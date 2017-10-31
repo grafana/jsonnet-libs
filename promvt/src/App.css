@@ -1,0 +1,18 @@
+.App {
+  color: hsl(192, 10%, 33%);
+}
+
+.button {
+  background-color: #eee;
+  padding: 2px 4px;
+  border-radius: 2px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  position: relative;
+  top: -1px;
+  transition: all 0.5 ease;
+}
+
+.button:hover {
+  border-color: #ccc;
+}

@@ -1,0 +1,36 @@
+.sunburst {
+  position: relative;
+}
+
+.sunburst svg {
+  overflow: visible;
+}
+
+.sunburst text {
+  color: hsl(192, 10%, 33%);
+}
+
+.sunburst path {
+  stroke: #fff;
+  stroke-width: 1px;
+}
+
+.sunburst text {
+  font-size: 12px;
+}
+
+.sunburst .legend {
+  transition: opacity 0.6s ease;
+  margin-top: 4rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  white-space: nowrap;
+  word-break: break-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.7;
+}
+
+.sunburst .legend.active {
+  opacity: 1;
+}
