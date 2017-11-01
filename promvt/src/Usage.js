@@ -124,6 +124,12 @@ class Usage extends Component {
     const progress = metricNames.length > 0 ? (metricsCount / metricNames.length * 100).toFixed(1) : 'Loading...';
     const took = (latency / 1000).toFixed(1);
     const colClasses = `col-6 flex-auto ${classNames}`;
+    const sunburstTitle = (title, metrics, name) => (
+      <tspan>
+        <tspan className="sunburstTitle">{title}</tspan>
+        <tspan dy="1.4em" x="0">{metrics} {name}</tspan>
+      </tspan>
+    );
 
     return (
       <div className="usage">
@@ -148,11 +154,17 @@ class Usage extends Component {
         </div>
         <div className="flex">
           <div className={colClasses}>
-            <Sunburst data={metrics} title="Metric Cardinalities" count={`${metricsCount} metrics`} />
+            <Sunburst
+              data={metrics}
+              title={sunburstTitle('Metric Cardinalities', metricsCount, 'metrics')}
+              count={`${metricsCount} metrics`} />
           </div>
           <div className="p4" />
           <div className={colClasses}>
-            <Sunburst data={grouped} title="Jobs" count={`${groupedCount} jobs`} />
+            <Sunburst
+              data={grouped}
+              title={sunburstTitle('Jobs', groupedCount, 'jobs')}
+              count={`${groupedCount} jobs`} />
           </div>
         </div>
       </div>

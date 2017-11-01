@@ -19,18 +19,44 @@
   font-size: 12px;
 }
 
+.sunburst .sunburstTitle {
+  font-weight: bold;
+}
+
 .sunburst .legend {
   transition: opacity 0.6s ease;
-  margin-top: 4rem;
-  margin-bottom: 0.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
   width: 100%;
-  white-space: nowrap;
-  word-break: break-all;
-  overflow: hidden;
-  text-overflow: ellipsis;
   opacity: 0.7;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.sunburst .count {
+  text-align: center;
 }
 
 .sunburst .legend.active {
   opacity: 1;
+}
+.sunburst .topoffenders table {
+  width: 100%;
+  font-size: 0.9rem;
+  text-align: left;
+  border-collapse: collapse;
+}
+.sunburst .topoffenders td {
+  border-top: 1px solid #ddd;
+  padding: 0.5rem 0;
+}
+.sunburst .topoffenders th {
+  padding: 0.5rem 0;
+}
+.sunburst .topoffenders .alignright {
+  text-align: right;
+}
+.sunburst .topoffenders .tablekey {
+  word-break: break-all;
 }
