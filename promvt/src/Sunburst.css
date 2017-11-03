@@ -12,7 +12,7 @@
 
 .sunburst path {
   stroke: #fff;
-  stroke-width: 1px;
+  stroke-width: 0.2px;
 }
 
 .sunburst text {
