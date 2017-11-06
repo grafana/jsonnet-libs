@@ -31,32 +31,16 @@
   width: 100%;
   opacity: 0.7;
   text-align: center;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-}
-.sunburst .count {
-  text-align: center;
 }
 
 .sunburst .legend.active {
   opacity: 1;
 }
-.sunburst .topoffenders table {
+.sunburst table {
   width: 100%;
-  font-size: 0.9rem;
-  text-align: left;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
 }
-.sunburst .topoffenders td {
-  border-top: 1px solid #ddd;
-  padding: 0.5rem 0;
-}
-.sunburst .topoffenders th {
-  padding: 0.5rem 0;
-}
-.sunburst .topoffenders .alignright {
-  text-align: right;
-}
-.sunburst .topoffenders .tablekey {
-  word-break: break-all;
+.sunburst table td {
+  border-color: #ccc;
 }

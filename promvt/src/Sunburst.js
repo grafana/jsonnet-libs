@@ -65,11 +65,7 @@ function getTopOffenders(d) {
   let matches = d.filter(node => node.depth === maxdepth);
   matches.sort((a, b) => b.value - a.value);
   const topoffenders = matches.slice(0,5);
-
-  let topdata = [];
-  topoffenders.forEach(node => topdata.push(node.data));
-
-  return topdata;
+  return topoffenders;
 }
 
 function drawChart(nodes, chartDiv, color) {
@@ -195,15 +191,18 @@ const Table = (props) => (
   <table>
     <thead>
       <tr>
-        <th>Name</th>
-        <th className="alignright">Size</th>
+        <th className="left-align py1">Name</th>
+        <th className="right-align py1">Size</th>
       </tr>
     </thead>
     <tbody>
       {props.data.map((d) => (
-        <tr key={d.key}>
-          <td className="tablekey">{d.key}</td>
-          <td className="alignright">{d.size}</td>
+        <tr key={d.data.key}>
+          <td className="left-align py1 border-top">
+            {d.parent.depth > 0 ? `${d.parent.data.name} » ` : ''}
+            {d.data.name}
+          </td>
+          <td className="right-align py1 border-top">{d.data.size}</td>
         </tr>
       ))}
     </tbody>
@@ -264,8 +263,8 @@ class Sunburst extends Component {
         </svg>
         <div className="legend">{LEGEND}</div>
         {offenders.length > 1 ?
-          <div className="topoffenders">
-            <h4>Ranking</h4>
+          <div>
+            <p>Ranking</p>
             <Table data={offenders} />
         </div> : null }
 
