@@ -191,8 +191,8 @@ const Table = (props) => (
   <table>
     <thead>
       <tr>
-        <th className="left-align py1">Name</th>
-        <th className="right-align py1">Size</th>
+        <th className="left-align py1 h6">Name</th>
+        <th className="right-align py1 h6">Count</th>
       </tr>
     </thead>
     <tbody>
@@ -246,7 +246,7 @@ class Sunburst extends Component {
   };
 
   render() {
-    const { classNames = '', title, count } = this.props;
+    const { classNames = '', title } = this.props;
     const { offenders } = this.state;
 
     return (
