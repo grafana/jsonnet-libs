@@ -1,6 +1,6 @@
 # Prometheus Visual Toolkit
 
-This is a web application to help you get insights of your Prometheus installation.
+This is a web application to help you get insights into your Prometheus installation.
 
 ![Usage overview](screenshot.png?raw=true)
 
