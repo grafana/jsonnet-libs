@@ -2,6 +2,8 @@
 
 This is a web application to help you get insights into your Prometheus installation.
 
+[Read the blog post with commentary](https://kausal.co/blog/prometheus-usage-charts/)
+
 ![Usage overview](screenshot.png?raw=true)
 
 ## Setup
