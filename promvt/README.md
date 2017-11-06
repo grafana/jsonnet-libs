@@ -31,6 +31,8 @@ yarn start
 This starts a webserver on your host that serves the application.
 Access the application on your browser: http://localhost:3000
 
+If your Prometheus is running on a different host, you need to adjust the `proxy` value in `package.json`.
+
 ### 2. Serve it from your webserver
 
 You can create a production build that you can host on your own webserver.
