@@ -21,7 +21,7 @@ function bumpColor(c, rnd = false) {
   hsl.s += 0.5;
   hsl.l -= 0.1;
   if (rnd) {
-    hsl.h += Math.random() * 40;
+    hsl.h += Math.random() * 20;
   }
   return hsl + '';
 }
@@ -29,6 +29,7 @@ function bumpColor(c, rnd = false) {
 function getColor(d, color) {
   const { depth } = d;
   const { prefix, name } = d.data;
+
   if (depth === 0) return 'transparent';
   if (depth === 1) {
     return color(prefix || name);
@@ -57,7 +58,17 @@ function getLegendText(d) {
   return `${label} (${percent}%)`;
 }
 
-function drawChart(data, chartDiv, color) {
+function getTopOffenders(d) {
+  if (!d) return
+  d.sort((a, b) => b.depth - a.depth);
+  const maxdepth = d[0].depth;
+  let matches = d.filter(node => node.depth === maxdepth);
+  matches.sort((a, b) => b.value - a.value);
+  const topoffenders = matches.slice(0,5);
+  return topoffenders;
+}
+
+function drawChart(nodes, chartDiv, color) {
   const width = chartDiv.clientWidth;
   const radius = width / 2;
   const x = scaleLinear().range([0, 2 * Math.PI]);
@@ -74,18 +85,12 @@ function drawChart(data, chartDiv, color) {
   const legend = d3_select(chartDiv)
     .select('.legend');
 
-  const partition = d3_partition();
-
   const arc = d3_arc()
     .startAngle(d => Math.max(0, Math.min(2 * Math.PI, x(d.x0))))
     .endAngle(d => Math.max(0, Math.min(2 * Math.PI, x(d.x1))))
     .innerRadius(d => Math.max(0, y(d.y0)))
     .outerRadius(d => Math.max(0, y(d.y1)));
 
-  const root = d3_hierarchy(data.root || data);
-  root.sum(d => d.size);
-
-  const nodes = partition(root).descendants();
   // console.log('root', nodes);
 
   const arcs = wrapper
@@ -162,7 +167,10 @@ function drawChart(data, chartDiv, color) {
       d => Math.cos(x(1 - d.x1 + 0.5)) * y(1.33)
     );
 
+
   function onMouseEnterArc(d) {
+    d3_select(this).style('opacity', (0.8 - d.depth / 5));
+
     if (d.depth) {
       legend
         .classed('active', true)
@@ -171,17 +179,46 @@ function drawChart(data, chartDiv, color) {
   }
 
   function onMouseLeaveArc(d) {
+    d3_select(this).style('opacity', (1 - d.depth / 5));
+
     legend
-      .classed('active', false)
-      .text(LEGEND);
+      .classed('active', false);
   }
 }
 
+
+const Table = (props) => (
+  <table>
+    <thead>
+      <tr>
+        <th className="left-align py1">Name</th>
+        <th className="right-align py1">Size</th>
+      </tr>
+    </thead>
+    <tbody>
+      {props.data.map((d) => (
+        <tr key={d.data.key}>
+          <td className="left-align py1 border-top">
+            {d.parent.depth > 0 ? `${d.parent.data.name} » ` : ''}
+            {d.data.name}
+          </td>
+          <td className="right-align py1 border-top">{d.data.size}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+);
+
 class Sunburst extends Component {
+  state = {
+    offenders: []
+  }
+
   componentDidMount() {
     window.addEventListener('resize', this.redraw);
     this.color = scaleOrdinal(scheme);
     if (this.props.data) {
+      this.processData(this.props.data);
       this.redraw();
     }
   }
@@ -191,15 +228,26 @@ class Sunburst extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    drawChart(nextProps.data, this.el, this.color);
+    this.processData(nextProps.data);
+    drawChart(this.nodes, this.el, this.color);
+    const offenders = getTopOffenders(this.nodes);
+    this.setState({ offenders });
+  }
+
+  processData(data) {
+    const partition = d3_partition();
+    const root = d3_hierarchy(data.root || data);
+    root.sum(d => d.size);
+    this.nodes = partition(root).descendants();
   }
 
   redraw = () => {
-    drawChart(this.props.data, this.el, this.color);
+    drawChart(this.nodes, this.el, this.color);
   };
 
   render() {
     const { classNames = '', title, count } = this.props;
+    const { offenders } = this.state;
 
     return (
       <div className={`${classNames} sunburst`} ref={el => (this.el = el)}>
@@ -214,7 +262,12 @@ class Sunburst extends Component {
           </g>
         </svg>
         <div className="legend">{LEGEND}</div>
-        <div className="count">{count}</div>
+        {offenders.length > 1 ?
+          <div>
+            <p>Ranking</p>
+            <Table data={offenders} />
+        </div> : null }
+
       </div>
     );
   }
