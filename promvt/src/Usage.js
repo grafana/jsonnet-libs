@@ -56,7 +56,8 @@ class Usage extends Component {
     const jetzt = Date.now();
 
     // Getting all metric names
-    this.request('/api/v1/label/__name__/values')
+    const url = '/api/v1/label/__name__/values';
+    this.request(url)
       .then(body => body.json())
       .then(res => {
         metricNames = res.data;
@@ -97,6 +98,13 @@ class Usage extends Component {
             const latency = Date.now() - jetzt;
             this.setState({ loading: false, latency });
           });
+      })
+      .catch(error => {
+        if (this.props.onRequestError) {
+          this.props.onRequestError({ error, url });
+        } else {
+          throw error;
+        }
       });
   }
 

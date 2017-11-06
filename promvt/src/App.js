@@ -7,10 +7,14 @@ import Usage from './Usage';
 // import METRICS from './data/metrics';
 
 class App extends Component {
+  handleRequestError({ error, url }) {
+    alert(`Error connecting to Promtheus. Make sure it is running and reachable under ${url} via your configured proxy.`);
+    console.error(error);
+  }
   render() {
     return (
       <div className="App pr4 pl4 pt3 pb4">
-        <Usage classNames="p4" />
+        <Usage classNames="p4" onRequestError={this.handleRequestError} />
       </div>
     );
   }
