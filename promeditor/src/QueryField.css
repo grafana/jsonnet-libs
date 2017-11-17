@@ -1,0 +1,10 @@
+.query-field {
+  font-size: 14px;
+  font-family: Consolas, Menlo, Courier, monospace;
+  height: auto;
+}
+
+.query-field__placeholder {
+  opacity: 0.5;
+  transform: translate(1px, 1px);
+}

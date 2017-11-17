@@ -1,0 +1,49 @@
+.typeahead {
+  position: absolute;
+  z-index: auto;
+  top: -10000px;
+  left: -10000px;
+  opacity: 0;
+  border-radius: 4px;
+  transition: opacity .75s;
+  border: 1px solid #e4e4e4;
+  max-height: calc(66vh);
+  overflow-y: scroll;
+  max-width: calc(66%);
+  overflow-x: hidden;
+  outline: none;
+  list-style: none;
+  background: #fff;
+  color: rgba(0,0,0,.65);
+  transition: background .3s cubic-bezier(.645,.045,.355,1),width .15s cubic-bezier(.645,.045,.355,1);
+}
+
+.typeahead-group__title {
+  color: rgba(0,0,0,.43);
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 8px 16px;
+}
+
+.typeahead-item {
+  line-height: 200%;
+  height: auto;
+  font-family: Consolas, Menlo, Courier, monospace;
+  padding: 0 16px 0 28px;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-left: -1px;
+  left: 1px;
+  position: relative;
+  z-index: 1;
+  display: block;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color .3s cubic-bezier(.645,.045,.355,1),border-color .3s cubic-bezier(.645,.045,.355,1),background .3s cubic-bezier(.645,.045,.355,1),padding .15s cubic-bezier(.645,.045,.355,1);
+}
+
+.typeahead-item__selected {
+  background-color: #ecf6fd;
+  color: #108ee9;
+}

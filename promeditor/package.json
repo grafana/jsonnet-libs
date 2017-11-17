@@ -1,0 +1,27 @@
+{
+  "name": "promeditor",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "David Kaltschmidt",
+  "repository": "https://github.com/kausalco/public",
+  "bugs": "https://github.com/kausalco/public/issues",
+  "proxy": "http://localhost:9090",
+  "dependencies": {
+    "prismjs": "^1.8.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-portal": "^3.1.0",
+    "slate": "^0.21.1",
+    "slate-edit-code": "^0.10.2",
+    "slate-prism": "^0.2.2"
+  },
+  "devDependencies": {
+    "react-scripts": "1.0.12"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}

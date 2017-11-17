@@ -1,0 +1,35 @@
+.app {
+  color: hsl(192, 10%, 33%);
+}
+
+.app main {
+  border: 1px solid lightgray;
+  background-color: rgba(224, 255, 255, 0.39);
+}
+
+.app__input {
+  position: relative;
+  display: inline-block;
+  padding: 6px 7px;
+  width: 66%;
+  cursor: text;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.65);
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  transition: all .3s;
+}
+
+.button {
+  background-color: #eee;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.5 ease;
+  outline: none;
+}
+
+.button:hover {
+  border-color: #ccc;
+}
