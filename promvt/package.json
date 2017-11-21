@@ -1,7 +1,7 @@
 {
   "name": "promvt",
-  "version": "0.1.0",
-  "license": "MIT",
+  "version": "0.1.1",
+  "license": "Apache-2.0",
   "author": "David Kaltschmidt",
   "repository": "https://github.com/kausalco/public",
   "bugs": "https://github.com/kausalco/public/issues",

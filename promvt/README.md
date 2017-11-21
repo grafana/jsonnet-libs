@@ -93,4 +93,4 @@ export default connect(mapStateToProps, { doRequest })(UsageContainer);
 
 ## LICENSE
 
-[MIT](LICENSE)
+[Apache-2.0](LICENSE)
