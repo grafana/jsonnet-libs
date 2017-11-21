@@ -1,0 +1,8 @@
+.env*
+.git*
+docker-compose.*.yml
+docker-compose.yml
+Dockerfile
+*.md
+LICENSE
+screenshot.png
