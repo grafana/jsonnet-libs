@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/kausalco/public
     docker:
-      - image: kausal/public-build:aae81a2
+      - image: kausal/public-build:7fd7918
 
     steps:
       - checkout
