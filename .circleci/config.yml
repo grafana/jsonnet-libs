@@ -9,3 +9,8 @@ jobs:
       - checkout
       - setup_remote_docker
       - run: make -C promtail
+      - deploy:
+          name: Push images
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push kausalco/promtail:$(git rev-parse --short HEAD)
