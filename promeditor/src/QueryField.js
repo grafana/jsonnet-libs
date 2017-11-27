@@ -43,6 +43,9 @@ function processLabels(labels) {
   return { values, keys: Object.keys(values) };
 }
 
+// Strip syntax chars
+const cleanText = s => s.replace(/[{}[\]="(),!~+\-*/^%]/g, '').trim();
+
 const getInitialState = query =>
   Raw.deserialize(
     {
@@ -156,11 +159,7 @@ class QueryField extends React.Component {
       const range = selection.getRangeAt(0);
       const text = selection.anchorNode.textContent;
       const offset = range.startOffset;
-      const prefix = text
-        .substr(0, offset)
-        // Strip syntax chars
-        .replace(/[{}[\]="(),!~+\-*/^%]/g, '')
-        .trim();
+      const prefix = cleanText(text.substr(0, offset));
 
       // Determine candidates by context
       const suggestionGroups = [];
@@ -227,10 +226,12 @@ class QueryField extends React.Component {
 
       let results = 0;
       const filteredSuggestions = suggestionGroups.map(group => {
-        group.items = group.items.filter(
-          c => c.length !== prefix.length && c.indexOf(prefix) > -1
-        );
-        results += group.items.length;
+        if (group.items) {
+          group.items = group.items.filter(
+            c => c.length !== prefix.length && c.indexOf(prefix) > -1
+          );
+          results += group.items.length;
+          }
         return group;
       });
 
@@ -253,7 +254,7 @@ class QueryField extends React.Component {
     }
   }, TYPEAHEAD_DEBOUNCE);
 
-  onKeyDown = (event, data, state, editor) => {
+  applyTypeahead(state) {
     const {
       suggestions,
       typeaheadPrefix,
@@ -262,72 +263,79 @@ class QueryField extends React.Component {
       typeaheadText,
     } = this.state;
 
+    if (!suggestions || suggestions.length === 0 || !this.menu) {
+      return;
+    }
+
+    // Get the currently selected suggestion
+    const flattenedSuggestions = flattenSuggestions(suggestions);
+    const selected = Math.abs(typeaheadIndex);
+    const selectedIndex = selected % flattenedSuggestions.length || 0;
+    let suggestion = flattenedSuggestions[selectedIndex];
+
+    // Modify suggestion based on context
+    switch (typeaheadContext) {
+      case 'context-labels': {
+        const nextChar = getNextCharacter();
+        if (!nextChar || nextChar === '}' || nextChar === ',') {
+          suggestion += '=';
+        }
+        break;
+      }
+
+      case 'context-label-values': {
+        // Always add quotes and remove existing ones instead
+        if (!(typeaheadText.startsWith('="') || typeaheadText.startsWith('"'))) {
+          suggestion = `"${suggestion}`;
+        }
+        if (getNextCharacter() !== '"') {
+          suggestion = `${suggestion}"`;
+        }
+        break;
+      }
+
+      default: {
+      }
+    }
+
+    // Reset typeahead
+    this.setState({
+      suggestions: [],
+      typeaheadContext: null,
+      typeaheadIndex: 0,
+      typeaheadPrefix: '',
+    });
+
+    // Remove the current, incomplete text and replace it with the selected suggestion
+    let backward = typeaheadPrefix.length;
+    const text = cleanText(typeaheadText);
+    const suffixLength = text.length - typeaheadPrefix.length;
+    const midWord =
+      typeaheadPrefix &&
+      ((suffixLength > 0 && text.startsWith(typeaheadPrefix)) ||
+        suggestion === typeaheadText);
+    const forward = midWord ? suffixLength : 0;
+
+    return (
+      state
+        .transform()
+        // TODO this line breaks if cursor was moved left and length is longer than whole prefix
+        .deleteBackward(backward)
+        .deleteForward(forward)
+        .insertText(suggestion)
+        .focus()
+        .apply()
+    );
+  }
+
+  onKeyDown = (event, data, state, editor) => {
+    const { typeaheadIndex } = this.state;
+
     switch (event.key) {
       case 'Tab': {
         // Dont blur input
         event.preventDefault();
-        if (!suggestions || suggestions.length === 0 || !this.menu) {
-          return;
-        }
-
-        // Get the currently selected suggestion
-        const flattenedSuggestions = flattenSuggestions(suggestions);
-        const selected = Math.abs(typeaheadIndex);
-        const selectedIndex = selected % flattenedSuggestions.length || 0;
-        let suggestion = flattenedSuggestions[selectedIndex];
-
-        // Modify suggestion based on context
-        switch (typeaheadContext) {
-          case 'context-labels': {
-            const nextChar = getNextCharacter();
-            if (nextChar === '}' || nextChar === ',') {
-              suggestion += '=';
-            }
-            break;
-          }
-
-          case 'context-label-values': {
-            // Always add quotes and remove existing ones instead
-            suggestion = `"${suggestion}"`;
-            break;
-          }
-
-          default: {
-          }
-        }
-
-        // Reset typeahead
-        this.setState({
-          suggestions: [],
-          typeaheadContext: null,
-          typeaheadIndex: 0,
-          typeaheadPrefix: '',
-        });
-
-        // Remove the current, incomplete text and replace it with the selected suggestion
-        let backward = typeaheadPrefix.length;
-        const suffixLength = typeaheadText.length - typeaheadPrefix.length;
-        const midWord =
-          typeaheadPrefix &&
-          ((suffixLength > 0 && typeaheadText.startsWith(typeaheadPrefix)) ||
-            suggestion === typeaheadText);
-        let forward = midWord ? suffixLength : 0;
-        // Adjust delete markers for quotes
-        if (typeaheadContext === 'context-label-values' && midWord) {
-          forward--;
-          backward++;
-        }
-
-        return (
-          state
-            .transform()
-            // TODO this line breaks if cursor was moved left and length is longer than whole prefix
-            .deleteBackward(backward)
-            .deleteForward(forward)
-            .insertText(suggestion)
-            .focus()
-            .apply()
-        );
+        return this.applyTypeahead(state);
       }
 
       case 'ArrowDown': {
