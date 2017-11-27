@@ -51,7 +51,11 @@ func main() {
 	newTargetFunc := func(path string, labels model.LabelSet) (*promtail.Target, error) {
 		return promtail.NewTarget(client, positions, path, labels)
 	}
-	tm := promtail.NewTargetManager(logger, cfg.ScrapeConfig, newTargetFunc)
+	tm, err := promtail.NewTargetManager(logger, cfg.ScrapeConfig, newTargetFunc)
+	if err != nil {
+		level.Error(logger).Log("msg", "Failed to make target manager", "error", err)
+		return
+	}
 	defer tm.Stop()
 
 	server, err := server.New(serverConfig)

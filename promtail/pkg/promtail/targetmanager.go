@@ -2,6 +2,7 @@ package promtail
 
 import (
 	"context"
+	"os"
 	"strings"
 
 	"github.com/go-kit/kit/log"
@@ -13,7 +14,8 @@ import (
 )
 
 const (
-	pathLabel = "__path__"
+	pathLabel        = "__path__"
+	currentHostLabel = "__current_host__"
 )
 
 type NewTargetFunc func(path string, labels model.LabelSet) (*Target, error)
@@ -29,12 +31,16 @@ func NewTargetManager(
 	logger log.Logger,
 	scrapeConfig []ScrapeConfig,
 	fn NewTargetFunc,
-) *TargetManager {
+) (*TargetManager, error) {
 	ctx, quit := context.WithCancel(context.Background())
-
 	tm := &TargetManager{
 		log:  logger,
 		quit: quit,
+	}
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		return nil, err
 	}
 
 	for _, cfg := range scrapeConfig {
@@ -43,6 +49,7 @@ func NewTargetManager(
 			newTarget:     fn,
 			relabelConfig: cfg.RelabelConfigs,
 			targets:       map[string]*Target{},
+			hostname:      hostname,
 		}
 		tm.syncers = append(tm.syncers, s)
 
@@ -53,7 +60,7 @@ func NewTargetManager(
 		go ts.Run(ctx)
 	}
 
-	return tm
+	return tm, nil
 }
 
 func (tm *TargetManager) Stop() {
@@ -69,6 +76,7 @@ type syncer struct {
 	newTarget     NewTargetFunc
 	targets       map[string]*Target
 	relabelConfig []*config.RelabelConfig
+	hostname      string
 }
 
 func (s *syncer) Sync(groups []*config.TargetGroup) {
@@ -77,9 +85,10 @@ func (s *syncer) Sync(groups []*config.TargetGroup) {
 	for _, group := range groups {
 		for _, t := range group.Targets {
 			labels := group.Labels.Merge(t)
+			labels[currentHostLabel] = model.LabelValue(s.hostname)
 			labels = relabel.Process(labels, s.relabelConfig...)
 			// Drop empty targets (drop in relabeling).
-			if len(labels) == 0 {
+			if labels == nil {
 				continue
 			}
 
