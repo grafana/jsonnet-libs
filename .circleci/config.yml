@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /go/src/github.com/kausal/public
+    working_directory: /go/src/github.com/kausalco/public
     docker:
       - image: kausal/public-build:aae81a2
 
