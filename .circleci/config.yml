@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/github.com/{{ORG_NAME}}/{{REPO_NAME}}
     docker:
-      - image: kausal/public-build:6674b07
+      - image: kausal/public-build:aae81a2
 
     steps:
       - checkout
