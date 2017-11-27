@@ -7,4 +7,5 @@ jobs:
 
     steps:
       - checkout
+      - setup_remote_docker
       - run: make -C promtail
