@@ -93,7 +93,11 @@ export default connect(mapStateToProps, { doRequest })(UsageContainer);
 
 ### 4. Using Docker
 
-Adjust Prometheus URL in [package.json](package.json) for your docker setup.
+Adjust Prometheus URL in [package.json](package.json) for your docker setup, for example:
+
+```js
+  "proxy": "http://prometheus:9090"
+```
 
 Build local image with provided [Dockerfile](Dockerfile)
 

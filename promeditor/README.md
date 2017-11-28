@@ -42,9 +42,13 @@ If your Prometheus is running on a different host, you need to adjust the `proxy
 
 3. Look at `src/App.js` for an example on how to include the editor field into your app.
 
-### 4. Using Docker
+### 3. Using Docker
 
-Adjust Prometheus URL in [package.json](package.json) for your docker setup.
+Adjust Prometheus URL in [package.json](package.json) for your docker setup, for example:
+
+```js
+  "proxy": "http://prometheus:9090"
+```
 
 Build local image with provided [Dockerfile](Dockerfile)
 
