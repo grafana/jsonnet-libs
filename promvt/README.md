@@ -91,6 +91,26 @@ const mapStateToProps = ({ queryEnd }) => ({
 export default connect(mapStateToProps, { doRequest })(UsageContainer);
 ```
 
+### 4. Using Docker
+
+Adjust Prometheus URL in [package.json](package.json) for your docker setup, for example:
+
+```js
+  "proxy": "http://prometheus:9090"
+```
+
+Build local image with provided [Dockerfile](Dockerfile)
+
+```sh
+docker build -t promvt -f Dockerfile .
+```
+
+and then run container
+
+```sh
+docker run --interactive --tty --publish 3000:3000 promvt
+```
+
 ## LICENSE
 
 [Apache-2.0](LICENSE)
