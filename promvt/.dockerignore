@@ -1,8 +1,8 @@
+node_modules
+build
 .env*
 .git*
-docker-compose.*.yml
-docker-compose.yml
-Dockerfile
 *.md
+Dockerfile
 LICENSE
 screenshot.png
