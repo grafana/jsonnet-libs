@@ -231,7 +231,7 @@ class QueryField extends React.Component {
             c => c.length !== prefix.length && c.indexOf(prefix) > -1
           );
           results += group.items.length;
-          }
+        }
         return group;
       });
 
@@ -254,24 +254,12 @@ class QueryField extends React.Component {
     }
   }, TYPEAHEAD_DEBOUNCE);
 
-  applyTypeahead(state) {
+  applyTypeahead(state, suggestion) {
     const {
-      suggestions,
       typeaheadPrefix,
       typeaheadContext,
-      typeaheadIndex,
       typeaheadText,
     } = this.state;
-
-    if (!suggestions || suggestions.length === 0 || !this.menu) {
-      return;
-    }
-
-    // Get the currently selected suggestion
-    const flattenedSuggestions = flattenSuggestions(suggestions);
-    const selected = Math.abs(typeaheadIndex);
-    const selectedIndex = selected % flattenedSuggestions.length || 0;
-    let suggestion = flattenedSuggestions[selectedIndex];
 
     // Modify suggestion based on context
     switch (typeaheadContext) {
@@ -285,7 +273,9 @@ class QueryField extends React.Component {
 
       case 'context-label-values': {
         // Always add quotes and remove existing ones instead
-        if (!(typeaheadText.startsWith('="') || typeaheadText.startsWith('"'))) {
+        if (
+          !(typeaheadText.startsWith('="') || typeaheadText.startsWith('"'))
+        ) {
           suggestion = `"${suggestion}`;
         }
         if (getNextCharacter() !== '"') {
@@ -298,24 +288,18 @@ class QueryField extends React.Component {
       }
     }
 
-    // Reset typeahead
-    this.setState({
-      suggestions: [],
-      typeaheadContext: null,
-      typeaheadIndex: 0,
-      typeaheadPrefix: '',
-    });
+    this.resetTypeahead();
 
     // Remove the current, incomplete text and replace it with the selected suggestion
     let backward = typeaheadPrefix.length;
     const text = cleanText(typeaheadText);
     const suffixLength = text.length - typeaheadPrefix.length;
+    const offset = typeaheadText.indexOf(typeaheadPrefix);
     const midWord =
       typeaheadPrefix &&
-      ((suffixLength > 0 && text.startsWith(typeaheadPrefix)) ||
-        suggestion === typeaheadText);
-    const forward = midWord ? suffixLength : 0;
-
+      ((suffixLength > 0 && offset > -1) || suggestion === typeaheadText);
+    const forward = midWord ? suffixLength + offset : 0;
+  
     return (
       state
         .transform()
@@ -329,13 +313,23 @@ class QueryField extends React.Component {
   }
 
   onKeyDown = (event, data, state, editor) => {
-    const { typeaheadIndex } = this.state;
+    const { typeaheadIndex, suggestions } = this.state;
 
     switch (event.key) {
       case 'Tab': {
         // Dont blur input
         event.preventDefault();
-        return this.applyTypeahead(state);
+        if (!suggestions || suggestions.length === 0 || !this.menu) {
+          return;
+        }
+    
+        // Get the currently selected suggestion
+        const flattenedSuggestions = flattenSuggestions(suggestions);
+        const selected = Math.abs(typeaheadIndex);
+        const selectedIndex = selected % flattenedSuggestions.length || 0;
+        const suggestion = flattenedSuggestions[selectedIndex];
+    
+        return this.applyTypeahead(state, suggestion);
       }
 
       case 'ArrowDown': {
@@ -386,7 +380,12 @@ class QueryField extends React.Component {
   };
 
   resetTypeahead() {
-    this.setState({ suggestions: [], typeaheadIndex: 0, typeaheadPrefix: '' });
+    this.setState({
+      suggestions: [],
+      typeaheadIndex: 0,
+      typeaheadPrefix: '',
+      typeaheadContext: null,
+    });
   }
 
   async fetchMetricLabels(name) {
@@ -439,16 +438,8 @@ class QueryField extends React.Component {
   };
 
   handleClickMenu = item => {
-    const { state, typeaheadPrefix = '' } = this.state;
-    this.resetTypeahead();
-
-    // Remove the current, incomplete text and replace it with the selected suggestion
-    const nextState = state
-      .transform()
-      .deleteBackward(typeaheadPrefix.length)
-      .insertText(item)
-      .focus()
-      .apply();
+    const { state } = this.state;
+    const nextState = this.applyTypeahead(state, item);
 
     // Internal state update
     this.onChange(nextState);
