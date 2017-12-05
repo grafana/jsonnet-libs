@@ -14,8 +14,8 @@ import (
 )
 
 const (
-	pathLabel        = "__path__"
-	currentHostLabel = "__current_host__"
+	pathLabel = "__path__"
+	hostLabel = "__host__"
 )
 
 type NewTargetFunc func(path string, labels model.LabelSet) (*Target, error)
@@ -85,10 +85,14 @@ func (s *syncer) Sync(groups []*config.TargetGroup) {
 	for _, group := range groups {
 		for _, t := range group.Targets {
 			labels := group.Labels.Merge(t)
-			labels[currentHostLabel] = model.LabelValue(s.hostname)
 			labels = relabel.Process(labels, s.relabelConfig...)
 			// Drop empty targets (drop in relabeling).
 			if labels == nil {
+				continue
+			}
+
+			host, ok := labels[hostLabel]
+			if ok && string(host) != s.hostname {
 				continue
 			}
 
