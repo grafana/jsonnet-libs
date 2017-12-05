@@ -4,9 +4,12 @@ Kausal's monorepo for Open Source projects
 * `promeditor`: PromQL query editor with tab-completion.
 
 * `promvt`: Prometheus Visual Toolkit–A web application to help you get insights
-into your Prometheus usage and instrumentation.
+  into your Prometheus usage and instrumentation.
 
 * [`promtail`](promtail/): A logging agent that uses Prometheus' service discovery.
+
+* [`klumps`](klumps/): Kubernetes/Linux USE Method with Prometheus: a set of
+  recording rules and Grafana dashboards.
 
 ## LICENSE
 
