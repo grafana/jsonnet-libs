@@ -3,11 +3,11 @@
 A set of [USE Method](http://www.brendangregg.com/usemethod.html) dashboards for
 Grafana, using Prometheus as a backend.  Use these dashboards if you want insight
 into the performance of your Kubernetes infrastructure.  For more motivation, see
-"[The RED Method: How to insturment your services](https://kccncna17.sched.com/event/CU8K/the-red-method-how-to-instrument-your-services-b-tom-wilkie-kausal?iframe=no&w=100%&sidebar=yes&bg=no)" talk from CloudNativeCon Austin.
+"[The RED Method: How to instrument your services](https://kccncna17.sched.com/event/CU8K/the-red-method-how-to-instrument-your-services-b-tom-wilkie-kausal?iframe=no&w=100%&sidebar=yes&bg=no)" talk from CloudNativeCon Austin.
 
 # Getting Started
 
-First you'll need [jsonnet](http://jsonnet.org/) - on a Mac I recommand installing
+First you'll need [jsonnet](http://jsonnet.org/) - on a Mac I recommend installing
 it with `brew`.  Once you have `jsonnet` installed, the dashboards can
 be generated with the following command:
 
