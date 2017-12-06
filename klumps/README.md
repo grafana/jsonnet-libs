@@ -1,9 +1,15 @@
 # KLUMPS: Kubernetes/Linux USE Method with Prometheus
 
-A set of [USE Method]() dashboards for Grafana, using Prometheus as a backend.
+A set of [USE Method](http://www.brendangregg.com/usemethod.html) dashboards for
+Grafana, using Prometheus as a backend.  Use these dashboards if you want insight
+into the performance of your Kubernetes infrastructure.  For more motivation, see
+"[The RED Method: How to insturment your services](https://kccncna17.sched.com/event/CU8K/the-red-method-how-to-instrument-your-services-b-tom-wilkie-kausal?iframe=no&w=100%&sidebar=yes&bg=no)" talk from CloudNativeCon Austin.
 
-First you'll need [jsonnet]().  Once you have installed that, the dashboards can
-be installed with the following command:
+# Getting Started
+
+First you'll need [jsonnet](http://jsonnet.org/) - on a Mac I recommand installing
+it with `brew`.  Once you have `jsonnet` installed, the dashboards can
+be generated with the following command:
 
 ```
 $ jsonnet -m . to_json_files.jsonnet
@@ -21,8 +27,8 @@ this file.
 
 ## Ksonnet
 
-Alternatively, if you use [ksonnet] to generate your Kubernetes config, the
-dashboards can be included in a config map directly:
+Alternatively, if you use [ksonnet](https://ksonnet.io/) to generate your
+Kubernetes config, the dashboards can be included in a config map directly:
 
 ```
 local k = import "ksonnet.beta.2/k8s.libsonnet",
