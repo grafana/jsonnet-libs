@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/kausalco/public
+    docker:
+      - image: kausal/public-build:7fd7918
+
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: make -C promtail
+      - deploy:
+          name: Push images
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker push kausal/promtail:$(git rev-parse --short HEAD)

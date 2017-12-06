@@ -1,0 +1,69 @@
+[[constraint]]
+  name = "github.com/gogo/protobuf"
+  version = "0.5.0"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golang/protobuf"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/golang/snappy"
+
+[[constraint]]
+  name = "github.com/hpcloud/tail"
+  version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/sirupsen/logrus"
+  version = "1.0.3"
+
+[[constraint]]
+  branch = "rm-loki"
+  source = "https://github.com/tomwilkie/weaveworks-common"
+  name = "github.com/weaveworks/common"
+
+[[constraint]]
+  branch = "master"
+  name = "golang.org/x/net"
+
+[[constraint]]
+  name = "google.golang.org/grpc"
+  version = "1.8.0"
+
+[[constraint]]
+  name = "gopkg.in/fsnotify.v1"
+  version = "1.4.2"
+
+[[constraint]]
+  branch = "v2"
+  name = "gopkg.in/yaml.v2"
+
+# Pin the various Prometheus dependancies
+[[constraint]]
+  branch = "master"
+  name = "github.com/prometheus/common"
+
+[[constraint]]
+  name = "github.com/prometheus/prometheus"
+  branch = "master"
+
+[[override]]
+  name = "k8s.io/client-go"
+  revision = "3627aeb7d4f6ade38f995d2c923e459146493c7e"
+
+[[override]]
+  name = "k8s.io/apimachinery"
+  revision = "75b8dd260ef0469d96d578705a87cffd0e09dab8"
+
+[[override]]
+  name = "github.com/Azure/azure-sdk-for-go"
+  revision = "bd73d950fa4440dae889bd9917bff7cef539f86e"
+
+[[override]]
+  name = "github.com/Azure/go-autorest"
+  revision = "8a25372bbfec739b8719a9e3987400d15ef9e179"
+
+[[override]]
+  name = "github.com/ugorji/go"
+  revision = "708a42d246822952f38190a8d8c4e6b16a0e600c"
