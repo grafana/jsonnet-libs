@@ -4,16 +4,53 @@ import './App.css';
 import QueryField from './QueryField';
 import Stats from './Stats';
 
+import TEST_RULES from './test_rules';
+
+const RULE_PREFIX = 'record: ';
+const EXPR_PREFIX = 'expr: ';
+
+function processRuleGroups(groups) {
+  return groups.reduce((acc, group) => {
+    group.rules.forEach(({ rule }) => {
+      if (rule && rule.indexOf(RULE_PREFIX) === 0) {
+        const strippedRule = rule.substr(RULE_PREFIX.length).trim();
+        const nameDelim = strippedRule.search(/\s/);
+        if (nameDelim > -1) {
+          const name = strippedRule.substr(0, nameDelim);
+          const expression = strippedRule.substr(nameDelim + EXPR_PREFIX.length + 1);
+          acc[name] = expression;
+        }
+      }
+    })
+    return acc;
+  }, {});
+}
+
+const processedRules = processRuleGroups(TEST_RULES);
+
+
 class App extends Component {
   state = {
+    initialQuery: null,
     latency: null,
     result: null,
     stats: null,
   }
 
+  handleExpandRules = () => {
+    let nextQuery = this.query;
+    Object.keys(processedRules).forEach(name => {
+      nextQuery = nextQuery.replace(name, processedRules[name]);
+    });
+    if (nextQuery !== this.query) {
+      this.query = nextQuery;
+      this.setState({ initialQuery: nextQuery });
+    }
+  }
+
   handleRequestError({ error, url }) {
     alert(
-      `Error connecting to Promtheus. Make sure it is running and reachable under ${url} via your configured proxy.`
+      `Error connecting to Prometheus. Make sure it is running and reachable under ${url} via your configured proxy.`
     );
     console.error(error);
   }
@@ -49,7 +86,7 @@ class App extends Component {
   }
 
   render() {
-    const { latency, result, stats } = this.state;
+    const { initialQuery, latency, result, stats } = this.state;
     return (
       <div className="app pr4 pl4 pt3 pb4">
         <header>
@@ -57,13 +94,18 @@ class App extends Component {
             <div className="h1 mb2 mt3">PromQL Editor</div>
             <div className="app__input">
               <QueryField
+                initialQuery={initialQuery}
                 onPressEnter={this.handleSubmit}
                 onQueryChange={this.handleQueryChange}
                 onRequestError={this.handleRequestError}
+                rules={processedRules}
               />
             </div>
             <button className="ml2 p1 button" onClick={this.handleSubmit}>
               Run
+            </button>
+            <button className="ml2 p1 button" onClick={this.handleExpandRules}>
+              Expand Recording Rules
             </button>
           </div>
           <div className="app__stats pr1">
