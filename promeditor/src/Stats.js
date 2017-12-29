@@ -20,7 +20,7 @@ export default ({ latency, stats }) => {
           const ms = (value * 1000).toFixed(3);
           const width = `${value / total * 100}%`;
           return (
-            <div className="stats__row">
+            <div className="stats__row" key={t}>
               <div className="stats__values">
                 <span className="stats__label h6">{t}: </span>
                 <span className="stats__value h6 right-align">{ms}ms</span>

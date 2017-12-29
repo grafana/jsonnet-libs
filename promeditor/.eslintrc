@@ -1,3 +1,24 @@
 {
-  "extends": "react-app"
+  "extends": [
+    "eslint:recommended",
+    "prettier",
+    "prettier/react",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "prettier"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 2017,
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": 0,
+    "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+    "react/prop-types": 0
+  },
+  "env": {
+    "browser": true
+  }
 }
