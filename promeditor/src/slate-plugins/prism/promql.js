@@ -73,7 +73,7 @@ export const FUNCTIONS = [
 ];
 
 const tokenizer = {
-  'comment': {
+  comment: {
     pattern: /(^|[^\n])#.*/,
     lookbehind: true,
   },
@@ -85,7 +85,7 @@ const tokenizer = {
         pattern: /[^,\s][^,]*[^,\s]*/,
         alias: 'attr-name',
       },
-    }
+    },
   },
   'context-labels': {
     pattern: /\{[^}]*(?=})/,
@@ -99,30 +99,38 @@ const tokenizer = {
         greedy: true,
         alias: 'attr-value',
       },
-    }
+    },
   },
-  'function': new RegExp(`\\b(?:${FUNCTIONS.join('|')})(?=\\s*\\()`, 'i'),
-  'context-range': [{
-    pattern: /\[[^\]]*(?=])/, // [1m]
-    inside: {
-      'range-duration': {
-        pattern: /\b\d+[smhdwy]\b/i,
-        alias: 'number',
-      }
-    }
-  }, {
-    pattern: /(offset\s+)\w+/, // offset 1m
-    lookbehind: true,
-    inside: {
-      'range-duration': {
-        pattern: /\b\d+[smhdwy]\b/i,
-        alias: 'number',
-      }
-    }
-  }],
-  'number': /-?\d+((\.\d*)?([eE][+-]?\d+)?)?\b/,
-  'operator': new RegExp(`/[-+*/=%^~]|&&?|\\|?\\||!=?|<(?:=>?|<|>)?|>[>=]?|\\b(?:${OPERATORS.join('|')})\\b`, 'i'),
-  'punctuation': /[{};()`,.]/
-}
+  function: new RegExp(`\\b(?:${FUNCTIONS.join('|')})(?=\\s*\\()`, 'i'),
+  'context-range': [
+    {
+      pattern: /\[[^\]]*(?=])/, // [1m]
+      inside: {
+        'range-duration': {
+          pattern: /\b\d+[smhdwy]\b/i,
+          alias: 'number',
+        },
+      },
+    },
+    {
+      pattern: /(offset\s+)\w+/, // offset 1m
+      lookbehind: true,
+      inside: {
+        'range-duration': {
+          pattern: /\b\d+[smhdwy]\b/i,
+          alias: 'number',
+        },
+      },
+    },
+  ],
+  number: /\b-?\d+((\.\d*)?([eE][+-]?\d+)?)?\b/,
+  operator: new RegExp(
+    `/[-+*/=%^~]|&&?|\\|?\\||!=?|<(?:=>?|<|>)?|>[>=]?|\\b(?:${OPERATORS.join(
+      '|'
+    )})\\b`,
+    'i'
+  ),
+  punctuation: /[{};()`,.]/,
+};
 
 export default tokenizer;

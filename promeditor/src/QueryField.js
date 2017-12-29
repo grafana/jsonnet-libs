@@ -23,7 +23,7 @@ const TYPEAHEAD_DEBOUNCE = 300;
 function configurePrismMetricsTokens(metrics) {
   Prism.languages.promql.metric = {
     alias: 'variable',
-    pattern: new RegExp(`\\b(${metrics.join('|')})\\b`, 'i'),
+    pattern: new RegExp(`(${metrics.join('|')})`, 'i'),
   };
 }
 
