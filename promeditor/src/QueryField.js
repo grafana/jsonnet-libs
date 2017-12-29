@@ -255,11 +255,7 @@ class QueryField extends React.Component {
   }, TYPEAHEAD_DEBOUNCE);
 
   applyTypeahead(state, suggestion) {
-    const {
-      typeaheadPrefix,
-      typeaheadContext,
-      typeaheadText,
-    } = this.state;
+    const { typeaheadPrefix, typeaheadContext, typeaheadText } = this.state;
 
     // Modify suggestion based on context
     switch (typeaheadContext) {
@@ -284,8 +280,7 @@ class QueryField extends React.Component {
         break;
       }
 
-      default: {
-      }
+      default:
     }
 
     this.resetTypeahead();
@@ -299,7 +294,7 @@ class QueryField extends React.Component {
       typeaheadPrefix &&
       ((suffixLength > 0 && offset > -1) || suggestion === typeaheadText);
     const forward = midWord ? suffixLength + offset : 0;
-  
+
     return (
       state
         .transform()
@@ -312,7 +307,7 @@ class QueryField extends React.Component {
     );
   }
 
-  onKeyDown = (event, data, state, editor) => {
+  onKeyDown = (event, data, state) => {
     const { typeaheadIndex, suggestions } = this.state;
 
     switch (event.key) {
@@ -322,13 +317,13 @@ class QueryField extends React.Component {
         if (!suggestions || suggestions.length === 0 || !this.menu) {
           return;
         }
-    
+
         // Get the currently selected suggestion
         const flattenedSuggestions = flattenSuggestions(suggestions);
         const selected = Math.abs(typeaheadIndex);
         const selectedIndex = selected % flattenedSuggestions.length || 0;
         const suggestion = flattenedSuggestions[selectedIndex];
-    
+
         return this.applyTypeahead(state, suggestion);
       }
 
