@@ -1,54 +1,32 @@
 import React from 'react';
-import { Editor, Plain, Raw } from 'slate';
+import { Value } from 'slate';
+import { Editor } from 'slate-react';
+import Plain from 'slate-plain-serializer';
 import Portal from 'react-portal';
-import PluginEditCode from 'slate-edit-code';
 
 // dom also includes Element polyfills
 import { getNextCharacter } from './utils/dom';
-import PluginPrism, { Prism } from './slate-plugins/prism/index';
+import BracesPlugin from './slate-plugins/braces';
+import NewlinePlugin from './slate-plugins/newline';
+import PluginPrism, {
+  configurePrismMetricsTokens,
+} from './slate-plugins/prism/index';
 import RunnerPlugin from './slate-plugins/runner';
 import debounce from './utils/debounce';
+import { processLabels, RATE_RANGES, cleanText } from './utils/prometheus';
 
 import Typeahead from './Typeahead';
 import './QueryField.css';
 
-const BRACES = {
-  '[': ']',
-  '{': '}',
-  '(': ')',
-};
-const RATE_RANGES = ['1m', '5m', '10m', '30m', '1h'];
 const TYPEAHEAD_DEBOUNCE = 300;
-
-function configurePrismMetricsTokens(metrics) {
-  Prism.languages.promql.metric = {
-    alias: 'variable',
-    pattern: new RegExp(`(${metrics.join('|')})`, 'i'),
-  };
-}
 
 function flattenSuggestions(s) {
   return s ? s.reduce((acc, g) => acc.concat(g.items), []) : [];
 }
 
-function processLabels(labels) {
-  const values = {};
-  labels.forEach(l => {
-    const { __name__, ...rest } = l;
-    Object.keys(rest).forEach(key => {
-      if (!values[key]) values[key] = [];
-      if (values[key].indexOf(rest[key]) === -1) values[key].push(rest[key]);
-    });
-  });
-  return { values, keys: Object.keys(values) };
-}
-
-// Strip syntax chars
-const cleanText = s => s.replace(/[{}[\]="(),!~+\-*/^%]/g, '').trim();
-
-const getInitialState = query =>
-  Raw.deserialize(
-    {
+const getInitialValue = query =>
+  Value.fromJSON({
+    document: {
       nodes: [
         {
           kind: 'block',
@@ -56,29 +34,37 @@ const getInitialState = query =>
           nodes: [
             {
               kind: 'text',
-              text: query,
+              leaves: [
+                {
+                  text: query,
+                },
+              ],
             },
           ],
         },
       ],
     },
-    { terse: true }
-  );
+  });
 
 class QueryField extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.plugins = [RunnerPlugin(), PluginPrism(), PluginEditCode()];
+    this.plugins = [
+      BracesPlugin(),
+      RunnerPlugin({ handler: props.onPressEnter }),
+      NewlinePlugin(),
+      PluginPrism(),
+    ];
 
     this.state = {
       labelKeys: {},
       labelValues: {},
       metrics: props.metrics || [],
       suggestions: [],
-      state: getInitialState(props.initialQuery || ''),
       typeaheadIndex: 0,
       typeaheadPrefix: '',
+      value: getInitialValue(props.initialQuery || ''),
     };
   }
 
@@ -103,18 +89,19 @@ class QueryField extends React.Component {
       nextProps.initialQuery !== null &&
       nextProps.initialQuery !== this.props.initialQuery
     ) {
-      this.setState({ state: getInitialState(nextProps.initialQuery) });
+      this.setState({ value: getInitialValue(nextProps.initialQuery) });
     }
   }
 
-  onChange = state => {
-    this.setState({ state });
+  onChange = ({ value }) => {
+    const changed = value.document !== this.state.value.document;
+    this.setState({ value }, () => {
+      if (changed) {
+        this.handleChangeQuery();
+      }
+    });
 
     window.requestAnimationFrame(this.handleTypeahead);
-  };
-
-  onDocumentChange = (doc, state) => {
-    this.handleChangeQuery(state);
   };
 
   onMetricsReceived = () => {
@@ -122,12 +109,11 @@ class QueryField extends React.Component {
     // Trigger re-render
     window.requestAnimationFrame(() => {
       // Bogus edit to trigger highlighting
-      const nextEditorState = this.state.state
-        .transform()
+      const change = this.state.value
+        .change()
         .insertText(' ')
-        .deleteBackward(1)
-        .apply();
-      this.onChange(nextEditorState);
+        .deleteBackward(1);
+      this.onChange(change);
     });
   };
 
@@ -138,11 +124,11 @@ class QueryField extends React.Component {
     return fetch(url);
   };
 
-  handleChangeQuery = state => {
+  handleChangeQuery = () => {
     // Send text change to parent
     const { onQueryChange } = this.props;
     if (onQueryChange) {
-      onQueryChange(Plain.serialize(state));
+      onQueryChange(Plain.serialize(this.state.value));
     }
   };
 
@@ -254,7 +240,7 @@ class QueryField extends React.Component {
     }
   }, TYPEAHEAD_DEBOUNCE);
 
-  applyTypeahead(state, suggestion) {
+  applyTypeahead(change, suggestion) {
     const { typeaheadPrefix, typeaheadContext, typeaheadText } = this.state;
 
     // Modify suggestion based on context
@@ -296,80 +282,55 @@ class QueryField extends React.Component {
     const forward = midWord ? suffixLength + offset : 0;
 
     return (
-      state
-        .transform()
+      change
         // TODO this line breaks if cursor was moved left and length is longer than whole prefix
         .deleteBackward(backward)
         .deleteForward(forward)
         .insertText(suggestion)
         .focus()
-        .apply()
     );
   }
 
-  onKeyDown = (event, data, state) => {
-    const { typeaheadIndex, suggestions } = this.state;
+  onKeyDown = (event, change) => {
+    if (this.menu) {
+      const { typeaheadIndex, suggestions } = this.state;
 
-    switch (event.key) {
-      case 'Tab': {
-        // Dont blur input
-        event.preventDefault();
-        if (!suggestions || suggestions.length === 0 || !this.menu) {
-          return;
+      switch (event.key) {
+        case 'Tab': {
+          // Dont blur input
+          event.preventDefault();
+          if (!suggestions || suggestions.length === 0) {
+            return;
+          }
+
+          // Get the currently selected suggestion
+          const flattenedSuggestions = flattenSuggestions(suggestions);
+          const selected = Math.abs(typeaheadIndex);
+          const selectedIndex = selected % flattenedSuggestions.length || 0;
+          const suggestion = flattenedSuggestions[selectedIndex];
+
+          this.applyTypeahead(change, suggestion);
+          return true;
         }
 
-        // Get the currently selected suggestion
-        const flattenedSuggestions = flattenSuggestions(suggestions);
-        const selected = Math.abs(typeaheadIndex);
-        const selectedIndex = selected % flattenedSuggestions.length || 0;
-        const suggestion = flattenedSuggestions[selectedIndex];
+        case 'ArrowDown': {
+          // Select next suggestion
+          event.preventDefault();
+          this.setState({ typeaheadIndex: typeaheadIndex + 1 });
+          break;
+        }
 
-        return this.applyTypeahead(state, suggestion);
-      }
+        case 'ArrowUp': {
+          // Select previous suggestion
+          event.preventDefault();
+          this.setState({ typeaheadIndex: Math.max(0, typeaheadIndex - 1) });
+          break;
+        }
 
-      case 'ArrowDown': {
-        // Select next suggestion
-        event.preventDefault();
-        this.setState({ typeaheadIndex: typeaheadIndex + 1 });
-        break;
-      }
-
-      case 'ArrowUp': {
-        // Select previous suggestion
-        event.preventDefault();
-        this.setState({ typeaheadIndex: Math.max(0, typeaheadIndex - 1) });
-        break;
-      }
-
-      case '{':
-      case '[': {
-        event.preventDefault();
-        // Insert matching braces
-        return state
-          .transform()
-          .insertText(`${event.key}${BRACES[event.key]}`)
-          .move(-1)
-          .focus()
-          .apply();
-      }
-
-      case '(': {
-        event.preventDefault();
-        // Insert matching braces
-        // HACK using 1024 as a long string end to move to
-        return state
-          .transform()
-          .insertText(event.key)
-          .move(1024)
-          .insertText(BRACES[event.key])
-          .move(-1025)
-          .focus()
-          .apply();
-      }
-
-      default: {
-        // console.log('default key', event.key, event.which, event.charCode, event.locale, data.key);
-        break;
+        default: {
+          // console.log('default key', event.key, event.which, event.charCode, event.locale, data.key);
+          break;
+        }
       }
     }
   };
@@ -433,13 +394,9 @@ class QueryField extends React.Component {
   };
 
   handleClickMenu = item => {
-    const { state } = this.state;
-    const nextState = this.applyTypeahead(state, item);
-
-    // Internal state update
-    this.onChange(nextState);
-    // For some reason it's not a document change, manually sending state up
-    this.handleChangeQuery(nextState);
+    // Manually triggering change
+    const change = this.applyTypeahead(this.state.value.change(), item);
+    this.onChange(change);
   };
 
   handleOpen = portal => {
@@ -512,17 +469,14 @@ class QueryField extends React.Component {
         {this.renderMenu()}
         <Editor
           autoCorrect={false}
-          placeholder={this.props.placeholder}
-          placeholderClassName="query-field__placeholder"
-          plugins={this.plugins}
-          state={this.state.state}
           onBlur={this.handleBlur}
           onKeyDown={this.onKeyDown}
           onChange={this.onChange}
-          onDocumentChange={this.onDocumentChange}
           onFocus={this.handleFocus}
-          onPressEnter={this.props.onPressEnter}
+          placeholder={this.props.placeholder}
+          plugins={this.plugins}
           spellCheck={false}
+          value={this.state.value}
         />
       </div>
     );

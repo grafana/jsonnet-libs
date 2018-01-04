@@ -9,7 +9,7 @@ class App extends Component {
     latency: null,
     result: null,
     stats: null,
-  }
+  };
 
   handleRequestError({ error, url }) {
     alert(
@@ -20,7 +20,7 @@ class App extends Component {
 
   handleQueryChange = query => {
     this.query = query;
-  }
+  };
 
   handleSubmit = () => {
     this.runQuery();
@@ -57,6 +57,7 @@ class App extends Component {
             <div className="h1 mb2 mt3">PromQL Editor</div>
             <div className="app__input">
               <QueryField
+                placeholder="PromQL query"
                 onPressEnter={this.handleSubmit}
                 onQueryChange={this.handleQueryChange}
                 onRequestError={this.handleRequestError}
@@ -72,7 +73,7 @@ class App extends Component {
         </header>
         <main className="mt2 p1 rounded">
           <pre className="h5">
-            {result ? JSON.stringify(result, null, '  ') : 'Query result' }
+            {result ? JSON.stringify(result, null, '  ') : 'Query result'}
           </pre>
         </main>
       </div>

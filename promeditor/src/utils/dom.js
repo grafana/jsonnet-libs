@@ -4,6 +4,7 @@ if (window.Element && !Element.prototype.closest) {
     const matches = (this.document || this.ownerDocument).querySelectorAll(s);
     let el = this;
     let i;
+    // eslint-disable-next-line
     do {
       i = matches.length;
       // eslint-disable-next-line
