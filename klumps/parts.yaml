@@ -2,7 +2,7 @@
   "name": "klumps",
   "apiVersion": "0.0.1",
   "kind": "ksonnet.io/parts",
-  "description": "KLUMPS: Kubernetes/Linux USE Method with Prometheus.","
+  "description": "KLUMPS: Kubernetes/Linux USE Method with Prometheus.",
   "author": "Kausal <hello@kausal.co>",
   "contributors": [
     {
@@ -12,7 +12,7 @@
     {
     "name": "David Kaltschmidt",
     "email": "david@kausal.co"
-    },
+    }
   ],
   "repository": {
     "type": "git",
