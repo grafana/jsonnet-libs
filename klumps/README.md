@@ -12,7 +12,7 @@ it with `brew`.  Once you have `jsonnet` installed, the dashboards can
 be generated with the following command:
 
 ```
-$ jsonnet -m . to_json_files.jsonnet
+$ jsonnet -m . lib/to_json_files.jsonnet
 ```
 
 The dashboards depend on a set of Prometheus recording rules, which can be

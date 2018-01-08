@@ -1,4 +1,4 @@
-local dashboards = import "klumps.libsonnet";
+local dashboards = import "../klumps.libsonnet";
 
 {
   [name]: dashboards[name]
