@@ -49,18 +49,15 @@ local g = import "grafana.libsonnet";
       g.row("CPU Requests")
       .addPanel(
         g.panel("Requests by Namespace") +
-        g.tablePanel("sum(kube_pod_container_resource_requests_cpu_cores) by (namespace)",
-                     "CPUs", tableStyles)
-      )
-      .addPanel(
-        g.panel("Limits by Namespace") +
-        g.tablePanel("sum(kube_pod_container_resource_limits_cpu_cores) by (namespace)",
-                     "CPUs", tableStyles)
-      )
-      .addPanel(
-        g.panel("Usage by Namespace") +
-        g.tablePanel("sum(rate(container_cpu_usage_seconds_total[5m])) by (namespace)",
-                     "CPU Usage", tableStyles)
+        g.tablePanel([
+          "sum(kube_pod_container_resource_requests_cpu_cores) by (namespace)",
+          "sum(kube_pod_container_resource_limits_cpu_cores) by (namespace)",
+          "sum(rate(container_cpu_usage_seconds_total[5m])) by (namespace)",
+        ], [
+          ["Value #A", "CPUs (Requests)"],
+          ["Value #B", "CPUs (Limits)"],
+          ["Value #C", "CPU Usage"],
+        ], tableStyles)
       )
     )
     .addRow(
@@ -76,21 +73,20 @@ local g = import "grafana.libsonnet";
       g.row("Memory Requests")
       .addPanel(
         g.panel("Requests by Namespace") +
-        g.tablePanel("sum(kube_pod_container_resource_requests_memory_bytes) by (namespace)",
-                     "Memory", tableStyles) +
-        { _styles+: { Value+: { unit: "decbytes" } } }
-      )
-      .addPanel(
-        g.panel("Limits by Namespace") +
-        g.tablePanel("sum(kube_pod_container_resource_limits_memory_bytes) by (namespace)",
-                     "Memory", tableStyles) +
-        { _styles+: { Value+: { unit: "decbytes" } } }
-      )
-      .addPanel(
-        g.panel("Usage by Namespace") +
-        g.tablePanel("sum(container_memory_usage_bytes) by (namespace)",
-                     "Memory Usage", tableStyles) +
-        { _styles+: { Value+: { unit: "decbytes" } } }
+        g.tablePanel([
+          "sum(kube_pod_container_resource_requests_memory_bytes) by (namespace)",
+          "sum(kube_pod_container_resource_limits_memory_bytes) by (namespace)",
+          "sum(container_memory_usage_bytes) by (namespace)",
+        ], [
+          ["Value #A", "Memory (Requests)"],
+          ["Value #B", "Memory (Limits)"],
+          ["Value #C", "Memory Usage"],
+        ], tableStyles) +
+        { _styles+: {
+          "Value #A"+: { unit: "decbytes" },
+          "Value #B"+: { unit: "decbytes" },
+          "Value #C"+: { unit: "decbytes" },
+        } }
       )
     ),
 

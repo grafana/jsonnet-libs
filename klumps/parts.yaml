@@ -1,0 +1,32 @@
+{
+  "name": "klumps",
+  "apiVersion": "0.0.1",
+  "kind": "ksonnet.io/parts",
+  "description": "KLUMPS: Kubernetes/Linux USE Method with Prometheus.","
+  "author": "Kausal <hello@kausal.co>",
+  "contributors": [
+    {
+    "name": "Tom Wilkie",
+    "email": "tom@kausal.co"
+    },
+    {
+    "name": "David Kaltschmidt",
+    "email": "david@kausal.co"
+    },
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kausal/public"
+  },
+  "bugs": {
+    "url": "https://github.com/kausal/public/issues"
+  },
+  "keywords": [
+    "Prometheus",
+    "Monitoring",
+    "Alerting",
+    "Kubernetes",
+    "Grafana"
+  ],
+  "license": "Apache 2.0"
+}

@@ -4,3 +4,6 @@ libraries:
   prometheus-ksonnet:
     version: master
     path: prometheus-ksonnet
+  klumps:
+    version: master
+    path: klumps
