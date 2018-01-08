@@ -7,10 +7,10 @@
       local n = std.length(row.panels),
       local nextPanel = super._nextPanel,
       local panels = std.makeArray(n, function(i)
-          row.panels[i] + { id: nextPanel + i }),
+        row.panels[i] { id: nextPanel + i }),
 
       _nextPanel: nextPanel + n,
-      rows+: [ row + {panels: panels} ],
+      rows+: [row { panels: panels }],
     },
     addTemplate(name, metric_name, label_name):: self {
       templating+: {
@@ -57,18 +57,18 @@
     templating: {
       list: [
         {
-          "current": {
-            "text": "Prometheus",
-            "value": "Prometheus"
+          current: {
+            text: "Prometheus",
+            value: "Prometheus",
           },
-          "hide": 0,
-          "label": null,
-          "name": "datasource",
-          "options": [],
-          "query": "prometheus",
-          "refresh": 1,
-          "regex": "",
-          "type": "datasource"
+          hide: 0,
+          label: null,
+          name: "datasource",
+          options: [],
+          query: "prometheus",
+          refresh: 1,
+          regex: "",
+          type: "datasource",
         },
       ],
     },
@@ -112,12 +112,12 @@
     addPanel(panel):: self {
       _panels+: [panel],
     },
-    
+
     panels:
       // Automatically distribute panels within a row.
       local n = std.length(self._panels);
-      [ p + { span: std.floor(12 / n) }
-          for p in self._panels ],
+      [p { span: std.floor(12 / n) }
+       for p in self._panels],
 
     collapse: false,
     height: "250px",
@@ -211,60 +211,60 @@
     local style(labelStyle) =
       if std.type(labelStyle) == "string"
       then {
-        "alias": labelStyle,
-        "colorMode": null,
-        "colors": [],
-        "dateFormat": "YYYY-MM-DD HH:mm:ss",
-        "decimals": 2,
-        "thresholds": [],
-        "type": "string",
-        "unit": "short",
+        alias: labelStyle,
+        colorMode: null,
+        colors: [],
+        dateFormat: "YYYY-MM-DD HH:mm:ss",
+        decimals: 2,
+        thresholds: [],
+        type: "string",
+        unit: "short",
       }
       else {
-        "alias": labelStyle["alias"],
-        "colorMode": null,
-        "colors": [],
-        "dateFormat": "YYYY-MM-DD HH:mm:ss",
-        "decimals": 2,
-        "thresholds": [],
-        "type": "string",
-        "unit": "short",
-        "link": std.objectHas(labelStyle, "link"),
-        "linkTooltip": "Drill down",
-        "linkUrl": if std.objectHas(labelStyle, "link") then labelStyle.link else "",
+        alias: labelStyle.alias,
+        colorMode: null,
+        colors: [],
+        dateFormat: "YYYY-MM-DD HH:mm:ss",
+        decimals: 2,
+        thresholds: [],
+        type: "string",
+        unit: "short",
+        link: std.objectHas(labelStyle, "link"),
+        linkTooltip: "Drill down",
+        linkUrl: if std.objectHas(labelStyle, "link") then labelStyle.link else "",
       },
 
     _styles:: {
       // By default hide time.
       Time: {
-        "alias": "Time",
-        "dateFormat": "YYYY-MM-DD HH:mm:ss",
-        "type": "hidden"
+        alias: "Time",
+        dateFormat: "YYYY-MM-DD HH:mm:ss",
+        type: "hidden",
       },
       // And the prometheus "Value" is treated specially.
       Value: {
-        "alias": valueLabel,
-        "colorMode": null,
-        "colors": [
+        alias: valueLabel,
+        colorMode: null,
+        colors: [
           "rgba(245, 54, 54, 0.9)",
           "rgba(237, 129, 40, 0.89)",
-          "rgba(50, 172, 45, 0.97)"
+          "rgba(50, 172, 45, 0.97)",
         ],
-        "dateFormat": "YYYY-MM-DD HH:mm:ss",
-        "decimals": 2,
-        "thresholds": [],
-        "type": "number",
-        "unit": "short"
+        dateFormat: "YYYY-MM-DD HH:mm:ss",
+        decimals: 2,
+        thresholds: [],
+        type: "number",
+        unit: "short",
       },
 
     } + {
       [label]: style(labelStyles[label])
-        for label in std.objectFields(labelStyles)
+      for label in std.objectFields(labelStyles)
     },
     styles: [
-      self._styles[pattern] + {pattern: pattern}
-        for pattern in std.objectFields(self._styles)
-    ] + [ style("") + {pattern: "/.*/"} ],
+      self._styles[pattern] { pattern: pattern }
+      for pattern in std.objectFields(self._styles)
+    ] + [style("") + { pattern: "/.*/" }],
     transform: "table",
     type: "table",
     targets: [
@@ -318,8 +318,8 @@
     targets: [
       {
         expr: "sum by (status) (label_replace(label_replace(rate(" + selector + "[1m]),"
-          + " \"status\", \"${1}xx\", \"status_code\", \"([0-9])..\"),"
-          + " \"status\", \"${1}\",   \"status_code\", \"([a-z]+)\"))",
+              + ' "status", "${1}xx", "status_code", "([0-9]).."),'
+              + ' "status", "${1}",   "status_code", "([a-z]+)"))',
         format: "time_series",
         intervalFactor: 2,
         legendFormat: "{{status}}",
@@ -418,8 +418,8 @@
 
   toPrometheusSelector(selector)::
     local pairs = [
-      "%(label)s%(op)s\"%(value)s\"" % matcher
+      '%(label)s%(op)s"%(value)s"' % matcher
       for matcher in selector
     ];
-      "{%s}" % std.join(", ", pairs),
+    "{%s}" % std.join(", ", pairs),
 }

@@ -9,11 +9,11 @@
       rules: [
         {
           record: "namespace:container_cpu_usage_seconds_total:sum_rate",
-          expr: "sum(rate(container_cpu_usage_seconds_total{job=\"%s\",image!=\"\"}[5m])) by (namespace)" % $._config.cadvisorJob,
+          expr: 'sum(rate(container_cpu_usage_seconds_total{job="%s",image!=""}[5m])) by (namespace)' % $._config.cadvisorJob,
         },
         {
           record: "namespace:container_memory_usage_bytes:sum",
-          expr: "sum(container_memory_usage_bytes{job=\"%s\",image!=\"\"}) by (namespace)" % $._config.cadvisorJob,
+          expr: 'sum(container_memory_usage_bytes{job="%s",image!=""}) by (namespace)' % $._config.cadvisorJob,
         },
         {
           record: "namespace_name:container_cpu_usage_seconds_total:sum_rate",
@@ -84,7 +84,7 @@
           record: ":node_cpu_utilisation:avg1m",
           expr: |||
             1 - avg(rate(node_cpu{job="default/node-exporter",mode="idle"}[1m]))
-          |||
+          |||,
         },
         {
           // CPU utilisation is % CPU is not idle.
@@ -94,7 +94,7 @@
               rate(node_cpu{job="default/node-exporter",mode="idle"}[1m])
             * on (namespace, instance) group_left(node)
               node_namespace_instance:kube_pod_info:)
-          |||
+          |||,
         },
         {
           // CPU saturation is 1min avg run queue length / number of CPUs.
@@ -104,7 +104,7 @@
             sum(node_load1{job="default/node-exporter"})
             /
             sum(node:node_num_cpu:sum)
-          |||
+          |||,
         },
         {
           // CPU saturation is 1min avg run queue length / number of CPUs.
@@ -118,7 +118,7 @@
             )
             /
             node:node_num_cpu:sum
-          |||
+          |||,
         },
         {
           record: ":node_memory_utilisation:",
@@ -127,7 +127,7 @@
             sum(node_memory_MemFree{job="default/node-exporter"} + node_memory_Cached{job="default/node-exporter"} + node_memory_Buffers{job="default/node-exporter"})
             /
             sum(node_memory_MemTotal{job="default/node-exporter"})
-          |||
+          |||,
         },
         {
           record: ":node_memory_swap_io_bytes:sum_rate",
@@ -136,7 +136,7 @@
               (rate(node_vmstat_pgpgin{job="default/node-exporter"}[1m])
              + rate(node_vmstat_pgpgout{job="default/node-exporter"}[1m]))
             )
-          |||
+          |||,
         },
         {
           record: "node:node_memory_utilisation:",
@@ -153,7 +153,7 @@
             * on (namespace, instance) group_left(node)
               node_namespace_instance:kube_pod_info:
             )
-          |||
+          |||,
         },
         {
           record: "node:node_memory_swap_io_bytes:sum_rate",
@@ -164,13 +164,13 @@
              * on (namespace, instance) group_left(node)
                node_namespace_instance:kube_pod_info:
             )
-          |||
+          |||,
         },
         {
           record: ":node_disk_utilisation:avg_irate",
           expr: |||
             avg(irate(node_disk_io_time_ms{job="default/node-exporter",device=~"(sd|xvd).+"}[1m]) / 1e3)
-          |||
+          |||,
         },
         {
           record: "node:node_disk_utilisation:avg_irate",
@@ -180,13 +180,13 @@
             * on (namespace, instance) group_left(node)
               node_namespace_instance:kube_pod_info:
             )
-          |||
+          |||,
         },
         {
           record: ":node_disk_saturation:avg_irate",
           expr: |||
             avg(irate(node_disk_io_time_weighted{job="default/node-exporter",device=~"(sd|xvd).+"}[1m]) / 1e3)
-          |||
+          |||,
         },
         {
           record: "node:node_disk_saturation:avg_irate",
@@ -196,14 +196,14 @@
             * on (namespace, instance) group_left(node)
               node_namespace_instance:kube_pod_info:
             )
-          |||
+          |||,
         },
         {
           record: ":node_net_utilisation:sum_irate",
           expr: |||
             sum(irate(node_network_receive_bytes{job="default/node-exporter",device="eth0"}[1m])) +
             sum(irate(node_network_transmit_bytes{job="default/node-exporter",device="eth0"}[1m]))
-          |||
+          |||,
         },
         {
           record: "node:node_net_utilisation:sum_irate",
@@ -214,14 +214,14 @@
             * on (namespace, instance) group_left(node)
               node_namespace_instance:kube_pod_info:
             )
-          |||
+          |||,
         },
         {
           record: ":node_net_saturation:sum_irate",
           expr: |||
             sum(irate(node_network_receive_drop{job="default/node-exporter",device="eth0"}[1m])) +
             sum(irate(node_network_transmit_drop{job="default/node-exporter",device="eth0"}[1m]))
-          |||
+          |||,
         },
         {
           record: "node:node_net_saturation:sum_irate",
@@ -232,7 +232,7 @@
             * on (namespace, instance) group_left(node)
               node_namespace_instance:kube_pod_info:
             )
-          |||
+          |||,
         },
       ],
     },

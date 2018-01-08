@@ -5,7 +5,7 @@ k {
     grafana_root_url: "http://grafana.%s.svc.cluster.local" % $._config.namespace,
   },
 
-  # Extension point for you to add your own dashboards.
+  // Extension point for you to add your own dashboards.
   dashboards:: {},
 
   grafana_config:: @"
@@ -36,8 +36,8 @@ default_theme = light
 
   dashboards_config_map:
     configMap.new("dashboards") +
-    configMap.withData({[name]: std.toString($.dashboards[name])
-      for name in std.objectFields($.dashboards)}),
+    configMap.withData({ [name]: std.toString($.dashboards[name])
+                         for name in std.objectFields($.dashboards) }),
 
   local container = $.core.v1.container,
 
@@ -69,7 +69,7 @@ default_theme = light
     deployment.new("grafana", 1, [$.grafana_container]) +
     $.grafana_add_datasource("prometheus", "http://prometheus.%s.svc.cluster.local%s" % [$._config.namespace, $._config.prometheus_path]) +
     $.util.configVolumeMount("grafana-config", "/etc/grafana") +
-    $.util.configVolumeMount("dashboards",  "/grafana/dashboards"),
+    $.util.configVolumeMount("dashboards", "/grafana/dashboards"),
 
   grafana_service:
     $.util.serviceFor($.grafana_deployment),

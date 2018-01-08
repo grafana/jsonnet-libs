@@ -30,7 +30,7 @@ k {
 
   kube_state_metrics_deployment:
     deployment.new("kube-state-metrics", 1, [
-      $.kube_state_metrics_container
+      $.kube_state_metrics_container,
     ]) +
     deployment.mixin.spec.template.spec.withServiceAccount("kube-state-metrics"),
 

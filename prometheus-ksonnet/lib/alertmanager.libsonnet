@@ -22,7 +22,7 @@ k {
       slack_configs: [{
         api_url: $._config.slack_url,
         channel: $._config.slack_channel,
-      }]
+      }],
     }],
   },
 

@@ -27,7 +27,7 @@ $ ks registry add kausal https://github.com/kausalco/public
 $ ks pkg install kausal/prometheus-ksonnet
 ```
 
-- Assuming you want to run in the default namespace ('environment' in ksonnet paralance), add the follow to the file `environments/default/main.jsonnet`:
+- Assuming you want to run in the default namespace ('environment' in ksonnet parlance), add the follow to the file `environments/default/main.jsonnet`:
 
 ```
 local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
@@ -35,6 +35,7 @@ local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
 prometheus {
   _config+:: {
     namespace: "default",
+  },
 }
 ```
 

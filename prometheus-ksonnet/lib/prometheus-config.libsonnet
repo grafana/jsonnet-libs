@@ -222,7 +222,7 @@ local k = import "kausal.libsonnet";
     ],
   },
 
-  # Extension points for adding alerts, recording rules and prometheus config.
+  // Extension points for adding alerts, recording rules and prometheus config.
   prometheus_alerts:: {},
   promethues_rules:: {},
 
