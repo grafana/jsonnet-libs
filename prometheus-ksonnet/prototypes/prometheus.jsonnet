@@ -1,5 +1,5 @@
 // @apiVersion 0.0.1
-// @name io.ksonnet.pkg.prometheus
+// @name co.kausal.pkg.prometheus
 // @description Deploys a full Prometheus/Kubernetes monitoring stack.
 // @shortDescription A full Prometheus/Kubernetes monitoring stack.
 // @optionalParam namespace string default Namespace in which to put the application

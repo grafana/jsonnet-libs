@@ -23,7 +23,7 @@
     "Alerting",
   ],
   "quickStart": {
-    "prototype": "io.ksonnet.pkg.prometheus",
+    "prototype": "co.kausal.pkg.prometheus",
     "componentName": "prometheus",
     "flags": {
       "namespace": "default",
