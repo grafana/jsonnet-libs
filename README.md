@@ -11,6 +11,9 @@ Kausal's monorepo for Open Source projects
 * [`klumps`](klumps/): Kubernetes/Linux USE Method with Prometheus: a set of
   recording rules and Grafana dashboards.
 
+* [`prometheus-ksonnet`](prometheus-ksonnet/): A set of extensible configurations
+  for running Prometheus on Kubernetes.
+
 ## LICENSE
 
 [Apache-2.0](LICENSE)
