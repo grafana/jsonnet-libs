@@ -5,8 +5,9 @@ k {
     slack_url: "http://slack",
     slack_channel: "general",
 
-    alertmanager_external_hostname: "http://alertmanage.%s.svc.cluster.local" % $._config.namespace,
+    alertmanager_external_hostname: "http://alertmanager.%s.svc.cluster.local" % $._config.namespace,
     alertmanager_path: "/",
+    alertmanager_port: 80,
   },
 
   alertmanager_config:: {
@@ -37,11 +38,11 @@ k {
 
   alertmanager_container::
     container.new("alertmanager", $._images.alertmanager) +
-    container.withPorts($.core.v1.containerPort.new("http-metrics", 80)) +
+    container.withPorts($.core.v1.containerPort.new("http-metrics", $._config.alertmanager_port)) +
     container.withArgs([
       "-log.level=info",
       "-config.file=/etc/alertmanager/alertmanager.yml",
-      "-web.listen-address=:80",
+      "-web.listen-address=:%s" % $._config.alertmanager_port,
       "-web.external-url=%s%s" % [$._config.alertmanager_external_hostname, $._config.alertmanager_path],
     ]),
 
@@ -50,7 +51,7 @@ k {
     container.withArgs([
       "-v", "-t", "-p=/etc/alertmanager",
       "curl", "-X", "POST", "--fail", "-o", "-", "-sS",
-      "http://localhost:80%s-/reload" % $._config.alertmanager_path,
+      "http://localhost:%s%s-/reload" % [$._config.alertmanager_port, $._config.alertmanager_path],
     ]),
 
   local deployment = $.extensions.v1beta1.deployment,
