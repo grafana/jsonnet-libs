@@ -1,0 +1,6 @@
+apiVersion: '0.1'
+kind: ksonnet.io/registry
+libraries:
+  apache:
+    version: master
+    path: prometheus-ksonnet
