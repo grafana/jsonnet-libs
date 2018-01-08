@@ -49,7 +49,7 @@
             sum by (namespace, label_name) (
               sum(kube_pod_container_resource_requests_memory_bytes{job="%(kube_state_metrics)s"}) by (namespace, pod)
             * on (namespace, pod) group_left(label_name)
-              label_replace(kube_pod_labels{job="%(kube_state_metrocs)s"}, "pod_name", "$1", "pod", "(.*)")
+              label_replace(kube_pod_labels{job="%(kube_state_metrics)s"}, "pod_name", "$1", "pod", "(.*)")
             )
           ||| % $._config.jobs,
         },
