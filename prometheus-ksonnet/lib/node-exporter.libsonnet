@@ -15,7 +15,7 @@ k {
     $.util.resourcesRequests("10m", "20Mi") +
     $.util.resourcesLimits("20m", "40Mi"),
 
-  local daemonSet = $.apps.v1beta1.daemonSet,
+  local daemonSet = $.extensions.v1beta1.daemonSet,
 
   node_exporter_deamonset:
     daemonSet.new("node-exporter", [$.node_exporter_container]) +
