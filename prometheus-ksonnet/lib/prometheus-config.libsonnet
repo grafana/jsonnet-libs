@@ -229,6 +229,9 @@ local k = import "kausal.libsonnet";
         }],
 
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
+        tls_config: {
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+        },
 
         relabel_configs: [{
           source_labels: ["__meta_kubernetes_service_label_component"],
