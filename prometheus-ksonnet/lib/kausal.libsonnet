@@ -38,42 +38,48 @@ k {
     },
   },
 
-  extensions+: {
-    v1beta1+: {
-      daemonSet+: {
-        new(name, containers)::
-          super.new() +
-          super.mixin.metadata.withName(name) +
-          super.mixin.spec.template.metadata.withLabels({ name: name }) +
-          super.mixin.spec.template.spec.withContainers(containers) +
+  local appsExtentions = {
+    daemonSet+: {
+      new(name, containers)::
+        super.new() +
+        super.mixin.metadata.withName(name) +
+        super.mixin.spec.template.metadata.withLabels({ name: name }) +
+        super.mixin.spec.template.spec.withContainers(containers) +
 
-          // Can't think of a reason we wouldn't want a DaemonSet to run on
-          // every node.
-          super.mixin.spec.template.spec.withTolerations([
-            $.core.v1.toleration.new() +
-            $.core.v1.toleration.withOperator("Exists") +
-            $.core.v1.toleration.withEffect("NoSchedule"),
-          ]) +
+        // Can't think of a reason we wouldn't want a DaemonSet to run on
+        // every node.
+        super.mixin.spec.template.spec.withTolerations([
+          $.core.v1.toleration.new() +
+          $.core.v1.toleration.withOperator("Exists") +
+          $.core.v1.toleration.withEffect("NoSchedule"),
+        ]) +
 
-          // We want to specify a minReadySeconds on every deamonset, so we get some
-          // very basic canarying, for instance, with bad arguments.
-          super.mixin.spec.withMinReadySeconds(10) +
-          super.mixin.spec.updateStrategy.withType("RollingUpdate"),
-      },
-
-      deployment+: {
-        new(name, replicas, containers, podLabels={})::
-          super.new(name, replicas, containers, podLabels { name: name }) +
-
-          // We want to specify a minReadySeconds on every deployment, so we get some
-          // very basic canarying, for instance, with bad arguments.
-          super.mixin.spec.withMinReadySeconds(10) +
-
-          // We want to add a sensible default for the number of old deployments
-          // handing around.
-          super.mixin.spec.withRevisionHistoryLimit(10),
-      },
+        // We want to specify a minReadySeconds on every deamonset, so we get some
+        // very basic canarying, for instance, with bad arguments.
+        super.mixin.spec.withMinReadySeconds(10) +
+        super.mixin.spec.updateStrategy.withType("RollingUpdate"),
     },
+
+    deployment+: {
+      new(name, replicas, containers, podLabels={})::
+        super.new(name, replicas, containers, podLabels + { name: name }) +
+
+        // We want to specify a minReadySeconds on every deployment, so we get some
+        // very basic canarying, for instance, with bad arguments.
+        super.mixin.spec.withMinReadySeconds(10) +
+
+        // We want to add a sensible default for the number of old deployments
+        // handing around.
+        super.mixin.spec.withRevisionHistoryLimit(10),
+    },
+  },
+
+  extensions+: {
+    v1beta1+: appsExtentions,
+  },
+
+  apps+: {
+    v1beta1+: appsExtentions,
   },
 
   rbac+: {

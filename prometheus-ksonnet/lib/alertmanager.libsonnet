@@ -54,7 +54,7 @@ k {
       "http://localhost:%s/%s-/reload" % [$._config.alertmanager_port, $._config.alertmanager_path],
     ]),
 
-  local deployment = $.extensions.v1beta1.deployment,
+  local deployment = $.apps.v1beta1.deployment,
 
   alertmanager_deployment:
     deployment.new("alertmanager", 1, [

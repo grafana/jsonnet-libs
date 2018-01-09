@@ -51,7 +51,7 @@ default_theme = light
     ]) +
     $.util.resourcesRequests("10m", "40Mi"),
 
-  local deployment = $.extensions.v1beta1.deployment,
+  local deployment = $.apps.v1beta1.deployment,
 
   grafana_add_datasource(name, url)::
     deployment.mixin.spec.template.spec.withContainersMixin(

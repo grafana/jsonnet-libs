@@ -43,7 +43,7 @@ k {
       "http://localhost:%s/%s-/reload" % [$._config.prometheus_port, $._config.prometheus_path],
     ]),
 
-  local deployment = $.extensions.v1beta1.deployment,
+  local deployment = $.apps.v1beta1.deployment,
 
   prometheus_deployment:
     deployment.new("prometheus", 1, [

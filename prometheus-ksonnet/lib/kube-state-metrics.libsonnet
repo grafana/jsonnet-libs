@@ -26,7 +26,7 @@ k {
     $.util.resourcesRequests("25m", "20Mi") +
     $.util.resourcesLimits("50m", "40Mi"),
 
-  local deployment = $.extensions.v1beta1.deployment,
+  local deployment = $.apps.v1beta1.deployment,
 
   kube_state_metrics_deployment:
     deployment.new("kube-state-metrics", 1, [
