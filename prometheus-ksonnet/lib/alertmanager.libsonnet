@@ -61,6 +61,7 @@ k {
       $.alertmanager_container,
       $.alertmanager_watch_container,
     ]) +
+    deployment.mixin.spec.template.metadata.withAnnotations({ "prometheus.io.path": "/%smetrics" % $._config.alertmanager_path }) +
     $.util.configVolumeMount("alertmanager-config", "/etc/alertmanager"),
 
   alertmanager_service:
