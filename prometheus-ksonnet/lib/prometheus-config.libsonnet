@@ -247,7 +247,7 @@ local k = import "kausal.libsonnet";
 
   // Extension points for adding alerts, recording rules and prometheus config.
   prometheus_alerts:: {},
-  promethues_rules:: {},
+  prometheus_rules:: {},
 
   local configMap = $.core.v1.configMap,
 
@@ -256,6 +256,6 @@ local k = import "kausal.libsonnet";
     configMap.withData({
       "prometheus.yml": k.util.manifestYaml($.prometheus_config),
       "alerts.rules": k.util.manifestYaml($.prometheus_alerts),
-      "recording.rules": k.util.manifestYaml($.promethues_rules),
+      "recording.rules": k.util.manifestYaml($.prometheus_rules),
     }),
 }
