@@ -75,6 +75,7 @@ class QueryField extends React.Component {
       labelKeys: {},
       labelValues: {},
       metrics: props.metrics || [],
+      rules: props.rules || [],
       suggestions: [],
       state: getInitialState(props.initialQuery || ''),
       typeaheadIndex: 0,
@@ -412,7 +413,9 @@ class QueryField extends React.Component {
     try {
       const res = await this.request(url);
       const body = await res.json();
-      this.setState({ metrics: body.data }, this.onMetricsReceived);
+      // HACK injecting rules here
+      const metrics = body.data.concat(Object.keys(this.props.rules));
+      this.setState({ metrics }, this.onMetricsReceived);
     } catch (error) {
       if (this.props.onRequestError) {
         this.props.onRequestError(error);
