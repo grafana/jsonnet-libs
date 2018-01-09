@@ -3,7 +3,7 @@ local k = import "kausal.libsonnet";
 k {
   _config+:: {
     prometheus_external_hostname: "http://prometheus.%s.svc.cluster.local" % $._config.namespace,
-    prometheus_path: "/",
+    prometheus_path: "",
     prometheus_port: 80,
   },
 
@@ -29,16 +29,18 @@ k {
     container.withArgs([
       "--config.file=/etc/prometheus/prometheus.yml",
       "--web.listen-address=:%s" % $._config.prometheus_port,
-      "--web.external-url=%s%s" % [$._config.prometheus_external_hostname, $._config.prometheus_path],
+      "--web.external-url=%s/%s" % [$._config.prometheus_external_hostname, $._config.prometheus_path],
       "--web.enable-lifecycle",
-    ]),
+    ]) +
+    $.util.resourcesRequests("250m", "1536Mi") +
+    $.util.resourcesLimits("500m", "2Gi"),
 
   prometheus_watch_container::
     container.new("watch", $._images.watch) +
     container.withArgs([
       "-v", "-t", "-p=/etc/prometheus",
       "curl", "-X", "POST", "--fail", "-o", "-", "-sS",
-      "http://localhost:%s%s-/reload" % [$._config.prometheus_port, $._config.prometheus_path],
+      "http://localhost:%s/%s-/reload" % [$._config.prometheus_port, $._config.prometheus_path],
     ]),
 
   local deployment = $.extensions.v1beta1.deployment,
@@ -49,6 +51,7 @@ k {
       $.prometheus_watch_container,
     ]) +
     $.util.configVolumeMount("prometheus-config", "/etc/prometheus") +
+    deployment.mixin.spec.template.metadata.annotations({ "prometheus.io.path": "/%smetrics" % $._config.prometheus_path }) +
     deployment.mixin.spec.template.spec.withServiceAccount("prometheus") +
     deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0),
 

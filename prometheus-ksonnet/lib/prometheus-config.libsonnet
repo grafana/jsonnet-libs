@@ -154,7 +154,7 @@ local k = import "kausal.libsonnet";
           {
             source_labels: ["__meta_kubernetes_namespace", "__meta_kubernetes_pod_label_name"],
             separator: "/",
-            regex: "default/kube-state-metrics",
+            regex: "%s/kube-state-metrics" % $._config.namespace,
             action: "keep",
           },
 
@@ -217,6 +217,29 @@ local k = import "kausal.libsonnet";
           source_labels: ["__name__", "image"],
           regex: "container_([a-z_]+);",
           action: "drop",
+        }],
+      },
+
+      // If running on GKE, you cannot scrape API server pods, and must instead
+      // scrape the API server service.
+      {
+        job_name: "kubernetes-service",
+        kubernetes_sd_configs: [{
+          role: "endpoints",
+        }],
+
+        bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
+
+        relabel_configs: [{
+          source_labels: ["__meta_kubernetes_service_label_component"],
+          regex: "apiserver",
+          action: "keep",
+        }, {
+          target_label: "__scheme__",
+          replacement: "https",
+        }, {
+          target_label: "job"
+          replacement: "default/kubernetes"
         }],
       },
     ],
