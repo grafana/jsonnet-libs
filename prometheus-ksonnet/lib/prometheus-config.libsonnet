@@ -238,8 +238,8 @@ local k = import "kausal.libsonnet";
           target_label: "__scheme__",
           replacement: "https",
         }, {
-          target_label: "job"
-          replacement: "default/kubernetes"
+          target_label: "job",
+          replacement: "default/kubernetes",
         }],
       },
     ],
