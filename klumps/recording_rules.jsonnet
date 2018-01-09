@@ -132,7 +132,7 @@
           record: ":node_memory_utilisation:",
           expr: |||
             1 -
-            sum(node_memory_MemFree{job="%(node_exporter)s"} + node_memory_Cached{job="default/node-exporter"} + node_memory_Buffers{job="default/node-exporter"})
+            sum(node_memory_MemFree{job="%(node_exporter)s"} + node_memory_Cached{job="%(node_exporter)s"} + node_memory_Buffers{job="%(node_exporter)s"})
             /
             sum(node_memory_MemTotal{job="%(node_exporter)s"})
           ||| % $._config.jobs,
