@@ -1,8 +1,9 @@
 local k = import "kausal.libsonnet";
 
-{
+k {
   _config+:: {
     apiServerAddress: "kubernetes.default.svc.cluster.local:443",
+    insecureSkipVerify: false,
   },
 
   prometheus_config:: {
@@ -49,7 +50,7 @@ local k = import "kausal.libsonnet";
 
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
-          insecure_skip_verify: true,
+          insecure_skip_verify: $._config.insecureSkipVerify,
         },
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
 
@@ -144,6 +145,7 @@ local k = import "kausal.libsonnet";
 
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+          insecure_skip_verify: $._config.insecureSkipVerify,
         },
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
 
@@ -176,7 +178,8 @@ local k = import "kausal.libsonnet";
 
         // Couldn't get prometheus to validate the kublet cert for scraping, so don't bother for now
         tls_config: {
-          insecure_skip_verify: true,
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+          insecure_skip_verify: $._config.insecureSkipVerify,
         },
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
 
@@ -205,6 +208,12 @@ local k = import "kausal.libsonnet";
           role: "node",
         }],
 
+        bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
+        tls_config: {
+          ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+          insecure_skip_verify: $._config.insecureSkipVerify,
+        },
+
         relabel_configs: [{
           source_labels: ["__address__"],
           regex: "(.+):([0-9]+)",
@@ -231,6 +240,7 @@ local k = import "kausal.libsonnet";
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
+          insecure_skip_verify: $._config.insecureSkipVerify,
         },
 
         relabel_configs: [{
