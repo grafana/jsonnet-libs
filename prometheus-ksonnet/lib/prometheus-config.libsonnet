@@ -72,7 +72,7 @@ k {
           {
             source_labels: ["__meta_kubernetes_pod_container_port_name"],
             action: "keep",
-            regex: "^.*-metrics$",
+            regex: ".*-metrics",
           },
 
           // Allow pods to override the scrape scheme with prometheus.io.scheme=https
@@ -232,10 +232,11 @@ k {
       // If running on GKE, you cannot scrape API server pods, and must instead
       // scrape the API server service.
       {
-        job_name: "kubernetes-service",
+        job_name: "default/kubernetes",
         kubernetes_sd_configs: [{
           role: "endpoints",
         }],
+        scheme: "https",
 
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
         tls_config: {
@@ -247,12 +248,6 @@ k {
           source_labels: ["__meta_kubernetes_service_label_component"],
           regex: "apiserver",
           action: "keep",
-        }, {
-          target_label: "__scheme__",
-          replacement: "https",
-        }, {
-          target_label: "job",
-          replacement: "default/kubernetes",
         }],
       },
     ],

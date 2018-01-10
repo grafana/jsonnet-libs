@@ -5,7 +5,7 @@ k {
 
   node_exporter_container::
     container.new("node-exporter", $._images.nodeExporter) +
-    container.withPorts($.core.v1.containerPort.new("http", 9100)) +
+    container.withPorts($.core.v1.containerPort.new("http-metrics", 9100)) +
     container.withArgs([
       "--path.procfs=/host/proc",
       "--path.sysfs=/host/sys",

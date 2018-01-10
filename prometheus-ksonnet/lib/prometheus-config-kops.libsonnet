@@ -37,6 +37,13 @@ k {
         regex: "(.+?)(\\:\\d+)?",
         replacement: "$1:%s" % port,
       },
+
+      // But also include the namespace as a separate label, for routing alerts
+      {
+        source_labels: ["__meta_kubernetes_namespace"],
+        action: "replace",
+        target_label: "namespace",
+      },
     ],
   },
 

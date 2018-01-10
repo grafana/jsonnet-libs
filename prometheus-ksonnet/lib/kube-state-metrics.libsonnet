@@ -21,7 +21,7 @@ k {
 
   kube_state_metrics_container::
     container.new("kube-state-metrics", $._images.kubeStateMetrics) +
-    container.withPorts($.core.v1.containerPort.new("http", 80)) +
+    container.withPorts($.core.v1.containerPort.new("http-metrics", 80)) +
     container.withArgs(["--port=80"]) +
     $.util.resourcesRequests("25m", "20Mi") +
     $.util.resourcesLimits("50m", "40Mi"),
