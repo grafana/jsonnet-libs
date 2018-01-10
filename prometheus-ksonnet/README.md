@@ -44,3 +44,20 @@ prometheus {
 ```
 $ ks apply default
 ```
+
+# Kops
+
+If you made your Kubernetes cluster with [Kops](https://github.com/kubernetes/kops),
+add the Kops mixin to your config to scrape the Kubernetes system components:
+
+```
+local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
+local kops = import "prometheus-ksonnet/lib/prometheus-config-kops.libsonnet";
+
+prometheus + kops {
+  _config+:: {
+    namespace: "default",
+    insecureSkipVerify: true,
+  },
+}
+```
