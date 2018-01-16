@@ -207,7 +207,15 @@
     ],
   },
 
-  tablePanel(query, valueLabel, labelStyles):: {
+  tablePanel(queries, valueLabels, labelStyles):: {
+    local qs =
+      if std.type(queries) == "string"
+      then [queries]
+      else queries,
+    local vls =
+      if std.type(valueLabels) == "string"
+      then [["Value", valueLabels]]
+      else valueLabels,
     local style(labelStyle) =
       if std.type(labelStyle) == "string"
       then {
@@ -241,9 +249,10 @@
         dateFormat: "YYYY-MM-DD HH:mm:ss",
         type: "hidden",
       },
+    } + {
       // And the prometheus "Value" is treated specially.
-      Value: {
-        alias: valueLabel,
+      [valueLabel[0]]: {
+        alias: valueLabel[1],
         colorMode: null,
         colors: [
           "rgba(245, 54, 54, 0.9)",
@@ -255,15 +264,14 @@
         thresholds: [],
         type: "number",
         unit: "short",
-      },
-
+      } for valueLabel in vls
     } + {
       [label]: style(labelStyles[label])
-      for label in std.objectFields(labelStyles)
+        for label in std.objectFields(labelStyles)
     },
     styles: [
-      self._styles[pattern] { pattern: pattern }
-      for pattern in std.objectFields(self._styles)
+      self._styles[pattern] + { pattern: pattern }
+        for pattern in std.objectFields(self._styles)
     ] + [style("") + { pattern: "/.*/" }],
     transform: "table",
     type: "table",
@@ -274,11 +282,11 @@
         instant: true,
         intervalFactor: 2,
         legendFormat: "",
-        refId: "A",
         step: 10,
-      },
+      } for query in qs
     ],
   },
+
 
   stack:: {
     stack: true,
