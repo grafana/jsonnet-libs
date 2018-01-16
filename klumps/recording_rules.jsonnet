@@ -1,5 +1,5 @@
 {
-  _config:: {
+  _config+:: {
     jobs: {
       cadvisor: "kubernetes-nodes",
       kube_state_metrics: "default/kube-state-metrics",
@@ -7,7 +7,7 @@
     }
   },
 
-  groups: [
+  groups+: [
     {
       name: "k8s.rules",
       rules: [
