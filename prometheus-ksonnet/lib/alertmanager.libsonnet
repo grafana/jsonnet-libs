@@ -6,7 +6,7 @@ k {
     slack_channel: "general",
 
     alertmanager_external_hostname: "http://alertmanager.%s.svc.cluster.local" % $._config.namespace,
-    alertmanager_path: "",
+    alertmanager_path: "/",
     alertmanager_port: 80,
   },
 
@@ -43,7 +43,7 @@ k {
       "-log.level=info",
       "-config.file=/etc/alertmanager/alertmanager.yml",
       "-web.listen-address=:%s" % $._config.alertmanager_port,
-      "-web.external-url=%s/%s" % [$._config.alertmanager_external_hostname, $._config.alertmanager_path],
+      "-web.external-url=%s%s" % [$._config.alertmanager_external_hostname, $._config.alertmanager_path],
     ]),
 
   alertmanager_watch_container::
@@ -51,7 +51,7 @@ k {
     container.withArgs([
       "-v", "-t", "-p=/etc/alertmanager",
       "curl", "-X", "POST", "--fail", "-o", "-", "-sS",
-      "http://localhost:%s/%s-/reload" % [$._config.alertmanager_port, $._config.alertmanager_path],
+      "http://localhost:%s%s-/reload" % [$._config.alertmanager_port, $._config.alertmanager_path],
     ]),
 
   local deployment = $.apps.v1beta1.deployment,
@@ -61,7 +61,7 @@ k {
       $.alertmanager_container,
       $.alertmanager_watch_container,
     ]) +
-    deployment.mixin.spec.template.metadata.withAnnotations({ "prometheus.io.path": "/%smetrics" % $._config.alertmanager_path }) +
+    deployment.mixin.spec.template.metadata.withAnnotations({ "prometheus.io.path": "%smetrics" % $._config.alertmanager_path }) +
     $.util.configVolumeMount("alertmanager-config", "/etc/alertmanager"),
 
   alertmanager_service:
