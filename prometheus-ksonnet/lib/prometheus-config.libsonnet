@@ -21,6 +21,7 @@ k {
         kubernetes_sd_configs: [{
           role: "pod",
         }],
+        path_prefix: $._config.alertmanager_path,
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
         },
