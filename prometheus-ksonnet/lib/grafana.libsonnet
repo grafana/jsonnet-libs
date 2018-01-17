@@ -67,7 +67,7 @@ default_theme = light
 
   grafana_deployment:
     deployment.new("grafana", 1, [$.grafana_container]) +
-    $.grafana_add_datasource("prometheus", "http://prometheus.%s.svc.cluster.local/%s" % [$._config.namespace, $._config.prometheus_path]) +
+    $.grafana_add_datasource("prometheus", "http://prometheus.%s.svc.cluster.local%s" % [$._config.namespace, $._config.prometheus_path]) +
     $.util.configVolumeMount("grafana-config", "/etc/grafana") +
     $.util.configVolumeMount("dashboards", "/grafana/dashboards"),
 
