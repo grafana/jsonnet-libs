@@ -4,7 +4,7 @@
       cadvisor: "kubernetes-nodes",
       kube_state_metrics: "default/kube-state-metrics",
       node_exporter: "default/node-exporter",
-    }
+    },
   },
 
   groups+: [

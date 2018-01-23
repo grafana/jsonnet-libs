@@ -267,11 +267,11 @@
       } for valueLabel in vls
     } + {
       [label]: style(labelStyles[label])
-        for label in std.objectFields(labelStyles)
+      for label in std.objectFields(labelStyles)
     },
     styles: [
-      self._styles[pattern] + { pattern: pattern }
-        for pattern in std.objectFields(self._styles)
+      self._styles[pattern] { pattern: pattern }
+      for pattern in std.objectFields(self._styles)
     ] + [style("") + { pattern: "/.*/" }],
     transform: "table",
     type: "table",

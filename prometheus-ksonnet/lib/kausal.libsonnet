@@ -27,14 +27,20 @@ k {
       },
 
       container:: $.extensions.v1beta1.deployment.mixin.spec.template.spec.containersType {
-        env(es)::
-          super.env([
+        new(name, image)::
+          super.new(name, image) +
+          super.withImagePullPolicy("IfNotPresent"),
+
+        withEnvMap(es)::
+          super.withEnv([
             $.core.v1.container.envType.new(k, es[k])
             for k in std.objectFields(es)
           ]),
       },
 
       toleration:: $.extensions.v1beta1.deployment.mixin.spec.template.spec.tolerationsType,
+
+      servicePort:: $.core.v1.service.mixin.spec.portsType,
     },
   },
 
@@ -62,7 +68,7 @@ k {
 
     deployment+: {
       new(name, replicas, containers, podLabels={})::
-        super.new(name, replicas, containers, podLabels + { name: name }) +
+        super.new(name, replicas, containers, podLabels { name: name }) +
 
         // We want to specify a minReadySeconds on every deployment, so we get some
         // very basic canarying, for instance, with bad arguments.
@@ -160,6 +166,18 @@ k {
         volume.fromHostPath(name, hostPath),
       ]),
 
+    secretVolumeMount(name, path)::
+      local container = $.core.v1.container;
+      local addMount(c) = c + container.withVolumeMountsMixin(
+        container.volumeMountsType.new(name, path)
+      );
+      local volume = $.core.v1.volume;
+      local deployment = $.extensions.v1beta1.deployment;
+      deployment.mapContainers(addMount) +
+      deployment.mixin.spec.template.spec.withVolumesMixin([
+        volume.fromSecret(name, name),
+      ]),
+
     manifestYaml(value):: (
       local f = std.native("manifestYamlFromJson");
       f(std.toString(value))
@@ -176,5 +194,18 @@ k {
         cpu: cpu,
         memory: memory,
       }),
+
+    antiAffinity:
+      {
+        local deployment = $.apps.v1beta1.deployment,
+        local podAntiAffinity = deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
+        local name = super.spec.template.metadata.labels.name,
+
+        spec+: podAntiAffinity.withRequiredDuringSchedulingIgnoredDuringExecution([
+          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.new() +
+          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.mixin.labelSelector.withMatchLabels({ name: name }) +
+          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey("kubernetes.io/hostname"),
+        ]).spec,
+      },
   },
 }
