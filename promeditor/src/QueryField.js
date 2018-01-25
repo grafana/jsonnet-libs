@@ -29,11 +29,11 @@ const getInitialValue = query =>
     document: {
       nodes: [
         {
-          kind: 'block',
+          object: 'block',
           type: 'paragraph',
           nodes: [
             {
-              kind: 'text',
+              object: 'text',
               leaves: [
                 {
                   text: query,
@@ -470,7 +470,7 @@ class QueryField extends React.Component {
     return (
       <div className="query-field">
         {// Create typeahead in DOM root so we can later position it absolutely
-        ReactDOM.createPortal(this.renderMenu(), window.document.body)}
+          ReactDOM.createPortal(this.renderMenu(), window.document.body)}
         <Editor
           autoCorrect={false}
           onBlur={this.handleBlur}
