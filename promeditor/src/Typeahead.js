@@ -30,17 +30,22 @@ const TypeaheadGroup = ({ items, label, selected, onClickItem }) => (
   </li>
 );
 
-const Typeahead = ({ groupedItems, selectedItems, onClickItem }) => (
-  <ul className="typeahead">
-    {groupedItems.map(g => (
-      <TypeaheadGroup
-        key={g.label}
-        onClickItem={onClickItem}
-        selected={selectedItems}
-        {...g}
-      />
-    ))}
-  </ul>
-);
+class Typeahead extends React.PureComponent {
+  render() {
+    const { groupedItems, menuRef, selectedItems, onClickItem } = this.props;
+    return (
+      <ul className="typeahead" ref={menuRef}>
+        {groupedItems.map(g => (
+          <TypeaheadGroup
+            key={g.label}
+            onClickItem={onClickItem}
+            selected={selectedItems}
+            {...g}
+          />
+        ))}
+      </ul>
+    );
+  }
+}
 
 export default Typeahead;

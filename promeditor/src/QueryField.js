@@ -1,8 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Value } from 'slate';
 import { Editor } from 'slate-react';
 import Plain from 'slate-plain-serializer';
-import Portal from 'react-portal';
 
 // dom also includes Element polyfills
 import { getNextCharacter } from './utils/dom';
@@ -74,6 +74,10 @@ class QueryField extends React.Component {
     if (this.props.metrics === undefined) {
       this.fetchMetricNames();
     }
+  };
+
+  componentWillUnmount = () => {
+    clearTimeout(this.resetTimer);
   };
 
   componentDidUpdate = () => {
@@ -296,6 +300,15 @@ class QueryField extends React.Component {
       const { typeaheadIndex, suggestions } = this.state;
 
       switch (event.key) {
+        case 'Escape': {
+          if (this.menu) {
+            event.preventDefault();
+            this.resetTypeahead();
+            return true;
+          }
+          break;
+        }
+
         case 'Tab': {
           // Dont blur input
           event.preventDefault();
@@ -335,14 +348,14 @@ class QueryField extends React.Component {
     }
   };
 
-  resetTypeahead() {
+  resetTypeahead = () => {
     this.setState({
       suggestions: [],
       typeaheadIndex: 0,
       typeaheadPrefix: '',
       typeaheadContext: null,
     });
-  }
+  };
 
   async fetchMetricLabels(name) {
     const url = `/api/v1/series?match[]=${name}`;
@@ -383,8 +396,9 @@ class QueryField extends React.Component {
     }
   }
 
-  handleBlur = () => {
+  handleBlur = e => {
     const { onBlur } = this.props;
+    this.resetTimer = setTimeout(this.resetTypeahead, 100);
     if (onBlur) onBlur();
   };
 
@@ -397,14 +411,6 @@ class QueryField extends React.Component {
     // Manually triggering change
     const change = this.applyTypeahead(this.state.value.change(), item);
     this.onChange(change);
-  };
-
-  handleOpen = portal => {
-    this.menu = portal.firstChild;
-  };
-
-  handleClose = () => {
-    delete this.menu;
   };
 
   updateMenu = () => {
@@ -432,6 +438,10 @@ class QueryField extends React.Component {
     }
   };
 
+  menuRef = menu => {
+    this.menu = menu;
+  };
+
   renderMenu = () => {
     const { suggestions } = this.state;
     const hasSuggesstions = suggestions && suggestions.length > 0;
@@ -447,26 +457,20 @@ class QueryField extends React.Component {
         : [];
 
     return (
-      <Portal
-        isOpened
-        closeOnEsc
-        closeOnOutsideClick
-        onOpen={this.handleOpen}
-        onClose={this.handleClose}
-      >
-        <Typeahead
-          selectedItems={selectedKeys}
-          onClickItem={this.handleClickMenu}
-          groupedItems={suggestions}
-        />
-      </Portal>
+      <Typeahead
+        menuRef={this.menuRef}
+        selectedItems={selectedKeys}
+        onClickItem={this.handleClickMenu}
+        groupedItems={suggestions}
+      />
     );
   };
 
   render = () => {
     return (
       <div className="query-field">
-        {this.renderMenu()}
+        {// Create typeahead in DOM root so we can later position it absolutely
+        ReactDOM.createPortal(this.renderMenu(), window.document.body)}
         <Editor
           autoCorrect={false}
           onBlur={this.handleBlur}
