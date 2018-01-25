@@ -46,6 +46,24 @@ const getInitialValue = query =>
     },
   });
 
+
+class Portal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.node = document.createElement('div');
+    this.node.classList.add(`query-field-portal-${props.index}`);
+    document.body.appendChild(this.node);
+  }
+
+  componentWillUnmount() {
+    document.body.removeChild(this.node);
+  }
+
+  render() {
+    return ReactDOM.createPortal(this.props.children, this.node);
+  }
+}
+
 class QueryField extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -141,8 +159,8 @@ class QueryField extends React.Component {
     if (selection.anchorNode) {
       const wrapperNode = selection.anchorNode.parentNode;
       const editorNode = wrapperNode.closest('.query-field');
-      if (!editorNode) {
-        // Not inside an editor
+      if (!editorNode || this.state.value.isBlurred) {
+        // Not inside this editor
         return;
       }
 
@@ -296,12 +314,12 @@ class QueryField extends React.Component {
   }
 
   onKeyDown = (event, change) => {
-    if (this.menu) {
+    if (this.menuEl) {
       const { typeaheadIndex, suggestions } = this.state;
 
       switch (event.key) {
         case 'Escape': {
-          if (this.menu) {
+          if (this.menuEl) {
             event.preventDefault();
             this.resetTypeahead();
             return true;
@@ -398,6 +416,8 @@ class QueryField extends React.Component {
 
   handleBlur = e => {
     const { onBlur } = this.props;
+    // If we dont wait here, menu clicks wont work because the menu
+    // will be gone.
     this.resetTimer = setTimeout(this.resetTypeahead, 100);
     if (onBlur) onBlur();
   };
@@ -415,7 +435,7 @@ class QueryField extends React.Component {
 
   updateMenu = () => {
     const { suggestions } = this.state;
-    const menu = this.menu;
+    const menu = this.menuEl;
     const selection = window.getSelection();
     const node = selection.anchorNode;
 
@@ -438,8 +458,8 @@ class QueryField extends React.Component {
     }
   };
 
-  menuRef = menu => {
-    this.menu = menu;
+  menuRef = el => {
+    this.menuEl = el;
   };
 
   renderMenu = () => {
@@ -456,21 +476,23 @@ class QueryField extends React.Component {
         ? [flattenedSuggestions[selectedIndex]]
         : [];
 
+    // Create typeahead in DOM root so we can later position it absolutely
     return (
-      <Typeahead
-        menuRef={this.menuRef}
-        selectedItems={selectedKeys}
-        onClickItem={this.handleClickMenu}
-        groupedItems={suggestions}
-      />
+      <Portal index={this.props.index}>
+        <Typeahead
+          menuRef={this.menuRef}
+          selectedItems={selectedKeys}
+          onClickItem={this.handleClickMenu}
+          groupedItems={suggestions}
+        />
+      </Portal>
     );
   };
 
   render = () => {
     return (
       <div className="query-field">
-        {// Create typeahead in DOM root so we can later position it absolutely
-          ReactDOM.createPortal(this.renderMenu(), window.document.body)}
+        {this.renderMenu()}
         <Editor
           autoCorrect={false}
           onBlur={this.handleBlur}
