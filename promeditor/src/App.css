@@ -14,7 +14,7 @@
 .app__input {
   position: relative;
   display: inline-block;
-  padding: 6px 7px;
+  padding: 6px 7px 4px;
   width: 80%;
   cursor: text;
   line-height: 1.5;
@@ -23,7 +23,7 @@
   background-image: none;
   border: 1px solid lightgray;
   border-radius: 4px;
-  transition: all .3s;
+  transition: all 0.3s;
 }
 
 .app__stats {
