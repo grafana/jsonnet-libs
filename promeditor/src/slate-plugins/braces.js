@@ -26,8 +26,10 @@ export default function BracesPlugin() {
 
         case '(': {
           event.preventDefault();
-          const length = value.anchorText.text.length;
+          const text = value.anchorText.text;
           const offset = value.anchorOffset;
+          const space = text.indexOf(' ', offset);
+          const length = space > 0 ? space : text.length;
           const forward = length - offset;
           // Insert matching braces
           change
