@@ -7,6 +7,7 @@ import Plain from 'slate-plain-serializer';
 // dom also includes Element polyfills
 import { getNextCharacter } from './utils/dom';
 import BracesPlugin from './slate-plugins/braces';
+import ClearPlugin from './slate-plugins/clear';
 import NewlinePlugin from './slate-plugins/newline';
 import PluginPrism, {
   configurePrismMetricsTokens,
@@ -46,7 +47,6 @@ const getInitialValue = query =>
     },
   });
 
-
 class Portal extends React.Component {
   constructor(props) {
     super(props);
@@ -70,6 +70,7 @@ class QueryField extends React.Component {
 
     this.plugins = [
       BracesPlugin(),
+      ClearPlugin(),
       RunnerPlugin({ handler: props.onPressEnter }),
       NewlinePlugin(),
       PluginPrism(),
