@@ -19,6 +19,7 @@ import { processLabels, RATE_RANGES, cleanText } from './utils/prometheus';
 import Typeahead from './Typeahead';
 import './QueryField.css';
 
+const EMPTY_METRIC = '';
 const TYPEAHEAD_DEBOUNCE = 300;
 
 function flattenSuggestions(s) {
@@ -212,6 +213,46 @@ class QueryField extends React.Component {
         } else {
           this.fetchMetricLabels(metric);
         }
+      } else if (wrapperClasses.contains('context-labels') && !metricNode) {
+        // Empty name queries
+        const defaultKeys = ['job', 'instance'];
+        const labelKeys = [
+          ...new Set(
+            Object.values(this.state.labelKeys).reduce(
+              (acc, keys) => acc.concat(keys),
+              defaultKeys
+            )
+          ),
+        ];
+        if (labelKeys) {
+          if (
+            (text && text.startsWith('=')) ||
+            wrapperClasses.contains('attr-value')
+          ) {
+            // Label values
+            const labelKeyNode = wrapperNode.previousCousin('.attr-name');
+            if (labelKeyNode) {
+              const labelKey = labelKeyNode.textContent;
+              if (this.state.labelValues[EMPTY_METRIC]) {
+                const labelValues = this.state.labelValues[EMPTY_METRIC][
+                  labelKey
+                ];
+                typeaheadContext = 'context-label-values';
+                suggestionGroups.push({
+                  label: 'Label values',
+                  items: labelValues,
+                });
+              } else {
+                // Can only query label values for now (API to query keys is under development)
+                this.fetchLabelValues(labelKey);
+              }
+            }
+          } else {
+            // Label keys
+            typeaheadContext = 'context-labels';
+            suggestionGroups.push({ label: 'Labels', items: labelKeys });
+          }
+        }
       } else if (metricNode && wrapperClasses.contains('context-aggregation')) {
         typeaheadContext = 'context-aggregation';
         const metric = metricNode.textContent;
@@ -222,7 +263,9 @@ class QueryField extends React.Component {
           this.fetchMetricLabels(metric);
         }
       } else if (
-        (this.state.metrics && (prefix || text.match(/[+\-*/^%]/))) ||
+        (this.state.metrics &&
+          ((prefix && !wrapperClasses.contains('token')) ||
+            text.match(/[+\-*/^%]/))) ||
         wrapperClasses.contains('context-function')
       ) {
         // Need prefix for metrics
@@ -375,6 +418,34 @@ class QueryField extends React.Component {
       typeaheadContext: null,
     });
   };
+
+  async fetchLabelValues(key) {
+    const url = `/api/v1/label/${key}/values`;
+    try {
+      const res = await this.request(url);
+      const body = await res.json();
+      const pairs = this.state.labelValues[EMPTY_METRIC];
+      const values = {
+        ...pairs,
+        [key]: body.data,
+      };
+      // const labelKeys = {
+      //   ...this.state.labelKeys,
+      //   [EMPTY_METRIC]: keys,
+      // };
+      const labelValues = {
+        ...this.state.labelValues,
+        [EMPTY_METRIC]: values,
+      };
+      this.setState({ labelValues }, this.handleTypeahead);
+    } catch (e) {
+      if (this.props.onRequestError) {
+        this.props.onRequestError(e);
+      } else {
+        console.error(e);
+      }
+    }
+  }
 
   async fetchMetricLabels(name) {
     const url = `/api/v1/series?match[]=${name}`;
