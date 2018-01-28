@@ -15,10 +15,17 @@
   },
   "rules": {
     "no-console": 0,
-    "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
+    "no-unused-vars": [
+      "error",
+      {
+        "ignoreRestSiblings": true
+      }
+    ],
     "react/prop-types": 0
   },
   "env": {
-    "browser": true
+    "browser": true,
+    "es6": true,
+    "jasmine": true
   }
 }

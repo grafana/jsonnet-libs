@@ -486,7 +486,7 @@ class QueryField extends React.Component {
     }
   }
 
-  handleBlur = e => {
+  handleBlur = () => {
     const { onBlur } = this.props;
     // If we dont wait here, menu clicks wont work because the menu
     // will be gone.
