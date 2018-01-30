@@ -179,16 +179,29 @@
     yaxes: $.yaxes("short"),
   },
 
-  queryPanel(query, legend):: {
+  queryPanel(queries, legends):: {
+
+    local qs =
+      if std.type(queries) == "string"
+      then [queries]
+      else queries,
+    local ls =
+      if std.type(legends) == "string"
+      then [legends]
+      else legends,
+
+    local qsandls = if std.length(ls) == std.length(qs)
+       then std.makeArray(std.length(qs), function(x) {q : qs[x], l: ls[x]})
+       else error "length of queries is not equal to length of legends",
+
     targets: [
       {
-        expr: query,
+        expr: ql.q,
         format: "time_series",
         intervalFactor: 2,
-        legendFormat: legend,
-        refId: "A",
+        legendFormat: ql.l,
         step: 10,
-      },
+      } for ql in qsandls
     ],
   },
 
