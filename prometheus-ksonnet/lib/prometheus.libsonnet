@@ -5,6 +5,7 @@ k {
     prometheus_external_hostname: "http://prometheus.%s.svc.cluster.local" % $._config.namespace,
     prometheus_path: "/",
     prometheus_port: 80,
+    prometheus_web_route_prefix: "/",
   },
 
   local policyRule = $.rbac.v1beta1.policyRule,
@@ -31,6 +32,7 @@ k {
       "--web.listen-address=:%s" % $._config.prometheus_port,
       "--web.external-url=%s%s" % [$._config.prometheus_external_hostname, $._config.prometheus_path],
       "--web.enable-lifecycle",
+      "--web.route-prefix=%s" % $._config.prometheus_web_route_prefix,
     ]) +
     $.util.resourcesRequests("250m", "1536Mi") +
     $.util.resourcesLimits("500m", "2Gi"),
@@ -40,7 +42,7 @@ k {
     container.withArgs([
       "-v", "-t", "-p=/etc/prometheus",
       "curl", "-X", "POST", "--fail", "-o", "-", "-sS",
-      "http://localhost:%s%s-/reload" % [$._config.prometheus_port, $._config.prometheus_path],
+      "http://localhost:%s/-/reload" % [$._config.prometheus_port],
     ]),
 
   local deployment = $.apps.v1beta1.deployment,
