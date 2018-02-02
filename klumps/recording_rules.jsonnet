@@ -69,6 +69,11 @@
       name: "node.rules",
       rules: [
         {
+          // Number of nodes in the cluster
+          record: ":kube_pod_info_node_count:",
+          expr: "sum(min(kube_pod_info) by (node))"
+        },
+        {
           // This rule results in the tuples (node, namespace, instance) => 1;
           // it is used to calculate per-node metrics, given namespace & instance.
           record: "node_namespace_instance:kube_pod_info:",
@@ -129,13 +134,35 @@
           ||| % $._config.jobs,
         },
         {
-          record: ":node_memory_utilisation:",
+          // Available memory per node
+          record: "node:node_memory_bytes_available:sum",
           expr: |||
-            1 -
-            sum(node_memory_MemFree{job="%(node_exporter)s"} + node_memory_Cached{job="%(node_exporter)s"} + node_memory_Buffers{job="%(node_exporter)s"})
-            /
-            sum(node_memory_MemTotal{job="%(node_exporter)s"})
+            sum by (node) (
+              (node_memory_MemFree{job="%(node_exporter)s"} + node_memory_Cached{job="%(node_exporter)s"} + node_memory_Buffers{job="%(node_exporter)s"})
+              * on (namespace, instance) group_left(node)
+                node_namespace_instance:kube_pod_info:
+            )
           ||| % $._config.jobs,
+        },
+        {
+          // Total memory per node
+          record: "node:node_memory_bytes_total:sum",
+          expr: |||
+            sum by (node) (
+              node_memory_MemTotal{job="%(node_exporter)s"}
+              * on (namespace, instance) group_left(node)
+                node_namespace_instance:kube_pod_info:
+            )
+          |||
+        },
+        {
+          // Memory utilisation per node, normalized by per-node memory
+          record: "node:node_memory_utilisation:ratio",
+          expr: |||
+            (node:node_memory_bytes_total:sum - node:node_memory_bytes_available:sum)
+            /
+            scalar(sum(node:node_memory_bytes_total:sum))
+          |||
         },
         {
           record: ":node_memory_swap_io_bytes:sum_rate",
@@ -149,18 +176,7 @@
         {
           record: "node:node_memory_utilisation:",
           expr: |||
-            1 -
-            sum by (node) (
-              (node_memory_MemFree{job="%(node_exporter)s"} + node_memory_Cached{job="%(node_exporter)s"} + node_memory_Buffers{job="%(node_exporter)s"})
-            * on (namespace, instance) group_left(node)
-              node_namespace_instance:kube_pod_info:
-            )
-            /
-            sum by (node) (
-              node_memory_MemTotal{job="%(node_exporter)s"}
-            * on (namespace, instance) group_left(node)
-              node_namespace_instance:kube_pod_info:
-            )
+            1 - (node:node_memory_bytes_available:sum / node:node_memory_bytes_total:sum)
           ||| % $._config.jobs,
         },
         {

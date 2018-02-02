@@ -63,8 +63,9 @@ local g = import "lib/grafana.libsonnet";
     .addRow(
       g.row("Memory")
       .addPanel(
-        g.panel("Memory Usage") +
-        g.queryPanel("sum(container_memory_usage_bytes) by (namespace)", "{{namespace}}") +
+        g.panel("Memory Usage (w/o cache)") +
+        // Not using container_memory_usage_bytes here because that includes page cache
+        g.queryPanel("sum(container_memory_rss) by (namespace)", "{{namespace}}") +
         g.stack +
         { yaxes: g.yaxes("decbytes") },
       )
@@ -76,11 +77,12 @@ local g = import "lib/grafana.libsonnet";
         g.tablePanel([
           "sum(kube_pod_container_resource_requests_memory_bytes) by (namespace)",
           "sum(kube_pod_container_resource_limits_memory_bytes) by (namespace)",
-          "sum(container_memory_usage_bytes) by (namespace)",
+          // Not using container_memory_usage_bytes here because that includes page cache
+          "sum(container_memory_rss) by (namespace)",
         ], [
           ["Value #A", "Memory (Requests)"],
           ["Value #B", "Memory (Limits)"],
-          ["Value #C", "Memory Usage"],
+          ["Value #C", "Memory Usage (w/o cache)"],
         ], tableStyles) +
         { _styles+: {
           "Value #A"+: { unit: "decbytes" },
@@ -228,25 +230,28 @@ local g = import "lib/grafana.libsonnet";
       g.row("CPU")
       .addPanel(
         g.panel("CPU Utilisation") +
-        g.queryPanel(":node_cpu_utilisation:avg1m", "Utilisation") +
-        { yaxes: g.yaxes("percentunit") },
+        g.queryPanel("node:node_cpu_utilisation:avg1m * node:node_num_cpu:sum / scalar(sum(node:node_num_cpu:sum))", "Utilisation") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
       .addPanel(
         g.panel("CPU Saturation") +
-        g.queryPanel(":node_cpu_saturation_load1:", "Saturation") +
-        { yaxes: g.yaxes("percentunit") },
+        g.queryPanel('node:node_cpu_saturation_load1: / scalar(sum(min(kube_pod_info) by (node)))', "") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
     )
     .addRow(
       g.row("Memory")
       .addPanel(
         g.panel("Memory Utilisation") +
-        g.queryPanel(":node_memory_utilisation:", "Utilisation") +
-        { yaxes: g.yaxes("percentunit") },
+        g.queryPanel('node:node_memory_utilisation:ratio', "") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
       .addPanel(
         g.panel("Memory Saturation") +
-        g.queryPanel(":node_memory_swap_io_bytes:sum_rate", "Swap IO") +
+        g.queryPanel('node:node_memory_swap_io_bytes:sum_rate', "") +
         { yaxes: g.yaxes("Bps") },
       )
     )
