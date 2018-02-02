@@ -307,7 +307,10 @@
     linewidth: 0,
   },
 
-  yaxes(format):: [
+  yaxes(args)::
+    local format = if std.type(args) == "string" then args else null;
+    local options = if std.type(args) == "object" then args else {};
+  [
     {
       format: format,
       label: null,
@@ -315,7 +318,7 @@
       max: null,
       min: 0,
       show: true,
-    },
+    } + options,
     {
       format: "short",
       label: null,
