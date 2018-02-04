@@ -53,7 +53,7 @@ k {
       $.prometheus_watch_container,
     ]) +
     $.util.configVolumeMount("prometheus-config", "/etc/prometheus") +
-    deployment.mixin.spec.template.metadata.withAnnotations({ "prometheus.io.path": "%smetrics" % $._config.prometheus_path }) +
+    deployment.mixin.spec.template.metadata.withAnnotations({ "prometheus.io.path": "%smetrics" % $._config.prometheus_web_route_prefix }) +
     deployment.mixin.spec.template.spec.withServiceAccount("prometheus") +
     deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0),
 
