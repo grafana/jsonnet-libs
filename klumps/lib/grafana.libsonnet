@@ -383,6 +383,7 @@
 
   latencyRecordingRulePanel(metric, selector, multiplier="1e3")::
     local labels = std.join("_", [matcher.label for matcher in selector]);
+    local legendLabels = std.join(" ", ["{{%s}}" % matcher.label for matcher in selector]);
     local selectorStr = $.toPrometheusSelector(selector);
     {
       nullPointMode: "connected",
@@ -396,7 +397,7 @@
           },
           format: "time_series",
           intervalFactor: 2,
-          legendFormat: "99th Percentile",
+          legendFormat: "%s 99th Percentile" % legendLabels,
           refId: "A",
           step: 10,
         },
@@ -409,7 +410,7 @@
           },
           format: "time_series",
           intervalFactor: 2,
-          legendFormat: "50th Percentile",
+          legendFormat: "%s 50th Percentile" % legendLabels,
           refId: "B",
           step: 10,
         },
@@ -422,7 +423,7 @@
           },
           format: "time_series",
           intervalFactor: 2,
-          legendFormat: "Average",
+          legendFormat: "%s Average" % legendLabels,
           refId: "C",
           step: 10,
         },
