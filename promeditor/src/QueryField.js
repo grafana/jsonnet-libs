@@ -105,7 +105,7 @@ class QueryField extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.metrics !== this.props.metrics) {
+    if (nextProps.metrics && nextProps.metrics !== this.props.metrics) {
       this.setState({ metrics: nextProps.metrics }, this.onMetricsReceived);
     }
     // initialQuery is null in case the user typed
@@ -129,6 +129,7 @@ class QueryField extends React.Component {
   };
 
   onMetricsReceived = () => {
+    if (!this.state.metrics) return;
     configurePrismMetricsTokens(this.state.metrics);
     // Trigger re-render
     window.requestAnimationFrame(() => {
