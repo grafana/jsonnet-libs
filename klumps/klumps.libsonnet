@@ -63,8 +63,9 @@ local g = import "lib/grafana.libsonnet";
     .addRow(
       g.row("Memory")
       .addPanel(
-        g.panel("Memory Usage") +
-        g.queryPanel("sum(container_memory_usage_bytes) by (namespace)", "{{namespace}}") +
+        g.panel("Memory Usage (w/o cache)") +
+        // Not using container_memory_usage_bytes here because that includes page cache
+        g.queryPanel("sum(container_memory_rss) by (namespace)", "{{namespace}}") +
         g.stack +
         { yaxes: g.yaxes("decbytes") },
       )
@@ -76,11 +77,12 @@ local g = import "lib/grafana.libsonnet";
         g.tablePanel([
           "sum(kube_pod_container_resource_requests_memory_bytes) by (namespace)",
           "sum(kube_pod_container_resource_limits_memory_bytes) by (namespace)",
-          "sum(container_memory_usage_bytes) by (namespace)",
+          // Not using container_memory_usage_bytes here because that includes page cache
+          "sum(container_memory_rss) by (namespace)",
         ], [
           ["Value #A", "Memory (Requests)"],
           ["Value #B", "Memory (Limits)"],
-          ["Value #C", "Memory Usage"],
+          ["Value #C", "Memory Usage (w/o cache)"],
         ], tableStyles) +
         { _styles+: {
           "Value #A"+: { unit: "decbytes" },
@@ -228,25 +230,29 @@ local g = import "lib/grafana.libsonnet";
       g.row("CPU")
       .addPanel(
         g.panel("CPU Utilisation") +
-        g.queryPanel(":node_cpu_utilisation:avg1m", "Utilisation") +
-        { yaxes: g.yaxes("percentunit") },
+        g.queryPanel("node:node_cpu_utilisation:avg1m * node:node_num_cpu:sum / scalar(sum(node:node_num_cpu:sum))", "{{node}}") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
       .addPanel(
-        g.panel("CPU Saturation") +
-        g.queryPanel(":node_cpu_saturation_load1:", "Saturation") +
-        { yaxes: g.yaxes("percentunit") },
+        g.panel("CPU Saturation (Load1)") +
+        g.queryPanel('node:node_cpu_saturation_load1: / scalar(sum(min(kube_pod_info) by (node)))', "{{node}}") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
     )
     .addRow(
       g.row("Memory")
       .addPanel(
         g.panel("Memory Utilisation") +
-        g.queryPanel(":node_memory_utilisation:", "Utilisation") +
-        { yaxes: g.yaxes("percentunit") },
+        g.queryPanel('node:node_memory_utilisation:ratio', "{{node}}") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
       .addPanel(
-        g.panel("Memory Saturation") +
-        g.queryPanel(":node_memory_swap_io_bytes:sum_rate", "Swap IO") +
+        g.panel("Memory Saturation (Swap I/O)") +
+        g.queryPanel('node:node_memory_swap_io_bytes:sum_rate', "{{node}}") +
+        g.stack +
         { yaxes: g.yaxes("Bps") },
       )
     )
@@ -254,34 +260,41 @@ local g = import "lib/grafana.libsonnet";
       g.row("Disk")
       .addPanel(
         g.panel("Disk IO Utilisation") +
-        g.queryPanel(":node_disk_utilisation:avg_irate", "Utilisation") +
-        { yaxes: g.yaxes("percentunit") },
+        // Full utilisation would be all disks on each node spending an average of
+        // 1 sec per second doing I/O, normalize by node count for stacked charts
+        g.queryPanel("node:node_disk_utilisation:avg_irate / scalar(:kube_pod_info_node_count:)", "{{node}}") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
       .addPanel(
         g.panel("Disk IO Saturation") +
-        g.queryPanel(":node_disk_saturation:avg_irate", "Saturation") +
-        { yaxes: g.yaxes("percentunit") },
+        g.queryPanel("node:node_disk_saturation:avg_irate / scalar(:kube_pod_info_node_count:)", "{{node}}") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
     )
     .addRow(
       g.row("Network")
       .addPanel(
-        g.panel("Net Utilisation") +
-        g.queryPanel(":node_net_utilisation:sum_irate", "Utilisation") +
+        g.panel("Net Utilisation (Transmitted)") +
+        g.queryPanel("node:node_net_utilisation:sum_irate", "{{node}}") +
+        g.stack +
         { yaxes: g.yaxes("Bps") },
       )
       .addPanel(
-        g.panel("Net Saturation") +
-        g.queryPanel(":node_net_saturation:sum_irate", "Saturation") +
+        g.panel("Net Saturation (Dropped)") +
+        g.queryPanel("node:node_net_saturation:sum_irate", "{{node}}") +
+        g.stack +
         { yaxes: g.yaxes("Bps") },
       )
     )
     .addRow(
-      g.row("Memory")
+      g.row("Storage")
       .addPanel(
         g.panel("Disk Capacity") +
-        g.queryPanel('1 - sum(max by (device, node) (node_filesystem_free{fstype=~"ext[24]"})) / sum(max by (device, node) (node_filesystem_size{fstype=~"ext[24]"}))', "Disk") +
-        { yaxes: g.yaxes("percentunit") },
+        g.queryPanel('sum(max(node_filesystem_size{fstype=~"ext[24]"} - node_filesystem_free{fstype=~"ext[24]"}) by (device,instance,namespace)) by (instance,namespace) / scalar(sum(max(node_filesystem_size{fstype=~"ext[24]"}) by (device,instance,namespace))) * on (namespace, instance) group_left(node) node_namespace_instance:kube_pod_info:', "{{node}}") +
+        g.stack +
+        { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       ),
     ),
 
@@ -296,7 +309,7 @@ local g = import "lib/grafana.libsonnet";
         { yaxes: g.yaxes("percentunit") },
       )
       .addPanel(
-        g.panel("CPU Saturation") +
+        g.panel("CPU Saturation (Load1)") +
         g.queryPanel('node:node_cpu_saturation_load1:{node="$node"}', "Saturation") +
         { yaxes: g.yaxes("percentunit") },
       )
@@ -309,7 +322,7 @@ local g = import "lib/grafana.libsonnet";
         { yaxes: g.yaxes("percentunit") },
       )
       .addPanel(
-        g.panel("Memory Saturation") +
+        g.panel("Memory Saturation (Swap I/O)") +
         g.queryPanel('node:node_memory_swap_io_bytes:sum_rate{node="$node"}', "Swap IO") +
         { yaxes: g.yaxes("Bps") },
       )
@@ -330,12 +343,12 @@ local g = import "lib/grafana.libsonnet";
     .addRow(
       g.row("Net")
       .addPanel(
-        g.panel("Net Utilisation") +
+        g.panel("Net Utilisation (Transmitted)") +
         g.queryPanel('node:node_net_utilisation:sum_irate{node="$node"}', "Utilisation") +
         { yaxes: g.yaxes("Bps") },
       )
       .addPanel(
-        g.panel("Net Saturation") +
+        g.panel("Net Saturation (Dropped)") +
         g.queryPanel('node:node_net_saturation:sum_irate{node="$node"}', "Saturation") +
         { yaxes: g.yaxes("Bps") },
       )
