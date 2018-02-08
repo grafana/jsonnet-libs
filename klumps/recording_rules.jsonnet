@@ -70,6 +70,7 @@
       rules: [
         {
           // Number of nodes in the cluster
+          // SINCE 2018-02-08
           record: ":kube_pod_info_node_count:",
           expr: "sum(min(kube_pod_info) by (node))"
         },
@@ -134,7 +135,17 @@
           ||| % $._config.jobs,
         },
         {
+          record: ":node_memory_utilisation:",
+          expr: |||
+            1 -
+            sum(node_memory_MemFree{job="%(node_exporter)s"} + node_memory_Cached{job="%(node_exporter)s"} + node_memory_Buffers{job="%(node_exporter)s"})
+            /
+            sum(node_memory_MemTotal{job="%(node_exporter)s"})
+          ||| % $._config.jobs,
+        },
+        {
           // Available memory per node
+          // SINCE 2018-02-08
           record: "node:node_memory_bytes_available:sum",
           expr: |||
             sum by (node) (
@@ -146,6 +157,7 @@
         },
         {
           // Total memory per node
+          // SINCE 2018-02-08
           record: "node:node_memory_bytes_total:sum",
           expr: |||
             sum by (node) (
@@ -153,10 +165,11 @@
               * on (namespace, instance) group_left(node)
                 node_namespace_instance:kube_pod_info:
             )
-          |||
+          ||| % $._config.jobs,
         },
         {
           // Memory utilisation per node, normalized by per-node memory
+          // NEW 2018-02-08
           record: "node:node_memory_utilisation:ratio",
           expr: |||
             (node:node_memory_bytes_total:sum - node:node_memory_bytes_available:sum)
@@ -174,7 +187,27 @@
           ||| % $._config.jobs,
         },
         {
+          // DEPRECATED
           record: "node:node_memory_utilisation:",
+          expr: |||
+            1 -
+            sum by (node) (
+              (node_memory_MemFree{job="%(node_exporter)s"} + node_memory_Cached{job="%(node_exporter)s"} + node_memory_Buffers{job="%(node_exporter)s"})
+            * on (namespace, instance) group_left(node)
+              node_namespace_instance:kube_pod_info:
+            )
+            /
+            sum by (node) (
+              node_memory_MemTotal{job="%(node_exporter)s"}
+            * on (namespace, instance) group_left(node)
+              node_namespace_instance:kube_pod_info:
+            )
+          ||| % $._config.jobs,
+        },
+        {
+          // DEPENDS 2018-02-08
+          // REPLACE node:node_memory_utilisation:
+          record: "node:node_memory_utilisation_2:",
           expr: |||
             1 - (node:node_memory_bytes_available:sum / node:node_memory_bytes_total:sum)
           ||| % $._config.jobs,
@@ -191,12 +224,14 @@
           ||| % $._config.jobs,
         },
         {
+          // Disk utilisation (ms spent, by rate() it's bound by 1 second)
           record: ":node_disk_utilisation:avg_irate",
           expr: |||
             avg(irate(node_disk_io_time_ms{job="%(node_exporter)s",device=~"(sd|xvd).+"}[1m]) / 1e3)
           ||| % $._config.jobs,
         },
         {
+          // Disk utilisation (ms spent, by rate() it's bound by 1 second)
           record: "node:node_disk_utilisation:avg_irate",
           expr: |||
             avg by (node) (
@@ -207,16 +242,18 @@
           ||| % $._config.jobs,
         },
         {
+          // Disk saturation (ms spent, by rate() it's bound by 1 second)
           record: ":node_disk_saturation:avg_irate",
           expr: |||
             avg(irate(node_disk_io_time_weighted{job="%(node_exporter)s",device=~"(sd|xvd).+"}[1m]) / 1e3)
           ||| % $._config.jobs,
         },
         {
+          // Disk saturation (ms spent, by rate() it's bound by 1 second)
           record: "node:node_disk_saturation:avg_irate",
           expr: |||
             avg by (node) (
-              irate(node_disk_io_time_weighted{job="%(node_exporter)sr",device=~"(sd|xvd).+"}[1m]) / 1e3
+              irate(node_disk_io_time_weighted{job="%(node_exporter)s",device=~"(sd|xvd).+"}[1m]) / 1e3
             * on (namespace, instance) group_left(node)
               node_namespace_instance:kube_pod_info:
             )
