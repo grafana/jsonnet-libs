@@ -205,10 +205,10 @@
     ],
   },
 
-  statPanel(query):: {
+  statPanel(query, format = "percentunit"):: {
     type: "singlestat",
     thresholds: "70,80",
-    format: "percentunit",
+    format: format,
     targets: [
       {
         expr: query,
