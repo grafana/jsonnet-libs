@@ -225,18 +225,20 @@ local g = import "lib/grafana.libsonnet";
     ),
 
   "k8s-cluster-rsrc-use.json":
+    local legendLink = "%s/dashboard/file/k8s-node-rsrc-use.json" % $._config.grafanaPrefix;
+
     g.dashboard("K8s / USE Method / Cluster")
     .addRow(
       g.row("CPU")
       .addPanel(
         g.panel("CPU Utilisation") +
-        g.queryPanel("node:node_cpu_utilisation:avg1m * node:node_num_cpu:sum / scalar(sum(node:node_num_cpu:sum))", "{{node}}") +
+        g.queryPanel("node:node_cpu_utilisation:avg1m * node:node_num_cpu:sum / scalar(sum(node:node_num_cpu:sum))", "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
       .addPanel(
         g.panel("CPU Saturation (Load1)") +
-        g.queryPanel('node:node_cpu_saturation_load1: / scalar(sum(min(kube_pod_info) by (node)))', "{{node}}") +
+        g.queryPanel('node:node_cpu_saturation_load1: / scalar(sum(min(kube_pod_info) by (node)))', "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
@@ -245,13 +247,13 @@ local g = import "lib/grafana.libsonnet";
       g.row("Memory")
       .addPanel(
         g.panel("Memory Utilisation") +
-        g.queryPanel('node:node_memory_utilisation:ratio', "{{node}}") +
+        g.queryPanel('node:node_memory_utilisation:ratio', "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
       .addPanel(
         g.panel("Memory Saturation (Swap I/O)") +
-        g.queryPanel('node:node_memory_swap_io_bytes:sum_rate', "{{node}}") +
+        g.queryPanel('node:node_memory_swap_io_bytes:sum_rate', "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes("Bps") },
       )
@@ -262,13 +264,13 @@ local g = import "lib/grafana.libsonnet";
         g.panel("Disk IO Utilisation") +
         // Full utilisation would be all disks on each node spending an average of
         // 1 sec per second doing I/O, normalize by node count for stacked charts
-        g.queryPanel("node:node_disk_utilisation:avg_irate / scalar(:kube_pod_info_node_count:)", "{{node}}") +
+        g.queryPanel("node:node_disk_utilisation:avg_irate / scalar(:kube_pod_info_node_count:)", "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
       .addPanel(
         g.panel("Disk IO Saturation") +
-        g.queryPanel("node:node_disk_saturation:avg_irate / scalar(:kube_pod_info_node_count:)", "{{node}}") +
+        g.queryPanel("node:node_disk_saturation:avg_irate / scalar(:kube_pod_info_node_count:)", "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       )
@@ -277,13 +279,13 @@ local g = import "lib/grafana.libsonnet";
       g.row("Network")
       .addPanel(
         g.panel("Net Utilisation (Transmitted)") +
-        g.queryPanel("node:node_net_utilisation:sum_irate", "{{node}}") +
+        g.queryPanel("node:node_net_utilisation:sum_irate", "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes("Bps") },
       )
       .addPanel(
         g.panel("Net Saturation (Dropped)") +
-        g.queryPanel("node:node_net_saturation:sum_irate", "{{node}}") +
+        g.queryPanel("node:node_net_saturation:sum_irate", "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes("Bps") },
       )
@@ -292,7 +294,7 @@ local g = import "lib/grafana.libsonnet";
       g.row("Storage")
       .addPanel(
         g.panel("Disk Capacity") +
-        g.queryPanel('sum(max(node_filesystem_size{fstype=~"ext[24]"} - node_filesystem_free{fstype=~"ext[24]"}) by (device,instance,namespace)) by (instance,namespace) / scalar(sum(max(node_filesystem_size{fstype=~"ext[24]"}) by (device,instance,namespace))) * on (namespace, instance) group_left(node) node_namespace_instance:kube_pod_info:', "{{node}}") +
+        g.queryPanel('sum(max(node_filesystem_size{fstype=~"ext[24]"} - node_filesystem_free{fstype=~"ext[24]"}) by (device,instance,namespace)) by (instance,namespace) / scalar(sum(max(node_filesystem_size{fstype=~"ext[24]"}) by (device,instance,namespace))) * on (namespace, instance) group_left(node) node_namespace_instance:kube_pod_info:', "{{node}}", legendLink) +
         g.stack +
         { yaxes: g.yaxes({ format: "percentunit", max: 1 }), },
       ),

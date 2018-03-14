@@ -179,7 +179,7 @@
     yaxes: $.yaxes("short"),
   },
 
-  queryPanel(queries, legends):: {
+  queryPanel(queries, legends, legendLink = null):: {
 
     local qs =
       if std.type(queries) == "string"
@@ -196,6 +196,7 @@
 
     targets: [
       {
+        legendLink: legendLink,
         expr: ql.q,
         format: "time_series",
         intervalFactor: 2,
