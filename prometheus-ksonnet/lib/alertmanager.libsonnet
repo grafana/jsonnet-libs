@@ -40,10 +40,10 @@ k {
     container.new("alertmanager", $._images.alertmanager) +
     container.withPorts($.core.v1.containerPort.new("http-metrics", $._config.alertmanager_port)) +
     container.withArgs([
-      "-log.level=info",
-      "-config.file=/etc/alertmanager/alertmanager.yml",
-      "-web.listen-address=:%s" % $._config.alertmanager_port,
-      "-web.external-url=%s%s" % [$._config.alertmanager_external_hostname, $._config.alertmanager_path],
+      "--log.level=info",
+      "--config.file=/etc/alertmanager/alertmanager.yml",
+      "--web.listen-address=:%s" % $._config.alertmanager_port,
+      "--web.external-url=%s%s" % [$._config.alertmanager_external_hostname, $._config.alertmanager_path],
     ]),
 
   alertmanager_watch_container::

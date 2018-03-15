@@ -5,7 +5,7 @@
     kubeStateMetrics: "gcr.io/google_containers/kube-state-metrics:v0.5.0",
     grafana: "kausal/grafana:v4.6.2-plus-build-image-c3b097cfc",
     gfdatasource: "quay.io/weaveworks/gfdatasource:master-2bda599",
-    alertmanager: "prom/alertmanager:v0.7.1",
+    alertmanager: "prom/alertmanager:v0.14.0",
     nodeExporter: "prom/node-exporter:v0.15.1",
   },
 }
