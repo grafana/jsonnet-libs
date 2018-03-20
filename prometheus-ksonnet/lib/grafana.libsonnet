@@ -2,7 +2,7 @@ local k = import "kausal.libsonnet";
 
 k {
   _config+:: {
-    grafana_root_url: "http://grafana.%s.svc.cluster.local" % $._config.namespace,
+    grafana_root_url: "http://grafana.%s.svc.cluster.local/grafana" % $._config.namespace,
   },
 
   // Extension point for you to add your own dashboards.
@@ -19,14 +19,14 @@ path = /grafana/dashboards
 
 [server]
 http_port = 80
-root_url = %s
+root_url = %(grafana_root_url)s
 
 [analytics]
 reporting_enabled = false
 
 [users]
 default_theme = light
-" % $._config.grafana_root_url,
+" % $._config,
 
   local configMap = $.core.v1.configMap,
 

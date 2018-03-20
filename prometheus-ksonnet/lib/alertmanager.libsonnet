@@ -6,7 +6,7 @@ k {
     slack_channel: "general",
 
     alertmanager_external_hostname: "http://alertmanager.%s.svc.cluster.local" % $._config.namespace,
-    alertmanager_path: "/",
+    alertmanager_path: "/alertmanager/",
     alertmanager_port: 80,
   },
 
