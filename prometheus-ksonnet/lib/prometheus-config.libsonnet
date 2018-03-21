@@ -255,7 +255,70 @@ k {
   },
 
   // Extension points for adding alerts, recording rules and prometheus config.
-  prometheus_alerts:: {},
+  prometheus_alerts:: {
+    groups+: [
+      {
+        name: "prometheus",
+        rules: [
+          {
+            expr: |||
+              up != 1
+            |||,
+            labels: {
+              severity: "warning",
+            },
+            annotations: {
+              message: "Prometheus failed to scrape a target {{ $labels.job }} / {{ $labels.instance }}",
+            },
+            "for": "15m",
+            alert: "PromScrapeFailed",
+          },
+          {
+            expr: |||
+              prometheus_config_last_reload_successful{job="default/prometheus"} == 0
+            |||,
+            labels: {
+              severity: "critical",
+            },
+            annotations: {
+              mesage: "Prometheus failed to reload config, see container logs",
+            },
+            "for": "15m",
+            alert: "PromBadConfig",
+          },
+          {
+            expr: |||
+              alertmanager_config_last_reload_successful{job="default/alertmanager"} == 0
+            |||,
+            labels: {
+              severity: "critical",
+            },
+            annotations: {
+              message: "Alertmanager failed to reload config, see container logs",
+            },
+            "for": "10m",
+            alert: "PromAlertmanagerBadConfig",
+          },
+          {
+            expr: |||
+              (rate(prometheus_remote_storage_failed_samples_total[1m]) * 100)
+                /
+              (rate(prometheus_remote_storage_failed_samples_total[1m]) + rate(prometheus_remote_storage_succeeded_samples_total[1m]))
+                > 1
+            |||,
+            labels: {
+              severity: "critical",
+            },
+            annotations: {
+              message: "Prometheus failed to send {{ printf \"%.1f\" $value }}%% samples",
+            },
+            "for": "15m",
+            alert: "PromRemoteStorageFailures",
+          },
+        ],
+      },
+    ],
+  },
   prometheus_rules:: {},
 
   local configMap = $.core.v1.configMap,
