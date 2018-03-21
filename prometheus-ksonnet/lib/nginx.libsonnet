@@ -28,18 +28,33 @@ k {
           server {
             listen 80;
             location ~ ^/prometheus(/?)(.*)$ {
-              proxy_pass      http://prometheus.%(namespace)s.svc.cluster.local/prometheus/$2;
+              proxy_pass      http://prometheus.%(namespace)s.svc.cluster.local/prometheus/$2$is_args$args;
             }
             location ~ /alertmanager(/?)(.*)$ {
-              proxy_pass      http://alertmanager.%(namespace)s.svc.cluster.local/alertmanager/$2;
+              proxy_pass      http://alertmanager.%(namespace)s.svc.cluster.local/alertmanager/$2$is_args$args;
             }
             location ~ ^/grafana(/?)(.*)$ {
-
-              proxy_pass      http://grafana.%(namespace)s.svc.cluster.local/$2;
+              proxy_pass      http://grafana.%(namespace)s.svc.cluster.local/$2$is_args$args;
+            }
+            location ~ /(index.html)? {
+              root /etc/nginx;
             }
           }
         }
-      ||| % $._config
+      ||| % $._config,
+      "index.html": |||
+        <html>
+          <head><title>Admin</title></head>
+          <body>
+            <h1>Admin</h1>
+            <ul>
+              <li><a href="/prometheus">Prometheus</a></li>
+              <li><a href="/alertmanager">Alertmanager</a></li>
+              <li><a href="/grafana">Grafana</a></li>
+            </ul>
+          </body>
+        </html>
+      |||
     }),
 
   local container = $.core.v1.container,
