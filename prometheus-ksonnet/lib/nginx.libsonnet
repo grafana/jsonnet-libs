@@ -1,6 +1,10 @@
 local k = import "kausal.libsonnet";
 
 k {
+  _config+:: {
+    cluster_dns_suffix: "cluster.local",
+  },
+
   local configMap = $.core.v1.configMap,
 
   nginx_config_map:
@@ -24,17 +28,17 @@ k {
           access_log   /dev/stderr  main;
           sendfile     on;
           tcp_nopush   on;
-          resolver     kube-dns.kube-system.svc.cluster.local;
+          resolver     kube-dns.kube-system.svc.%(cluster_dns_suffix)s;
           server {
             listen 80;
             location ~ ^/prometheus(/?)(.*)$ {
-              proxy_pass      http://prometheus.%(namespace)s.svc.cluster.local/prometheus/$2$is_args$args;
+              proxy_pass      http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s/prometheus/$2$is_args$args;
             }
             location ~ /alertmanager(/?)(.*)$ {
-              proxy_pass      http://alertmanager.%(namespace)s.svc.cluster.local/alertmanager/$2$is_args$args;
+              proxy_pass      http://alertmanager.%(namespace)s.svc.%(cluster_dns_suffix)s/alertmanager/$2$is_args$args;
             }
             location ~ ^/grafana(/?)(.*)$ {
-              proxy_pass      http://grafana.%(namespace)s.svc.cluster.local/$2$is_args$args;
+              proxy_pass      http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/$2$is_args$args;
             }
             location ~ /(index.html)? {
               root /etc/nginx;

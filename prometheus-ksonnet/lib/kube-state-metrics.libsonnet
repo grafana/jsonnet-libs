@@ -8,21 +8,66 @@ k {
     $.util.rbac("kube-state-metrics", [
       policyRule.new() +
       policyRule.withApiGroups([""]) +
-      policyRule.withResources(["nodes", "pods", "services", "resourcequotas", "replicationcontrollers", "limitranges"]) +
+      policyRule.withResources([
+        "nodes",
+        "pods",
+        "services",
+        "resourcequotas",
+        "replicationcontrollers",
+        "limitranges",
+        "persistentvolumeclaims",
+        "persistentvolumes",
+        "namespaces",
+        "endpoints",
+      ]) +
       policyRule.withVerbs(["list", "watch"]),
 
       policyRule.new() +
       policyRule.withApiGroups(["extensions"]) +
-      policyRule.withResources(["daemonsets", "deployments", "replicasets"]) +
+      policyRule.withResources([
+        "daemonsets",
+        "deployments",
+        "replicasets",
+      ]) +
+      policyRule.withVerbs(["list", "watch"]),
+
+      policyRule.new() +
+      policyRule.withApiGroups(["apps"]) +
+      policyRule.withResources([
+        "statefulsets",
+      ]) +
+      policyRule.withVerbs(["list", "watch"]),
+
+      policyRule.new() +
+      policyRule.withApiGroups(["batch"]) +
+      policyRule.withResources([
+        "cronjobs",
+        "jobs",
+      ]) +
+      policyRule.withVerbs(["list", "watch"]),
+
+      policyRule.new() +
+      policyRule.withApiGroups(["autoscaling"]) +
+      policyRule.withResources([
+        "horizontalpodautoscalers",
+      ]) +
       policyRule.withVerbs(["list", "watch"]),
     ]),
 
   local container = $.core.v1.container,
+  local containerPort = $.core.v1.containerPort,
 
   kube_state_metrics_container::
     container.new("kube-state-metrics", $._images.kubeStateMetrics) +
-    container.withPorts($.core.v1.containerPort.new("http-metrics", 80)) +
-    container.withArgs(["--port=80"]) +
+    container.withArgs([
+      "--port=80",
+      "--telemetry-host=0.0.0.0",
+      "--telemetry-port=81",
+    ]) +
+    container.withPorts([
+      containerPort.new("http-metrics", 80),
+      containerPort.new("self-metrics", 81),
+    ]) +
     $.util.resourcesRequests("25m", "20Mi") +
     $.util.resourcesLimits("50m", "40Mi"),
 
