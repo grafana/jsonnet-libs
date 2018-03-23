@@ -23,8 +23,8 @@
         },
         {
           expr: |||
-            kube_pod_status_ready{condition="true"} != 1
-          |||,
+            sum by (namespace, pod) (kube_pod_status_phase{job="%(kube_state_metrics)s", phase!~"Running|Succeeded"}) > 0
+          ||| % $.jobs,
           labels: {
             severity: "critical",
           },
