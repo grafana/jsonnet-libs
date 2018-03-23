@@ -1,6 +1,10 @@
 local k = import "kausal.libsonnet";
 
 k {
+  _config+::{
+    node_exporter_mount_root: true,
+  },
+
   local container = $.core.v1.container,
 
   node_exporter_container::
@@ -17,11 +21,13 @@ k {
 
   local daemonSet = $.extensions.v1beta1.daemonSet,
 
-  node_exporter_deamonset:
+  node_exporter_daemonset:
     daemonSet.new("node-exporter", [$.node_exporter_container]) +
     daemonSet.mixin.spec.template.spec.withHostPid(true) +
     daemonSet.mixin.spec.template.spec.withHostNetwork(true) +
     $.util.hostVolumeMount("proc", "/proc", "/host/proc") +
     $.util.hostVolumeMount("sys", "/sys", "/host/sys") +
-    $.util.hostVolumeMount("root", "/", "/rootfs"),
+      (if $._config.node_exporter_mount_root
+      then $.util.hostVolumeMount("root", "/", "/rootfs")
+      else {}),
 }

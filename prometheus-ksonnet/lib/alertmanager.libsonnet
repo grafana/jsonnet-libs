@@ -44,7 +44,11 @@ k {
       "--config.file=/etc/alertmanager/alertmanager.yml",
       "--web.listen-address=:%s" % $._config.alertmanager_port,
       "--web.external-url=%s%s" % [$._config.alertmanager_external_hostname, $._config.alertmanager_path],
-    ]),
+    ]) +
+    container.mixin.resources.withRequests({
+      cpu: "10m",
+      memory: "40Mi",
+    }),
 
   alertmanager_watch_container::
     container.new("watch", $._images.watch) +
@@ -52,7 +56,11 @@ k {
       "-v", "-t", "-p=/etc/alertmanager",
       "curl", "-X", "POST", "--fail", "-o", "-", "-sS",
       "http://localhost:%s%s-/reload" % [$._config.alertmanager_port, $._config.alertmanager_path],
-    ]),
+    ]) +
+    container.mixin.resources.withRequests({
+      cpu: "10m",
+      memory: "20Mi",
+    }),
 
   local deployment = $.apps.v1beta1.deployment,
 
