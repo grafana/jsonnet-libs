@@ -2,7 +2,7 @@ local k = import "kausal.libsonnet";
 
 k {
   _config+:: {
-    grafana_root_url: "http://grafana.%s.svc.cluster.local/grafana" % $._config.namespace,
+    grafana_root_url: "http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana" % $._config,
   },
 
   // Extension point for you to add your own dashboards.
@@ -67,7 +67,7 @@ default_theme = light
 
   grafana_deployment:
     deployment.new("grafana", 1, [$.grafana_container]) +
-    $.grafana_add_datasource("prometheus", "http://prometheus.%s.svc.cluster.local%s" % [$._config.namespace, $._config.prometheus_web_route_prefix]) +
+    $.grafana_add_datasource("prometheus", "http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s%(prometheus_web_route_prefix)s" % $._config) +
     $.util.configVolumeMount("grafana-config", "/etc/grafana") +
     $.util.configVolumeMount("dashboards", "/grafana/dashboards"),
 
