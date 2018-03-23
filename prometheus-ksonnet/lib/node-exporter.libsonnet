@@ -21,7 +21,7 @@ k {
 
   local daemonSet = $.extensions.v1beta1.daemonSet,
 
-  node_exporter_deamonset:
+  node_exporter_daemonset:
     daemonSet.new("node-exporter", [$.node_exporter_container]) +
     daemonSet.mixin.spec.template.spec.withHostPid(true) +
     daemonSet.mixin.spec.template.spec.withHostNetwork(true) +
