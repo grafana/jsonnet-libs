@@ -10,7 +10,7 @@
       rules: [
         {
           expr: |||
-            rate(kube_pod_container_status_restarts[15m]) > 0
+            rate(kube_pod_container_status_restarts_total[15m]) > 0
           |||,
           labels: {
             severity: "critical",
