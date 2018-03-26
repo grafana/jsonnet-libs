@@ -61,3 +61,32 @@ prometheus + kops {
   },
 }
 ```
+
+# Customising and Extending.
+
+The choice of Ksonnet for configuring these jobs was intention; it allows users
+to easily override setting in these configurations to suit their needs, without having
+to fork or modify this library.  For instance, to override the resource requests
+and limits for the Prometheus container, you would:
+
+```
+local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
+
+prometheus {
+  prometheus_container+::
+     $.util.resourcesRequests("1", "2Gi") +
+     $.util.resourcesLimits("2", "4Gi"),
+}
+```
+
+We sometimes specify config options in a `_config` dict; there are two situations
+under which we do this:
+
+- When you must provide a value for the parameter (such as `namesapce`).
+- When the parameter get referenced in multiple places, and overriding it using
+  the technique above would be cumbersome and error prone (such as with `cluster_dns_suffix`).
+
+We use these two guidelines for when to put parameters in `_config` as otherwise
+the config field would just become the same as the jobs it declares - and lets
+not forget, this whole thing is config - so its completely acceptable to override
+pretty much any of it.
