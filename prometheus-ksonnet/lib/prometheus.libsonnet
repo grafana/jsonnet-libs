@@ -6,6 +6,10 @@ k {
     prometheus_path: "/",
     prometheus_port: 80,
     prometheus_web_route_prefix: $._config.prometheus_path,
+    prometheus_resources_requests_cpu: "250m",
+    prometheus_resources_requests_memory: "1536Mi",
+    prometheus_resources_limits_cpu: "500m",
+    prometheus_resources_limits_memory: "2Gi",
   },
 
   local policyRule = $.rbac.v1beta1.policyRule,
@@ -34,8 +38,8 @@ k {
       "--web.enable-lifecycle",
       "--web.route-prefix=%s" % $._config.prometheus_web_route_prefix,
     ]) +
-    $.util.resourcesRequests("250m", "1536Mi") +
-    $.util.resourcesLimits("500m", "2Gi"),
+    $.util.resourcesRequests($._config.prometheus_resources_requests_cpu, $._config.prometheus_resources_requests_memory) +
+    $.util.resourcesLimits($._config.prometheus_resources_limits_cpu, $._config.prometheus_resources_limits_memory),
 
   prometheus_watch_container::
     container.new("watch", $._images.watch) +
