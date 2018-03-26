@@ -12,13 +12,13 @@
       name: "k8s.rules",
       rules: [
         {
-          record: "namespace:container_cpu_usage_seconds_total:sum_rate",
+          record: "namespace_name:container_cpu_usage_seconds_total:sum_rate",
           expr: |||
             sum(rate(container_cpu_usage_seconds_total{job="%(cadvisor)s",image!=""}[5m])) by (namespace)
           ||| % $._config.jobs,
         },
         {
-          record: "namespace:container_memory_usage_bytes:sum",
+          record: "namespace_name:container_memory_usage_bytes:sum",
           expr: |||
             sum(container_memory_usage_bytes{job="%(cadvisor)s",image!=""}) by (namespace)
           ||| % $._config.jobs,
