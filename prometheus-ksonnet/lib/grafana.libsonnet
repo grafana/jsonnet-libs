@@ -2,7 +2,7 @@ local k = import "kausal.libsonnet";
 
 k {
   _config+:: {
-    grafana_root_url: "http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana" % $._config,
+    grafana_root_url: "http://nginx.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana" % $._config,
   },
 
   // Extension point for you to add your own dashboards.
