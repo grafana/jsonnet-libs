@@ -16,6 +16,7 @@ k {
       "--collector.filesystem.ignored-mount-points=^/(sys|proc|dev|host|etc)($|/)",
     ]) +
     container.mixin.securityContext.withPrivileged(true) +
+    container.mixin.securityContext.withRunAsUser(0) +
     $.util.resourcesRequests("10m", "20Mi") +
     $.util.resourcesLimits("20m", "40Mi"),
 
