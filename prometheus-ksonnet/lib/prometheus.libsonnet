@@ -3,7 +3,7 @@ local k = import "kausal.libsonnet";
 k {
   _config+:: {
     prometheus_external_hostname: "http://prometheus.%s.svc.cluster.local" % $._config.namespace,
-    prometheus_path: "/",
+    prometheus_path: "/prometheus/",
     prometheus_port: 80,
     prometheus_web_route_prefix: $._config.prometheus_path,
   },

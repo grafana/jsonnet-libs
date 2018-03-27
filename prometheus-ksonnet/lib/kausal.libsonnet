@@ -96,7 +96,7 @@ k {
     },
   },
 
-  util:: {
+  util+:: {
     // serviceFor create service for a given deployment.
     serviceFor(deployment)::
       local container = $.core.v1.container;
