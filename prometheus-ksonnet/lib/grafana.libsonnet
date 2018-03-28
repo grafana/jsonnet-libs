@@ -3,6 +3,7 @@ local k = import "kausal.libsonnet";
 k {
   _config+:: {
     grafana_root_url: "http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana" % $._config,
+    grafana_admin_password: "admin",
   },
 
   // Extension point for you to add your own dashboards.
@@ -57,7 +58,7 @@ default_theme = light
     deployment.mixin.spec.template.spec.withContainersMixin(
       container.new("gfdatasource-%s" % name, $._images.gfdatasource) +
       container.withArgs([
-        "--grafana-url=http://admin:admin@127.0.0.1:80/api",
+        "--grafana-url=http://admin:%(grafana_admin_password)s@127.0.0.1:80/api" % $._config,
         "--data-source-url=%s" % url,
         "--name=%s" % name,
         "--type=prometheus",
