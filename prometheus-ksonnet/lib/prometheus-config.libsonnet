@@ -315,6 +315,19 @@ k {
             "for": "15m",
             alert: "PromRemoteStorageFailures",
           },
+          {
+            expr: |||
+              rate(prometheus_rule_evaluation_failures_total[1m]) > 0
+            |||,
+            labels: {
+              severity: "critical",
+            },
+            annotations: {
+              message: "Prometheus failed to evaluate {{ printf \"%.1f\" $value }} rules / s",
+            },
+            "for": "15m",
+            alert: "PromRuleFailures",
+          },
         ],
       },
     ],
