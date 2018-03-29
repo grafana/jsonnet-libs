@@ -77,6 +77,9 @@ k {
     deployment.new("kube-state-metrics", 1, [
       $.kube_state_metrics_container,
     ]) +
+    // Stop the default pod discovery scraping this pod - we use a special
+    // scrape config to preserve namespace etc labels.
+    deployment.mixin.spec.template.metadata.withAnnotationsMixin({"prometheus.io.scrape": "false"}) +
     deployment.mixin.spec.template.spec.withServiceAccount("kube-state-metrics"),
 
   kube_state_metrics_service:
