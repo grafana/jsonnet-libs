@@ -10,3 +10,6 @@ libraries:
   klumps:
     version: master
     path: klumps
+  consul-mixin:
+    version: master
+    path: consul-mixin
