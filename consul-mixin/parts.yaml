@@ -1,0 +1,27 @@
+{
+  "name": "consul-mixin",
+  "apiVersion": "0.0.1",
+  "kind": "ksonnet.io/parts",
+  "description": "Monitoring mixin for Hashicorp Consul.",
+  "author": "Kausal <hello@kausal.co>",
+  "contributors": [
+    {
+    "name": "Tom Wilkie",
+    "email": "tom@kausal.co"
+    },
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kausal/public"
+  },
+  "bugs": {
+    "url": "https://github.com/kausal/public/issues"
+  },
+  "keywords": [
+    "Prometheus",
+    "Monitoring",
+    "Alerting",
+    "Consul",
+  ],
+  "license": "Apache 2.0"
+}
