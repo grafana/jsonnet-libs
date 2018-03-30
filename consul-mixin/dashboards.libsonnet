@@ -3,7 +3,7 @@ local g = import "klumps/lib/grafana.libsonnet";
 {
   dashboards+:: {
     "consul.json": g.dashboard("Consul")
-      .addTemplate("namespace", "kube_service_info", "namespace")
+      .addTemplate("namespace", "kube_pod_container_info{image=~\".*consul.*\"}", "namespace")
       .addRow(
         g.row("Leader")
         .addPanel(
