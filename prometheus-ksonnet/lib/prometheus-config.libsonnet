@@ -310,7 +310,7 @@ k {
               severity: "critical",
             },
             annotations: {
-              message: "Prometheus failed to send {{ printf \"%.1f\" $value }}%% samples",
+              message: "Prometheus failed to send {{ printf \"%.1f\" $value }}% samples",
             },
             "for": "15m",
             alert: "PromRemoteStorageFailures",
