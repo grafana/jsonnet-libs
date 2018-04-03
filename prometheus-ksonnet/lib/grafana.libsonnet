@@ -75,6 +75,25 @@ default_theme = light
       }),
     }),
 
+  grafana_add_datasource_with_basicauth(name, url, username, password, default=false)::
+    configMap.withDataMixin({
+      ["%s.yml" % name]: k.util.manifestYaml({
+        apiVersion: 1,
+        datasources: [{
+          name: name,
+          type: "prometheus",
+          access: "proxy",
+          url: url,
+          isDefault: default,
+          version: 1,
+          editable: false,
+          basicAuth: true,
+          basicAuthUser: username,
+          basicAuthPassword: password,
+        }],
+      }),
+    }),
+
   local container = $.core.v1.container,
 
   grafana_container::
