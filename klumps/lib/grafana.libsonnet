@@ -45,7 +45,6 @@
       list: [],
     },
     hideControls: false,
-    id: 1,
     links: [],
     rows: [],
     schemaVersion: 14,
