@@ -3,11 +3,35 @@ local k = import "kausal.libsonnet";
 k {
   _config+:: {
     cluster_dns_suffix: "cluster.local",
+    admin_services: [
+      {title: "Grafana", path: "grafana", url: "http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/" % $._config},
+      {title: "Prometheus", path: "prometheus", url: "http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s/prometheus/" % $._config},
+      {title: "Alertmanager", path: "alertmanager", url: "http://alertmanager.%(namespace)s.svc.%(cluster_dns_suffix)s/alertmanager/" % $._config},
+    ],
   },
 
   local configMap = $.core.v1.configMap,
 
   nginx_config_map:
+    local vars = {
+      location_stanzas: [
+        |||
+          location ~ ^/%(path)s(/?)(.*)$ {
+            proxy_pass      %(url)s$2$is_args$args;
+          }
+        ||| % service
+          for service in $._config.admin_services
+      ],
+      locations: std.join("\n", self.location_stanzas),
+      link_stanzas: [
+        |||
+          <li><a href="/%(path)s">%(title)s</a></li>
+        ||| % service
+          for service in $._config.admin_services
+      ],
+      links: std.join("\n", self.link_stanzas),
+    };
+
     configMap.new("nginx-config") +
     configMap.withData({
       "nginx.conf": |||
@@ -31,34 +55,24 @@ k {
           resolver     kube-dns.kube-system.svc.%(cluster_dns_suffix)s;
           server {
             listen 80;
-            location ~ ^/prometheus(/?)(.*)$ {
-              proxy_pass      http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s/prometheus/$2$is_args$args;
-            }
-            location ~ /alertmanager(/?)(.*)$ {
-              proxy_pass      http://alertmanager.%(namespace)s.svc.%(cluster_dns_suffix)s/alertmanager/$2$is_args$args;
-            }
-            location ~ ^/grafana(/?)(.*)$ {
-              proxy_pass      http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/$2$is_args$args;
-            }
+            %(locations)s
             location ~ /(index.html)? {
               root /etc/nginx;
             }
           }
         }
-      ||| % $._config,
+      ||| % ($._config + vars),
       "index.html": |||
         <html>
           <head><title>Admin</title></head>
           <body>
             <h1>Admin</h1>
             <ul>
-              <li><a href="/prometheus">Prometheus</a></li>
-              <li><a href="/alertmanager">Alertmanager</a></li>
-              <li><a href="/grafana">Grafana</a></li>
+              %(links)s
             </ul>
           </body>
         </html>
-      |||
+      ||| % vars,
     }),
 
   local container = $.core.v1.container,
