@@ -45,7 +45,6 @@
       list: [],
     },
     hideControls: false,
-    id: 1,
     links: [],
     rows: [],
     schemaVersion: 14,
@@ -221,15 +220,12 @@
     ],
   },
 
-  tablePanel(queries, valueLabels, labelStyles):: {
+  tablePanel(queries, labelStyles):: {
     local qs =
       if std.type(queries) == "string"
       then [queries]
       else queries,
-    local vls =
-      if std.type(valueLabels) == "string"
-      then [["Value", valueLabels]]
-      else valueLabels,
+
     local style(labelStyle) =
       if std.type(labelStyle) == "string"
       then {
@@ -249,8 +245,8 @@
         dateFormat: "YYYY-MM-DD HH:mm:ss",
         decimals: 2,
         thresholds: [],
-        type: "string",
-        unit: "short",
+        type: "number",
+        unit: if std.objectHas(labelStyle, "unit") then labelStyle.unit else "short",
         link: std.objectHas(labelStyle, "link"),
         linkTooltip: "Drill down",
         linkUrl: if std.objectHas(labelStyle, "link") then labelStyle.link else "",
@@ -264,29 +260,15 @@
         type: "hidden",
       },
     } + {
-      // And the prometheus "Value" is treated specially.
-      [valueLabel[0]]: {
-        alias: valueLabel[1],
-        colorMode: null,
-        colors: [
-          "rgba(245, 54, 54, 0.9)",
-          "rgba(237, 129, 40, 0.89)",
-          "rgba(50, 172, 45, 0.97)",
-        ],
-        dateFormat: "YYYY-MM-DD HH:mm:ss",
-        decimals: 2,
-        thresholds: [],
-        type: "number",
-        unit: "short",
-      } for valueLabel in vls
-    } + {
       [label]: style(labelStyles[label])
-      for label in std.objectFields(labelStyles)
+        for label in std.objectFields(labelStyles)
     },
+
     styles: [
       self._styles[pattern] { pattern: pattern }
       for pattern in std.objectFields(self._styles)
     ] + [style("") + { pattern: "/.*/" }],
+
     transform: "table",
     type: "table",
     targets: [
