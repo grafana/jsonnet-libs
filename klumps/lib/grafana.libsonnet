@@ -385,10 +385,19 @@
     yaxes: $.yaxes("ms"),
   },
 
-  latencyRecordingRulePanel(metric, selector, multiplier="1e3")::
-    local labels = std.join("_", [matcher.label for matcher in selector]);
-    local legendLabels = std.join(" ", ["{{%s}}" % matcher.label for matcher in selector]);
-    local selectorStr = $.toPrometheusSelector(selector);
+  // latencyRecordingRulePanel - build a latency panel for a recording rule.
+  // - metric: the base metric name (middle part of recording rule name)
+  // - selectors: list of selectors which will be added to first part of
+  //   recording rule name, and to the query selector itself.
+  // - extra_selectors (optional): list of selectors which will be added to the
+  //   query selector, but not to the beginnig of the recording rule name.
+  //   Useful for external labels.
+  // - multiplier (optional): assumes results are in seconds, will multiply
+  //   by 1e3 to get ms.  Can be turned off.
+  latencyRecordingRulePanel(metric, selectors, extra_selectors=[], multiplier="1e3")::
+    local labels = std.join("_", [matcher.label for matcher in selectors]);
+    local legendLabels = std.join(" ", ["{{%s}}" % matcher.label for matcher in selectors + extra_selectors]);
+    local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
     {
       nullPointMode: "connected",
       targets: [
