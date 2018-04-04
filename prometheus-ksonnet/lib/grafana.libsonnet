@@ -13,10 +13,6 @@ k {
 enabled = true
 org_role = Admin
 
-[dashboards.json]
-enabled = true
-path = /grafana/dashboards
-
 [server]
 http_port = 80
 root_url = %(grafana_root_url)s
@@ -39,6 +35,65 @@ default_theme = light
     configMap.withData({ [name]: std.toString($.dashboards[name])
                          for name in std.objectFields($.dashboards) }),
 
+  grafana_dashboard_provisioning_config_map:
+    configMap.new("grafana-dashboard-provisioning") +
+    configMap.withData({"dashboards.yml": k.util.manifestYaml({
+      apiVersion: 1,
+      providers: [{
+        name: "dashboards",
+        orgId: 1,
+        folder: "",
+        type: "file",
+        disableDeletion: true,
+        editable: false,
+        options: {
+          path: "/grafana/dashboards",
+        },
+      }],
+    }),
+  }),
+
+  grafana_datasource_config_map:
+    configMap.new("grafana-datasources") +
+    $.grafana_add_datasource("prometheus",
+      "http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s%(prometheus_web_route_prefix)s" % $._config,
+      default=true),
+
+  grafana_add_datasource(name, url, default=false)::
+    configMap.withDataMixin({
+      ["%s.yml" % name]: k.util.manifestYaml({
+        apiVersion: 1,
+        datasources: [{
+          name: name,
+          type: "prometheus",
+          access: "proxy",
+          url: url,
+          isDefault: default,
+          version: 1,
+          editable: false,
+        }],
+      }),
+    }),
+
+  grafana_add_datasource_with_basicauth(name, url, username, password, default=false)::
+    configMap.withDataMixin({
+      ["%s.yml" % name]: k.util.manifestYaml({
+        apiVersion: 1,
+        datasources: [{
+          name: name,
+          type: "prometheus",
+          access: "proxy",
+          url: url,
+          isDefault: default,
+          version: 1,
+          editable: false,
+          basicAuth: true,
+          basicAuthUser: username,
+          basicAuthPassword: password,
+        }],
+      }),
+    }),
+
   local container = $.core.v1.container,
 
   grafana_container::
@@ -53,22 +108,11 @@ default_theme = light
 
   local deployment = $.apps.v1beta1.deployment,
 
-  grafana_add_datasource(name, url)::
-    deployment.mixin.spec.template.spec.withContainersMixin(
-      container.new("gfdatasource-%s" % name, $._images.gfdatasource) +
-      container.withArgs([
-        "--grafana-url=http://admin:admin@127.0.0.1:80/api",
-        "--data-source-url=%s" % url,
-        "--name=%s" % name,
-        "--type=prometheus",
-      ]) +
-      $.util.resourcesRequests("10m", "20Mi"),
-    ),
-
   grafana_deployment:
     deployment.new("grafana", 1, [$.grafana_container]) +
-    $.grafana_add_datasource("prometheus", "http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s%(prometheus_web_route_prefix)s" % $._config) +
     $.util.configVolumeMount("grafana-config", "/etc/grafana") +
+    $.util.configVolumeMount("grafana-dashboard-provisioning", "/usr/share/grafana/conf/provisioning/dashboards") +
+    $.util.configVolumeMount("grafana-datasources", "/usr/share/grafana/conf/provisioning/datasources") +
     $.util.configVolumeMount("dashboards", "/grafana/dashboards"),
 
   grafana_service:
