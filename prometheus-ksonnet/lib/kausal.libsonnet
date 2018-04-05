@@ -13,17 +13,38 @@ k {
           super.new(name, {}),
       },
 
+      // Expose containerPort type.
       containerPort:: $.core.v1.container.portsType {
         // Force all ports to have names.
         new(name, port)::
           super.newNamed(name, port),
+
+        // Shortcut constructor for UDP ports.
+        newUDP(name, port)::
+          super.newNamed(name, port) +
+          super.withProtocol("UDP"),
       },
 
+      // Expose volumes type.
       volume:: $.core.v1.pod.mixin.spec.volumesType {
         // Remove items parameter from fromConfigMap
         fromConfigMap(name, configMapName)::
           super.withName(name) +
           super.mixin.configMap.withName(configMapName),
+
+        // Shortcut constructor for secret volumes.
+        fromSecret(name, secret)::
+          super.withName(name) +
+          super.mixin.secret.withSecretName(secret),
+      },
+
+      volumeMount:: $.core.v1.container.volumeMountsType {
+        // Override new, such that it doesn't always set readOnly: false.
+        new(name, mountPath, readOnly=false)::
+          {} + self.withName(name) + self.withMountPath(mountPath) +
+            if readOnly
+            then self.withReadOnly(readOnly)
+            else {},
       },
 
       container:: $.extensions.v1beta1.deployment.mixin.spec.template.spec.containersType {
@@ -92,7 +113,26 @@ k {
     v1beta1+: {
       // Shortcut to access the hidden types.
       policyRule:: $.rbac.v1beta1.clusterRole.rulesType,
-      subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType,
+
+      subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType {
+        withKind(kind):: self + {kind: kind},
+      },
+
+      roleBinding+: {
+        mixin+: {
+          roleRef+: {
+            withKind(kind):: self.mixinInstance({kind: kind}),
+          },
+        },
+      },
+
+      clusterRoleBinding+: {
+        mixin+: {
+          roleRef+: {
+            withKind(kind):: self.mixinInstance({kind: kind}),
+          },
+        },
+      },
     },
   },
 
@@ -132,47 +172,84 @@ k {
         clusterRoleBinding.new() +
         clusterRoleBinding.mixin.metadata.withName(name) +
         clusterRoleBinding.mixin.roleRef.withApiGroup("rbac.authorization.k8s.io") +
-        { roleRef+: { kind: "ClusterRole" } } +
+        clusterRoleBinding.mixin.roleRef.withKind("ClusterRole") +
         clusterRoleBinding.mixin.roleRef.withName(name) +
         clusterRoleBinding.withSubjects([
           subject.new() +
-          { kind: "ServiceAccount" } +
+          subject.withKind("ServiceAccount") +
           subject.withName(name) +
           subject.withNamespace($._config.namespace),
         ]),
     },
 
-    configVolumeMount(volumeName, path)::
-      local deployment = $.extensions.v1beta1.deployment;
-      local container = $.core.v1.container;
-      local addMount(c) = c + container.withVolumeMountsMixin(
-        container.volumeMountsType.new(volumeName, path)
-      );
-      local volume = $.core.v1.volume;
+    namespacedRBAC(name, rules):: {
+      local role = $.rbac.v1beta1.role,
+      local roleBinding = $.rbac.v1beta1.roleBinding,
+      local subject = $.rbac.v1beta1.subject,
+      local serviceAccount = $.core.v1.serviceAccount,
+
+      service_account:
+        serviceAccount.new(name) +
+        serviceAccount.mixin.metadata.withNamespace($._config.namespace),
+
+      role:
+        role.new() +
+        role.mixin.metadata.withName(name) +
+        role.mixin.metadata.withNamespace($._config.namespace) +
+        role.withRules(rules),
+
+      cluster_role_binding:
+        roleBinding.new() +
+        roleBinding.mixin.metadata.withName(name) +
+        roleBinding.mixin.metadata.withNamespace($._config.namespace) +
+        roleBinding.mixin.roleRef.withApiGroup("rbac.authorization.k8s.io") +
+        roleBinding.mixin.roleRef.withKind("Role") +
+        roleBinding.mixin.roleRef.withName(name) +
+        roleBinding.withSubjects([
+          subject.new() +
+          subject.withKind("ServiceAccount") +
+          subject.withName(name) +
+          subject.withNamespace($._config.namespace),
+        ]),
+    },
+
+    configVolumeMount(name, path)::
+      local container = $.core.v1.container,
+           deployment = $.extensions.v1beta1.deployment,
+          volumeMount = $.core.v1.volumeMount,
+               volume = $.core.v1.volume,
+          addMount(c) = c + container.withVolumeMountsMixin(
+            volumeMount.new(name, path)
+          );
+
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
-        volume.fromConfigMap(volumeName, volumeName),
+        volume.fromConfigMap(name, name),
       ]),
 
     hostVolumeMount(name, hostPath, path)::
-      local container = $.core.v1.container;
-      local addMount(c) = c + container.withVolumeMountsMixin(
-        container.volumeMountsType.new(name, path)
-      );
-      local volume = $.core.v1.volume;
-      local deployment = $.extensions.v1beta1.deployment;
+      local container = $.core.v1.container,
+           deployment = $.extensions.v1beta1.deployment,
+          volumeMount = $.core.v1.volumeMount,
+               volume = $.core.v1.volume,
+          addMount(c) = c + container.withVolumeMountsMixin(
+            volumeMount.new(name, path)
+          );
+
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
         volume.fromHostPath(name, hostPath),
       ]),
 
     secretVolumeMount(name, path)::
-      local container = $.core.v1.container;
-      local addMount(c) = c + container.withVolumeMountsMixin(
-        container.volumeMountsType.new(name, path)
-      );
-      local volume = $.core.v1.volume;
-      local deployment = $.extensions.v1beta1.deployment;
+      local container = $.core.v1.container,
+           deployment = $.extensions.v1beta1.deployment,
+          volumeMount = $.core.v1.volumeMount,
+               volume = $.core.v1.volume,
+          addMount(c) = c + container.withVolumeMountsMixin(
+            volumeMount.new(name, path)
+          );
+
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
         volume.fromSecret(name, name),
