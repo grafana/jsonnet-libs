@@ -42,7 +42,7 @@ class Usage extends Component {
     if (this.props.request) {
       return this.props.request(url);
     }
-    return fetch(url);
+    return fetch(url,  { credentials: 'same-origin' });
   }
 
   getData(setState) {
