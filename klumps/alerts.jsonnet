@@ -146,6 +146,45 @@
             message: "Kubernetes API server client '{{ $labels.job }}/{{ $labels.instance }}' is experiencing {{ printf \"%0.0f\" $value }} errors / sec.'",
           },
         },
+        {
+          alert: "KubeQuotaExceeded",
+          expr: |||
+            100 * kube_resourcequota{job="%(kube_state_metrics)s", type="used"} / ignoring(instance, job, type)  kube_resourcequota{job="%(kube_state_metrics)s", type="hard"} > 90
+          ||| % $.jobs,
+          "for": "15m",
+          labels: {
+            severity: "warning",
+          },
+          annotations: {
+            message: "{{ printf \"%0.0f\" $value }}%% usage of {{ $labels.resource }} in namespace {{ $labels.namespace }}.",
+          },
+        },
+        {
+          alert: "KubePersistentVolumeUsageCritical",
+          expr: |||
+            100.0 - 100 * (kubelet_volume_stats_available_bytes / kubelet_volume_stats_capacity_bytes) > 97
+          |||,
+          "for": "1m",
+          labels: {
+            severity: "critical",
+          },
+          annotations: {
+            message: "The persistent volume claimed by {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} is over 97% utilized."
+          },
+        },
+        {
+          alert: "KubePersistentVolumeFullInFourDays",
+          expr: |||
+            predict_linear(kubelet_volume_stats_available_bytes[1h], 4 * 24 * 3600) < 0
+          |||,
+          "for": "5m",
+          labels: {
+            severity: "critical",
+          },
+          annotations: {
+            message: "Based on recent sampling, the persistent volume claimed by {{ $labels.persistentvolumeclaim }} in namespace {{ $labels.namespace }} is expected to fill up within four days."
+          }
+        },
       ],
     },
   ],
