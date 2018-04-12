@@ -6,6 +6,7 @@
   "repository": "https://github.com/kausalco/public",
   "bugs": "https://github.com/kausalco/public/issues",
   "proxy": "http://localhost:9090",
+  "homepage": ".",
   "dependencies": {
     "d3-color": "^1.0.3",
     "d3-hierarchy": "^1.1.5",
