@@ -74,6 +74,7 @@
           alert: "KubeNodeNotReady",
         },
         {
+          alert: "KubeCPUOvercommit",
           expr: |||
             sum(namespace_name:kube_pod_container_resource_requests_cpu_cores:sum)
               /
@@ -85,12 +86,12 @@
             severity: "warning",
           },
           annotations: {
-            message: "Overcommited CPU resource requests, cannot tolerate node failure.",
+            message: "Overcommited CPU resource requests on Pods, cannot tolerate node failure.",
           },
           "for": "5m",
-          alert: "KubeCPUOvercommit",
         },
         {
+          alert: "KubeMemOvercommit",
           expr: |||
             sum(namespace_name:kube_pod_container_resource_requests_memory_bytes:sum)
               /
@@ -102,10 +103,35 @@
             severity: "warning",
           },
           annotations: {
-            message: "Overcommited Memory resource requests, cannot tolerate node failure.",
+            message: "Overcommited Memory resource requests on Pods, cannot tolerate node failure.",
           },
           "for": "5m",
+        },
+        {
+          alert: "KubeCPUOvercommit",
+          expr: |||
+            sum(kube_resourcequota{type="hard", resource="requests.cpu"}) / sum(node:node_num_cpu:sum) > 1
+          |||,
+          labels: {
+            severity: "warning",
+          },
+          annotations: {
+            message: "Overcommited CPU resource request quota on Namespaces.",
+          },
+          "for": "5m",
+        },
+        {
           alert: "KubeMemOvercommit",
+          expr: |||
+            sum(kube_resourcequota{type="hard", resource="requests.memory"}) / sum(node_memory_MemTotal) > 1
+          |||,
+          labels: {
+            severity: "warning",
+          },
+          annotations: {
+            message: "Overcommited Memory resource request quota on Namespaces.",
+          },
+          "for": "5m",
         },
         {
           alert: "KubeVersionMismatch",
