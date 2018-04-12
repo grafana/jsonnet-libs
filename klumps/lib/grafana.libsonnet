@@ -12,6 +12,7 @@
       _nextPanel: nextPanel + n,
       rows+: [row { panels: panels }],
     },
+
     addTemplate(name, metric_name, label_name):: self {
       templating+: {
         list+: [{
@@ -25,6 +26,35 @@
           includeAll: false,
           label: name,
           multi: false,
+          name: name,
+          options: [],
+          query: "label_values(%s, %s)" % [metric_name, label_name],
+          refresh: 1,
+          regex: "",
+          sort: 2,
+          tagValuesQuery: "",
+          tags: [],
+          tagsQuery: "",
+          type: "query",
+          useTags: false,
+        }],
+      },
+    },
+
+    addMultiTemplate(name, metric_name, label_name):: self {
+      templating+: {
+        list+: [{
+          allValue: null,
+          current: {
+            selected: true,
+            text: "All",
+            value: "$__all",
+          },
+          datasource: "$datasource",
+          hide: 0,
+          includeAll: true,
+          label: name,
+          multi: true,
           name: name,
           options: [],
           query: "label_values(%s, %s)" % [metric_name, label_name],
@@ -193,7 +223,7 @@
        then std.makeArray(std.length(qs), function(x) {q : qs[x], l: ls[x]})
        else error "length of queries is not equal to length of legends",
 
-    targets: [
+    targets+: [
       {
         legendLink: legendLink,
         expr: ql.q,
