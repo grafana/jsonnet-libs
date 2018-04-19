@@ -4,6 +4,13 @@
     kube_state_metrics: "default/kube-state-metrics",
   },
 
+  _config+:: {
+    // We alert when the aggregate (CPU, Memory) quota for all namespaces is
+    // greater than the amount of the resources in the cluster.  We do however
+    // allow you to overcommit if you wish.
+    namespace_overcommit_factor: 1.5
+  },
+
   groups+: [
     {
       name: "kubernetes",
@@ -110,8 +117,8 @@
         {
           alert: "KubeCPUOvercommit",
           expr: |||
-            sum(kube_resourcequota{type="hard", resource="requests.cpu"}) / sum(node:node_num_cpu:sum) > 1
-          |||,
+            sum(kube_resourcequota{type="hard", resource="requests.cpu"}) / sum(node:node_num_cpu:sum) > %(namespace_overcommit_factor)s
+          ||| % $._config,
           labels: {
             severity: "warning",
           },
@@ -123,8 +130,8 @@
         {
           alert: "KubeMemOvercommit",
           expr: |||
-            sum(kube_resourcequota{type="hard", resource="requests.memory"}) / sum(node_memory_MemTotal) > 1
-          |||,
+            sum(kube_resourcequota{type="hard", resource="requests.memory"}) / sum(node_memory_MemTotal) > %(namespace_overcommit_factor)s
+          ||| % $._config,
           labels: {
             severity: "warning",
           },
