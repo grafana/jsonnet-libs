@@ -28,7 +28,7 @@ k {
 
   local configMap = $.core.v1.configMap,
 
-  aletrmanager_config_map:
+  alertmanager_config_map:
     configMap.new("alertmanager-config") +
     configMap.withData({
       "alertmanager.yml": $.util.manifestYaml($.alertmanager_config),
