@@ -189,7 +189,7 @@
             severity: "warning",
           },
           annotations: {
-            message: "{{ printf \"%0.0f\" $value }}%% usage of {{ $labels.resource }} in namespace {{ $labels.namespace }}.",
+            message: "{{ printf \"%0.0f\" $value }}% usage of {{ $labels.resource }} in namespace {{ $labels.namespace }}.",
           },
         },
         {
