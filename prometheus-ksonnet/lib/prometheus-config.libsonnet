@@ -300,6 +300,19 @@ k {
             alert: "PromAlertmanagerBadConfig",
           },
           {
+            alert: "PromAlertsFailed",
+            expr: |||
+              sum(increase(alertmanager_notifications_failed_total[5m])) by (namespace) > 0
+            |||,
+            "for": "5m",
+            labels: {
+              severity: "critical",
+            },
+            annotations: {
+              message: "Alertmanager failed to send an alert.",
+            },
+          },
+          {
             expr: |||
               (rate(prometheus_remote_storage_failed_samples_total[1m]) * 100)
                 /
