@@ -1,13 +1,4 @@
-local k = import "kausal.libsonnet";
-
-k {
-  _config+:: {
-    prometheus_external_hostname: "http://prometheus.%s.svc.cluster.local" % $._config.namespace,
-    prometheus_path: "/prometheus/",
-    prometheus_port: 80,
-    prometheus_web_route_prefix: $._config.prometheus_path,
-  },
-
+{
   local policyRule = $.rbac.v1beta1.policyRule,
 
   prometheus_rbac:
@@ -54,8 +45,10 @@ k {
     ]) +
     $.util.configVolumeMount("prometheus-config", "/etc/prometheus") +
     deployment.mixin.spec.template.metadata.withAnnotations({ "prometheus.io.path": "%smetrics" % $._config.prometheus_web_route_prefix }) +
-    deployment.mixin.spec.template.spec.withServiceAccount("prometheus") +
-    deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0),
+    deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
+    if $._config.enable_rbac
+    then deployment.mixin.spec.template.spec.withServiceAccount("prometheus")
+    else {},
 
   prometheus_service:
     $.util.serviceFor($.prometheus_deployment),

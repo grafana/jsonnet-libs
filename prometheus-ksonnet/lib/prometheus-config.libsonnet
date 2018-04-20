@@ -1,11 +1,4 @@
-local k = import "kausal.libsonnet";
-
-k {
-  _config+:: {
-    apiServerAddress: "kubernetes.default.svc.cluster.local:443",
-    insecureSkipVerify: false,
-  },
-
+{
   prometheus_config:: {
     global: {
       scrape_interval: "15s",
@@ -51,7 +44,7 @@ k {
 
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
-          insecure_skip_verify: $._config.insecureSkipVerify,
+          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
         },
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
 
@@ -146,7 +139,7 @@ k {
 
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
-          insecure_skip_verify: $._config.insecureSkipVerify,
+          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
         },
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
 
@@ -180,14 +173,14 @@ k {
         // Couldn't get prometheus to validate the kublet cert for scraping, so don't bother for now
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
-          insecure_skip_verify: $._config.insecureSkipVerify,
+          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
         },
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
 
         relabel_configs: [
           {
             target_label: "__address__",
-            replacement: $._config.apiServerAddress,
+            replacement: $._config.prometheus_api_server_address,
           },
           {
             target_label: "__scheme__",
@@ -212,7 +205,7 @@ k {
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
-          insecure_skip_verify: $._config.insecureSkipVerify,
+          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
         },
 
         relabel_configs: [{
@@ -242,7 +235,7 @@ k {
         bearer_token_file: "/var/run/secrets/kubernetes.io/serviceaccount/token",
         tls_config: {
           ca_file: "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt",
-          insecure_skip_verify: $._config.insecureSkipVerify,
+          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
         },
 
         relabel_configs: [{
@@ -352,8 +345,8 @@ k {
   prometheus_config_map:
     configMap.new("prometheus-config") +
     configMap.withData({
-      "prometheus.yml": k.util.manifestYaml($.prometheus_config),
-      "alerts.rules": k.util.manifestYaml($.prometheus_alerts),
-      "recording.rules": k.util.manifestYaml($.prometheus_rules),
+      "prometheus.yml": $.util.manifestYaml($.prometheus_config),
+      "alerts.rules": $.util.manifestYaml($.prometheus_alerts),
+      "recording.rules": $.util.manifestYaml($.prometheus_rules),
     }),
 }

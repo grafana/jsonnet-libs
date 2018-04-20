@@ -3,6 +3,7 @@ local k = import "k.libsonnet";
 
 k {
   _config+:: {
+    enable_rbac: true,
     namespace: error "Must define a namespace",
   },
 
@@ -154,64 +155,70 @@ k {
 
     // rbac creates a service account, role and role binding with the given
     // name and rules.
-    rbac(name, rules):: {
-      local clusterRole = $.rbac.v1beta1.clusterRole,
-      local clusterRoleBinding = $.rbac.v1beta1.clusterRoleBinding,
-      local subject = $.rbac.v1beta1.subject,
-      local serviceAccount = $.core.v1.serviceAccount,
+    rbac(name, rules)::
+      if $._config.enable_rbac
+      then {
+        local clusterRole = $.rbac.v1beta1.clusterRole,
+        local clusterRoleBinding = $.rbac.v1beta1.clusterRoleBinding,
+        local subject = $.rbac.v1beta1.subject,
+        local serviceAccount = $.core.v1.serviceAccount,
 
-      service_account:
-        serviceAccount.new(name),
+        service_account:
+          serviceAccount.new(name),
 
-      cluster_role:
-        clusterRole.new() +
-        clusterRole.mixin.metadata.withName(name) +
-        clusterRole.withRules(rules),
+        cluster_role:
+          clusterRole.new() +
+          clusterRole.mixin.metadata.withName(name) +
+          clusterRole.withRules(rules),
 
-      cluster_role_binding:
-        clusterRoleBinding.new() +
-        clusterRoleBinding.mixin.metadata.withName(name) +
-        clusterRoleBinding.mixin.roleRef.withApiGroup("rbac.authorization.k8s.io") +
-        clusterRoleBinding.mixin.roleRef.withKind("ClusterRole") +
-        clusterRoleBinding.mixin.roleRef.withName(name) +
-        clusterRoleBinding.withSubjects([
-          subject.new() +
-          subject.withKind("ServiceAccount") +
-          subject.withName(name) +
-          subject.withNamespace($._config.namespace),
-        ]),
-    },
+        cluster_role_binding:
+          clusterRoleBinding.new() +
+          clusterRoleBinding.mixin.metadata.withName(name) +
+          clusterRoleBinding.mixin.roleRef.withApiGroup("rbac.authorization.k8s.io") +
+          clusterRoleBinding.mixin.roleRef.withKind("ClusterRole") +
+          clusterRoleBinding.mixin.roleRef.withName(name) +
+          clusterRoleBinding.withSubjects([
+            subject.new() +
+            subject.withKind("ServiceAccount") +
+            subject.withName(name) +
+            subject.withNamespace($._config.namespace),
+          ]),
+      }
+      else {},
 
-    namespacedRBAC(name, rules):: {
-      local role = $.rbac.v1beta1.role,
-      local roleBinding = $.rbac.v1beta1.roleBinding,
-      local subject = $.rbac.v1beta1.subject,
-      local serviceAccount = $.core.v1.serviceAccount,
+    namespacedRBAC(name, rules)::
+      if $._config.enable_rbac
+      then {
+        local role = $.rbac.v1beta1.role,
+        local roleBinding = $.rbac.v1beta1.roleBinding,
+        local subject = $.rbac.v1beta1.subject,
+        local serviceAccount = $.core.v1.serviceAccount,
 
-      service_account:
-        serviceAccount.new(name) +
-        serviceAccount.mixin.metadata.withNamespace($._config.namespace),
+        service_account:
+          serviceAccount.new(name) +
+          serviceAccount.mixin.metadata.withNamespace($._config.namespace),
 
-      role:
-        role.new() +
-        role.mixin.metadata.withName(name) +
-        role.mixin.metadata.withNamespace($._config.namespace) +
-        role.withRules(rules),
+        role:
+          role.new() +
+          role.mixin.metadata.withName(name) +
+          role.mixin.metadata.withNamespace($._config.namespace) +
+          role.withRules(rules),
 
-      cluster_role_binding:
-        roleBinding.new() +
-        roleBinding.mixin.metadata.withName(name) +
-        roleBinding.mixin.metadata.withNamespace($._config.namespace) +
-        roleBinding.mixin.roleRef.withApiGroup("rbac.authorization.k8s.io") +
-        roleBinding.mixin.roleRef.withKind("Role") +
-        roleBinding.mixin.roleRef.withName(name) +
-        roleBinding.withSubjects([
-          subject.new() +
-          subject.withKind("ServiceAccount") +
-          subject.withName(name) +
-          subject.withNamespace($._config.namespace),
-        ]),
-    },
+        cluster_role_binding:
+          roleBinding.new() +
+          roleBinding.mixin.metadata.withName(name) +
+          roleBinding.mixin.metadata.withNamespace($._config.namespace) +
+          roleBinding.mixin.roleRef.withApiGroup("rbac.authorization.k8s.io") +
+          roleBinding.mixin.roleRef.withKind("Role") +
+          roleBinding.mixin.roleRef.withName(name) +
+          roleBinding.withSubjects([
+            subject.new() +
+            subject.withKind("ServiceAccount") +
+            subject.withName(name) +
+            subject.withNamespace($._config.namespace),
+          ]),
+      }
+      else {},
 
     configVolumeMount(name, path)::
       local container = $.core.v1.container,

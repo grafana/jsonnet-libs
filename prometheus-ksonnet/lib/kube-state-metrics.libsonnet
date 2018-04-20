@@ -1,7 +1,4 @@
-local k = import "kausal.libsonnet";
-
-
-k {
+{
   local policyRule = $.rbac.v1beta1.policyRule,
 
   kube_state_metrics_rbac:
@@ -80,7 +77,9 @@ k {
     // Stop the default pod discovery scraping this pod - we use a special
     // scrape config to preserve namespace etc labels.
     deployment.mixin.spec.template.metadata.withAnnotationsMixin({"prometheus.io.scrape": "false"}) +
-    deployment.mixin.spec.template.spec.withServiceAccount("kube-state-metrics"),
+    if $._config.enable_rbac
+    then deployment.mixin.spec.template.spec.withServiceAccount("kube-state-metrics")
+    else {},
 
   kube_state_metrics_service:
     $.util.serviceFor($.kube_state_metrics_deployment),

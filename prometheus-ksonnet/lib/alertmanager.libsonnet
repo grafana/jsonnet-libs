@@ -1,15 +1,4 @@
-local k = import "kausal.libsonnet";
-
-k {
-  _config+:: {
-    slack_url: "http://slack",
-    slack_channel: "general",
-
-    alertmanager_external_hostname: "http://alertmanager.%s.svc.cluster.local" % $._config.namespace,
-    alertmanager_path: "/alertmanager/",
-    alertmanager_port: 80,
-  },
-
+{
   alertmanager_config:: {
     templates: ["/etc/alertmanager/*.tmpl"],
     route: {

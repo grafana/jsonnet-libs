@@ -1,6 +1,4 @@
-local k = import "kausal.libsonnet";
-
-k {
+{
   local k8s_pod_scrape(name, port) = {
     job_name: name,
     kubernetes_sd_configs: [{

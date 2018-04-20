@@ -1,10 +1,4 @@
-local k = import "kausal.libsonnet";
-
-k {
-  _config+:: {
-    grafana_root_url: "http://nginx.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana" % $._config,
-  },
-
+{
   // Extension point for you to add your own dashboards.
   dashboards:: {},
 
@@ -37,7 +31,7 @@ default_theme = light
 
   grafana_dashboard_provisioning_config_map:
     configMap.new("grafana-dashboard-provisioning") +
-    configMap.withData({"dashboards.yml": k.util.manifestYaml({
+    configMap.withData({"dashboards.yml": $.util.manifestYaml({
       apiVersion: 1,
       providers: [{
         name: "dashboards",
@@ -61,7 +55,7 @@ default_theme = light
 
   grafana_add_datasource(name, url, default=false)::
     configMap.withDataMixin({
-      ["%s.yml" % name]: k.util.manifestYaml({
+      ["%s.yml" % name]: $.util.manifestYaml({
         apiVersion: 1,
         datasources: [{
           name: name,
@@ -77,7 +71,7 @@ default_theme = light
 
   grafana_add_datasource_with_basicauth(name, url, username, password, default=false)::
     configMap.withDataMixin({
-      ["%s.yml" % name]: k.util.manifestYaml({
+      ["%s.yml" % name]: $.util.manifestYaml({
         apiVersion: 1,
         datasources: [{
           name: name,

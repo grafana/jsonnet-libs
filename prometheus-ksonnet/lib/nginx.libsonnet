@@ -1,15 +1,4 @@
-local k = import "kausal.libsonnet";
-
-k {
-  _config+:: {
-    cluster_dns_suffix: "cluster.local",
-    admin_services: [
-      {title: "Grafana", path: "grafana", url: "http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/" % $._config},
-      {title: "Prometheus", path: "prometheus", url: "http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s/prometheus/" % $._config},
-      {title: "Alertmanager", path: "alertmanager", url: "http://alertmanager.%(namespace)s.svc.%(cluster_dns_suffix)s/alertmanager/" % $._config},
-    ],
-  },
-
+{
   local configMap = $.core.v1.configMap,
 
   nginx_config_map:

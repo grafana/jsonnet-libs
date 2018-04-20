@@ -1,10 +1,4 @@
-local k = import "kausal.libsonnet";
-
-k {
-  _config+::{
-    node_exporter_mount_root: true,
-  },
-
+{
   local container = $.core.v1.container,
 
   node_exporter_container::
