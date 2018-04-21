@@ -42,8 +42,16 @@
   alertmanager_watch_container::
     container.new('watch', $._images.watch) +
     container.withArgs([
-      '-v', '-t', '-p=/etc/alertmanager',
-      'curl', '-X', 'POST', '--fail', '-o', '-', '-sS',
+      '-v',
+      '-t',
+      '-p=/etc/alertmanager',
+      'curl',
+      '-X',
+      'POST',
+      '--fail',
+      '-o',
+      '-',
+      '-sS',
       'http://localhost:%s%s-/reload' % [$._config.alertmanager_port, $._config.alertmanager_path],
     ]) +
     container.mixin.resources.withRequests({

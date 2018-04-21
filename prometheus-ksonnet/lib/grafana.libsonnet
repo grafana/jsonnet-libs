@@ -26,25 +26,28 @@ default_theme = light
 
   dashboards_config_map:
     configMap.new('dashboards') +
-    configMap.withData({ [name]: std.toString($.dashboards[name])
-                         for name in std.objectFields($.dashboards) }),
+    configMap.withData({
+      [name]: std.toString($.dashboards[name])
+      for name in std.objectFields($.dashboards)
+    }),
 
   grafana_dashboard_provisioning_config_map:
     configMap.new('grafana-dashboard-provisioning') +
-    configMap.withData({ 'dashboards.yml': $.util.manifestYaml({
-      apiVersion: 1,
-      providers: [{
-        name: 'dashboards',
-        orgId: 1,
-        folder: '',
-        type: 'file',
-        disableDeletion: true,
-        editable: false,
-        options: {
-          path: '/grafana/dashboards',
-        },
-      }],
-    }),
+    configMap.withData({
+      'dashboards.yml': $.util.manifestYaml({
+        apiVersion: 1,
+        providers: [{
+          name: 'dashboards',
+          orgId: 1,
+          folder: '',
+          type: 'file',
+          disableDeletion: true,
+          editable: false,
+          options: {
+            path: '/grafana/dashboards',
+          },
+        }],
+      }),
     }),
 
   grafana_datasource_config_map:

@@ -124,7 +124,8 @@
             source_labels: ['__meta_kubernetes_pod_name'],
             action: 'replace',
             target_label: 'instance',
-          }],
+          },
+        ],
       },
 
       // A separate scrape config for kube-state-metrics which doesn't add a namespace
@@ -159,7 +160,8 @@
             source_labels: ['__meta_kubernetes_pod_name'],
             action: 'replace',
             target_label: 'instance',
-          }],
+          },
+        ],
       },
 
 

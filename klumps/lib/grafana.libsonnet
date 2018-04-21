@@ -145,8 +145,10 @@
     panels:
       // Automatically distribute panels within a row.
       local n = std.length(self._panels);
-      [p { span: std.floor(12 / n) }
-       for p in self._panels],
+      [
+        p { span: std.floor(12 / n) }
+        for p in self._panels
+      ],
 
     collapse: false,
     height: '250px',
@@ -231,7 +233,8 @@
         intervalFactor: 2,
         legendFormat: ql.l,
         step: 10,
-      } for ql in qsandls
+      }
+      for ql in qsandls
     ],
   },
 
@@ -309,7 +312,8 @@
         intervalFactor: 2,
         legendFormat: '',
         step: 10,
-      } for query in qs
+      }
+      for query in qs
     ],
   },
 

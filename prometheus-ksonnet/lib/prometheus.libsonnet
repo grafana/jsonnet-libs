@@ -31,8 +31,16 @@
   prometheus_watch_container::
     container.new('watch', $._images.watch) +
     container.withArgs([
-      '-v', '-t', '-p=/etc/prometheus',
-      'curl', '-X', 'POST', '--fail', '-o', '-', '-sS',
+      '-v',
+      '-t',
+      '-p=/etc/prometheus',
+      'curl',
+      '-X',
+      'POST',
+      '--fail',
+      '-o',
+      '-',
+      '-sS',
       'http://localhost:%s%s-/reload' % [$._config.prometheus_port, $._config.prometheus_web_route_prefix],
     ]),
 
