@@ -18,24 +18,24 @@
         list+: [{
           allValue: null,
           current: {
-            text: "prod",
-            value: "prod",
+            text: 'prod',
+            value: 'prod',
           },
-          datasource: "$datasource",
+          datasource: '$datasource',
           hide: 0,
           includeAll: false,
           label: name,
           multi: false,
           name: name,
           options: [],
-          query: "label_values(%s, %s)" % [metric_name, label_name],
+          query: 'label_values(%s, %s)' % [metric_name, label_name],
           refresh: 1,
-          regex: "",
+          regex: '',
           sort: 2,
-          tagValuesQuery: "",
+          tagValuesQuery: '',
           tags: [],
-          tagsQuery: "",
-          type: "query",
+          tagsQuery: '',
+          type: 'query',
           useTags: false,
         }],
       },
@@ -47,24 +47,24 @@
           allValue: null,
           current: {
             selected: true,
-            text: "All",
-            value: "$__all",
+            text: 'All',
+            value: '$__all',
           },
-          datasource: "$datasource",
+          datasource: '$datasource',
           hide: 0,
           includeAll: true,
           label: name,
           multi: true,
           name: name,
           options: [],
-          query: "label_values(%s, %s)" % [metric_name, label_name],
+          query: 'label_values(%s, %s)' % [metric_name, label_name],
           refresh: 1,
-          regex: "",
+          regex: '',
           sort: 2,
-          tagValuesQuery: "",
+          tagValuesQuery: '',
           tags: [],
-          tagsQuery: "",
-          type: "query",
+          tagsQuery: '',
+          type: 'query',
           useTags: false,
         }],
       },
@@ -78,7 +78,7 @@
     links: [],
     rows: [],
     schemaVersion: 14,
-    style: "dark",
+    style: 'dark',
     tags: [],
     editable: true,
     gnetId: null,
@@ -87,51 +87,51 @@
       list: [
         {
           current: {
-            text: "Prometheus",
-            value: "Prometheus",
+            text: 'Prometheus',
+            value: 'Prometheus',
           },
           hide: 0,
           label: null,
-          name: "datasource",
+          name: 'datasource',
           options: [],
-          query: "prometheus",
+          query: 'prometheus',
           refresh: 1,
-          regex: "",
-          type: "datasource",
+          regex: '',
+          type: 'datasource',
         },
       ],
     },
     time: {
-      from: "now-1h",
-      to: "now",
+      from: 'now-1h',
+      to: 'now',
     },
-    refresh: "10s",
+    refresh: '10s',
     timepicker: {
       refresh_intervals: [
-        "5s",
-        "10s",
-        "30s",
-        "1m",
-        "5m",
-        "15m",
-        "30m",
-        "1h",
-        "2h",
-        "1d",
+        '5s',
+        '10s',
+        '30s',
+        '1m',
+        '5m',
+        '15m',
+        '30m',
+        '1h',
+        '2h',
+        '1d',
       ],
       time_options: [
-        "5m",
-        "15m",
-        "1h",
-        "6h",
-        "12h",
-        "24h",
-        "2d",
-        "7d",
-        "30d",
+        '5m',
+        '15m',
+        '1h',
+        '6h',
+        '12h',
+        '24h',
+        '2d',
+        '7d',
+        '30d',
       ],
     },
-    timezone: "utc",
+    timezone: 'utc',
     title: title,
     version: 0,
   },
@@ -145,17 +145,19 @@
     panels:
       // Automatically distribute panels within a row.
       local n = std.length(self._panels);
-      [p { span: std.floor(12 / n) }
-       for p in self._panels],
+      [
+        p { span: std.floor(12 / n) }
+        for p in self._panels
+      ],
 
     collapse: false,
-    height: "250px",
+    height: '250px',
     repeat: null,
     repeatIteration: null,
     repeatRowId: null,
     showTitle: true,
     title: title,
-    titleSize: "h6",
+    titleSize: 'h6',
   },
 
   panel(title):: {
@@ -163,7 +165,7 @@
     bars: false,
     dashLength: 10,
     dashes: false,
-    datasource: "$datasource",
+    datasource: '$datasource',
     fill: 1,
     legend: {
       avg: false,
@@ -177,11 +179,11 @@
     lines: true,
     linewidth: 1,
     links: [],
-    nullPointMode: "null as zero",
+    nullPointMode: 'null as zero',
     percentage: false,
     pointradius: 5,
     points: false,
-    renderer: "flot",
+    renderer: 'flot',
     seriesOverrides: [],
     spaceLength: 10,
     span: 6,
@@ -195,121 +197,123 @@
     tooltip: {
       shared: true,
       sort: 0,
-      value_type: "individual",
+      value_type: 'individual',
     },
-    type: "graph",
+    type: 'graph',
     xaxis: {
       buckets: null,
-      mode: "time",
+      mode: 'time',
       name: null,
       show: true,
       values: [],
     },
-    yaxes: $.yaxes("short"),
+    yaxes: $.yaxes('short'),
   },
 
-  queryPanel(queries, legends, legendLink = null):: {
+  queryPanel(queries, legends, legendLink=null):: {
 
     local qs =
-      if std.type(queries) == "string"
+      if std.type(queries) == 'string'
       then [queries]
       else queries,
     local ls =
-      if std.type(legends) == "string"
+      if std.type(legends) == 'string'
       then [legends]
       else legends,
 
     local qsandls = if std.length(ls) == std.length(qs)
-       then std.makeArray(std.length(qs), function(x) {q : qs[x], l: ls[x]})
-       else error "length of queries is not equal to length of legends",
+    then std.makeArray(std.length(qs), function(x) { q: qs[x], l: ls[x] })
+    else error 'length of queries is not equal to length of legends',
 
     targets+: [
       {
         legendLink: legendLink,
         expr: ql.q,
-        format: "time_series",
+        format: 'time_series',
         intervalFactor: 2,
         legendFormat: ql.l,
         step: 10,
-      } for ql in qsandls
+      }
+      for ql in qsandls
     ],
   },
 
-  statPanel(query, format = "percentunit"):: {
-    type: "singlestat",
-    thresholds: "70,80",
+  statPanel(query, format='percentunit'):: {
+    type: 'singlestat',
+    thresholds: '70,80',
     format: format,
     targets: [
       {
         expr: query,
-        format: "time_series",
+        format: 'time_series',
         instant: true,
         intervalFactor: 2,
-        refId: "A",
+        refId: 'A',
       },
     ],
   },
 
   tablePanel(queries, labelStyles):: {
     local qs =
-      if std.type(queries) == "string"
+      if std.type(queries) == 'string'
       then [queries]
       else queries,
 
     local style(labelStyle) =
-      if std.type(labelStyle) == "string"
+      if std.type(labelStyle) == 'string'
       then {
         alias: labelStyle,
         colorMode: null,
         colors: [],
-        dateFormat: "YYYY-MM-DD HH:mm:ss",
+        dateFormat: 'YYYY-MM-DD HH:mm:ss',
         decimals: 2,
         thresholds: [],
-        type: "string",
-        unit: "short",
+        type: 'string',
+        unit: 'short',
       }
       else {
         alias: labelStyle.alias,
         colorMode: null,
         colors: [],
-        dateFormat: "YYYY-MM-DD HH:mm:ss",
+        dateFormat: 'YYYY-MM-DD HH:mm:ss',
         decimals: 2,
         thresholds: [],
-        type: "number",
-        unit: if std.objectHas(labelStyle, "unit") then labelStyle.unit else "short",
-        link: std.objectHas(labelStyle, "link"),
-        linkTooltip: "Drill down",
-        linkUrl: if std.objectHas(labelStyle, "link") then labelStyle.link else "",
+        type: 'number',
+        unit: if std.objectHas(labelStyle, 'unit') then labelStyle.unit else 'short',
+        link: std.objectHas(labelStyle, 'link'),
+        linkTooltip: 'Drill down',
+        linkUrl: if std.objectHas(labelStyle, 'link') then labelStyle.link else '',
       },
 
     _styles:: {
       // By default hide time.
       Time: {
-        alias: "Time",
-        dateFormat: "YYYY-MM-DD HH:mm:ss",
-        type: "hidden",
+        alias: 'Time',
+        dateFormat: 'YYYY-MM-DD HH:mm:ss',
+        type: 'hidden',
       },
     } + {
       [label]: style(labelStyles[label])
-        for label in std.objectFields(labelStyles)
+      for label in std.objectFields(labelStyles)
     },
 
     styles: [
       self._styles[pattern] { pattern: pattern }
       for pattern in std.objectFields(self._styles)
-    ] + [style("") + { pattern: "/.*/" }],
+    ] + [style('') + { pattern: '/.*/' }],
 
-    transform: "table",
-    type: "table",
+    transform: 'table',
+    type: 'table',
     targets: [
       {
         expr: query,
-        format: "table",
+        format: 'table',
         instant: true,
         intervalFactor: 2,
-        legendFormat: "",
+        legendFormat: '',
         step: 10,
-      } for query in qs
+      }
+      for query in qs
     ],
   },
 
@@ -321,80 +325,80 @@
   },
 
   yaxes(args)::
-    local format = if std.type(args) == "string" then args else null;
-    local options = if std.type(args) == "object" then args else {};
-  [
-    {
-      format: format,
-      label: null,
-      logBase: 1,
-      max: null,
-      min: 0,
-      show: true,
-    } + options,
-    {
-      format: "short",
-      label: null,
-      logBase: 1,
-      max: null,
-      min: null,
-      show: false,
-    },
-  ],
+    local format = if std.type(args) == 'string' then args else null;
+    local options = if std.type(args) == 'object' then args else {};
+    [
+      {
+        format: format,
+        label: null,
+        logBase: 1,
+        max: null,
+        min: 0,
+        show: true,
+      } + options,
+      {
+        format: 'short',
+        label: null,
+        logBase: 1,
+        max: null,
+        min: null,
+        show: false,
+      },
+    ],
 
   qpsPanel(selector):: {
     aliasColors: {
-      "1xx": "#EAB839",
-      "2xx": "#7EB26D",
-      "3xx": "#6ED0E0",
-      "4xx": "#EF843C",
-      "5xx": "#E24D42",
-      success: "#7EB26D",
-      "error": "#E24D42",
+      '1xx': '#EAB839',
+      '2xx': '#7EB26D',
+      '3xx': '#6ED0E0',
+      '4xx': '#EF843C',
+      '5xx': '#E24D42',
+      success: '#7EB26D',
+      'error': '#E24D42',
     },
     targets: [
       {
-        expr: "sum by (status) (label_replace(label_replace(rate(" + selector + "[1m]),"
+        expr: 'sum by (status) (label_replace(label_replace(rate(' + selector + '[1m]),'
               + ' "status", "${1}xx", "status_code", "([0-9]).."),'
               + ' "status", "${1}",   "status_code", "([a-z]+)"))',
-        format: "time_series",
+        format: 'time_series',
         intervalFactor: 2,
-        legendFormat: "{{status}}",
-        refId: "A",
+        legendFormat: '{{status}}',
+        refId: 'A',
         step: 10,
       },
     ],
   } + $.stack,
 
-  latencyPanel(metricName, selector, multiplier="1e3"):: {
-    nullPointMode: "connected",
+  latencyPanel(metricName, selector, multiplier='1e3'):: {
+    nullPointMode: 'connected',
     targets: [
       {
-        expr: "histogram_quantile(0.99, sum(rate(%s_bucket%s[5m])) by (le)) * %s" % [metricName, selector, multiplier],
-        format: "time_series",
+        expr: 'histogram_quantile(0.99, sum(rate(%s_bucket%s[5m])) by (le)) * %s' % [metricName, selector, multiplier],
+        format: 'time_series',
         intervalFactor: 2,
-        legendFormat: "99th Percentile",
-        refId: "A",
+        legendFormat: '99th Percentile',
+        refId: 'A',
         step: 10,
       },
       {
-        expr: "histogram_quantile(0.50, sum(rate(%s_bucket%s[5m])) by (le)) * %s" % [metricName, selector, multiplier],
-        format: "time_series",
+        expr: 'histogram_quantile(0.50, sum(rate(%s_bucket%s[5m])) by (le)) * %s' % [metricName, selector, multiplier],
+        format: 'time_series',
         intervalFactor: 2,
-        legendFormat: "50th Percentile",
-        refId: "B",
+        legendFormat: '50th Percentile',
+        refId: 'B',
         step: 10,
       },
       {
-        expr: "sum(rate(%s_sum%s[5m])) * %s / sum(rate(%s_count%s[5m]))" % [metricName, selector, multiplier, metricName, selector],
-        format: "time_series",
+        expr: 'sum(rate(%s_sum%s[5m])) * %s / sum(rate(%s_count%s[5m]))' % [metricName, selector, multiplier, metricName, selector],
+        format: 'time_series',
         intervalFactor: 2,
-        legendFormat: "Average",
-        refId: "C",
+        legendFormat: 'Average',
+        refId: 'C',
         step: 10,
       },
     ],
-    yaxes: $.yaxes("ms"),
+    yaxes: $.yaxes('ms'),
   },
 
   // latencyRecordingRulePanel - build a latency panel for a recording rule.
@@ -406,61 +410,61 @@
   //   Useful for external labels.
   // - multiplier (optional): assumes results are in seconds, will multiply
   //   by 1e3 to get ms.  Can be turned off.
-  latencyRecordingRulePanel(metric, selectors, extra_selectors=[], multiplier="1e3")::
-    local labels = std.join("_", [matcher.label for matcher in selectors]);
-    local legendLabels = std.join(" ", ["{{%s}}" % matcher.label for matcher in selectors + extra_selectors]);
+  latencyRecordingRulePanel(metric, selectors, extra_selectors=[], multiplier='1e3')::
+    local labels = std.join('_', [matcher.label for matcher in selectors]);
+    local legendLabels = std.join(' ', ['{{%s}}' % matcher.label for matcher in selectors + extra_selectors]);
     local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
     {
-      nullPointMode: "connected",
+      nullPointMode: 'connected',
       targets: [
         {
-          expr: "%(labels)s:%(metric)s:99quantile%(selector)s * %(multiplier)s" % {
+          expr: '%(labels)s:%(metric)s:99quantile%(selector)s * %(multiplier)s' % {
             labels: labels,
             metric: metric,
             selector: selectorStr,
             multiplier: multiplier,
           },
-          format: "time_series",
+          format: 'time_series',
           intervalFactor: 2,
-          legendFormat: "%s 99th Percentile" % legendLabels,
-          refId: "A",
+          legendFormat: '%s 99th Percentile' % legendLabels,
+          refId: 'A',
           step: 10,
         },
         {
-          expr: "%(labels)s:%(metric)s:50quantile%(selector)s * %(multiplier)s" % {
+          expr: '%(labels)s:%(metric)s:50quantile%(selector)s * %(multiplier)s' % {
             labels: labels,
             metric: metric,
             selector: selectorStr,
             multiplier: multiplier,
           },
-          format: "time_series",
+          format: 'time_series',
           intervalFactor: 2,
-          legendFormat: "%s 50th Percentile" % legendLabels,
-          refId: "B",
+          legendFormat: '%s 50th Percentile' % legendLabels,
+          refId: 'B',
           step: 10,
         },
         {
-          expr: "%(labels)s:%(metric)s:avg%(selector)s * %(multiplier)s" % {
+          expr: '%(labels)s:%(metric)s:avg%(selector)s * %(multiplier)s' % {
             labels: labels,
             metric: metric,
             selector: selectorStr,
             multiplier: multiplier,
           },
-          format: "time_series",
+          format: 'time_series',
           intervalFactor: 2,
-          legendFormat: "%s Average" % legendLabels,
-          refId: "C",
+          legendFormat: '%s Average' % legendLabels,
+          refId: 'C',
           step: 10,
         },
       ],
-      yaxes: $.yaxes("ms"),
+      yaxes: $.yaxes('ms'),
     },
 
   selector:: {
-    eq(label, value):: { label: label, op: "=", value: value },
-    neq(label, value):: { label: label, op: "!=", value: value },
-    re(label, value):: { label: label, op: "=~", value: value },
-    nre(label, value):: { label: label, op: "!~", value: value },
+    eq(label, value):: { label: label, op: '=', value: value },
+    neq(label, value):: { label: label, op: '!=', value: value },
+    re(label, value):: { label: label, op: '=~', value: value },
+    nre(label, value):: { label: label, op: '!~', value: value },
   },
 
   toPrometheusSelector(selector)::
@@ -468,5 +472,5 @@
       '%(label)s%(op)s"%(value)s"' % matcher
       for matcher in selector
     ];
-    "{%s}" % std.join(", ", pairs),
+    '{%s}' % std.join(', ', pairs),
 }

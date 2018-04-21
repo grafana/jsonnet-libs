@@ -9,21 +9,21 @@
             proxy_pass      %(url)s$2$is_args$args;
           }
         ||| % service
-          for service in $._config.admin_services
+        for service in $._config.admin_services
       ],
-      locations: std.join("\n", self.location_stanzas),
+      locations: std.join('\n', self.location_stanzas),
       link_stanzas: [
         |||
           <li><a href="/%(path)s">%(title)s</a></li>
         ||| % service
-          for service in $._config.admin_services
+        for service in $._config.admin_services
       ],
-      links: std.join("\n", self.link_stanzas),
+      links: std.join('\n', self.link_stanzas),
     };
 
-    configMap.new("nginx-config") +
+    configMap.new('nginx-config') +
     configMap.withData({
-      "nginx.conf": |||
+      'nginx.conf': |||
         worker_processes     5;  ## Default: 1
         error_log            /dev/stderr;
         pid                  nginx.pid;
@@ -51,7 +51,7 @@
           }
         }
       ||| % ($._config + vars),
-      "index.html": |||
+      'index.html': |||
         <html>
           <head><title>Admin</title></head>
           <body>
@@ -67,15 +67,15 @@
   local container = $.core.v1.container,
 
   nginx_container::
-    container.new("nginx", $._images.nginx) +
-    container.withPorts($.core.v1.containerPort.new("http", 80)) +
-    $.util.resourcesRequests("50m", "100Mi"),
+    container.new('nginx', $._images.nginx) +
+    container.withPorts($.core.v1.containerPort.new('http', 80)) +
+    $.util.resourcesRequests('50m', '100Mi'),
 
   local deployment = $.apps.v1beta1.deployment,
 
   nginx_deployment:
-    deployment.new("nginx", 1, [$.nginx_container]) +
-    $.util.configVolumeMount("nginx-config", "/etc/nginx"),
+    deployment.new('nginx', 1, [$.nginx_container]) +
+    $.util.configVolumeMount('nginx-config', '/etc/nginx'),
 
   nginx_service:
     $.util.serviceFor($.nginx_deployment),

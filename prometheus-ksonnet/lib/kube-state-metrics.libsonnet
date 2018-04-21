@@ -2,83 +2,83 @@
   local policyRule = $.rbac.v1beta1.policyRule,
 
   kube_state_metrics_rbac:
-    $.util.rbac("kube-state-metrics", [
+    $.util.rbac('kube-state-metrics', [
       policyRule.new() +
-      policyRule.withApiGroups([""]) +
+      policyRule.withApiGroups(['']) +
       policyRule.withResources([
-        "nodes",
-        "pods",
-        "services",
-        "resourcequotas",
-        "replicationcontrollers",
-        "limitranges",
-        "persistentvolumeclaims",
-        "persistentvolumes",
-        "namespaces",
-        "endpoints",
+        'nodes',
+        'pods',
+        'services',
+        'resourcequotas',
+        'replicationcontrollers',
+        'limitranges',
+        'persistentvolumeclaims',
+        'persistentvolumes',
+        'namespaces',
+        'endpoints',
       ]) +
-      policyRule.withVerbs(["list", "watch"]),
+      policyRule.withVerbs(['list', 'watch']),
 
       policyRule.new() +
-      policyRule.withApiGroups(["extensions"]) +
+      policyRule.withApiGroups(['extensions']) +
       policyRule.withResources([
-        "daemonsets",
-        "deployments",
-        "replicasets",
+        'daemonsets',
+        'deployments',
+        'replicasets',
       ]) +
-      policyRule.withVerbs(["list", "watch"]),
+      policyRule.withVerbs(['list', 'watch']),
 
       policyRule.new() +
-      policyRule.withApiGroups(["apps"]) +
+      policyRule.withApiGroups(['apps']) +
       policyRule.withResources([
-        "statefulsets",
+        'statefulsets',
       ]) +
-      policyRule.withVerbs(["list", "watch"]),
+      policyRule.withVerbs(['list', 'watch']),
 
       policyRule.new() +
-      policyRule.withApiGroups(["batch"]) +
+      policyRule.withApiGroups(['batch']) +
       policyRule.withResources([
-        "cronjobs",
-        "jobs",
+        'cronjobs',
+        'jobs',
       ]) +
-      policyRule.withVerbs(["list", "watch"]),
+      policyRule.withVerbs(['list', 'watch']),
 
       policyRule.new() +
-      policyRule.withApiGroups(["autoscaling"]) +
+      policyRule.withApiGroups(['autoscaling']) +
       policyRule.withResources([
-        "horizontalpodautoscalers",
+        'horizontalpodautoscalers',
       ]) +
-      policyRule.withVerbs(["list", "watch"]),
+      policyRule.withVerbs(['list', 'watch']),
     ]),
 
   local container = $.core.v1.container,
   local containerPort = $.core.v1.containerPort,
 
   kube_state_metrics_container::
-    container.new("kube-state-metrics", $._images.kubeStateMetrics) +
+    container.new('kube-state-metrics', $._images.kubeStateMetrics) +
     container.withArgs([
-      "--port=80",
-      "--telemetry-host=0.0.0.0",
-      "--telemetry-port=81",
+      '--port=80',
+      '--telemetry-host=0.0.0.0',
+      '--telemetry-port=81',
     ]) +
     container.withPorts([
-      containerPort.new("http-metrics", 80),
-      containerPort.new("self-metrics", 81),
+      containerPort.new('http-metrics', 80),
+      containerPort.new('self-metrics', 81),
     ]) +
-    $.util.resourcesRequests("25m", "20Mi") +
-    $.util.resourcesLimits("50m", "40Mi"),
+    $.util.resourcesRequests('25m', '20Mi') +
+    $.util.resourcesLimits('50m', '40Mi'),
 
   local deployment = $.apps.v1beta1.deployment,
 
   kube_state_metrics_deployment:
-    deployment.new("kube-state-metrics", 1, [
+    deployment.new('kube-state-metrics', 1, [
       $.kube_state_metrics_container,
     ]) +
     // Stop the default pod discovery scraping this pod - we use a special
     // scrape config to preserve namespace etc labels.
-    deployment.mixin.spec.template.metadata.withAnnotationsMixin({"prometheus.io.scrape": "false"}) +
+    deployment.mixin.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
     if $._config.enable_rbac
-    then deployment.mixin.spec.template.spec.withServiceAccount("kube-state-metrics")
+    then deployment.mixin.spec.template.spec.withServiceAccount('kube-state-metrics')
     else {},
 
   kube_state_metrics_service:
