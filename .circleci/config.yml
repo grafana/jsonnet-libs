@@ -1,10 +1,26 @@
 version: 2
-jobs:
-  build:
-    working_directory: /go/src/github.com/kausalco/public
-    docker:
-      - image: kausal/public-build:7fd7918
 
+defaults: &defaults
+  docker:
+    - image: kausal/public-build:7fd7918
+  working_directory: /go/src/github.com/kausalco/public
+
+workflows:
+  version: 2
+  default:
+    jobs:
+    - lint
+    - build-promtail
+
+jobs:
+  lint:
+    <<: *defaults
+    steps:
+      - checkout
+      - run: make lint
+
+  build-promtail:
+    <<: *defaults
     steps:
       - checkout
       - setup_remote_docker

@@ -1,10 +1,10 @@
 // Override defaults paramters for objects in the ksonnet libs here.
-local k = import "k.libsonnet";
+local k = import 'k.libsonnet';
 
 k {
   _config+:: {
     enable_rbac: true,
-    namespace: error "Must define a namespace",
+    namespace: error 'Must define a namespace',
   },
 
   core+: {
@@ -23,7 +23,7 @@ k {
         // Shortcut constructor for UDP ports.
         newUDP(name, port)::
           super.newNamed(name, port) +
-          super.withProtocol("UDP"),
+          super.withProtocol('UDP'),
       },
 
       // Expose volumes type.
@@ -43,15 +43,15 @@ k {
         // Override new, such that it doesn't always set readOnly: false.
         new(name, mountPath, readOnly=false)::
           {} + self.withName(name) + self.withMountPath(mountPath) +
-            if readOnly
-            then self.withReadOnly(readOnly)
-            else {},
+          if readOnly
+          then self.withReadOnly(readOnly)
+          else {},
       },
 
       container:: $.extensions.v1beta1.deployment.mixin.spec.template.spec.containersType {
         new(name, image)::
           super.new(name, image) +
-          super.withImagePullPolicy("IfNotPresent"),
+          super.withImagePullPolicy('IfNotPresent'),
 
         withEnvMap(es)::
           super.withEnv([
@@ -78,14 +78,14 @@ k {
         // every node.
         super.mixin.spec.template.spec.withTolerations([
           $.core.v1.toleration.new() +
-          $.core.v1.toleration.withOperator("Exists") +
-          $.core.v1.toleration.withEffect("NoSchedule"),
+          $.core.v1.toleration.withOperator('Exists') +
+          $.core.v1.toleration.withEffect('NoSchedule'),
         ]) +
 
         // We want to specify a minReadySeconds on every deamonset, so we get some
         // very basic canarying, for instance, with bad arguments.
         super.mixin.spec.withMinReadySeconds(10) +
-        super.mixin.spec.updateStrategy.withType("RollingUpdate"),
+        super.mixin.spec.updateStrategy.withType('RollingUpdate'),
     },
 
     deployment+: {
@@ -116,13 +116,13 @@ k {
       policyRule:: $.rbac.v1beta1.clusterRole.rulesType,
 
       subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType {
-        withKind(kind):: self + {kind: kind},
+        withKind(kind):: self + { kind: kind },
       },
 
       roleBinding+: {
         mixin+: {
           roleRef+: {
-            withKind(kind):: self.mixinInstance({kind: kind}),
+            withKind(kind):: self.mixinInstance({ kind: kind }),
           },
         },
       },
@@ -130,7 +130,7 @@ k {
       clusterRoleBinding+: {
         mixin+: {
           roleRef+: {
-            withKind(kind):: self.mixinInstance({kind: kind}),
+            withKind(kind):: self.mixinInstance({ kind: kind }),
           },
         },
       },
@@ -143,7 +143,7 @@ k {
       local container = $.core.v1.container;
       local servicePort = $.core.v1.service.mixin.spec.portsType;
       local ports = [
-        servicePort.newNamed(c.name + "-" + port.name, port.containerPort, port.containerPort)
+        servicePort.newNamed(c.name + '-' + port.name, port.containerPort, port.containerPort)
         for c in deployment.spec.template.spec.containers
         for port in (c + container.withPortsMixin([])).ports
       ];
@@ -174,12 +174,12 @@ k {
         cluster_role_binding:
           clusterRoleBinding.new() +
           clusterRoleBinding.mixin.metadata.withName(name) +
-          clusterRoleBinding.mixin.roleRef.withApiGroup("rbac.authorization.k8s.io") +
-          clusterRoleBinding.mixin.roleRef.withKind("ClusterRole") +
+          clusterRoleBinding.mixin.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+          clusterRoleBinding.mixin.roleRef.withKind('ClusterRole') +
           clusterRoleBinding.mixin.roleRef.withName(name) +
           clusterRoleBinding.withSubjects([
             subject.new() +
-            subject.withKind("ServiceAccount") +
+            subject.withKind('ServiceAccount') +
             subject.withName(name) +
             subject.withNamespace($._config.namespace),
           ]),
@@ -208,12 +208,12 @@ k {
           roleBinding.new() +
           roleBinding.mixin.metadata.withName(name) +
           roleBinding.mixin.metadata.withNamespace($._config.namespace) +
-          roleBinding.mixin.roleRef.withApiGroup("rbac.authorization.k8s.io") +
-          roleBinding.mixin.roleRef.withKind("Role") +
+          roleBinding.mixin.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+          roleBinding.mixin.roleRef.withKind('Role') +
           roleBinding.mixin.roleRef.withName(name) +
           roleBinding.withSubjects([
             subject.new() +
-            subject.withKind("ServiceAccount") +
+            subject.withKind('ServiceAccount') +
             subject.withName(name) +
             subject.withNamespace($._config.namespace),
           ]),
@@ -222,12 +222,12 @@ k {
 
     configVolumeMount(name, path)::
       local container = $.core.v1.container,
-           deployment = $.extensions.v1beta1.deployment,
-          volumeMount = $.core.v1.volumeMount,
-               volume = $.core.v1.volume,
-          addMount(c) = c + container.withVolumeMountsMixin(
-            volumeMount.new(name, path)
-          );
+            deployment = $.extensions.v1beta1.deployment,
+            volumeMount = $.core.v1.volumeMount,
+            volume = $.core.v1.volume,
+            addMount(c) = c + container.withVolumeMountsMixin(
+        volumeMount.new(name, path)
+      );
 
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
@@ -236,12 +236,12 @@ k {
 
     hostVolumeMount(name, hostPath, path)::
       local container = $.core.v1.container,
-           deployment = $.extensions.v1beta1.deployment,
-          volumeMount = $.core.v1.volumeMount,
-               volume = $.core.v1.volume,
-          addMount(c) = c + container.withVolumeMountsMixin(
-            volumeMount.new(name, path)
-          );
+            deployment = $.extensions.v1beta1.deployment,
+            volumeMount = $.core.v1.volumeMount,
+            volume = $.core.v1.volume,
+            addMount(c) = c + container.withVolumeMountsMixin(
+        volumeMount.new(name, path)
+      );
 
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
@@ -250,12 +250,12 @@ k {
 
     secretVolumeMount(name, path)::
       local container = $.core.v1.container,
-           deployment = $.extensions.v1beta1.deployment,
-          volumeMount = $.core.v1.volumeMount,
-               volume = $.core.v1.volume,
-          addMount(c) = c + container.withVolumeMountsMixin(
-            volumeMount.new(name, path)
-          );
+            deployment = $.extensions.v1beta1.deployment,
+            volumeMount = $.core.v1.volumeMount,
+            volume = $.core.v1.volume,
+            addMount(c) = c + container.withVolumeMountsMixin(
+        volumeMount.new(name, path)
+      );
 
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
@@ -263,7 +263,7 @@ k {
       ]),
 
     manifestYaml(value):: (
-      local f = std.native("manifestYamlFromJson");
+      local f = std.native('manifestYamlFromJson');
       f(std.toString(value))
     ),
 
@@ -288,7 +288,7 @@ k {
         spec+: podAntiAffinity.withRequiredDuringSchedulingIgnoredDuringExecution([
           podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.new() +
           podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.mixin.labelSelector.withMatchLabels({ name: name }) +
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey("kubernetes.io/hostname"),
+          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey('kubernetes.io/hostname'),
         ]).spec,
       },
   },
