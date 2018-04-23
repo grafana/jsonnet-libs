@@ -1,28 +1,31 @@
 {
-  // Extension point for you to add your own dashboards.
-  dashboards:: {},
-
-  grafana_config:: @"
-[auth.anonymous]
-enabled = true
-org_role = Admin
-
-[server]
-http_port = 80
-root_url = %(grafana_root_url)s
-
-[analytics]
-reporting_enabled = false
-
-[users]
-default_theme = light
-" % $._config,
+  grafana_config:: {
+    sections: {
+      'auth.anonymous': {
+        enabled: true,
+        org_role: 'Admin',
+      },
+      server: {
+        http_port: 80,
+        root_url: $._config.grafana_root_url,
+      },
+      analytics: {
+        reporting_enabled: false,
+      },
+      users: {
+        default_theme: 'light',
+      },
+    },
+  },
 
   local configMap = $.core.v1.configMap,
 
   grafana_config_map:
     configMap.new('grafana-config') +
-    configMap.withData({ 'grafana.ini': $.grafana_config }),
+    configMap.withData({ 'grafana.ini': std.manifestIni($.grafana_config) }),
+
+  // Extension point for you to add your own dashboards.
+  dashboards:: {},
 
   dashboards_config_map:
     configMap.new('dashboards') +
