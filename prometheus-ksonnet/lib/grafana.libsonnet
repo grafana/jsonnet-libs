@@ -25,13 +25,18 @@
     configMap.withData({ 'grafana.ini': std.manifestIni($.grafana_config) }),
 
   // Extension point for you to add your own dashboards.
-  dashboards:: {},
+  dashboards+:: {},
+  grafana_dashboards+:: {},
 
   dashboards_config_map:
     configMap.new('dashboards') +
-    configMap.withData({
+    configMap.withDataMixin({
       [name]: std.toString($.dashboards[name])
       for name in std.objectFields($.dashboards)
+    }) +
+    configMap.withDataMixin({
+      [name]: std.toString($.grafana_dashboards[name])
+      for name in std.objectFields($.grafana_dashboards)
     }),
 
   grafana_dashboard_provisioning_config_map:
