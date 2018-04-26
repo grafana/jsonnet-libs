@@ -248,7 +248,7 @@ k {
         volume.fromHostPath(name, hostPath),
       ]),
 
-    secretVolumeMount(name, path)::
+    secretVolumeMount(name, path, defaultMode=256)::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
@@ -259,7 +259,22 @@ k {
 
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
-        volume.fromSecret(name, name),
+        volume.fromSecret(name, name) +
+        volume.mixin.secret.withDefaultMode(defaultMode),
+      ]),
+
+    emptyVolumeMount(name, path)::
+      local container = $.core.v1.container,
+            deployment = $.extensions.v1beta1.deployment,
+            volumeMount = $.core.v1.volumeMount,
+            volume = $.core.v1.volume,
+            addMount(c) = c + container.withVolumeMountsMixin(
+        volumeMount.new(name, path)
+      );
+
+      deployment.mapContainers(addMount) +
+      deployment.mixin.spec.template.spec.withVolumesMixin([
+        volume.fromEmptyDir(name),
       ]),
 
     manifestYaml(value):: (
