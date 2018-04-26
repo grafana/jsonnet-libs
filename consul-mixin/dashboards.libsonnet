@@ -1,4 +1,4 @@
-local g = import 'klumps/lib/grafana.libsonnet';
+local g = import 'grafana-builder/grafana.libsonnet';
 
 local row_settings = {
   height: '100px',
