@@ -107,7 +107,7 @@
     container.withCommand([
       '/usr/sbin/grafana-server',
       '--homepath=/usr/share/grafana',
-      '--config=/etc/grafana/grafana.ini',
+      '--config=/etc/grafana-config/grafana.ini',
     ]) +
     $.util.resourcesRequests('10m', '40Mi'),
 
@@ -115,9 +115,9 @@
 
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container]) +
-    $.util.configVolumeMount('grafana-config', '/etc/grafana') +
-    $.util.configVolumeMount('grafana-dashboard-provisioning', '/usr/share/grafana/conf/provisioning/dashboards') +
-    $.util.configVolumeMount('grafana-datasources', '/usr/share/grafana/conf/provisioning/datasources') +
+    $.util.configVolumeMount('grafana-config', '/etc/grafana-config') +
+    $.util.configVolumeMount('grafana-dashboard-provisioning', '%(grafana_provisioning_dir)s/dashboards' % $._config) +
+    $.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config) +
     $.util.configVolumeMount('dashboards', '/grafana/dashboards'),
 
   grafana_service:
