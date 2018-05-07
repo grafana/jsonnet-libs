@@ -342,13 +342,17 @@
   },
   prometheus_rules:: {},
 
+  // We changes to using camelCase, but here we try and make it backwards compatible.
+  prometheusAlerts+:: $.prometheus_alerts,
+  prometheusRules+:: $.prometheus_rules,
+
   local configMap = $.core.v1.configMap,
 
   prometheus_config_map:
     configMap.new('prometheus-config') +
     configMap.withData({
       'prometheus.yml': $.util.manifestYaml($.prometheus_config),
-      'alerts.rules': $.util.manifestYaml($.prometheus_alerts),
-      'recording.rules': $.util.manifestYaml($.prometheus_rules),
+      'alerts.rules': $.util.manifestYaml($.prometheusAlerts),
+      'recording.rules': $.util.manifestYaml($.prometheusRules),
     }),
 }

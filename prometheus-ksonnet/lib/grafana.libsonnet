@@ -27,16 +27,13 @@
   // Extension point for you to add your own dashboards.
   dashboards+:: {},
   grafana_dashboards+:: {},
+  grafanaDashboards+:: $.dashboards + $.grafana_dashboards,
 
   dashboards_config_map:
     configMap.new('dashboards') +
     configMap.withDataMixin({
-      [name]: std.toString($.dashboards[name])
-      for name in std.objectFields($.dashboards)
-    }) +
-    configMap.withDataMixin({
-      [name]: std.toString($.grafana_dashboards[name])
-      for name in std.objectFields($.grafana_dashboards)
+      [name]: std.toString($.grafanaDashboards[name])
+      for name in std.objectFields($.grafanaDashboards)
     }),
 
   grafana_dashboard_provisioning_config_map:
