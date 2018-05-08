@@ -233,6 +233,21 @@ k {
       deployment.mixin.spec.template.spec.withVolumesMixin([
         volume.fromConfigMap(name, name),
       ]),
+      
+    configVolumeMountSubPath(name, path, subpath)::
+      local container = $.core.v1.container,
+            deployment = $.extensions.v1beta1.deployment,
+            volumeMount = $.core.v1.volumeMount,
+            volume = $.core.v1.volume,
+            addMount(c) = c + container.withVolumeMountsMixin(
+        volumeMount.new(name, path) +
+        volumeMount.withSubPath(subpath)
+      );
+
+      deployment.mapContainers(addMount) +
+      deployment.mixin.spec.template.spec.withVolumesMixin([
+        volume.fromConfigMap(name, name),
+      ]),
 
     hostVolumeMount(name, hostPath, path)::
       local container = $.core.v1.container,
