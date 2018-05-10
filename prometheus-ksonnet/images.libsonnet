@@ -6,7 +6,7 @@
     grafana: 'grafana/grafana:5.0.4',
     gfdatasource: 'quay.io/weaveworks/gfdatasource:master-2bda599',
     alertmanager: 'prom/alertmanager:v0.14.0',
-    nodeExporter: 'prom/node-exporter:v0.15.1',
+    nodeExporter: 'prom/node-exporter:v0.16.0-rc.3',
     nginx: 'nginx:1.13.9',
   },
 }
