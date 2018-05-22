@@ -219,29 +219,18 @@ k {
           ]),
       }
       else {},
-
-    configVolumeMount(name, path)::
-      local container = $.core.v1.container,
-            deployment = $.extensions.v1beta1.deployment,
-            volumeMount = $.core.v1.volumeMount,
-            volume = $.core.v1.volume,
-            addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path)
-      );
-
-      deployment.mapContainers(addMount) +
-      deployment.mixin.spec.template.spec.withVolumesMixin([
-        volume.fromConfigMap(name, name),
-      ]),
       
-    configVolumeMountSubPath(name, path, subpath)::
+    // VolumeMount helper functions can be augmented with mixins. 
+    // For example, passing "volumeMount.withSubPath(subpath)" will result in
+    // a subpath mixin.
+    configVolumeMount(name, path, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
         volumeMount.new(name, path) +
-        volumeMount.withSubPath(subpath)
+        volumeMountMixin,
       );
 
       deployment.mapContainers(addMount) +
@@ -249,7 +238,7 @@ k {
         volume.fromConfigMap(name, name),
       ]),
 
-    hostVolumeMount(name, hostPath, path)::
+    hostVolumeMount(name, hostPath, path, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
@@ -263,7 +252,7 @@ k {
         volume.fromHostPath(name, hostPath),
       ]),
 
-    secretVolumeMount(name, path, defaultMode=256)::
+    secretVolumeMount(name, path, defaultMode=256, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
@@ -278,7 +267,7 @@ k {
         volume.mixin.secret.withDefaultMode(defaultMode),
       ]),
 
-    emptyVolumeMount(name, path)::
+    emptyVolumeMount(name, path, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
