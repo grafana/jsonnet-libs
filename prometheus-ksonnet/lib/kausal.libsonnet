@@ -284,11 +284,6 @@ k {
         volume.fromEmptyDir(name),
       ]),
 
-      deployment.mapContainers(addMount) +
-      deployment.mixin.spec.template.spec.withVolumesMixin([
-        volume.fromEmptyDir(name),
-      ]),
-
     manifestYaml(value):: (
       local f = std.native('manifestYamlFromJson');
       f(std.toString(value))
