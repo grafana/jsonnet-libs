@@ -219,8 +219,8 @@ k {
           ]),
       }
       else {},
-      
-    // VolumeMount helper functions can be augmented with mixins. 
+
+    // VolumeMount helper functions can be augmented with mixins.
     // For example, passing "volumeMount.withSubPath(subpath)" will result in
     // a subpath mixin.
     configVolumeMount(name, path, volumeMountMixin={})::
@@ -244,7 +244,8 @@ k {
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path)
+        volumeMount.new(name, path) +
+        volumeMountMixin,
       );
 
       deployment.mapContainers(addMount) +
@@ -258,7 +259,8 @@ k {
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path)
+        volumeMount.new(name, path) +
+        volumeMountMixin,
       );
 
       deployment.mapContainers(addMount) +
@@ -273,8 +275,14 @@ k {
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path)
+        volumeMount.new(name, path) +
+        volumeMountMixin,
       );
+
+      deployment.mapContainers(addMount) +
+      deployment.mixin.spec.template.spec.withVolumesMixin([
+        volume.fromEmptyDir(name),
+      ]),
 
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
