@@ -26,7 +26,7 @@
       'nginx.conf': |||
         worker_processes     5;  ## Default: 1
         error_log            /dev/stderr;
-        pid                  nginx.pid;
+        pid                  /tmp/nginx.pid;
         worker_rlimit_nofile 8192;
 
         events {
