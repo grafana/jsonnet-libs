@@ -220,13 +220,17 @@ k {
       }
       else {},
 
-    configVolumeMount(name, path)::
+    // VolumeMount helper functions can be augmented with mixins.
+    // For example, passing "volumeMount.withSubPath(subpath)" will result in
+    // a subpath mixin.
+    configVolumeMount(name, path, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path)
+        volumeMount.new(name, path) +
+        volumeMountMixin,
       );
 
       deployment.mapContainers(addMount) +
@@ -234,13 +238,14 @@ k {
         volume.fromConfigMap(name, name),
       ]),
 
-    hostVolumeMount(name, hostPath, path)::
+    hostVolumeMount(name, hostPath, path, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path)
+        volumeMount.new(name, path) +
+        volumeMountMixin,
       );
 
       deployment.mapContainers(addMount) +
@@ -248,13 +253,14 @@ k {
         volume.fromHostPath(name, hostPath),
       ]),
 
-    secretVolumeMount(name, path, defaultMode=256)::
+    secretVolumeMount(name, path, defaultMode=256, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path)
+        volumeMount.new(name, path) +
+        volumeMountMixin,
       );
 
       deployment.mapContainers(addMount) +
@@ -263,13 +269,14 @@ k {
         volume.mixin.secret.withDefaultMode(defaultMode),
       ]),
 
-    emptyVolumeMount(name, path)::
+    emptyVolumeMount(name, path, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path)
+        volumeMount.new(name, path) +
+        volumeMountMixin,
       );
 
       deployment.mapContainers(addMount) +
