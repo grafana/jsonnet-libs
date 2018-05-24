@@ -5,7 +5,7 @@
             "source": {
                 "git": {
                     "remote": "https://github.com/brancz/kubernetes-mixin",
-                    "subdir": "add-rules-alerts"
+                    "subdir": ""
                 }
             },
             "version": "add-rules-alerts"
