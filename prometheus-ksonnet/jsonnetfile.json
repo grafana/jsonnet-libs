@@ -1,0 +1,14 @@
+{
+    "dependencies": [
+        {
+            "name": "kubernetes-mixin",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/brancz/kubernetes-mixin",
+                    "subdir": "add-rules-alerts"
+                }
+            },
+            "version": "add-rules-alerts"
+        }
+    ]
+}

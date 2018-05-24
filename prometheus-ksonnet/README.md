@@ -20,11 +20,11 @@ $ ks init <application name>
 $ cd <application name>
 ```
 
-- Add the kausal repository, instantiate the package
+- Vendor this package using [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler)
 
 ```
-$ ks registry add kausal https://github.com/kausalco/public
-$ ks pkg install kausal/prometheus-ksonnet
+$ go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
+$ jb install https://github.com/kausalco/public/prometheus-ksonnet
 ```
 
 - Assuming you want to run in the default namespace ('environment' in ksonnet parlance), add the follow to the file `environments/default/main.jsonnet`:

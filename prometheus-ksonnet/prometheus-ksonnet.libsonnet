@@ -1,3 +1,4 @@
+(import 'kubernetes-mixin/mixin.libsonnet') +
 (import 'lib/kausal.libsonnet') +
 (import 'images.libsonnet') +
 (import 'lib/alertmanager.libsonnet') +

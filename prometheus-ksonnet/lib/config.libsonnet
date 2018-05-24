@@ -36,5 +36,16 @@
 
     // Node exporter options.
     node_exporter_mount_root: true,
+
+    // Kubernetes mixin overrides.
+    cadvisorSelector: 'job="kube-system/cadvisor"',
+    kubeletSelector: 'job="kube-system/kubelet"',
+    kubeStateMetricsSelector: 'job="%s/kube-state-metrics"' % $._config.namespace,
+    nodeExporterSelector: 'job="%s/node-exporter"' % $._config.namespace,
+    notKubeDnsSelector: 'job!="kube-system/kube-dns"',
+    kubeSchedulerSelector: 'job="kube-system/kube-scheduler"',
+    kubeControllerManagerSelector: 'job="kube-system/kube-controller-manager"',
+    kubeApiserverSelector: 'job="kube-system/kube-apiserver"',
+    podLabel: 'instance',
   },
 }
