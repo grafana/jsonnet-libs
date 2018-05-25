@@ -164,6 +164,39 @@
         ],
       },
 
+      // A separate scrape config for node-exporter which maps the nodename onto the
+      // instance label
+      {
+        job_name: 'default/node-exporter',
+        kubernetes_sd_configs: [{
+          role: 'pod',
+        }],
+
+        tls_config: {
+          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
+        },
+        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+
+        relabel_configs: [
+
+          // Drop anything who's service is not kube-state-metrics
+          // Rename jobs to be <namespace>/<name, from pod name label>
+          {
+            source_labels: ['__meta_kubernetes_namespace', '__meta_kubernetes_pod_label_name'],
+            separator: '/',
+            regex: '%s/node-exporter' % $._config.namespace,
+            action: 'keep',
+          },
+
+          // Rename instances to be the pod name
+          {
+            source_labels: ['__meta_kubernetes_pod_node_name'],
+            action: 'replace',
+            target_label: 'instance',
+          },
+        ],
+      },
 
       // This scrape config gather all kubelet metrics.
       {

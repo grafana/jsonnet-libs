@@ -20,6 +20,7 @@
     daemonSet.new('node-exporter', [$.node_exporter_container]) +
     daemonSet.mixin.spec.template.spec.withHostPid(true) +
     daemonSet.mixin.spec.template.spec.withHostNetwork(true) +
+    daemonSet.mixin.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
     $.util.hostVolumeMount('proc', '/proc', '/host/proc') +
     $.util.hostVolumeMount('sys', '/sys', '/host/sys') +
     (if $._config.node_exporter_mount_root
