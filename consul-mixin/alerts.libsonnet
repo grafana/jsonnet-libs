@@ -32,14 +32,14 @@
         {
           alert: 'ConsulPeers',
           expr: |||
-            consul_raft_peers != 3
-          |||,
+            consul_raft_peers != %(consul_replicas)s
+          ||| % $._config,
           'for': '10m',
           labels: {
             severity: 'critical',
           },
           annotations: {
-            message: "Consul '{{ $labels.job }}' does not have 3 peers.",
+            message: "Consul '{{ $labels.job }}' does not have %(consul_replicas)s peers." % $._config,
           },
         },
       ],
