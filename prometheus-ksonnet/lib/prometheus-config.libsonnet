@@ -133,9 +133,12 @@
       // prevents the exported namespace label being renamed to exported_namespace, and
       // allows us to route alerts based on namespace.
       {
-        job_name: 'default/kube-state-metrics',
+        job_name: '%s/kube-state-metrics' % $._config.namespace,
         kubernetes_sd_configs: [{
           role: 'pod',
+          namespaces: {
+            names: [$._config.namespace],
+          },
         }],
 
         tls_config: {
@@ -149,9 +152,8 @@
           // Drop anything who's service is not kube-state-metrics
           // Rename jobs to be <namespace>/<name, from pod name label>
           {
-            source_labels: ['__meta_kubernetes_namespace', '__meta_kubernetes_pod_label_name'],
-            separator: '/',
-            regex: '%s/kube-state-metrics' % $._config.namespace,
+            source_labels: ['__meta_kubernetes_pod_label_name'],
+            regex: 'kube-state-metrics',
             action: 'keep',
           },
 
@@ -165,11 +167,14 @@
       },
 
       // A separate scrape config for node-exporter which maps the nodename onto the
-      // instance label
+      // instance label.
       {
-        job_name: 'default/node-exporter',
+        job_name: '%s/node-exporter' % $._config.namespace,
         kubernetes_sd_configs: [{
           role: 'pod',
+          namespaces: {
+            names: [$._config.namespace],
+          },
         }],
 
         tls_config: {
@@ -179,17 +184,14 @@
         bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
 
         relabel_configs: [
-
-          // Drop anything who's service is not kube-state-metrics
-          // Rename jobs to be <namespace>/<name, from pod name label>
+          // Drop anything who's name is not node-exporter.
           {
-            source_labels: ['__meta_kubernetes_namespace', '__meta_kubernetes_pod_label_name'],
-            separator: '/',
-            regex: '%s/node-exporter' % $._config.namespace,
+            source_labels: ['__meta_kubernetes_pod_label_name'],
+            regex: 'node-exporter',
             action: 'keep',
           },
 
-          // Rename instances to be the pod name
+          // Rename instances to be the node name.
           {
             source_labels: ['__meta_kubernetes_pod_node_name'],
             action: 'replace',
