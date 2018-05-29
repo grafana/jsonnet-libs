@@ -238,13 +238,13 @@ k {
         volume.fromConfigMap(name, name),
       ]),
 
-    hostVolumeMount(name, hostPath, path, volumeMountMixin={})::
+    hostVolumeMount(name, hostPath, path, readOnly=false, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
-        volumeMount.new(name, path) +
+        volumeMount.new(name, path, readOnly=readOnly) +
         volumeMountMixin,
       );
 
