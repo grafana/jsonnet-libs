@@ -35,7 +35,7 @@
 
     // Grafana config options.
     grafana_root_url: 'http://nginx.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana' % self,
-    grafana_provisioning_dir: "/usr/share/grafana/conf/provisioning",
+    grafana_provisioning_dir: "/etc/grafana/provisioning",
 
     // Node exporter options.
     node_exporter_mount_root: true,
@@ -50,5 +50,6 @@
     kubeControllerManagerSelector: 'job="kube-system/kube-controller-manager"',
     kubeApiserverSelector: 'job="kube-system/kube-apiserver"',
     podLabel: 'instance',
+    grafanaPrefix: '/grafana',
   },
 }

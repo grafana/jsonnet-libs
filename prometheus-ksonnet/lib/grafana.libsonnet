@@ -102,7 +102,7 @@
     container.new('grafana', $._images.grafana) +
     container.withPorts($.core.v1.containerPort.new('grafana', 80)) +
     container.withCommand([
-      '/usr/sbin/grafana-server',
+      '/usr/share/grafana/bin/grafana-server',
       '--homepath=/usr/share/grafana',
       '--config=/etc/grafana-config/grafana.ini',
     ]) +
@@ -112,6 +112,7 @@
 
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container]) +
+    deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
     $.util.configVolumeMount('grafana-config', '/etc/grafana-config') +
     $.util.configVolumeMount('grafana-dashboard-provisioning', '%(grafana_provisioning_dir)s/dashboards' % $._config) +
     $.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config) +
