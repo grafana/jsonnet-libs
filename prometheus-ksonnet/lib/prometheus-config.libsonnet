@@ -53,6 +53,7 @@
         //   prometheus.io.scheme: https - use https for scraping
         //   prometheus.io.port - scrape this port
         //   prometheus.io.path - scrape this path
+        //   prometheus.io.param-<parameter> - send ?parameter=value with the scrape
         relabel_configs: [
 
           // Drop anything annotated with prometheus.io.scrape=false
@@ -124,6 +125,12 @@
             source_labels: ['__meta_kubernetes_pod_name'],
             action: 'replace',
             target_label: 'instance',
+          },
+
+          {
+            regex: '__meta_kubernetes_pod_annotation_prometheus_io_param_(.+)',
+            action: 'labelmap',
+            replacement: '__param_$1',
           },
         ],
       },
