@@ -9,6 +9,16 @@
                 }
             },
             "version": "master"
+        },
+        {
+            "name": "oauth2_proxy",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/gouthamve/mixins",
+                    "subdir": "oauth2_proxy"
+                }
+            },
+            "version": "master"
         }
     ]
 }

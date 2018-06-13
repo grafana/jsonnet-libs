@@ -79,4 +79,25 @@
 
   nginx_service:
     $.util.serviceFor($.nginx_deployment),
+
+
+  local oauth2_proxy = import 'oauth2_proxy/mixin.libsonnet',
+
+  oauth2_proxy:
+    if ! $._config.oauth_enabled
+    then {}
+    else (
+      oauth2_proxy {
+        _config+:: {
+          namespace: $._config.namespace,
+
+          redirect_url: $._config.oauth_redirect_url,
+          upstream: 'http://nginx.%(namespace)s.svc.%(cluster_dns_suffix)s/' % $._config,
+          client_id: $._config.oauth_client_id,
+          client_secret: $._config.oauth_client_secret,
+          cookie_secret: $._config.oauth_cookie_secret,
+          email_domain: $._config.oauth_email_domain,
+        },
+      }
+    ),
 }

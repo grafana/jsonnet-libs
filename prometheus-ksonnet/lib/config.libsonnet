@@ -35,7 +35,7 @@
 
     // Grafana config options.
     grafana_root_url: 'http://nginx.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana' % self,
-    grafana_provisioning_dir: "/etc/grafana/provisioning",
+    grafana_provisioning_dir: '/etc/grafana/provisioning',
 
     // Node exporter options.
     node_exporter_mount_root: true,
@@ -51,5 +51,13 @@
     kubeApiserverSelector: 'job="kube-system/kube-apiserver"',
     podLabel: 'instance',
     grafanaPrefix: '/grafana',
+
+    // oauth2-Proxy
+    oauth_enabled: false,
+    oauth_client_id: error 'Must define a client id',
+    oauth_client_secret: error 'Must define a client secret',
+    oauth_cookie_secret: error 'Must define a cookie secret',
+    oauth_redirect_url: error 'Must define a redirect url',
+    oauth_email_domain: '*',
   },
 }
