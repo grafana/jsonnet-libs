@@ -14,8 +14,8 @@
             "name": "oauth2_proxy",
             "source": {
                 "git": {
-                    "remote": "https://github.com/gouthamve/mixins",
-                    "subdir": "oauth2_proxy"
+                    "remote": "https://github.com/kausalco/public",
+                    "subdir": "oauth2_proxy-mixin"
                 }
             },
             "version": "master"
