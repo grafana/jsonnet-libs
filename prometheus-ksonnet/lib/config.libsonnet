@@ -52,12 +52,7 @@
     podLabel: 'instance',
     grafanaPrefix: '/grafana',
 
-    // oauth2-Proxy
+    // oauth2-proxy
     oauth_enabled: false,
-    oauth_client_id: error 'Must define a client id',
-    oauth_client_secret: error 'Must define a client secret',
-    oauth_cookie_secret: error 'Must define a cookie secret',
-    oauth_redirect_url: error 'Must define a redirect url',
-    oauth_email_domain: '*',
   },
 }
