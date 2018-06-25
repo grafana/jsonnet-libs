@@ -1,13 +1,31 @@
-{
+local k = import "ksonnet-util/kausal.libsonnet";
+
+k {
+  _config+:: {
+    cookie_secret: error 'Must define a cookie secret',
+    client_id: error 'Must define a client id',
+    client_secret: error 'Must define a client secret',
+    redirect_url: error 'Must define a redirect url',
+    upstream: error 'Must define an upstream',
+    email_domain: '*',
+    pass_basic_auth: 'false',
+  },
+
+  _images+:: {
+    oauth2_proxy: 'a5huynh/oauth2_proxy:latest',
+  },
+
+  local secret = $.core.v1.secret,
+
   oauth2_proxy_secret:
-    $.core.v1.secret.new('oauth2-proxy', {
+    secret.new('oauth2-proxy', {
       OAUTH2_PROXY_COOKIE_SECRET: std.base64($._config.cookie_secret),
       OAUTH2_PROXY_CLIENT_SECRET: std.base64($._config.client_secret),
       OAUTH2_PROXY_CLIENT_ID: std.base64($._config.client_id),
     }),
 
-
   local container = $.core.v1.container,
+
   oauth2_proxy_container::
     container.new('oauth2-proxy', $._images.oauth2_proxy) +
     container.withPorts($.core.v1.containerPort.new('http', 80)) +
@@ -20,8 +38,8 @@
     ]) +
     container.withEnvFromSecret('oauth2-proxy'),
 
-
   local deployment = $.apps.v1beta1.deployment,
+
   oauth2_proxy_deployment:
     deployment.new('oauth2-proxy', 1, [$.oauth2_proxy_container]),
 
