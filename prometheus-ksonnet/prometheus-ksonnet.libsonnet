@@ -1,4 +1,4 @@
-(import 'lib/kausal.libsonnet') +
+(import 'ksonnet-util/kausal.libsonnet') +
 (import 'images.libsonnet') +
 (import 'lib/alertmanager.libsonnet') +
 (import 'lib/grafana.libsonnet') +

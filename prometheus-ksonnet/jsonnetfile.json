@@ -19,6 +19,16 @@
                 }
             },
             "version": "master"
+        },
+        {
+            "name": "ksonnet-util",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/kausalco/public",
+                    "subdir": "ksonnet-util"
+                }
+            },
+            "version": "master"
         }
     ]
 }
