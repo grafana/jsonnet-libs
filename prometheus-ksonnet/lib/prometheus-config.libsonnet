@@ -163,14 +163,19 @@
             regex: 'kube-state-metrics',
             action: 'keep',
           },
-
           // Rename instances to be the pod name
           {
             source_labels: ['__meta_kubernetes_pod_name'],
             action: 'replace',
             target_label: 'instance',
           },
-        ],
+          // Rename node to be the node name.
+          {
+            source_labels: ['__meta_kubernetes_pod_node_name'],
+            action: 'replace',
+            target_label: 'node',
+          },
+        ],  
       },
 
       // A separate scrape config for node-exporter which maps the nodename onto the
