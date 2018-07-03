@@ -9,6 +9,26 @@
                 }
             },
             "version": "master"
+        },
+        {
+            "name": "oauth2_proxy",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/kausalco/public",
+                    "subdir": "oauth2_proxy-mixin"
+                }
+            },
+            "version": "master"
+        },
+        {
+            "name": "ksonnet-util",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/kausalco/public",
+                    "subdir": "ksonnet-util"
+                }
+            },
+            "version": "master"
         }
     ]
 }
