@@ -74,26 +74,26 @@
       pvc.mixin.spec.resources.withRequests({ storage: '300Gi' })
     ),
 
- local statefulset = $.apps.v1beta1.statefulSet,
- local volumeMount = $.core.v1.volumeMount,
+  local statefulset = $.apps.v1beta1.statefulSet,
+  local volumeMount = $.core.v1.volumeMount,
 
- prometheus_statefulset:
-   if ! $._config.stateful
-   then {}
-   else (
-    statefulset.new('prometheus', 1, [
-      $.prometheus_container.withVolumeMountsMixin(
-        volumeMount.new('prometheus-data', '/prometheus')
-      ),
-      $.prometheus_watch_container,
-    ], $.prometheus_pvc) +
-    $.util.configVolumeMount('prometheus-config', '/etc/prometheus') +
-    statefulset.mixin.spec.withServiceName('prometheus') +
-    statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.prometheus_web_route_prefix }) +
-    statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-    if $._config.enable_rbac
-    then statefulset.mixin.spec.template.spec.withServiceAccount('prometheus')
-    else {}
+  prometheus_statefulset:
+    if ! $._config.stateful
+    then {}
+    else (
+      statefulset.new('prometheus', 1, [
+        $.prometheus_container.withVolumeMountsMixin(
+          volumeMount.new('prometheus-data', '/prometheus')
+        ),
+        $.prometheus_watch_container,
+      ], $.prometheus_pvc) +
+      $.util.configVolumeMount('prometheus-config', '/etc/prometheus') +
+      statefulset.mixin.spec.withServiceName('prometheus') +
+      statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.prometheus_web_route_prefix }) +
+      statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
+      if $._config.enable_rbac
+      then statefulset.mixin.spec.template.spec.withServiceAccount('prometheus')
+      else {}
     ),
 
   prometheus_service:

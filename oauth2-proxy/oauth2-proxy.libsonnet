@@ -1,4 +1,4 @@
-local k = import "ksonnet-util/kausal.libsonnet";
+local k = import 'ksonnet-util/kausal.libsonnet';
 
 k {
   _config+:: {

@@ -100,10 +100,10 @@ k {
         // handing around.
         super.mixin.spec.withRevisionHistoryLimit(10),
     },
-    
+
     statefulSet+: {
       new(name, replicas, containers, volumeClaims, podLabels={})::
-        super.new(name, replicas, containers, volumeClaims, podLabels { name: name })
+        super.new(name, replicas, containers, volumeClaims, podLabels { name: name }),
     },
   },
 
