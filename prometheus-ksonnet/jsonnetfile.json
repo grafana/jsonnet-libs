@@ -15,7 +15,7 @@
             "source": {
                 "git": {
                     "remote": "https://github.com/kausalco/public",
-                    "subdir": "oauth2_proxy-mixin"
+                    "subdir": "oauth2-proxy"
                 }
             },
             "version": "master"
