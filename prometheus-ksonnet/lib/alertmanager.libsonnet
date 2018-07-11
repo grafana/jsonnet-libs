@@ -30,7 +30,7 @@
     container.withPorts($.core.v1.containerPort.new('http-metrics', $._config.alertmanager_port)) +
     container.withArgs([
       '--log.level=info',
-      '--config.file=/etc/alertmanager/alertmanager.yml',
+      '--config.file=/etc/alertmanager/config/alertmanager.yml',
       '--web.listen-address=:%s' % $._config.alertmanager_port,
       '--web.external-url=%s%s' % [$._config.alertmanager_external_hostname, $._config.alertmanager_path],
     ]) +
@@ -44,7 +44,7 @@
     container.withArgs([
       '-v',
       '-t',
-      '-p=/etc/alertmanager',
+      '-p=/etc/alertmanager/config',
       'curl',
       '-X',
       'POST',
@@ -67,7 +67,7 @@
       $.alertmanager_watch_container,
     ]) +
     deployment.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.alertmanager_path }) +
-    $.util.configVolumeMount('alertmanager-config', '/etc/alertmanager'),
+    $.util.configVolumeMount('alertmanager-config', '/etc/alertmanager/config'),
 
   alertmanager_service:
     $.util.serviceFor($.alertmanager_deployment),
