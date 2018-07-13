@@ -54,7 +54,7 @@ k {
           super.withImagePullPolicy('IfNotPresent'),
 
         withEnvMap(es)::
-          super.withEnv([
+          super.withEnvMixin([
             $.core.v1.container.envType.new(k, es[k])
             for k in std.objectFields(es)
           ]),
