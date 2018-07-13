@@ -148,7 +148,10 @@ k {
       local container = $.core.v1.container;
       local servicePort = $.core.v1.service.mixin.spec.portsType;
       local ports = [
-        servicePort.newNamed(c.name + '-' + port.name, port.containerPort, port.containerPort)
+        servicePort.newNamed(c.name + '-' + port.name, port.containerPort, port.containerPort) +
+        if std.objectHas(port, 'protocol')
+        then servicePort.withProtocol(port.protocol)
+        else {}
         for c in deployment.spec.template.spec.containers
         for port in (c + container.withPortsMixin([])).ports
       ];
