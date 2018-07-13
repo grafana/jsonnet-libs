@@ -7,6 +7,6 @@
     gfdatasource: 'quay.io/weaveworks/gfdatasource:master-2bda599',
     alertmanager: 'prom/alertmanager:v0.15.0',
     nodeExporter: 'prom/node-exporter:v0.15.2',
-    nginx: 'nginx:1.13.9',
+    nginx: 'nginx:1.15.1-alpine',
   },
 }
