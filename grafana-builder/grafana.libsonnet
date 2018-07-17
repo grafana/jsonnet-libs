@@ -1,5 +1,5 @@
 {
-  dashboard(title):: {
+  dashboard(title, uid=''):: {
     // Stuff that isn't materialised.
     _nextPanel:: 0,
     addRow(row):: self {
@@ -71,6 +71,7 @@
     },
 
     // Stuff that is materialised.
+    uid: uid,
     annotations: {
       list: [],
     },
@@ -306,17 +307,17 @@
     type: 'table',
     targets: [
       {
-        expr: query,
+        //expr: qs[i],
         format: 'table',
         instant: true,
         intervalFactor: 2,
         legendFormat: '',
         step: 10,
+        refId: std.char(65+i),
       }
-      for query in qs
+      for i in std.range(0, std.length(qs))
     ],
   },
-
 
   stack:: {
     stack: true,
