@@ -307,7 +307,7 @@
     type: 'table',
     targets: [
       {
-        //expr: qs[i],
+        expr: qs[i],
         format: 'table',
         instant: true,
         intervalFactor: 2,
