@@ -321,5 +321,20 @@ k {
           podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey('kubernetes.io/hostname'),
         ]).spec,
       },
+
+    antiAffinityBestEffort:
+      {
+        local deployment = $.apps.v1beta1.deployment,
+        local podAntiAffinity = deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
+        local weightedPodAffinityTerm = podAntiAffinity.preferredDuringSchedulingIgnoredDuringExecutionType,
+        local name = super.spec.template.metadata.labels.name,
+
+        spec+: podAntiAffinity.withPreferredDuringSchedulingIgnoredDuringExecution([
+          weightedPodAffinityTerm.new() +
+          weightedPodAffinityTerm.withWeight(100) +
+          weightedPodAffinityTerm.mixin.podAffinityTerm.labelSelector.withMatchLabels({ name: name }) +
+          weightedPodAffinityTerm.mixin.podAffinityTerm.withTopologyKey('kubernetes.io/hostname'),
+        ]).spec,
+      },
   },
 }
