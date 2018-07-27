@@ -25,6 +25,7 @@ k {
     }),
 
   local container = $.core.v1.container,
+  local envFrom = container.envFromType,
 
   oauth2_proxy_container::
     container.new('oauth2-proxy', $._images.oauth2_proxy) +
@@ -36,7 +37,10 @@ k {
       '-email-domain=%s' % $._config.oauth_email_domain,
       '-pass-basic-auth=%s' % $._config.oauth_pass_basic_auth,
     ]) +
-    container.withEnvFromSecret('oauth2-proxy'),
+    container.withEnvFrom(
+      envFrom.new() +
+      envFrom.mixin.secretRef.withName('oauth2-proxy'),
+    ),
 
   local deployment = $.apps.v1beta1.deployment,
 
