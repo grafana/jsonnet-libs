@@ -372,7 +372,7 @@
   } + $.stack,
 
   latencyPanel(metricName, selector, multiplier='1e3'):: {
-    nullPointMode: 'connected',
+    nullPointMode: 'null as zero',
     targets: [
       {
         expr: 'histogram_quantile(0.99, sum(rate(%s_bucket%s[5m])) by (le)) * %s' % [metricName, selector, multiplier],
@@ -416,7 +416,7 @@
     local legendLabels = std.join(' ', ['{{%s}}' % matcher.label for matcher in selectors + extra_selectors]);
     local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
     {
-      nullPointMode: 'connected',
+      nullPointMode: 'null as zero',
       targets: [
         {
           expr: '%(labels)s:%(metric)s:99quantile%(selector)s * %(multiplier)s' % {
