@@ -48,6 +48,10 @@ k {
           else {},
       },
 
+      persistentVolumeClaim+:: {
+        new():: {},
+      },
+
       container:: $.extensions.v1beta1.deployment.mixin.spec.template.spec.containersType {
         new(name, image)::
           super.new(name, image) +
