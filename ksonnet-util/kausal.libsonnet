@@ -53,6 +53,24 @@ k {
           super.new(name, image) +
           super.withImagePullPolicy('IfNotPresent'),
 
+        withEnvMixin(es)::
+          // if an envvar has an empty value ("") we want to remove that property
+          // because k8s will remove that and then it would always
+          // show up as a difference.
+          local removeEmptyValue(obj) =
+            if std.objectHas(obj, 'value') && std.length(obj.value) == 0 then
+              {
+                [k]: obj[k]
+                for k in std.objectFields(obj)
+                if k != 'value'
+              }
+            else
+              obj;
+          super.withEnvMixin([
+            removeEmptyValue(envvar)
+            for envvar in es
+          ]),
+
         withEnvMap(es)::
           super.withEnvMixin([
             $.core.v1.container.envType.new(k, es[k])
