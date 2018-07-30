@@ -313,9 +313,9 @@
         intervalFactor: 2,
         legendFormat: '',
         step: 10,
-        refId: std.char(65+i),
+        refId: std.char(65 + i),
       }
-      for i in std.range(0, std.length(qs)-1)
+      for i in std.range(0, std.length(qs) - 1)
     ],
   },
 
