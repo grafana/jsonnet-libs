@@ -76,7 +76,7 @@ k {
           ]),
 
         withEnvMap(es)::
-          super.withEnvMixin([
+          self.withEnvMixin([
             $.core.v1.container.envType.new(k, es[k])
             for k in std.objectFields(es)
           ]),
