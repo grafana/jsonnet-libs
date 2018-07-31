@@ -65,7 +65,7 @@
   local pvc = $.core.v1.persistentVolumeClaim,
 
   prometheus_pvc::
-    if !$._config.stateful
+    if ! $._config.stateful
     then {}
     else (
       pvc.new() +
@@ -78,7 +78,7 @@
   local volumeMount = $.core.v1.volumeMount,
 
   prometheus_statefulset:
-    if !$._config.stateful
+    if ! $._config.stateful
     then {}
     else (
       statefulset.new('prometheus', 1, [
