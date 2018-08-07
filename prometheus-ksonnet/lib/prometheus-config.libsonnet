@@ -302,17 +302,22 @@
   prometheus_alerts:: {
     groups+: [
       {
-        alert: 'PromScrapeFailed',
-        expr: |||
-          up != 1
-        |||,
-        'for': '15m',
-        labels: {
-          severity: 'warning',
-        },
-        annotations: {
-          message: 'Prometheus failed to scrape a target {{ $labels.job }} / {{ $labels.instance }}',
-        },
+        name: 'prometheus-extra',
+        rules: [
+          {
+            alert: 'PromScrapeFailed',
+            expr: |||
+              up != 1
+            |||,
+            'for': '15m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              message: 'Prometheus failed to scrape a target {{ $labels.job }} / {{ $labels.instance }}',
+            },
+          },
+        ],
       },
     ],
   },
