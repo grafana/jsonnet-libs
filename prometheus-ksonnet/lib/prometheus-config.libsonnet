@@ -299,7 +299,23 @@
   },
 
   // Extension points for adding alerts, recording rules and prometheus config.
-  prometheus_alerts:: {},
+  prometheus_alerts:: {
+    groups+: [
+      {
+        alert: 'PromScrapeFailed',
+        expr: |||
+          up != 1
+        |||,
+        'for': '15m',
+        labels: {
+          severity: 'warning',
+        },
+        annotations: {
+          message: 'Prometheus failed to scrape a target {{ $labels.job }} / {{ $labels.instance }}',
+        },
+      },
+    ],
+  },
 
   prometheus_rules:: {
     groups+: [
