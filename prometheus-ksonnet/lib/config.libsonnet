@@ -52,6 +52,10 @@
     podLabel: 'instance',
     grafanaPrefix: '/grafana',
 
+    // Prometheus mixin overrides.
+    prometheusSelector: 'job="default/prometheus"',
+    alertmanagerSelector: 'job="default/alertmanager"',
+
     // oauth2-proxy
     oauth_enabled: false,
   },

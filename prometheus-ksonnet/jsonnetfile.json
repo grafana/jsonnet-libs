@@ -11,6 +11,16 @@
             "version": "master"
         },
         {
+            "name": "prometheus-mixin",
+            "source": {
+                "git": {
+                    "remote": "https://github.com/prometheus/prometheus",
+                    "subdir": "documentation/prometheus-mixin"
+                }
+            },
+            "version": "mixin"
+        },
+        {
             "name": "oauth2_proxy",
             "source": {
                 "git": {
