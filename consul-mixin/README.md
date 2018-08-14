@@ -9,8 +9,8 @@ package.
 To install this mixin, use [ksonnet](https://ksonnet.io/):
 
 ```sh
-$ ks registry add vault_exporter https://github.com/kausal/public
-$ ks pkg install kausal/consul-mixin
+$ go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
+$ jb install https://github.com/kausalco/public/consul-mixin
 ```
 
 Then to use, in your environment's `main.jsonnet` file:
