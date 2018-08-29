@@ -1,4 +1,4 @@
-# Grafana Lab's Jsonnet libraries
+# Grafana Labs' Jsonnet libraries
 
 This repository contains various Jsonnet libraries we use at Grafana Labs:
 
