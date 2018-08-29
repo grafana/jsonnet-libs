@@ -1,19 +1,22 @@
-# public
-Kausal's monorepo for Open Source projects
+# Grafana Lab's Jsonnet libraries
 
-* `promeditor`: PromQL query editor with tab-completion.
+This repository contains various Jsonnet libraries we use at Grafana Labs:
 
-* `promvt`: Prometheus Visual Toolkit–A web application to help you get insights
-  into your Prometheus usage and instrumentation.
+* [`consul-mixin`](consul-mixin/): A set of reuseable and extensible dashboards
+  and alerts for running Hashicorp's Consul.
+
+* [`grafana-builder`](grafana-builder/): A library for building Grafana dashboards
+  with jsonnet, following the builder pattern.
+
+* [`ksonnet-util`](ksonnet-util/): An overlay and set of utilities for [ksonnet](https://ksonnet.io/)
+  that makes working with the library easier.
+
+* [`oauth2-proxy`](oauth2-proxy/): A ksonnet configuration for deploying bitly's
+  OAuth proxy to Kubernetes.
 
 * [`prometheus-ksonnet`](prometheus-ksonnet/): A set of extensible configurations
   for running Prometheus on Kubernetes.
 
-* [`consul-mixin`](consul-mixin/): A set of reuseable and extensible dashboards
-  and alerts for running Consul.
-
-* [`grafana-builder`](grafana-builder/): A library for building Grafana dashboards
-  with jsonnet, following the builder pattern.
 
 ## LICENSE
 

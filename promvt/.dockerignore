@@ -1,8 +1,0 @@
-node_modules
-build
-.env*
-.git*
-*.md
-Dockerfile
-LICENSE
-screenshot.png
