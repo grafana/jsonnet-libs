@@ -6,6 +6,8 @@
       policyRule.new() +
       policyRule.withApiGroups(['']) +
       policyRule.withResources([
+        'configmaps',
+        'secrets',
         'nodes',
         'pods',
         'services',
