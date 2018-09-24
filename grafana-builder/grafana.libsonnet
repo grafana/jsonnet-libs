@@ -402,65 +402,6 @@
     yaxes: $.yaxes('ms'),
   },
 
-  // latencyRecordingRulePanel - build a latency panel for a recording rule.
-  // - metric: the base metric name (middle part of recording rule name)
-  // - selectors: list of selectors which will be added to first part of
-  //   recording rule name, and to the query selector itself.
-  // - extra_selectors (optional): list of selectors which will be added to the
-  //   query selector, but not to the beginnig of the recording rule name.
-  //   Useful for external labels.
-  // - multiplier (optional): assumes results are in seconds, will multiply
-  //   by 1e3 to get ms.  Can be turned off.
-  latencyRecordingRulePanel(metric, selectors, extra_selectors=[], multiplier='1e3')::
-    local labels = std.join('_', [matcher.label for matcher in selectors]);
-    local legendLabels = std.join(' ', ['{{%s}}' % matcher.label for matcher in selectors + extra_selectors]);
-    local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
-    {
-      nullPointMode: 'null as zero',
-      targets: [
-        {
-          expr: '%(labels)s:%(metric)s:99quantile%(selector)s * %(multiplier)s' % {
-            labels: labels,
-            metric: metric,
-            selector: selectorStr,
-            multiplier: multiplier,
-          },
-          format: 'time_series',
-          intervalFactor: 2,
-          legendFormat: '%s 99th Percentile' % legendLabels,
-          refId: 'A',
-          step: 10,
-        },
-        {
-          expr: '%(labels)s:%(metric)s:50quantile%(selector)s * %(multiplier)s' % {
-            labels: labels,
-            metric: metric,
-            selector: selectorStr,
-            multiplier: multiplier,
-          },
-          format: 'time_series',
-          intervalFactor: 2,
-          legendFormat: '%s 50th Percentile' % legendLabels,
-          refId: 'B',
-          step: 10,
-        },
-        {
-          expr: '%(labels)s:%(metric)s:avg%(selector)s * %(multiplier)s' % {
-            labels: labels,
-            metric: metric,
-            selector: selectorStr,
-            multiplier: multiplier,
-          },
-          format: 'time_series',
-          intervalFactor: 2,
-          legendFormat: '%s Average' % legendLabels,
-          refId: 'C',
-          step: 10,
-        },
-      ],
-      yaxes: $.yaxes('ms'),
-    },
-
   selector:: {
     eq(label, value):: { label: label, op: '=', value: value },
     neq(label, value):: { label: label, op: '!=', value: value },
