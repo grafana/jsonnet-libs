@@ -279,7 +279,7 @@
         dateFormat: 'YYYY-MM-DD HH:mm:ss',
         decimals: 2,
         thresholds: [],
-        type: 'number',
+        type: if std.objectHas(labelStyle, 'type') then labelStyle.type else 'number',
         unit: if std.objectHas(labelStyle, 'unit') then labelStyle.unit else 'short',
         link: std.objectHas(labelStyle, 'link'),
         linkTooltip: 'Drill down',
