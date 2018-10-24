@@ -126,7 +126,7 @@ k {
     statefulSet+: {
       new(name, replicas, containers, volumeClaims, podLabels={})::
         super.new(name, replicas, containers, volumeClaims, podLabels { name: name }) +
-        super.mixin.spec.updateStrategy.withType("RollingUpdate"),
+        super.mixin.spec.updateStrategy.withType('RollingUpdate'),
     },
   },
 
