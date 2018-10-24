@@ -15,6 +15,9 @@
       users: {
         default_theme: 'light',
       },
+      explore+: {
+        enabled: true,
+      },
     },
   },
 
