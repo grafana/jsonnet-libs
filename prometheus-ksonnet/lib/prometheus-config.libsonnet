@@ -266,12 +266,22 @@
           replacement: '$1:4194',
         }],
 
-        // Drop container_* metrics with no image.
-        metric_relabel_configs: [{
-          source_labels: ['__name__', 'image'],
-          regex: 'container_([a-z_]+);',
-          action: 'drop',
-        }],
+        metric_relabel_configs: [
+          // Drop container_* metrics with no image.
+          {
+            source_labels: ['__name__', 'image'],
+            regex: 'container_([a-z_]+);',
+            action: 'drop',
+          },
+
+          // Drop a bunch of metrics which are disabled but still sent, see
+          // https://github.com/google/cadvisor/issues/1925.
+          {
+            source_labels: ['__name__'],
+            regex: 'container_(network_tcp_usage_total|network_udp_usage_total|tasks_state|cpu_load_average_10s)',
+            action: 'drop',
+          },
+        ],
       },
 
       // If running on GKE, you cannot scrape API server pods, and must instead
