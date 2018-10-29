@@ -17,8 +17,8 @@
     ]) +
     container.mixin.securityContext.withPrivileged(true) +
     container.mixin.securityContext.withRunAsUser(0) +
-    $.util.resourcesRequests('10m', '20Mi') +
-    $.util.resourcesLimits('50m', '40Mi'),
+    $.util.resourcesRequests('50m', '30Mi') +
+    $.util.resourcesLimits('200m', '75Mi'),
 
   local daemonSet = $.extensions.v1beta1.daemonSet,
 
