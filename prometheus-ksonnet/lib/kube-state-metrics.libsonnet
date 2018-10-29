@@ -67,8 +67,8 @@
       containerPort.new('http-metrics', 80),
       containerPort.new('self-metrics', 81),
     ]) +
-    $.util.resourcesRequests('25m', '20Mi') +
-    $.util.resourcesLimits('100m', '60Mi'),
+    $.util.resourcesRequests('50m', '50Mi') +
+    $.util.resourcesLimits('250m', '150Mi'),
 
   local deployment = $.apps.v1beta1.deployment,
 
