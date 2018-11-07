@@ -304,6 +304,20 @@
           regex: 'apiserver',
           action: 'keep',
         }],
+
+        // Drop some high cardinality metrics.
+        metric_relabel_configs: [
+          {
+            source_labels: ['__name__'],
+            regex: 'apiserver_admission_controller_admission_latencies_seconds_.*',
+            action: 'drop',
+          },
+          {
+            source_labels: ['__name__'],
+            regex: 'apiserver_admission_step_admission_latencies_seconds_.*',
+            action: 'drop',
+          },
+        ],
       },
     ],
   },
