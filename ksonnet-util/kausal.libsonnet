@@ -166,6 +166,13 @@ k {
   },
 
   util+:: {
+    // mapToFlags converts a map to a set of golang-style command line flags.
+    mapToFlags(map): [
+      '-%s=%s' % [key, map[key]]
+      for key in std.objectFields(map)
+      if map[key] != null
+    ],
+
     // serviceFor create service for a given deployment.
     serviceFor(deployment)::
       local container = $.core.v1.container;
