@@ -9,4 +9,5 @@
 (import 'lib/prometheus-config.libsonnet') +
 (import 'kubernetes-mixin/mixin.libsonnet') +
 (import 'prometheus-mixin/mixin.libsonnet') +
+(import 'alertmanager-mixin/mixin.libsonnet') +
 (import 'lib/config.libsonnet')
