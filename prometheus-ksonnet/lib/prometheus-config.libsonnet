@@ -246,12 +246,13 @@
         ],
       },
 
-      // As of k8s 1.7, cAdvisor is on a port 4194.
+      // As of k8s 1.7.3, cAdvisor metrics are available via kubelet using the /metrics/cadvisor path
       {
         job_name: 'kube-system/cadvisor',
         kubernetes_sd_configs: [{
           role: 'node',
         }],
+        scheme: 'https',
 
         bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
         tls_config: {
@@ -259,12 +260,18 @@
           insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
         },
 
-        relabel_configs: [{
-          source_labels: ['__address__'],
-          regex: '(.+):([0-9]+)',
-          target_label: '__address__',
-          replacement: '$1:4194',
-        }],
+        relabel_configs: [
+          {
+            target_label: '__address__',
+            replacement: 'kubernetes.default.svc:443',
+          },
+          {
+            source_labels: ['__meta_kubernetes_node_name'],
+            regex: '(.+)',
+            target_label: '__metrics_path__',
+            replacement: '/api/v1/nodes/${1}/proxy/metrics/cadvisor',
+          },
+        ],
 
         metric_relabel_configs: [
           // Drop container_* metrics with no image.
