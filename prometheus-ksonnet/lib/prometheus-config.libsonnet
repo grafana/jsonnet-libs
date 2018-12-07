@@ -132,6 +132,13 @@
             action: 'labelmap',
             replacement: '__param_$1',
           },
+
+          // Drop pods with phase Succeeded or Failed
+          {
+            source_labels: ['__meta_kubernetes_pod_phase'],
+            action: 'drop',
+            regex: '^(Succeeded|Failed)$',
+          },
         ],
       },
 
