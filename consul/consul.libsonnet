@@ -4,10 +4,10 @@
   },
 
   _images+:: {
-    consul: 'consul:0.8.5',
+    consul: 'consul:1.4.0',
     consulSidekick: 'quay.io/weaveworks/consul-sidekick:master-f18ad13',
-    statsdExporter: 'prom/statsd-exporter:v0.6.0',
-    consulExporter: 'prom/consul-exporter:v0.3.0',
+    statsdExporter: 'prom/statsd-exporter:v0.8.1',
+    consulExporter: 'prom/consul-exporter:v0.4.0',
   },
 
   local configMap = $.core.v1.configMap,
@@ -15,7 +15,7 @@
   consul_config_map:
     configMap.new('consul') +
     configMap.withData({
-      'consul.config': std.toString({
+      'consul-config.json': std.toString({
         telemetry: {
           dogstatsd_addr: '127.0.0.1:9125',
         },
@@ -238,7 +238,7 @@
       '-ui',
       '-server',
       '-client=0.0.0.0',
-      '-config-file=/etc/config/consul.config',
+      '-config-file=/etc/config/consul-config.json',
       '-bootstrap-expect=%d' % $._config.consul_replicas,
     ]) +
     container.withEnvMap({
@@ -276,16 +276,16 @@
   consul_statsd_exporter::
     container.new('statsd-exporter', $._images.statsdExporter) +
     container.withArgs([
-      '-web.listen-address=:8000',
-      '-statsd.mapping-config=/etc/config/mapping',
+      '--web.listen-address=:8000',
+      '--statsd.mapping-config=/etc/config/mapping',
     ]) +
     container.withPorts(containerPort.new('http-metrics', 8000)),
 
   consul_exporter::
     container.new('consul-exporter', $._images.consulExporter) +
     container.withArgs([
-      '-consul.server=localhost:8500',
-      '-web.listen-address=:9107',
+      '--consul.server=localhost:8500',
+      '--web.listen-address=:9107',
     ]) +
     container.withPorts(containerPort.new('http-metrics', 9107)),
 
