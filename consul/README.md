@@ -1,6 +1,6 @@
-# Prometheus Ksonnet Mixin
+# Consul Ksonnet 
 
-A set of extensible configs for running Prometheus on Kubernetes.
+A set of extensible configs for running Consul on Kubernetes.
 
 Usage:
 - Make sure you have the [ksonnet v0.8.0](https://github.com/ksonnet/ksonnet).
@@ -25,18 +25,18 @@ $ cd <application name>
 
 ```
 $ go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-$ jb install https://github.com/grafana/jsonnet-libs/prometheus-ksonnet
+$ jb install https://github.com/grafana/jsonnet-libs/consul
 ```
 
 - Assuming you want to run in the default namespace ('environment' in ksonnet parlance), add the following to the file `environments/default/main.jsonnet`:
 
 ```
-local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
+local consul = import "consul/consul.libsonnet";
 
-prometheus {
+consul + {
   _config+:: {
-    namespace: "default",
-  },
+    consul_replicas: 1,
+  }
 }
 ```
 
@@ -45,36 +45,18 @@ prometheus {
 ```
 $ ks apply default
 ```
-
-# Kops
-
-If you made your Kubernetes cluster with [Kops](https://github.com/kubernetes/kops),
-add the Kops mixin to your config to scrape the Kubernetes system components:
-
-```
-local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
-local kops = import "prometheus-ksonnet/lib/prometheus-config-kops.libsonnet";
-
-prometheus + kops {
-  _config+:: {
-    namespace: "default",
-    insecureSkipVerify: true,
-  },
-}
-```
-
 # Customising and Extending.
 
 The choice of Ksonnet for configuring these jobs was intention; it allows users
 to easily override setting in these configurations to suit their needs, without having
 to fork or modify this library.  For instance, to override the resource requests
-and limits for the Prometheus container, you would:
+and limits for the Consul container, you would:
 
 ```
-local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
+local consul = import "consul/consul.libsonnet";
 
-prometheus {
-  prometheus_container+::
+consul {
+  consul_container+::
      $.util.resourcesRequests("1", "2Gi") +
      $.util.resourcesLimits("2", "4Gi"),
 }

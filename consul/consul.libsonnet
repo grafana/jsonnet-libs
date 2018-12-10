@@ -156,7 +156,7 @@
           labels:
             type: $1
         - match: consul.memberlist.gossip
-          name: consul_memberlist_gossep
+          name: consul_memberlist_gossip
           labels: {}
         - match: consul.memberlist.probeNode
           name: consul_memberlist_probenode
@@ -164,27 +164,27 @@
         - match: consul.memberlist.pushPullNode
           name: consul_memberlist_pushpullnode
           labels: {}
-        - match: consul.consul.http.*
+        - match: consul.http.*
           name: consul_http_request
           labels:
             method: $1
             path: /
-        - match: consul.consul.http.*.*
+        - match: consul.http.*.*
           name: consul_http_request
           labels:
             method: $1
             path: /$2
-        - match: consul.consul.http.*.*.*
+        - match: consul.http.*.*.*
           name: consul_http_request
           labels:
             method: $1
             path: /$2/$3
-        - match: consul.consul.http.*.*.*.*
+        - match: consul.http.*.*.*.*
           name: consul_http_request
           labels:
             method: $1
             path: /$2/$3/$4
-        - match: consul.consul.http.*.*.*.*.*
+        - match: consul.http.*.*.*.*.*
           name: consul_http_request
           labels:
             method: $1
