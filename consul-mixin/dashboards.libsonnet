@@ -79,7 +79,7 @@ local panel_settings = {
         row_settings
       )
       .addRow(
-        g.row('Vault Server')
+        g.row('Consul Server')
         .addPanel(
           g.panel('QPS') +
           g.queryPanel('sum(rate(consul_http_request_count{job="$job"}[1m])) by (instance)', '{{instance}}') +
