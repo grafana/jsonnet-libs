@@ -97,16 +97,9 @@
             replacement: '$1:$3',
           },
 
-          // Drop pods without a name label
+          // Rename jobs to be <namespace>/<name, pod controller name>
           {
-            source_labels: ['__meta_kubernetes_pod_label_name'],
-            action: 'drop',
-            regex: '^$',
-          },
-
-          // Rename jobs to be <namespace>/<name, from pod name label>
-          {
-            source_labels: ['__meta_kubernetes_namespace', '__meta_kubernetes_pod_label_name'],
+            source_labels: ['__meta_kubernetes_namespace', '__meta_kubernetes_pod_controller_name'],
             action: 'replace',
             separator: '/',
             target_label: 'job',
