@@ -358,6 +358,19 @@
               message: 'Prometheus failed to scrape a target {{ $labels.job }} / {{ $labels.instance }}',
             },
           },
+          {
+            alert: 'PromScrapeFlapping',
+            expr: |||
+              avg_over_time(up[5m]) < 1
+            |||,
+            'for': '15m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              message: 'Prometheus target flapping {{ $labels.job }} / {{ $labels.instance }}',
+            },
+          },
         ],
       },
     ],
