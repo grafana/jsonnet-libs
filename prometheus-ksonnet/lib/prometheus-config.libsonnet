@@ -171,10 +171,13 @@
             action: 'keep',
           },
 
-          // Rename instances to be the pod name
+          // Rename instances to be the pod name.
+          // As the scrape two ports of KSM, include the port name in the instance
+          // name.  Otherwise alerts about scrape failures and timeouts won't work.
           {
-            source_labels: ['__meta_kubernetes_pod_name'],
+            source_labels: ['__meta_kubernetes_pod_name', '__meta_kubernetes_pod_container_port_name'],
             action: 'replace',
+            separator: '-',
             target_label: 'instance',
           },
         ],
