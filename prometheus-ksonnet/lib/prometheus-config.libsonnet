@@ -371,6 +371,19 @@
               message: 'Prometheus target flapping {{ $labels.job }} / {{ $labels.instance }}',
             },
           },
+          {
+            alert: 'PromScrapeTooLong',
+            expr: |||
+              scrape_duration_seconds > 60
+            |||,
+            'for': '15m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              message: '{{ $labels.job }} / {{ $labels.instance }} is taking too long to scrape ({{ printf "%.1f" $value }}s)',
+            },
+          },
         ],
       },
     ],
