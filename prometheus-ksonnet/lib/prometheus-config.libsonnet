@@ -177,7 +177,7 @@
           {
             source_labels: ['__meta_kubernetes_pod_name', '__meta_kubernetes_pod_container_port_name'],
             action: 'replace',
-            separator: '-',
+            separator: ':',
             target_label: 'instance',
           },
         ],
