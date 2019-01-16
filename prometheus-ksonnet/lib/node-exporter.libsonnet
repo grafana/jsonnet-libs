@@ -11,7 +11,7 @@
       '--no-collector.netstat',
       '--collector.netdev.ignored-devices=^veth.+$',
 
-      # We run an older version due to the renamed metrics.  There ignores are from newer version.
+      // We run an older version due to the renamed metrics.  There ignores are from newer version.
       '--collector.filesystem.ignored-fs-types=^(tmpfs|autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$',
       '--collector.filesystem.ignored-mount-points=^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)',
     ]) +
