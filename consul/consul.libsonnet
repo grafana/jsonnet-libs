@@ -1,4 +1,6 @@
-{
+local k = import 'ksonnet-util/kausal.libsonnet';
+
+k {
   _config+:: {
     consul_replicas: 3,
   },
