@@ -1,3 +1,5 @@
+local g = import "grafana-builder/grafana.libsonnet";
+
 {
   histogramRules(metric, labels)::
     local vars = {
@@ -47,7 +49,7 @@
     local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
     {
       nullPointMode: 'null as zero',
-      yaxes: $.yaxes('ms'),
+      yaxes: g.yaxes('ms'),
       targets: [
         {
           expr: 'histogram_quantile(0.99, sum by (le) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s)) * %(multiplier)s' % {
