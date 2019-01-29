@@ -277,7 +277,7 @@
         colorMode: null,
         colors: [],
         dateFormat: 'YYYY-MM-DD HH:mm:ss',
-        decimals: 2,
+        decimals: if std.objectHas(labelStyle, 'decimals') then labelStyle.decimals else 2,
         thresholds: [],
         type: if std.objectHas(labelStyle, 'type') then labelStyle.type else 'number',
         unit: if std.objectHas(labelStyle, 'unit') then labelStyle.unit else 'short',
