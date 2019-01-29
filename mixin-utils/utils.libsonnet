@@ -90,4 +90,18 @@
         },
       ],
     },
+
+  selector:: {
+    eq(label, value):: { label: label, op: '=', value: value },
+    neq(label, value):: { label: label, op: '!=', value: value },
+    re(label, value):: { label: label, op: '=~', value: value },
+    nre(label, value):: { label: label, op: '!~', value: value },
+  },
+
+  toPrometheusSelector(selector)::
+    local pairs = [
+      '%(label)s%(op)s"%(value)s"' % matcher
+      for matcher in selector
+    ];
+    '{%s}' % std.join(', ', pairs),
 }
