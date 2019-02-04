@@ -1,7 +1,7 @@
 {
   dashboard(title, uid=''):: {
     // Stuff that isn't materialised.
-    _nextPanel:: 0,
+    _nextPanel:: 1,
     addRow(row):: self {
       // automatically number panels in added rows.
       local n = std.length(row.panels),
