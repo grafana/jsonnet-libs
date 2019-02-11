@@ -167,8 +167,8 @@ k {
 
   util+:: {
     // mapToFlags converts a map to a set of golang-style command line flags.
-    mapToFlags(map): [
-      '-%s=%s' % [key, map[key]]
+    mapToFlags(map, prefix='-'): [
+      '%s%s=%s' % [prefix, key, map[key]]
       for key in std.objectFields(map)
       if map[key] != null
     ],
