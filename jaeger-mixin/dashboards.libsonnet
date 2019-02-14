@@ -89,12 +89,12 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
         g.row('Cassandra')
         .addPanel(
           g.panel('insert attempt rate') +
-          g.qpsPanelErrTotal('jaeger_cassandra_write_errors_total', 'jaeger_cassandra_write_attempts_total') +
+          g.qpsPanelErrTotal('jaeger_cassandra_errors_total', 'jaeger_cassandra_attempts_total') +
           g.stack
         )
         .addPanel(
           g.panel('% inserts erroring') +
-          g.queryPanel('sum(rate(jaeger_cassandra_write_errors_total[1m])) by (instance) / sum(rate(jaeger_cassandra_write_attempts_total[1m])) by (instance)', '{{instance}}') +
+          g.queryPanel('sum(rate(jaeger_cassandra_errors_total[1m])) by (instance) / sum(rate(jaeger_cassandra_attempts_total[1m])) by (instance)', '{{instance}}') +
           { yaxes: g.yaxes({ format: 'percentunit', max: 1 }) } +
           g.stack,
         )

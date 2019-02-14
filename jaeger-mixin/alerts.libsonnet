@@ -111,7 +111,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           },
         }, {
           alert: 'JaegerCassandraWritesFailing',
-          expr: percentErrsWithTotal('jaeger_cassandra_write_errors_total', 'jaeger_cassandra_write_attempts_total') + '> 1',
+          expr: percentErrsWithTotal('jaeger_cassandra_errors_total', 'jaeger_cassandra_attempts_total') + '> 1',
           'for': '15m',
           labels: {
             severity: 'warning',
@@ -123,7 +123,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           },
         }, {
           alert: 'JaegerCassandraReadsFailing',
-          expr: percentErrsWithTotal('jaeger_cassandra_reads_errors_total', 'jaeger_cassandra_reads_attempts_total') + '> 1',
+          expr: percentErrsWithTotal('jaeger_cassandra_read_errors_total', 'jaeger_cassandra_read_attempts_total') + '> 1',
           'for': '15m',
           labels: {
             severity: 'warning',
