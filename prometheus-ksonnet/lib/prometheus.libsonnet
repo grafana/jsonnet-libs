@@ -24,6 +24,7 @@
       '--web.external-url=%s%s' % [$._config.prometheus_external_hostname, $._config.prometheus_path],
       '--web.enable-lifecycle',
       '--web.route-prefix=%s' % $._config.prometheus_web_route_prefix,
+      '--storage.tsdb.path=/prometheus/data',
     ]) +
     $.util.resourcesRequests('250m', '1536Mi') +
     $.util.resourcesLimits('500m', '2Gi'),
