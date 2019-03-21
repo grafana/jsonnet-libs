@@ -282,7 +282,7 @@
         type: if std.objectHas(labelStyle, 'type') then labelStyle.type else 'number',
         unit: if std.objectHas(labelStyle, 'unit') then labelStyle.unit else 'short',
         link: std.objectHas(labelStyle, 'link'),
-        linkTooltip: 'Drill down',
+        linkTooltip: if std.objectHas(labelStyle, 'linkTooltip') then labelStyle.linkTooltip else 'Drill down',
         linkUrl: if std.objectHas(labelStyle, 'link') then labelStyle.link else '',
       },
 
