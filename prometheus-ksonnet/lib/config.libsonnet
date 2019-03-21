@@ -19,6 +19,7 @@
 
     // Prometheus config options.
     prometheus_api_server_address: self.apiServerAddress,
+    scrape_api_server_endpoints: true,
     prometheus_insecure_skip_verify: self.insecureSkipVerify,
     prometheus_external_hostname: 'http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s' % self,
     prometheus_path: '/prometheus/',

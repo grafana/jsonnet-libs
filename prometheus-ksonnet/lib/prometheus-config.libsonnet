@@ -302,11 +302,14 @@
       },
 
       // If running on GKE, you cannot scrape API server pods, and must instead
-      // scrape the API server service.
+      // scrape the API server service endpoints.  On AKS this doesn't work.
       {
         job_name: 'default/kubernetes',
         kubernetes_sd_configs: [{
-          role: 'endpoints',
+          role:
+            if $._config.scrape_api_server_endpoints
+            then 'endpoints'
+            else 'service',
         }],
         scheme: 'https',
 
