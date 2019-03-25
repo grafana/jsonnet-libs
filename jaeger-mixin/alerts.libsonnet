@@ -14,7 +14,19 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
       {
         name: 'jaeger_alerts',
         rules: [{
-          alert: 'JaegerHTTPServerErrs',
+          alert: 'JaegerAgentUDPPacketsBeingDropped',
+          expr: 'rate(jaeger_agent_thrift_udp_server_packets_dropped_total[1m]) > 1',
+          'for': '15m',
+          labels: {
+            severity: 'warning',
+          },
+          annotations: {
+            message: |||
+              {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }} UDP packets per second.
+            |||,
+          },
+        }, {
+          alert: 'JaegerAgentHTTPServerErrs',
           expr: percentErrsWithTotal('jaeger_agent_http_server_errors_total', 'jaeger_agent_http_server_total') + '> 1',
           'for': '15m',
           labels: {
@@ -23,18 +35,6 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           annotations: {
             message: |||
               {{ $labels.job }} {{ $labels.instance }} is experiencing {{ printf "%.2f" $value }}% HTTP errors.
-            |||,
-          },
-        }, {
-          alert: 'JaegerRPCRequestsErrors',
-          expr: percentErrs('jaeger_client_jaeger_rpc_http_requests', 'status_code=~"4xx|5xx"') + '> 1',
-          'for': '15m',
-          labels: {
-            severity: 'warning',
-          },
-          annotations: {
-            message: |||
-              {{ $labels.job }} {{ $labels.instance }} is experiencing {{ printf "%.2f" $value }}% RPC HTTP errors.
             |||,
           },
         }, {
@@ -62,6 +62,18 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             |||,
           },
         }, {
+          alert: 'JaegerCollectorQueueNotDraining',
+          expr: 'avg_over_time(jaeger_collector_queue_length[10m]) > 1000',
+          'for': '15m',
+          labels: {
+            severity: 'warning',
+          },
+          annotations: {
+            message: |||
+              collector {{ $labels.job }} {{ $labels.instance }} is not able to drain the queue.
+            |||,
+          },
+        }, {
           alert: 'JaegerCollectorDroppingSpans',
           expr: percentErrsWithTotal('jaeger_collector_spans_dropped_total', 'jaeger_collector_spans_received_total') + '> 1',
           'for': '15m',
@@ -83,6 +95,18 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
           annotations: {
             message: |||
               {{ $labels.job }} {{ $labels.instance }} is failing {{ printf "%.2f" $value }}% in updating sampling policies.
+            |||,
+          },
+        }, {
+          alert: 'JaegerCollectorPersistenceSlow',
+          expr: 'histogram_quantile(0.99, sum by (le) (rate(jaeger_collector_save_latency_bucket[1m]))) > 0.5',
+          'for': '15m',
+          labels: {
+            severity: 'warning',
+          },
+          annotations: {
+            message: |||
+              {{ $labels.job }} {{ $labels.instance }} is slow at persisting spans.
             |||,
           },
         }, {
