@@ -70,7 +70,7 @@
     pvc.new() +
     pvc.mixin.metadata.withName('alertmanager-data') +
     pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-    pvc.mixin.spec.resources.withRequests({ storage: '10Gi' }),
+    pvc.mixin.spec.resources.withRequests({ storage: '5Gi' }),
 
   local statefulset = $.apps.v1beta1.statefulSet,
 
