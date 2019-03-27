@@ -132,6 +132,6 @@
   },
 
   main_prometheus: $.prometheus {
-    name: "prometheus",
+    name: ;prometheus',
   },
 }
