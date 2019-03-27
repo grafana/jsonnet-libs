@@ -75,7 +75,7 @@
   local statefulset = $.apps.v1beta1.statefulSet,
 
   alertmanager_statefulset:
-    statefulset.new("alertmanager", 1, [
+    statefulset.new('alertmanager', 1, [
       $.alertmanager_container,
       $.alertmanager_watch_container,
     ], self.alertmanager_pvc) +

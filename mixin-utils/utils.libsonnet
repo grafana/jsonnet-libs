@@ -1,4 +1,4 @@
-local g = import "grafana-builder/grafana.libsonnet";
+local g = import 'grafana-builder/grafana.libsonnet';
 
 {
   histogramRules(metric, labels)::
