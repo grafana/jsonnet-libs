@@ -24,6 +24,7 @@
     }),
 
   local container = $.core.v1.container,
+  local volumeMount = $.core.v1.volumeMount,
 
   alertmanager_container::
     container.new('alertmanager', $._images.alertmanager) +
@@ -33,7 +34,11 @@
       '--config.file=/etc/alertmanager/config/alertmanager.yml',
       '--web.listen-address=:%s' % $._config.alertmanager_port,
       '--web.external-url=%s%s' % [$._config.alertmanager_external_hostname, $._config.alertmanager_path],
+      '--storage.path=/alertmanager',
     ]) +
+    container.withVolumeMountsMixin(
+      volumeMount.new('alertmanager-data', '/alertmanager')
+    ) +
     container.mixin.resources.withRequests({
       cpu: '10m',
       memory: '40Mi',
@@ -59,16 +64,26 @@
       memory: '20Mi',
     }),
 
-  local deployment = $.apps.v1beta1.deployment,
+  local pvc = $.core.v1.persistentVolumeClaim,
 
-  alertmanager_deployment:
-    deployment.new('alertmanager', 1, [
+  alertmanager_pvc::
+    pvc.new() +
+    pvc.mixin.metadata.withName('alertmanager-data') +
+    pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
+    pvc.mixin.spec.resources.withRequests({ storage: '10Gi' }),
+
+  local statefulset = $.apps.v1beta1.statefulSet,
+
+  alertmanager_statefulset:
+    statefulset.new("alertmanager", 1, [
       $.alertmanager_container,
       $.alertmanager_watch_container,
-    ]) +
-    deployment.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.alertmanager_path }) +
+    ], self.alertmanager_pvc) +
+    statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.alertmanager_path }) +
+    statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
+    statefulset.mixin.spec.template.spec.securityContext.withFsGroup(0) +
     $.util.configVolumeMount('alertmanager-config', '/etc/alertmanager/config'),
 
   alertmanager_service:
-    $.util.serviceFor($.alertmanager_deployment),
+    $.util.serviceFor($.alertmanager_statefulset),
 }
