@@ -24,6 +24,7 @@
     prometheus_config:: $.prometheus_config,
     prometheusAlerts:: $.prometheusAlerts,
     prometheusRules:: $.prometheusRules,
+    _config:: $._config,
 
     prometheus_config_map:
       // Can't reference self.foo below as we're in a map context, so
@@ -42,20 +43,23 @@
     local container = $.core.v1.container,
 
     prometheus_container::
+      local _config = self._config;
       container.new('prometheus', $._images.prometheus) +
       container.withPorts($.core.v1.containerPort.new('http-metrics', 80)) +
       container.withArgs([
         '--config.file=/etc/prometheus/prometheus.yml',
-        '--web.listen-address=:%s' % $._config.prometheus_port,
-        '--web.external-url=%s%s' % [$._config.prometheus_external_hostname, $._config.prometheus_path],
+        '--web.listen-address=:%s' % _config.prometheus_port,
+        '--web.external-url=%s%s' % [_config.prometheus_external_hostname, _config.prometheus_path],
         '--web.enable-lifecycle',
-        '--web.route-prefix=%s' % $._config.prometheus_web_route_prefix,
+        '--web.route-prefix=%s' % _config.prometheus_web_route_prefix,
         '--storage.tsdb.path=/prometheus/data',
       ]) +
       $.util.resourcesRequests('250m', '1536Mi') +
       $.util.resourcesLimits('500m', '2Gi'),
 
     prometheus_watch_container::
+      local _config = self._config;
+
       container.new('watch', $._images.watch) +
       container.withArgs([
         '-v',
@@ -68,7 +72,7 @@
         '-o',
         '-',
         '-sS',
-        'http://localhost:%s%s-/reload' % [$._config.prometheus_port, $._config.prometheus_web_route_prefix],
+        'http://localhost:%s%s-/reload' % [_config.prometheus_port, _config.prometheus_web_route_prefix],
       ]),
 
     local deployment = $.apps.v1beta1.deployment,
