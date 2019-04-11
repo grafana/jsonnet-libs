@@ -79,7 +79,6 @@
 
     prometheus_deployment:
       local _config = self._config;
-
       if _config.stateful
       then {}
       else (
@@ -111,6 +110,7 @@
     local volumeMount = $.core.v1.volumeMount,
 
     prometheus_statefulset:
+      local _config = self._config;
       if !($._config.stateful)
       then {}
       else (
@@ -122,7 +122,7 @@
         ], self.prometheus_pvc) +
         $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus') +
         statefulset.mixin.spec.withServiceName('prometheus') +
-        statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.prometheus_web_route_prefix }) +
+        statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix }) +
         statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
         if $._config.enable_rbac
         then statefulset.mixin.spec.template.spec.withServiceAccount(self.name)
