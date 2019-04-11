@@ -78,7 +78,9 @@
     local deployment = $.apps.v1beta1.deployment,
 
     prometheus_deployment:
-      if $._config.stateful
+      local _config = self._config;
+
+      if _config.stateful
       then {}
       else (
         deployment.new(self.name, 1, [
@@ -86,9 +88,9 @@
           self.prometheus_watch_container,
         ]) +
         $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus') +
-        deployment.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.prometheus_web_route_prefix }) +
+        deployment.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix }) +
         deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-        if $._config.enable_rbac
+        if _config.enable_rbac
         then deployment.mixin.spec.template.spec.withServiceAccount('prometheus')
         else {}
       ),
