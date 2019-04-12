@@ -88,6 +88,30 @@ k {
     },
   },
 
+  batch+: {
+    v1beta1+: {
+      cronJob+: {
+        new(name='', schedule='', containers=[])::
+          super.new() +
+          (
+            if name != '' then
+              super.mixin.metadata.withName(name) +
+              // set name label on pod
+              super.mixin.spec.jobTemplate.spec.template.metadata.withLabels({ name: name })
+            else
+              {}
+          ) +
+          (
+            if schedule != '' then
+              super.mixin.spec.withSchedule(schedule)
+            else
+              {}
+          ) +
+          super.mixin.spec.jobTemplate.spec.template.spec.withContainers(containers),
+      },
+    },
+  },
+
   local appsExtentions = {
     daemonSet+: {
       new(name, containers)::
