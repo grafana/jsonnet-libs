@@ -97,7 +97,8 @@
     local pvc = $.core.v1.persistentVolumeClaim,
 
     prometheus_pvc::
-      if !($._config.stateful)
+      local _config = self._config;
+      if !(_config.stateful)
       then {}
       else (
         pvc.new() +
@@ -111,7 +112,7 @@
 
     prometheus_statefulset:
       local _config = self._config;
-      if !($._config.stateful)
+      if !(_config.stateful)
       then {}
       else (
         statefulset.new(self.name, 1, [
@@ -124,14 +125,15 @@
         statefulset.mixin.spec.withServiceName('prometheus') +
         statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix }) +
         statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-        if $._config.enable_rbac
+        if _config.enable_rbac
         then statefulset.mixin.spec.template.spec.withServiceAccount(self.name)
         else {}
       ),
 
     prometheus_service:
+      local _config = self._config;
       $.util.serviceFor(
-        if $._config.stateful
+        if _config.stateful
         then self.prometheus_statefulset
         else self.prometheus_deployment
       ),
