@@ -99,15 +99,6 @@
       }),
     }),
 
-  grafanaNotificationChannels+:: {},
-
-  notification_channel_config_map:
-    configMap.new('grafana-notification-channels') +
-    configMap.withDataMixin({
-      [name]: std.toString($.grafanaNotificationChannels[name])
-      for name in std.objectFields($.grafanaNotificationChannels)
-    }),
-
   local container = $.core.v1.container,
 
   grafana_container::
@@ -128,7 +119,6 @@
     $.util.configVolumeMount('grafana-config', '/etc/grafana-config') +
     $.util.configVolumeMount('grafana-dashboard-provisioning', '%(grafana_provisioning_dir)s/dashboards' % $._config) +
     $.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config) +
-    $.util.configVolumeMount('grafana-notification-channels', '%(grafana_provisioning_dir)s/notifiers' % $._config) +
     $.util.configVolumeMount('dashboards', '/grafana/dashboards'),
 
   grafana_service:
