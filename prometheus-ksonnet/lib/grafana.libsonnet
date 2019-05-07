@@ -64,13 +64,13 @@
                              'http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s%(prometheus_web_route_prefix)s' % $._config,
                              default=true),
 
-  grafana_add_datasource(name, url, type='prometheus', default=false)::
+  grafana_add_datasource(name, url, default=false)::
     configMap.withDataMixin({
       ['%s.yml' % name]: $.util.manifestYaml({
         apiVersion: 1,
         datasources: [{
           name: name,
-          type: type,
+          type: 'prometheus',
           access: 'proxy',
           url: url,
           isDefault: default,
@@ -80,13 +80,13 @@
       }),
     }),
 
-  grafana_add_datasource_with_basicauth(name, url, username, password, type='prometheus', default=false)::
+  grafana_add_datasource_with_basicauth(name, url, username, password, default=false)::
     configMap.withDataMixin({
       ['%s.yml' % name]: $.util.manifestYaml({
         apiVersion: 1,
         datasources: [{
           name: name,
-          type: type,
+          type: 'prometheus',
           access: 'proxy',
           url: url,
           isDefault: default,
