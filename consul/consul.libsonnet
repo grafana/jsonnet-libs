@@ -288,6 +288,7 @@ k {
     container.withArgs([
       '--consul.server=localhost:8500',
       '--web.listen-address=:9107',
+      '--consul.timeout=1s',
     ]) +
     container.withPorts(containerPort.new('http-metrics', 9107)),
 
