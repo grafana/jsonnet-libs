@@ -1,4 +1,6 @@
-{
+local k = import 'ksonnet-util/kausal.libsonnet';
+
+k {
   util+:: {
     // Convert number to k8s "quantity" (ie 1.5Gi -> "1536Mi")
     // as per https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/apimachinery/pkg/api/resource/quantity.go
