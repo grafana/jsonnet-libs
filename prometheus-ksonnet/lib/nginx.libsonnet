@@ -1,20 +1,33 @@
 {
-  local configMap = $.core.v1.configMap,
-
-  nginx_config_map:
-    local vars = {
-      location_stanzas: [
-        |||
-          location ~ ^/%(path)s(/?)(.*)$ {
+  local buildHeaders(service, allowWebsockets) =
+    |||
             proxy_pass      %(url)s$2$is_args$args;
             proxy_set_header    Host $host;
             proxy_set_header    X-Real-IP $remote_addr;
             proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header    X-Forwarded-Proto $scheme;
             proxy_set_header    X-Forwarded-Host $http_host;
+    ||| % service + if allowWebsockets then |||
+            # Allow websocket connections https://www.nginx.com/blog/websocket-nginx/
+            proxy_set_header    Upgrade $http_upgrade;
+            proxy_set_header    Connection "Upgrade";
+    ||| else '',
+
+  local buildLocation(service) =
+    |||
+          location ~ ^/%(path)s(/?)(.*)$ {
+    ||| % service +
+              buildHeaders(service, if 'allowWebsockets' in service then service.allowWebsockets else false) +
+    |||
           }
-        ||| % service
-        for service in $._config.admin_services
+    |||,
+
+  local configMap = $.core.v1.configMap,
+
+  nginx_config_map:
+    local vars = {
+      location_stanzas: [
+        buildLocation(service) for service in $._config.admin_services
       ],
       locations: std.join('\n', self.location_stanzas),
       link_stanzas: [

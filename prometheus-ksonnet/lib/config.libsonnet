@@ -8,7 +8,7 @@
 
     // Overrides for the nginx frontend for all these services.
     admin_services: [
-      { title: 'Grafana', path: 'grafana', url: 'http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/' % $._config },
+      { title: 'Grafana', path: 'grafana', url: 'http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/' % $._config, allowWebsockets: true},
       { title: 'Prometheus', path: 'prometheus', url: 'http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s/prometheus/' % $._config },
       { title: 'Alertmanager', path: 'alertmanager', url: 'http://alertmanager.%(namespace)s.svc.%(cluster_dns_suffix)s/alertmanager/' % $._config },
     ],
