@@ -8,7 +8,7 @@
             proxy_set_header    X-Forwarded-Proto $scheme;
             proxy_set_header    X-Forwarded-Host $http_host;
     ||| % service + if allowWebsockets then |||
-            # Allow websocket connections
+            # Allow websocket connections https://www.nginx.com/blog/websocket-nginx/
             proxy_set_header    Upgrade $http_upgrade;
             proxy_set_header    Connection "Upgrade";
     ||| else '',
