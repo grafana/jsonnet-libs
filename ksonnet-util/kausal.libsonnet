@@ -200,7 +200,8 @@ k {
     // serviceFor create service for a given deployment.
     serviceFor(deployment)::
       local container = $.core.v1.container;
-      local servicePort = $.core.v1.service.mixin.spec.portsType;
+      local service = $.core.v1.service;
+      local servicePort = service.mixin.spec.portsType;
       local ports = [
         servicePort.newNamed(c.name + '-' + port.name, port.containerPort, port.containerPort) +
         if std.objectHas(port, 'protocol')
@@ -209,11 +210,12 @@ k {
         for c in deployment.spec.template.spec.containers
         for port in (c + container.withPortsMixin([])).ports
       ];
-      $.core.v1.service.new(
+      service.new(
         deployment.metadata.name,  // name
         deployment.spec.template.metadata.labels,  // selector
         ports,
-      ),
+      ) +
+      service.mixin.metadata.withLabels({ name: deployment.metadata.name }),
 
     // rbac creates a service account, role and role binding with the given
     // name and rules.
