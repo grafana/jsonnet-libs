@@ -11,6 +11,9 @@ This repository contains various Jsonnet libraries we use at Grafana Labs:
 * [`ksonnet-util`](ksonnet-util/): An overlay and set of utilities for [ksonnet](https://ksonnet.io/)
   that makes working with the library easier.
 
+* [`memcached-mixin`](memcached-mixin/): A set of reuseable and extensible dashboards
+  for Memcached.
+
 * [`oauth2-proxy`](oauth2-proxy/): A ksonnet configuration for deploying bitly's
   OAuth proxy to Kubernetes.
 
