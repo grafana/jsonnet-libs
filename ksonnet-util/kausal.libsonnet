@@ -12,6 +12,12 @@ k {
       configMap+: {
         new(name)::
           super.new(name, {}),
+        withData(data)::
+          if (data == {}) then {}
+          else super.withData(data),
+        withDataMixin(data)::
+          if (data == {}) then {}
+          else super.withData(data),
       },
 
       // Expose containerPort type.
