@@ -17,7 +17,7 @@ k {
           else super.withData(data),
         withDataMixin(data)::
           if (data == {}) then {}
-          else super.withData(data),
+          else super.withDataMixin(data),
       },
 
       // Expose containerPort type.
