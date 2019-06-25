@@ -1,5 +1,5 @@
 {
-  local buildHeaders(service, allowWebsockets) =
+  local buildHeaders(service, allowWebsockets, subfilter) =
     |||
             proxy_pass      %(url)s$2$is_args$args;
             proxy_set_header    Host $host;
@@ -11,13 +11,25 @@
             # Allow websocket connections https://www.nginx.com/blog/websocket-nginx/
             proxy_set_header    Upgrade $http_upgrade;
             proxy_set_header    Connection "Upgrade";
-    ||| else '',
+    ||| else '' + if subfilter then |||
+      sub_filter 'href="/' 'href="/%(path)s/';
+      sub_filter 'src="/' 'src="/%(path)s/';
+      sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
+      sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
+      sub_filter_once off;
+      sub_filter_types text/css application/xml application/json application/javascript;
+      proxy_redirect   "/" "/%(path)s/";
+    ||| % service else '',
 
   local buildLocation(service) =
     |||
           location ~ ^/%(path)s(/?)(.*)$ {
     ||| % service +
-              buildHeaders(service, if 'allowWebsockets' in service then service.allowWebsockets else false) +
+              buildHeaders(
+                service,
+                if 'allowWebsockets' in service then service.allowWebsockets else false,
+                if 'subfilter' in service then service.subfilter else false,
+              ) +
     |||
           }
     |||,
