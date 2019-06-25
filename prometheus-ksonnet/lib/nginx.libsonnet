@@ -12,13 +12,13 @@
             proxy_set_header    Upgrade $http_upgrade;
             proxy_set_header    Connection "Upgrade";
     ||| else '' + if subfilter then |||
-      sub_filter 'href="/' 'href="/%(path)s/';
-      sub_filter 'src="/' 'src="/%(path)s/';
-      sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
-      sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
-      sub_filter_once off;
-      sub_filter_types text/css application/xml application/json application/javascript;
-      proxy_redirect   "/" "/%(path)s/";
+            sub_filter 'href="/' 'href="/%(path)s/';
+            sub_filter 'src="/' 'src="/%(path)s/';
+            sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
+            sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
+            sub_filter_once off;
+            sub_filter_types text/css application/xml application/json application/javascript;
+            proxy_redirect   "/" "/%(path)s/";
     ||| % service else '',
 
   local buildLocation(service) =
