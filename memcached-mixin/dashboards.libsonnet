@@ -6,11 +6,12 @@ local g = (import 'grafana-builder/grafana.libsonnet');
       g.dashboard('Memcached')
       .addMultiTemplate('cluster', 'kube_pod_container_info{image=~".*memcached.*"}', 'cluster')
       .addMultiTemplate('namespace', 'kube_pod_container_info{image=~".*memcached.*"}', 'namespace')
+      .addMultiTemplate('instance', 'kube_pod_container_info{image=~".*memcached.*", namespace=~"$namespace"}', 'pod')
       .addRow(
         g.row('Hits')
         .addPanel(
           g.panel('Hit Rate') +
-          g.queryPanel('sum(rate(memcached_commands_total{cluster=~"$cluster", job=~"($namespace)/($name)", command="get", status="hit"}[1m])) / sum(rate(memcached_commands_total{cluster=~"$cluster", job=~"($namespace)/($name)", command="get"}[1m]))', 'Hit Rate') +
+          g.queryPanel('sum(rate(memcached_commands_total{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance", command="get", status="hit"}[1m])) / sum(rate(memcached_commands_total{cluster=~"$cluster", job=~"($namespace)/($name)", command="get"}[1m]))', 'Hit Rate') +
           { yaxes: g.yaxes('percentunit') },
         )
       )
@@ -18,29 +19,29 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         g.row('Ops')
         .addPanel(
           g.panel('Commands') +
-          g.queryPanel('sum without (job, instance) (rate(memcached_commands_total{cluster=~"$cluster", job=~"($namespace)/($name)"}[1m]))', '{{command}} {{status}}')
+          g.queryPanel('sum without (job, instance) (rate(memcached_commands_total{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"}[1m]))', '{{command}} {{status}}')
         )
         .addPanel(
           g.panel('Evictions') +
-          g.queryPanel('sum without (job) (rate(memcached_items_evicted_total{cluster=~"$cluster", job=~"($namespace)/($name)"}[1m]))', '{{instance}}')
+          g.queryPanel('sum without (job) (rate(memcached_items_evicted_total{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"}[1m]))', '{{instance}}')
         )
         .addPanel(
           g.panel('Stored') +
-          g.queryPanel('sum without (job) (rate(memcached_items_total{cluster=~"$cluster", job=~"($namespace)/($name)"}[1m]))', '{{instance}}')
+          g.queryPanel('sum without (job) (rate(memcached_items_total{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"}[1m]))', '{{instance}}')
         )
       )
       .addRow(
         g.row('Memory')
         .addPanel(
           g.panel('Memory') +
-          g.queryPanel('sum without (job) (memcached_current_bytes{cluster=~"$cluster", job=~"($namespace)/($name)"})', '{{instance}}') +
+          g.queryPanel('sum without (job) (memcached_current_bytes{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"})', '{{instance}}') +
           g.stack +
           { yaxes: g.yaxes('bytes') },
           // TODO add memcached_limit_bytes
         )
         .addPanel(
           g.panel('Items') +
-          g.queryPanel('sum without (job) (memcached_current_items{cluster=~"$cluster", job=~"($namespace)/($name)"})', '{{instance}}') +
+          g.queryPanel('sum without (job) (memcached_current_items{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"})', '{{instance}}') +
           g.stack,
         )
       )
@@ -48,17 +49,24 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         g.row('Network')
         .addPanel(
           g.panel('Connections') +
-          g.queryPanel('sum without (job) (rate(memcached_connections_total{cluster=~"$cluster", job=~"($namespace)/($name)"}[1m]))', '{{instance}}')
-          // TODO add memcached_max_connections
+          g.queryPanel([
+            'sum without (job) (rate(memcached_connections_total{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"}[1m]))',
+            'sum without (job) (memcached_current_connections{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"})',
+            'sum without (job) (memcached_max_connections{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"})',
+          ], [
+            '{{instance}} - Connection Rate',
+            '{{instance}} - Current Connrections',
+            '{{instance}} - Max Connections',
+          ])
         )
         .addPanel(
           g.panel('Reads') +
-          g.queryPanel('sum without (job) (rate(memcached_read_bytes_total{cluster=~"$cluster", job=~"($namespace)/($name)"}[1m]))', '{{instance}}') +
+          g.queryPanel('sum without (job) (rate(memcached_read_bytes_total{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"}[1m]))', '{{instance}}') +
           { yaxes: g.yaxes('bps') },
         )
         .addPanel(
           g.panel('Writes') +
-          g.queryPanel('sum without (job) (rate(memcached_written_bytes_total{cluster=~"$cluster", job=~"($namespace)/($name)"}[1m]))', '{{instance}}') +
+          g.queryPanel('sum without (job) (rate(memcached_written_bytes_total{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"}[1m]))', '{{instance}}') +
           { yaxes: g.yaxes('bps') },
         )
       )
@@ -67,8 +75,8 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         .addPanel(
           g.panel('Memcached Info') +
           g.tablePanel([
-            'count by (job, instance, version) (memcached_version{cluster=~"$cluster", job=~"($namespace)/($name)"})',
-            'max by (job, instance) (memcached_uptime_seconds{cluster=~"$cluster", job=~"($namespace)/($name)"})',
+            'count by (job, instance, version) (memcached_version{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"})',
+            'max by (job, instance) (memcached_uptime_seconds{cluster=~"$cluster", job=~"($namespace)/($name)", instance=~"$instance"})',
           ], {
             job: { alias: 'Job' },
             instance: { alias: 'Instance' },
