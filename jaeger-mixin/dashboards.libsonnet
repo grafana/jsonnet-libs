@@ -40,7 +40,7 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
         )
         .addPanel(
           g.panel('% spans dropped') +
-          g.queryPanel('sum(rate(jaeger_reporter_spans{result=~"dropped|err"}[1m])) by (namespace) / sum(rate(jaeger_reporter_spans[1m])) by (namespace)', '{{namespace}}') +
+          g.queryPanel('sum(rate(jaeger_reporter_spans{result=~"dropped|err"}[1m])) by (namespace) / scalar(sum(rate(jaeger_reporter_spans[1m])))', '{{namespace}}') +
           { yaxes: g.yaxes({ format: 'percentunit', max: 1 }) } +
           g.stack
         )
@@ -54,7 +54,7 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
         )
         .addPanel(
           g.panel('% batches dropped') +
-          g.queryPanel('sum(rate(jaeger_agent_reporter_batches_failures_total[1m])) by (cluster) / sum(rate(jaeger_agent_reporter_batches_submitted_total[1m])) by (cluster)', '{{cluster}}') +
+          g.queryPanel('sum(rate(jaeger_agent_reporter_batches_failures_total[1m])) by (cluster) / scalar(sum(rate(jaeger_agent_reporter_batches_submitted_total[1m])))', '{{cluster}}') +
           { yaxes: g.yaxes({ format: 'percentunit', max: 1 }) } +
           g.stack
         )
@@ -68,7 +68,7 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
         )
         .addPanel(
           g.panel('% spans dropped') +
-          g.queryPanel('sum(rate(jaeger_collector_spans_dropped_total[1m])) by (instance) / sum(rate(jaeger_collector_spans_received_total[1m])) by (instance)', '{{instance}}') +
+          g.queryPanel('sum(rate(jaeger_collector_spans_dropped_total[1m])) by (instance) / scalar(sum(rate(jaeger_collector_spans_received_total[1m])))', '{{instance}}') +
           { yaxes: g.yaxes({ format: 'percentunit', max: 1 }) } +
           g.stack
         )
