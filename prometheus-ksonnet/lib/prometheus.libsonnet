@@ -139,7 +139,7 @@
       ),
   },
 
-  main_prometheus:: $.prometheus {
+  main_prometheus: $.prometheus {
     name: 'prometheus',
   },
 }
