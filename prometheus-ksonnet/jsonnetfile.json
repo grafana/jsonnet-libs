@@ -18,7 +18,7 @@
                     "subdir": "documentation/prometheus-mixin"
                 }
             },
-            "version": "mixin"
+            "version": "master"
         },
         {
             "name": "alertmanager-mixin",
