@@ -74,29 +74,41 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
         )
       )
       .addRow(
+        g.row('Collector')
+        .addPanel(
+          g.panel('Traces by Service') +
+          g.queryPanel('sum by (svc) (rate(jaeger_collector_traces_saved_by_svc_total[1m]))', '{{svc}}') +
+          g.stack
+        )
+        .addPanel(
+          g.panel('Spans by Service') +
+          g.queryPanel('sum by (svc) (rate(jaeger_collector_spans_saved_by_svc_total[1m]))', '{{svc}}') +
+          g.stack
+        )
+      )
+      .addRow(
         g.row('Collector - Queue Stats')
         .addPanel(
-          g.panel('span queue length') +
+          g.panel('Span Queue Length') +
           g.queryPanel('jaeger_collector_queue_length', '{{instance}}') +
           g.stack
         )
         .addPanel(
-          g.panel('span queue time - 95 percentile') +
+          g.panel('Span Queue Time - P95') +
           g.queryPanel('histogram_quantile(0.95, sum(rate(jaeger_collector_in_queue_latency_bucket[1m])) by (le, instance))', '{{instance}}')
         )
       )
       .addRow(
         g.row('Cassandra')
         .addPanel(
-          g.panel('insert attempt rate') +
+          g.panel('Collector Save Rate') +
           g.qpsPanelErrTotal('jaeger_cassandra_errors_total', 'jaeger_cassandra_attempts_total') +
           g.stack
         )
         .addPanel(
-          g.panel('% inserts erroring') +
-          g.queryPanel('sum(rate(jaeger_cassandra_errors_total[1m])) by (instance) / sum(rate(jaeger_cassandra_attempts_total[1m])) by (instance)', '{{instance}}') +
-          { yaxes: g.yaxes({ format: 'percentunit', max: 1 }) } +
-          g.stack,
+          g.panel('Collector Save Latency - P95 ') +
+          g.queryPanel('histogram_quantile(0.95, sum by (job, le) (rate(jaeger_collector_save_latency_bucket[1m])))', '{{job}}') +
+          { yaxes: g.yaxes({ format: 's'}) },
         )
       ),
 
