@@ -27,12 +27,16 @@
         'daemonsets',
         'deployments',
         'replicasets',
+        'ingresses',
       ]) +
       policyRule.withVerbs(['list', 'watch']),
 
       policyRule.new() +
       policyRule.withApiGroups(['apps']) +
       policyRule.withResources([
+        'daemonsets',
+        'deployments',
+        'replicasets',
         'statefulsets',
       ]) +
       policyRule.withVerbs(['list', 'watch']),
@@ -50,6 +54,21 @@
       policyRule.withResources([
         'horizontalpodautoscalers',
       ]) +
+      policyRule.withVerbs(['list', 'watch']),
+
+      policyRule.new() +
+      policyRule.withApiGroups(['ingresses']) +
+      policyRule.withResources(['ingress']) +
+      policyRule.withVerbs(['list', 'watch']),
+
+      policyRule.new() +
+      policyRule.withApiGroups(['policy']) +
+      policyRule.withResources(['poddisruptionbudgets']) +
+      policyRule.withVerbs(['list', 'watch']),
+
+      policyRule.new() +
+      policyRule.withApiGroups(['certificates.k8s.io']) +
+      policyRule.withResources(['certificatesigningrequests']) +
       policyRule.withVerbs(['list', 'watch']),
     ]),
 
