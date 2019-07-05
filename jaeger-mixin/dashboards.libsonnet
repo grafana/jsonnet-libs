@@ -108,7 +108,7 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
         .addPanel(
           g.panel('Collector Save Latency - P95 ') +
           g.queryPanel('histogram_quantile(0.95, sum by (job, le) (rate(jaeger_collector_save_latency_bucket[1m])))', '{{job}}') +
-          { yaxes: g.yaxes({ format: 's'}) },
+          { yaxes: g.yaxes({ format: 's' }) },
         )
       ),
 
