@@ -1,29 +1,29 @@
 {
   local buildHeaders(service, allowWebsockets, subfilter) =
     |||
-            proxy_pass      %(url)s$2$is_args$args;
-            proxy_set_header    Host $host;
-            proxy_set_header    X-Real-IP $remote_addr;
-            proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header    X-Forwarded-Proto $scheme;
-            proxy_set_header    X-Forwarded-Host $http_host;
+      proxy_pass      %(url)s$2$is_args$args;
+      proxy_set_header    Host $host;
+      proxy_set_header    X-Real-IP $remote_addr;
+      proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header    X-Forwarded-Proto $scheme;
+      proxy_set_header    X-Forwarded-Host $http_host;
     ||| % service + if allowWebsockets then |||
-            # Allow websocket connections https://www.nginx.com/blog/websocket-nginx/
-            proxy_set_header    Upgrade $http_upgrade;
-            proxy_set_header    Connection "Upgrade";
+      # Allow websocket connections https://www.nginx.com/blog/websocket-nginx/
+      proxy_set_header    Upgrade $http_upgrade;
+      proxy_set_header    Connection "Upgrade";
     ||| else '' + if subfilter then |||
-            sub_filter 'href="/' 'href="/%(path)s/';
-            sub_filter 'src="/' 'src="/%(path)s/';
-            sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
-            sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
-            sub_filter_once off;
-            sub_filter_types text/css application/xml application/json application/javascript;
-            proxy_redirect   "/" "/%(path)s/";
+      sub_filter 'href="/' 'href="/%(path)s/';
+      sub_filter 'src="/' 'src="/%(path)s/';
+      sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
+      sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
+      sub_filter_once off;
+      sub_filter_types text/css application/xml application/json application/javascript;
+      proxy_redirect   "/" "/%(path)s/";
     ||| % service else '',
 
   local buildLocation(service) =
     |||
-          location ~ ^/%(path)s(/?)(.*)$ {
+      location ~ ^/%(path)s(/?)(.*)$ {
     ||| % service +
               buildHeaders(
                 service,
@@ -31,7 +31,7 @@
                 if 'subfilter' in service then service.subfilter else false,
               ) +
     |||
-          }
+      }
     |||,
 
   local configMap = $.core.v1.configMap,
@@ -39,7 +39,8 @@
   nginx_config_map:
     local vars = {
       location_stanzas: [
-        buildLocation(service) for service in $._config.admin_services
+        buildLocation(service)
+        for service in $._config.admin_services
       ],
       locations: std.join('\n', self.location_stanzas),
       link_stanzas: [
