@@ -360,16 +360,24 @@ k {
     ),
 
     resourcesRequests(cpu, memory)::
-      $.core.v1.container.mixin.resources.withRequests({
-        cpu: cpu,
-        memory: memory,
-      }),
+      $.core.v1.container.mixin.resources.withRequests(
+        (if cpu != null
+        then {cpu: cpu}
+        else {}) +
+        (if memory != null
+        then {memory: memory}
+        else {})
+       ),
 
     resourcesLimits(cpu, memory)::
-      $.core.v1.container.mixin.resources.withLimits({
-        cpu: cpu,
-        memory: memory,
-      }),
+      $.core.v1.container.mixin.resources.withLimits(
+        (if cpu != null
+        then {cpu: cpu}
+        else {}) +
+        (if memory != null
+        then {memory: memory}
+        else {})
+      ),
 
     antiAffinity:
       {
