@@ -11,6 +11,7 @@
 
     alerting: {
       alertmanagers: [{
+        api_version: 'v2',
         kubernetes_sd_configs: [{
           role: 'pod',
         }],
