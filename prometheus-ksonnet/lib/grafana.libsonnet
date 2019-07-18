@@ -155,7 +155,8 @@
     $.util.configVolumeMount('grafana-dashboard-provisioning', '%(grafana_provisioning_dir)s/dashboards' % $._config) +
     $.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config) +
     $.util.configVolumeMount('grafana-notification-channels', '%(grafana_provisioning_dir)s/notifiers' % $._config) +
-    $.util.configVolumeMount('dashboards', '/grafana/dashboards'),
+    $.util.configVolumeMount('dashboards', '/grafana/dashboards') +
+    $.util.podPriority('critical'),
 
   grafana_service:
     $.util.serviceFor($.grafana_deployment),

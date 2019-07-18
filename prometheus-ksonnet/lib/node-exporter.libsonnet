@@ -31,5 +31,6 @@
     $.util.hostVolumeMount('sys', '/sys', '/host/sys') +
     (if $._config.node_exporter_mount_root
      then $.util.hostVolumeMount('root', '/', '/rootfs')
-     else {}),
+     else {}) +
+    $.util.podPriority('critical'),
 }

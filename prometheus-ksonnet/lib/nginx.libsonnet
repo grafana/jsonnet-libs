@@ -106,7 +106,8 @@
 
   nginx_deployment:
     deployment.new('nginx', 1, [$.nginx_container]) +
-    $.util.configVolumeMount('nginx-config', '/etc/nginx'),
+    $.util.configVolumeMount('nginx-config', '/etc/nginx') +
+    $.util.podPriority('critical'),
 
   nginx_service:
     $.util.serviceFor($.nginx_deployment),

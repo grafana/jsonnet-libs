@@ -4,6 +4,7 @@ local k = import 'k.libsonnet';
 k {
   _config+:: {
     enable_rbac: true,
+    enable_pod_priorities: false,
     namespace: error 'Must define a namespace',
   },
 
@@ -391,5 +392,13 @@ k {
           podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey('kubernetes.io/hostname'),
         ]).spec,
       },
+
+    // Add a priority to the pods in a deployment (or deployment-like objects
+    // such as a statefulset) iff _config.enable_pod_priorities is set to true.
+    podPriority(p):
+      local deployment = $.apps.v1beta1.deployment;
+      if $._config.enable_pod_priorities
+      then deployment.mixin.spec.template.spec.withPriorityClassName(p)
+      else {},
   },
 }
