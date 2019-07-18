@@ -126,9 +126,10 @@
         statefulset.mixin.spec.withServiceName('prometheus') +
         statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix }) +
         statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-        if _config.enable_rbac
-        then statefulset.mixin.spec.template.spec.withServiceAccount(self.name)
-        else {}
+        (if _config.enable_rbac
+         then statefulset.mixin.spec.template.spec.withServiceAccount(self.name)
+         else {})  +
+        $.util.podPriority('critical')
       ),
 
     prometheus_service:
