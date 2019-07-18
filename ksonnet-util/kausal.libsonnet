@@ -393,6 +393,8 @@ k {
         ]).spec,
       },
 
+    // Add a priority to the pods in a deployment (or deployment-like objects
+    // such as a statefulset) iff _config.enable_pod_priorities is set to true.
     podPriority(p):
       local deployment = $.apps.v1beta1.deployment;
       if $._config.enable_pod_priorities
