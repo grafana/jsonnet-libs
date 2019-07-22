@@ -309,9 +309,9 @@ k {
         volume.fromConfigMap(name, name),
       ]),
 
-    // configMapVolumeMount adds a configMap to deployment-like object.
+    // configMapVolumeMount adds a configMap to deployment-like objects.
     // It will also add an annotation hash to ensure the pods are re-deployed
-    // then the config map changes.
+    // when the config map changes.
     configMapVolumeMount(configMap, path, volumeMountMixin={})::
       local name = configMap.metadata.name,
             hash = std.md5(std.toString(configMap)),
