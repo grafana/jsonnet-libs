@@ -309,6 +309,29 @@ k {
         volume.fromConfigMap(name, name),
       ]),
 
+    // configMapVolumeMount adds a configMap to deployment-like objects.
+    // It will also add an annotation hash to ensure the pods are re-deployed
+    // when the config map changes.
+    configMapVolumeMount(configMap, path, volumeMountMixin={})::
+      local name = configMap.metadata.name,
+            hash = std.md5(std.toString(configMap)),
+            container = $.core.v1.container,
+            deployment = $.extensions.v1beta1.deployment,
+            volumeMount = $.core.v1.volumeMount,
+            volume = $.core.v1.volume,
+            addMount(c) = c + container.withVolumeMountsMixin(
+        volumeMount.new(name, path) +
+        volumeMountMixin,
+      );
+
+      deployment.mapContainers(addMount) +
+      deployment.mixin.spec.template.spec.withVolumesMixin([
+        volume.fromConfigMap(name, name),
+      ]) + 
+      deployment.mixin.spec.template.metadata.withAnnotationsMixin({
+        ['%s-hash' % name]: hash,
+      }),
+
     hostVolumeMount(name, hostPath, path, readOnly=false, volumeMountMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
