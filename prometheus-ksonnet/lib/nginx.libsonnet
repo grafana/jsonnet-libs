@@ -1,6 +1,8 @@
 {
-  local buildHeaders(service, allowWebsockets, subfilter) =
-    |||
+  local buildHeaders(service, redirect, allowWebsockets, subfilter) =
+    if redirect then |||
+      return 302 %(url)s;
+    ||| % service else |||
       proxy_pass      %(url)s$2$is_args$args;
       proxy_set_header    Host $host;
       proxy_set_header    X-Real-IP $remote_addr;
@@ -27,6 +29,7 @@
     ||| % service +
               buildHeaders(
                 service,
+                if 'redirect' in service then service.redirect else false,
                 if 'allowWebsockets' in service then service.allowWebsockets else false,
                 if 'subfilter' in service then service.subfilter else false,
               ) +
