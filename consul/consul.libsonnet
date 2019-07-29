@@ -9,7 +9,7 @@ k {
     consul: 'consul:1.4.0',
     consulSidekick: 'weaveworks/consul-sidekick:master-f18ad13',
     statsdExporter: 'prom/statsd-exporter:v0.8.1',
-    consulExporter: 'prom/consul-exporter:v0.4.0',
+    consulExporter: 'prom/consul-exporter:v0.5.0',
   },
 
   local configMap = $.core.v1.configMap,
