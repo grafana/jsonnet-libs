@@ -44,49 +44,57 @@ local g = import 'grafana-builder/grafana.libsonnet';
   //   Useful for external labels.
   // - multiplier (optional): assumes results are in seconds, will multiply
   //   by 1e3 to get ms.  Can be turned off.
-  latencyRecordingRulePanel(metric, selectors, extra_selectors=[], multiplier='1e3')::
+  // - sum_by (optional): additional labels to use in the sum by clause, will also be used in the legend
+  latencyRecordingRulePanel(metric, selectors, extra_selectors=[], multiplier='1e3', sum_by=[])::
     local labels = std.join('_', [matcher.label for matcher in selectors]);
     local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
+    local sb = ['le'];
+    local legend = std.join('', ['{{ %(lb)s }} ' % lb for lb in sum_by]);
+    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % {lbls: std.join(',', sum_by)} else '';
+    local sumByHisto = std.join(',', sb + sum_by);
     {
       nullPointMode: 'null as zero',
       yaxes: g.yaxes('ms'),
       targets: [
         {
-          expr: 'histogram_quantile(0.99, sum by (le) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s)) * %(multiplier)s' % {
+          expr: 'histogram_quantile(0.99, sum by (%(sumBy)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s)) * %(multiplier)s' % {
             labels: labels,
             metric: metric,
             selector: selectorStr,
             multiplier: multiplier,
+            sumBy: sumByHisto,
           },
           format: 'time_series',
           intervalFactor: 2,
-          legendFormat: '99th Percentile',
+          legendFormat: '%(legend)s99th Percentile' % legend,
           refId: 'A',
           step: 10,
         },
         {
-          expr: 'histogram_quantile(0.50, sum by (le) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s)) * %(multiplier)s' % {
+          expr: 'histogram_quantile(0.50, sum by (%(sumBy)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s)) * %(multiplier)s' % {
             labels: labels,
             metric: metric,
             selector: selectorStr,
             multiplier: multiplier,
+            sumBy: sumByHisto,
           },
           format: 'time_series',
           intervalFactor: 2,
-          legendFormat: '50th Percentile',
+          legendFormat: '%(legend)s50th Percentile' % legend,
           refId: 'B',
           step: 10,
         },
         {
-          expr: '%(multiplier)s * sum(%(labels)s:%(metric)s_sum:sum_rate%(selector)s) / sum(%(labels)s:%(metric)s_count:sum_rate%(selector)s)' % {
+          expr: '%(multiplier)s * sum(%(labels)s:%(metric)s_sum:sum_rate%(selector)s)%(sumBy)s / sum(%(labels)s:%(metric)s_count:sum_rate%(selector)s)%(sumBy)s' % {
             labels: labels,
             metric: metric,
             selector: selectorStr,
             multiplier: multiplier,
+            sumBy: sumBy,
           },
           format: 'time_series',
           intervalFactor: 2,
-          legendFormat: 'Average',
+          legendFormat: '%(legend)sAverage' % legend,
           refId: 'C',
           step: 10,
         },
