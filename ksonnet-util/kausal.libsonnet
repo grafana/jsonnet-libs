@@ -363,7 +363,7 @@ k {
         volume.mixin.secret.withDefaultMode(defaultMode),
       ]),
 
-    emptyVolumeMount(name, path, volumeMountMixin={})::
+    emptyVolumeMount(name, path, volumeMountMixin={}, volumeMixin={})::
       local container = $.core.v1.container,
             deployment = $.extensions.v1beta1.deployment,
             volumeMount = $.core.v1.volumeMount,
@@ -375,7 +375,7 @@ k {
 
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
-        volume.fromEmptyDir(name),
+        volume.fromEmptyDir(name) + volumeMixin,
       ]),
 
     manifestYaml(value):: (
