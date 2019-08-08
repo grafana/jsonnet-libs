@@ -14,15 +14,17 @@ k {
 
   local configMap = $.core.v1.configMap,
 
+  consul_config:: {
+    telemetry: {
+      dogstatsd_addr: '127.0.0.1:9125',
+    },
+    leave_on_terminate: true,
+  },
+
   consul_config_map:
     configMap.new('consul') +
     configMap.withData({
-      'consul-config.json': std.toString({
-        telemetry: {
-          dogstatsd_addr: '127.0.0.1:9125',
-        },
-        leave_on_terminate: true,
-      }),
+      'consul-config.json': std.toString($.consul_config),
       mapping: |||
         mappings:
         - match: consul.*.runtime.*
@@ -302,7 +304,7 @@ k {
       $.consul_exporter,
     ]) +
     deployment.mixin.spec.template.spec.withServiceAccount('consul-sidekick') +
-    $.util.configVolumeMount('consul', '/etc/config') +
+    $.util.configMapVolumeMount($.consul_config_map, '/etc/config') +
     $.util.antiAffinity,
 
   consul_service:
