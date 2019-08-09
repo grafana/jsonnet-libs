@@ -64,7 +64,7 @@
                              'http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s%(prometheus_web_route_prefix)s' % $._config,
                              default=true),
 
-  grafana_add_datasource(name, url, default=false)::
+  grafana_add_datasource(name, url, default=false, method='GET')::
     configMap.withDataMixin({
       ['%s.yml' % name]: $.util.manifestYaml({
         apiVersion: 1,
@@ -76,11 +76,14 @@
           isDefault: default,
           version: 1,
           editable: false,
+          jsonData: {
+            httpMethod: method,
+          },
         }],
       }),
     }),
 
-  grafana_add_datasource_with_basicauth(name, url, username, password, default=false)::
+  grafana_add_datasource_with_basicauth(name, url, username, password, default=false, method='GET')::
     configMap.withDataMixin({
       ['%s.yml' % name]: $.util.manifestYaml({
         apiVersion: 1,
@@ -95,6 +98,9 @@
           basicAuth: true,
           basicAuthUser: username,
           basicAuthPassword: password,
+          jsonData: {
+            httpMethod: method,
+          },
         }],
       }),
     }),
