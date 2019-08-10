@@ -77,71 +77,91 @@
       ]),
 
     local deployment = $.apps.v1beta1.deployment,
-
-    prometheus_deployment:
-      local _config = self._config;
-      if _config.stateful
-      then {}
-      else (
-        deployment.new(self.name, 1, [
-          self.prometheus_container,
-          self.prometheus_watch_container,
-        ]) +
-        $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus') +
-        deployment.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix }) +
-        deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-        if _config.enable_rbac
-        then deployment.mixin.spec.template.spec.withServiceAccount('prometheus')
-        else {}
-      ),
-
     local pvc = $.core.v1.persistentVolumeClaim,
 
     prometheus_pvc::
-      local _config = self._config;
-      if !(_config.stateful)
-      then {}
-      else (
-        pvc.new() +
-        pvc.mixin.metadata.withName('%s-data' % (self.name)) +
-        pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-        pvc.mixin.spec.resources.withRequests({ storage: '300Gi' })
-      ),
+      pvc.new() +
+      pvc.mixin.metadata.withName('%s-data' % (self.name)) +
+      pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
+      pvc.mixin.spec.resources.withRequests({ storage: '300Gi' }),
 
     local statefulset = $.apps.v1beta1.statefulSet,
     local volumeMount = $.core.v1.volumeMount,
 
     prometheus_statefulset:
-      local _config = self._config;
-      if !(_config.stateful)
-      then {}
-      else (
-        statefulset.new(self.name, 1, [
-          self.prometheus_container.withVolumeMountsMixin(
-            volumeMount.new('%s-data' % self.name, '/prometheus')
-          ),
-          self.prometheus_watch_container,
-        ], self.prometheus_pvc) +
-        $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus') +
-        statefulset.mixin.spec.withServiceName('prometheus') +
-        statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix }) +
-        statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-        (if _config.enable_rbac
-         then statefulset.mixin.spec.template.spec.withServiceAccount(self.name)
-         else {}) +
-        $.util.podPriority('critical')
-      ),
-
-    prometheus_service:
-      local _config = self._config;
-      $.util.serviceFor(
-        if _config.stateful
-        then self.prometheus_statefulset
-        else self.prometheus_deployment
-      ),
+      statefulset.new(self.name, 1, [
+        self.prometheus_container.withVolumeMountsMixin(
+          volumeMount.new('%s-data' % self.name, '/prometheus')
+        ),
+        self.prometheus_watch_container,
+      ], self.prometheus_pvc) +
+      $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus') +
+      statefulset.mixin.spec.withServiceName('prometheus') +
+      statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix }) +
+      statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
+      (if _config.enable_rbac
+       then statefulset.mixin.spec.template.spec.withServiceAccount(self.name)
+       else {})  +
+      $.util.podPriority('critical')
   },
 
-  main_prometheus: $.prometheus {
-    name: 'prometheus',
+ prometheus_replica:: $.prometheus {
+    replica:: error 'replica must be set',
+    name: 'prometheus-%s' % self.replica,
+
+    local _replica = self.replica,
+
+    prometheus_config+: {
+      global+: {
+        scrape_interval: $._config.scrape_interval,
+        external_labels+: {
+          __replica__: _replica,
+        },
+      },
+
+      alerting+: {
+        alert_relabel_configs+: [
+          {
+            regex: '__replica__',
+            action: 'labeldrop',
+          },
+        ],
+      },
+    },
+
+    // We don't want the pods to be labeled name:prometheus-one etc.
+    local statefulset = $.apps.v1beta1.statefulSet,
+    local labels = { name: 'prometheus', replica: _replica },
+    prometheus_statefulset+:
+      statefulset.mixin.spec.selector.withMatchLabels(labels) +
+      statefulset.mixin.spec.template.metadata.withLabels(labels),
+  },
+
+  prometheus_one: $.prometheus_replica {
+    replica: 'one',
+    prometheus_config+: {
+      remote_write+: $._config.remote_write_both,
+    },
+
+    local service = $.core.v1.service,
+    local port = service.mixin.spec.portsType,
+
+    prometheus_service:
+      service.new(
+        'prometheus',
+        { name: 'prometheus', replica: 'one' },
+        port.newNamed('prometheus-http-metrics', 80, 80)
+      ) +
+      service.mixin.metadata.withLabels({ name: 'prometheus' }),
+  },
+
+  prometheus_two: $.prometheus_replica {
+    replica: 'two',
+    prometheus_config+: {
+      remote_write+:
+        if $._config.replicas_remote_write
+        then $._config.remote_write_dev
+        else [],
+    },
   },
 }
