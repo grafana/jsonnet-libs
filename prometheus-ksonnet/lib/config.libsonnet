@@ -59,5 +59,9 @@
 
     // oauth2-proxy
     oauth_enabled: false,
+
+    // Optionally shard dashboards into multiple config maps.
+    // Set to the number of desired config maps.  0 to disable.
+    dashboard_config_maps: 0,
   },
 }
