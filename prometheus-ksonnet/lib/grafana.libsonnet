@@ -33,11 +33,25 @@
   grafanaDashboards+:: $.dashboards + $.grafana_dashboards,
 
   dashboards_config_map:
-    configMap.new('dashboards') +
-    configMap.withDataMixin({
-      [name]: std.toString($.grafanaDashboards[name])
-      for name in std.objectFields($.grafanaDashboards)
-    }),
+    if $._config.dashboard_config_maps > 0
+    then {}
+    else
+      configMap.new('dashboards') +
+      configMap.withDataMixin({
+        [name]: std.toString($.grafanaDashboards[name])
+        for name in std.objectFields($.grafanaDashboards)
+      }),
+
+  dashboards_config_maps: {
+    ['dashboard-%d' % shard]:
+        configMap.new('dashboards-%d' % shard) +
+        configMap.withDataMixin({
+          [name]: std.toString($.grafanaDashboards[name])
+          for name in std.objectFields($.grafanaDashboards)
+          if std.codepoint(std.md5(name)[1]) % $._config.dashboard_config_maps == shard
+        }),
+    for shard in std.range(0, $._config.dashboard_config_maps-1)
+  },
 
   grafana_dashboard_provisioning_config_map:
     configMap.new('grafana-dashboard-provisioning') +
@@ -161,7 +175,18 @@
     $.util.configVolumeMount('grafana-dashboard-provisioning', '%(grafana_provisioning_dir)s/dashboards' % $._config) +
     $.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config) +
     $.util.configVolumeMount('grafana-notification-channels', '%(grafana_provisioning_dir)s/notifiers' % $._config) +
-    $.util.configVolumeMount('dashboards', '/grafana/dashboards') +
+    (
+      if $._config.dashboard_config_maps == 0
+      then $.util.configVolumeMount('dashboards', '/grafana/dashboards')
+      else
+        std.foldr(
+          function(m, acc) m + acc,
+          [
+            $.util.configVolumeMount('dashboards-%d' % shard, '/grafana/dashboards/%d' % shard)
+            for shard in std.range(0, $._config.dashboard_config_maps-1)
+          ],
+          {})
+    ) +
     $.util.podPriority('critical'),
 
   grafana_service:
