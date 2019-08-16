@@ -327,7 +327,7 @@ k {
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
         volume.fromConfigMap(name, name),
-      ]) + 
+      ]) +
       deployment.mixin.spec.template.metadata.withAnnotationsMixin({
         ['%s-hash' % name]: hash,
       }),
@@ -386,21 +386,21 @@ k {
     resourcesRequests(cpu, memory)::
       $.core.v1.container.mixin.resources.withRequests(
         (if cpu != null
-        then {cpu: cpu}
-        else {}) +
+         then { cpu: cpu }
+         else {}) +
         (if memory != null
-        then {memory: memory}
-        else {})
-       ),
+         then { memory: memory }
+         else {})
+      ),
 
     resourcesLimits(cpu, memory)::
       $.core.v1.container.mixin.resources.withLimits(
         (if cpu != null
-        then {cpu: cpu}
-        else {}) +
+         then { cpu: cpu }
+         else {}) +
         (if memory != null
-        then {memory: memory}
-        else {})
+         then { memory: memory }
+         else {})
       ),
 
     antiAffinity:

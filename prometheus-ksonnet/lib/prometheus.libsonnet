@@ -128,7 +128,7 @@
         statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
         (if _config.enable_rbac
          then statefulset.mixin.spec.template.spec.withServiceAccount(self.name)
-         else {})  +
+         else {}) +
         $.util.podPriority('critical')
       ),
 

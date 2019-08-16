@@ -50,7 +50,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
     local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
     local sb = ['le'];
     local legend = std.join('', ['{{ %(lb)s }} ' % lb for lb in sum_by]);
-    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % {lbls: std.join(',', sum_by)} else '';
+    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else '';
     local sumByHisto = std.join(',', sb + sum_by);
     {
       nullPointMode: 'null as zero',

@@ -27,12 +27,12 @@
     |||
       location ~ ^/%(path)s(/?)(.*)$ {
     ||| % service +
-              buildHeaders(
-                service,
-                if 'redirect' in service then service.redirect else false,
-                if 'allowWebsockets' in service then service.allowWebsockets else false,
-                if 'subfilter' in service then service.subfilter else false,
-              ) +
+    buildHeaders(
+      service,
+      if 'redirect' in service then service.redirect else false,
+      if 'allowWebsockets' in service then service.allowWebsockets else false,
+      if 'subfilter' in service then service.subfilter else false,
+    ) +
     |||
       }
     |||,
