@@ -6,7 +6,7 @@ k {
   },
 
   _images+:: {
-    consul: 'consul:1.4.0',
+    consul: 'consul:1.5.3',
     consulSidekick: 'weaveworks/consul-sidekick:master-f18ad13',
     statsdExporter: 'prom/statsd-exporter:v0.12.2',
     consulExporter: 'prom/consul-exporter:v0.5.0',
