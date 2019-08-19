@@ -22,8 +22,10 @@ k {
     name:: error 'must specify name',
     max_item_size:: '1m',
     memory_limit_mb:: 1024,
+    overprovision_factor:: 1.2,
+    cpu_limits:: '3',
     memory_request_bytes::
-      std.ceil((self.memory_limit_mb * 1.2) + 100) * 1024 * 1024,
+      std.ceil((self.memory_limit_mb * self.overprovision_factor) + 100) * 1024 * 1024,
     memory_limits_bytes::
       self.memory_limit_mb * 1.5 * 1024 * 1024,
 
@@ -39,7 +41,7 @@ k {
         '-v',
       ]) +
       $.util.resourcesRequests('500m', $.util.bytesToK8sQuantity(self.memory_request_bytes)) +
-      $.util.resourcesLimits('3', $.util.bytesToK8sQuantity(self.memory_limits_bytes)),
+      $.util.resourcesLimits(self.cpu_limits, $.util.bytesToK8sQuantity(self.memory_limits_bytes)),
 
     memcached_exporter::
       container.new('exporter', $._images.memcachedExporter) +
