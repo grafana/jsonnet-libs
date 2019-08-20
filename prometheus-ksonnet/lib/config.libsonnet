@@ -51,11 +51,14 @@
     kubeControllerManagerSelector: 'job="kube-system/kube-controller-manager"',
     kubeApiserverSelector: 'job="kube-system/kube-apiserver"',
     podLabel: 'instance',
-    grafanaPrefix: '/grafana',
+    grafanaPrefix: '/grafana',  // Also used by node-mixin.
 
     // Prometheus mixin overrides.
     prometheusSelector: 'job="default/prometheus"',
     alertmanagerSelector: 'job="default/alertmanager"',
+
+    // Node mixin overrides.
+    nodeCriticalSeverity: 'warning', // Do not page if nodes run out of disk space.
 
     // oauth2-proxy
     oauth_enabled: false,
