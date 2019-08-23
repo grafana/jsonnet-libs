@@ -1,8 +1,5 @@
 {
   _config+:: {
-    // Should this prometheus installation be stateful?
-    stateful: false,
-
     // Cluster specific overrides.
     cluster_dns_suffix: 'cluster.local',
 
