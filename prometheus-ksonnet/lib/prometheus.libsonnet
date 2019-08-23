@@ -2,6 +2,15 @@
   prometheus:: {
     name:: error 'must specify name',
 
+    _config:: $._config,
+
+    // We bounce through various layers of indirection so user can:
+    // a) override config for all Prometheus' by merging into $.prometheus_config,
+    // b) override config for a specific Prometheus instance by merging in here.
+    prometheus_config:: $.prometheus_config,
+    prometheusAlerts:: $.prometheusAlerts,
+    prometheusRules:: $.prometheusRules,
+
     local policyRule = $.rbac.v1beta1.policyRule,
 
     prometheus_rbac:
@@ -16,15 +25,8 @@
         policyRule.withVerbs(['get']),
       ]),
 
-    // We bounce through various layers of indirection so user can:
-    // a) override config for all Prometheus' by merging into $.prometheus_config,
-    // b) override config for a specific Prometheus instance by merging in here.
-    local configMap = $.core.v1.configMap,
 
-    prometheus_config:: $.prometheus_config,
-    prometheusAlerts:: $.prometheusAlerts,
-    prometheusRules:: $.prometheusRules,
-    _config:: $._config,
+    local configMap = $.core.v1.configMap,
 
     prometheus_config_map:
       // Can't reference self.foo below as we're in a map context, so
@@ -44,12 +46,13 @@
 
     prometheus_container::
       local _config = self._config;
+
       container.new('prometheus', $._images.prometheus) +
       container.withPorts($.core.v1.containerPort.new('http-metrics', 80)) +
       container.withArgs([
         '--config.file=/etc/prometheus/prometheus.yml',
         '--web.listen-address=:%s' % _config.prometheus_port,
-        '--web.external-url=%s%s' % [_config.prometheus_external_hostname, _config.prometheus_path],
+        '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
         '--web.enable-lifecycle',
         '--web.route-prefix=%s' % _config.prometheus_web_route_prefix,
         '--storage.tsdb.path=/prometheus/data',
@@ -73,10 +76,9 @@
         '-o',
         '-',
         '-sS',
-        'http://localhost:%s%s-/reload' % [_config.prometheus_port, _config.prometheus_web_route_prefix],
+        'http://localhost:%(prometheus_port)s%(prometheus_web_route_prefix)s-/reload' % _config,
       ]),
 
-    local deployment = $.apps.v1beta1.deployment,
     local pvc = $.core.v1.persistentVolumeClaim,
 
     prometheus_pvc::
@@ -89,6 +91,8 @@
     local volumeMount = $.core.v1.volumeMount,
 
     prometheus_statefulset:
+      local _config = self._config;
+
       statefulset.new(self.name, 1, [
         self.prometheus_container.withVolumeMountsMixin(
           volumeMount.new('%s-data' % self.name, '/prometheus')
@@ -97,71 +101,11 @@
       ], self.prometheus_pvc) +
       $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus') +
       statefulset.mixin.spec.withServiceName('prometheus') +
-      statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix }) +
+      statefulset.mixin.spec.template.metadata.withAnnotations({
+        'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
+      }) +
       statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-      (if _config.enable_rbac
-       then statefulset.mixin.spec.template.spec.withServiceAccount(self.name)
-       else {})  +
+      statefulset.mixin.spec.template.spec.withServiceAccount(self.name) +
       $.util.podPriority('critical')
-  },
-
- prometheus_replica:: $.prometheus {
-    replica:: error 'replica must be set',
-    name: 'prometheus-%s' % self.replica,
-
-    local _replica = self.replica,
-
-    prometheus_config+: {
-      global+: {
-        scrape_interval: $._config.scrape_interval,
-        external_labels+: {
-          __replica__: _replica,
-        },
-      },
-
-      alerting+: {
-        alert_relabel_configs+: [
-          {
-            regex: '__replica__',
-            action: 'labeldrop',
-          },
-        ],
-      },
-    },
-
-    // We don't want the pods to be labeled name:prometheus-one etc.
-    local statefulset = $.apps.v1beta1.statefulSet,
-    local labels = { name: 'prometheus', replica: _replica },
-    prometheus_statefulset+:
-      statefulset.mixin.spec.selector.withMatchLabels(labels) +
-      statefulset.mixin.spec.template.metadata.withLabels(labels),
-  },
-
-  prometheus_one: $.prometheus_replica {
-    replica: 'one',
-    prometheus_config+: {
-      remote_write+: $._config.remote_write_both,
-    },
-
-    local service = $.core.v1.service,
-    local port = service.mixin.spec.portsType,
-
-    prometheus_service:
-      service.new(
-        'prometheus',
-        { name: 'prometheus', replica: 'one' },
-        port.newNamed('prometheus-http-metrics', 80, 80)
-      ) +
-      service.mixin.metadata.withLabels({ name: 'prometheus' }),
-  },
-
-  prometheus_two: $.prometheus_replica {
-    replica: 'two',
-    prometheus_config+: {
-      remote_write+:
-        if $._config.replicas_remote_write
-        then $._config.remote_write_dev
-        else [],
-    },
   },
 }
