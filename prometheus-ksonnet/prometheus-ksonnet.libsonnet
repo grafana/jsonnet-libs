@@ -13,12 +13,17 @@
 (import 'node-mixin/mixin.libsonnet') +
 (import 'lib/config.libsonnet') +
 {
-  // Delete obsolete node-related dashboards from the k8s mixin.
+  // Mark obsolete node-related dashboards from the k8s mixin as
+  // hidden.
   // Once we can use the current version of the k8s mixin, those
   // overrides can be removed.
+  // (Note: In jsonnet, you cannot easily remove a field from
+  // a tuple. Marking it as hidden is a hack suggested by
+  // @sparkprime himself. See https://github.com/google/jsonnet/issues/312
+  // for details.)
   grafanaDashboards+:: {
-    'k8s-cluster-rsrc-use.json': null,
-    'k8s-node-rsrc-use.json': null,
-    'k8s-multicluster-rsrc-use.json': null,
+    'k8s-cluster-rsrc-use.json':: super['k8s-cluster-rsrc-use.json'],
+    'k8s-node-rsrc-use.json':: super['k8s-node-rsrc-use.json'],
+    'k8s-multicluster-rsrc-use.json':: super['k8s-multicluster-rsrc-use.json'],
   },
 }
