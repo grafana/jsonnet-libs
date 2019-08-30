@@ -11,14 +11,14 @@
 (import 'prometheus-mixin/mixin.libsonnet') +
 (import 'alertmanager-mixin/mixin.libsonnet') +
 (import 'node-mixin/mixin.libsonnet') +
-(import 'lib/config.libsonnet')
-
+(import 'lib/config.libsonnet') +
 {
   // Delete obsolete node-related dashboards from the k8s mixin.
   // Once we can use the current version of the k8s mixin, those
   // overrides can be removed.
-  grafanaDashboards+: {
+  grafanaDashboards+:: {
     'k8s-cluster-rsrc-use.json': null,
     'k8s-node-rsrc-use.json': null,
+    'k8s-multicluster-rsrc-use.json': null,
   },
 }
