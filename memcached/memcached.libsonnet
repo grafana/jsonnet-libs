@@ -24,6 +24,7 @@ k {
     memory_limit_mb:: 1024,
     overprovision_factor:: 1.2,
     cpu_limits:: '3',
+    connection_limit:: 1024,
     memory_request_bytes::
       std.ceil((self.memory_limit_mb * self.overprovision_factor) + 100) * 1024 * 1024,
     memory_limits_bytes::
@@ -38,6 +39,7 @@ k {
       container.withArgs([
         '-m %(memory_limit_mb)s' % self,
         '-I %(max_item_size)s' % self,
+        '-c %(connection_limit)s' % self,
         '-v',
       ]) +
       $.util.resourcesRequests('500m', $.util.bytesToK8sQuantity(self.memory_request_bytes)) +
