@@ -55,7 +55,7 @@
     alertmanagerSelector: 'job="default/alertmanager"',
 
     // Node mixin overrides.
-    nodeCriticalSeverity: 'warning', // Do not page if nodes run out of disk space.
+    nodeCriticalSeverity: 'warning',  // Do not page if nodes run out of disk space.
 
     // oauth2-proxy
     oauth_enabled: false,
