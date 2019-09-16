@@ -51,19 +51,20 @@ k {
         '--web.listen-address=0.0.0.0:9150',
       ]),
 
-    local deployment = $.apps.v1beta1.deployment,
+    local statefulSet = $.apps.v1beta1.statefulSet,
 
-    deployment:
-      deployment.new(self.name, $._config.memcached_replicas, [
+    statefulSet:
+      statefulSet.new(self.name, $._config.memcached_replicas, [
         self.memcached_container,
         self.memcached_exporter,
-      ]) +
+      ], []) +
+      statefulSet.mixin.spec.withServiceName(self.name) +
       $.util.antiAffinity,
 
     local service = $.core.v1.service,
 
     service:
-      $.util.serviceFor(self.deployment) +
+      $.util.serviceFor(self.statefulSet) +
       service.mixin.spec.withClusterIp('None'),
   },
 }
