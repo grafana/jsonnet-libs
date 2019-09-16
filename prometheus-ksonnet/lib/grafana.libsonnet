@@ -44,13 +44,13 @@
 
   dashboards_config_maps: {
     ['dashboard-%d' % shard]:
-        configMap.new('dashboards-%d' % shard) +
-        configMap.withDataMixin({
-          [name]: std.toString($.grafanaDashboards[name])
-          for name in std.objectFields($.grafanaDashboards)
-          if std.codepoint(std.md5(name)[1]) % $._config.dashboard_config_maps == shard
-        }),
-    for shard in std.range(0, $._config.dashboard_config_maps-1)
+      configMap.new('dashboards-%d' % shard) +
+      configMap.withDataMixin({
+        [name]: std.toString($.grafanaDashboards[name])
+        for name in std.objectFields($.grafanaDashboards)
+        if std.codepoint(std.md5(name)[1]) % $._config.dashboard_config_maps == shard
+      })
+    for shard in std.range(0, $._config.dashboard_config_maps - 1)
   },
 
   grafana_dashboard_provisioning_config_map:
@@ -183,9 +183,10 @@
           function(m, acc) m + acc,
           [
             $.util.configVolumeMount('dashboards-%d' % shard, '/grafana/dashboards/%d' % shard)
-            for shard in std.range(0, $._config.dashboard_config_maps-1)
+            for shard in std.range(0, $._config.dashboard_config_maps - 1)
           ],
-          {})
+          {}
+        )
     ) +
     $.util.podPriority('critical'),
 

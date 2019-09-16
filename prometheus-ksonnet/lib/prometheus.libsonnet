@@ -106,6 +106,6 @@
       }) +
       statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
       statefulset.mixin.spec.template.spec.withServiceAccount(self.name) +
-      $.util.podPriority('critical')
+      $.util.podPriority('critical'),
   },
 }
