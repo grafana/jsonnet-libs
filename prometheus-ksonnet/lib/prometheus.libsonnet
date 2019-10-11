@@ -107,5 +107,8 @@
       statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
       statefulset.mixin.spec.template.spec.withServiceAccount(self.name) +
       $.util.podPriority('critical'),
+
+    prometheus_service:
+      $.util.serviceFor(self.prometheus_statefulset),
   },
 }
