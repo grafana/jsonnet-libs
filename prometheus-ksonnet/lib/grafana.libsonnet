@@ -13,7 +13,7 @@
         reporting_enabled: false,
       },
       users: {
-        default_theme: 'light',
+        default_theme: 'dark',
       },
       explore+: {
         enabled: true,
