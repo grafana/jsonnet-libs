@@ -10,30 +10,46 @@
     ],
 
     alerting: {
-      alertmanagers: [{
-        api_version: 'v2',
-        kubernetes_sd_configs: [{
-          role: 'pod',
-        }],
-        path_prefix: $._config.alertmanager_path,
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
-        relabel_configs: [{
-          source_labels: ['__meta_kubernetes_pod_label_name'],
-          regex: 'alertmanager',
-          action: 'keep',
-        }, {
-          source_labels: ['__meta_kubernetes_namespace'],
-          regex: $._config.namespace,
-          action: 'keep',
-        }, {
-          source_labels: ['__meta_kubernetes_pod_container_port_number'],
-          regex: null,
-          action: 'drop',
-        }],
-      }],
+      alertmanagers: std.prune(
+        [
+          // For local alertmanager or local instances of the global alertmanager, use K8s SD.
+          if !$._config.alertmanager_cluster_self.global || $._config.alertmanager_cluster_self.replicas > 0 then
+            {
+              api_version: 'v2',
+              kubernetes_sd_configs: [{
+                role: 'pod',
+              }],
+              path_prefix: $._config.alertmanager_path,
+              tls_config: {
+                ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+              },
+              bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+              relabel_configs: [{
+                source_labels: ['__meta_kubernetes_pod_label_name'],
+                regex: 'alertmanager',
+                action: 'keep',
+              }, {
+                source_labels: ['__meta_kubernetes_namespace'],
+                regex: $._config.namespace,
+                action: 'keep',
+              }, {
+                source_labels: ['__meta_kubernetes_pod_container_port_number'],
+                regex: '',
+                action: 'drop',
+              }],
+            },
+        ] + if $._config.alertmanager_cluster_self.global then [{
+          // For non-local instances, use DNS-SRV SD.
+          api_version: 'v2',
+          path_prefix: $._config.alertmanager_path,
+          dns_sd_configs: [{ names: [
+            'alertmanager-http-metrics.tcp.alertmanager.%s.svc.%s.%s' % [$._config.namespace, cluster, $._config.cluster_dns_tld]
+            for cluster in std.objectFields($._config.alertmanager_clusters)
+            if $._config.cluster_name != cluster && $._config.alertmanager_clusters[cluster].global && $._config.alertmanager_clusters[cluster].replicas > 1
+          ] }],
+        }]
+        else [],
+      ),
     },
 
     scrape_configs: [
