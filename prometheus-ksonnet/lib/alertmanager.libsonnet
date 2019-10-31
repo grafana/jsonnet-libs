@@ -12,7 +12,7 @@
     ]
   else if isGossiping then
     [
-      'alertmanager-%d.alertmanager.%s.svc.%s:%s' % [i, $._config.namespace, $._config.cluster_dns_suffix, $._config.alertmanager_gossip_port]
+      'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [i, $._config.namespace, cluster, $._config.cluster_dns_tld, $._config.alertmanager_gossip_port]
       for i in std.range(0, replicas - 1)
     ]
   else [],
