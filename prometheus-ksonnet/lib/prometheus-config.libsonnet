@@ -33,9 +33,10 @@
                 regex: $._config.namespace,
                 action: 'keep',
               }, {
+	        // This prevents port-less containers and the gossip ports from showing up.
                 source_labels: ['__meta_kubernetes_pod_container_port_number'],
-                regex: '',
-                action: 'drop',
+                regex: $._config.alertmanager_port,
+                action: 'keep',
               }],
             },
         ] + if $._config.alertmanager_cluster_self.global then [{
