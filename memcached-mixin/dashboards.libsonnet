@@ -104,7 +104,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
               options: [],
               query: 'query_result(max by (owner_name) (kube_pod_container_info{image=~".*memcached.*"} * on(cluster, namespace, pod) group_left(owner_name) kube_pod_owner))',
               refresh: 1,
-              regex: '/owner_name=\\"(.*?)(?:-([a-z0-9]+))?\\"/',
+              regex: '/owner_name=\\"(.*?)\\"/',
               sort: 2,
               tagValuesQuery: '',
               tags: [],
