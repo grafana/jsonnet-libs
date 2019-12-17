@@ -25,11 +25,11 @@ k {
       containerPort:: $.core.v1.container.portsType {
         // Force all ports to have names.
         new(name, port)::
-          super.newNamed(name, port),
+          super.newNamed(name=name, containerPort=port),
 
         // Shortcut constructor for UDP ports.
         newUDP(name, port)::
-          super.newNamed(name, port) +
+          super.newNamed(name=name, containerPort=port) +
           super.withProtocol('UDP'),
       },
 
@@ -143,7 +143,8 @@ k {
 
     deployment+: {
       new(name, replicas, containers, podLabels={})::
-        super.new(name, replicas, containers, podLabels { name: name }) +
+        local labels = podLabels {name: name};
+        super.new(name, replicas, containers, labels) +
 
         // We want to specify a minReadySeconds on every deployment, so we get some
         // very basic canarying, for instance, with bad arguments.
@@ -151,7 +152,10 @@ k {
 
         // We want to add a sensible default for the number of old deployments
         // handing around.
-        super.mixin.spec.withRevisionHistoryLimit(10),
+        super.mixin.spec.withRevisionHistoryLimit(10) +
+
+        // required matchLabels selector
+        super.mixin.spec.selector.withMatchLabels(labels),
     },
 
     statefulSet+: {
@@ -175,6 +179,7 @@ k {
 
   apps+: {
     v1beta1+: appsExtentions,
+    v1+: appsExtentions,
   },
 
   rbac+: {
