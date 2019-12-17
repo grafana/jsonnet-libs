@@ -160,16 +160,8 @@ k {
 
     statefulSet+: {
       new(name, replicas, containers, volumeClaims, podLabels={})::
-        { kind: 'StatefulSet'} + 
-        { apiVersion: 'apps/v1beta1' } + 
-        self.mixin.metadata.withName(name) + 
-        self.mixin.spec.withReplicas(replicas) + 
-        self.mixin.spec.template.spec.withContainers(containers) + 
-        self.mixin.spec.template.metadata.withLabels(podLabels { name: name }) +
-        (if std.length(volumeClaims)>0
-        then self.mixin.spec.withVolumeClaimTemplates(volumeClaims)
-        else {}) +
-        super.mixin.spec.updateStrategy.withType('RollingUpdate'),
+        super.new(name, replicas,containers,volumeClaims,podLabels {name: name}) +
+      super.mixin.spec.updateStrategy.withType('RollingUpdate'),
     },
   },
 
