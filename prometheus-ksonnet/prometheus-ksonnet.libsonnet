@@ -2,6 +2,7 @@
 (import 'images.libsonnet') +
 (import 'lib/alertmanager.libsonnet') +
 (import 'lib/grafana.libsonnet') +
+(import 'lib/grafana-configmaps.libsonnet') +
 (import 'lib/kube-state-metrics.libsonnet') +
 (import 'lib/nginx.libsonnet') +
 (import 'lib/node-exporter.libsonnet') +
