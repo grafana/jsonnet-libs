@@ -15,7 +15,7 @@
         [name]: std.toString($.grafanaDashboards[name])
         for name in std.objectFields($.grafanaDashboards)
       }) +
-      configMap.mixin.metadata.withLabels($._config.grafana_config_maps_labels),
+      configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels),
 
   dashboards_config_maps: {
     ['dashboard-%d' % shard]:
@@ -25,7 +25,7 @@
         for name in std.objectFields($.grafanaDashboards)
         if std.codepoint(std.md5(name)[1]) % $._config.dashboard_config_maps == shard
       }) +
-      configMap.mixin.metadata.withLabels($._config.grafana_config_maps_labels)
+      configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels)
     for shard in std.range(0, $._config.dashboard_config_maps - 1)
   },
 
@@ -103,7 +103,8 @@
     configMap.withDataMixin({
       [name]: std.toString($.grafanaNotificationChannels[name])
       for name in std.objectFields($.grafanaNotificationChannels)
-    }),
+    }) +
+    configMap.mixin.metadata.withLabels($._config.grafana_notification_channel_labels),
 
   grafana_plugins+:: [],
 }

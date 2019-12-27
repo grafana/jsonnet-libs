@@ -112,6 +112,7 @@
     dashboard_config_maps: 0,
 
     // Optionally add labels to grafana config maps.
-    grafana_config_maps_labels: {},
+    grafana_dashboard_labels: {},
+    grafana_notification_channel_labels: {},
   },
 }
