@@ -46,8 +46,7 @@
       }),
     }),
 
-  grafana_datasource_config_map:
-    configMap.new('grafana-datasources') +
+  grafanaDatasources+::
     $.grafana_add_datasource('prometheus',
                              'http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s%(prometheus_web_route_prefix)s' % $._config,
                              default=true),

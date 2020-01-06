@@ -29,6 +29,8 @@
     for shard in std.range(0, $._config.dashboard_config_maps - 1)
   },
 
+  grafanaDatasources+:: {},
+
   grafana_add_datasource(name, url, default=false, method='GET')::
     configMap.withDataMixin({
       ['%s.yml' % name]: $.util.manifestYaml({
@@ -69,6 +71,14 @@
         }],
       }),
     }),
+
+  grafana_datasource_config_map:
+    configMap.new('grafana-datasources') +
+    configMap.withDataMixin({
+      [name]: std.toString($.grafanaDatasources[name])
+      for name in std.objectFields($.grafanaDatasources)
+    }) +
+    configMap.mixin.metadata.withLabels($._config.grafana_datasource_labels),
 
   grafanaNotificationChannels+:: {},
 

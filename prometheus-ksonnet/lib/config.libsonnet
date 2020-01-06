@@ -113,6 +113,7 @@
 
     // Optionally add labels to grafana config maps.
     grafana_dashboard_labels: {},
+    grafana_datasource_labels: {},
     grafana_notification_channel_labels: {},
   },
 }
