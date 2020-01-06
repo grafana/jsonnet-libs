@@ -50,7 +50,7 @@
       container.new('prometheus', $._images.prometheus) +
       container.withPorts($.core.v1.containerPort.new('http-metrics', 80)) +
       container.withArgs([
-        '--config.file=/etc/prometheus/prometheus.yml',
+        '--config.file=%(prometheus_config_dir)s/prometheus.yml' % _config,
         '--web.listen-address=:%s' % _config.prometheus_port,
         '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
         '--web.enable-lifecycle',
@@ -68,7 +68,7 @@
       container.withArgs([
         '-v',
         '-t',
-        '-p=/etc/prometheus',
+        '-p=%(prometheus_config_dir)s' % _config,
         'curl',
         '-X',
         'POST',

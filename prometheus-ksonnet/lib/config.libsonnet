@@ -38,6 +38,7 @@
     prometheus_path: '/prometheus/',
     prometheus_port: 80,
     prometheus_web_route_prefix: $._config.prometheus_path,
+    prometheus_config_dir: '/etc/prometheus',
 
     // Alertmanager config options.
     alertmanager_external_hostname: 'http://alertmanager.%(namespace)s.svc.%(cluster_dns_suffix)s' % self,
