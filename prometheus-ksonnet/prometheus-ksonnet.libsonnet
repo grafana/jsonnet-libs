@@ -8,6 +8,7 @@
 (import 'lib/node-exporter.libsonnet') +
 (import 'lib/prometheus.libsonnet') +
 (import 'lib/prometheus-config.libsonnet') +
+(import 'lib/prometheus-configmap.libsonnet') +
 (import 'kubernetes-mixin/mixin.libsonnet') +
 (import 'prometheus-mixin/mixin.libsonnet') +
 (import 'alertmanager-mixin/mixin.libsonnet') +
