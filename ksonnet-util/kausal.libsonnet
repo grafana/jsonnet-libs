@@ -166,7 +166,7 @@ k {
         // remove volumeClaimTemplates if empty (otherwise it will create a diff all the time)
         (if std.length(volumeClaims) == 0 then {
           spec+: {volumeClaimTemplates:: {}}
-        })
+        } else {})
     },
   },
 
