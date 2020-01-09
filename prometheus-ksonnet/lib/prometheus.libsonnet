@@ -1,6 +1,6 @@
 {
-  prometheus:: {
-    name:: error 'must specify name',
+  prometheus: {
+    name:: 'prometheus',
 
     _config:: $._config,
 
