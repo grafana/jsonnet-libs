@@ -143,7 +143,7 @@ k {
 
     deployment+: {
       new(name, replicas, containers, podLabels={})::
-        local labels = podLabels {name: name};
+        local labels = podLabels { name: name };
         super.new(name, replicas, containers, labels) +
 
         // We want to specify a minReadySeconds on every deployment, so we get some
@@ -160,13 +160,13 @@ k {
 
     statefulSet+: {
       new(name, replicas, containers, volumeClaims, podLabels={})::
-        super.new(name, replicas,containers,volumeClaims,podLabels {name: name}) +
+        super.new(name, replicas, containers, volumeClaims, podLabels { name: name }) +
         super.mixin.spec.updateStrategy.withType('RollingUpdate') +
 
         // remove volumeClaimTemplates if empty (otherwise it will create a diff all the time)
         (if std.length(volumeClaims) == 0 then {
-          spec+: {volumeClaimTemplates:: {}}
-        } else {})
+           spec+: { volumeClaimTemplates:: {} },
+         } else {}),
     },
   },
 
@@ -215,7 +215,7 @@ k {
     ],
 
     // serviceFor create service for a given deployment.
-    serviceFor(deployment)::
+    serviceFor(deployment, ignored_labels=[])::
       local container = $.core.v1.container;
       local service = $.core.v1.service;
       local servicePort = service.mixin.spec.portsType;
@@ -227,9 +227,14 @@ k {
         for c in deployment.spec.template.spec.containers
         for port in (c + container.withPortsMixin([])).ports
       ];
+      local labels = {
+        [x]: deployment.spec.template.metadata.labels[x]
+        for x in std.objectFields(deployment.spec.template.metadata.labels)
+        if std.count(ignored_labels, x) == 0
+      };
       service.new(
         deployment.metadata.name,  // name
-        deployment.spec.template.metadata.labels,  // selector
+        labels,  // selector
         ports,
       ) +
       service.mixin.metadata.withLabels({ name: deployment.metadata.name }),
