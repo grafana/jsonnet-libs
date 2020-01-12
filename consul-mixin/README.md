@@ -10,7 +10,7 @@ To install this mixin, use [ksonnet](https://ksonnet.io/):
 
 ```sh
 $ go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-$ jb install https://github.com/kausalco/public/consul-mixin
+$ jb install github.com/kausalco/public/consul-mixin
 ```
 
 Then to use, in your environment's `main.jsonnet` file:
