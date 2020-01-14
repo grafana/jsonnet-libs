@@ -294,7 +294,7 @@
         relabel_configs: [
           {
             target_label: '__address__',
-            replacement: 'kubernetes.default.svc:443',
+            replacement: $._config.prometheus_api_server_address,
           },
           {
             source_labels: ['__meta_kubernetes_node_name'],
