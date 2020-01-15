@@ -1,5 +1,5 @@
 {
-  local podAntiAffinity = $.apps.v1beta1.deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
+  local podAntiAffinity = $.apps.v1.deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
 
   etcd_cluster(name, size=3, version='3.3.13', env=[]):: {
     apiVersion: 'etcd.database.coreos.com/v1beta2',

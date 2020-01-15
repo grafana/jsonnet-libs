@@ -111,7 +111,7 @@
     pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
     pvc.mixin.spec.resources.withRequests({ storage: '5Gi' }),
 
-  local statefulset = $.apps.v1beta1.statefulSet,
+  local statefulset = $.apps.v1.statefulSet,
 
   // Do not create statefulset in clusters without any alertmanagers.
   alertmanager_statefulset: if replicas > 0 then

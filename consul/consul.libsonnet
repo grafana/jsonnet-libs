@@ -294,7 +294,7 @@ k {
     ]) +
     container.withPorts(containerPort.new('http-metrics', 9107)),
 
-  local deployment = $.apps.v1beta1.deployment,
+  local deployment = $.apps.v1.deployment,
 
   consul_deployment:
     deployment.new('consul', $._config.consul_replicas, [

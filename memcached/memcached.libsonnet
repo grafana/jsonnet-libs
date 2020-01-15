@@ -53,7 +53,7 @@ k {
         '--web.listen-address=0.0.0.0:9150',
       ]),
 
-    local statefulSet = $.apps.v1beta1.statefulSet,
+    local statefulSet = $.apps.v1.statefulSet,
 
     statefulSet:
       statefulSet.new(self.name, $._config.memcached_replicas, [

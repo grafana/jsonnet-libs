@@ -42,7 +42,7 @@
     $.util.resourcesRequests('500m', '200Mi') +
     $.util.resourcesLimits('1', '500Mi'),
 
-  local deployment = $.apps.v1beta1.deployment,
+  local deployment = $.apps.v1.deployment,
 
   operator_deployment:
     deployment.new('etcd-operator', 1, [$.operator_container]) +
