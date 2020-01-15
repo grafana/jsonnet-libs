@@ -154,6 +154,8 @@
       for name in std.objectFields($.grafanaNotificationChannels)
     }),
 
+  grafana_plugins+:: [],
+
   local container = $.core.v1.container,
 
   grafana_container::
@@ -161,6 +163,7 @@
     container.withPorts($.core.v1.containerPort.new('grafana', 80)) +
     container.withEnv([
       container.envType.new('GF_PATHS_CONFIG', '/etc/grafana-config/grafana.ini'),
+      container.envType.new('GF_INSTALL_PLUGINS', std.join(',', $.grafana_plugins)),
     ])+
     $.util.resourcesRequests('10m', '40Mi'),
 
