@@ -159,11 +159,9 @@
   grafana_container::
     container.new('grafana', $._images.grafana) +
     container.withPorts($.core.v1.containerPort.new('grafana', 80)) +
-    container.withCommand([
-      '/usr/share/grafana/bin/grafana-server',
-      '--homepath=/usr/share/grafana',
-      '--config=/etc/grafana-config/grafana.ini',
-    ]) +
+    container.withEnv([
+      container.envType.new('GF_PATHS_CONFIG', '/etc/grafana-config/grafana.ini'),
+    ])+
     $.util.resourcesRequests('10m', '40Mi'),
 
   local deployment = $.apps.v1beta1.deployment,
