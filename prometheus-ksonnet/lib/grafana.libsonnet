@@ -161,10 +161,10 @@
   grafana_container::
     container.new('grafana', $._images.grafana) +
     container.withPorts($.core.v1.containerPort.new('grafana', 80)) +
-    container.withEnv([
-      container.envType.new('GF_PATHS_CONFIG', '/etc/grafana-config/grafana.ini'),
-      container.envType.new('GF_INSTALL_PLUGINS', std.join(',', $.grafana_plugins)),
-    ])+
+    container.withEnvMap({
+      'GF_PATHS_CONFIG': '/etc/grafana-config/grafana.ini',
+      'GF_INSTALL_PLUGINS': std.join(',', $.grafana_plugins),
+    }) +
     $.util.resourcesRequests('10m', '40Mi'),
 
   local deployment = $.apps.v1beta1.deployment,
