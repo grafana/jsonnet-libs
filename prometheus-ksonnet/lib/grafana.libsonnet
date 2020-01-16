@@ -167,7 +167,7 @@
     }) +
     $.util.resourcesRequests('10m', '40Mi'),
 
-  local deployment = $.apps.v1beta1.deployment,
+  local deployment = $.apps.v1.deployment,
 
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container]) +

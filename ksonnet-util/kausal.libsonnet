@@ -59,7 +59,7 @@ k {
         new():: {},
       },
 
-      container:: $.extensions.v1beta1.deployment.mixin.spec.template.spec.containersType {
+      container:: $.apps.v1.deployment.mixin.spec.template.spec.containersType {
         new(name, image)::
           super.new(name, image) +
           super.withImagePullPolicy('IfNotPresent'),
@@ -89,7 +89,7 @@ k {
           ]),
       },
 
-      toleration:: $.extensions.v1beta1.deployment.mixin.spec.template.spec.tolerationsType,
+      toleration:: $.apps.v1.deployment.mixin.spec.template.spec.tolerationsType,
 
       servicePort:: $.core.v1.service.mixin.spec.portsType,
     },
@@ -311,7 +311,7 @@ k {
     // a subpath mixin.
     configVolumeMount(name, path, volumeMountMixin={})::
       local container = $.core.v1.container,
-            deployment = $.extensions.v1beta1.deployment,
+            deployment = $.apps.v1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
@@ -331,7 +331,7 @@ k {
       local name = configMap.metadata.name,
             hash = std.md5(std.toString(configMap)),
             container = $.core.v1.container,
-            deployment = $.extensions.v1beta1.deployment,
+            deployment = $.apps.v1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
@@ -349,7 +349,7 @@ k {
 
     hostVolumeMount(name, hostPath, path, readOnly=false, volumeMountMixin={})::
       local container = $.core.v1.container,
-            deployment = $.extensions.v1beta1.deployment,
+            deployment = $.apps.v1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
@@ -364,7 +364,7 @@ k {
 
     secretVolumeMount(name, path, defaultMode=256, volumeMountMixin={})::
       local container = $.core.v1.container,
-            deployment = $.extensions.v1beta1.deployment,
+            deployment = $.apps.v1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
@@ -380,7 +380,7 @@ k {
 
     emptyVolumeMount(name, path, volumeMountMixin={}, volumeMixin={})::
       local container = $.core.v1.container,
-            deployment = $.extensions.v1beta1.deployment,
+            deployment = $.apps.v1.deployment,
             volumeMount = $.core.v1.volumeMount,
             volume = $.core.v1.volume,
             addMount(c) = c + container.withVolumeMountsMixin(
@@ -420,7 +420,7 @@ k {
 
     antiAffinity:
       {
-        local deployment = $.apps.v1beta1.deployment,
+        local deployment = $.apps.v1.deployment,
         local podAntiAffinity = deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
         local name = super.spec.template.metadata.labels.name,
 
@@ -434,7 +434,7 @@ k {
     // Add a priority to the pods in a deployment (or deployment-like objects
     // such as a statefulset) iff _config.enable_pod_priorities is set to true.
     podPriority(p):
-      local deployment = $.apps.v1beta1.deployment;
+      local deployment = $.apps.v1.deployment;
       if $._config.enable_pod_priorities
       then deployment.mixin.spec.template.spec.withPriorityClassName(p)
       else {},

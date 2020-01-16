@@ -42,7 +42,7 @@ k {
       envFrom.mixin.secretRef.withName('oauth2-proxy'),
     ),
 
-  local deployment = $.apps.v1beta1.deployment,
+  local deployment = $.apps.v1.deployment,
 
   oauth2_proxy_deployment:
     deployment.new('oauth2-proxy', 1, [$.oauth2_proxy_container]),

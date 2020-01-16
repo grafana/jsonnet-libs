@@ -105,7 +105,7 @@
     container.withPorts($.core.v1.containerPort.new('http', 80)) +
     $.util.resourcesRequests('50m', '100Mi'),
 
-  local deployment = $.apps.v1beta1.deployment,
+  local deployment = $.apps.v1.deployment,
 
   nginx_deployment:
     deployment.new('nginx', 1, [$.nginx_container]) +

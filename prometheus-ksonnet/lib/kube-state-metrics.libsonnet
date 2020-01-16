@@ -89,7 +89,7 @@
     $.util.resourcesRequests('50m', '50Mi') +
     $.util.resourcesLimits('250m', '150Mi'),
 
-  local deployment = $.apps.v1beta1.deployment,
+  local deployment = $.apps.v1.deployment,
 
   kube_state_metrics_deployment:
     deployment.new('kube-state-metrics', 1, [
