@@ -122,9 +122,11 @@ k {
   local appsExtentions = {
     daemonSet+: {
       new(name, containers)::
+        local labels = {name: name};
+
         super.new() +
         super.mixin.metadata.withName(name) +
-        super.mixin.spec.template.metadata.withLabels({ name: name }) +
+        super.mixin.spec.template.metadata.withLabels(labels) +
         super.mixin.spec.template.spec.withContainers(containers) +
 
         // Can't think of a reason we wouldn't want a DaemonSet to run on
@@ -138,12 +140,16 @@ k {
         // We want to specify a minReadySeconds on every deamonset, so we get some
         // very basic canarying, for instance, with bad arguments.
         super.mixin.spec.withMinReadySeconds(10) +
-        super.mixin.spec.updateStrategy.withType('RollingUpdate'),
+        super.mixin.spec.updateStrategy.withType('RollingUpdate') +
+
+        // apps.v1 requires an explicit selector:
+        super.mixin.spec.selector.withMatchLabels(labels),
     },
 
     deployment+: {
       new(name, replicas, containers, podLabels={})::
         local labels = podLabels { name: name };
+
         super.new(name, replicas, containers, labels) +
 
         // We want to specify a minReadySeconds on every deployment, so we get some
@@ -154,14 +160,19 @@ k {
         // handing around.
         super.mixin.spec.withRevisionHistoryLimit(10) +
 
-        // required matchLabels selector
+        // apps.v1 requires an explicit selector:
         super.mixin.spec.selector.withMatchLabels(labels),
     },
 
     statefulSet+: {
       new(name, replicas, containers, volumeClaims, podLabels={})::
-        super.new(name, replicas, containers, volumeClaims, podLabels { name: name }) +
+        local labels = podLabels { name: name };
+
+        super.new(name, replicas, containers, volumeClaims, labels) +
         super.mixin.spec.updateStrategy.withType('RollingUpdate') +
+
+        // apps.v1 requires an explicit selector:
+        super.mixin.spec.selector.withMatchLabels(labels) +
 
         // remove volumeClaimTemplates if empty (otherwise it will create a diff all the time)
         (if std.length(volumeClaims) == 0 then {
