@@ -33,8 +33,8 @@
     to add datasources:
 
     grafanaDatasources+:: {
-      'my-datasource': $.grafana_datasource(name, url, default, method),
-      'secure-datasource': $.grafana_datasource_with_basicauth(name, url, username, password, default, method),
+      'my-datasource.yml': $.grafana_datasource(name, url, default, method),
+      'secure-datasource.yml': $.grafana_datasource_with_basicauth(name, url, username, password, default, method),
     },
   */
   grafanaDatasources+:: {},
