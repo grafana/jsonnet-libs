@@ -231,7 +231,7 @@ k {
       local service = $.core.v1.service;
       local servicePort = service.mixin.spec.portsType;
       local ports = [
-        servicePort.newNamed(c.name + '-' + port.name, port.containerPort, port.containerPort) +
+        servicePort.newNamed(port.name + '-' + c.name, port.containerPort, port.containerPort) +
         if std.objectHas(port, 'protocol')
         then servicePort.withProtocol(port.protocol)
         else {}
