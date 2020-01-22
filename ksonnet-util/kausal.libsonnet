@@ -226,14 +226,18 @@ k {
     ],
 
     // serviceFor create service for a given deployment.
-    serviceFor(deployment, ignored_labels=[])::
+    serviceFor(deployment, ignored_labels=[], nameFormat="%(container)s-%(port)s")::
       local container = $.core.v1.container;
       local service = $.core.v1.service;
       local servicePort = service.mixin.spec.portsType;
       local ports = [
-        servicePort.newNamed(c.name + '-' + port.name, port.containerPort, port.containerPort) +
+        servicePort.newNamed(
+          name=(nameFormat % {container: c.name, port: port.name}),
+          port=port.containerPort,
+          targetPort=port.containerPort
+        ) +
         if std.objectHas(port, 'protocol')
-        then servicePort.withProtocol(port.protocol)
+          then servicePort.withProtocol(port.protocol)
         else {}
         for c in deployment.spec.template.spec.containers
         for port in (c + container.withPortsMixin([])).ports
@@ -243,6 +247,7 @@ k {
         for x in std.objectFields(deployment.spec.template.metadata.labels)
         if std.count(ignored_labels, x) == 0
       };
+
       service.new(
         deployment.metadata.name,  // name
         labels,  // selector
