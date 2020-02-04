@@ -194,26 +194,7 @@ k {
     v1beta1+: {
       // Shortcut to access the hidden types.
       policyRule:: $.rbac.v1beta1.clusterRole.rulesType,
-
-      subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType {
-        withKind(kind):: self + { kind: kind },
-      },
-
-      roleBinding+: {
-        mixin+: {
-          roleRef+: {
-            withKind(kind):: self.mixinInstance({ kind: kind }),
-          },
-        },
-      },
-
-      clusterRoleBinding+: {
-        mixin+: {
-          roleRef+: {
-            withKind(kind):: self.mixinInstance({ kind: kind }),
-          },
-        },
-      },
+      subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType,
     },
   },
 
