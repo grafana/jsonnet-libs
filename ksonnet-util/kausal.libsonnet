@@ -234,7 +234,11 @@ k {
         labels,  // selector
         ports,
       ) +
-      service.mixin.metadata.withLabels({ name: deployment.metadata.name }),
+      service.mixin.metadata.withLabels({ name: deployment.metadata.name }) + (
+        if 'namespace' in deployment.metadata then
+          service.mixin.metadata.withNamespace(deployment.metadata.namespace)
+        else {}
+      ),
 
     // rbac creates a service account, role and role binding with the given
     // name and rules.
