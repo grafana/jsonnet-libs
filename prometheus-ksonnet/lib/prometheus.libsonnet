@@ -39,6 +39,7 @@
         '--config.file=/etc/prometheus/prometheus.yml',
         '--web.listen-address=:%s' % _config.prometheus_port,
         '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
+        '--web.enable-admin-api',
         '--web.enable-lifecycle',
         '--web.route-prefix=%s' % _config.prometheus_web_route_prefix,
         '--storage.tsdb.path=/prometheus/data',
