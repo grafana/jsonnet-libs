@@ -1,0 +1,4 @@
+{
+  service:
+    $.util.serviceFor($.deployment),
+}
