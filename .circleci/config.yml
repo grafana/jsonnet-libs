@@ -2,8 +2,7 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: kausal/public-build:42aa130
-  working_directory: /go/src/github.com/kausalco/public
+    - image: grafana/jsonnet-build:1022b37
 
 workflows:
   version: 2

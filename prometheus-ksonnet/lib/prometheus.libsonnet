@@ -99,5 +99,5 @@
       $.util.serviceFor(self.prometheus_statefulset),
   },
 
-  main_prometheus: $.prometheus {name: "prometheus"},
+  main_prometheus: $.prometheus { name: 'prometheus' },
 }
