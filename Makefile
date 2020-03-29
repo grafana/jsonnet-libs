@@ -13,3 +13,7 @@ lint:
 				fi; \
 		done; \
 		exit $$RESULT
+
+dashboards:
+		scripts/dashboard-gen.sh
+		@git diff --exit-code -- .
