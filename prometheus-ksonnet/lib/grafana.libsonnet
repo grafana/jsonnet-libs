@@ -43,7 +43,7 @@
             options: {
               path: '/grafana/dashboards',
             },
-          }
+          },
         ] + [
           {
             name: 'dashboards-%s' % std.asciiLower(folder),
