@@ -5,6 +5,7 @@
   dashboards+:: {},
   grafana_dashboards+:: {},
   grafanaDashboards+:: $.dashboards + $.grafana_dashboards,
+  dashboardsByFolder+:: {},
 
   dashboards_config_map:
     if $._config.dashboard_config_maps > 0
@@ -27,6 +28,17 @@
       }) +
       configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels)
     for shard in std.range(0, $._config.dashboard_config_maps - 1)
+  },
+
+  dashboard_folders_config_maps: {
+    ['dashboard-%s' % std.asciiLower(folder)]:
+      configMap.new('dashboards-%s' % std.asciiLower(folder)) +
+      configMap.withDataMixin({
+        [name]: std.toString($.dashboardsByFolder[folder][name])
+        for name in std.objectFields($.dashboardsByFolder[folder])
+      }) +
+      configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels)
+    for folder in std.objectFields($.dashboardsByFolder)
   },
 
   /*

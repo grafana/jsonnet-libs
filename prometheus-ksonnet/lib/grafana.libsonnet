@@ -32,17 +32,32 @@
     configMap.withData({
       'dashboards.yml': $.util.manifestYaml({
         apiVersion: 1,
-        providers: [{
-          name: 'dashboards',
-          orgId: 1,
-          folder: '',
-          type: 'file',
-          disableDeletion: true,
-          editable: false,
-          options: {
-            path: '/grafana/dashboards',
-          },
-        }],
+        providers: [
+          {
+            name: 'dashboards',
+            orgId: 1,
+            folder: '',
+            type: 'file',
+            disableDeletion: true,
+            editable: false,
+            options: {
+              path: '/grafana/dashboards',
+            },
+          }
+        ] + [
+          {
+            name: 'dashboards-%s' % std.asciiLower(folder),
+            orgId: 1,
+            folder: folder,
+            type: 'file',
+            disableDeletion: true,
+            editable: false,
+            options: {
+              path: '/grafana/dashboard-folders/%s' % std.asciiLower(folder),
+            },
+          }
+          for folder in std.objectFields($.dashboardsByFolder)
+        ],
       }),
     }),
 
@@ -84,6 +99,16 @@
           ],
           {}
         )
+    ) + (
+      // Add config map mounts for each folder for dashboards.
+      std.foldr(
+        function(m, acc) m + acc,
+        [
+          $.util.configVolumeMount('dashboards-%s' % std.asciiLower(folder), '/grafana/dashboard-folders/%s' % std.asciiLower(folder))
+          for folder in std.objectFields($.dashboardsByFolder)
+        ],
+        {}
+      )
     ) +
     $.util.podPriority('critical'),
 
