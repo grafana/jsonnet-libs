@@ -43,25 +43,15 @@
     $.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config) +
     $.util.configVolumeMount('grafana-notification-channels', '%(grafana_provisioning_dir)s/notifiers' % $._config) +
     (
-      // If we're not doing dashboard config map sharding, mount the dashboard
-      // config map.
-      if $._config.dashboard_config_maps == 0
-      then $.util.configVolumeMount('dashboards', '/grafana/dashboards')
-      else {}
-    ) + (
-      // If we are doing dashboard config map sharding here, mount _all_
-      // the shards.
-      if $._config.dashboard_config_maps > 0
-      then
-        std.foldr(
-          function(m, acc) m + acc,
-          [
-            $.util.configVolumeMount('dashboards-%d' % shard, '/grafana/dashboards/%d' % shard)
-            for shard in std.range(0, $._config.dashboard_config_maps - 1)
-          ],
-          {}
-        )
-      else {}
+      // Mount _all_ the dashboard config map shards.
+      std.foldr(
+        function(m, acc) m + acc,
+        [
+          $.util.configVolumeMount('dashboards-%d' % shard, '/grafana/dashboards/%d' % shard)
+          for shard in std.range(0, $._config.dashboard_config_maps - 1)
+        ],
+        {}
+      )
     ) + (
       // Add config map mounts for each folder for dashboards.
       std.foldr(

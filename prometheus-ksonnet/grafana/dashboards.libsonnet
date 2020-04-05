@@ -1,6 +1,12 @@
 {
   local configMap = $.core.v1.configMap,
 
+  _config+:: {
+    // Shard dashboards across multiple config maps to overcome annotation
+    // lenght limits.
+    dashboard_config_maps: 8,
+  },
+
   // Extension point for you to add your own dashboards.
   dashboards+:: {},
   grafana_dashboards+:: {},
@@ -14,12 +20,6 @@
       for name in std.objectFields(dashboards)
     }) +
     configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels),
-
-  // This config map contains all "root" dashboards, when sharding is disabled.
-  dashboards_config_map:
-    if $._config.dashboard_config_maps == 0
-    then materialise_config_map('dashboards', $.grafanaDashboards)
-    else {},
 
   // When sharding is enabled, this is a map of config maps, each map named
   // "dashboard-0" ... "dashboard-N" and containing dashboards whose name
