@@ -1,8 +1,7 @@
 (import 'ksonnet-util/kausal.libsonnet') +
 (import 'images.libsonnet') +
+(import 'grafana/grafana.libsonnet') +
 (import 'lib/alertmanager.libsonnet') +
-(import 'lib/grafana.libsonnet') +
-(import 'lib/grafana-configmaps.libsonnet') +
 (import 'lib/kube-state-metrics.libsonnet') +
 (import 'lib/nginx.libsonnet') +
 (import 'lib/node-exporter.libsonnet') +
