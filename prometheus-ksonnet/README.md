@@ -22,8 +22,8 @@ $ tk env set environments/default  --server-from-context=$CONTEXT
 - Vendor this package using [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler)
 
 ```
-$ go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-$ jb install https://github.com/grafana/jsonnet-libs/prometheus-ksonnet
+$ GO111MODULE=on go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
+$ jb install github.com/grafana/jsonnet-libs/prometheus-ksonnet
 ```
 
 - Assuming you want to run in the default namespace ('environment' in ksonnet parlance), add the following to the file `environments/default/main.jsonnet`:
