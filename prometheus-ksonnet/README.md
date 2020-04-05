@@ -5,13 +5,13 @@ A set of extensible configs for running Prometheus on Kubernetes.
 Usage:
 - Make sure you have [Tanka](https://tanka.dev/install) installed:
 
-```
+```bash
 $ GO111MODULE=on go get github.com/grafana/tanka/cmd/tk
 ```
 
 - In your config repo, init Tanka and point it at your Kubernetes cluster:
 
-```
+```bash
 $ tk init
 
 # point at cluster
@@ -21,14 +21,14 @@ $ tk env set environments/default  --server-from-context=$CONTEXT
 
 - Vendor this package using [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler)
 
-```
+```bash
 $ GO111MODULE=on go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
 $ jb install github.com/grafana/jsonnet-libs/prometheus-ksonnet
 ```
 
 - Assuming you want to run in the default namespace ('environment' in ksonnet parlance), add the following to the file `environments/default/main.jsonnet`:
 
-```
+```jsonnet
 local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
 
 prometheus {
@@ -41,7 +41,7 @@ prometheus {
 
 - Apply your config:
 
-```
+```bash
 $ tk apply environments/default
 ```
 
@@ -50,7 +50,7 @@ $ tk apply environments/default
 If you made your Kubernetes cluster with [Kops](https://github.com/kubernetes/kops),
 add the Kops mixin to your config to scrape the Kubernetes system components:
 
-```
+```jsonnet
 local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
 local kops = import "prometheus-ksonnet/lib/prometheus-config-kops.libsonnet";
 
@@ -69,7 +69,7 @@ to easily override setting in these configurations to suit their needs, without 
 to fork or modify this library.  For instance, to override the resource requests
 and limits for the Prometheus container, you would:
 
-```
+```jsonnet
 local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
 
 prometheus {
