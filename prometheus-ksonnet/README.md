@@ -3,17 +3,20 @@
 A set of extensible configs for running Prometheus on Kubernetes.
 
 Usage:
-- Make sure you have [tanka](https://tanka.dev/install) installed:
+- Make sure you have [Tanka](https://tanka.dev/install) installed:
 
 ```
 $ GO111MODULE=on go get github.com/grafana/tanka/cmd/tk
 ```
 
-- In your config repo, init tanka and point it at your Kubernetes cluster:
+- In your config repo, init Tanka and point it at your Kubernetes cluster:
 
 ```
-$ kubectl config view
-$ tk env set environments/default  --server=https://<IP address and port from above>
+$ tk init
+
+# point at cluster
+$ export CONTEXT=$(kubectl current-context)
+$ tk env set environments/default  --server-from-context=$CONTEXT
 ```
 
 - Vendor this package using [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler)
@@ -61,7 +64,7 @@ prometheus + kops {
 
 # Customising and Extending.
 
-The choice of tanka for configuring these jobs was intentional; it allows users
+The choice of Tanka for configuring these jobs was intentional; it allows users
 to easily override setting in these configurations to suit their needs, without having
 to fork or modify this library.  For instance, to override the resource requests
 and limits for the Prometheus container, you would:
