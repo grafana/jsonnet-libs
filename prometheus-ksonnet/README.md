@@ -3,22 +3,17 @@
 A set of extensible configs for running Prometheus on Kubernetes.
 
 Usage:
-- Make sure you have the [ksonnet v0.8.0](https://github.com/ksonnet/ksonnet).
+- Make sure you have [tanka](https://tanka.dev/install) installed:
 
 ```
-$ brew install https://raw.githubusercontent.com/ksonnet/homebrew-tap/82ef24cb7b454d1857db40e38671426c18cd8820/ks.rb
-$ brew pin ks
-$ ks version
-ksonnet version: v0.8.0
-jsonnet version: v0.9.5
-client-go version: v1.6.8-beta.0+$Format:%h$
+$ GO111MODULE=on go get github.com/grafana/tanka/cmd/tk
 ```
 
-- In your config repo, if you don't have a ksonnet application, make a new one (will copy credentials from current context):
+- In your config repo, init tanka and point it at your Kubernetes cluster:
 
 ```
-$ ks init <application name>
-$ cd <application name>
+$ kubectl config view
+$ tk env set environments/default  --server=https://<IP address and port from above>
 ```
 
 - Vendor this package using [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler)
@@ -35,6 +30,7 @@ local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
 
 prometheus {
   _config+:: {
+    cluster_name: "cluster1",
     namespace: "default",
   },
 }
@@ -43,7 +39,7 @@ prometheus {
 - Apply your config:
 
 ```
-$ ks apply default
+$ tk apply environments/default
 ```
 
 # Kops
@@ -65,7 +61,7 @@ prometheus + kops {
 
 # Customising and Extending.
 
-The choice of Ksonnet for configuring these jobs was intention; it allows users
+The choice of tanka for configuring these jobs was intentional; it allows users
 to easily override setting in these configurations to suit their needs, without having
 to fork or modify this library.  For instance, to override the resource requests
 and limits for the Prometheus container, you would:
