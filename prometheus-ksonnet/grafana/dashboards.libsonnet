@@ -9,11 +9,11 @@
 
   local materialise_config_map(config_map_name, dashboards) =
     configMap.new(config_map_name) +
-      configMap.withDataMixin({
-        [name]: std.toString(dashboards[name])
-        for name in std.objectFields(dashboards)
-      }) +
-      configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels),
+    configMap.withDataMixin({
+      [name]: std.toString(dashboards[name])
+      for name in std.objectFields(dashboards)
+    }) +
+    configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels),
 
   // This config map contains all "root" dashboards, when sharding is disabled.
   dashboards_config_map:
@@ -37,8 +37,10 @@
   // A map of config maps, one per folder, for dashboards in folders.
   dashboard_folders_config_maps: {
     ['dashboard-%s' % std.asciiLower(folder)]:
-      materialise_config_map('dashboards-%s' % std.asciiLower(folder),
-        $.dashboardsByFolder[folder])
+      materialise_config_map(
+        'dashboards-%s' % std.asciiLower(folder),
+        $.dashboardsByFolder[folder]
+      )
     for folder in std.objectFields($.dashboardsByFolder)
   },
 
