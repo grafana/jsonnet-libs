@@ -1,7 +1,7 @@
 {
   // Add you mixins here.
   mixins+:: {
-    kubernetes+:
+    kubernetes:
       (import 'kubernetes-mixin/mixin.libsonnet') {
         _config+:: {
           cadvisorSelector: 'job="kube-system/cadvisor"',
@@ -16,21 +16,21 @@
         },
       },
 
-    prometheus+:
+    prometheus:
       (import 'prometheus-mixin/mixin.libsonnet') {
         _config+:: {
           prometheusSelector: 'job="default/prometheus"',
         },
       },
 
-    alertmanager+:
+    alertmanager:
       (import 'alertmanager-mixin/mixin.libsonnet') {
         _config+:: {
           alertmanagerSelector: 'job="default/alertmanager"',
         },
       },
 
-    node_exporter+:
+    node_exporter:
       (import 'node-mixin/mixin.libsonnet') {
         _config+:: {
           nodeExporterSelector: 'job="%s/node-exporter"' % $._config.namespace,  // Also used by node-mixin.
