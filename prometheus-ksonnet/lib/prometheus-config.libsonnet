@@ -420,8 +420,8 @@
     } +
     std.foldr(
       function(mixinName, acc)
-      local mixin = $.mixins[mixinName] + emptyMixin;
-      acc + mixin.prometheusAlerts,
+        local mixin = $.mixins[mixinName] + emptyMixin;
+        acc + mixin.prometheusAlerts,
       std.objectFields($.mixins),
       {}
     ),
