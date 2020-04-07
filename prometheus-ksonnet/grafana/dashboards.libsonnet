@@ -29,7 +29,7 @@
     function(mixinName, acc)
       local mixin = $.mixins[mixinName] + emptyMixin;
       if std.objectHas(mixin, 'grafanaDashboardFolder')
-      then acc + {
+      then acc {
         [mixin.grafanaDashboardFolder]: mixin.grafanaDashboards,
       }
       else acc,
