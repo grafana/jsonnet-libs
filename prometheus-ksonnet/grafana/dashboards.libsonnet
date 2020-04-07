@@ -10,11 +10,14 @@
   // New API: Mixins go in the mixins map.
   mixins+:: {},
 
-  // Legacy extension points for you to add your own dashboards.
+  // emptyMixin allows us to reliably do `mixin.grafanaDashboards` without
+  // having to check the field exists first. Some mixins don't declare all
+  // the fields, and thats fine.
   local emptyMixin = {
     grafanaDashboards+: {},
   },
 
+  // Legacy extension points for you to add your own dashboards.
   grafanaDashboards+:: std.foldr(
     function(mixinName, acc)
       local mixin = $.mixins[mixinName] + emptyMixin;
