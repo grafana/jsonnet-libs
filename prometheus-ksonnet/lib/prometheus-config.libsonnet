@@ -432,6 +432,25 @@
   },
 
   // We changes to using camelCase, but here we try and make it backwards compatible.
-  prometheusAlerts+:: $.prometheus_alerts,
-  prometheusRules+:: $.prometheus_rules,
+  prometheusAlerts+::
+    $.prometheus_alerts +
+    std.foldr(
+      function(m, acc) m + acc,
+      [
+        $.mixins[mixinName].prometheusAlerts
+        for mixinName in std.objectFields($.mixins)
+      ],
+      {}
+    ),
+
+  prometheusRules+::
+    $.prometheus_rules +
+    std.foldr(
+      function(m, acc) m + acc,
+      [
+        $.mixins[mixinName].prometheusAlerts
+        for mixinName in std.objectFields($.mixins)
+      ],
+      {}
+    ),
 }
