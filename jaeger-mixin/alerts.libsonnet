@@ -9,7 +9,7 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
 };
 
 {
-  prometheus_alerts+:: {
+  prometheusAlerts+:: {
     groups+: [
       {
         name: 'jaeger_alerts',

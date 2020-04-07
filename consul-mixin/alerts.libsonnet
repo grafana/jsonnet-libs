@@ -1,5 +1,5 @@
 {
-  prometheus_alerts+:: {
+  prometheusAlerts+:: {
     groups+: [{
       name: 'consul',
       rules: [

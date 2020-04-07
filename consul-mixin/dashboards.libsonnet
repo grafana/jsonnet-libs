@@ -12,7 +12,7 @@ local panel_settings = {
 };
 
 {
-  dashboards+:: {
+  grafanaDashboards+:: {
     'consul.json':
       g.dashboard('Consul')
       .addTemplate('job', 'consul_up', 'job')
