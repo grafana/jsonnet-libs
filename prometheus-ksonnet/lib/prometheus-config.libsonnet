@@ -363,75 +363,92 @@
     ],
   },
 
-  // Extension points for adding alerts, recording rules and prometheus config.
-  prometheus_alerts:: {
-    groups+: [
-      {
-        name: 'prometheus-extra',
-        rules: [
-          {
-            alert: 'PromScrapeFailed',
-            expr: |||
-              up != 1
-            |||,
-            'for': '15m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              message: 'Prometheus failed to scrape a target {{ $labels.job }} / {{ $labels.instance }}',
-            },
-          },
-          {
-            alert: 'PromScrapeFlapping',
-            expr: |||
-              avg_over_time(up[5m]) < 1
-            |||,
-            'for': '15m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              message: 'Prometheus target flapping {{ $labels.job }} / {{ $labels.instance }}',
-            },
-          },
-          {
-            alert: 'PromScrapeTooLong',
-            expr: |||
-              scrape_duration_seconds > 60
-            |||,
-            'for': '15m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              message: '{{ $labels.job }} / {{ $labels.instance }} is taking too long to scrape ({{ printf "%.1f" $value }}s)',
-            },
-          },
-        ],
-      },
-    ],
+  // Legacy Extension points for adding alerts, recording rules and prometheus config.
+  local emptyMixin = {
+    prometheusAlerts+:: {},
+    prometheusRules+:: {},
   },
 
-  prometheus_rules:: {
-    groups+: [
-      {
-        // Add mapping from namespace, pod -> node with node name as pod, as
-        // we use the node name as the node-exporter instance label.
-        name: 'instance_override',
-        rules: [
-          {
-            record: 'node_namespace_pod:kube_pod_info:',
-            expr: |||
-              max by(node, namespace, instance) (label_replace(kube_pod_info{job="default/kube-state-metrics"}, "instance", "$1", "node", "(.*)"))
-            |||,
-          },
-        ],
-      },
-    ],
-  },
+  prometheusAlerts::
+    {
+      groups+: [
+        {
+          name: 'prometheus-extra',
+          rules: [
+            {
+              alert: 'PromScrapeFailed',
+              expr: |||
+                up != 1
+              |||,
+              'for': '15m',
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                message: 'Prometheus failed to scrape a target {{ $labels.job }} / {{ $labels.instance }}',
+              },
+            },
+            {
+              alert: 'PromScrapeFlapping',
+              expr: |||
+                avg_over_time(up[5m]) < 1
+              |||,
+              'for': '15m',
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                message: 'Prometheus target flapping {{ $labels.job }} / {{ $labels.instance }}',
+              },
+            },
+            {
+              alert: 'PromScrapeTooLong',
+              expr: |||
+                scrape_duration_seconds > 60
+              |||,
+              'for': '15m',
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                message: '{{ $labels.job }} / {{ $labels.instance }} is taking too long to scrape ({{ printf "%.1f" $value }}s)',
+              },
+            },
+          ],
+        },
+      ],
+    } +
+    std.foldr(
+      function(mixinName, acc)
+        local mixin = $.mixins[mixinName] + emptyMixin;
+        acc + mixin.prometheusAlerts,
+      std.objectFields($.mixins),
+      {}
+    ),
 
-  // We changes to using camelCase, but here we try and make it backwards compatible.
-  prometheusAlerts+:: $.prometheus_alerts,
-  prometheusRules+:: $.prometheus_rules,
+  prometheusRules::
+    {
+      groups+: [
+        {
+          // Add mapping from namespace, pod -> node with node name as pod, as
+          // we use the node name as the node-exporter instance label.
+          name: 'instance_override',
+          rules: [
+            {
+              record: 'node_namespace_pod:kube_pod_info:',
+              expr: |||
+                max by(node, namespace, instance) (label_replace(kube_pod_info{job="default/kube-state-metrics"}, "instance", "$1", "node", "(.*)"))
+              |||,
+            },
+          ],
+        },
+      ],
+    } +
+    std.foldr(
+      function(mixinName, acc)
+        local mixin = $.mixins[mixinName] + emptyMixin;
+        acc + mixin.prometheusRules,
+      std.objectFields($.mixins),
+      {},
+    ),
 }

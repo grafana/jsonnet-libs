@@ -7,11 +7,38 @@
     dashboard_config_maps: 8,
   },
 
-  // Extension point for you to add your own dashboards.
-  dashboards+:: {},
-  grafana_dashboards+:: {},
-  grafanaDashboards+:: $.dashboards + $.grafana_dashboards,
-  dashboardsByFolder+:: {},
+  // New API: Mixins go in the mixins map.
+  mixins+:: {},
+
+  // emptyMixin allows us to reliably do `mixin.grafanaDashboards` without
+  // having to check the field exists first. Some mixins don't declare all
+  // the fields, and thats fine.
+  local emptyMixin = {
+    grafanaDashboards+: {},
+  },
+
+  // Legacy extension points for you to add your own dashboards.
+  grafanaDashboards+:: std.foldr(
+    function(mixinName, acc)
+      local mixin = $.mixins[mixinName] + emptyMixin;
+      if !std.objectHas(mixin, 'grafanaDashboardFolder')
+      then acc + mixin.grafanaDashboards
+      else acc,
+    std.objectFields($.mixins),
+    {}
+  ),
+
+  dashboardsByFolder+:: std.foldr(
+    function(mixinName, acc)
+      local mixin = $.mixins[mixinName] + emptyMixin;
+      if std.objectHas(mixin, 'grafanaDashboardFolder')
+      then acc {
+        [mixin.grafanaDashboardFolder]: mixin.grafanaDashboards,
+      }
+      else acc,
+    std.objectFields($.mixins),
+    {}
+  ),
 
   local materialise_config_map(config_map_name, dashboards) =
     configMap.new(config_map_name) +

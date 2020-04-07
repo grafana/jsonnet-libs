@@ -81,25 +81,6 @@
     // Node exporter options.
     node_exporter_mount_root: true,
 
-    // Kubernetes mixin overrides.
-    cadvisorSelector: 'job="kube-system/cadvisor"',
-    kubeletSelector: 'job="kube-system/kubelet"',
-    kubeStateMetricsSelector: 'job="%s/kube-state-metrics"' % $._config.namespace,
-    nodeExporterSelector: 'job="%s/node-exporter"' % $._config.namespace,  // Also used by node-mixin.
-    notKubeDnsSelector: 'job!="kube-system/kube-dns"',
-    kubeSchedulerSelector: 'job="kube-system/kube-scheduler"',
-    kubeControllerManagerSelector: 'job="kube-system/kube-controller-manager"',
-    kubeApiserverSelector: 'job="kube-system/kube-apiserver"',
-    podLabel: 'instance',
-    grafanaPrefix: '/grafana',  // Also used by node-mixin.
-
-    // Prometheus mixin overrides.
-    prometheusSelector: 'job="default/prometheus"',
-    alertmanagerSelector: 'job="default/alertmanager"',
-
-    // Node mixin overrides.
-    nodeCriticalSeverity: 'warning',  // Do not page if nodes run out of disk space.
-
     // oauth2-proxy
     oauth_enabled: false,
   },
