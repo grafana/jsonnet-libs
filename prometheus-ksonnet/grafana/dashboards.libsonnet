@@ -15,9 +15,9 @@
   // the fields, and thats fine.
   //
   // We also use this to add a little "opinion":
-  // - Dashboard UIDs should be the md5 hash of their filename.
-  // - Timezone should be "default" (ie local).
-  // - Tooltip should only show a single value.
+  // - Dashboard UIDs are set to the md5 hash of their filename.
+  // - Timezone are set to be "default" (ie local).
+  // - Tooltip only show a single value.
   local mixinProto = {
     grafanaDashboards+:: {},
   } + {
