@@ -10,17 +10,48 @@
   // New API: Mixins go in the mixins map.
   mixins+:: {},
 
-  // emptyMixin allows us to reliably do `mixin.grafanaDashboards` without
+  // mixinProto allows us to reliably do `mixin.grafanaDashboards` without
   // having to check the field exists first. Some mixins don't declare all
   // the fields, and thats fine.
-  local emptyMixin = {
-    grafanaDashboards+: {},
+  //
+  // We also use this to add a little "opinion":
+  // - Dashboard UIDs should be the md5 hash of their filename.
+  // - Timezone should be "default" (ie local).
+  // - Tooltip should only show a single value.
+  local mixinProto = {
+    grafanaDashboards+:: {},
+  } + {
+    local grafanaDashboards = super.grafanaDashboards,
+
+    grafanaDashboards+:: {
+      [filename]:
+        local dashboard = grafanaDashboards[filename];
+        dashboard {
+          uid: std.md5(filename),
+          timezone: '',
+
+          [if std.objectHas(dashboard, 'rows') then 'rows']: [
+            row {
+              panels: [
+                panel {
+                  tooltip+: {
+                    shared: false,
+                  },
+                }
+                for panel in super.panels
+              ],
+            }
+            for row in super.rows
+          ],
+        }
+      for filename in std.objectFields(grafanaDashboards)
+    },
   },
 
   // Legacy extension points for you to add your own dashboards.
   grafanaDashboards+:: std.foldr(
     function(mixinName, acc)
-      local mixin = $.mixins[mixinName] + emptyMixin;
+      local mixin = $.mixins[mixinName] + mixinProto;
       if !std.objectHas(mixin, 'grafanaDashboardFolder')
       then acc + mixin.grafanaDashboards
       else acc,
@@ -30,7 +61,7 @@
 
   dashboardsByFolder+:: std.foldr(
     function(mixinName, acc)
-      local mixin = $.mixins[mixinName] + emptyMixin;
+      local mixin = $.mixins[mixinName] + mixinProto;
       if std.objectHas(mixin, 'grafanaDashboardFolder')
       then acc {
         [mixin.grafanaDashboardFolder]: mixin.grafanaDashboards,
