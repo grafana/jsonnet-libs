@@ -1,4 +1,5 @@
 {
+  grafanaDashboardFolder: 'Consul',
   _config+:: {
     consul_replicas: 3,
   },
