@@ -3,6 +3,8 @@
   mixins+:: {
     kubernetes:
       (import 'kubernetes-mixin/mixin.libsonnet') {
+        grafanaDashboardFolder: 'Kubernetes',
+
         _config+:: {
           cadvisorSelector: 'job="kube-system/cadvisor"',
           kubeletSelector: 'job="kube-system/kubelet"',
@@ -18,6 +20,8 @@
 
     prometheus:
       (import 'prometheus-mixin/mixin.libsonnet') {
+        grafanaDashboardFolder: 'Prometheus',
+
         _config+:: {
           prometheusSelector: 'job="default/prometheus"',
         },
@@ -25,6 +29,8 @@
 
     alertmanager:
       (import 'alertmanager-mixin/mixin.libsonnet') {
+        grafanaDashboardFolder: 'Alertmanager',
+
         _config+:: {
           alertmanagerSelector: 'job="default/alertmanager"',
         },
@@ -32,6 +38,8 @@
 
     node_exporter:
       (import 'node-mixin/mixin.libsonnet') {
+        grafanaDashboardFolder: 'node_exporter',
+
         _config+:: {
           nodeExporterSelector: 'job="%s/node-exporter"' % $._config.namespace,  // Also used by node-mixin.
 
