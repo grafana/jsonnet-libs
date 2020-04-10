@@ -52,7 +52,7 @@
   grafanaDashboards+:: std.foldr(
     function(mixinName, acc)
       local mixin = $.mixins[mixinName] + mixinProto;
-      if !std.objectHas(mixin, 'grafanaDashboardFolder')
+      if !$.isFolderedMixin(mixin)
       then acc + mixin.grafanaDashboards
       else acc,
     std.objectFields($.mixins),
@@ -66,6 +66,12 @@
     local underscore = std.strReplace(lower, '_', '-');
     local space = std.strReplace(underscore, ' ', '-');
     space,
+
+  // Helper to decide is a mixin should go in a folder or not.
+  isFolderedMixin(m)::
+    local mixin = m + mixinProto;
+    std.objectHas(mixin, 'grafanaDashboardFolder') &&
+    std.length(mixin.grafanaDashboards) > 0,
 
   // Its super common for a single mixin's worth of dashboards to not even fit
   // in a single config map.  So we split each mixin's dashboards up over
@@ -96,7 +102,7 @@
   dashboard_folders_config_maps: std.foldr(
     function(mixinName, acc)
       local mixin = $.mixins[mixinName] + mixinProto;
-      if !std.objectHas(mixin, 'grafanaDashboardFolder')
+      if !$.isFolderedMixin(mixin)
       then acc
       else
         local config_map_name = 'dashboards-%s' % $.folderID(mixin.grafanaDashboardFolder);
@@ -146,7 +152,7 @@
             },
           }
           for mixinName in std.objectFields($.mixins)
-          if std.objectHas($.mixins[mixinName], 'grafanaDashboardFolder')
+          if $.isFolderedMixin($.mixins[mixinName])
         ],
       }),
     }),

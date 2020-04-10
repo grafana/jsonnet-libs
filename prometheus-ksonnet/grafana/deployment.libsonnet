@@ -62,7 +62,7 @@
       std.foldr(
         function(mixinName, acc)
           local mixin = $.mixins[mixinName];
-          if !std.objectHas(mixin, 'grafanaDashboardFolder')
+          if !$.isFolderedMixin(mixin)
           then acc
           else
             local config_map_name = 'dashboards-%s' % $.folderID(mixin.grafanaDashboardFolder);
