@@ -59,48 +59,60 @@
     {}
   ),
 
-  dashboardsByFolder+:: std.foldr(
+  // Config map names can't contain special chars, this is a hack but will
+  // do for now.
+  folderID(folder)::
+    local lower = std.asciiLower(folder);
+    local underscore = std.strReplace(lower, '_', '-');
+    local space = std.strReplace(underscore, ' ', '-');
+    space,
+
+  // Its super common for a single mixin's worth of dashboards to not even fit
+  // in a single config map.  So we split each mixin's dashboards up over
+  // multiple config maps, depending on the hash of dashboards name.
+  local sharded_config_maps(name_prefix, shards, dashboards) = {
+    ['%s-%d' % [name_prefix, shard]]:
+      configMap.new('%s-%d' % [name_prefix, shard]) +
+      configMap.withDataMixin({
+        [name]: std.toString(dashboards[name])
+        for name in std.objectFields(dashboards)
+        if std.codepoint(std.md5(name)[1]) % shards == shard
+      }) +
+      configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels)
+    for shard in std.range(0, shards - 1)
+  },
+
+  // Map containing all the sharded config maps for dashboards in no folder.
+  // ie dashboards_config_maps[dashboard name] -> dashboard
+  dashboards_config_maps:
+    sharded_config_maps(
+      'dashboards',
+      $._config.dashboard_config_maps,
+      $.grafanaDashboards,
+    ),
+
+  // Map containing maps of all the sharded config maps for each folder.
+  // ie dashboard_folders_config_maps[dashboard folder][dashboard name] -> dashboard
+  dashboard_folders_config_maps: std.foldr(
     function(mixinName, acc)
       local mixin = $.mixins[mixinName] + mixinProto;
-      if std.objectHas(mixin, 'grafanaDashboardFolder')
-      then acc {
-        [mixin.grafanaDashboardFolder]: mixin.grafanaDashboards,
-      }
-      else acc,
+      if !std.objectHas(mixin, 'grafanaDashboardFolder')
+      then acc
+      else
+        local config_map_name = 'dashboards-%s' % $.folderID(mixin.grafanaDashboardFolder);
+        acc {
+          [config_map_name]:
+            sharded_config_maps(
+              config_map_name,
+              if std.objectHas(mixin, 'grafanaDashboardShards')
+              then mixin.grafanaDashboardShards
+              else 1,
+              mixin.grafanaDashboards
+            ),
+        },
     std.objectFields($.mixins),
-    {}
+    {},
   ),
-
-  local materialise_config_map(config_map_name, dashboards) =
-    configMap.new(config_map_name) +
-    configMap.withDataMixin({
-      [name]: std.toString(dashboards[name])
-      for name in std.objectFields(dashboards)
-    }) +
-    configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels),
-
-  // When sharding is enabled, this is a map of config maps, each map named
-  // "dashboard-0" ... "dashboard-N" and containing dashboards whose name
-  // hashes to that shard.
-  dashboards_config_maps: {
-    ['dashboard-%d' % shard]:
-      materialise_config_map('dashboards-%d' % shard, {
-        [name]: $.grafanaDashboards[name]
-        for name in std.objectFields($.grafanaDashboards)
-        if std.codepoint(std.md5(name)[1]) % $._config.dashboard_config_maps == shard
-      })
-    for shard in std.range(0, $._config.dashboard_config_maps - 1)
-  },
-
-  // A map of config maps, one per folder, for dashboards in folders.
-  dashboard_folders_config_maps: {
-    ['dashboard-%s' % std.asciiLower(folder)]:
-      materialise_config_map(
-        'dashboards-%s' % std.asciiLower(folder),
-        $.dashboardsByFolder[folder]
-      )
-    for folder in std.objectFields($.dashboardsByFolder)
-  },
 
   // Config map containing the dashboard provisioning YAML, telling
   // Grafana where to find the dashboard JSONs.
@@ -123,17 +135,18 @@
           },
         ] + [
           {
-            name: 'dashboards-%s' % std.asciiLower(folder),
+            name: 'dashboards-%s' % $.folderID($.mixins[mixinName].grafanaDashboardFolder),
             orgId: 1,
-            folder: folder,
+            folder: $.mixins[mixinName].grafanaDashboardFolder,
             type: 'file',
             disableDeletion: true,
             editable: false,
             options: {
-              path: '/grafana/dashboard-folders/%s' % std.asciiLower(folder),
+              path: '/grafana/dashboards-%s' % $.folderID($.mixins[mixinName].grafanaDashboardFolder),
             },
           }
-          for folder in std.objectFields($.dashboardsByFolder)
+          for mixinName in std.objectFields($.mixins)
+          if std.objectHas($.mixins[mixinName], 'grafanaDashboardFolder')
         ],
       }),
     }),

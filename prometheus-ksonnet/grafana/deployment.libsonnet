@@ -35,6 +35,18 @@
 
   local deployment = $.apps.v1.deployment,
 
+  // Helper to mount a variable number of shareded config maps.
+  local sharded_config_map_mounts(prefix, shards) =
+    std.foldr(
+      function(shard, acc)
+        $.util.configVolumeMount(
+          '%s-%d' % [prefix, shard],
+          '/grafana/%s/%d' % [prefix, shard]
+        ) + acc,
+      std.range(0, shards - 1),
+      {}
+    ),
+
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container]) +
     deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
@@ -44,23 +56,23 @@
     $.util.configVolumeMount('grafana-notification-channels', '%(grafana_provisioning_dir)s/notifiers' % $._config) +
     (
       // Mount _all_ the dashboard config map shards.
-      std.foldr(
-        function(m, acc) m + acc,
-        [
-          $.util.configVolumeMount('dashboards-%d' % shard, '/grafana/dashboards/%d' % shard)
-          for shard in std.range(0, $._config.dashboard_config_maps - 1)
-        ],
-        {}
-      )
+      sharded_config_map_mounts('dashboards', $._config.dashboard_config_maps)
     ) + (
       // Add config map mounts for each folder for dashboards.
       std.foldr(
-        function(m, acc) m + acc,
-        [
-          $.util.configVolumeMount('dashboards-%s' % std.asciiLower(folder), '/grafana/dashboard-folders/%s' % std.asciiLower(folder))
-          for folder in std.objectFields($.dashboardsByFolder)
-        ],
-        {}
+        function(mixinName, acc)
+          local mixin = $.mixins[mixinName];
+          if !std.objectHas(mixin, 'grafanaDashboardFolder')
+          then acc
+          else
+            local config_map_name = 'dashboards-%s' % $.folderID(mixin.grafanaDashboardFolder);
+            local shards =
+              if std.objectHas(mixin, 'grafanaDashboardShards')
+              then mixin.grafanaDashboardShards
+              else 1;
+            sharded_config_map_mounts(config_map_name, shards) + acc,
+        std.objectFields($.mixins),
+        {},
       )
     ) +
     $.util.podPriority('critical'),
