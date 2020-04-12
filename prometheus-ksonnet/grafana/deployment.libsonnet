@@ -26,7 +26,7 @@
 
   grafana_container::
     container.new('grafana', $._images.grafana) +
-    container.withPorts($.core.v1.containerPort.new('grafana', 80)) +
+    container.withPorts($.core.v1.containerPort.new('grafana-metrics', 80)) +
     container.withEnvMap({
       GF_PATHS_CONFIG: '/etc/grafana-config/grafana.ini',
       GF_INSTALL_PLUGINS: std.join(',', $.grafana_plugins),
