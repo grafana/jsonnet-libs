@@ -77,7 +77,7 @@
   // in a single config map.  So we split each mixin's dashboards up over
   // multiple config maps, depending on the hash of dashboards name.
   local sharded_config_maps(name_prefix, shards, dashboards) = {
-    ['%s-%d' % [name_prefix, shard]]:
+    ['%s-%d' % [name_prefix, shard]]+:
       configMap.new('%s-%d' % [name_prefix, shard]) +
       configMap.withDataMixin({
         [name]: std.toString(dashboards[name])
@@ -107,7 +107,7 @@
       else
         local config_map_name = 'dashboards-%s' % $.folderID(mixin.grafanaDashboardFolder);
         acc {
-          [config_map_name]:
+          [config_map_name]+:
             sharded_config_maps(
               config_map_name,
               if std.objectHas(mixin, 'grafanaDashboardShards')
