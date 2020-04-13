@@ -26,7 +26,7 @@
 
   grafana_container::
     container.new('grafana', $._images.grafana) +
-    container.withPorts($.core.v1.containerPort.new('grafana-metrics', 80)) +
+    container.withPorts($.core.v1.containerPort.new('grafana-metrics', 3000)) +
     container.withEnvMap({
       GF_PATHS_CONFIG: '/etc/grafana-config/grafana.ini',
       GF_INSTALL_PLUGINS: std.join(',', $.grafana_plugins),
@@ -49,8 +49,10 @@
 
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container]) +
-    deployment.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-    $.util.configVolumeMount('grafana-config', '/etc/grafana-config') +
+    // Use configMapVolumeMount to automatically include the hash of the config
+    // as an annotation.  No need to use for others, Grafana will pick up
+    // changes there.
+    $.util.configMapVolumeMount($.grafana_config_map, '/etc/grafana-config') +
     $.util.configVolumeMount('grafana-dashboard-provisioning', '%(grafana_provisioning_dir)s/dashboards' % $._config) +
     $.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config) +
     $.util.configVolumeMount('grafana-notification-channels', '%(grafana_provisioning_dir)s/notifiers' % $._config) +
@@ -77,6 +79,16 @@
     ) +
     $.util.podPriority('critical'),
 
+  local service = $.core.v1.service,
+  local servicePort = service.mixin.spec.portsType,
+
   grafana_service:
-    $.util.serviceFor($.grafana_deployment),
+    $.util.serviceFor($.grafana_deployment) +
+    service.mixin.spec.withPortsMixin([
+      servicePort.newNamed(
+        name='http',
+        port=80,
+        targetPort=3000,
+      ),
+    ]),
 }

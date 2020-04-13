@@ -6,7 +6,7 @@
         org_role: 'Admin',
       },
       server: {
-        http_port: 80,
+        http_port: 3000,
         root_url: $._config.grafana_root_url,
       },
       analytics: {
