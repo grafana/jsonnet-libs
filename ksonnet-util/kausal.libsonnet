@@ -428,6 +428,19 @@ k {
         ]).spec,
       },
 
+    antiAffinityStatefulSet:
+      {
+        local statefulSet = $.apps.v1.statefulSet,
+        local podAntiAffinity = statefulSet.mixin.spec.template.spec.affinity.podAntiAffinity,
+        local name = super.spec.template.metadata.labels.name,
+
+        spec+: podAntiAffinity.withRequiredDuringSchedulingIgnoredDuringExecution([
+          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.new() +
+          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.mixin.labelSelector.withMatchLabels({ name: name }) +
+          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey('kubernetes.io/hostname'),
+        ]).spec,
+      },
+
     // Add a priority to the pods in a deployment (or deployment-like objects
     // such as a statefulset) iff _config.enable_pod_priorities is set to true.
     podPriority(p):
