@@ -47,6 +47,32 @@
       {}
     ),
 
+  local folder_mounts =
+    // Dedupe folder names through a map fold first,
+    // just incase two mixins go into the same folder.
+    local folderShards = std.foldr(
+      function(mixinName, acc)
+        local mixin = $.mixins[mixinName];
+        if !$.isFolderedMixin(mixin)
+        then acc
+        else acc {
+          [$.folderID(mixin.grafanaDashboardFolder)]:
+            if std.objectHas(mixin, 'grafanaDashboardShards')
+            then mixin.grafanaDashboardShards
+            else 1,
+        },
+      std.objectFields($.mixins),
+      {},
+    );
+    std.foldr(
+      function(folderName, acc)
+        local config_map_name = 'dashboards-%s' % folderName;
+        local shards = folderShards[folderName];
+        sharded_config_map_mounts(config_map_name, shards) + acc,
+      std.objectFields(folderShards),
+      {},
+    ),
+
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container]) +
     // Use configMapVolumeMount to automatically include the hash of the config
@@ -61,21 +87,7 @@
       sharded_config_map_mounts('dashboards', $._config.dashboard_config_maps)
     ) + (
       // Add config map mounts for each folder for dashboards.
-      std.foldr(
-        function(mixinName, acc)
-          local mixin = $.mixins[mixinName];
-          if !$.isFolderedMixin(mixin)
-          then acc
-          else
-            local config_map_name = 'dashboards-%s' % $.folderID(mixin.grafanaDashboardFolder);
-            local shards =
-              if std.objectHas(mixin, 'grafanaDashboardShards')
-              then mixin.grafanaDashboardShards
-              else 1;
-            sharded_config_map_mounts(config_map_name, shards) + acc,
-        std.objectFields($.mixins),
-        {},
-      )
+      folder_mounts
     ) +
     $.util.podPriority('critical'),
 
