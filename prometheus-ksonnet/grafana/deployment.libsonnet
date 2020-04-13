@@ -86,7 +86,7 @@
     $.util.serviceFor($.grafana_deployment) +
     service.mixin.spec.withPortsMixin([
       servicePort.newNamed(
-        name="http",
+        name='http',
         port=80,
         targetPort=3000,
       ),
