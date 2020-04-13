@@ -53,25 +53,25 @@
     local folderShards = std.foldr(
       function(mixinName, acc)
         local mixin = $.mixins[mixinName];
-        if ! $.isFolderedMixin(mixin)
+        if !$.isFolderedMixin(mixin)
         then acc
-        else acc + {
+        else acc {
           [$.folderID(mixin.grafanaDashboardFolder)]:
-              if std.objectHas(mixin, 'grafanaDashboardShards')
-              then mixin.grafanaDashboardShards
-              else 1,
+            if std.objectHas(mixin, 'grafanaDashboardShards')
+            then mixin.grafanaDashboardShards
+            else 1,
         },
       std.objectFields($.mixins),
       {},
     );
-      std.foldr(
-        function(folderName, acc)
-            local config_map_name = 'dashboards-%s' % folderName;
-            local shards = folderShards[folderName];
-            sharded_config_map_mounts(config_map_name, shards) + acc,
-        std.objectFields(folderShards),
-        {},
-      ),
+    std.foldr(
+      function(folderName, acc)
+        local config_map_name = 'dashboards-%s' % folderName;
+        local shards = folderShards[folderName];
+        sharded_config_map_mounts(config_map_name, shards) + acc,
+      std.objectFields(folderShards),
+      {},
+    ),
 
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container]) +
