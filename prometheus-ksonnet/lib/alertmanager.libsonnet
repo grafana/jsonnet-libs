@@ -121,8 +121,6 @@
     ], self.alertmanager_pvc) +
     statefulset.mixin.spec.withServiceName('alertmanager') +
     statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.alertmanager_path }) +
-    statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
-    statefulset.mixin.spec.template.spec.securityContext.withFsGroup(0) +
     $.util.configVolumeMount('alertmanager-config', '/etc/alertmanager/config') +
     $.util.podPriority('critical')
   else {},
