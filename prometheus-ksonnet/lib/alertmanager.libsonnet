@@ -127,8 +127,20 @@
     $.util.podPriority('critical')
   else {},
 
+  local service = $.core.v1.service,
+  local servicePort = service.mixin.spec.portsType,
+
   // Do not create service in clusters without any alertmanagers.
-  alertmanager_service: if replicas > 0 then
-    $.util.serviceFor($.alertmanager_statefulset)
-  else {},
+  alertmanager_service:
+    if replicas == 0
+    then {}
+    else
+      $.util.serviceFor($.alertmanager_statefulset) +
+      service.mixin.spec.withPortsMixin([
+        servicePort.newNamed(
+          name='http',
+          port=80,
+          targetPort=$._config.alertmanager_port,
+        ),
+      ]),
 }

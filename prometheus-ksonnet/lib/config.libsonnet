@@ -36,13 +36,13 @@
     prometheus_insecure_skip_verify: self.insecureSkipVerify,
     prometheus_external_hostname: 'http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s' % self,
     prometheus_path: '/prometheus/',
-    prometheus_port: 80,
+    prometheus_port: 9090,
     prometheus_web_route_prefix: $._config.prometheus_path,
 
     // Alertmanager config options.
     alertmanager_external_hostname: 'http://alertmanager.%(namespace)s.svc.%(cluster_dns_suffix)s' % self,
     alertmanager_path: '/alertmanager/',
-    alertmanager_port: 80,
+    alertmanager_port: 9093,
     alertmanager_gossip_port: 9094,
     // Description of how many alertmanager replicas to run where. All
     // clusters with `'global': true` are participating in one global
