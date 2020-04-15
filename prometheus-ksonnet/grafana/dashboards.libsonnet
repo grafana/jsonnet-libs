@@ -143,7 +143,7 @@
           {
             name: 'dashboards-%s' % $.folderID(mixinName),
             orgId: 1,
-            folder: $.mixins[mixinName].grafanaDashboardFolder,
+            folder: '%s folder' % $.mixins[mixinName].grafanaDashboardFolder,
             type: 'file',
             disableDeletion: true,
             editable: false,
