@@ -141,7 +141,7 @@
           },
         ] + [
           {
-            name: 'dashboards-%s' % $.folderID($.mixins[mixinName].grafanaDashboardFolder),
+            name: 'dashboards-%s' % $.folderID(mixinName),
             orgId: 1,
             folder: $.mixins[mixinName].grafanaDashboardFolder,
             type: 'file',
