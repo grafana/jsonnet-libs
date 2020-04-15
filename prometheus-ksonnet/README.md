@@ -52,7 +52,7 @@ add the Kops mixin to your config to scrape the Kubernetes system components:
 
 ```jsonnet
 local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
-local kops = import "prometheus-ksonnet/lib/prometheus-config-kops.libsonnet";
+local kops = import "prometheus-ksonnet/prometheus-config-kops.libsonnet";
 
 prometheus + kops {
   _config+:: {
