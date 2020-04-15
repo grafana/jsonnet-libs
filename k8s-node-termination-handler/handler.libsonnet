@@ -34,17 +34,17 @@
     local daemonSet = k.apps.v1.daemonSet,
     local tolerations = daemonSet.mixin.spec.template.spec.tolerationsType,
     local nodeAffinity = daemonSet.mixin.spec.template.spec.affinity.nodeAffinity,
-    local b = nodeAffinity.requiredDuringSchedulingIgnoredDuringExecutionType,
+    local nodeSelector = nodeAffinity.requiredDuringSchedulingIgnoredDuringExecutionType,
     daemonset:
       daemonSet.new('node-termination-handler', [self.container]) +
       daemonSet.mixin.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.mixinInstance(
-        b.withNodeSelectorTerms([
-          b.nodeSelectorTermsType.new() +
-          b.nodeSelectorTermsType.withMatchExpressions([
-            b.nodeSelectorTermsType.matchFieldsType
+        nodeSelector.withNodeSelectorTerms([
+          nodeSelector.nodeSelectorTermsType.new() +
+          nodeSelector.nodeSelectorTermsType.withMatchExpressions([
+            nodeSelector.nodeSelectorTermsType.matchFieldsType
             .withKey('cloud.google.com/gke-accelerator')
             .withOperator('Exists'),
-            b.nodeSelectorTermsType.matchFieldsType
+            nodeSelector.nodeSelectorTermsType.matchFieldsType
             .withKey('cloud.google.com/gke-preemptible')
             .withOperator('Exists'),
           ]),
