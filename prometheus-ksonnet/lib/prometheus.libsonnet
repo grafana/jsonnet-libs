@@ -34,7 +34,7 @@
       local _config = self._config;
 
       container.new('prometheus', $._images.prometheus) +
-      container.withPorts($.core.v1.containerPort.new('http-metrics', 80)) +
+      container.withPorts($.core.v1.containerPort.new('http-metrics', _config.prometheus_port)) +
       container.withArgs([
         '--config.file=/etc/prometheus/prometheus.yml',
         '--web.listen-address=:%s' % _config.prometheus_port,
@@ -91,12 +91,26 @@
       statefulset.mixin.spec.template.metadata.withAnnotations({
         'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
       }) +
-      statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(0) +
       statefulset.mixin.spec.template.spec.withServiceAccount(self.name) +
+      statefulset.mixin.spec.template.spec.securityContext.withFsGroup(2000) +
+      statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(1000) +
+      statefulset.mixin.spec.template.spec.securityContext.withRunAsNonRoot(true) +
       $.util.podPriority('critical'),
 
+    local service = $.core.v1.service,
+    local servicePort = service.mixin.spec.portsType,
+
     prometheus_service:
-      $.util.serviceFor(self.prometheus_statefulset),
+      local _config = self._config;
+
+      $.util.serviceFor(self.prometheus_statefulset) +
+      service.mixin.spec.withPortsMixin([
+        servicePort.newNamed(
+          name='http',
+          port=80,
+          targetPort=_config.prometheus_port,
+        ),
+      ]),
   },
 
   main_prometheus: $.prometheus { name: 'prometheus' },
