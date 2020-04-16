@@ -37,6 +37,7 @@
     local nodeSelector = nodeAffinity.requiredDuringSchedulingIgnoredDuringExecutionType,
     daemonset:
       daemonSet.new('node-termination-handler', [self.container]) +
+      daemonSet.mixin.spec.template.spec.withServiceAccount(self.service_account.metadata.name) +
       daemonSet.mixin.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.mixinInstance(
         nodeSelector.withNodeSelectorTerms([
           nodeSelector.nodeSelectorTermsType.new() +
@@ -44,6 +45,9 @@
             nodeSelector.nodeSelectorTermsType.matchFieldsType
             .withKey('cloud.google.com/gke-accelerator')
             .withOperator('Exists'),
+          ]),
+          nodeSelector.nodeSelectorTermsType.new() +
+          nodeSelector.nodeSelectorTermsType.withMatchExpressions([
             nodeSelector.nodeSelectorTermsType.matchFieldsType
             .withKey('cloud.google.com/gke-preemptible')
             .withOperator('Exists'),
