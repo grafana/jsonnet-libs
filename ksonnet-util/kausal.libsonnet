@@ -44,6 +44,9 @@ k {
         fromSecret(name, secret)::
           super.withName(name) +
           super.mixin.secret.withSecretName(secret),
+
+        // Rename emptyDir to claimName
+        fromPersistentVolumeClaim(name='', claimName=''):: super.fromPersistentVolumeClaim(name=name, emptyDir=claimName),
       },
 
       volumeMount:: $.core.v1.container.volumeMountsType {
