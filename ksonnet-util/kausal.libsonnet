@@ -55,10 +55,6 @@ k {
           else {},
       },
 
-      persistentVolumeClaim+:: {
-        new():: {},
-      },
-
       container:: $.apps.v1.deployment.mixin.spec.template.spec.containersType {
         new(name, image)::
           super.new(name, image) +
