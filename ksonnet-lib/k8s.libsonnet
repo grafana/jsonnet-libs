@@ -26714,7 +26714,7 @@
         volume:: {
           fromConfigMap(name='', configMapName='', configMapItems=''):: self.withName(name) + self.mixin.configMap.withItems(configMapItems).withName(configMapName),
           fromEmptyDir(name='', emptyDir={}):: self.withName(name) + self.mixin.emptyDir.mixinInstance(emptyDir),
-          fromPersistentVolumeClaim(name='', emptyDir=''):: self.withName(name) + self.mixin.persistentVolumeClaim.withClaimName(emptyDir),
+          fromPersistentVolumeClaim(name='', claimName=''):: self.withName(name) + self.mixin.persistentVolumeClaim.withClaimName(claimName),
           fromHostPath(name='', hostPath=''):: self.withName(name) + self.mixin.hostPath.withPath(hostPath),
           fromSecret(name='', secretName=''):: self.withName(name) + self.mixin.secret.withSecretName(secretName),
           // Volume's name. Must be a DNS_LABEL and unique within the pod. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
