@@ -1,5 +1,5 @@
 // Override defaults paramters for objects in the ksonnet libs here.
-local k = import 'k.libsonnet';
+local k = import 'ksonnet.beta.4/k.libsonnet';
 
 k {
   _config+:: {
