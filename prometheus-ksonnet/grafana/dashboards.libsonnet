@@ -151,8 +151,10 @@
               path: '/grafana/dashboards-%s' % $.folderID($.mixins[mixinName].grafanaDashboardFolder),
             },
           }
-          for mixinName in std.objectFields($.mixins)
-          if $.isFolderedMixin($.mixins[mixinName])
+          for mixinName in std.set(
+            std.filter(function(n) $.isFolderedMixin($.mixins[n]), std.objectFields($.mixins)),
+            keyF=function(n) $.mixins[n].grafanaDashboardFolder
+          )
         ],
       }),
     }),
