@@ -238,13 +238,8 @@ k {
 
     // basicIngressFor creates an ingress that routes all traffic for a host to a service
     // WARNING: This function only uses the first port specified in the service
-    basicIngressFor(service, host, ignored_labels=[])::
+    basicIngressFor(service, host)::
       local ingress = $.extensions.v1beta1.ingress;
-      local labels = {
-        [x]: service.metadata.labels[x]
-        for x in std.objectFields(service.metadata.labels)
-        if std.count(ignored_labels, x) == 0
-      };
 
       ingress.new() + ingress.mixin.metadata.withName(service.metadata.name)
       + ingress.mixin.metadata.withLabelsMixin({ name: service.metadata.name })
