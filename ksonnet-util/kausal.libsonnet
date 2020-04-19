@@ -244,14 +244,15 @@ k {
       ingress.new() + ingress.mixin.metadata.withName(service.metadata.name)
       + ingress.mixin.metadata.withLabelsMixin({ name: service.metadata.name })
       + ingress.mixin.spec.withRules([
-        { host: host, 
+        {
+          host: host,
           http: { paths: [{
-            path: "/*",
+            path: '/*',
             backend: {
               serviceName: service.metadata.name,
               servicePort: service.spec.ports[0].port,
-            }
-          }]},
+            },
+          }] },
         },
       ]),
 
