@@ -106,12 +106,16 @@ local g = import 'grafana-builder/grafana.libsonnet';
     neq(label, value):: { label: label, op: '!=', value: value },
     re(label, value):: { label: label, op: '=~', value: value },
     nre(label, value):: { label: label, op: '!~', value: value },
+
+    // Use with latencyRecordingRulePanel to get the label in the metric name
+    // but not in the selector.
+    noop(label):: { label: label, op: 'nop' },
   },
 
   toPrometheusSelector(selector)::
     local pairs = [
       '%(label)s%(op)s"%(value)s"' % matcher
-      for matcher in selector
+      for matcher in std.filter(function(matcher) matcher.op != 'nop', selector)
     ];
     '{%s}' % std.join(', ', pairs),
 }
