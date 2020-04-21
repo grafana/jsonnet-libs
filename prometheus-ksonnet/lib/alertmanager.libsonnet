@@ -18,7 +18,7 @@
   else [],
 
   slackAlertTitle:: '{{ template "__alert_title" . }}',
-  slackAlertText:: {{ template "__alert_text" . }},
+  slackAlertText:: '{{ template "__alert_text" . }}',
 
   build_slack_receiver(name, slack_channel)::
     {
