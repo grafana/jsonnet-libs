@@ -17,15 +17,8 @@
     ]
   else [],
 
-  slackAlertTitle:: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.cluster }}: {{ .GroupLabels.alertname }} ({{ .GroupLabels.namespace }})',
-  slackAlertText:: |||
-    {{ .CommonAnnotations.summary }}
-    {{ if .Alerts.Firing | len }}Firing alerts:
-    {{ range .Alerts.Firing }}- {{ .Annotations.message }}{{ .Annotations.description }}
-    {{ end }}{{ end }}{{ if .Alerts.Resolved | len }}Resolved alerts:
-    {{ range .Alerts.Resolved }}- {{ .Annotations.message }}{{ .Annotations.description }}
-    {{ end }}{{ end }}
-  |||,
+  slackAlertTitle:: '{{ template "__alert_title" . }}',
+  slackAlertText:: {{ template "__alert_text" . }},
 
   build_slack_receiver(name, slack_channel)::
     {
