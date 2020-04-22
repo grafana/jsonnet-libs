@@ -17,9 +17,6 @@
     ]
   else [],
 
-  slackAlertTitle:: '{{ template "__alert_title" . }}',
-  slackAlertText:: '{{ template "__alert_text" . }}',
-
   build_slack_receiver(name, slack_channel)::
     {
       name: name,
@@ -27,8 +24,8 @@
         api_url: $._config.slack_url,
         channel: slack_channel,
         send_resolved: true,
-        title: $.slackAlertTitle,
-        text: $.slackAlertText,
+        title: '{{ template "__alert_title" . }}',
+        text: '{{ template "__alert_text" . }}',
         actions: [
           {
             type: 'button',
