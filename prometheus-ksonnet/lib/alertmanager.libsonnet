@@ -17,20 +17,48 @@
     ]
   else [],
 
+  build_slack_receiver(name, slack_channel)::
+    {
+      name: name,
+      slack_configs: [{
+        api_url: $._config.slack_url,
+        channel: slack_channel,
+        send_resolved: true,
+        title: '{{ template "__alert_title" . }}',
+        text: '{{ template "__alert_text" . }}',
+        actions: [
+          {
+            type: 'button',
+            text: 'Runbook :green_book:',
+            url: '{{ (index .Alerts 0).Annotations.runbook_url }}',
+          },
+          {
+            type: 'button',
+            text: 'Source :information_source:',
+            url: '{{ (index .Alerts 0).GeneratorURL }}',
+          },
+          {
+            type: 'button',
+            text: 'Silence :no_bell:',
+            url: '{{ template "__alert_silence_link" . }}',
+          },
+        ],
+      }],
+    },
+
   alertmanager_config:: {
-    templates: ['/etc/alertmanager/*.tmpl'],
+    templates: [
+      '/etc/alertmanager/*.tmpl',
+      '/etc/alertmanager/config/templates.tmpl',
+    ],
     route: {
       group_by: ['alertname'],
       receiver: 'slack',
     },
 
-    receivers: [{
-      name: 'slack',
-      slack_configs: [{
-        api_url: $._config.slack_url,
-        channel: $._config.slack_channel,
-      }],
-    }],
+    receivers: [
+      $.build_slack_receiver('slack', $._config.slack_channel),
+    ],
   },
 
   local configMap = $.core.v1.configMap,
@@ -40,6 +68,7 @@
     configMap.new('alertmanager-config') +
     configMap.withData({
       'alertmanager.yml': $.util.manifestYaml($.alertmanager_config),
+      'templates.tmpl': (importstr 'files/alertmanager_config.tmpl'),
     })
   else {},
 
