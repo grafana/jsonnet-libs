@@ -20,6 +20,10 @@ This repository contains various Jsonnet libraries we use at Grafana Labs:
 * [`prometheus-ksonnet`](prometheus-ksonnet/): A set of extensible configurations
   for running Prometheus on Kubernetes.
 
+## Jsonnet-bundler
+
+`jsonnetfile.json` are formatted with jb v0.3.1, this is not backwards compatible with jb v0.2.0. We strongly
+adivse to upgrade jb. If that is not possible right now, tag `pre-0.3` that marks the last version supporting jb v0.2.0.
 
 ## LICENSE
 
