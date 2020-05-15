@@ -134,11 +134,22 @@
             replacement: '$1',
           },
 
-          // But also include the namespace as a separate label, for routing alerts
+          // But also include the namespace, container, pod as separate labels,
+          // for routing alerts and joining with cAdvisor metrics.
           {
             source_labels: ['__meta_kubernetes_namespace'],
             action: 'replace',
             target_label: 'namespace',
+          },
+          {
+            source_labels: ['__meta_kubernetes_pod_name'],
+            action: 'replace',
+            target_label: 'pod',  // Not 'pod_name', which disappeared in K8s 1.16.
+          },
+          {
+            source_labels: ['__meta_kubernetes_container_name'],
+            action: 'replace',
+            target_label: 'container',  // Not 'container_name', which disappeared in K8s 1.16.
           },
 
           // Rename instances to the concatenation of pod:container:port.
@@ -169,10 +180,12 @@
         ],
       },
 
-      // A separate scrape config for kube-state-metrics which doesn't add a namespace
-      // label, instead taking the namespace label from the exported timeseries.  This
-      // prevents the exported namespace label being renamed to exported_namespace, and
-      // allows us to route alerts based on namespace.
+      // A separate scrape config for kube-state-metrics which doesn't
+      // add namespace, container, and pod labels, instead taking
+      // those labels from the exported timeseries. This prevents them
+      // being renamed to exported_namespace etc.  and allows us to
+      // route alerts based on namespace and join KSM metrics with
+      // cAdvisor metrics.
       {
         job_name: '%s/kube-state-metrics' % $._config.namespace,
         kubernetes_sd_configs: [{
