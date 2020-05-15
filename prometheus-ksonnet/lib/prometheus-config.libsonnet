@@ -141,10 +141,16 @@
             target_label: 'namespace',
           },
 
-          // Rename instances to be the pod name
+          // Rename instances to the concatenation of pod:container:port.
+          // All three components are needed to guarantee a unique instance label.
           {
-            source_labels: ['__meta_kubernetes_pod_name'],
+            source_labels: [
+              '__meta_kubernetes_pod_name',
+              '__meta_kubernetes_pod_container_name',
+              '__meta_kubernetes_pod_container_port_name',
+            ],
             action: 'replace',
+            separator: ':',
             target_label: 'instance',
           },
 
@@ -192,11 +198,16 @@
             action: 'keep',
           },
 
-          // Rename instances to be the pod name.
-          // As the scrape two ports of KSM, include the port name in the instance
-          // name.  Otherwise alerts about scrape failures and timeouts won't work.
+          // Rename instances to the concatenation of pod:container:port.
+          // In the specific case of KSM, we could leave out the container
+          // name and still have a unique instance label, but we leave it
+          // in here for consistency with the normal pod scraping.
           {
-            source_labels: ['__meta_kubernetes_pod_name', '__meta_kubernetes_pod_container_port_name'],
+            source_labels: [
+              '__meta_kubernetes_pod_name',
+              '__meta_kubernetes_pod_container_name',
+              '__meta_kubernetes_pod_container_port_name',
+            ],
             action: 'replace',
             separator: ':',
             target_label: 'instance',
