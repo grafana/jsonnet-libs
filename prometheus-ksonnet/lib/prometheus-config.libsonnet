@@ -147,7 +147,7 @@
             target_label: 'pod',  // Not 'pod_name', which disappeared in K8s 1.16.
           },
           {
-            source_labels: ['__meta_kubernetes_container_name'],
+            source_labels: ['__meta_kubernetes_pod_container_name'],
             action: 'replace',
             target_label: 'container',  // Not 'container_name', which disappeared in K8s 1.16.
           },
