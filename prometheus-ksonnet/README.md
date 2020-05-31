@@ -15,7 +15,7 @@ $ GO111MODULE=on go get github.com/grafana/tanka/cmd/tk
 $ tk init
 
 # point at cluster
-$ export CONTEXT=$(kubectl current-context)
+$ export CONTEXT=$(kubectl config current-context)
 $ tk env set environments/default  --server-from-context=$CONTEXT
 ```
 
