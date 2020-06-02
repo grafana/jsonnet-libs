@@ -17,7 +17,7 @@ $ GO111MODULE=on go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
 $ tk init
 
 # point at cluster
-$ export CONTEXT=$(kubectl current-context)
+$ export CONTEXT=$(kubectl config current-context)
 $ tk env set environments/default  --server-from-context=$CONTEXT
 ```
 
