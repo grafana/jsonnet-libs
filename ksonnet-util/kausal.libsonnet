@@ -124,8 +124,8 @@ k {
 
   local appsExtentions = {
     daemonSet+: {
-      new(name, containers)::
-        local labels = { name: name };
+      new(name, containers, podLabels={}, labelName='name')::
+        local labels = podLabels { [labelName]: name };
 
         super.new() +
         super.mixin.metadata.withName(name) +
@@ -150,8 +150,8 @@ k {
     },
 
     deployment+: {
-      new(name, replicas, containers, podLabels={})::
-        local labels = podLabels { name: name };
+      new(name, replicas, containers, podLabels={}, labelName='name')::
+        local labels = podLabels { [labelName]: name };
 
         super.new(name, replicas, containers, labels) +
 
@@ -168,8 +168,8 @@ k {
     },
 
     statefulSet+: {
-      new(name, replicas, containers, volumeClaims, podLabels={})::
-        local labels = podLabels { name: name };
+      new(name, replicas, containers, volumeClaims, podLabels={}, labelName='name')::
+        local labels = podLabels { [labelName]: name };
 
         super.new(name, replicas, containers, volumeClaims, labels) +
         super.mixin.spec.updateStrategy.withType('RollingUpdate') +
