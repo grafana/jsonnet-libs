@@ -124,8 +124,8 @@ k {
 
   local appsExtentions = {
     daemonSet+: {
-      new(name, containers)::
-        local labels = { name: name };
+      new(name, containers, podLabels={})::
+        local labels = podLabels { name: name };
 
         super.new() +
         super.mixin.metadata.withName(name) +
