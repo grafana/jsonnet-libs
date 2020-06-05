@@ -120,9 +120,9 @@ local g = import 'grafana-builder/grafana.libsonnet';
     '{%s}' % std.join(', ', pairs),
 
   // withRunbookURL - Add/Override the runbook_url annotations for all alerts inside a list of rule groups.
-  // - groups: the list of rule groups containing alerts.
   // - url_format: an URL format for the runbook, the alert name will be substituted in the URL.
-  withRunbookURL(groups, url_format)::
+  // - groups: the list of rule groups containing alerts.
+  withRunbookURL(url_format, groups)::
     [
       group {
         rules: [
