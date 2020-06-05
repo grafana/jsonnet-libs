@@ -123,17 +123,17 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // - groups: the list of rule groups containing alerts.
   // - url_format: an URL format for the runbook, the alert name will be substituted in the URL.
   withRunbookURL(groups, url_format)::
-  [
-    group {
-      rules: [
-        alert {
-          annotations+: {
-            runbook_url: url_format % alert.alert,
-          },
-        }
-        for alert in group.rules
-      ],
-    }
-    for group in groups
-  ],
+    [
+      group {
+        rules: [
+          alert {
+            annotations+: {
+              runbook_url: url_format % alert.alert,
+            },
+          }
+          for alert in group.rules
+        ],
+      }
+      for group in groups
+    ],
 }
