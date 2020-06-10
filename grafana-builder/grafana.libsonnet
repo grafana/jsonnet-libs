@@ -168,6 +168,7 @@
     dashes: false,
     datasource: '$datasource',
     fill: 1,
+    interval: null,
     legend: {
       avg: false,
       current: false,
