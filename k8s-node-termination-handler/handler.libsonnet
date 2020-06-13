@@ -38,33 +38,30 @@
     daemonset:
       daemonSet.new('node-termination-handler', [self.container]) +
       daemonSet.mixin.spec.template.spec.withServiceAccount(self.service_account.metadata.name) +
-      daemonSet.mixin.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.mixinInstance(
-        nodeSelector.withNodeSelectorTerms([
+      daemonSet.mixin.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.withNodeSelectorTerms(
+        [
           nodeSelector.nodeSelectorTermsType.new() +
           nodeSelector.nodeSelectorTermsType.withMatchExpressions([
-            nodeSelector.nodeSelectorTermsType.matchFieldsType
-            .withKey('cloud.google.com/gke-accelerator')
-            .withOperator('Exists'),
+            nodeSelector.nodeSelectorTermsType.matchFieldsType.withKey('cloud.google.com/gke-accelerator')
+            + nodeSelector.nodeSelectorTermsType.matchFieldsType.withOperator('Exists'),
           ]),
           nodeSelector.nodeSelectorTermsType.new() +
           nodeSelector.nodeSelectorTermsType.withMatchExpressions([
-            nodeSelector.nodeSelectorTermsType.matchFieldsType
-            .withKey('cloud.google.com/gke-preemptible')
-            .withOperator('Exists'),
+            nodeSelector.nodeSelectorTermsType.matchFieldsType.withKey('cloud.google.com/gke-preemptible')
+            + nodeSelector.nodeSelectorTermsType.matchFieldsType.withOperator('Exists'),
           ]),
-        ])
+        ]
       ) +
       daemonSet.mixin.metadata.withNamespace(_config.namespace) +
       daemonSet.mixin.spec.template.spec.withHostPid(true) +
       daemonSet.mixin.spec.template.spec.withTolerations([
         tolerations.new() +
-        tolerations
-        .withOperator('Exists')
-        .withEffect('NoSchedule'),
+        tolerations.withOperator('Exists') +
+        tolerations.withEffect('NoSchedule'),
+
         tolerations.new() +
-        tolerations
-        .withOperator('Exists')
-        .withEffect('NoExecute'),
+        tolerations.withOperator('Exists') +
+        tolerations.withEffect('NoExecute'),
       ]),
 
     local serviceAccount = k.core.v1.serviceAccount,
