@@ -81,7 +81,7 @@
       local _config = self._config;
 
       statefulset.new(self.name, 1, [
-        self.prometheus_container.withVolumeMountsMixin(
+        self.prometheus_container + container.withVolumeMountsMixin(
           volumeMount.new('%s-data' % self.name, '/prometheus')
         ),
         self.prometheus_watch_container,
