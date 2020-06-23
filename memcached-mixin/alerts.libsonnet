@@ -7,20 +7,20 @@
           {
             alert: 'MemcachedDown',
             expr: |||
-                memcached_up == 0
+              memcached_up == 0
             |||,
             'for': '15m',
             labels: {
-                severity: 'critical',
+              severity: 'critical',
             },
             annotations: {
-                message: |||
+              message: |||
                 Memcached Instance {{ $labels.job }} / {{ $labels.instance }} is down for more than 15mins.
-                |||,
+              |||,
             },
           },
         ],
       },
-    ]
+    ],
   },
 }
