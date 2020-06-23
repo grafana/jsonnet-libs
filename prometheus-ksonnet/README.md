@@ -3,10 +3,12 @@
 A set of extensible configs for running Prometheus on Kubernetes.
 
 Usage:
-- Make sure you have [Tanka](https://tanka.dev/install) installed:
+- Make sure you have [Tanka](https://tanka.dev/install) and
+  [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler) installed:
 
 ```bash
 $ GO111MODULE=on go get github.com/grafana/tanka/cmd/tk
+$ GO111MODULE=on go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
 ```
 
 - In your config repo, init Tanka and point it at your Kubernetes cluster:
@@ -15,14 +17,13 @@ $ GO111MODULE=on go get github.com/grafana/tanka/cmd/tk
 $ tk init
 
 # point at cluster
-$ export CONTEXT=$(kubectl current-context)
+$ export CONTEXT=$(kubectl config current-context)
 $ tk env set environments/default  --server-from-context=$CONTEXT
 ```
 
-- Vendor this package using [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler)
+- Vendor this package using jsonnet-bundler:
 
 ```bash
-$ GO111MODULE=on go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
 $ jb install github.com/grafana/jsonnet-libs/prometheus-ksonnet
 ```
 
