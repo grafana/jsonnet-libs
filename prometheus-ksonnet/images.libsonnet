@@ -1,7 +1,7 @@
 {
   _images+:: {
     prometheus: 'prom/prometheus:v2.19.1',
-    grafana: 'grafana/grafana:6.4.4',
+    grafana: 'grafana/grafana:7.0.4',
     watch: 'weaveworks/watch:master-5b2a6e5',
     kubeStateMetrics: 'gcr.io/google_containers/kube-state-metrics:v1.6.0',
     alertmanager: 'prom/alertmanager:v0.21.0',
