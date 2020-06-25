@@ -77,6 +77,9 @@
     local statefulset = $.apps.v1.statefulSet,
     local volumeMount = $.core.v1.volumeMount,
 
+    prometheus_config_mount::
+      $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus'),
+
     prometheus_statefulset:
       local _config = self._config;
 
@@ -86,7 +89,7 @@
         ),
         self.prometheus_watch_container,
       ], self.prometheus_pvc) +
-      $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus') +
+      self.prometheus_config_mount +
       statefulset.mixin.spec.withServiceName('prometheus') +
       statefulset.mixin.spec.template.metadata.withAnnotations({
         'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
