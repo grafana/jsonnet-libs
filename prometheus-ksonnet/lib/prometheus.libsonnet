@@ -30,13 +30,15 @@
 
     local container = $.core.v1.container,
 
+    prometheus_config_file:: '/etc/prometheus/prometheus.yml',
+
     prometheus_container::
       local _config = self._config;
 
       container.new('prometheus', $._images.prometheus) +
       container.withPorts($.core.v1.containerPort.new('http-metrics', _config.prometheus_port)) +
       container.withArgs([
-        '--config.file=/etc/prometheus/prometheus.yml',
+        '--config.file=' + self.prometheus_config_file,
         '--web.listen-address=:%s' % _config.prometheus_port,
         '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
         '--web.enable-admin-api',

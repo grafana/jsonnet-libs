@@ -1,3 +1,6 @@
+local container = $.core.v1.container;
+local statefulset = $.apps.v1.statefulSet;
+
 {
   prometheus_config_0: $.prometheus_config,
   prometheus_config_1: $.prometheus_config,
@@ -30,13 +33,14 @@
 
   prometheus_config_mount:: {},
 
-  prometheus_init_container::
-    container.new('prometheus-init', 'busybox') +
-    container.withCommand(["ln", "-s", "/etc/$HOSTNAME", "/etc/prometheus"]),
+  prometheus_config_file:: '/etc/$(POD_NAME)/prometheus.yml',
+
+  prometheus_container+:: container.withEnv([
+      container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+    ]),
 
   prometheus_statefulset:
     $.util.configVolumeMount('%s-config-0' % self.name, '/etc/prometheus-0') +
     $.util.configVolumeMount('%s-config-1' % self.name, '/etc/prometheus-1') +
-    statefulset.mixin.spec.template.spec.withInitContainers(self.prometheus_init_container) +
     statefulset.mixin.spec.withReplicas(2),
 }
