@@ -26,7 +26,12 @@
             'prometheus.io/port': '2379',
           },
           etcdEnv: env,
-        },
+        } + (
+          // Run etcd with the Burstable QoS class, and without a CPU limit
+          // to avoid CFS throttling (best for low latency)
+          $.util.resourcesRequests('500m', '512Mi') +
+          $.util.resourcesLimits(null, '512Mi')
+        ),
     },
   },
 }
