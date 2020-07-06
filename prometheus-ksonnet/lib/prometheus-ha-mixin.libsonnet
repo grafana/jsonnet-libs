@@ -4,37 +4,42 @@ local statefulset = k.apps.v1.statefulSet;
 local configMap = k.core.v1.configMap;
 
 {
-  prometheus_config_0:: self.prometheus_config,
-  prometheus_config_1:: self.prometheus_config,
+  local root = self,
 
-  prometheusAlerts_0:: self.prometheusAlerts,
-  prometheusAlerts_1:: self.prometheusAlerts,
+  _config+:: {
+    prometheus_config_file: '/etc/$(POD_NAME)/prometheus.yml',
+  },
 
-  prometheusRules_0:: self.prometheusRules,
-  prometheusRules_1:: self.prometheusRules,
+  prometheus_zero+:: {
+    config+:: root.prometheus_config,
+    alerts+:: root.prometheusAlerts,
+    rules+:: root.prometheusRules,
+  },
 
-  local prom = self,
+  prometheus_one+:: {
+    config+:: root.prometheus_config,
+    alerts+:: root.prometheusAlerts,
+    rules+:: root.prometheusRules,
+  },
 
   prometheus_config_map:: {},
 
   prometheus_config_maps: [
     configMap.new('%s-config-0' % self.name) +
     configMap.withData({
-      'prometheus.yml': k.util.manifestYaml(prom.prometheus_config_0),
-      'alerts.rules': k.util.manifestYaml(prom.prometheusAlerts_0),
-      'recording.rules': k.util.manifestYaml(prom.prometheusRules_0),
+      'prometheus.yml': k.util.manifestYaml(root.prometheus_zero.config),
+      'alerts.rules': k.util.manifestYaml(root.prometheus_zero.alerts),
+      'recording.rules': k.util.manifestYaml(root.prometheus_zero.rules),
     }),
     configMap.new('%s-config-1' % self.name) +
     configMap.withData({
-      'prometheus.yml': k.util.manifestYaml(prom.prometheus_config_1),
-      'alerts.rules': k.util.manifestYaml(prom.prometheusAlerts_1),
-      'recording.rules': k.util.manifestYaml(prom.prometheusRules_1),
+      'prometheus.yml': k.util.manifestYaml(root.prometheus_one.config),
+      'alerts.rules': k.util.manifestYaml(root.prometheus_one.alerts),
+      'recording.rules': k.util.manifestYaml(root.prometheus_one.rules),
     }),
   ],
 
   prometheus_config_mount:: {},
-
-  prometheus_config_file:: '/etc/$(POD_NAME)/prometheus.yml',
 
   prometheus_container+:: container.withEnv([
     container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
