@@ -31,22 +31,19 @@
 
     local container = $.core.v1.container,
 
-    prometheus_args:: {
-        '--config.file': _config.prometheus_config_file,
-        '--web.listen-address': _config.prometheus_port,
-        '--web.external-url': '%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
-        '--web.enable-admin-api': true,
-        '--web.enable-lifecycle': true,
-        '--web.route-prefix': _config.prometheus_web_route_prefix,
-        '--storage.tsdb.path': '/prometheus/data',
-        '--storage.tsdb.wal-compression': true,
-    },
-
     prometheus_container::
-
       container.new('prometheus', $._images.prometheus) +
       container.withPorts($.core.v1.containerPort.new('http-metrics', _config.prometheus_port)) +
-      container.withArgs($.util.mapToArgs(self.prometheus_args) +
+      container.withArgs([
+        '--config.file=' + _config.prometheus_config_file,
+        '--web.listen-address=:%s' % _config.prometheus_port,
+        '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
+        '--web.enable-admin-api',
+        '--web.enable-lifecycle',
+        '--web.route-prefix=%s' % _config.prometheus_web_route_prefix,
+        '--storage.tsdb.path=/prometheus/data',
+        '--storage.tsdb.wal-compression',
+      ]) +
       $.util.resourcesRequests('250m', '1536Mi') +
       $.util.resourcesLimits('500m', '2Gi'),
 
