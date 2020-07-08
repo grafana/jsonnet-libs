@@ -13,6 +13,7 @@
     name:: error 'must specify name',
 
     _config:: $._config,
+    local _config = self._config,
 
     local policyRule = $.rbac.v1beta1.policyRule,
 
@@ -31,12 +32,10 @@
     local container = $.core.v1.container,
 
     prometheus_container::
-      local _config = self._config;
-
       container.new('prometheus', $._images.prometheus) +
       container.withPorts($.core.v1.containerPort.new('http-metrics', _config.prometheus_port)) +
       container.withArgs([
-        '--config.file=/etc/prometheus/prometheus.yml',
+        '--config.file=' + _config.prometheus_config_file,
         '--web.listen-address=:%s' % _config.prometheus_port,
         '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
         '--web.enable-admin-api',
@@ -49,8 +48,6 @@
       $.util.resourcesLimits('500m', '2Gi'),
 
     prometheus_watch_container::
-      local _config = self._config;
-
       container.new('watch', $._images.watch) +
       container.withArgs([
         '-v',
@@ -77,16 +74,17 @@
     local statefulset = $.apps.v1.statefulSet,
     local volumeMount = $.core.v1.volumeMount,
 
-    prometheus_statefulset:
-      local _config = self._config;
+    prometheus_config_mount::
+      $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus'),
 
+    prometheus_statefulset:
       statefulset.new(self.name, 1, [
         self.prometheus_container + container.withVolumeMountsMixin(
           volumeMount.new('%s-data' % self.name, '/prometheus')
         ),
         self.prometheus_watch_container,
       ], self.prometheus_pvc) +
-      $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus') +
+      self.prometheus_config_mount +
       statefulset.mixin.spec.withServiceName('prometheus') +
       statefulset.mixin.spec.template.metadata.withAnnotations({
         'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
@@ -101,8 +99,6 @@
     local servicePort = service.mixin.spec.portsType,
 
     prometheus_service:
-      local _config = self._config;
-
       $.util.serviceFor(self.prometheus_statefulset) +
       service.mixin.spec.withPortsMixin([
         servicePort.newNamed(
