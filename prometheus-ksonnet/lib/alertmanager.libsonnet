@@ -169,5 +169,6 @@
           port=80,
           targetPort=$._config.alertmanager_port,
         ),
-      ]),
+      ]) +
+      service.spec.withSessionAffinity('ClientIP'),
 }
