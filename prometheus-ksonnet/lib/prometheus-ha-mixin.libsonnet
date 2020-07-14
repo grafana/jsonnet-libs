@@ -10,14 +10,27 @@ local configMap = k.core.v1.configMap;
     prometheus_config_file: '/etc/$(POD_NAME)/prometheus.yml',
   },
 
+  // The '__replica__' label is used by Cortex for deduplication.
   prometheus_zero+:: {
-    config+:: root.prometheus_config,
+    config+:: root.prometheus_config {
+      global+: {
+        external_labels+: {
+          __replica__: 'zero',
+        },
+      },
+    },
     alerts+:: root.prometheusAlerts,
     rules+:: root.prometheusRules,
   },
 
   prometheus_one+:: {
-    config+:: root.prometheus_config,
+    config+:: root.prometheus_config {
+      global+: {
+        external_labels+: {
+          __replica__: 'one',
+        },
+      },
+    },
     alerts+:: root.prometheusAlerts,
     rules+:: root.prometheusRules,
   },
