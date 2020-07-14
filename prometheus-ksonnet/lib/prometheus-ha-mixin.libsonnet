@@ -58,6 +58,10 @@ local configMap = k.core.v1.configMap;
     container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
   ]),
 
+  prometheus_watch_container+:: container.withEnv([
+    container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+  ]),
+
   prometheus_statefulset+:
     k.util.configVolumeMount('%s-config-0' % self.name, '/etc/prometheus-0') +
     k.util.configVolumeMount('%s-config-1' % self.name, '/etc/prometheus-1') +

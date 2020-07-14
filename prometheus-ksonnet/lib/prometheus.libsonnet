@@ -52,7 +52,8 @@
       container.withArgs([
         '-v',
         '-t',
-        '-p=/etc/prometheus',
+        // Watch the directory in which the Prometheus config file is located.
+        '-p=' + std.substr(_config.prometheus_config_file, 0, std.reverse(std.findSubstr('/', _config.prometheus_config_file))[0]),
         'curl',
         '-X',
         'POST',
