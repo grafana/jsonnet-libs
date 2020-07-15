@@ -7,7 +7,7 @@ local configMap = k.core.v1.configMap;
   local root = self,
 
   _config+:: {
-    prometheus_config_file: '/etc/$(POD_NAME)/prometheus.yml',
+    prometheus_config_dir: '/etc/$(POD_NAME)',
   },
 
   // The '__replica__' label is used by Cortex for deduplication.
@@ -55,6 +55,10 @@ local configMap = k.core.v1.configMap;
   prometheus_config_mount:: {},
 
   prometheus_container+:: container.withEnv([
+    container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+  ]),
+
+  prometheus_watch_container+:: container.withEnv([
     container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
   ]),
 
