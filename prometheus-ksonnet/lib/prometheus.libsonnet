@@ -52,7 +52,7 @@
       container.withArgs([
         '-v',
         '-t',
-        '-p=/etc/prometheus',
+        '-p=' + _config.prometheus_config_dir,
         'curl',
         '-X',
         'POST',
@@ -75,7 +75,7 @@
     local volumeMount = $.core.v1.volumeMount,
 
     prometheus_config_mount::
-      $.util.configVolumeMount('%s-config' % self.name, '/etc/prometheus'),
+      $.util.configVolumeMount('%s-config' % self.name, _config.prometheus_config_dir),
 
     prometheus_statefulset:
       statefulset.new(self.name, 1, [
