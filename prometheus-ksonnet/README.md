@@ -27,7 +27,7 @@ $ tk env set environments/default  --server-from-context=$CONTEXT
 $ jb install github.com/grafana/jsonnet-libs/prometheus-ksonnet
 ```
 
-- Assuming you want to run in the default namespace ('environment' in ksonnet parlance), add the following to the file `environments/default/main.jsonnet`:
+- Assuming you want to run in the default namespace ('environment' in Tanka parlance), add the following to the file `environments/default/main.jsonnet`:
 
 ```jsonnet
 local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";

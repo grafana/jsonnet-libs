@@ -1,34 +1,24 @@
-# Consul Ksonnet 
+# Consul Jsonnet
 
 A set of extensible configs for running Consul on Kubernetes.
 
-Usage:
-- Make sure you have the [ksonnet v0.8.0](https://github.com/ksonnet/ksonnet).
+To use this libary, install [Tanka](https://tanka.dev/) and [Jsonnet Bundler](https://github.com/jsonnet-bundler/jsonnet-bundler).
+
+In your config repo, if you don't have a Tanka application, make a new one (will copy credentials from current context):
 
 ```
-$ brew install https://raw.githubusercontent.com/ksonnet/homebrew-tap/82ef24cb7b454d1857db40e38671426c18cd8820/ks.rb
-$ brew pin ks
-$ ks version
-ksonnet version: v0.8.0
-jsonnet version: v0.9.5
-client-go version: v1.6.8-beta.0+$Format:%h$
-```
-
-- In your config repo, if you don't have a ksonnet application, make a new one (will copy credentials from current context):
-
-```
-$ ks init <application name>
+$ mkdir <application name>
 $ cd <application name>
+$ tk init
 ```
 
-- Vendor this package using [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler)
+Then you can install the library with:
 
 ```
-$ go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-$ jb install https://github.com/grafana/jsonnet-libs/consul
+jb install github.com/grafana/jsonnet-libs/consul
 ```
 
-- Assuming you want to run in the default namespace ('environment' in ksonnet parlance), add the following to the file `environments/default/main.jsonnet`:
+- Assuming you want to run in the default namespace ('environment' in Tanka parlance), add the following to the file `environments/default/main.jsonnet`:
 
 ```
 local consul = import "consul/consul.libsonnet";
@@ -43,11 +33,11 @@ consul + {
 - Apply your config:
 
 ```
-$ ks apply default
+$ tk apply default
 ```
 # Customising and Extending.
 
-The choice of Ksonnet for configuring these jobs was intention; it allows users
+The choice of Tanka for configuring these jobs was intention; it allows users
 to easily override setting in these configurations to suit their needs, without having
 to fork or modify this library.  For instance, to override the resource requests
 and limits for the Consul container, you would:
