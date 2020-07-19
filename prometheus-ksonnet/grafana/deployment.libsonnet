@@ -92,7 +92,7 @@
     $.util.podPriority('critical'),
 
   local service = $.core.v1.service,
-  local servicePort = service.mixin.spec.portsType,
+  local servicePort = $.core.v1.servicePort,
 
   grafana_service:
     $.util.serviceFor($.grafana_deployment) +

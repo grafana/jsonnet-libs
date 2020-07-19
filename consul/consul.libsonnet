@@ -256,11 +256,10 @@ k {
     ]) +
     $.util.resourcesRequests('100m', '500Mi'),
 
-  local policyRule = $.rbac.v1beta1.policyRule,
+  local policyRule = $.rbac.v1.policyRule,
 
   consul_sidekick_rbac:
     $.util.namespacedRBAC('consul-sidekick', [
-      policyRule.new() +
       policyRule.withApiGroups(['', 'extensions', 'apps']) +
       policyRule.withResources(['pods', 'replicasets']) +
       policyRule.withVerbs(['get', 'list', 'watch']),
@@ -273,8 +272,8 @@ k {
       '--pod-name=$(POD_NAME)',
     ]) +
     container.withEnv([
-      container.envType.fromFieldPath('POD_NAMESPACE', 'metadata.namespace'),
-      container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+      $.core.v1.envVar.fromFieldPath('POD_NAMESPACE', 'metadata.namespace'),
+      $.core.v1.envVar.fromFieldPath('POD_NAME', 'metadata.name'),
     ]),
 
   consul_statsd_exporter::

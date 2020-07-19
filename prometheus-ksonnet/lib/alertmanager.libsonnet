@@ -73,6 +73,7 @@
   else {},
 
   local container = $.core.v1.container,
+  local envVar = $.core.v1.envVar,
   local volumeMount = $.core.v1.volumeMount,
 
   alertmanager_container::
@@ -102,7 +103,7 @@
         []
     ) +
     container.withEnvMixin([
-      container.envType.fromFieldPath('POD_IP', 'status.podIP'),
+      envVar.fromFieldPath('POD_IP', 'status.podIP'),
     ]) +
     container.withVolumeMountsMixin(
       volumeMount.new('alertmanager-data', '/alertmanager')
@@ -155,7 +156,7 @@
   else {},
 
   local service = $.core.v1.service,
-  local servicePort = service.mixin.spec.portsType,
+  local servicePort = $.core.v1.servicePort,
 
   // Do not create service in clusters without any alertmanagers.
   alertmanager_service:

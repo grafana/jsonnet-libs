@@ -1,5 +1,6 @@
 {
   local podAntiAffinity = $.apps.v1.deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
+  local podAffinityTerm = $.core.v1.podAffinityTerm,
 
   etcd_cluster(name, size=3, version='3.3.13', env=[]):: {
     apiVersion: 'etcd.database.coreos.com/v1beta2',
@@ -15,9 +16,8 @@
       version: version,
       pod:
         podAntiAffinity.withRequiredDuringSchedulingIgnoredDuringExecution([
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.new() +
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.mixin.labelSelector.withMatchLabels({ etcd_cluster: name }) +
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey('kubernetes.io/hostname'),
+          podAffinityTerm.labelSelector.withMatchLabels({ etcd_cluster: name }) +
+          podAffinityTerm.withTopologyKey('kubernetes.io/hostname'),
         ]).spec.template.spec
         {
           labels: { name: name },

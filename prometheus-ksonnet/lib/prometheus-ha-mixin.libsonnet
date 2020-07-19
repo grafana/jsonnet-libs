@@ -1,5 +1,6 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 local container = k.core.v1.container;
+local envVar = k.core.v1.envVarservice;
 local statefulset = k.apps.v1.statefulSet;
 local configMap = k.core.v1.configMap;
 
@@ -55,11 +56,11 @@ local configMap = k.core.v1.configMap;
   prometheus_config_mount:: {},
 
   prometheus_container+:: container.withEnv([
-    container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+    envVar.fromFieldPath('POD_NAME', 'metadata.name'),
   ]),
 
   prometheus_watch_container+:: container.withEnv([
-    container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+    envVar.fromFieldPath('POD_NAME', 'metadata.name'),
   ]),
 
   prometheus_statefulset+:

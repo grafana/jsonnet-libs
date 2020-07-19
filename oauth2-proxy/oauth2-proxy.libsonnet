@@ -25,7 +25,7 @@ k {
     }),
 
   local container = $.core.v1.container,
-  local envFrom = container.envFromType,
+  local envFrom = $.core.v1.envFromSource,
 
   oauth2_proxy_container::
     container.new('oauth2-proxy', $._images.oauth2_proxy) +
@@ -38,8 +38,7 @@ k {
       '-pass-basic-auth=%s' % $._config.oauth_pass_basic_auth,
     ]) +
     container.withEnvFrom(
-      envFrom.new() +
-      envFrom.mixin.secretRef.withName('oauth2-proxy'),
+      envFrom.secretRef.withName('oauth2-proxy'),
     ),
 
   local deployment = $.apps.v1.deployment,

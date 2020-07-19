@@ -96,7 +96,7 @@
       $.util.podPriority('critical'),
 
     local service = $.core.v1.service,
-    local servicePort = service.mixin.spec.portsType,
+    local servicePort = $.core.v1.servicePort,
 
     prometheus_service:
       $.util.serviceFor(self.prometheus_statefulset) +
