@@ -96,7 +96,7 @@
 
   grafana_service:
     $.util.serviceFor($.grafana_deployment) +
-    service.mixin.spec.withPortsMixin([
+    service.spec.withPortsMixin([
       servicePort.newNamed(
         name='http',
         port=80,

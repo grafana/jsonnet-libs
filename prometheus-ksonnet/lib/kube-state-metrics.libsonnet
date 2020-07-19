@@ -97,8 +97,8 @@
     ]) +
     // Stop the default pod discovery scraping this pod - we use a special
     // scrape config to preserve namespace etc labels.
-    deployment.mixin.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
-    deployment.mixin.spec.template.spec.withServiceAccount('kube-state-metrics') +
+    deployment.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
+    deployment.spec.template.spec.withServiceAccount('kube-state-metrics') +
     $.util.podPriority('critical'),
 
   kube_state_metrics_service:

@@ -302,7 +302,7 @@ k {
       $.consul_statsd_exporter,
       $.consul_exporter,
     ]) +
-    deployment.mixin.spec.template.spec.withServiceAccount('consul-sidekick') +
+    deployment.spec.template.spec.withServiceAccount('consul-sidekick') +
     $.util.configMapVolumeMount($.consul_config_map, '/etc/config') +
     $.util.antiAffinity,
 

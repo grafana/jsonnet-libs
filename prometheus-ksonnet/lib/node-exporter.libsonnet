@@ -15,8 +15,8 @@
       '--collector.filesystem.ignored-fs-types=^(tmpfs|autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$',
       '--collector.filesystem.ignored-mount-points=^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)',
     ]) +
-    container.mixin.securityContext.withPrivileged(true) +
-    container.mixin.securityContext.withRunAsUser(0) +
+    container.securityContext.withPrivileged(true) +
+    container.securityContext.withRunAsUser(0) +
     $.util.resourcesRequests('50m', '30Mi') +
     $.util.resourcesLimits('200m', '75Mi'),
 
@@ -24,9 +24,9 @@
 
   node_exporter_daemonset:
     daemonSet.new('node-exporter', [$.node_exporter_container]) +
-    daemonSet.mixin.spec.template.spec.withHostPid(true) +
-    daemonSet.mixin.spec.template.spec.withHostNetwork(true) +
-    daemonSet.mixin.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
+    daemonSet.spec.template.spec.withHostPid(true) +
+    daemonSet.spec.template.spec.withHostNetwork(true) +
+    daemonSet.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
     $.util.hostVolumeMount('proc', '/proc', '/host/proc') +
     $.util.hostVolumeMount('sys', '/sys', '/host/sys') +
     (if $._config.node_exporter_mount_root

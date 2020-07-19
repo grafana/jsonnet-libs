@@ -42,5 +42,5 @@
 
   operator_deployment:
     deployment.new('etcd-operator', 1, [$.operator_container]) +
-    deployment.mixin.spec.template.spec.withServiceAccount('etcd-operator'),
+    deployment.spec.template.spec.withServiceAccount('etcd-operator'),
 }

@@ -66,5 +66,5 @@ local configMap = k.core.v1.configMap;
   prometheus_statefulset+:
     k.util.configVolumeMount('%s-config-0' % self.name, '/etc/prometheus-0') +
     k.util.configVolumeMount('%s-config-1' % self.name, '/etc/prometheus-1') +
-    statefulset.mixin.spec.withReplicas(2),
+    statefulset.spec.withReplicas(2),
 }

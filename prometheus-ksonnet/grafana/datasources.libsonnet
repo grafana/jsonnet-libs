@@ -80,5 +80,5 @@
       [name]: std.toString($.grafanaDatasources[name])
       for name in std.objectFields($.grafanaDatasources)
     }) +
-    configMap.mixin.metadata.withLabels($._config.grafana_datasource_labels),
+    configMap.metadata.withLabels($._config.grafana_datasource_labels),
 }

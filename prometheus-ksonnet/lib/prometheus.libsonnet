@@ -67,9 +67,9 @@
 
     prometheus_pvc::
       pvc.new() +
-      pvc.mixin.metadata.withName('%s-data' % (self.name)) +
-      pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-      pvc.mixin.spec.resources.withRequests({ storage: '300Gi' }),
+      pvc.metadata.withName('%s-data' % (self.name)) +
+      pvc.spec.withAccessModes('ReadWriteOnce') +
+      pvc.spec.resources.withRequests({ storage: '300Gi' }),
 
     local statefulset = $.apps.v1.statefulSet,
     local volumeMount = $.core.v1.volumeMount,
@@ -85,14 +85,14 @@
         self.prometheus_watch_container,
       ], self.prometheus_pvc) +
       self.prometheus_config_mount +
-      statefulset.mixin.spec.withServiceName('prometheus') +
-      statefulset.mixin.spec.template.metadata.withAnnotations({
+      statefulset.spec.withServiceName('prometheus') +
+      statefulset.spec.template.metadata.withAnnotations({
         'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
       }) +
-      statefulset.mixin.spec.template.spec.withServiceAccount(self.name) +
-      statefulset.mixin.spec.template.spec.securityContext.withFsGroup(2000) +
-      statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(1000) +
-      statefulset.mixin.spec.template.spec.securityContext.withRunAsNonRoot(true) +
+      statefulset.spec.template.spec.withServiceAccount(self.name) +
+      statefulset.spec.template.spec.securityContext.withFsGroup(2000) +
+      statefulset.spec.template.spec.securityContext.withRunAsUser(1000) +
+      statefulset.spec.template.spec.securityContext.withRunAsNonRoot(true) +
       $.util.podPriority('critical'),
 
     local service = $.core.v1.service,
@@ -100,7 +100,7 @@
 
     prometheus_service:
       $.util.serviceFor(self.prometheus_statefulset) +
-      service.mixin.spec.withPortsMixin([
+      service.spec.withPortsMixin([
         servicePort.newNamed(
           name='http',
           port=80,
