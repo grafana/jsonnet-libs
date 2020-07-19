@@ -4,28 +4,26 @@
   local containerPort = $.core.v1.containerPort,
 
   webhook_container::
-    container.new('webhook', $._images.cert_manager_webhook)
-    .withImagePullPolicy('IfNotPresent')
-    .withArgs([
+    container.new('webhook', $._images.cert_manager_webhook) +
+    container.withImagePullPolicy('IfNotPresent') +
+    container.withArgs([
       '--v=2',  // loglevel
       '--secure-port=10250',  // optionally customizable
       '--tls-cert-file=/certs/tls.crt',
       '--tls-private-key-file=/certs/tls.key',
-    ],)
-    .withEnv([
-      container.envType.fromFieldPath('POD_NAMESPACE', 'metadata.namespace'),
-    ])
-    .withVolumeMounts([
-      container.volumeMountsType.new(name='certs', mountPath='/certs'),
+    ],) +
+    container.withEnv([
+      $.core.v1.envVar.fromFieldPath('POD_NAMESPACE', 'metadata.namespace'),
     ]) +
-    container.mixin.livenessProbe.httpGet
-    .withPath('/livez')
-    .withPort(6080)
-    .withScheme('HTTP') +
-    container.mixin.readinessProbe.httpGet
-    .withPath('/healthz')
-    .withPort(6080)
-    .withScheme('HTTP'),
+    container.withVolumeMounts([
+      $.core.v1.Volume.new(name='certs', mountPath='/certs'),
+    ]) +
+    container.livenessProbe.httpGet.withPath('/livez') +
+    container.livenessProbe.httpGet.withPort(6080) +
+    container.livenessProbe.httpGet.withScheme('HTTP') +
+    container.readinessProbe.httpGet.withPath('/healthz') +
+    container.readinessProbe.httpGet.withPort(6080) +
+    container.readinessProbe.httpGet.withScheme('HTTP'),
 
 
   webhook_deployment:
@@ -33,11 +31,10 @@
       app: 'webhook',
       /* TODO: labels */
     },) +
-    deployment.mixin.spec.template.spec
-    .withServiceAccountName('cert-manager-webhook') +
-    deployment.mixin.spec.template.spec.withVolumes([
-      deployment.mixin.spec.template.spec.volumesType.fromSecret(name='certs', secretName='cert-manager-webhook-tls'),
+    deployment.spec.template.spec.withServiceAccountName('cert-manager-webhook') +
+    deployment.spec.template.spec.withVolumes([
+      $.core.v1.volume.fromSecret(name='certs', secretName='cert-manager-webhook-tls'),
     ],) +
-    deployment.mixin.metadata.withLabelsMixin({ app: 'webhook' },),
+    deployment.metadata.withLabelsMixin({ app: 'webhook' },),
 
 }

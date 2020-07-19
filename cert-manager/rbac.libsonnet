@@ -1,402 +1,273 @@
 {
-  local clusterRole = $.rbac.v1beta1.clusterRole,
-  local clusterRoleBinding = $.rbac.v1beta1.clusterRoleBinding,
+  local clusterRole = $.rbac.v1.clusterRole,
+  local clusterRoleBinding = $.rbac.v1.clusterRoleBinding,
 
+  local role = $.rbac.v1.role,
+  local roleBinding = $.rbac.v1.roleBinding,
 
-  local role = $.rbac.v1beta1.role,
-  local roleBinding = $.rbac.v1beta1.roleBinding,
+  local policyRule = $.rbac.v1.policyRule,
+  local subject = $.rbac.v1.subject,
 
   leaderelection_role:
-    role.new() +
-    role.mixin.metadata
-    .withName('cert-manager:leaderelection')
-    .withNamespace('kube-system')
-    .withLabels({}/* TODO: labels */) +
+    role.new('cert-manager:leaderelection') +
+    role.metadata.withNamespace('kube-system') +
+    role.metadata.withLabels({}/* TODO: labels */) +
     role.withRules([
-      role.rulesType.new() +
-      role.rulesType
-      .withApiGroups('')
-      .withResources(['configmaps'])
-      .withVerbs(['get', 'create', 'update', 'patch'],),
-    ],),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['configmaps']) +
+      policyRule.withVerbs(['get', 'create', 'update', 'patch']),
+    ]),
   leaderelection_rolebinding:
-    roleBinding.new() +
-    roleBinding.mixin.metadata
-    .withName('cert-manager:leaderelection')
-    .withNamespace('kube-system')
-    .withLabels({}/* TODO: labels */) +
-    roleBinding.mixin.roleRef
-    .withApiGroup('rbac.authorization.k8s.io')
-    .withKind('Role')
-    .withName('cert-manager:leaderelection') +
+    roleBinding.new('cert-manager:leaderelection') +
+    roleBinding.metadata.withNamespace('kube-system') +
+    roleBinding.metadata.withLabels({}/* TODO: labels */) +
+    roleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+    roleBinding.roleRef.withKind('Role') +
+    roleBinding.roleRef.withName('cert-manager:leaderelection') +
     roleBinding.withSubjects([
-      roleBinding.subjectsType.new() +
-      roleBinding.subjectsType
-      .withApiGroup('')
-      .withKind('ServiceAccount')
-      .withName('cert-manager')
-      .withNamespace($._config.namespace),
-
-    ],),
+      subject.withApiGroup('') +
+      subject.withKind('ServiceAccount') +
+      subject.withName('cert-manager') +
+      subject.withNamespace($._config.namespace),
+    ]),
 
   cert_manager_controller_issuers_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-controller-issuers')
-    .withLabels({}/* TODO namespace */) +
+    clusterRole.new('cert-manager-controller-issuers') +
+    clusterRole.metadata.withLabels({}/* TODO namespace */) +
     clusterRole.withRules([
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['issuers', 'issuers/status'])
-      .withVerbs(['update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['issuers'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['secrets'])
-      .withVerbs(['get', 'list', 'watch', 'create', 'update', 'delete']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['events'])
-      .withVerbs(['create', 'patch']),
-    ],),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['issuers', 'issuers/status']) +
+      policyRule.withVerbs(['update']),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['issuers']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['secrets']) +
+      policyRule.withVerbs(['get', 'list', 'watch', 'create', 'update', 'delete']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['events']) +
+      policyRule.withVerbs(['create', 'patch']),
+    ]),
 
   cert_manager_controller_clusterissuers_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-controller-clusterissuers')
-    .withLabels({}/* TODO namespace */) +
+    clusterRole.new('cert-manager-controller-clusterissuers') +
+    clusterRole.metadata.withLabels({}/* TODO namespace */) +
     clusterRole.withRules([
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['clusterissuers', 'clusterissuers/status'])
-      .withVerbs(['update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['clusterissuers'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['secrets'])
-      .withVerbs(['get', 'list', 'watch', 'create', 'update', 'delete']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['events'])
-      .withVerbs(['create', 'patch']),
-    ],),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['clusterissuers', 'clusterissuers/status']) +
+      policyRule.withVerbs(['update']),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['clusterissuers']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['secrets']) +
+      policyRule.withVerbs(['get', 'list', 'watch', 'create', 'update', 'delete']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['events']) +
+      policyRule.withVerbs(['create', 'patch']),
+    ]),
   cert_manager_controller_certificates_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-controller-certificates')
-    .withLabels({}/* TODO namespace */) +
+    clusterRole.new('cert-manager-controller-certificates') +
+    clusterRole.metadata.withLabels({}/* TODO namespace */) +
     clusterRole.withRules([
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['certificates', 'certificates/status', 'certificaterequests', 'certificaterequests/status'])
-      .withVerbs(['update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['certificates', 'certificaterequests', 'clusterissuers', 'issuers'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['certificates/finalizers', 'certificaterequests/finalizers'])
-      .withVerbs(['update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('acme.cert-manager.io')
-      .withResources(['orders'])
-      .withVerbs(['create', 'delete', 'get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['secrets'])
-      .withVerbs(['get', 'list', 'watch', 'create', 'update', 'delete']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['events'])
-      .withVerbs(['create', 'patch']),
-    ],),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['certificates', 'certificates/status', 'certificaterequests', 'certificaterequests/status']) +
+      policyRule.withVerbs(['update']),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['certificates', 'certificaterequests', 'clusterissuers', 'issuers']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['certificates/finalizers', 'certificaterequests/finalizers']) +
+      policyRule.withVerbs(['update']),
+      policyRule.withApiGroups('acme.cert-manager.io') +
+      policyRule.withResources(['orders']) +
+      policyRule.withVerbs(['create', 'delete', 'get', 'list', 'watch']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['secrets']) +
+      policyRule.withVerbs(['get', 'list', 'watch', 'create', 'update', 'delete']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['events']) +
+      policyRule.withVerbs(['create', 'patch']),
+    ]),
   cert_manager_controller_orders_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-controller-orders')
-    .withLabels({}/* TODO namespace */) +
+    clusterRole.new('cert-manager-controller-orders') +
+    clusterRole.metadata.withLabels({}/* TODO namespace */) +
     clusterRole.withRules([
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('acme.cert-manager.io')
-      .withResources(['orders', 'orders/status'])
-      .withVerbs(['update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('acme.cert-manager.io')
-      .withResources(['orders', 'challenges'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['clusterissuers', 'issuers'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('acme.cert-manager.io')
-      .withResources(['challenges'])
-      .withVerbs(['create', 'delete']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('acme.cert-manager.io')
-      .withResources(['orders/finalizers'])
-      .withVerbs(['update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['secrets'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['events'])
-      .withVerbs(['create', 'patch']),
-    ],),
+      policyRule.withApiGroups('acme.cert-manager.io') +
+      policyRule.withResources(['orders', 'orders/status']) +
+      policyRule.withVerbs(['update']),
+      policyRule.withApiGroups('acme.cert-manager.io') +
+      policyRule.withResources(['orders', 'challenges']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['clusterissuers', 'issuers']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('acme.cert-manager.io') +
+      policyRule.withResources(['challenges']) +
+      policyRule.withVerbs(['create', 'delete']),
+      policyRule.withApiGroups('acme.cert-manager.io') +
+      policyRule.withResources(['orders/finalizers']) +
+      policyRule.withVerbs(['update']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['secrets']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['events']) +
+      policyRule.withVerbs(['create', 'patch']),
+    ]),
 
   cert_manager_controller_challenges_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-controller-challenges')
-    .withLabels({}/* TODO namespace */) +
+    clusterRole.new('cert-manager-controller-challenges') +
+    clusterRole.metadata.withLabels({}/* TODO namespace */) +
     clusterRole.withRules([
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('acme.cert-manager.io')
-      .withResources(['challenges', 'challenges/status'])
-      .withVerbs(['update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('acme.cert-manager.io')
-      .withResources(['challenges'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['issuers', 'clusterissuers'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['secrets'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['events'])
-      .withVerbs(['create', 'patch']),
+      policyRule.withApiGroups('acme.cert-manager.io') +
+      policyRule.withResources(['challenges', 'challenges/status']) +
+      policyRule.withVerbs(['update']),
+      policyRule.withApiGroups('acme.cert-manager.io') +
+      policyRule.withResources(['challenges']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['issuers', 'clusterissuers']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['secrets']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['events']) +
+      policyRule.withVerbs(['create', 'patch']),
       // HTTP01 rules
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['pods', 'services'])
-      .withVerbs(['get', 'list', 'watch', 'create', 'delete']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('extensions')
-      .withResources(['ingresses'])
-      .withVerbs(['get', 'list', 'watch', 'create', 'delete', 'update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups(['acme.cert-manager.io'])
-      .withResources(['challenges/finalizers'])
-      .withVerbs(['update']),
-      // DNS01 rules (duplicated above)
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['secrets'])
-      .withVerbs(['get', 'list', 'watch']),
-
-    ],),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['pods', 'services']) +
+      policyRule.withVerbs(['get', 'list', 'watch', 'create', 'delete']),
+      policyRule.withApiGroups('extensions') +
+      policyRule.withResources(['ingresses']) +
+      policyRule.withVerbs(['get', 'list', 'watch', 'create', 'delete', 'update']),
+      policyRule.withApiGroups(['acme.cert-manager.io']) +
+      policyRule.withResources(['challenges/finalizers']) +
+      policyRule.withVerbs(['update']),
+      // DNS01 rules (duplicated above)+
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['secrets']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+    ]),
   cert_manager_controller_ingress_shim_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-controller-ingress-shim')
-    .withLabels({}/* TODO namespace */) +
+    clusterRole.new('cert-manager-controller-ingress-shim') +
+    clusterRole.metadata.withLabels({}/* TODO namespace */) +
     clusterRole.withRules([
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['certificates', 'certificaterequests'])
-      .withVerbs(['create', 'update', 'delete']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['certificates', 'certificaterequests', 'issuers', 'clusterissuers'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('extensions')
-      .withResources(['ingresses'])
-      .withVerbs(['get', 'list', 'watch']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('extensions')
-      .withResources(['ingresses/finalizers'])
-      .withVerbs(['update']),
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('')
-      .withResources(['events'])
-      .withVerbs(['create', 'patch']),
-    ],),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['certificates', 'certificaterequests']) +
+      policyRule.withVerbs(['create', 'update', 'delete']),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['certificates', 'certificaterequests', 'issuers', 'clusterissuers']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('extensions') +
+      policyRule.withResources(['ingresses']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+      policyRule.withApiGroups('extensions') +
+      policyRule.withResources(['ingresses/finalizers']) +
+      policyRule.withVerbs(['update']),
+      policyRule.withApiGroups('') +
+      policyRule.withResources(['events']) +
+      policyRule.withVerbs(['create', 'patch']),
+    ]),
 
   cert_manager_controller_issuers_clusterrolebinding:
-    clusterRoleBinding.new() +
-    clusterRoleBinding.mixin.metadata
-    .withName('cert-manager-controller-issuers')
-    .withLabels({}/* TODO: labels */) +
-    clusterRoleBinding.mixin.roleRef
-    .withApiGroup('rbac.authorization.k8s.io')
-    .withKind('ClusterRole')
-    .withName('cert-manager-controller-issuers') +
-    clusterRoleBinding.withSubjects(
-      clusterRoleBinding.subjectsType.new() +
-      clusterRoleBinding.subjectsType
-      .withKind('ServiceAccount')
-      .withName('cert-manager')
-      .withNamespace($._config.namespace)
-    ),
+    clusterRoleBinding.new('cert-manager-controller-issuers') +
+    clusterRoleBinding.metadata.withLabels({}/* TODO: labels */) +
+    clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+    clusterRoleBinding.roleRef.withKind('ClusterRole') +
+    clusterRoleBinding.roleRef.withName('cert-manager-controller-issuers') +
+    clusterRoleBinding.withSubjects([
+      subject.withKind('ServiceAccount') +
+      subject.withName('cert-manager') +
+      subject.withNamespace($._config.namespace),
+    ]),
 
   cert_manager_controller_clusterissuers_clusterrolebinding:
-    clusterRoleBinding.new() +
-    clusterRoleBinding.mixin.metadata
-    .withName('cert-manager-controller-clusterissuers')
-    .withLabels({}/* TODO: labels */) +
-    clusterRoleBinding.mixin.roleRef
-    .withApiGroup('rbac.authorization.k8s.io')
-    .withKind('ClusterRole')
-    .withName('cert-manager-controller-clusterissuers') +
-    clusterRoleBinding.withSubjects(
-      clusterRoleBinding.subjectsType.new() +
-      clusterRoleBinding.subjectsType
-      .withKind('ServiceAccount')
-      .withName('cert-manager')
-      .withNamespace($._config.namespace)
-    ),
+    clusterRoleBinding.new('cert-manager-controller-clusterissuers') +
+    clusterRoleBinding.metadata.withLabels({}/* TODO: labels */) +
+    clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+    clusterRoleBinding.roleRef.withKind('ClusterRole') +
+    clusterRoleBinding.roleRef.withName('cert-manager-controller-clusterissuers') +
+    clusterRoleBinding.withSubjects([
+      subject.withKind('ServiceAccount') +
+      subject.withName('cert-manager') +
+      subject.withNamespace($._config.namespace),
+    ]),
 
   cert_manager_controller_certificates_clusterrolebinding:
-    clusterRoleBinding.new() +
-    clusterRoleBinding.mixin.metadata
-    .withName('cert-manager-controller-certificates')
-    .withLabels({}/* TODO: labels */) +
-    clusterRoleBinding.mixin.roleRef
-    .withApiGroup('rbac.authorization.k8s.io')
-    .withKind('ClusterRole')
-    .withName('cert-manager-controller-certificates') +
-    clusterRoleBinding.withSubjects(
-      clusterRoleBinding.subjectsType.new() +
-      clusterRoleBinding.subjectsType
-      .withKind('ServiceAccount')
-      .withName('cert-manager')
-      .withNamespace($._config.namespace)
-    ),
+    clusterRoleBinding.new('cert-manager-controller-certificates') +
+    clusterRoleBinding.metadata.withLabels({}/* TODO: labels */) +
+    clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+    clusterRoleBinding.roleRef.withKind('ClusterRole') +
+    clusterRoleBinding.roleRef.withName('cert-manager-controller-certificates') +
+    clusterRoleBinding.withSubjects([
+      subject.withKind('ServiceAccount') +
+      subject.withName('cert-manager') +
+      subject.withNamespace($._config.namespace),
+    ]),
 
   cert_manager_controller_orders_clusterrolebinding:
-    clusterRoleBinding.new() +
-    clusterRoleBinding.mixin.metadata
-    .withName('cert-manager-controller-orders')
-    .withLabels({}/* TODO: labels */) +
-    clusterRoleBinding.mixin.roleRef
-    .withApiGroup('rbac.authorization.k8s.io')
-    .withKind('ClusterRole')
-    .withName('cert-manager-controller-orders') +
-    clusterRoleBinding.withSubjects(
-      clusterRoleBinding.subjectsType.new() +
-      clusterRoleBinding.subjectsType
-      .withKind('ServiceAccount')
-      .withName('cert-manager')
-      .withNamespace($._config.namespace)
-    ),
+    clusterRoleBinding.new('cert-manager-controller-orders') +
+    clusterRoleBinding.metadata.withLabels({}/* TODO: labels */) +
+    clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+    clusterRoleBinding.roleRef.withKind('ClusterRole') +
+    clusterRoleBinding.roleRef.withName('cert-manager-controller-orders') +
+    clusterRoleBinding.withSubjects([
+      subject.withKind('ServiceAccount') +
+      subject.withName('cert-manager') +
+      subject.withNamespace($._config.namespace),
+    ]),
 
   cert_manager_controller_challenges_clusterrolebinding:
-    clusterRoleBinding.new() +
-    clusterRoleBinding.mixin.metadata
-    .withName('cert-manager-controller-challenges')
-    .withLabels({}/* TODO: labels */) +
-    clusterRoleBinding.mixin.roleRef
-    .withApiGroup('rbac.authorization.k8s.io')
-    .withKind('ClusterRole')
-    .withName('cert-manager-controller-challenges') +
-    clusterRoleBinding.withSubjects(
-      clusterRoleBinding.subjectsType.new() +
-      clusterRoleBinding.subjectsType
-      .withKind('ServiceAccount')
-      .withName('cert-manager')
-      .withNamespace($._config.namespace)
-    ),
+    clusterRoleBinding.new('cert-manager-controller-challenges') +
+    clusterRoleBinding.metadata.withLabels({}/* TODO: labels */) +
+    clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+    clusterRoleBinding.roleRef.withKind('ClusterRole') +
+    clusterRoleBinding.roleRef.withName('cert-manager-controller-challenges') +
+    clusterRoleBinding.withSubjects([
+      subject.withKind('ServiceAccount') +
+      subject.withName('cert-manager') +
+      subject.withNamespace($._config.namespace),
+    ]),
 
   cert_manager_controller_ingress_shim_clusterrolebinding:
-    clusterRoleBinding.new() +
-    clusterRoleBinding.mixin.metadata
-    .withName('cert-manager-controller-ingress-shim')
-    .withLabels({}/* TODO: labels */) +
-    clusterRoleBinding.mixin.roleRef
-    .withApiGroup('rbac.authorization.k8s.io')
-    .withKind('ClusterRole')
-    .withName('cert-manager-controller-ingress-shim') +
-    clusterRoleBinding.withSubjects(
-      clusterRoleBinding.subjectsType.new() +
-      clusterRoleBinding.subjectsType
-      .withKind('ServiceAccount')
-      .withName('cert-manager')
-      .withNamespace($._config.namespace)
-    ),
+    clusterRoleBinding.new('cert-manager-controller-ingress-shim') +
+    clusterRoleBinding.metadata.withLabels({}/* TODO: labels */) +
+    clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+    clusterRoleBinding.roleRef.withKind('ClusterRole') +
+    clusterRoleBinding.roleRef.withName('cert-manager-controller-ingress-shim') +
+    clusterRoleBinding.withSubjects([
+      subject.withKind('ServiceAccount') +
+      subject.withName('cert-manager') +
+      subject.withNamespace($._config.namespace),
+    ]),
 
   cert_manager_view_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-view')
-    .withLabels({
+    clusterRole.new('cert-manager-view') +
+    clusterRole.metadata.withLabels({
       'rbac.authorization.k8s.io/aggregate-to-view': 'true',
       'rbac.authorization.k8s.io/aggregate-to-edit': 'true',
       'rbac.authorization.k8s.io/aggregate-to-admin': 'true',
-    })
-    .withLabelsMixin({}/* TODO labels */) +
+    }) +
+    clusterRole.metadata.withLabelsMixin({}/* TODO labels */) +
     clusterRole.withRules([
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['certificates', 'certificaterequests', 'issuers'])
-      .withVerbs(['get', 'list', 'watch']),
-    ],),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['certificates', 'certificaterequests', 'issuers']) +
+      policyRule.withVerbs(['get', 'list', 'watch']),
+    ]),
 
   cert_manager_edit_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-edit')
-    .withLabels({
+    clusterRole.new('cert-manager-edit') +
+    clusterRole.metadata.withLabels({
       'rbac.authorization.k8s.io/aggregate-to-edit': 'true',
       'rbac.authorization.k8s.io/aggregate-to-admin': 'true',
-    })
-    .withLabelsMixin({}/* TODO labels */) +
+    }) +
+    clusterRole.metadata.withLabelsMixin({}/* TODO labels */) +
     clusterRole.withRules([
-      clusterRole.rulesType.new() +
-      clusterRole.rulesType
-      .withApiGroups('cert-manager.io')
-      .withResources(['certificates', 'certificaterequests', 'issuers'])
-      .withVerbs(['create', 'delete', 'deletecollection', 'patch', 'update']),
-    ],),
+      policyRule.withApiGroups('cert-manager.io') +
+      policyRule.withResources(['certificates', 'certificaterequests', 'issuers']) +
+      policyRule.withVerbs(['create', 'delete', 'deletecollection', 'patch', 'update']),
+    ]),
 
 }

@@ -1,18 +1,14 @@
 {
   local clusterRole = $.rbac.v1.clusterRole,
-  local rules = clusterRole.rulesType,
+  local policyRule = $.rbac.v1.policyRule,
 
   webhook_psp_clusterrole:
-    clusterRole.new() +
-    clusterRole.mixin.metadata
-    .withName('cert-manager-webhook-psp')
-    .withLabels({},/* TODO: labels */) +
-    clusterRole.withRules(
-      rules.new() +
-      rules
-      .withApiGroups('policy')
-      .withResourceNames(['cert-manager-webhook'])
-      .withResources(['podsecuritypolicies'])
-      .withVerbs(['use'])
-    ),
+    clusterRole.new('cert-manager-webhook-psp') +
+    clusterRole.metadat.withLabels({},/* TODO: labels */) +
+    clusterRole.withRules([
+      policyRule.withApiGroups('policy') +
+      policyRule.withResourceNames(['cert-manager-webhook']) +
+      policyRule.withResources(['podsecuritypolicies']) +
+      policyRule.withVerbs(['use']),
+    ]),
 }

@@ -1,48 +1,37 @@
 {
   local validatingWebhookCfg = $.admissionregistration.v1beta1.validatingWebhookConfiguration,
-  local webhookType = validatingWebhookCfg.webhooksType,
-  local matchExpressionsType = webhookType.mixin.namespaceSelector.matchExpressionsType,
-  local rulesType = webhookType.rulesType,
-  local clientConfigType = webhookType.mixin.clientConfigType,
-  local serviceType = clientConfigType.mixin.serviceType,
+  local webhook = $.admissionregistration.v1beta1.webhook,
+  local rule = $.admissionregistration.v1beta1.ruleWithOperations,
 
-  validating_webhook: validatingWebhookCfg.new() +
-                      validatingWebhookCfg.mixin.metadata.withName('cert-manager-webhook') +
-                      validatingWebhookCfg.mixin.metadata.withAnnotations(
-                        { 'cert-manager.io/inject-ca-from-secret': $._config.namespace + '/cert-manager-webhook-tls' },
-                      ) +
-                      validatingWebhookCfg.withWebhooks(
-                        webhookType.new() +
-                        webhookType
-                        .withName('webhook.cert-manager.io')
-                        .withFailurePolicy('Fail')
-                        .withSideEffects('None')
-                        .withRules(
-                          rulesType.new() +
-                          rulesType
-                          .withApiGroups(['cert-manager.io', 'acme.cert-manager.io'])
-                          .withApiVersions('v1alpha2')
-                          .withOperations(['CREATE', 'UPDATE'],)
-                          .withResources('*/*')
-                        ) +
-                        webhookType.mixin.namespaceSelector.withMatchExpressions([
-                          matchExpressionsType.new() +
-                          matchExpressionsType
-                          .withKey('cert-manager.io/disable-validation')
-                          .withOperator('NotIn')
-                          .withValues('true'),
-                          matchExpressionsType.new() +
-                          matchExpressionsType
-                          .withKey('name')
-                          .withOperator('NotIn')
-                          .withValues($._config.namespace),
-                        ],) +
-                        webhookType.mixin.clientConfig.mixinInstance(
-                          clientConfigType.new() +
-                          clientConfigType.mixin.service
-                          .withName('cert-manager-webhook')
-                          .withNamespace($._config.namespace)
-                          .withPath('/mutate')
-                        )
-                      ),
+  validating_webhook:
+    validatingWebhookCfg.new('cert-manager-webhook') +
+    validatingWebhookCfg.metadata.withAnnotations(
+      { 'cert-manager.io/inject-ca-from-secret': $._config.namespace + '/cert-manager-webhook-tls' },
+    ) +
+    validatingWebhookCfg.withWebhooks(
+      webhook.withName('webhook.cert-manager.io') +
+      webhook.withFailurePolicy('Fail') +
+      webhook.withSideEffects('None') +
+      webhook.withRules(
+        rule.withApiGroups(['cert-manager.io', 'acme.cert-manager.io']) +
+        rule.withApiVersions('v1alpha2') +
+        rule.withOperations(['CREATE', 'UPDATE'],) +
+        rule.withResources('*/*')
+      ) +
+      webhook.namespaceSelector.withMatchExpressions([
+        {
+          key: 'cert-manager.io/disable-validation',
+          operator: 'NotIn',
+          values: ['true'],
+        },
+        {
+          key: 'name',
+          operator: 'NotIn',
+          values: [$._config.namespace],
+        },
+      ]) +
+      webhook.clientConfig.service.withName('cert-manager-webhook') +
+      webhook.clientConfig.service.withNamespace($._config.namespace) +
+      webhook.clientConfig.service.withPath('/mutate')
+    ),
 }

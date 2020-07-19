@@ -1,22 +1,17 @@
 {
   local clusterRoleBinding = $.rbac.v1.clusterRoleBinding,
-  local roleRef = clusterRoleBinding.roleRefType,
-  local subjects = clusterRoleBinding.subjectsType,
+  local subject = $.rbac.v1.subject,
 
   psp_clusterrolebinding:
-    clusterRoleBinding.new() +
-    clusterRoleBinding.mixin.metadata
-    .withName('cert-manager-psp')
-    .withLabels({}/* TODO: labels */,) +
-    clusterRoleBinding.mixin.roleRef
-    .withApiGroup('rbac.authorization.k8s.io')
-    .withKind('ClusterRole')
-    .withName('cert-manager-psp') +
-    clusterRoleBinding.withSubjects(
-      subjects.new() + subjects
-                       .withKind('ServiceAccount')
-                       .withName('cert-manager')
-                       .withNamespace($._config.namespace)
-    ),
+    clusterRoleBinding.new('cert-manager-psp') +
+    clusterRoleBinding.metadata.withLabels({}/* TODO: labels */,) +
+    clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+    clusterRoleBinding.roleRef.withKind('ClusterRole') +
+    clusterRoleBinding.roleRef.withName('cert-manager-psp') +
+    clusterRoleBinding.withSubjects([
+      subject.withKind('ServiceAccount') +
+      subject.withName('cert-manager') +
+      subject.withNamespace($._config.namespace),
+    ]),
 
 }

@@ -1,33 +1,26 @@
 {
   local mutatingWebhookConfiguration = $.admissionregistration.v1beta1.mutatingWebhookConfiguration,
-  local webhookType = mutatingWebhookConfiguration.webhooksType,
-  local rules = webhookType.rulesType,
-  local clientConfigType = webhookType.mixin.clientConfigType,
-  local serviceType = clientConfigType.mixin.serviceType,
+  local webhook = $.admissionregistration.v1beta1.webhook,
+  local rule = $.admissionregistration.v1beta1.ruleWithOperations,
 
   webhook_mutating_webhook:
-    mutatingWebhookConfiguration.new() +
-    mutatingWebhookConfiguration.mixin.metadata
-    .withName('cert-manager-webhook')
-    .withLabels({},/* TODO: labels */)
-    .withAnnotations({
+    mutatingWebhookConfiguration.new('cert-manager-webhook') +
+    mutatingWebhookConfiguration.metadata.withLabels({},/* TODO: labels */) +
+    mutatingWebhookConfiguration.metadata.withAnnotations({
       'cert-manager.io/inject-ca-from-secret': $._config.namespace + '/cert-manager-webhook-tls',
     },) +
     mutatingWebhookConfiguration.withWebhooks(
-      webhookType.new() + webhookType
-                          .withName('webhook.cert-manager.io')
-                          .withRules(
-        rules.new() + rules
-                      .withApiGroups(['cert-manager.io', 'acme.cert-manager.io'])
-                      .withApiVersions('v1alpha2')
-                      .withOperations(['CREATE', 'UPDATE'],)
-                      .withResources('*/*')
-      )
-                          .withFailurePolicy('Fail')
-                          .withSideEffects('None') +
-      webhookType.mixin.clientConfig.service
-      .withName('cert-manager-webhook')
-      .withNamespace($._config.namespace)
-      .withPath('/mutate')
+      webhook.withName('webhook.cert-manager.io') +
+      webhook.withRules([
+        rule.withApiGroups(['cert-manager.io', 'acme.cert-manager.io']) +
+        rule.withApiVersions('v1alpha2') +
+        rule.withOperations(['CREATE', 'UPDATE'],) +
+        rule.withResources('*/*'),
+      ]) +
+      webhook.withFailurePolicy('Fail') +
+      webhook.withSideEffects('None') +
+      webhook.clientConfig.service.withName('cert-manager-webhook') +
+      webhook.clientConfig.service.withNamespace($._config.namespace) +
+      webhook.clientConfig.service.withPath('/mutate')
     ),
 }
