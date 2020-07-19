@@ -22,7 +22,7 @@ k {
       },
 
       // Expose containerPort type.
-      containerPort:: $.core.v1.containerPort {
+      containerPort+:: {
         // Force all ports to have names.
         new(name, port)::
           super.newNamed(name=name, containerPort=port),
@@ -34,7 +34,7 @@ k {
       },
 
       // Expose volumes type.
-      volume:: $.core.v1.volume {
+      volume+:: {
         // Make items parameter optional from fromConfigMap
         fromConfigMap(name, configMapName, configMapItems={})::
           super.fromConfigMap(name, configMapName, configMapItems),
@@ -44,7 +44,7 @@ k {
           super.fromPersistentVolumeClaim(name=name, emptyDir=claimName),
       },
 
-      volumeMount:: $.core.v1.volumeMount {
+      volumeMount+:: {
         // Override new, such that it doesn't always set readOnly: false.
         new(name, mountPath, readOnly=false)::
           super.new(name, mountPath, readOnly),
@@ -55,7 +55,7 @@ k {
           super.new(name),
       },
 
-      container:: $.core.v1.container {
+      container+:: {
         new(name, image)::
           super.new(name, image) +
           super.withImagePullPolicy('IfNotPresent'),
