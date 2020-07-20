@@ -12,8 +12,8 @@
     then {}
     else
       container.withEnvMixin([
-        container.envType.new('JAEGER_AGENT_HOST', $._config.jaeger_agent_host),
-        container.envType.new('JAEGER_TAGS', 'namespace=%s,cluster=%s' % [$._config.namespace, $._config.cluster]),
-        container.envType.new('JAEGER_SAMPLER_MANAGER_HOST_PORT', 'http://%s:5778/sampling' % $._config.jaeger_agent_host),
+        $.core.v1.envVar.new('JAEGER_AGENT_HOST', $._config.jaeger_agent_host),
+        $.core.v1.envVar.new('JAEGER_TAGS', 'namespace=%s,cluster=%s' % [$._config.namespace, $._config.cluster]),
+        $.core.v1.envVar.new('JAEGER_SAMPLER_MANAGER_HOST_PORT', 'http://%s:5778/sampling' % $._config.jaeger_agent_host),
       ]),
 }
