@@ -11,8 +11,8 @@ k {
   core+: {
     v1+: {
       configMap+: {
-        new(name)::
-          super.new(name, {}),
+        new(name, data={})::
+          super.new(name, data),
         withData(data)::
           if (data == {}) then {}
           else super.withData(data),
@@ -22,7 +22,7 @@ k {
       },
 
       // Expose containerPort type.
-      containerPort:: $.core.v1.container.portsType {
+      containerPort+:: {
         // Force all ports to have names.
         new(name, port)::
           super.newNamed(name=name, containerPort=port),
@@ -34,35 +34,28 @@ k {
       },
 
       // Expose volumes type.
-      volume:: $.core.v1.pod.mixin.spec.volumesType {
-        // Remove items parameter from fromConfigMap
-        fromConfigMap(name, configMapName)::
-          super.withName(name) +
-          super.mixin.configMap.withName(configMapName),
-
-        // Shortcut constructor for secret volumes.
-        fromSecret(name, secret)::
-          super.withName(name) +
-          super.mixin.secret.withSecretName(secret),
+      volume+:: {
+        // Make items parameter optional from fromConfigMap
+        fromConfigMap(name, configMapName, configMapItems={})::
+          super.fromConfigMap(name, configMapName, configMapItems),
 
         // Rename emptyDir to claimName
-        fromPersistentVolumeClaim(name='', claimName=''):: super.fromPersistentVolumeClaim(name=name, emptyDir=claimName),
+        fromPersistentVolumeClaim(name='', claimName='')::
+          super.fromPersistentVolumeClaim(name=name, emptyDir=claimName),
       },
 
-      volumeMount:: $.core.v1.container.volumeMountsType {
+      volumeMount+:: {
         // Override new, such that it doesn't always set readOnly: false.
         new(name, mountPath, readOnly=false)::
-          {} + self.withName(name) + self.withMountPath(mountPath) +
-          if readOnly
-          then self.withReadOnly(readOnly)
-          else {},
+          super.new(name, mountPath, readOnly),
       },
 
       persistentVolumeClaim+:: {
-        new():: {},
+        new(name='')::
+          super.new(name),
       },
 
-      container:: $.apps.v1.deployment.mixin.spec.template.spec.containersType {
+      container+:: {
         new(name, image)::
           super.new(name, image) +
           super.withImagePullPolicy('IfNotPresent'),
@@ -87,14 +80,10 @@ k {
 
         withEnvMap(es)::
           self.withEnvMixin([
-            $.core.v1.container.envType.new(k, es[k])
+            $.core.v1.envVar(k, es[k])
             for k in std.objectFields(es)
           ]),
       },
-
-      toleration:: $.apps.v1.deployment.mixin.spec.template.spec.tolerationsType,
-
-      servicePort:: $.core.v1.service.mixin.spec.portsType,
     },
   },
 
@@ -102,22 +91,22 @@ k {
     v1beta1+: {
       cronJob+: {
         new(name='', schedule='', containers=[])::
-          super.new() +
+          super.new(name) +
           (
             if name != '' then
-              super.mixin.metadata.withName(name) +
+              super.metadata.withName(name) +
               // set name label on pod
-              super.mixin.spec.jobTemplate.spec.template.metadata.withLabels({ name: name })
+              super.spec.jobTemplate.spec.template.metadata.withLabels({ name: name })
             else
               {}
           ) +
           (
             if schedule != '' then
-              super.mixin.spec.withSchedule(schedule)
+              super.spec.withSchedule(schedule)
             else
               {}
           ) +
-          super.mixin.spec.jobTemplate.spec.template.spec.withContainers(containers),
+          super.spec.jobTemplate.spec.template.spec.withContainers(containers),
       },
     },
   },
@@ -127,26 +116,24 @@ k {
       new(name, containers, podLabels={})::
         local labels = podLabels { name: name };
 
-        super.new() +
-        super.mixin.metadata.withName(name) +
-        super.mixin.spec.template.metadata.withLabels(labels) +
-        super.mixin.spec.template.spec.withContainers(containers) +
+        super.new(name) +
+        super.spec.template.metadata.withLabels(labels) +
+        super.spec.template.spec.withContainers(containers) +
 
         // Can't think of a reason we wouldn't want a DaemonSet to run on
         // every node.
-        super.mixin.spec.template.spec.withTolerations([
-          $.core.v1.toleration.new() +
+        super.spec.template.spec.withTolerations([
           $.core.v1.toleration.withOperator('Exists') +
           $.core.v1.toleration.withEffect('NoSchedule'),
         ]) +
 
         // We want to specify a minReadySeconds on every deamonset, so we get some
         // very basic canarying, for instance, with bad arguments.
-        super.mixin.spec.withMinReadySeconds(10) +
-        super.mixin.spec.updateStrategy.withType('RollingUpdate') +
+        super.spec.withMinReadySeconds(10) +
+        super.spec.updateStrategy.withType('RollingUpdate') +
 
         // apps.v1 requires an explicit selector:
-        super.mixin.spec.selector.withMatchLabels(labels),
+        super.spec.selector.withMatchLabels(labels),
     },
 
     deployment+: {
@@ -157,14 +144,14 @@ k {
 
         // We want to specify a minReadySeconds on every deployment, so we get some
         // very basic canarying, for instance, with bad arguments.
-        super.mixin.spec.withMinReadySeconds(10) +
+        super.spec.withMinReadySeconds(10) +
 
         // We want to add a sensible default for the number of old deployments
         // handing around.
-        super.mixin.spec.withRevisionHistoryLimit(10) +
+        super.spec.withRevisionHistoryLimit(10) +
 
         // apps.v1 requires an explicit selector:
-        super.mixin.spec.selector.withMatchLabels(labels),
+        super.spec.selector.withMatchLabels(labels),
     },
 
     statefulSet+: {
@@ -172,10 +159,10 @@ k {
         local labels = podLabels { name: name };
 
         super.new(name, replicas, containers, volumeClaims, labels) +
-        super.mixin.spec.updateStrategy.withType('RollingUpdate') +
+        super.spec.updateStrategy.withType('RollingUpdate') +
 
         // apps.v1 requires an explicit selector:
-        super.mixin.spec.selector.withMatchLabels(labels) +
+        super.spec.selector.withMatchLabels(labels) +
 
         // remove volumeClaimTemplates if empty (otherwise it will create a diff all the time)
         (if std.length(volumeClaims) == 0 then {
@@ -189,16 +176,9 @@ k {
   },
 
   apps+: {
+    v1beta2+: appsExtentions,
     v1beta1+: appsExtentions,
     v1+: appsExtentions,
-  },
-
-  rbac+: {
-    v1beta1+: {
-      // Shortcut to access the hidden types.
-      policyRule:: $.rbac.v1beta1.clusterRole.rulesType,
-      subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType,
-    },
   },
 
   util+:: {
@@ -213,7 +193,7 @@ k {
     serviceFor(deployment, ignored_labels=[], nameFormat='%(container)s-%(port)s')::
       local container = $.core.v1.container;
       local service = $.core.v1.service;
-      local servicePort = service.mixin.spec.portsType;
+      local servicePort = $.core.v1.servicePort;
       local ports = [
         servicePort.newNamed(
           name=(nameFormat % { container: c.name, port: port.name }),
@@ -237,37 +217,34 @@ k {
         labels,  // selector
         ports,
       ) +
-      service.mixin.metadata.withLabels({ name: deployment.metadata.name }),
+      service.metadata.withLabels({ name: deployment.metadata.name }),
 
     // rbac creates a service account, role and role binding with the given
     // name and rules.
     rbac(name, rules)::
       if $._config.enable_rbac
       then {
-        local clusterRole = $.rbac.v1beta1.clusterRole,
-        local clusterRoleBinding = $.rbac.v1beta1.clusterRoleBinding,
-        local subject = $.rbac.v1beta1.subject,
+        local clusterRole = $.rbac.v1.clusterRole,
+        local clusterRoleBinding = $.rbac.v1.clusterRoleBinding,
+        local subject = $.rbac.v1.subject,
         local serviceAccount = $.core.v1.serviceAccount,
 
         service_account:
           serviceAccount.new(name),
 
         cluster_role:
-          clusterRole.new() +
-          clusterRole.mixin.metadata.withName(name) +
+          clusterRole.new(name) +
           clusterRole.withRules(rules),
 
         cluster_role_binding:
-          clusterRoleBinding.new() +
-          clusterRoleBinding.mixin.metadata.withName(name) +
-          clusterRoleBinding.mixin.roleRef.withApiGroup('rbac.authorization.k8s.io') +
-          clusterRoleBinding.mixin.roleRef.withKind('ClusterRole') +
-          clusterRoleBinding.mixin.roleRef.withName(name) +
+          clusterRoleBinding.new(name) +
+          clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+          clusterRoleBinding.roleRef.withKind('ClusterRole') +
+          clusterRoleBinding.roleRef.withName(self.cluster_role.metadata.name) +
           clusterRoleBinding.withSubjects([
-            subject.new() +
             subject.withKind('ServiceAccount') +
-            subject.withName(name) +
-            subject.withNamespace($._config.namespace),
+            subject.withName(self.service_account.metadata.name) +
+            subject.withNamespace(self.service_account.metadata.namespace),
           ]),
       }
       else {},
@@ -275,33 +252,30 @@ k {
     namespacedRBAC(name, rules)::
       if $._config.enable_rbac
       then {
-        local role = $.rbac.v1beta1.role,
-        local roleBinding = $.rbac.v1beta1.roleBinding,
-        local subject = $.rbac.v1beta1.subject,
+        local role = $.rbac.v1.role,
+        local roleBinding = $.rbac.v1.roleBinding,
+        local subject = $.rbac.v1.subject,
         local serviceAccount = $.core.v1.serviceAccount,
 
         service_account:
           serviceAccount.new(name) +
-          serviceAccount.mixin.metadata.withNamespace($._config.namespace),
+          serviceAccount.metadata.withNamespace($._config.namespace),
 
         role:
-          role.new() +
-          role.mixin.metadata.withName(name) +
-          role.mixin.metadata.withNamespace($._config.namespace) +
+          role.new(name) +
+          role.metadata.withNamespace($._config.namespace) +
           role.withRules(rules),
 
         cluster_role_binding:
-          roleBinding.new() +
-          roleBinding.mixin.metadata.withName(name) +
-          roleBinding.mixin.metadata.withNamespace($._config.namespace) +
-          roleBinding.mixin.roleRef.withApiGroup('rbac.authorization.k8s.io') +
-          roleBinding.mixin.roleRef.withKind('Role') +
-          roleBinding.mixin.roleRef.withName(name) +
+          roleBinding.new(name) +
+          roleBinding.metadata.withNamespace($._config.namespace) +
+          roleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io') +
+          roleBinding.roleRef.withKind('Role') +
+          roleBinding.roleRef.withName(self.role.metadata.name) +
           roleBinding.withSubjects([
-            subject.new() +
             subject.withKind('ServiceAccount') +
-            subject.withName(name) +
-            subject.withNamespace($._config.namespace),
+            subject.withName(self.service_account.metadata.name) +
+            subject.withNamespace(self.service_account.metadata.namespace),
           ]),
       }
       else {},
@@ -320,7 +294,7 @@ k {
       );
 
       deployment.mapContainers(addMount) +
-      deployment.mixin.spec.template.spec.withVolumesMixin([
+      deployment.spec.template.spec.withVolumesMixin([
         volume.fromConfigMap(name, name),
       ]),
 
@@ -340,10 +314,10 @@ k {
       );
 
       deployment.mapContainers(addMount) +
-      deployment.mixin.spec.template.spec.withVolumesMixin([
+      deployment.spec.template.spec.withVolumesMixin([
         volume.fromConfigMap(name, name),
       ]) +
-      deployment.mixin.spec.template.metadata.withAnnotationsMixin({
+      deployment.spec.template.metadata.withAnnotationsMixin({
         ['%s-hash' % name]: hash,
       }),
 
@@ -358,7 +332,7 @@ k {
       );
 
       deployment.mapContainers(addMount) +
-      deployment.mixin.spec.template.spec.withVolumesMixin([
+      deployment.spec.template.spec.withVolumesMixin([
         volume.fromHostPath(name, hostPath),
       ]),
 
@@ -373,9 +347,9 @@ k {
       );
 
       deployment.mapContainers(addMount) +
-      deployment.mixin.spec.template.spec.withVolumesMixin([
+      deployment.spec.template.spec.withVolumesMixin([
         volume.fromSecret(name, name) +
-        volume.mixin.secret.withDefaultMode(defaultMode),
+        volume.secret.withDefaultMode(defaultMode),
       ]),
 
     emptyVolumeMount(name, path, volumeMountMixin={}, volumeMixin={})::
@@ -389,7 +363,7 @@ k {
       );
 
       deployment.mapContainers(addMount) +
-      deployment.mixin.spec.template.spec.withVolumesMixin([
+      deployment.spec.template.spec.withVolumesMixin([
         volume.fromEmptyDir(name) + volumeMixin,
       ]),
 
@@ -399,7 +373,7 @@ k {
     ),
 
     resourcesRequests(cpu, memory)::
-      $.core.v1.container.mixin.resources.withRequests(
+      $.core.v1.container.resources.withRequests(
         (if cpu != null
          then { cpu: cpu }
          else {}) +
@@ -409,7 +383,7 @@ k {
       ),
 
     resourcesLimits(cpu, memory)::
-      $.core.v1.container.mixin.resources.withLimits(
+      $.core.v1.container.resources.withLimits(
         (if cpu != null
          then { cpu: cpu }
          else {}) +
@@ -420,27 +394,25 @@ k {
 
     antiAffinity:
       {
-        local deployment = $.apps.v1.deployment,
-        local podAntiAffinity = deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
+        local podAntiAffinity = $.apps.v1.deployment.spec.template.spec.affinity.podAntiAffinity,
+        local podAffinityTerm = $.core.v1.podAffinityTerm,
         local name = super.spec.template.metadata.labels.name,
 
         spec+: podAntiAffinity.withRequiredDuringSchedulingIgnoredDuringExecution([
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.new() +
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.mixin.labelSelector.withMatchLabels({ name: name }) +
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey('kubernetes.io/hostname'),
+          podAffinityTerm.labelSelector.withMatchLabels({ name: name }) +
+          podAffinityTerm.withTopologyKey('kubernetes.io/hostname'),
         ]).spec,
       },
 
     antiAffinityStatefulSet:
       {
-        local statefulSet = $.apps.v1.statefulSet,
-        local podAntiAffinity = statefulSet.mixin.spec.template.spec.affinity.podAntiAffinity,
+        local podAntiAffinity = $.apps.v1.statefulSet.spec.template.spec.affinity.podAntiAffinity,
+        local podAffinityTerm = $.core.v1.podAffinityTerm,
         local name = super.spec.template.metadata.labels.name,
 
         spec+: podAntiAffinity.withRequiredDuringSchedulingIgnoredDuringExecution([
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.new() +
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.mixin.labelSelector.withMatchLabels({ name: name }) +
-          podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecutionType.withTopologyKey('kubernetes.io/hostname'),
+          podAffinityTerm.labelSelector.withMatchLabels({ name: name }) +
+          podAffinityTerm.withTopologyKey('kubernetes.io/hostname'),
         ]).spec,
       },
 
@@ -449,7 +421,7 @@ k {
     podPriority(p):
       local deployment = $.apps.v1.deployment;
       if $._config.enable_pod_priorities
-      then deployment.mixin.spec.template.spec.withPriorityClassName(p)
+      then deployment.spec.template.spec.withPriorityClassName(p)
       else {},
   },
 }
