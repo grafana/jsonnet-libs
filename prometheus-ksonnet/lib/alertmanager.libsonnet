@@ -2,17 +2,9 @@
   local replicas = self._config.alertmanager_cluster_self.replicas,
   local isGlobal = self._config.alertmanager_cluster_self.global,
   local isGossiping = replicas > 1 || isGlobal,
-  local peers = if isGlobal
-  then
+  local peers = if isGossiping then
     [
-      'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [i, $._config.namespace, cluster, $._config.cluster_dns_tld, $._config.alertmanager_gossip_port]
-      for cluster in std.objectFields($._config.alertmanager_clusters)
-      if $._config.alertmanager_clusters[cluster].global
-      for i in std.range(0, $._config.alertmanager_clusters[cluster].replicas - 1)
-    ]
-  else if isGossiping then
-    [
-      'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [i, $._config.namespace, $._config.cluster_name, $._config.cluster_dns_tld, $._config.alertmanager_gossip_port]
+      'alertmanager-%d.alertmanager-gossip.%s.svc.%s:%s' % [i, $._config.namespace, $._config.cluster_dns_suffix, $._config.alertmanager_gossip_port]
       for i in std.range(0, replicas - 1)
     ]
   else [],
@@ -148,7 +140,7 @@
       $.alertmanager_container,
       $.alertmanager_watch_container,
     ], self.alertmanager_pvc) +
-    statefulset.mixin.spec.withServiceName('alertmanager') +
+    statefulset.mixin.spec.withServiceName('alertmanager-gossip') +
     statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.alertmanager_path }) +
     $.util.configVolumeMount('alertmanager-config', '/etc/alertmanager/config') +
     $.util.podPriority('critical')
@@ -159,16 +151,35 @@
 
   // Do not create service in clusters without any alertmanagers.
   alertmanager_service:
-    if replicas == 0
-    then {}
-    else
-      $.util.serviceFor($.alertmanager_statefulset) +
-      service.mixin.spec.withPortsMixin([
-        servicePort.newNamed(
-          name='http',
-          port=80,
-          targetPort=$._config.alertmanager_port,
-        ),
-      ]) +
-      service.spec.withSessionAffinity('ClientIP'),
+    if replicas == 1 then
+      {
+        web:
+          $.util.serviceFor($.alertmanager_statefulset) +
+          service.mixin.spec.withPortsMixin([
+            servicePort.newNamed(
+              name='http',
+              port=80,
+              targetPort=$._config.alertmanager_port,
+            ),
+          ]) +
+          service.spec.withSessionAffinity('ClientIP'),
+      }
+    else if replicas > 0 then
+      {
+        web:
+          $.util.serviceFor($.alertmanager_statefulset) +
+          service.mixin.spec.withPorts([
+            servicePort.newNamed(
+              name='http',
+              port=80,
+              targetPort=$._config.alertmanager_port,
+            ),
+          ]) +
+          service.spec.withSessionAffinity('ClientIP'),
+        gossip:
+          $.util.serviceFor($.alertmanager_statefulset) +
+          service.metadata.withName('alertmanager-gossip') +
+          service.spec.withClusterIp('None'),
+      }
+    else {},
 }
