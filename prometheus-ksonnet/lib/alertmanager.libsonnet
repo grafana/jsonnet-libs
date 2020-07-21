@@ -164,7 +164,7 @@
           ]) +
           service.spec.withSessionAffinity('ClientIP'),
       }
-    else if replicas > 0 then
+    else if replicas > 1 then
       {
         web:
           $.util.serviceFor($.alertmanager_statefulset) +
