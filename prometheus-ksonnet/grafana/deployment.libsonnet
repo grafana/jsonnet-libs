@@ -75,13 +75,12 @@
 
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container]) +
-    // Use configMapVolumeMount to automatically include the hash of the config
-    // as an annotation.  No need to use for others, Grafana will pick up
-    // changes there.
+    // Use configMapVolumeMount to automatically include the hash of the config.
+    // No need to use for dashboards, Grafana will pick up changes there.
     $.util.configMapVolumeMount($.grafana_config_map, '/etc/grafana-config') +
+    $.util.configMapVolumeMount($.grafana_datasource_config_map, '%(grafana_provisioning_dir)s/datasources' % $._config) +
+    $.util.configMapVolumeMount($.notification_channel_config_map, '%(grafana_provisioning_dir)s/notifiers' % $._config) +
     $.util.configVolumeMount('grafana-dashboard-provisioning', '%(grafana_provisioning_dir)s/dashboards' % $._config) +
-    $.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config) +
-    $.util.configVolumeMount('grafana-notification-channels', '%(grafana_provisioning_dir)s/notifiers' % $._config) +
     (
       // Mount _all_ the dashboard config map shards.
       sharded_config_map_mounts('dashboards', $._config.dashboard_config_maps)
