@@ -1,4 +1,4 @@
-# Prometheus Ksonnet Mixin
+# Prometheus Ksonnet
 
 A set of extensible configs for running Prometheus on Kubernetes.
 
