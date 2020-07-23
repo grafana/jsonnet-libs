@@ -364,11 +364,30 @@
           insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
         },
 
-        relabel_configs: [{
-          source_labels: ['__meta_kubernetes_service_label_component'],
-          regex: 'apiserver',
-          action: 'keep',
-        }],
+        relabel_configs: [
+          {
+            source_labels: ['__meta_kubernetes_service_label_component'],
+            regex: 'apiserver',
+            action: 'keep',
+          },
+
+          // Include the namespace, container, pod as separate labels
+          {
+            source_labels: ['__meta_kubernetes_namespace'],
+            action: 'replace',
+            target_label: 'namespace',
+          },
+          {
+            source_labels: ['__meta_kubernetes_pod_name'],
+            action: 'replace',
+            target_label: 'pod',  // Not 'pod_name', which disappeared in K8s 1.16.
+          },
+          {
+            source_labels: ['__meta_kubernetes_pod_container_name'],
+            action: 'replace',
+            target_label: 'container',  // Not 'container_name', which disappeared in K8s 1.16.
+          },
+        ],
 
         // Drop some high cardinality metrics.
         metric_relabel_configs: [
