@@ -9,7 +9,9 @@
       proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header    X-Forwarded-Proto $scheme;
       proxy_set_header    X-Forwarded-Host $http_host;
-    ||| % service + if allowWebsockets then |||
+      proxy_read_timeout  %(nginx_proxy_read_timeout)s;
+      proxy_send_timeout  %(nginx_proxy_send_timeout)s;
+    ||| % (service + $._config) + if allowWebsockets then |||
       # Allow websocket connections https://www.nginx.com/blog/websocket-nginx/
       proxy_set_header    Upgrade $http_upgrade;
       proxy_set_header    Connection "Upgrade";
