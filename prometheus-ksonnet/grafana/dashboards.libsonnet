@@ -3,7 +3,7 @@
 
   _config+:: {
     // Shard dashboards across multiple config maps to overcome annotation
-    // lenght limits.
+    // length limits.
     dashboard_config_maps: 8,
   },
 
@@ -12,7 +12,7 @@
 
   // mixinProto allows us to reliably do `mixin.grafanaDashboards` without
   // having to check the field exists first. Some mixins don't declare all
-  // the fields, and thats fine.
+  // the fields, and that's fine.
   //
   // We also use this to add a little "opinion":
   // - Dashboard UIDs are set to the md5 hash of their filename.
@@ -73,9 +73,9 @@
     std.objectHas(mixin, 'grafanaDashboardFolder') &&
     std.length(mixin.grafanaDashboards) > 0,
 
-  // Its super common for a single mixin's worth of dashboards to not even fit
+  // It's super common for a single mixin's worth of dashboards to not even fit
   // in a single config map.  So we split each mixin's dashboards up over
-  // multiple config maps, depending on the hash of dashboards name.
+  // multiple config maps, depending on the hash of the dashboard name.
   local sharded_config_maps(name_prefix, shards, dashboards) = {
     ['%s-%d' % [name_prefix, shard]]+:
       configMap.new('%s-%d' % [name_prefix, shard]) +
