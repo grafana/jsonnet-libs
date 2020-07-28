@@ -43,7 +43,7 @@
     local vars = {
       location_stanzas: [
         buildLocation(service)
-        for service in $._config.admin_services
+        for service in std.set($._config.admin_services, keyF=url)
       ],
       locations: std.join('\n', self.location_stanzas),
       link_stanzas: [
