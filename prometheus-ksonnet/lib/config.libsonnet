@@ -11,6 +11,7 @@
       {
         title: 'Grafana',
         path: 'grafana',
+        params: '/?search=open',
         url: 'http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/' % $._config,
         allowWebsockets: true,
       },

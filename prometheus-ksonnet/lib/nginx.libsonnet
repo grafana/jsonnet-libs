@@ -48,8 +48,8 @@
       locations: std.join('\n', self.location_stanzas),
       link_stanzas: [
         |||
-          <li><a href="/%(path)s">%(title)s</a></li>
-        ||| % service
+          <li><a href="/%(path)s%(params)s">%(title)s</a></li>
+        ||| % ({ params: '' } + service)
         for service in $._config.admin_services
       ],
       links: std.join('\n', self.link_stanzas),
