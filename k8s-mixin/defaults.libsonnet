@@ -90,6 +90,17 @@
     },
   },
 
+  rbac+: {
+    v1+: {
+      subject+: {
+        fromServiceAccount(service_account)::
+          subject.withKind('ServiceAccount') +
+          subject.withName(service_account.metadata.name) +
+          subject.withNamespace(service_account.metadata.namespace),
+      },
+    },
+  },
+
   batch+: {
     v1beta1+: {
       cronJob+: {
@@ -246,9 +257,7 @@
           clusterRoleBinding.roleRef.withKind('ClusterRole') +
           clusterRoleBinding.roleRef.withName(self.cluster_role.metadata.name) +
           clusterRoleBinding.withSubjects([
-            subject.withKind('ServiceAccount') +
-            subject.withName(self.service_account.metadata.name) +
-            subject.withNamespace(self.service_account.metadata.namespace),
+            subject.fromServiceAccount(self.service_account),
           ]),
       }
       else {},
@@ -277,9 +286,7 @@
           roleBinding.roleRef.withKind('Role') +
           roleBinding.roleRef.withName(self.role.metadata.name) +
           roleBinding.withSubjects([
-            subject.withKind('ServiceAccount') +
-            subject.withName(self.service_account.metadata.name) +
-            subject.withNamespace(self.service_account.metadata.namespace),
+            subject.fromServiceAccount(self.service_account),
           ]),
       }
       else {},
