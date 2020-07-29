@@ -233,7 +233,8 @@
         local serviceAccount = $.core.v1.serviceAccount,
 
         service_account:
-          serviceAccount.new(name),
+          serviceAccount.new(name) +
+          serviceAccount.metadata.withNamespace($._config.namespace),
 
         cluster_role:
           clusterRole.new(name) +
