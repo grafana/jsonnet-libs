@@ -77,7 +77,7 @@
 
         withEnvMap(es)::
           self.withEnvMixin([
-            $.core.v1.envVar(k, es[k])
+            $.core.v1.envVar.new(k, es[k])
             for k in std.objectFields(es)
           ]),
       },
