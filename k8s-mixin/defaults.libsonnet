@@ -1,7 +1,4 @@
-// Override defaults paramters for objects in the ksonnet libs here.
-local k = import 'k.libsonnet';
-
-k {
+{
   _config+:: {
     enable_rbac: true,
     enable_pod_priorities: false,
