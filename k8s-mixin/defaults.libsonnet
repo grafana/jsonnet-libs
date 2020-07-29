@@ -94,9 +94,9 @@
     v1+: {
       subject+: {
         fromServiceAccount(service_account)::
-          subject.withKind('ServiceAccount') +
-          subject.withName(service_account.metadata.name) +
-          subject.withNamespace(service_account.metadata.namespace),
+          self.withKind('ServiceAccount') +
+          self.withName(service_account.metadata.name) +
+          self.withNamespace(service_account.metadata.namespace),
       },
     },
   },
