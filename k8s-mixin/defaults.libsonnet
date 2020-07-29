@@ -33,8 +33,14 @@
       // Expose volumes type.
       volume+:: {
         // Make items parameter optional from fromConfigMap
-        fromConfigMap(name, configMapName, configMapItems={})::
-          super.fromConfigMap(name, configMapName, configMapItems),
+        fromConfigMap(name, configMapName, configMapItems=[])::
+          {
+            configMap+:
+              if configMapItems == [] then { items:: '' }
+              else {},
+          }
+          + super.fromConfigMap(name, configMapName, configMapItems),
+
 
         // Rename emptyDir to claimName
         fromPersistentVolumeClaim(name='', claimName='')::
