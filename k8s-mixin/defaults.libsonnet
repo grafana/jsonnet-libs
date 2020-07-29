@@ -36,7 +36,7 @@
         fromConfigMap(name, configMapName, configMapItems=[])::
           {
             configMap+:
-              if configMapItems == [] then { items:: '' }
+              if configMapItems == [] then { items:: null }
               else {},
           }
           + super.fromConfigMap(name, configMapName, configMapItems),
