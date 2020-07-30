@@ -9,6 +9,7 @@ local configMap = k.core.v1.configMap;
   _config+:: {
     prometheus_config_dir: '/etc/$(POD_NAME)',
   },
+  local _config = self._config,
 
   // The '__replica__' label is used by Cortex for deduplication.
   prometheus_zero+:: {
@@ -55,8 +56,13 @@ local configMap = k.core.v1.configMap;
   prometheus_config_mount:: {},
 
   prometheus_container+:: container.withEnv([
-    container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
-  ]),
+                            container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+                          ])
+                          + container.mixin.readinessProbe.httpGet.withPath('%(prometheus_path)s-/ready' % _config)
+                          + container.mixin.readinessProbe.httpGet.withPort(_config.prometheus_port)
+                          + container.mixin.readinessProbe.withInitialDelaySeconds(15)
+                          + container.mixin.readinessProbe.withTimeoutSeconds(1)
+  ,
 
   prometheus_watch_container+:: container.withEnv([
     container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
