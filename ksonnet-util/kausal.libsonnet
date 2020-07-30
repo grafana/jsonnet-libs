@@ -35,10 +35,14 @@ k {
 
       // Expose volumes type.
       volume:: $.core.v1.pod.mixin.spec.volumesType {
-        // Remove items parameter from fromConfigMap
-        fromConfigMap(name, configMapName)::
-          super.withName(name) +
-          super.mixin.configMap.withName(configMapName),
+        // Make items parameter optional from fromConfigMap
+        fromConfigMap(name, configMapName, configMapItems=[])::
+          {
+            configMap+:
+              if configMapItems == [] then { items:: null }
+              else {},
+          }
+          + super.fromConfigMap(name, configMapName, configMapItems),
 
         // Shortcut constructor for secret volumes.
         fromSecret(name, secret)::
