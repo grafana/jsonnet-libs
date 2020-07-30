@@ -45,9 +45,11 @@ k {
           + super.fromConfigMap(name, configMapName, configMapItems),
 
         // Shortcut constructor for secret volumes.
-        fromSecret(name, secret)::
-          super.withName(name) +
-          super.mixin.secret.withSecretName(secret),
+        fromSecret(name, secret='', secretName='')::
+          if secretName != ''
+          then local secret = secretName;
+               super.withName(name) +
+               super.mixin.secret.withSecretName(secret),
 
         // Rename emptyDir to claimName
         fromPersistentVolumeClaim(name='', claimName=''):: super.fromPersistentVolumeClaim(name=name, emptyDir=claimName),
