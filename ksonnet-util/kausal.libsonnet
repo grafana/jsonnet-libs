@@ -380,7 +380,7 @@ k {
 
       deployment.mapContainers(addMount) +
       deployment.mixin.spec.template.spec.withVolumesMixin([
-        volume.fromSecret(name, name) +
+        volume.fromSecret(name, secretName=name) +
         volume.mixin.secret.withDefaultMode(defaultMode),
       ]),
 
