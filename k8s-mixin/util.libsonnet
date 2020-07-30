@@ -190,6 +190,35 @@ local k = import 'k.libsonnet';
         volume.fromEmptyDir(name) + volumeMixin,
       ]),
 
+    removeVolume(name):: {
+      local volumes = super.spec.template.spec.volumes,
+      local containers = super.spec.template.spec.containers,
+      spec+: {
+        template+: {
+          spec+: {
+            containers: [
+              if std.objectHas(container, 'volumeMounts')
+              then container {
+                volumeMounts:
+                  std.prune([
+                    if mount.name != name
+                    then mount
+                    for mount in container.volumeMounts
+                  ]),
+              }
+              else container
+              for container in containers
+            ],
+            volumes: std.prune([
+              if volume.name != name
+              then volume
+              for volume in volumes
+            ]),
+          },
+        },
+      },
+    },
+
     manifestYaml(value):: (
       local f = std.native('manifestYamlFromJson');
       f(std.toString(value))
