@@ -4,11 +4,11 @@
 
   psp_clusterrole:
     clusterRole.new('cert-manager-psp') +
-    clusterRule.metadata.withLabels({},/* TODO: labels */) +
+    clusterRole.metadata.withLabels({},/* TODO: labels */) +
     clusterRole.withRules([
-      polictyRule.withApiGroups('policy') +
-      polictyRule.withResources(['podsecuritypolicies']) +
-      polictyRule.withVerbs(['use']) +
-      polictyRule.withResourceNames(['cert-manager']),
+      policyRule.withApiGroups('policy') +
+      policyRule.withResources(['podsecuritypolicies']) +
+      policyRule.withVerbs(['use']) +
+      policyRule.withResourceNames(['cert-manager']),
     ]),
 }

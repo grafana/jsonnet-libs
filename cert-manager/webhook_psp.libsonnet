@@ -4,8 +4,8 @@
 
   webhook_psp:
     podSecurityPolicy.new('cert-manager-webhook') +
-    podSecurityPolicty.metadata.withLabels({}/* TODO: labels */) +
-    podSecurityPolicty.metadata.withAnnotations(
+    podSecurityPolicy.metadata.withLabels({}/* TODO: labels */) +
+    podSecurityPolicy.metadata.withAnnotations(
       {
         'seccomp.security.alpha.kubernetes.io/allowedProfileNames': 'docker/default',
         'seccomp.security.alpha.kubernetes.io/defaultProfileName': 'docker/default',
@@ -28,8 +28,8 @@
       'downwardAPI',
     ],) +
     podSecurityPolicy.spec.withHostNetwork(false) +
-    podSecurityPolicy.spec.withHostIpc(false) +
-    podSecurityPolicy.spec.withHostPid(false) +
+    podSecurityPolicy.spec.withHostIPC(false) +
+    podSecurityPolicy.spec.withHostPID(false) +
     podSecurityPolicy.spec.runAsUser.withRule('MustRunAs') +
     podSecurityPolicy.spec.runAsUser.withRanges(idRange.withMin(1000) + idRange.withMax(1000)) +
     podSecurityPolicy.spec.seLinux.withRule('RunAsAny') +

@@ -8,7 +8,7 @@
       { app: 'webhook' /* TODO:selector */ },
       [servicePort.newNamed(name='https', port=443, targetPort=10250)]
     ) +
-    service.withType('ClusterIP') +
-    service.withNamespace($._config.namespace) +
+    service.spec.withType('ClusterIP') +
+    service.metadata.withNamespace($._config.namespace) +
     service.metadata.withLabelsMixin({ app: 'webhook' }),
 }

@@ -26,8 +26,8 @@
       'downwardAPI',
     ],) +
     podSecurityPolicy.spec.withHostNetwork(false) +
-    podSecurityPolicy.spec.withHostIpc(false) +
-    podSecurityPolicy.spec.withHostPid(false) +
+    podSecurityPolicy.spec.withHostIPC(false) +
+    podSecurityPolicy.spec.withHostPID(false) +
     podSecurityPolicy.spec.runAsUser.withRule('MustRunAs') +
     podSecurityPolicy.spec.runAsUser.withRanges(idRange.withMin(1000) + idRange.withMax(1000)) +
     podSecurityPolicy.spec.seLinux.withRule('RunAsAny') +

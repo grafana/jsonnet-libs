@@ -16,7 +16,7 @@
       $.core.v1.envVar.fromFieldPath('POD_NAMESPACE', 'metadata.namespace'),
     ]) +
     container.withVolumeMounts([
-      $.core.v1.Volume.new(name='certs', mountPath='/certs'),
+      $.core.v1.volumeMount.new(name='certs', mountPath='/certs'),
     ]) +
     container.livenessProbe.httpGet.withPath('/livez') +
     container.livenessProbe.httpGet.withPort(6080) +

@@ -3,7 +3,7 @@
   local policyRule = $.rbac.v1.policyRule,
 
   cainjector_psp_clusterrole:
-    clusterRule.new('cert-manager-cainjector-psp') +
+    clusterRole.new('cert-manager-cainjector-psp') +
     clusterRole.metadata.withLabels({},/* TODO: labels */) +
     clusterRole.withRules(
       policyRule.withApiGroups('policy') +

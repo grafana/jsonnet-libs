@@ -4,7 +4,7 @@
 
   webhook_psp_clusterrole:
     clusterRole.new('cert-manager-webhook-psp') +
-    clusterRole.metadat.withLabels({},/* TODO: labels */) +
+    clusterRole.metadata.withLabels({},/* TODO: labels */) +
     clusterRole.withRules([
       policyRule.withApiGroups('policy') +
       policyRule.withResourceNames(['cert-manager-webhook']) +
