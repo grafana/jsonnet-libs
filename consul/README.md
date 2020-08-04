@@ -37,7 +37,7 @@ $ tk apply default
 ```
 # Customising and Extending.
 
-The choice of Tanka for configuring these jobs was intention; it allows users
+The choice of Tanka for configuring these jobs was intentional; it allows users
 to easily override setting in these configurations to suit their needs, without having
 to fork or modify this library.  For instance, to override the resource requests
 and limits for the Consul container, you would:
