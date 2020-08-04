@@ -1,5 +1,5 @@
 {
-  dashboard(title, uid=''):: {
+  dashboard(title, uid='', datasource='default'):: {
     // Stuff that isn't materialised.
     _nextPanel:: 1,
     addRow(row):: self {
@@ -88,8 +88,8 @@
       list: [
         {
           current: {
-            text: 'default',
-            value: 'default',
+            text: datasource,
+            value: datasource,
           },
           hide: 0,
           label: null,
