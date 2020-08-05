@@ -12,6 +12,19 @@ local configMap = k.core.v1.configMap;
   local _config = self._config,
 
   // The '__replica__' label is used by Cortex for deduplication.
+  // We add a different one to each HA replica but remove it from
+  // alerts to not break deduplication of alerts in the Alertmanager.
+  prometheus_config+: {
+    alerting+: {
+      alert_relabel_configs+: [
+        {
+          regex: '__replica__',
+          action: 'labeldrop',
+        },
+      ],
+    },
+  },
+
   prometheus_zero+:: {
     config+:: root.prometheus_config {
       global+: {
