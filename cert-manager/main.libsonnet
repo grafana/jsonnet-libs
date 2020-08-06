@@ -66,7 +66,7 @@ local generated = import 'generated.libsonnet';
   ,
 
   local templated = (import 'templated.libsonnet') { _config+:: $._config },
-  crds: templated.configureHelmChart(importstr 'files/crds.yaml'),
+  crds: templated.configureHelmChart(importstr 'files/00-crds.yaml'),
 
   cainjector: std.mapWithKey(
     function(key, obj)
