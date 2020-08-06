@@ -75,15 +75,17 @@ local util = import '_util.libsonnet';
     local statefulset = $.apps.v1.statefulSet,
     local volumeMount = $.core.v1.volumeMount,
 
+    prometheus_global_config_mount::
+      $.util.configVolumeMount('%s-config' % self.name, _config.prometheus_config_dir),
+
     prometheus_config_mount::
       std.foldr(
-        function (mixinName, acc)
-        local normalisedName = util.normalise(mixinName);
-        $.util.configVolumeMount('%s-%s-config' % [self.name, normalisedName], _config.prometheus_config_dir + '/' + normalisedName) + acc,
+        function(mixinName, acc)
+          local normalisedName = util.normalise(mixinName);
+          $.util.configVolumeMount('%s-%s-config' % [self.name, normalisedName], _config.prometheus_config_dir + '/' + normalisedName) + acc,
         std.objectFields($.mixins),
         {},
-      )
-    + $.util.configVolumeMount('%s-config' % self.name, _config.prometheus_config_dir),
+      ) + self.prometheus_global_config_mount,
 
     prometheus_statefulset:
       statefulset.new(self.name, 1, [

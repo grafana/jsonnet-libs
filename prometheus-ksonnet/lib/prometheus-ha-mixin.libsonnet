@@ -49,9 +49,7 @@ local configMap = k.core.v1.configMap;
     rules+:: root.prometheusRules,
   },
 
-  prometheus_config_map:: {},
-
-  prometheus_config_maps: [
+  prometheus_config_maps+: [
     configMap.new('%s-config-0' % self.name) +
     configMap.withData({
       'prometheus.yml': k.util.manifestYaml(root.prometheus_zero.config),
@@ -66,7 +64,9 @@ local configMap = k.core.v1.configMap;
     }),
   ],
 
-  prometheus_config_mount:: {},
+  prometheus_global_config_mount::
+    k.util.configVolumeMount('%s-config-0' % self.name, '/etc/prometheus-0') +
+    k.util.configVolumeMount('%s-config-1' % self.name, '/etc/prometheus-1'),
 
   prometheus_container+:: container.withEnv([
                             container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
@@ -82,7 +82,5 @@ local configMap = k.core.v1.configMap;
   ]),
 
   prometheus_statefulset+:
-    k.util.configVolumeMount('%s-config-0' % self.name, '/etc/prometheus-0') +
-    k.util.configVolumeMount('%s-config-1' % self.name, '/etc/prometheus-1') +
     statefulset.mixin.spec.withReplicas(2),
 }
