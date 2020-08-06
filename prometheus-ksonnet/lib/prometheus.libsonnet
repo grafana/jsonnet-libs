@@ -1,3 +1,4 @@
+local util = import '_util.libsonnet';
 {
   /*
    * All Prometheus resources are contained within a `prometheus` node. This allows
@@ -75,7 +76,14 @@
     local volumeMount = $.core.v1.volumeMount,
 
     prometheus_config_mount::
-      $.util.configVolumeMount('%s-config' % self.name, _config.prometheus_config_dir),
+      std.foldr(
+        function (mixinName, acc)
+        local normalisedName = util.normalise(mixinName);
+        $.util.configVolumeMount('%s-%s-config' % [self.name, normalisedName], _config.prometheus_config_dir + '/' + normalisedName) + acc,
+        std.objectFields($.mixins),
+        {},
+      )
+    + $.util.configVolumeMount('%s-config' % self.name, _config.prometheus_config_dir),
 
     prometheus_statefulset:
       statefulset.new(self.name, 1, [

@@ -387,6 +387,8 @@
     ],
   },
 
+  mixins+:: {},
+
   // Legacy Extension points for adding alerts, recording rules and prometheus config.
   local emptyMixin = {
     prometheusAlerts+:: {},
