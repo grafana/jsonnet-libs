@@ -4,12 +4,7 @@ A set of extensible configs for running Prometheus on Kubernetes.
 
 Usage:
 - Make sure you have [Tanka](https://tanka.dev/install) and
-  [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler) installed:
-
-```bash
-$ GO111MODULE=on go get github.com/grafana/tanka/cmd/tk
-$ GO111MODULE=on go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-```
+  [jsonnet-bundler](https://tanka.dev/install#jsonnet-bundler) installed:
 
 - In your config repo, init Tanka and point it at your Kubernetes cluster:
 

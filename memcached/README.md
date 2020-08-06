@@ -2,7 +2,7 @@
 
 A set of extensible configs for running Memcached on Kubernetes.
 
-To use this libary, install [Tanka](https://tanka.dev/) and [Jsonnet Bundler](https://github.com/jsonnet-bundler/jsonnet-bundler).
+To use this libary, install [Tanka](https://tanka.dev/) and [Jsonnet Bundler](https://tanka.dev/install#jsonnet-bundler).
 
 In your config repo, if you don't have a Tanka application, make a new one (will copy credentials from current context):
 
