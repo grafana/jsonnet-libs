@@ -14,12 +14,6 @@ local util = import '_util.libsonnet';
         '%s/recording.rules' % util.normalise(mixinName),
       ]
       for mixinName in std.objectFields($.mixins)
-    ]) + std.flattenArrays([
-      [
-        '%s/alerts.rules' % util.normalise(mixinName),
-        '%s/recording.rules' % util.normalise(mixinName),
-      ]
-      for mixinName in std.objectFields($.mixins)
     ]),
 
     alerting: {
