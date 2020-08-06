@@ -1,0 +1,36 @@
+---
+# Source: cert-manager/templates/webhook-mutating-webhook.yaml
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: XX_HELM_RELEASE_XX-cert-manager-webhook
+  labels:
+    app: webhook
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance: XX_HELM_RELEASE_XX
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: "webhook"
+    helm.sh/chart: cert-manager-v0.16.0
+  annotations:
+    cert-manager.io/inject-ca-from-secret: "XX_HELM_NAMESPACE_XX/XX_HELM_RELEASE_XX-cert-manager-webhook-ca"
+webhooks:
+  - name: webhook.cert-manager.io
+    rules:
+      - apiGroups:
+          - "cert-manager.io"
+          - "acme.cert-manager.io"
+        apiVersions:
+          - "*"
+        operations:
+          - CREATE
+          - UPDATE
+        resources:
+          - "*/*"
+    failurePolicy: Fail
+    # Only include 'sideEffects' field in Kubernetes 1.12+
+    sideEffects: None
+    clientConfig:
+      service:
+        name: XX_HELM_RELEASE_XX-cert-manager-webhook
+        namespace: "XX_HELM_NAMESPACE_XX"
+        path: /mutate

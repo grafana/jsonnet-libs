@@ -1,0 +1,54 @@
+---
+# Source: cert-manager/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: XX_HELM_RELEASE_XX-cert-manager
+  namespace: "XX_HELM_NAMESPACE_XX"
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance: XX_HELM_RELEASE_XX
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: "controller"
+    helm.sh/chart: cert-manager-v0.16.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cert-manager
+      app.kubernetes.io/instance: XX_HELM_RELEASE_XX
+      app.kubernetes.io/component: "controller"
+  template:
+    metadata:
+      labels:
+        app: cert-manager
+        app.kubernetes.io/name: cert-manager
+        app.kubernetes.io/instance: XX_HELM_RELEASE_XX
+        app.kubernetes.io/component: "controller"
+        app.kubernetes.io/managed-by: Helm
+        helm.sh/chart: cert-manager-v0.16.0
+      annotations:
+        prometheus.io/path: "/metrics"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9402'
+    spec:
+      serviceAccountName: XX_HELM_RELEASE_XX-cert-manager
+      containers:
+        - name: cert-manager
+          image: "quay.io/jetstack/cert-manager-controller:v0.16.0"
+          imagePullPolicy: IfNotPresent
+          args:
+          - --v=2
+          - --cluster-resource-namespace=$(POD_NAMESPACE)
+          - --leader-election-namespace=kube-system
+          ports:
+          - containerPort: 9402
+            protocol: TCP
+          env:
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          resources:
+            {}

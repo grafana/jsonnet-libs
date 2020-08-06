@@ -1,0 +1,19 @@
+---
+# Source: cert-manager/templates/psp-clusterrole.yaml
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: XX_HELM_RELEASE_XX-cert-manager-psp
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance: XX_HELM_RELEASE_XX
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: "controller"
+    helm.sh/chart: cert-manager-v0.16.0
+rules:
+- apiGroups: ['policy']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - XX_HELM_RELEASE_XX-cert-manager

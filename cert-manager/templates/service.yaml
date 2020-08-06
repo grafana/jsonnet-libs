@@ -1,0 +1,24 @@
+---
+# Source: cert-manager/templates/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: XX_HELM_RELEASE_XX-cert-manager
+  namespace: "XX_HELM_NAMESPACE_XX"
+  labels:
+    app: cert-manager
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance: XX_HELM_RELEASE_XX
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: "controller"
+    helm.sh/chart: cert-manager-v0.16.0
+spec:
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 9402
+      targetPort: 9402
+  selector:
+    app.kubernetes.io/name: cert-manager
+    app.kubernetes.io/instance: XX_HELM_RELEASE_XX
+    app.kubernetes.io/component: "controller"
