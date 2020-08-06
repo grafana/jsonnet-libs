@@ -1,3 +1,4 @@
+local util = import '_util.libsonnet';
 {
   prometheus_config:: {
     global: {
@@ -387,13 +388,8 @@
     ],
   },
 
+  // mixins go here. Global rules not associated to a mixin can go into into prometheusAlerts/prometheusRules
   mixins+:: {},
-
-  // Legacy Extension points for adding alerts, recording rules and prometheus config.
-  local emptyMixin = {
-    prometheusAlerts+:: {},
-    prometheusRules+:: {},
-  },
 
   prometheusAlerts::
     {
@@ -443,14 +439,7 @@
           ],
         },
       ],
-    } +
-    std.foldr(
-      function(mixinName, acc)
-        local mixin = $.mixins[mixinName] + emptyMixin;
-        acc + mixin.prometheusAlerts,
-      std.objectFields($.mixins),
-      {}
-    ),
+    },
 
   prometheusRules::
     {
@@ -469,12 +458,5 @@
           ],
         },
       ],
-    } +
-    std.foldr(
-      function(mixinName, acc)
-        local mixin = $.mixins[mixinName] + emptyMixin;
-        acc + mixin.prometheusRules,
-      std.objectFields($.mixins),
-      {},
-    ),
+    },
 }
