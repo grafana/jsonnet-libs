@@ -7,16 +7,7 @@ local util = import '_util.libsonnet';
     // We bounce through various layers of indirection so user can:
     // a) override config for all Prometheus' by merging into $.prometheus_config,
     // b) override config for a specific Prometheus instance by merging in here.
-    prometheus_config:: $.prometheus_config {
-      rule_files+: std.flattenArrays([
-        [
-          '%s/alerts.rules' % util.normalise(mixinName),
-          '%s/recording.rules' % util.normalise(mixinName),
-        ]
-        for mixinName in std.objectFields($.mixins)
-      ]),
-    },
-
+    prometheus_config:: $.prometheus_config,
     prometheusAlerts:: $.prometheusAlerts,
     prometheusRules:: $.prometheusRules,
 

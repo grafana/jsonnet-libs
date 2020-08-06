@@ -8,7 +8,19 @@ local util = import '_util.libsonnet';
     rule_files: [
       'alerts.rules',
       'recording.rules',
-    ],
+    ] + std.flattenArrays([
+      [
+        '%s/alerts.rules' % util.normalise(mixinName),
+        '%s/recording.rules' % util.normalise(mixinName),
+      ]
+      for mixinName in std.objectFields($.mixins)
+    ]) + std.flattenArrays([
+      [
+        '%s/alerts.rules' % util.normalise(mixinName),
+        '%s/recording.rules' % util.normalise(mixinName),
+      ]
+      for mixinName in std.objectFields($.mixins)
+    ]),
 
     alerting: {
       alertmanagers: std.prune(
