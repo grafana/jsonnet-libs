@@ -1,47 +1,73 @@
 ---
 # Source: cert-manager/templates/webhook-rbac.yaml
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
 metadata:
-  name: XX_HELM_RELEASE_XX-cert-manager-webhook:dynamic-serving
-  namespace: "XX_HELM_NAMESPACE_XX"
+  name: XX_HELM_RELEASE_XX-cert-manager-webhook:webhook-requester
   labels:
     app: webhook
     app.kubernetes.io/name: webhook
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "webhook"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
 rules:
-- apiGroups: [""]
-  resources: ["secrets"]
-  resourceNames:
-  - 'XX_HELM_RELEASE_XX-cert-manager-webhook-ca'
-  verbs: ["get", "list", "watch", "update"]
-# It's not possible to grant CREATE permission on a single resourceName.
-- apiGroups: [""]
-  resources: ["secrets"]
-  verbs: ["create"]
+- apiGroups:
+  - admission.cert-manager.io
+  resources:
+  - certificates
+  - certificaterequests
+  - issuers
+  - clusterissuers
+  verbs:
+  - create
 ---
 # Source: cert-manager/templates/webhook-rbac.yaml
+# apiserver gets the auth-delegator role to delegate auth decisions to
+# the core apiserver
 apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: XX_HELM_RELEASE_XX-cert-manager-webhook:dynamic-serving
-  namespace: "XX_HELM_NAMESPACE_XX"
+  name: XX_HELM_RELEASE_XX-cert-manager-webhook:auth-delegator
   labels:
     app: webhook
     app.kubernetes.io/name: webhook
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "webhook"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: XX_HELM_RELEASE_XX-cert-manager-webhook:dynamic-serving
+  kind: ClusterRole
+  name: system:auth-delegator
 subjects:
 - apiGroup: ""
   kind: ServiceAccount
   name: XX_HELM_RELEASE_XX-cert-manager-webhook
   namespace: XX_HELM_NAMESPACE_XX
+---
+# Source: cert-manager/templates/webhook-rbac.yaml
+# apiserver gets the ability to read authentication. This allows it to
+# read the specific configmap that has the requestheader-* entries to
+# api agg
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: XX_HELM_RELEASE_XX-cert-manager-webhook:webhook-authentication-reader
+  namespace: kube-system
+  labels:
+    app: webhook
+    app.kubernetes.io/name: webhook
+    app.kubernetes.io/instance: XX_HELM_RELEASE_XX
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: cert-manager-v0.13.0
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: extension-apiserver-authentication-reader
+subjects:
+- apiGroup: ""
+  kind: ServiceAccount
+  name: XX_HELM_RELEASE_XX-cert-manager-webhook
+  namespace: XX_HELM_NAMESPACE_XX
+---
+# Source: cert-manager/templates/webhook-rbac.yaml
+### Webhook ###

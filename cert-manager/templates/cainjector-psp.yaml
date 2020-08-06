@@ -6,11 +6,9 @@ metadata:
   name: XX_HELM_RELEASE_XX-cert-manager-cainjector
   labels:
     app: cainjector
-    app.kubernetes.io/name: cainjector
-    app.kubernetes.io/instance: XX_HELM_RELEASE_XX
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "cainjector"
-    helm.sh/chart: cert-manager-v0.16.0
+    chart: cert-manager-v0.13.0
+    release: XX_HELM_RELEASE_XX
+    heritage: Helm
   annotations:
     seccomp.security.alpha.kubernetes.io/allowedProfileNames: 'docker/default'
     seccomp.security.alpha.kubernetes.io/defaultProfileName:  'docker/default'

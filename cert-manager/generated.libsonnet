@@ -7,7 +7,6 @@
   cainjector_psp: templated.configureHelmChart(importstr 'templates/cainjector-psp.yaml'),
   cainjector_rbac: templated.configureHelmChart(importstr 'templates/cainjector-rbac.yaml'),
   cainjector_serviceaccount: templated.configureHelmChart(importstr 'templates/cainjector-serviceaccount.yaml'),
-  crds: templated.configureHelmChart(importstr 'templates/crds.yaml'),
   deployment: templated.configureHelmChart(importstr 'templates/deployment.yaml'),
   psp_clusterrolebinding: templated.configureHelmChart(importstr 'templates/psp-clusterrolebinding.yaml'),
   psp_clusterrole: templated.configureHelmChart(importstr 'templates/psp-clusterrole.yaml'),

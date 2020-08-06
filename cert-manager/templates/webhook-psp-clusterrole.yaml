@@ -6,11 +6,9 @@ metadata:
   name: XX_HELM_RELEASE_XX-cert-manager-webhook-psp
   labels:
     app: webhook
-    app.kubernetes.io/name: webhook
-    app.kubernetes.io/instance: XX_HELM_RELEASE_XX
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "webhook"
-    helm.sh/chart: cert-manager-v0.16.0
+    chart: cert-manager-v0.13.0
+    release: XX_HELM_RELEASE_XX
+    heritage: Helm
 rules:
 - apiGroups: ['policy']
   resources: ['podsecuritypolicies']

@@ -9,10 +9,9 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "webhook"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
   annotations:
-    cert-manager.io/inject-ca-from-secret: "XX_HELM_NAMESPACE_XX/XX_HELM_RELEASE_XX-cert-manager-webhook-ca"
+    cert-manager.io/inject-ca-from-secret: "XX_HELM_NAMESPACE_XX/XX_HELM_RELEASE_XX-cert-manager-webhook-tls"
 webhooks:
   - name: webhook.cert-manager.io
     rules:
@@ -20,14 +19,13 @@ webhooks:
           - "cert-manager.io"
           - "acme.cert-manager.io"
         apiVersions:
-          - "*"
+          - v1alpha2
         operations:
           - CREATE
           - UPDATE
         resources:
           - "*/*"
     failurePolicy: Fail
-    # Only include 'sideEffects' field in Kubernetes 1.12+
     sideEffects: None
     clientConfig:
       service:

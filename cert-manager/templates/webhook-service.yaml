@@ -10,8 +10,7 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "webhook"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
 spec:
   type: ClusterIP
   ports:
@@ -19,6 +18,7 @@ spec:
     port: 443
     targetPort: 10250
   selector:
+    app: webhook
     app.kubernetes.io/name: webhook
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
-    app.kubernetes.io/component: "webhook"
+    app.kubernetes.io/managed-by: Helm

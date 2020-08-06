@@ -9,8 +9,7 @@ metadata:
     app.kubernetes.io/name: cainjector
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "cainjector"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
 rules:
   - apiGroups: ["cert-manager.io"]
     resources: ["certificates"]
@@ -30,9 +29,6 @@ rules:
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
     verbs: ["get", "list", "watch", "update"]
-  - apiGroups: ["auditregistration.k8s.io"]
-    resources: ["auditsinks"]
-    verbs: ["get", "list", "watch", "update"]
 ---
 # Source: cert-manager/templates/cainjector-rbac.yaml
 apiVersion: rbac.authorization.k8s.io/v1beta1
@@ -44,8 +40,7 @@ metadata:
     app.kubernetes.io/name: cainjector
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "cainjector"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -67,21 +62,13 @@ metadata:
     app.kubernetes.io/name: cainjector
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "cainjector"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
 rules:
   # Used for leader election by the controller
-  # cert-manager-cainjector-leader-election is used by the CertificateBased injector controller
-  #   see cmd/cainjector/start.go#L113
-  # cert-manager-cainjector-leader-election-core is used by the SecretBased injector controller
-  #   see cmd/cainjector/start.go#L137
+  # TODO: refine the permission to *just* the leader election configmap
   - apiGroups: [""]
     resources: ["configmaps"]
-    resourceNames: ["cert-manager-cainjector-leader-election", "cert-manager-cainjector-leader-election-core"]
-    verbs: ["get", "update", "patch"]
-  - apiGroups: [""]
-    resources: ["configmaps"]
-    verbs: ["create"]
+    verbs: ["get", "create", "update", "patch"]
 ---
 # Source: cert-manager/templates/cainjector-rbac.yaml
 # grant cert-manager permission to manage the leaderelection configmap in the
@@ -96,8 +83,7 @@ metadata:
     app.kubernetes.io/name: cainjector
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "cainjector"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role

@@ -10,15 +10,15 @@ metadata:
     app.kubernetes.io/name: webhook
     app.kubernetes.io/instance: XX_HELM_RELEASE_XX
     app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/component: "webhook"
-    helm.sh/chart: cert-manager-v0.16.0
+    helm.sh/chart: cert-manager-v0.13.0
 spec:
   replicas: 1
   selector:
     matchLabels:
+      app: webhook
       app.kubernetes.io/name: webhook
       app.kubernetes.io/instance: XX_HELM_RELEASE_XX
-      app.kubernetes.io/component: "webhook"
+      app.kubernetes.io/managed-by: Helm
   template:
     metadata:
       labels:
@@ -26,37 +26,29 @@ spec:
         app.kubernetes.io/name: webhook
         app.kubernetes.io/instance: XX_HELM_RELEASE_XX
         app.kubernetes.io/managed-by: Helm
-        app.kubernetes.io/component: "webhook"
-        helm.sh/chart: cert-manager-v0.16.0
+        helm.sh/chart: cert-manager-v0.13.0
+      annotations:
     spec:
       serviceAccountName: XX_HELM_RELEASE_XX-cert-manager-webhook
       containers:
         - name: cert-manager
-          image: "quay.io/jetstack/cert-manager-webhook:v0.16.0"
+          image: "quay.io/jetstack/cert-manager-webhook:v0.13.0"
           imagePullPolicy: IfNotPresent
           args:
           - --v=2
           - --secure-port=10250
-          - --dynamic-serving-ca-secret-namespace=$(POD_NAMESPACE)
-          - --dynamic-serving-ca-secret-name=XX_HELM_RELEASE_XX-cert-manager-webhook-ca
-          - --dynamic-serving-dns-names=XX_HELM_RELEASE_XX-cert-manager-webhook,XX_HELM_RELEASE_XX-cert-manager-webhook.XX_HELM_NAMESPACE_XX,XX_HELM_RELEASE_XX-cert-manager-webhook.XX_HELM_NAMESPACE_XX.svc
-          ports:
-          - name: https
-            containerPort: 10250
+          - --tls-cert-file=/certs/tls.crt
+          - --tls-private-key-file=/certs/tls.key
           livenessProbe:
             httpGet:
               path: /livez
               port: 6080
               scheme: HTTP
-            initialDelaySeconds: 60
-            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /healthz
               port: 6080
               scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 5
           env:
           - name: POD_NAMESPACE
             valueFrom:
@@ -64,3 +56,10 @@ spec:
                 fieldPath: metadata.namespace
           resources:
             {}
+          volumeMounts:
+          - name: certs
+            mountPath: /certs
+      volumes:
+      - name: certs
+        secret:
+          secretName: XX_HELM_RELEASE_XX-cert-manager-webhook-tls
