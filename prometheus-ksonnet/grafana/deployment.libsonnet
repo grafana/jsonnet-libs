@@ -35,7 +35,7 @@
 
   local deployment = $.apps.v1.deployment,
 
-  // Helper to mount a variable number of shareded config maps.
+  // Helper to mount a variable number of sharded config maps.
   local sharded_config_map_mounts(prefix, shards) =
     std.foldr(
       function(shard, acc)
