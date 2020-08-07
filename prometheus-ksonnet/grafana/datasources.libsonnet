@@ -12,22 +12,18 @@
   grafanaDatasources+:: {},
 
   // Generates yaml string containing datasource config
-  grafana_datasource(name, url, default=false, method='GET')::
-    {
-      apiVersion: 1,
-      datasources: [{
-        name: name,
-        type: 'prometheus',
-        access: 'proxy',
-        url: url,
-        isDefault: default,
-        version: 1,
-        editable: false,
-        jsonData: {
-          httpMethod: method,
-        },
-      }],
+  grafana_datasource(name, url, default=false, method='GET', type='prometheus'):: {
+    name: name,
+    type: type,
+    access: 'proxy',
+    url: url,
+    isDefault: default,
+    version: 1,
+    editable: false,
+    jsonData: {
+      httpMethod: method,
     },
+  },
 
   /*
     helper to allow adding datasources directly to the datasource_config_map
@@ -42,25 +38,21 @@
     }),
 
   // Generates yaml string containing datasource config
-  grafana_datasource_with_basicauth(name, url, username, password, default=false, method='GET')::
-    {
-      apiVersion: 1,
-      datasources: [{
-        name: name,
-        type: 'prometheus',
-        access: 'proxy',
-        url: url,
-        isDefault: default,
-        version: 1,
-        editable: false,
-        basicAuth: true,
-        basicAuthUser: username,
-        basicAuthPassword: password,
-        jsonData: {
-          httpMethod: method,
-        },
-      }],
+  grafana_datasource_with_basicauth(name, url, username, password, default=false, method='GET', type='prometheus'):: {
+    name: name,
+    type: type,
+    access: 'proxy',
+    url: url,
+    isDefault: default,
+    version: 1,
+    editable: false,
+    basicAuth: true,
+    basicAuthUser: username,
+    basicAuthPassword: password,
+    jsonData: {
+      httpMethod: method,
     },
+  },
 
   /*
    helper to allow adding datasources directly to the datasource_config_map
@@ -81,7 +73,10 @@
         if std.isString($.grafanaDatasources[name]) then
           $.grafanaDatasources[name]
         else
-          $.util.manifestYaml($.grafanaDatasources[name])
+          $.util.manifestYaml({
+            apiVersion: 1,
+            datasources: [$.grafanaDatasources[name]],
+          })
       )
       for name in std.objectFields($.grafanaDatasources)
     }) +
