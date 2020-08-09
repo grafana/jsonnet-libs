@@ -4,12 +4,7 @@ A set of extensible configs for running Prometheus on Kubernetes.
 
 Usage:
 - Make sure you have [Tanka](https://tanka.dev/install) and
-  [jsonnet-bundler](https://github.com/jsonnet-bundler/jsonnet-bundler) installed:
-
-```bash
-$ GO111MODULE=on go get github.com/grafana/tanka/cmd/tk
-$ GO111MODULE=on go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-```
+  [jsonnet-bundler](https://tanka.dev/install#jsonnet-bundler) installed:
 
 - In your config repo, init Tanka and point it at your Kubernetes cluster:
 
@@ -27,7 +22,7 @@ $ tk env set environments/default  --server-from-context=$CONTEXT
 $ jb install github.com/grafana/jsonnet-libs/prometheus-ksonnet
 ```
 
-- Assuming you want to run in the default namespace ('environment' in ksonnet parlance), add the following to the file `environments/default/main.jsonnet`:
+- Assuming you want to run in the default namespace ('environment' in Tanka parlance), add the following to the file `environments/default/main.jsonnet`:
 
 ```jsonnet
 local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";

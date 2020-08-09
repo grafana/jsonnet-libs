@@ -8,13 +8,13 @@ This repository contains various Jsonnet libraries we use at Grafana Labs:
 * [`grafana-builder`](grafana-builder/): A library for building Grafana dashboards
   with jsonnet, following the builder pattern.
 
-* [`ksonnet-util`](ksonnet-util/): An overlay and set of utilities for [ksonnet](https://ksonnet.io/)
-  that makes working with the library easier.
+* [`ksonnet-util`](ksonnet-util/): An overlay and set of utilities aiming at making
+  working with Kubernetes easier.
 
 * [`memcached-mixin`](memcached-mixin/): A set of reuseable and extensible dashboards
   for Memcached.
 
-* [`oauth2-proxy`](oauth2-proxy/): A ksonnet configuration for deploying bitly's
+* [`oauth2-proxy`](oauth2-proxy/): A jsonnet configuration for deploying bitly's
   OAuth proxy to Kubernetes.
 
 * [`prometheus-ksonnet`](prometheus-ksonnet/): A set of extensible configurations

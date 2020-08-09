@@ -6,16 +6,17 @@ Grafana dashboards and Prometheus alerts for operating Consul, in the form
 of a monitoring mixin. They are easiest to use with the [prometheus-ksonnet](https://github.com/grafana/jsonnet-libs/tree/master/prometheus-ksonnet)
 package.
 
-To install this mixin, use [ksonnet](https://ksonnet.io/):
+To use this mixin, install [Tanka](https://tanka.dev/) and [Jsonnet Bundler](https://tanka.dev/install#jsonnet-bundler).
 
-```sh
-$ go get github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb
-$ jb install github.com/grafana/jsonnet-libs/consul-mixin
+Then you can install the mixin with:
+
+```
+jb install github.com/grafana/jsonnet-libs/consul-mixin
 ```
 
-Then to use, in your environment's `main.jsonnet` file:
+To use, in your Tanka environment's `main.jsonnet` file:
 
-```js
+```jsonnet
 local prometheus = (import "prometheus-ksonnet/prometheus-ksonnet.libsonnet");
 local consul_mixin = (import "consul-mixin/mixin.libsonnet");
 
