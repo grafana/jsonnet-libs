@@ -34,7 +34,10 @@
   */
   grafana_add_datasource(name, url, default=false, method='GET')::
     configMap.withDataMixin({
-      ['%s.yml' % name]: $.util.manifestYaml($.grafana_datasource(name, url, default, method)),
+      ['%s.yml' % name]: $.util.manifestYaml({
+        apiVersion: 1,
+        datasources: [$.grafana_datasource(name, url, default, method)],
+      }),
     }),
 
   // Generates yaml string containing datasource config
@@ -63,13 +66,16 @@
   */
   grafana_add_datasource_with_basicauth(name, url, username, password, default=false, method='GET')::
     configMap.withDataMixin({
-      ['%s.yml' % name]: $.util.manifestYaml($.grafana_datasource_with_basicauth(name, url, username, password, default, method)),
+      ['%s.yml' % name]: $.util.manifestYaml({
+        apiVersion: 1,
+        datasources: [$.grafana_datasource_with_basicauth(name, url, username, password, default, method)],
+      }),
     }),
 
   grafana_datasource_config_map:
     configMap.new('grafana-datasources') +
     configMap.withDataMixin({
-      [name]: (
+      [if std.endsWith(name, '.yml') then name else name + '.yml']: (
         if std.isString($.grafanaDatasources[name]) then
           $.grafanaDatasources[name]
         else
