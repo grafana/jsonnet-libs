@@ -1,7 +1,0 @@
----
-installCRDs: true
-
-global:
-  podSecurityPolicy:
-    enabled: true
-    useAppArmor : false

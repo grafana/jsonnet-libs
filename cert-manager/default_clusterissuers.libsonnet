@@ -1,25 +1,21 @@
 {
-  local _containers = super.controller.deployment.cert_manager.deployment.spec.template.spec.containers,
-  controller+: {
-    deployment+: {
-      cert_manager+: {
-        deployment+: {
+  local _containers = super.labeled.cert_manager_deployment.spec.template.spec.containers,
+  labeled+: {
+    cert_manager_deployment+: {
+      spec+: {
+        template+: {
           spec+: {
-            template+: {
-              spec+: {
-                containers: [
-                  _container {
-                    args+:
-                      [
-                        '--default-issuer-kind=ClusterIssuer',
-                      ]
-                      + (if $._config.default_issuer != null then ['--default-issuer-name=' + $._config.default_issuer] else [])
-                      + (if $._config.default_issuer_group != null then ['--default-issuer-group=' + $._config.default_issuer_group] else []),
-                  }
-                  for _container in _containers
-                ],
-              },
-            },
+            containers: [
+              _container {
+                args+:
+                  [
+                    '--default-issuer-kind=ClusterIssuer',
+                  ]
+                  + (if $._config.default_issuer != null then ['--default-issuer-name=' + $._config.default_issuer] else [])
+                  + (if $._config.default_issuer_group != null then ['--default-issuer-group=' + $._config.default_issuer_group] else []),
+              }
+              for _container in _containers
+            ],
           },
         },
       },

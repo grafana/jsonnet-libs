@@ -1,3 +1,3 @@
-(import 'cert-manager/config.libsonnet') +
-(import 'cert-manager/main.libsonnet') +
-(import 'cert-manager/default_clusterissuers.libsonnet')
+(import 'config.libsonnet') +
+(import 'main.libsonnet') +
+(import 'default_clusterissuers.libsonnet')

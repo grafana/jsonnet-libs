@@ -1,7 +1,24 @@
-local generated = import 'generated.libsonnet';
-
 {
-  local configured = (generated { _config+:: $._config }),
+  local generated =
+    std.native('helmTemplate')(
+      'cert-manager',
+      'jetstack/cert-manager',
+      {
+        values: {
+          installCRDs: true,
+          global: {
+            podSecurityPolicy: {
+              enabled: true,
+              useAppArmor: false,
+            },
+          },
+        },
+        flags: [
+          '--version=v0.13.0',
+          '--namespace=%s' % $._config.namespace,
+        ],
+      }
+    ),
 
   local patch_labels(o, app, name) =
     local selectors = {
@@ -65,49 +82,16 @@ local generated = import 'generated.libsonnet';
     else o
   ,
 
-  local templated = (import 'templated.libsonnet') { _config+:: $._config },
-  crds: templated.configureHelmChart(importstr 'files/00-crds.yaml'),
-
-  cainjector: std.mapWithKey(
+  labeled: std.mapWithKey(
     function(key, obj)
-      patch_labels(obj, 'cainjector', 'cert-manager-cainjector'),
-    {
-      cainjector_deployment: configured.cainjector_deployment,
-      cainjector_psp_clusterrolebinding: configured.cainjector_psp_clusterrolebinding,
-      cainjector_psp_clusterrole: configured.cainjector_psp_clusterrole,
-      cainjector_psp: configured.cainjector_psp,
-      cainjector_rbac: configured.cainjector_rbac,
-      cainjector_serviceaccount: configured.cainjector_serviceaccount,
-    }
+      if std.length(std.findSubstr('cainjector', key)) > 0
+      then patch_labels(obj, 'cainjector', 'cert-manager-cainjector')
+      else if std.length(std.findSubstr('webhook', key)) > 0
+      then patch_labels(obj, 'webhook', 'cert-manager-webhook')
+      else patch_labels(obj, 'controller', 'cert-manager')
+    ,
+    generated
   ),
 
-  controller: std.mapWithKey(
-    function(key, obj)
-      patch_labels(obj, 'controller', 'cert-manager'),
-    {
-      deployment: configured.deployment,
-      psp: configured.psp,
-      psp_clusterrole: configured.psp_clusterrole,
-      psp_clusterrolebinding: configured.psp_clusterrolebinding,
-      rbac: configured.rbac,
-      service: configured.service,
-      serviceaccount: configured.serviceaccount,
-    }
-  ),
-
-  webhook: std.mapWithKey(
-    function(key, obj)
-      patch_labels(obj, 'webhook', 'cert-manager-webhook'),
-    {
-      webhook_deployment: configured.webhook_deployment,
-      webhook_mutating_webhook: configured.webhook_mutating_webhook,
-      webhook_psp_clusterrolebinding: configured.webhook_psp_clusterrolebinding,
-      webhook_psp_clusterrole: configured.webhook_psp_clusterrole,
-      webhook_psp: configured.webhook_psp,
-      webhook_rbac: configured.webhook_rbac,
-      webhook_serviceaccount: configured.webhook_serviceaccount,
-      webhook_service: configured.webhook_service,
-      webhook_validating_webhook: configured.webhook_validating_webhook,
-    }
-  ),
+  crds: std.native('parseYaml')(importstr 'files/00-crds.yaml'),
 }
