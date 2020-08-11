@@ -63,7 +63,14 @@ k {
       },
 
       persistentVolumeClaim+:: {
-        new():: {},
+        new(name='')::
+          if 'new' in super
+          then super.new(name)
+          else
+            if name != '' then
+              {} + super.mixin.metadata.withName(name)
+            else
+              {},
       },
 
       container:: $.apps.v1.deployment.mixin.spec.template.spec.containersType {
