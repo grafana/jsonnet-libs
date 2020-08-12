@@ -109,4 +109,32 @@ local generated = import 'generated.libsonnet';
       webhook_validating_webhook: configured.webhook_validating_webhook,
     }
   ),
+} + {
+  local _containers = super.controller.deployment.cert_manager.deployment.spec.template.spec.containers,
+  controller+: {
+    deployment+: {
+      cert_manager+: {
+        deployment+: {
+          spec+: {
+            template+: {
+              spec+: {
+                containers: [
+                  _container {
+                    ports: [
+                      {
+                        containerPort: 9402,
+                        protocol: 'TCP',
+                        name: 'http-metrics',
+                      },
+                    ],
+                  }
+                  for _container in _containers
+                ],
+              },
+            },
+          },
+        },
+      },
+    },
+  },
 }
