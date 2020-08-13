@@ -3,33 +3,29 @@
     operator: 'quay.io/coreos/etcd-operator:v0.9.4',
   },
 
-  local policyRule = $.rbac.v1beta1.policyRule,
+  local policyRule = $.rbac.v1.policyRule,
 
   operator_rbac:
     $.util.rbac('etcd-operator', [
-      policyRule.new() +
       policyRule.withApiGroups(['etcd.database.coreos.com']) +
       policyRule.withResources(['etcdclusters', 'etcdbackups', 'etcdrestores']) +
       policyRule.withVerbs(['*']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['apiextensions.k8s.io']) +
       policyRule.withResources(['customresourcedefinitions']) +
       policyRule.withVerbs(['*']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['']) +
       policyRule.withResources(['pods', 'services', 'endpoints', 'persistentvolumeclaims', 'events']) +
       policyRule.withVerbs(['*']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['apps']) +
       policyRule.withResources(['deployments']) +
       policyRule.withVerbs(['*']),
     ]),
 
   local container = $.core.v1.container,
-  local env = container.envType,
+  local env = $.core.v1.envVar,
   operator_container::
     container.new('operator', $._images.operator) +
     container.withCommand(['etcd-operator']) +
@@ -46,5 +42,5 @@
 
   operator_deployment:
     deployment.new('etcd-operator', 1, [$.operator_container]) +
-    deployment.mixin.spec.template.spec.withServiceAccount('etcd-operator'),
+    deployment.spec.template.spec.withServiceAccount('etcd-operator'),
 }
