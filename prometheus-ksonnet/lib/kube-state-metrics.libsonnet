@@ -1,9 +1,8 @@
 {
-  local policyRule = $.rbac.v1beta1.policyRule,
+  local policyRule = $.rbac.v1.policyRule,
 
   kube_state_metrics_rbac:
     $.util.rbac('kube-state-metrics', [
-      policyRule.new() +
       policyRule.withApiGroups(['']) +
       policyRule.withResources([
         'configmaps',
@@ -21,7 +20,6 @@
       ]) +
       policyRule.withVerbs(['list', 'watch']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['extensions']) +
       policyRule.withResources([
         'daemonsets',
@@ -31,7 +29,6 @@
       ]) +
       policyRule.withVerbs(['list', 'watch']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['apps']) +
       policyRule.withResources([
         'daemonsets',
@@ -41,7 +38,6 @@
       ]) +
       policyRule.withVerbs(['list', 'watch']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['batch']) +
       policyRule.withResources([
         'cronjobs',
@@ -49,24 +45,20 @@
       ]) +
       policyRule.withVerbs(['list', 'watch']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['autoscaling']) +
       policyRule.withResources([
         'horizontalpodautoscalers',
       ]) +
       policyRule.withVerbs(['list', 'watch']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['ingresses']) +
       policyRule.withResources(['ingress']) +
       policyRule.withVerbs(['list', 'watch']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['policy']) +
       policyRule.withResources(['poddisruptionbudgets']) +
       policyRule.withVerbs(['list', 'watch']),
 
-      policyRule.new() +
       policyRule.withApiGroups(['certificates.k8s.io']) +
       policyRule.withResources(['certificatesigningrequests']) +
       policyRule.withVerbs(['list', 'watch']),
@@ -97,8 +89,8 @@
     ]) +
     // Stop the default pod discovery scraping this pod - we use a special
     // scrape config to preserve namespace etc labels.
-    deployment.mixin.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
-    deployment.mixin.spec.template.spec.withServiceAccount('kube-state-metrics') +
+    deployment.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
+    deployment.spec.template.spec.withServiceAccount('kube-state-metrics') +
     $.util.podPriority('critical'),
 
   kube_state_metrics_service:

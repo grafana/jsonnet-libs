@@ -15,16 +15,14 @@
     _config:: $._config,
     local _config = self._config,
 
-    local policyRule = $.rbac.v1beta1.policyRule,
+    local policyRule = $.rbac.v1.policyRule,
 
     prometheus_rbac:
       $.util.rbac(self.name, [
-        policyRule.new() +
         policyRule.withApiGroups(['']) +
         policyRule.withResources(['nodes', 'nodes/proxy', 'services', 'endpoints', 'pods']) +
         policyRule.withVerbs(['get', 'list', 'watch']),
 
-        policyRule.new() +
         policyRule.withNonResourceUrls('/metrics') +
         policyRule.withVerbs(['get']),
       ]),
@@ -66,10 +64,9 @@
     local pvc = $.core.v1.persistentVolumeClaim,
 
     prometheus_pvc::
-      pvc.new() +
-      pvc.mixin.metadata.withName('%s-data' % (self.name)) +
-      pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-      pvc.mixin.spec.resources.withRequests({ storage: '300Gi' }),
+      pvc.new('%s-data' % (self.name)) +
+      pvc.spec.withAccessModes('ReadWriteOnce') +
+      pvc.spec.resources.withRequests({ storage: '300Gi' }),
 
     local statefulset = $.apps.v1.statefulSet,
     local volumeMount = $.core.v1.volumeMount,
@@ -85,22 +82,22 @@
         self.prometheus_watch_container,
       ], self.prometheus_pvc) +
       self.prometheus_config_mount +
-      statefulset.mixin.spec.withServiceName('prometheus') +
-      statefulset.mixin.spec.template.metadata.withAnnotations({
+      statefulset.spec.withServiceName('prometheus') +
+      statefulset.spec.template.metadata.withAnnotations({
         'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
       }) +
-      statefulset.mixin.spec.template.spec.withServiceAccount(self.name) +
-      statefulset.mixin.spec.template.spec.securityContext.withFsGroup(2000) +
-      statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(1000) +
-      statefulset.mixin.spec.template.spec.securityContext.withRunAsNonRoot(true) +
+      statefulset.spec.template.spec.withServiceAccount(self.name) +
+      statefulset.spec.template.spec.securityContext.withFsGroup(2000) +
+      statefulset.spec.template.spec.securityContext.withRunAsUser(1000) +
+      statefulset.spec.template.spec.securityContext.withRunAsNonRoot(true) +
       $.util.podPriority('critical'),
 
     local service = $.core.v1.service,
-    local servicePort = service.mixin.spec.portsType,
+    local servicePort = $.core.v1.servicePort,
 
     prometheus_service:
       $.util.serviceFor(self.prometheus_statefulset) +
-      service.mixin.spec.withPortsMixin([
+      service.spec.withPortsMixin([
         servicePort.newNamed(
           name='http',
           port=80,

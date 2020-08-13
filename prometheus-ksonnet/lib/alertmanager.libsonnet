@@ -102,12 +102,12 @@
         []
     ) +
     container.withEnvMixin([
-      container.envType.fromFieldPath('POD_IP', 'status.podIP'),
+      $.core.v1.envVar.fromFieldPath('POD_IP', 'status.podIP'),
     ]) +
     container.withVolumeMountsMixin(
       volumeMount.new('alertmanager-data', '/alertmanager')
     ) +
-    container.mixin.resources.withRequests({
+    container.resources.withRequests({
       cpu: '10m',
       memory: '40Mi',
     }),
@@ -127,7 +127,7 @@
       '-sS',
       'http://localhost:%s%s-/reload' % [$._config.alertmanager_port, $._config.alertmanager_path],
     ]) +
-    container.mixin.resources.withRequests({
+    container.resources.withRequests({
       cpu: '10m',
       memory: '20Mi',
     }),
@@ -135,10 +135,9 @@
   local pvc = $.core.v1.persistentVolumeClaim,
 
   alertmanager_pvc::
-    pvc.new() +
-    pvc.mixin.metadata.withName('alertmanager-data') +
-    pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-    pvc.mixin.spec.resources.withRequests({ storage: '5Gi' }),
+    pvc.new('alertmanager-data') +
+    pvc.spec.withAccessModes('ReadWriteOnce') +
+    pvc.spec.resources.withRequests({ storage: '5Gi' }),
 
   local statefulset = $.apps.v1.statefulSet,
 
@@ -148,14 +147,14 @@
       $.alertmanager_container,
       $.alertmanager_watch_container,
     ], self.alertmanager_pvc) +
-    statefulset.mixin.spec.withServiceName('alertmanager') +
-    statefulset.mixin.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.alertmanager_path }) +
+    statefulset.spec.withServiceName('alertmanager') +
+    statefulset.spec.template.metadata.withAnnotations({ 'prometheus.io.path': '%smetrics' % $._config.alertmanager_path }) +
     $.util.configVolumeMount('alertmanager-config', '/etc/alertmanager/config') +
     $.util.podPriority('critical')
   else {},
 
   local service = $.core.v1.service,
-  local servicePort = service.mixin.spec.portsType,
+  local servicePort = $.core.v1.servicePort,
 
   // Do not create service in clusters without any alertmanagers.
   alertmanager_service:
@@ -163,7 +162,7 @@
     then {}
     else
       $.util.serviceFor($.alertmanager_statefulset) +
-      service.mixin.spec.withPortsMixin([
+      service.spec.withPortsMixin([
         servicePort.newNamed(
           name='http',
           port=80,

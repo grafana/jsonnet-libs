@@ -56,9 +56,9 @@
         if !$.isFolderedMixin(mixin)
         then acc
         else acc {
-          [$.folderID(mixin.grafanaDashboardFolder)]:
+          [$.folderID(grafanaDashboardFolder)]:
             if std.objectHas(mixin, 'grafanaDashboardShards')
-            then mixin.grafanaDashboardShards
+            then grafanaDashboardShards
             else 1,
         },
       std.objectFields($.mixins),
@@ -92,11 +92,11 @@
     $.util.podPriority('critical'),
 
   local service = $.core.v1.service,
-  local servicePort = service.mixin.spec.portsType,
+  local servicePort = $.core.v1.servicePort,
 
   grafana_service:
     $.util.serviceFor($.grafana_deployment) +
-    service.mixin.spec.withPortsMixin([
+    service.spec.withPortsMixin([
       servicePort.newNamed(
         name='http',
         port=80,

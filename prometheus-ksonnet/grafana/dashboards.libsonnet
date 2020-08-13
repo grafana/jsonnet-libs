@@ -84,7 +84,7 @@
         for name in std.objectFields(dashboards)
         if std.codepoint(std.md5(name)[1]) % shards == shard
       }) +
-      configMap.mixin.metadata.withLabels($._config.grafana_dashboard_labels)
+      configMap.metadata.withLabels($._config.grafana_dashboard_labels)
     for shard in std.range(0, shards - 1)
   },
 

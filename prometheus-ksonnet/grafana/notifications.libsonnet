@@ -34,5 +34,5 @@
       [name]: std.toString($.grafanaNotificationChannels[name])
       for name in std.objectFields($.grafanaNotificationChannels)
     }) +
-    configMap.mixin.metadata.withLabels($._config.grafana_notification_channel_labels),
+    configMap.metadata.withLabels($._config.grafana_notification_channel_labels),
 }

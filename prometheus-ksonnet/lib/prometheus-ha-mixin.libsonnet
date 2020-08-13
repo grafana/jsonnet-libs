@@ -1,5 +1,6 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 local container = k.core.v1.container;
+local envVar = k.core.v1.envVar;
 local statefulset = k.apps.v1.statefulSet;
 local configMap = k.core.v1.configMap;
 
@@ -69,20 +70,20 @@ local configMap = k.core.v1.configMap;
   prometheus_config_mount:: {},
 
   prometheus_container+:: container.withEnv([
-                            container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+                            envVar.fromFieldPath('POD_NAME', 'metadata.name'),
                           ])
-                          + container.mixin.readinessProbe.httpGet.withPath('%(prometheus_path)s-/ready' % _config)
-                          + container.mixin.readinessProbe.httpGet.withPort(_config.prometheus_port)
-                          + container.mixin.readinessProbe.withInitialDelaySeconds(15)
-                          + container.mixin.readinessProbe.withTimeoutSeconds(1)
+                          + container.readinessProbe.httpGet.withPath('%(prometheus_path)s-/ready' % _config)
+                          + container.readinessProbe.httpGet.withPort(_config.prometheus_port)
+                          + container.readinessProbe.withInitialDelaySeconds(15)
+                          + container.readinessProbe.withTimeoutSeconds(1)
   ,
 
   prometheus_watch_container+:: container.withEnv([
-    container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
+    envVar.fromFieldPath('POD_NAME', 'metadata.name'),
   ]),
 
   prometheus_statefulset+:
     k.util.configVolumeMount('%s-config-0' % self.name, '/etc/prometheus-0') +
     k.util.configVolumeMount('%s-config-1' % self.name, '/etc/prometheus-1') +
-    statefulset.mixin.spec.withReplicas(2),
+    statefulset.spec.withReplicas(2),
 }
