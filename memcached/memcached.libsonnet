@@ -60,13 +60,13 @@ k {
         self.memcached_container,
         self.memcached_exporter,
       ], []) +
-      statefulSet.mixin.spec.withServiceName(self.name) +
+      statefulSet.spec.withServiceName(self.name) +
       $.util.antiAffinity,
 
     local service = $.core.v1.service,
 
     service:
       $.util.serviceFor(self.statefulSet) +
-      service.mixin.spec.withClusterIp('None'),
+      service.spec.withClusterIp('None'),
   },
 }
