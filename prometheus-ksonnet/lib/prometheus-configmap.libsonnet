@@ -11,18 +11,27 @@
 
     local configMap = $.core.v1.configMap,
 
-    prometheus_config_map:
+    prometheus_config_maps:
       // Can't reference self.foo below as we're in a map context, so
       // need to capture reference to the configs in scope here.
       local prometheus_config = self.prometheus_config;
       local prometheusAlerts = self.prometheusAlerts;
       local prometheusRules = self.prometheusRules;
+      [
+        configMap.new('%s-config' % self.name) +
+        configMap.withData({
+          'prometheus.yml': $.util.manifestYaml(prometheus_config),
+        }),
 
-      configMap.new('%s-config' % self.name) +
-      configMap.withData({
-        'prometheus.yml': $.util.manifestYaml(prometheus_config),
-        'alerts.rules': $.util.manifestYaml(prometheusAlerts),
-        'recording.rules': $.util.manifestYaml(prometheusRules),
-      }),
+        configMap.new('%s-alerts' % self.name) +
+        configMap.withData({
+          'alerts.rules': $.util.manifestYaml(prometheusAlerts),
+        }),
+
+        configMap.new('%s-rules' % self.name) +
+        configMap.withData({
+          'recording.rules': $.util.manifestYaml(prometheusRules),
+        }),
+      ],
   },
 }
