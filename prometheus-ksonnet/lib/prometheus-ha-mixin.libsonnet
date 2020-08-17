@@ -58,7 +58,7 @@ local configMap = k.core.v1.configMap;
     configMap.withData({
       'alerts.rules': k.util.manifestYaml(root.prometheus_zero.alerts),
     }),
-    configMap.new('%s-rules-0' % self.name) +
+    configMap.new('%s-recording-0' % self.name) +
     configMap.withData({
       'recording.rules': k.util.manifestYaml(root.prometheus_zero.rules),
     }),
@@ -71,7 +71,7 @@ local configMap = k.core.v1.configMap;
     configMap.withData({
       'alerts.rules': k.util.manifestYaml(root.prometheus_one.alerts),
     }),
-    configMap.new('%s-rules-1' % self.name) +
+    configMap.new('%s-recording-1' % self.name) +
     configMap.withData({
       'recording.rules': k.util.manifestYaml(root.prometheus_one.rules),
     }),
@@ -80,10 +80,10 @@ local configMap = k.core.v1.configMap;
   prometheus_config_mount::
     k.util.configVolumeMount('%s-config-0' % self.name, '/etc/prometheus-0')
     + k.util.configVolumeMount('%s-alerts-0' % self.name, '/etc/prometheus-0/alerts')
-    + k.util.configVolumeMount('%s-rules-0' % self.name, '/etc/prometheus-0/rules')
+    + k.util.configVolumeMount('%s-recording-0' % self.name, '/etc/prometheus-0/recording')
     + k.util.configVolumeMount('%s-config-1' % self.name, '/etc/prometheus-1')
     + k.util.configVolumeMount('%s-alerts-1' % self.name, '/etc/prometheus-1/alerts')
-    + k.util.configVolumeMount('%s-rules-1' % self.name, '/etc/prometheus-1/rules')
+    + k.util.configVolumeMount('%s-recording-1' % self.name, '/etc/prometheus-1/recording')
   ,
 
   prometheus_container+:: container.withEnv([

@@ -5,8 +5,8 @@
     },
 
     rule_files: [
-      'alerts/rules',
-      'recording/rules',
+      'alerts/alerts.rules',
+      'recording/recording.rules',
     ],
 
     alerting: {

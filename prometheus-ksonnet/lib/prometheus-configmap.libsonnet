@@ -28,7 +28,7 @@
           'alerts.rules': $.util.manifestYaml(prometheusAlerts),
         }),
 
-        configMap.new('%s-rules' % self.name) +
+        configMap.new('%s-recording' % self.name) +
         configMap.withData({
           'recording.rules': $.util.manifestYaml(prometheusRules),
         }),
