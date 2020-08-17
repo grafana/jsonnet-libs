@@ -77,7 +77,7 @@
     prometheus_config_mount::
       $.util.configVolumeMount('%s-config' % self.name, _config.prometheus_config_dir)
       + $.util.configVolumeMount('%s-alerts' % self.name, _config.prometheus_config_dir + '/alerts')
-      + $.util.configVolumeMount('%s-rules' % self.name, _config.prometheus_config_dir + '/recording')
+      + $.util.configVolumeMount('%s-rules' % self.name, _config.prometheus_config_dir + '/rules')
     ,
 
     prometheus_statefulset:
