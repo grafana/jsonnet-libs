@@ -29,7 +29,7 @@ local configMap = k.core.v1.configMap;
     config+:: root.prometheus_config {
       global+: {
         external_labels+: {
-          __replica__: 'zero',
+          __replica__: 'prometheus-0',
         },
       },
     },
@@ -41,7 +41,7 @@ local configMap = k.core.v1.configMap;
     config+:: root.prometheus_config {
       global+: {
         external_labels+: {
-          __replica__: 'one',
+          __replica__: 'prometheus-1',
         },
       },
     },
