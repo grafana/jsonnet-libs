@@ -99,4 +99,28 @@ local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
     if $._config.custom_crds
     then std.native('parseYaml')(importstr 'files/00-crds.yaml')
     else {},
+} + {
+  local _containers = super.labeled.cert_manager_deployment.spec.template.spec.containers,
+  labeled+: {
+    cert_manager_deployment+: {
+      spec+: {
+        template+: {
+          spec+: {
+            containers: [
+              _container {
+                ports: [
+                  {
+                    containerPort: 9402,
+                    protocol: 'TCP',
+                    name: 'http-metrics',
+                  },
+                ],
+              }
+              for _container in _containers
+            ],
+          },
+        },
+      },
+    },
+  },
 }
