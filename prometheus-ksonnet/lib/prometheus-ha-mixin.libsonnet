@@ -29,7 +29,7 @@ local configMap = k.core.v1.configMap;
     config+:: root.prometheus_config {
       global+: {
         external_labels+: {
-          __replica__: 'zero',
+          __replica__: 'prometheus-0',
         },
       },
     },
@@ -41,7 +41,7 @@ local configMap = k.core.v1.configMap;
     config+:: root.prometheus_config {
       global+: {
         external_labels+: {
-          __replica__: 'one',
+          __replica__: 'prometheus-1',
         },
       },
     },
@@ -49,24 +49,42 @@ local configMap = k.core.v1.configMap;
     rules+:: root.prometheusRules,
   },
 
-  prometheus_config_map:: {},
-
   prometheus_config_maps: [
-    configMap.new('%s-config-0' % self.name) +
+    configMap.new('%s-0-config' % self.name) +
     configMap.withData({
       'prometheus.yml': k.util.manifestYaml(root.prometheus_zero.config),
+    }),
+    configMap.new('%s-0-alerts' % self.name) +
+    configMap.withData({
       'alerts.rules': k.util.manifestYaml(root.prometheus_zero.alerts),
+    }),
+    configMap.new('%s-0-recording' % self.name) +
+    configMap.withData({
       'recording.rules': k.util.manifestYaml(root.prometheus_zero.rules),
     }),
-    configMap.new('%s-config-1' % self.name) +
+
+    configMap.new('%s-1-config' % self.name) +
     configMap.withData({
       'prometheus.yml': k.util.manifestYaml(root.prometheus_one.config),
+    }),
+    configMap.new('%s-1-alerts' % self.name) +
+    configMap.withData({
       'alerts.rules': k.util.manifestYaml(root.prometheus_one.alerts),
+    }),
+    configMap.new('%s-1-recording' % self.name) +
+    configMap.withData({
       'recording.rules': k.util.manifestYaml(root.prometheus_one.rules),
     }),
   ],
 
-  prometheus_config_mount:: {},
+  prometheus_config_mount::
+    k.util.configVolumeMount('%s-0-config' % self.name, '/etc/prometheus-0')
+    + k.util.configVolumeMount('%s-0-alerts' % self.name, '/etc/prometheus-0/alerts')
+    + k.util.configVolumeMount('%s-0-recording' % self.name, '/etc/prometheus-0/recording')
+    + k.util.configVolumeMount('%s-1-config' % self.name, '/etc/prometheus-1')
+    + k.util.configVolumeMount('%s-1-alerts' % self.name, '/etc/prometheus-1/alerts')
+    + k.util.configVolumeMount('%s-1-recording' % self.name, '/etc/prometheus-1/recording')
+  ,
 
   prometheus_container+:: container.withEnv([
                             container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
@@ -82,7 +100,5 @@ local configMap = k.core.v1.configMap;
   ]),
 
   prometheus_statefulset+:
-    k.util.configVolumeMount('%s-config-0' % self.name, '/etc/prometheus-0') +
-    k.util.configVolumeMount('%s-config-1' % self.name, '/etc/prometheus-1') +
     statefulset.mixin.spec.withReplicas(2),
 }
