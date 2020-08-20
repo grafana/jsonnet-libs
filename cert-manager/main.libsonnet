@@ -1,7 +1,7 @@
 local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
 {
   values:: {
-    installCRDs: true,
+    installCRDs: if $.config.custom_crds then false else true,
     global: {
       podSecurityPolicy: {
         enabled: true,
