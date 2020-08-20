@@ -10,10 +10,12 @@ local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
     },
   },
 
+  chart_vendor_folder:: '',
+
   local generated =
     helm.template(
       'cert-manager',
-      'jetstack/cert-manager',
+      '%sjetstack/cert-manager' % $.chart_vendor_folder,
       {
         values: $.values,
         flags: [
