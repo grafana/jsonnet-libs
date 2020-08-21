@@ -30,7 +30,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
   template(name, chart, conf={})::
     this.patchLabels(
       std.native('helmTemplate')(name, chart, conf),
-      defaultLabels
+      this.defaultLabels
     ),
 
   '#patchKubernetesObjects':: d.fn(
