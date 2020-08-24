@@ -5,7 +5,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
   '#':: d.pkg(
     name='helm-util',
     url='github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet',
-    help='`helm-util` provides utilities for using helm in jsonnet',
+    help=(importstr "package.md") % (importstr "_example.jsonnet"),
   ),
 
   // This common label is usually set to 'Helm', this is not true anymore.
@@ -34,7 +34,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     ),
 
   '#patchKubernetesObjects':: d.fn(
-    '`patchKubernetesObjects` finds all Kubernetes objects and patches them`',
+    '`patchKubernetesObjects` applies `patch` to all Kubernetes objects it finds in `object`.',
     [
       d.arg('object', d.T.object),
       d.arg('patch', d.T.object),
@@ -62,7 +62,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     else object,
 
   '#patchLabels':: d.fn(
-    '`patchLabels` finds all Kubernetes objects and adds labels',
+    '`patchLabels` finds all Kubernetes objects and adds labels to them.',
     [
       d.arg('object', d.T.object),
       d.arg('labels', d.T.object),
