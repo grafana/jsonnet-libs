@@ -1,105 +1,109 @@
+local k = import 'k.libsonnet';
+
 {
-  new(config):: {
-    local k = import 'ksonnet-util/kausal.libsonnet',
+  namespace:: 'kube-system',
+  slack_webhook:: '',
+  image:: 'k8s.gcr.io/gke-node-termination-handler@sha256:aca12d17b222dfed755e28a44d92721e477915fb73211d0a0f8925a1fa847cca',
 
-    local _config = {
-      namespace: 'kube-system',
-      slack_webhook: '',
-    } + config,
+  local container = k.core.v1.container,
+  local envVar = k.core.v1.envVar,
+  container::
+    container.new('node-termination-handler', self.image)
+    + container.withCommand(['./node-termination-handler'])
+    + container.withArgs([
+      '--logtostderr',
+      '--exclude-pods=$(POD_NAME):$(POD_NAMESPACE)',
+      '-v=10',
+      '--taint=cloud.google.com/impending-node-termination::NoSchedule',
+    ])
+    + container.withEnv([
+      envVar.fromFieldPath('POD_NAME', 'metadata.name'),
+      envVar.fromFieldPath('POD_NAMESPACE', 'metadata.namespace'),
+      envVar.new('SLACK_WEBHOOK_URL', self.slack_webhook),
+    ])
+    + container.securityContext.capabilities.withAdd(['SYS_BOOT'])
+    + container.resources.withRequests({
+      cpu: '50m',
+      memory: '10Mi',
+    })
+    + container.resources.withLimits({
+      cpu: '150m',
+      memory: '30Mi',
+    })
+  ,
 
+  local daemonSet = k.apps.v1.daemonSet,
+  local tolerations = k.core.v1.toleration,
+  local nodeAffinity = daemonSet.spec.template.spec.affinity.nodeAffinity,
+  local nodeSelectorTerm = k.core.v1.nodeSelectorTerm,
+  local nodeSelectorRequirement = k.core.v1.nodeSelectorRequirement,
+  daemonset:
+    local labels = { name: 'node-termination-handler' };
+    daemonSet.new(labels.name)
+    + daemonSet.metadata.withNamespace(self.namespace)
+    + daemonSet.metadata.withLabels(labels)
+    + daemonSet.spec.withMinReadySeconds(10)
+    + daemonSet.spec.selector.withMatchLabels(labels)
+    + daemonSet.spec.template.metadata.withLabels(labels)
+    + daemonSet.spec.template.spec.withContainers([self.container])
+    + daemonSet.spec.template.spec.withServiceAccount(self.service_account.metadata.name)
+    + daemonSet.spec.template.spec.withHostPID(true)
+    + daemonSet.spec.template.spec.withTolerations([
+      tolerations.withOperator('Exists')
+      + tolerations.withEffect('NoSchedule'),
+      tolerations.withOperator('Exists')
+      + tolerations.withEffect('NoExecute'),
+    ])
+    + nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.withNodeSelectorTerms(
+      [
+        nodeSelectorTerm.withMatchExpressions([
+          nodeSelectorRequirement.withKey('cloud.google.com/gke-accelerator')
+          + nodeSelectorRequirement.withOperator('Exists'),
+        ]),
+        nodeSelectorTerm.withMatchExpressions([
+          nodeSelectorRequirement.withKey('cloud.google.com/gke-preemptible')
+          + nodeSelectorRequirement.withOperator('Exists'),
+        ]),
+      ]
+    )
+  ,
 
-    _images+:: {
-      node_termination_handler: 'k8s.gcr.io/gke-node-termination-handler@sha256:aca12d17b222dfed755e28a44d92721e477915fb73211d0a0f8925a1fa847cca',
-    },
+  local serviceAccount = k.core.v1.serviceAccount,
+  service_account:
+    serviceAccount.new('node-termination-handler')
+    + serviceAccount.metadata.withNamespace(self.namespace)
+  ,
 
+  local clusterRole = k.rbac.v1.clusterRole,
+  local policyRule = k.rbac.v1.policyRule,
+  cluster_role:
+    clusterRole.new('node-termination-handler-role')
+    + clusterRole.withRules([
+      policyRule.withApiGroups('')
+      + policyRule.withResources(['nodes'])
+      + policyRule.withVerbs(['get', 'update'])
+      ,
+      policyRule.withApiGroups('')
+      + policyRule.withResources(['events'])
+      + policyRule.withVerbs(['create'])
+      ,
+      policyRule.withApiGroups('')
+      + policyRule.withResources(['pods'])
+      + policyRule.withVerbs(['get', 'list', 'delete']),
+    ])
+  ,
 
-    local container = k.core.v1.container,
-    container::
-      container.new('node-termination-handler', self._images.node_termination_handler) +
-      container.withCommand(['./node-termination-handler']) +
-      container.withArgsMixin([
-        '--logtostderr',
-        '--exclude-pods=$(POD_NAME):$(POD_NAMESPACE)',
-        '-v=10',
-        '--taint=cloud.google.com/impending-node-termination::NoSchedule',
-      ]) +
-      container.withEnv([
-        container.envType.fromFieldPath('POD_NAME', 'metadata.name'),
-        container.envType.fromFieldPath('POD_NAMESPACE', 'metadata.namespace'),
-        container.envType.new('SLACK_WEBHOOK_URL', _config.slack_webhook),
-      ]) +
-      container.mixin.securityContext.capabilities.withAdd(['SYS_BOOT']) +
-      k.util.resourcesLimits('150m', '30Mi'),
-
-    local daemonSet = k.apps.v1.daemonSet,
-    local tolerations = daemonSet.mixin.spec.template.spec.tolerationsType,
-    local nodeAffinity = daemonSet.mixin.spec.template.spec.affinity.nodeAffinity,
-    local nodeSelector = nodeAffinity.requiredDuringSchedulingIgnoredDuringExecutionType,
-    daemonset:
-      daemonSet.new('node-termination-handler', [self.container]) +
-      daemonSet.mixin.spec.template.spec.withServiceAccount(self.service_account.metadata.name) +
-      daemonSet.mixin.spec.template.spec.affinity.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution.withNodeSelectorTerms(
-        [
-          nodeSelector.nodeSelectorTermsType.new() +
-          nodeSelector.nodeSelectorTermsType.withMatchExpressions([
-            nodeSelector.nodeSelectorTermsType.matchFieldsType.withKey('cloud.google.com/gke-accelerator')
-            + nodeSelector.nodeSelectorTermsType.matchFieldsType.withOperator('Exists'),
-          ]),
-          nodeSelector.nodeSelectorTermsType.new() +
-          nodeSelector.nodeSelectorTermsType.withMatchExpressions([
-            nodeSelector.nodeSelectorTermsType.matchFieldsType.withKey('cloud.google.com/gke-preemptible')
-            + nodeSelector.nodeSelectorTermsType.matchFieldsType.withOperator('Exists'),
-          ]),
-        ]
-      ) +
-      daemonSet.mixin.metadata.withNamespace(_config.namespace) +
-      daemonSet.mixin.spec.template.spec.withHostPid(true) +
-      daemonSet.mixin.spec.template.spec.withTolerations([
-        tolerations.new() +
-        tolerations.withOperator('Exists') +
-        tolerations.withEffect('NoSchedule'),
-
-        tolerations.new() +
-        tolerations.withOperator('Exists') +
-        tolerations.withEffect('NoExecute'),
-      ]),
-
-    local serviceAccount = k.core.v1.serviceAccount,
-    service_account:
-      serviceAccount.new('node-termination-handler') +
-      serviceAccount.mixin.metadata.withNamespace(_config.namespace),
-
-    local clusterRole = k.rbac.v1.clusterRole,
-    local clusterRoleRule = k.rbac.v1.clusterRole.rulesType,
-    cluster_role:
-      clusterRole.new() +
-      clusterRole.mixin.metadata.withName('node-termination-handler-role') +
-      clusterRole.withRulesMixin([
-        clusterRoleRule.new() +
-        clusterRoleRule.withApiGroups('') +
-        clusterRoleRule.withResources(['nodes']) +
-        clusterRoleRule.withVerbs(['get', 'update']),
-        clusterRoleRule.new() +
-        clusterRoleRule.withApiGroups('') +
-        clusterRoleRule.withResources(['events']) +
-        clusterRoleRule.withVerbs(['create']),
-        clusterRoleRule.new() +
-        clusterRoleRule.withApiGroups('') +
-        clusterRoleRule.withResources(['pods']) +
-        clusterRoleRule.withVerbs(['get', 'list', 'delete']),
-      ]),
-
-    local clusterRoleBinding = k.rbac.v1.clusterRoleBinding,
-    cluster_role_binding:
-      clusterRoleBinding.new() +
-      clusterRoleBinding.mixin.metadata.withName('node-termination-handler-role-binding') +
-      clusterRoleBinding.mixin.roleRef.withApiGroup('rbac.authorization.k8s.io') +
-      clusterRoleBinding.mixin.roleRef.withKind('ClusterRole') +
-      clusterRoleBinding.mixin.roleRef.withName('node-termination-handler-role') +
-      clusterRoleBinding.withSubjectsMixin({
-        kind: 'ServiceAccount',
-        name: 'node-termination-handler',
-        namespace: _config.namespace,
-      }),
-  },
+  local clusterRoleBinding = k.rbac.v1.clusterRoleBinding,
+  local subject = k.rbac.v1.subject,
+  cluster_role_binding:
+    clusterRoleBinding.new('node-termination-handler-role-binding')
+    + clusterRoleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io')
+    + clusterRoleBinding.roleRef.withKind('ClusterRole')
+    + clusterRoleBinding.roleRef.withName('node-termination-handler-role')
+    + clusterRoleBinding.withSubjects(
+      subject.withKind(self.service_account.kind)
+      + subject.withName(self.service_account.metadata.name)
+      + subject.withNamespace(self.service_account.metadata.namespace)
+      ,
+    ),
 }
