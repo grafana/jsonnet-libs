@@ -5,7 +5,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
   '#':: d.pkg(
     name='helm-util',
     url='github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet',
-    help=(importstr "package.md") % (importstr "_example.jsonnet"),
+    help=(importstr 'package.md') % (importstr '_example.jsonnet'),
   ),
 
   // This common label is usually set to 'Helm', this is not true anymore.
