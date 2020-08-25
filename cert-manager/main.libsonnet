@@ -25,10 +25,10 @@ local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
       }
     ),
 
+  // manual generated lib used different labels as selectors
+  // keeping these minimizes impact on production
   local patch_labels(o, app, name) =
     local labels = {
-      // manual generated lib used these labels as selectors
-      // keeping these minimizes impact on production
       app: app,
       name: name,
     };
@@ -112,6 +112,8 @@ local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
               _container {
                 ports: [
                   {
+                    // Convention in grafana/jsonnet-libs is to name the prometheus
+                    // scraping port 'http-metrics' for service discovery
                     containerPort: 9402,
                     protocol: 'TCP',
                     name: 'http-metrics',
