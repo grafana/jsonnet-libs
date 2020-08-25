@@ -1,6 +1,5 @@
-# Cert-manager jsonnet library (alpha)
+# cert-manager
 
-This library was created as a mostly 1-to-1 rewrite of cert-manager helm chart and is in use internally at Grafana Labs. It should be considered experimental.
+This jsonnet lib renders the cert-manager Helm chart with a few Grafana specific overrides.
 
-In addition to the helm chart content, this jsonnet library also provides `letsencrypt-prod` and `letsencrypt-staging` ClusterIssuers for direct consumption. Please have a look at `config.libsonnet` for configuration parameters.
-
+It depends on the helmraiser functionality available in tanka>=0.12.0-alpha1.
