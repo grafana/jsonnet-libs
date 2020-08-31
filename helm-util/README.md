@@ -36,7 +36,7 @@ local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
     conf={
       values: $.values,
       flags: [
-        '--version=%s % $.version',
+        '--version=%s' % $.version,
       ],
     },
   ),
