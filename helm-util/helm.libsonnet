@@ -8,6 +8,12 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     help='`helm-util` provides utilities for using helm in jsonnet',
   ),
 
+  _calledFrom:: error 'new(std.thisFile) was not called',
+
+  new(calledFrom):: self {
+    _calledFrom: calledFrom,
+  },
+
   // This common label is usually set to 'Helm', this is not true anymore.
   // You can override this with any value you choose.
   // https://helm.sh/docs/chart_best_practices/labels/#standard-labels
@@ -15,7 +21,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
 
   '#template':: d.fn(
     |||
-      `template` expands the Helm Chart to it's underlying resources and returns them in an `Object`,
+      `template` expands the Helm Chart to its underlying resources and returns them in an `Object`,
       so they can be consumed and modified from within Jsonnet.
 
       This functionality requires Helmraiser support in Jsonnet (e.g. using Grafana Tanka) and also
@@ -28,10 +34,10 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     ]
   ),
   template(name, chart, conf={})::
-    this.patchLabels(
-      std.native('helmTemplate')(name, chart, conf),
-      this.defaultLabels
-    ),
+    local cfg = conf { calledFrom: this._calledFrom };
+    local chartData = std.native('helmTemplate')(name, chart, cfg);
+
+    this.patchLabels(chartData, this.defaultLabels),
 
   '#patchKubernetesObjects':: d.fn(
     '`patchKubernetesObjects` finds all Kubernetes objects and patches them`',
@@ -77,5 +83,4 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
         },
       }
     ),
-
 }
