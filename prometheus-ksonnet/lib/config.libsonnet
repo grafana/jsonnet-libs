@@ -6,22 +6,11 @@
     cluster_name: error 'must specify cluster name',
     namespace: error 'must specify namespace',
 
+    // Grafana config options.
+    grafana_root_url: 'http://nginx.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana' % self,
+
     // Overrides for the nginx frontend for all these services.
-    admin_services: std.prune([
-      {
-        title: 'Grafana (Light)',
-        path: 'grafana',
-        params: '/?search=open&theme=light',
-        url: 'http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/' % $._config,
-        allowWebsockets: true,
-      },
-      {
-        title: 'Grafana (Dark)',
-        path: 'grafana',
-        params: '/?search=open&theme=dark',
-        url: 'http://grafana.%(namespace)s.svc.%(cluster_dns_suffix)s/' % $._config,
-        allowWebsockets: true,
-      },
+    admin_services+: std.prune([
       {
         title: 'Prometheus',
         path: 'prometheus',
