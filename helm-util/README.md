@@ -8,7 +8,7 @@ permalink: /
 local helm-util = import "github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet"
 ```
 
-Package `helm-util` allows to consume Helm Charts as plain Jsonnet resources.
+Package `helm-util` allows the user to consume Helm Charts as plain Jsonnet resources.
 
 ### Usage
 
@@ -39,7 +39,7 @@ local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet')
 
 ### Chart Management
 
-To simplify Chart vendoring, Tanka includes a special tool at `tk tool vendor`:
+To simplify Chart vendoring, Tanka includes a special tool at `tk tool charts`:
 
 ```bash
 # create a chartfile.yaml, similar to jsonnetfile.json

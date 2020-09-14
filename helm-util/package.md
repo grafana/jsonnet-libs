@@ -17,7 +17,7 @@ resolved relative to the file that calls `helm.template`:
 
 ### Chart Management
 
-To simplify Chart vendoring, Tanka includes a special tool at `tk tool vendor`:
+To simplify Chart vendoring, Tanka includes a special tool at `tk tool charts`:
 
 ```bash
 # create a chartfile.yaml, similar to jsonnetfile.json
