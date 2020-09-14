@@ -11,7 +11,7 @@ local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet')
     },
   },
 
-  local generated = helm.template("cert-manager", "./charts/cert-manager", {
+  local generated = helm.template('cert-manager', './charts/cert-manager', {
     values: $.values,
     namespace: $._config.namespace,
   }),
