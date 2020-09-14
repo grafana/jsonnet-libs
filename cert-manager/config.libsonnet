@@ -1,7 +1,7 @@
 {
   _config+:: {
     name: 'cert-manager',
-    namespace: error '$._config.namesapce needs to be configured.',
+    namespace: error '$._config.namespace needs to be configured.',
     version: 'v0.13.0',
     custom_crds: true,  // newer cert-manager charts can install CRDs
     default_issuer: null,

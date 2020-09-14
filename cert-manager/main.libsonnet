@@ -1,4 +1,5 @@
-local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
+local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet').new(std.thisFile);
+
 {
   values:: {
     installCRDs: if $._config.custom_crds then false else true,
@@ -10,20 +11,10 @@ local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
     },
   },
 
-  chart_vendor_folder:: '',
-
-  local generated =
-    helm.template(
-      'cert-manager',
-      '%sjetstack/cert-manager' % $.chart_vendor_folder,
-      {
-        values: $.values,
-        flags: [
-          '--version=%s' % $._config.version,
-          '--namespace=%s' % $._config.namespace,
-        ],
-      }
-    ),
+  local generated = helm.template('cert-manager', './charts/cert-manager', {
+    values: $.values,
+    namespace: $._config.namespace,
+  }),
 
   // manual generated lib used different labels as selectors
   // keeping these minimizes impact on production
@@ -102,9 +93,9 @@ local helm = import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet';
     then std.native('parseYaml')(importstr 'files/00-crds.yaml')
     else {},
 } + {
-  local _containers = super.labeled.cert_manager_deployment.spec.template.spec.containers,
+  local _containers = super.labeled.deployment_cert_manager.spec.template.spec.containers,
   labeled+: {
-    cert_manager_deployment+: {
+    deployment_cert_manager+: {
       spec+: {
         template+: {
           spec+: {

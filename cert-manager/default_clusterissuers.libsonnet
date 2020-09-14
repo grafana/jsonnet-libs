@@ -1,7 +1,7 @@
 {
-  local _containers = super.labeled.cert_manager_deployment.spec.template.spec.containers,
+  local _containers = super.labeled.deployment_cert_manager.spec.template.spec.containers,
   labeled+: {
-    cert_manager_deployment+: {
+    deployment_cert_manager+: {
       spec+: {
         template+: {
           spec+: {
