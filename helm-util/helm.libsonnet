@@ -8,6 +8,26 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     help=(importstr 'package.md') % (importstr '_example.jsonnet'),
   ),
 
+  '#_config':: 'ignore',
+  _config: {
+    calledFrom:: error 'new(std.thisFile) was not called',
+  },
+
+
+  '#new': d.fn(
+    |||
+      `new` initiates the `helm-util` library. It must be called before any `helm.template` call:
+       > ```jsonnet
+       > // std.thisFile required to correctly resolve local Helm Charts
+       > helm.new(std.thisFile)
+       > ```
+    |||,
+    [d.arg('calledFrom', d.T.string)]
+  ),
+  new(calledFrom):: self {
+    _config+: { calledFrom: calledFrom },
+  },
+
   // This common label is usually set to 'Helm', this is not true anymore.
   // You can override this with any value you choose.
   // https://helm.sh/docs/chart_best_practices/labels/#standard-labels
@@ -15,7 +35,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
 
   '#template':: d.fn(
     |||
-      `template` expands the Helm Chart to it's underlying resources and returns them in an `Object`,
+      `template` expands the Helm Chart to its underlying resources and returns them in an `Object`,
       so they can be consumed and modified from within Jsonnet.
 
       This functionality requires Helmraiser support in Jsonnet (e.g. using Grafana Tanka) and also
@@ -28,10 +48,10 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     ]
   ),
   template(name, chart, conf={})::
-    this.patchLabels(
-      std.native('helmTemplate')(name, chart, conf),
-      this.defaultLabels
-    ),
+    local cfg = conf { calledFrom: this._config.calledFrom };
+    local chartData = std.native('helmTemplate')(name, chart, cfg);
+
+    this.patchLabels(chartData, this.defaultLabels),
 
   '#patchKubernetesObjects':: d.fn(
     '`patchKubernetesObjects` applies `patch` to all Kubernetes objects it finds in `object`.',
@@ -77,5 +97,4 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
         },
       }
     ),
-
 }

@@ -31,7 +31,7 @@ local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet')
       persistence: { enabled: true },
       plugins: ['grafana-clock-panel'],
     },
-    namespace: "test"
+    namespace: 'test',
   }),
 }
 
@@ -65,11 +65,25 @@ compatible with `google/go-jsonnet` or `google/jsonnet`.
 
 ## Index
 
+* [`fn new(calledFrom)`](#fn-new)
 * [`fn patchKubernetesObjects(object, patch)`](#fn-patchkubernetesobjects)
 * [`fn patchLabels(object, labels)`](#fn-patchlabels)
 * [`fn template(name, chart, conf)`](#fn-template)
 
 ## Fields
+
+### fn new
+
+```ts
+new(calledFrom)
+```
+
+`new` initiates the `helm-util` library. It must be called before any `helm.template` call:
+ > ```jsonnet
+ > // std.thisFile required to correctly resolve local Helm Charts
+ > helm.new(std.thisFile)
+ > ```
+
 
 ### fn patchKubernetesObjects
 
@@ -93,7 +107,7 @@ patchLabels(object, labels)
 template(name, chart, conf)
 ```
 
-`template` expands the Helm Chart to it's underlying resources and returns them in an `Object`,
+`template` expands the Helm Chart to its underlying resources and returns them in an `Object`,
 so they can be consumed and modified from within Jsonnet.
 
 This functionality requires Helmraiser support in Jsonnet (e.g. using Grafana Tanka) and also

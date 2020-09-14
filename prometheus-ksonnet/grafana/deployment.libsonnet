@@ -1,13 +1,7 @@
 {
-  grafanaDatasources+:: {
-    'prometheus.yml': $.grafana_datasource('prometheus',
-                                           'http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s%(prometheus_web_route_prefix)s' % $._config,
-                                           default=true),
-  },
-
   _config+:: {
     // Grafana config options.
-    grafana_root_url: 'http://nginx.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana' % self,
+    grafana_root_url: '',
     grafana_provisioning_dir: '/etc/grafana/provisioning',
 
     // Optionally shard dashboards into multiple config maps.

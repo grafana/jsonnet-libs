@@ -1,4 +1,0 @@
-{
-  service:
-    $.util.serviceFor($.deployment),
-}

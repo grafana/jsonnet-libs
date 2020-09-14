@@ -7,6 +7,6 @@ local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet')
       persistence: { enabled: true },
       plugins: ['grafana-clock-panel'],
     },
-    namespace: "test"
+    namespace: 'test',
   }),
 }

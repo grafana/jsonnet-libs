@@ -1,0 +1,10 @@
+directory: charts
+repositories:
+- name: stable
+  url: https://kubernetes-charts.storage.googleapis.com
+- name: jetstack
+  url: https://charts.jetstack.io
+requires:
+- chart: jetstack/cert-manager
+  version: 0.13.0
+version: 1
