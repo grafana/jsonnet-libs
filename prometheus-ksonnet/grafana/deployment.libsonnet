@@ -15,7 +15,7 @@
   },
 
   grafana_plugins+:: [
-    "grafana-polystat-panel",
+    'grafana-polystat-panel',
   ],
 
   local container = $.core.v1.container,
