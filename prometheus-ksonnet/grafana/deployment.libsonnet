@@ -14,7 +14,9 @@
     grafana_notification_channel_labels: {},
   },
 
-  grafana_plugins+:: [],
+  grafana_plugins+:: [
+    "grafana-polystat-panel",
+  ],
 
   local container = $.core.v1.container,
 
