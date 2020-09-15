@@ -320,6 +320,25 @@
     ],
   },
 
+  textPanel(title, markdown):: {
+    type: "text",
+    title: title,
+    options: {
+      content: markdown,
+      mode: "markdown"
+    },
+    transparent: true,
+    datasource: null,
+    timeFrom: null,
+    timeShift: null,
+    fieldConfig: {
+      defaults: {
+        custom: {}
+      },
+      overrides: []
+    },
+  },
+
   stack:: {
     stack: true,
     fill: 10,
