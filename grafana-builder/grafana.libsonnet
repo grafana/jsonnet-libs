@@ -321,11 +321,11 @@
   },
 
   textPanel(title, markdown):: {
-    type: "text",
+    type: 'text',
     title: title,
     options: {
       content: markdown,
-      mode: "markdown"
+      mode: 'markdown',
     },
     transparent: true,
     datasource: null,
@@ -333,9 +333,9 @@
     timeShift: null,
     fieldConfig: {
       defaults: {
-        custom: {}
+        custom: {},
       },
-      overrides: []
+      overrides: [],
     },
   },
 
