@@ -171,6 +171,17 @@
             replacement: '__param_$1',
           },
 
+          // Generic mapping of k8s label/annotation to prometheus labels.
+          {
+            regex: '__meta_kubernetes_pod_label_prometheus_io_label_(.+)',
+            action: 'labelmap'
+          },
+
+          {
+            regex: '__meta_kubernetes_pod_annotation_prometheus_io_label_(.+)',
+            action: 'labelmap'
+          },
+
           // Drop pods with phase Succeeded or Failed
           {
             source_labels: ['__meta_kubernetes_pod_phase'],
