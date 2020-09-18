@@ -1,4 +1,4 @@
-Package `helm-util` allows to consume Helm Charts as plain Jsonnet resources.
+Package `helm-util` allows the user to consume Helm Charts as plain Jsonnet resources.
 
 ### Usage
 
