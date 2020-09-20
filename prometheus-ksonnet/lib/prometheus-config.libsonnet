@@ -171,7 +171,8 @@
             replacement: '__param_$1',
           },
 
-          // Generic mapping of k8s label/annotation to prometheus labels.
+          // Map all K8s labels/annotations starting with
+          // 'prometheus.io/label-' to Prometheus labels.
           {
             regex: '__meta_kubernetes_pod_label_prometheus_io_label_(.+)',
             action: 'labelmap',
