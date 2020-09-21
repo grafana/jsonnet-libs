@@ -269,6 +269,72 @@
         ],
       },
 
+      // A separate scrape config for kube-dns, which does not adhere to the pod
+      // conventions required by the generic scrape config.
+      {
+        job_name: 'kube-system/kube-dns',
+        kubernetes_sd_configs: [{
+          role: 'pod',
+          namespaces: {
+            names: ['kube-system'],
+          },
+        }],
+
+        tls_config: {
+          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
+        },
+        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+
+        relabel_configs: [
+
+          // Scrape only kube-dns.
+          {
+            source_labels: ['__meta_kubernetes_pod_label_k8s_app'],
+            action: 'keep',
+            regex: 'kube-dns',
+          },
+
+          // Scrape the ports named "metrics".
+          {
+            source_labels: ['__meta_kubernetes_pod_container_port_name'],
+            action: 'keep',
+            regex: 'metrics',
+          },
+
+          // Include the namespace, container, pod as separate labels,
+          // for routing alerts and joining with cAdvisor metrics.
+          {
+            source_labels: ['__meta_kubernetes_namespace'],
+            action: 'replace',
+            target_label: 'namespace',
+          },
+          {
+            source_labels: ['__meta_kubernetes_pod_name'],
+            action: 'replace',
+            target_label: 'pod',  // Not 'pod_name', which disappeared in K8s 1.16.
+          },
+          {
+            source_labels: ['__meta_kubernetes_pod_container_name'],
+            action: 'replace',
+            target_label: 'container',  // Not 'container_name', which disappeared in K8s 1.16.
+          },
+
+          // Rename instances to the concatenation of pod:container:port.
+          // All three components are needed to guarantee a unique instance label.
+          {
+            source_labels: [
+              '__meta_kubernetes_pod_name',
+              '__meta_kubernetes_pod_container_name',
+              '__meta_kubernetes_pod_container_port_name',
+            ],
+            action: 'replace',
+            separator: ':',
+            target_label: 'instance',
+          },
+        ],
+      },
+
       // This scrape config gather all kubelet metrics.
       {
         job_name: 'kube-system/kubelet',
