@@ -8,12 +8,13 @@ permalink: /
 local helm-util = import "github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet"
 ```
 
-Package `helm-util` allows the user to consume Helm Charts as plain Jsonnet resources.
+Package `helm-util` allows the user to consume Helm Charts as plain Jsonnet
+resources. This package implements [Helm support](https://tanka.dev/helm) for
+Grafana Tanka.
 
 ### Usage
 
-> **Warning:** [Functionality required](#internals) by this library is still
-> experimental and may break at any time.
+> **Warning:** [Functionality required](#internals) by this library is still experimental and may break.
 
 The [`helm.template`](#fn-helmtemplate) function to converts a Helm Chart into Jsonnet objects,
 to be consumed by tools like [Grafana Tanka](https://tanka.dev).
@@ -37,17 +38,7 @@ local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet')
 
 ```
 
-### Chart Management
-
-To simplify Chart vendoring, Tanka includes a special tool at `tk tool charts`:
-
-```bash
-# create a chartfile.yaml, similar to jsonnetfile.json
-$ tk tool charts init
-
-# install the Grafana Chart to ./charts/grafana
-$ tk tool charts add stable/grafana@5.5.5
-```
+For more information on that see https://tanka.dev/helm
 
 ### Internals
 
@@ -57,7 +48,7 @@ reasons](https://jsonnet.org/ref/language.html#independence-from-the-environment
 a different way was required.
 
 To work around this, [Tanka](https://tanka.dev) instead binds special
-functionality into Jsonnet that exposes this functionality.
+functionality into Jsonnet that provides `helm template`.
 
 This however means this library and all libraries using this library are not
 compatible with `google/go-jsonnet` or `google/jsonnet`.
