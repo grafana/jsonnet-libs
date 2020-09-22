@@ -1,4 +1,5 @@
-local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet');
+local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet').new(std.thisFile);
+
 {
   values:: {
     installCRDs: if $._config.custom_crds then false else true,
@@ -13,7 +14,6 @@ local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet')
   local generated = helm.template('cert-manager', './charts/cert-manager', {
     values: $.values,
     namespace: $._config.namespace,
-    calledFrom: std.thisFile,
   }),
 
   // manual generated lib used different labels as selectors
