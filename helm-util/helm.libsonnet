@@ -51,7 +51,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     then
       // a Kubernetes object is characterized by having an apiVersion and Kind
       if std.objectHas(object, 'apiVersion') && std.objectHas(object, 'kind')
-         && (kind == null || object.kind == std.trace('%s: %s' % [object.kind, kind], kind)) && (name == null || object.metadata.name == name)
+         && (kind == null || object.kind == kind) && (name == null || object.metadata.name == name)
       then object + patch
       else
         std.mapWithKey(
