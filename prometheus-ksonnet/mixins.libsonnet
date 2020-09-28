@@ -16,6 +16,7 @@
           kubeControllerManagerSelector: 'job="kube-system/kube-controller-manager"',
           kubeApiserverSelector: 'job="kube-system/kube-apiserver"',
           podLabel: 'instance',
+          notKubeDnsCoreDnsSelector: 'job!~"kube-system/kube-dns|coredns"',
         },
       },
 
