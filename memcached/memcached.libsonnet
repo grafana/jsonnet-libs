@@ -42,7 +42,7 @@ k {
         '-c %(connection_limit)s' % self,
         '-v',
       ]) +
-      $.util.resourcesRequests('500m', $.util.bytesToK8sQuantity(self.memory_request_bytes)) +
+      $.util.resourcesRequests('100m', $.util.bytesToK8sQuantity(self.memory_request_bytes)) +
       $.util.resourcesLimits(self.cpu_limits, $.util.bytesToK8sQuantity(self.memory_limits_bytes)),
 
     memcached_exporter::
