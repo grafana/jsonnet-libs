@@ -66,7 +66,7 @@ k {
         new(name='')::
           if name != '' then
             if 'new' in super
-            then super.new(name)
+            then super.new() + super.mixin.metadata.withName(name)
             else
               {} + super.mixin.metadata.withName(name)
           else
