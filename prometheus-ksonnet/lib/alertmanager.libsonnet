@@ -173,5 +173,5 @@
           targetPort=$._config.alertmanager_port,
         ),
       ]) +
-      service.spec.withSessionAffinity('ClientIP'),
+      service.mixin.spec.withSessionAffinity('ClientIP'),
 }
