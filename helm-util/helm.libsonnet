@@ -5,13 +5,27 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
   '#':: d.pkg(
     name='helm-util',
     url='github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet',
-    help='`helm-util` provides utilities for using helm in jsonnet',
+    help=(importstr 'README.md.tmpl') % (importstr '_example.jsonnet'),
   ),
 
-  _calledFrom:: error 'new(std.thisFile) was not called',
+  '#_config':: 'ignore',
+  _config: {
+    calledFrom:: error 'new(std.thisFile) was not called',
+  },
 
+
+  '#new': d.fn(
+    |||
+      `new` initiates the `helm-util` library. It must be called before any `helm.template` call:
+       > ```jsonnet
+       > // std.thisFile required to correctly resolve local Helm Charts
+       > helm.new(std.thisFile)
+       > ```
+    |||,
+    [d.arg('calledFrom', d.T.string)]
+  ),
   new(calledFrom):: self {
-    _calledFrom: calledFrom,
+    _config+: { calledFrom: calledFrom },
   },
 
   // This common label is usually set to 'Helm', this is not true anymore.
@@ -34,13 +48,13 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     ]
   ),
   template(name, chart, conf={})::
-    local cfg = conf { calledFrom: this._calledFrom };
+    local cfg = conf { calledFrom: this._config.calledFrom };
     local chartData = std.native('helmTemplate')(name, chart, cfg);
 
     this.patchLabels(chartData, this.defaultLabels),
 
   '#patchKubernetesObjects':: d.fn(
-    '`patchKubernetesObjects` finds all Kubernetes objects and patches them`',
+    '`patchKubernetesObjects` applies `patch` to all Kubernetes objects it finds in `object`.',
     [
       d.arg('object', d.T.object),
       d.arg('patch', d.T.object),
@@ -68,7 +82,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     else object,
 
   '#patchLabels':: d.fn(
-    '`patchLabels` finds all Kubernetes objects and adds labels',
+    '`patchLabels` finds all Kubernetes objects and adds labels to them.',
     [
       d.arg('object', d.T.object),
       d.arg('labels', d.T.object),
