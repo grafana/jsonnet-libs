@@ -42,6 +42,11 @@
             text: 'Silence :no_bell:',
             url: '{{ template "__alert_silence_link" . }}',
           },
+          {
+            type: 'button',
+            text: 'Dashboard :grafana:',
+            url: '{{ (index .Alerts 0).Annotations.dashboard_url }}',
+          },
         ],
       }],
     },
