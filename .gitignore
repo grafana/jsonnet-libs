@@ -1,4 +1,1 @@
-.DS_Store
-vendor
-jsonnetfile.lock.json
-*.zip
+.*.sw[op]
