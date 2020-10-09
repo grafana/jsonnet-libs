@@ -23,7 +23,7 @@
   },
 
   cluster_issuer_staging: {
-    apiVersion: 'cert-manager.io/v1alpha2',
+    apiVersion: 'cert-manager.io/v1alpha3',
     kind: 'ClusterIssuer',
     metadata: {
       name: 'letsencrypt-staging',
@@ -54,7 +54,7 @@
   },
 
   cluster_issuer_prod: {
-    apiVersion: 'cert-manager.io/v1alpha2',
+    apiVersion: 'cert-manager.io/v1alpha3',
     kind: 'ClusterIssuer',
     metadata: {
       name: 'letsencrypt-prod',
