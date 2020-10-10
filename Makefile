@@ -5,9 +5,22 @@ fmt:
 				xargs -n 1 -- $(JSONNET_FMT) -i
 
 lint:
-		@RESULT=0; \
+		RESULT=0; \
 		for f in $$(find . -name '*.libsonnet' -print -o -name '*.jsonnet' -print); do \
 				$(JSONNET_FMT) -- "$$f" | diff -u "$$f" -; \
+				if [ $$? -ne 0 ]; then \
+					RESULT=1; \
+				fi; \
+		done; \
+		for d in $$(find . -name '*-mixin' -a -type d -print); do \
+			if [ -e "$$d/jsonnetfile.json" ]; then \
+				echo "Installing dependancies for $$d"; \
+				pushd "$$d" >/dev/null && jb install && popd >/dev/null; \
+			fi; \
+		done; \
+		for m in $$(find . -name 'mixin.libsonnet' -print); do \
+				echo "Linting $$m"; \
+				mixtool lint "$$m"; \
 				if [ $$? -ne 0 ]; then \
 					RESULT=1; \
 				fi; \
