@@ -30,7 +30,7 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
 {
   grafanaDashboards+: {
     'jaeger-write.json':
-      g.dashboard('Jaeger / Write')
+      (g.dashboard('Jaeger / Write') + { uid: '5f26222aa7a3fb734f0cd4072cab43b3' })
       .addRow(
         g.row('Services')
         .addPanel(
@@ -113,7 +113,7 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
       ),
 
     'jaeger-read.json':
-      g.dashboard('Jaeger / Read')
+      (g.dashboard('Jaeger / Read') + { uid: '1311ff9971f44f5ade3e1592d579f3f4' })
       .addRow(
         g.row('Query')
         .addPanel(
