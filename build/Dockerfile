@@ -12,7 +12,7 @@ FROM golang:1.15-alpine AS mixtool-builder
 RUN GO111MODULE=on go get github.com/monitoring-mixins/mixtool/cmd/mixtool@59d44357240d
 
 FROM alpine:3.7
-RUN apk --no-cache add make python git openssh-client
+RUN apk --no-cache add make python git openssh-client bash
 COPY --from=jsonnet-builder jsonnet/jsonnet /usr/bin
 COPY --from=jsonnet-builder jsonnet/jsonnetfmt /usr/bin
 COPY --from=mixtool-builder /go/bin/mixtool /usr/bin
