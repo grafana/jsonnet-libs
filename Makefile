@@ -1,4 +1,5 @@
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 2 --string-style s --comment-style s
+SHELL := /bin/bash
 
 fmt:
 		@find . -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
@@ -20,7 +21,7 @@ lint:
 		done; \
 		for m in $$(find . -name 'mixin.libsonnet' -print); do \
 				echo "Linting $$m"; \
-				mixtool lint "$$m"; \
+				mixtool lint -J $$(dirname "$$m")/vendor "$$m"; \
 				if [ $$? -ne 0 ]; then \
 					RESULT=1; \
 				fi; \
