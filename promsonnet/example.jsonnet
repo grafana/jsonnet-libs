@@ -2,8 +2,8 @@ local prom = import 'prom.libsonnet';
 local promRuleGroupSet = prom.v1.ruleGroupSet;
 local promRuleGroup = prom.v1.ruleGroup;
 {
-  prometheus_down::
-    promRuleGroup.new('prometheus_down')
+  prometheus_metamon::
+    promRuleGroup.new('prometheus_metamon')
     + promRuleGroup.rule.new(
       'PrometheusDown', {
         alert: 'PrometheusDown',
@@ -20,5 +20,5 @@ local promRuleGroup = prom.v1.ruleGroup;
 
   prometheusAlerts+:
     promRuleGroupSet.new()
-    + promRuleGroupSet.addGroup($.prometheus_down),
+    + promRuleGroupSet.addGroup($.prometheus_metamon),
 }

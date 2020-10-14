@@ -13,12 +13,12 @@ local prom = import 'prom.libsonnet';
 local promRuleGroupSet = prom.v1.ruleGroupSet;
 local promRuleGroup = prom.v1.ruleGroup;
 {
-  prometheus_up::
-    promRuleGroup.new('prometheus_up')
+  prometheus_metamon::
+    promRuleGroup.new('prometheus_metamon')
     + promRuleGroup.rule.new(
-      'PrometheusUp', {
-        alert: 'PrometheusUp',
-        expr: 'up',
+      'PrometheusDown', {
+        alert: 'PrometheusDown',
+        expr: 'up{job="prometheus"}==0',
         'for': '5m',
         labels: {
           namespace: 'prometheus',
@@ -31,7 +31,7 @@ local promRuleGroup = prom.v1.ruleGroup;
 
   prometheusAlerts+:
     promRuleGroupSet.new()
-    + promRuleGroupSet.addGroup($.prometheus_up),
+    + promRuleGroupSet.addGroup($.prometheus_metamon),
 }
 ```
 
@@ -42,9 +42,9 @@ simply with code such as:
 {
   prometheusAlerts+: {
     groups_map+:: {
-      prometheus_up+:: {
+      prometheus_metamon+:: {
         rules+:: {
-          PrometheusUp+:: {
+          PrometheusDown+:: {
             for: '10m',
           },
         },
