@@ -1,7 +1,4 @@
-local dashboard = import 'dashboards/jvm_rev1.libsonnet';
-
+(import 'dashboards.libsonnet') +
 {
-  grafanaDashboards+:: {
-    'jvm-dashboard.json': dashboard
-  }
+  grafanaDashboardFolder: 'Memcached',
 }
