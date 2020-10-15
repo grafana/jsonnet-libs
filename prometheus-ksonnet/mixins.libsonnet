@@ -50,5 +50,8 @@
           grafanaPrefix: '/grafana',
         },
       },
+
+    grafana:
+      (import 'grafana-mixin/mixin.libsonnet'),
   },
 }
