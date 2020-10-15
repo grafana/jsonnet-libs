@@ -78,12 +78,12 @@ local configMap = k.core.v1.configMap;
   ],
 
   prometheus_config_mount::
-    k.util.configVolumeMount('%s-0-config' % self.name, '/etc/prometheus-0')
-    + k.util.configVolumeMount('%s-0-alerts' % self.name, '/etc/prometheus-0/alerts')
-    + k.util.configVolumeMount('%s-0-recording' % self.name, '/etc/prometheus-0/recording')
-    + k.util.configVolumeMount('%s-1-config' % self.name, '/etc/prometheus-1')
-    + k.util.configVolumeMount('%s-1-alerts' % self.name, '/etc/prometheus-1/alerts')
-    + k.util.configVolumeMount('%s-1-recording' % self.name, '/etc/prometheus-1/recording')
+    k.util.configVolumeMount('%s-0-config' % self.name, '/etc/%s-0' % self.name)
+    + k.util.configVolumeMount('%s-0-alerts' % self.name, '/etc/%s-0/alerts' % self.name)
+    + k.util.configVolumeMount('%s-0-recording' % self.name, '/etc/%s-0/recording' % self.name)
+    + k.util.configVolumeMount('%s-1-config' % self.name, '/etc/%s-1' % self.name)
+    + k.util.configVolumeMount('%s-1-alerts' % self.name, '/etc/%s-1/alerts' % self.name)
+    + k.util.configVolumeMount('%s-1-recording' % self.name, '/etc/%s-1/recording' % self.name)
   ,
 
   prometheus_container+:: container.withEnv([
