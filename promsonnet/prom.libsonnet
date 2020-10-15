@@ -27,9 +27,15 @@
       },
 
       rule: {
-        new(name, rule):: {
+        newAlert(name, rule):: {
           rules_map+:: {
-            [name]: rule,
+            [name]: rule { alert: name },
+          },
+          rules_order+:: [name],
+        },
+        newRecording(name, rule):: {
+          rules_map+:: {
+            [name]: rule { record: name },
           },
           rules_order+:: [name],
         },

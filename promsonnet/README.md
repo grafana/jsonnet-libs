@@ -15,9 +15,8 @@ local promRuleGroup = prom.v1.ruleGroup;
 {
   prometheus_metamon::
     promRuleGroup.new('prometheus_metamon')
-    + promRuleGroup.rule.new(
+    + promRuleGroup.rule.newAlert(
       'PrometheusDown', {
-        alert: 'PrometheusDown',
         expr: 'up{job="prometheus"}==0',
         'for': '5m',
         labels: {
