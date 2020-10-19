@@ -1,4 +1,4 @@
 (import 'dashboards.libsonnet') +
 {
-  grafanaDashboardFolder: 'Memcached',
+  grafanaDashboardFolder: 'JVM',
 }
