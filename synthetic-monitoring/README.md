@@ -18,19 +18,16 @@ Here is an example usage:
 **`main.jsonnet:`**
 ```
 local sm = import 'synthetic-monitoring/sm.libsonnet';
+  
 {
   syntheticMonitoring+:: {
-    grafanaHttpCheck: sm.new('grafana', 'https://grafana.com/')
-                      + sm.withHttp()
+    grafanaHttpCheck: sm.http.new('grafana', 'https://grafana.com/')
                       + sm.withProbes('all'),  // enable all probes
-    grafanaPingCheck: sm.new('grafana', 'grafana.com')
-                      + sm.withPing()
+    grafanaPingCheck: sm.ping.new('grafana', 'grafana.com')
                       + sm.withProbes('continents'),  // one check per continent
-    grafanaDnsCheck: sm.new('grafana', 'grafana.com')
-                     + sm.withDns()
+    grafanaDnsCheck: sm.dns.new('grafana', 'grafana.com')
                      + sm.withProbes('europe'),  // just check from Europe
-    grafanaTcpCheck: sm.new('grafana', 'grafana.com:443')
-                     + sm.withTcp()
+    grafanaTcpCheck: sm.tcp.new('grafana', 'grafana.com:443')
                      + sm.withProbes('small'),  // just use a smaller, predefined set of checks
   },
 }
