@@ -24,5 +24,5 @@ FROM alpine:3.7
 RUN apk --no-cache add make python git openssh-client bash
 COPY --from=jsonnet-builder jsonnet/jsonnet /usr/bin
 COPY --from=jsonnet-builder jsonnet/jsonnetfmt /usr/bin
-COPY --from=jb-builder /usr/bin/jb /urs/bin
+COPY --from=jb-builder /usr/bin/jb /usr/bin
 COPY --from=mixtool-builder /go/bin/mixtool /usr/bin
