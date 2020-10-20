@@ -1,15 +1,6 @@
 local example = import 'example.jsonnet';
+local prom = import 'prom.libsonnet';
 
 example {
-  prometheusAlerts+: {
-    groups_map+:: {
-      prometheus_metamon+:: {
-        rules_map+:: {
-          PrometheusDown+:: {
-            'for': '10m',
-          },
-        },
-      },
-    },
-  },
+  prometheusAlerts+: prom.v1.patchRule('prometheus_metamon', 'PrometheusDown', { 'for': '10m' }),
 }

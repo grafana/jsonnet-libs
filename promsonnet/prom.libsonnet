@@ -8,6 +8,7 @@
         local groups_order = self.groups_order,
         groups: [groups_map[group] for group in groups_order],
       },
+
       addGroup(group):: {
         groups_map+:: {
           [group.name]: group,
@@ -38,6 +39,16 @@
             [name]: rule { record: name },
           },
           rules_order+:: [name],
+        },
+      },
+    },
+
+    patchRule(group, rule, patch):: {
+      groups_map+:: {
+        [group]+: {
+          rules_map+:: {
+            [rule]+: patch,
+          },
         },
       },
     },

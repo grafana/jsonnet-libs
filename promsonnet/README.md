@@ -55,6 +55,12 @@ simply with code such as:
 
 We no longer need to iterate over all alerts to do so.
 
+Better than this though, `PromSonnet` provides a helper function, making
+this trivial:
+```
+prometheusAlerts+: prom.v1.patchRule('prometheus_metamon', 'PrometheusDown', { 'for': '10m' }),
+```
+
 You can execute either of these examples in the `promsonnet` directory
 via:
 ```
