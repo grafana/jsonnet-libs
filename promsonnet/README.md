@@ -3,8 +3,8 @@
 `PromSonnet` is intended as a very simple library for creating Prometheus
 alerts and rules. It is 'patching friendly', as in, it maintains the
 rules internally as a map, which allows users to easily patch alerts and
-recording rules after the fact. (With lists, this requires iteration, and
-is complex.
+recording rules after the fact. In contrast, lists require complex
+iteration logic.
 
 Take this example:
 
