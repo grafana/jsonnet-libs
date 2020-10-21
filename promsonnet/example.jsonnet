@@ -10,14 +10,38 @@ local promRuleGroup = prom.v1.ruleGroup;
         'for': '5m',
         labels: {
           namespace: 'prometheus',
-          severity: 'critical',
+        },
+        annotations: {
+        },
+      }
+    )
+    + promRuleGroup.rule.newAlert(
+      'AlertManagerDown', {
+        expr: 'left{job="alertmanager"} == 0',
+        'for': '5m',
+        labels: {
+          namespace: 'alertmanager',
+        },
+        annotations: {
+        },
+      },
+    ),
+
+  grafana_check::
+    promRuleGroup.new('grafana_check')
+    + promRuleGroup.rule.newAlert(
+      'GrafanaDown', {
+        expr: 'up{job="grafana"} == 0',
+        'for': '5m',
+        labels: {
+          namespace: 'grafana',
         },
         annotations: {
         },
       }
     ),
-
   prometheusAlerts+:
     promRuleGroupSet.new()
-    + promRuleGroupSet.addGroup($.prometheus_metamon),
+    + promRuleGroupSet.addGroup($.prometheus_metamon)
+    + promRuleGroupSet.addGroup($.grafana_check),
 }
