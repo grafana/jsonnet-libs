@@ -40,19 +40,17 @@
         local rules_order = self.rules_order,
       },
 
-      rule: {
-        newAlert(name, rule):: {
-          rules_map+:: {
-            [name]: rule { alert: name },
-          },
-          rules_order+:: [name],
+      newAlertRule(name, rule):: {
+        rules_map+:: {
+          [name]: rule { alert: name },
         },
-        newRecording(name, rule):: {
-          rules_map+:: {
-            [name]: rule { record: name },
-          },
-          rules_order+:: [name],
+        rules_order+:: [name],
+      },
+      newRecordingRule(name, rule):: {
+        rules_map+:: {
+          [name]: rule { record: name },
         },
+        rules_order+:: [name],
       },
     },
 
@@ -66,7 +64,7 @@
       },
     },
 
-    patchGroup(group, patch):: {
+    patchRuleGroup(group, patch):: {
       groups_map+:: {
         [group]+: {
           patches+: [patch],
@@ -74,7 +72,7 @@
       },
     },
 
-    patchAll(patch):: {
+    patchAllRules(patch):: {
       patch_rules_all+:: [patch],
     },
   },

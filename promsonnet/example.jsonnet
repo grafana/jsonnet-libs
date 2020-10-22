@@ -4,7 +4,7 @@ local promRuleGroup = prom.v1.ruleGroup;
 {
   prometheus_metamon::
     promRuleGroup.new('prometheus_metamon')
-    + promRuleGroup.rule.newAlert(
+    + promRuleGroup.newAlertRule(
       'PrometheusDown', {
         expr: 'up{job="prometheus"} == 0',
         'for': '5m',
@@ -15,7 +15,7 @@ local promRuleGroup = prom.v1.ruleGroup;
         },
       }
     )
-    + promRuleGroup.rule.newAlert(
+    + promRuleGroup.newAlertRule(
       'AlertManagerDown', {
         expr: 'left{job="alertmanager"} == 0',
         'for': '5m',
@@ -29,7 +29,7 @@ local promRuleGroup = prom.v1.ruleGroup;
 
   grafana_check::
     promRuleGroup.new('grafana_check')
-    + promRuleGroup.rule.newAlert(
+    + promRuleGroup.newAlertRule(
       'GrafanaDown', {
         expr: 'up{job="grafana"} == 0',
         'for': '5m',
