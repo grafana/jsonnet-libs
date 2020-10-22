@@ -1,7 +1,7 @@
 {
   __inputs: [
     {
-      name: 'DS_PROM',
+      name: 'Prometheus',
       label: 'prom',
       description: 'A prometheus datasource with JMX Exporter scraping',
       type: 'datasource',
@@ -50,7 +50,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${DS_PROM}',
+          datasource: '${Prometheus}',
           fill: 1,
           id: 2,
           legend: {
@@ -143,7 +143,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${DS_PROM}',
+          datasource: '${Prometheus}',
           fill: 1,
           id: 3,
           legend: {
@@ -230,7 +230,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${DS_PROM}',
+          datasource: '${Prometheus}',
           fill: 1,
           id: 4,
           legend: {
@@ -321,7 +321,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${DS_PROM}',
+          datasource: '${Prometheus}',
           fill: 1,
           id: 5,
           legend: {
@@ -399,7 +399,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${DS_PROM}',
+          datasource: '${Prometheus}',
           fill: 1,
           id: 6,
           legend: {
@@ -493,7 +493,7 @@
       {
         allValue: '',
         current: {},
-        datasource: '${DS_PROM}',
+        datasource: '${Prometheus}',
         hide: 0,
         includeAll: true,
         label: 'Instance',
@@ -516,7 +516,7 @@
         includeAll: false,
         label: null,
         multi: false,
-        name: 'DS_PROM',
+        name: 'Prometheus',
         options: [],
         query: 'prometheus',
         queryValue: '',
