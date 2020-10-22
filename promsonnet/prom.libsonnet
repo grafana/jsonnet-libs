@@ -14,7 +14,11 @@
             name: group_name,
             rules: [
               local rule = group.rules_map[rule_name];
-              std.foldl(function(rule, patch) rule + patch, patch_rules_all + group.patches, rule)
+              std.foldl(
+                function(rule, patch) rule + patch,
+                patch_rules_all + group.patches,
+                rule,
+              )
               for rule_name in group.rules_order
             ],
           }
