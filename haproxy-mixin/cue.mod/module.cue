@@ -1,1 +1,1 @@
-module: "github.com/jdbaldry/prometheus"
+module: "github.com/jdbaldry/haproxy-mixin"
