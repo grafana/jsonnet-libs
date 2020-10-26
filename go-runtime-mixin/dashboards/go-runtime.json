@@ -5,7 +5,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.0.4"
+      "version": "7.2.0"
     },
     {
       "type": "panel",
@@ -35,7 +35,6 @@
   },
   "description": "Go runtime metrics",
   "editable": true,
-  "gnetId": 13076,
   "graphTooltip": 0,
   "id": null,
   "iteration": 1602794777869,
@@ -515,9 +514,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(go_memstats_alloc_bytes_total{job=\"$job\", instance=~\"$instance\"}[$__interval])",
+          "expr": "rate(go_memstats_alloc_bytes_total{job=\"$job\", instance=~\"$instance\"}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "{{instance}}: malloc/min",
+          "legendFormat": "{{instance}}: bytes malloced/s",
           "refId": "A"
         }
       ],
@@ -611,9 +610,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(go_memstats_mallocs_total{job=\"$job\", instance=~\"$instance\"}[$__interval])",
+          "expr": "rate(go_memstats_mallocs_total{job=\"$job\", instance=~\"$instance\"}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "{{instance}}: mallocs per min",
+          "legendFormat": "{{instance}}: mallocs/sec",
           "refId": "A"
         }
       ],
