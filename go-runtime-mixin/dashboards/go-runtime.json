@@ -46,7 +46,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Total bytes of memory reserved by the process.",
+      "description": "Average total bytes of memory reserved across all process instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -89,9 +89,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_sys_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by(job)(go_memstats_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: sys",
+          "legendFormat": "{{job}} (avg)",
           "refId": "A"
         }
       ],
@@ -142,7 +142,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "",
+      "description": "Average stack memory usage across all instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -185,9 +185,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_stack_sys_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job) (go_memstats_stack_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}} stack inuse",
+          "legendFormat": "{{job}}: stack inuse (avg)",
           "refId": "A"
         }
       ],
@@ -238,7 +238,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Memory reservations by the runtime, not for stack or heap",
+      "description": "Average memory reservations by the runtime, not for stack or heap, across all instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -281,27 +281,27 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_mspan_sys_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_memstats_mspan_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: mspan sys",
+          "legendFormat": "{{instance}}: mspan (avg)",
           "refId": "B"
         },
         {
-          "expr": "go_memstats_mcache_sys_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_memstats_mcache_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: mcache sys",
+          "legendFormat": "{{instance}}: mcache (avg)",
           "refId": "D"
         },
         {
-          "expr": "go_memstats_buck_hash_sys_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_memstats_buck_hash_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: buck hash sys",
+          "legendFormat": "{{instance}}: buck hash (avg)",
           "refId": "E"
         },
         {
-          "expr": "go_memstats_gc_sys_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_memstats_gc_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: gc sys",
+          "legendFormat": "{{job}}: gc (avg)",
           "refId": "F"
         }
       ],
@@ -352,7 +352,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Memory reserved, and actually in use, by the heap",
+      "description": "Average memory reserved, and actually in use, by the heap, across all instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -395,33 +395,33 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_heap_sys_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_memstats_heap_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: heap reserved",
+          "legendFormat": "{{job}}: heap reserved (avg)",
           "refId": "B"
         },
         {
-          "expr": "go_memstats_heap_inuse_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_memstats_heap_inuse_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: heap in use",
+          "legendFormat": "{{job}}: heap in use (avg)",
           "refId": "A"
         },
         {
-          "expr": "go_memstats_heap_alloc_bytes{job=~\"tns_app\",instance=~\".*\"}",
+          "expr": "avg by (job)(go_memstats_heap_alloc_bytes{job=~\"tns_app\",instance=~\".*\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: heap alloc",
+          "legendFormat": "{{job}}: heap alloc (avg)",
           "refId": "C"
         },
         {
-          "expr": "go_memstats_heap_idle_bytes{job=~\"tns_app\",instance=~\".*\"}",
+          "expr": "avg by (job)(go_memstats_heap_idle_bytes{job=~\"tns_app\",instance=~\".*\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: heap idle",
+          "legendFormat": "{{job}}: heap idle (avg)",
           "refId": "D"
         },
         {
-          "expr": "go_memstats_heap_released_bytes{job=~\"tns_app\",instance=~\".*\"}",
+          "expr": "avg by (job)(go_memstats_heap_released_bytes{job=~\"tns_app\",instance=~\".*\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: heap released",
+          "legendFormat": "{{job}}: heap released (avg)",
           "refId": "E"
         }
       ],
@@ -472,6 +472,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "Average allocation rate in bytes per second, across all instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -514,9 +515,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(go_memstats_alloc_bytes_total{job=\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+          "expr": "avg by (job)(rate(go_memstats_alloc_bytes_total{job=\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{instance}}: bytes malloced/s",
+          "legendFormat": "{{job}}: bytes malloced/s (avg)",
           "refId": "A"
         }
       ],
@@ -567,7 +568,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Rate of heap object allocation.",
+      "description": "Average rate of heap object allocation, across all instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -612,7 +613,7 @@
         {
           "expr": "rate(go_memstats_mallocs_total{job=\"$job\", instance=~\"$instance\"}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "{{instance}}: mallocs/sec",
+          "legendFormat": "{{job}}: obj mallocs/s (avg)",
           "refId": "A"
         }
       ],
@@ -663,6 +664,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description": "Average number of live memory objects across all instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -707,9 +709,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_mallocs_total{job=\"$job\", instance=~\"$instance\"} - go_memstats_frees_total{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by(job)(go_memstats_mallocs_total{job=\"$job\", instance=~\"$instance\"} - go_memstats_frees_total{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: object count",
+          "legendFormat": "{{job}}: object count (avg)",
           "refId": "A"
         }
       ],
@@ -760,6 +762,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
+      "description":  "Average number of goroutines across instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -802,9 +805,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_goroutines{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_goroutines{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{job}}: goroutine count (avg)",
           "refId": "A"
         }
       ],
@@ -899,17 +902,23 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_gc_duration_seconds{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_gc_duration_seconds{quantile=\"0\", job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: {{quantile}}",
+          "legendFormat": "{{job}}: min gc time (avg)",
           "refId": "A"
+        },
+        {
+          "expr": "avg by (job)(go_gc_duration_seconds{quantile=\"1\", job=\"$job\", instance=~\"$instance\"})",
+          "interval": "",
+          "legendFormat": "{{job}}: max gc time (avg)",
+          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "GC duration quantile",
+      "title": "GC min & max duration",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -952,7 +961,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "The number used bytes at which runtime plans to perform the next GC.",
+      "description": "The number used bytes at which the runtime plans to perform the next GC, averaged across all instances of a job.",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -995,10 +1004,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "go_memstats_next_gc_bytes{job=\"$job\", instance=~\"$instance\"}",
+          "expr": "avg by (job)(go_memstats_next_gc_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}",
-          "refId": "H"
+          "legendFormat": "{{job}} next gc bytes (avg)",
+          "refId": "A"
         }
       ],
       "thresholds": [],
@@ -1075,14 +1084,14 @@
         "allValue": null,
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(go_goroutines, job)",
+        "definition": "label_values(go_info, job)",
         "hide": 0,
         "includeAll": false,
         "label": "job",
         "multi": false,
         "name": "job",
         "options": [],
-        "query": "label_values(go_goroutines, job)",
+        "query": "label_values(go_info, job)",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
@@ -1097,14 +1106,14 @@
         "allValue": "",
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(go_goroutines{job=\"$job\"}, instance)",
+        "definition": "label_values(go_info{job=\"$job\"}, instance)",
         "hide": 0,
         "includeAll": true,
         "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
-        "query": "label_values(go_goroutines{job=\"$job\"}, instance)",
+        "query": "label_values(go_info{job=\"$job\"}, instance)",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
