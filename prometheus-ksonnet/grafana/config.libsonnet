@@ -37,6 +37,9 @@
       explore+: {
         enabled: true,
       },
+      date_formats+: {
+        default_timezone: 'UTC',
+      },
     },
   },
 
