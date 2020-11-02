@@ -27,6 +27,12 @@
     apiServerAddress: 'kubernetes.default.svc.%(cluster_dns_suffix)s:443' % self,
     insecureSkipVerify: false,
 
+    // Prometheus config basics
+    prometheus_requests_cpu: '250m',
+    prometheus_requests_memory: '1536Mi',
+    prometheus_limits_cpu: '500m',
+    prometheus_limits_memory: '2Gi',
+
     // Prometheus config options.
     prometheus_api_server_address: self.apiServerAddress,
     scrape_api_server_endpoints: true,
