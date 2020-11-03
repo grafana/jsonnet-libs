@@ -161,12 +161,13 @@
     titleSize: 'h6',
   },
 
-  panel(title):: {
+  panel(title, description=""):: {
     aliasColors: {},
     bars: false,
     dashLength: 10,
     dashes: false,
     datasource: '$datasource',
+    description: description,
     fill: 1,
     legend: {
       avg: false,
