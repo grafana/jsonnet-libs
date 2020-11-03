@@ -161,7 +161,7 @@
     titleSize: 'h6',
   },
 
-  panel(title, description=""):: {
+  panel(title, description=''):: {
     aliasColors: {},
     bars: false,
     dashLength: 10,
