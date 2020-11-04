@@ -97,4 +97,21 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
         },
       }
     ),
+
+  '#setNamespace':: d.fn(
+    '`setNamespace` finds all Kubernetes objects and sets namespace on them.',
+    [
+      d.arg('object', d.T.object),
+      d.arg('namespace', d.T.object),
+    ]
+  ),
+  setNamespace(object, namespace)::
+    this.patchKubernetesObjects(
+      object,
+      {
+        metadata+: {
+          namespace: namespace,
+        },
+      }
+    ),
 }

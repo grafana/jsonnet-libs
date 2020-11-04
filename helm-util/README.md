@@ -59,6 +59,7 @@ compatible with `google/go-jsonnet` or `google/jsonnet`.
 * [`fn new(calledFrom)`](#fn-new)
 * [`fn patchKubernetesObjects(object, patch)`](#fn-patchkubernetesobjects)
 * [`fn patchLabels(object, labels)`](#fn-patchlabels)
+* [`fn setNamespace(object, namespace)`](#fn-setnamespace)
 * [`fn template(name, chart, conf)`](#fn-template)
 
 ## Fields
@@ -91,6 +92,14 @@ patchLabels(object, labels)
 ```
 
 `patchLabels` finds all Kubernetes objects and adds labels to them.
+
+### fn setNamespace
+
+```ts
+setNamespace(object, namespace)
+```
+
+`setNamespace` finds all Kubernetes objects and sets namespace on them.
 
 ### fn template
 
