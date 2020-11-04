@@ -44,8 +44,10 @@
         '--storage.tsdb.path=/prometheus/data',
         '--storage.tsdb.wal-compression',
       ]) +
-      $.util.resourcesRequests('250m', '1536Mi') +
-      $.util.resourcesLimits('500m', '2Gi'),
+      $.util.resourcesRequests(_config.prometheus_requests_cpu,
+                               _config.prometheus_requests_memory) +
+      $.util.resourcesLimits(_config.prometheus_limits_cpu,
+                             _config.prometheus_limits_memory),
 
     prometheus_watch_container::
       container.new('watch', $._images.watch) +
