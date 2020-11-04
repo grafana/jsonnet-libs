@@ -78,13 +78,13 @@
   kube_state_metrics_container::
     container.new('kube-state-metrics', $._images.kubeStateMetrics) +
     container.withArgs([
-      '--port=80',
+      '--port=8080',
       '--telemetry-host=0.0.0.0',
-      '--telemetry-port=81',
+      '--telemetry-port=8081',
     ]) +
     container.withPorts([
-      containerPort.new('http-metrics', 80),
-      containerPort.new('self-metrics', 81),
+      containerPort.new('http-metrics', 8080),
+      containerPort.new('self-metrics', 8081),
     ]) +
     $.util.resourcesRequests('50m', '50Mi') +
     $.util.resourcesLimits('250m', '150Mi'),
@@ -99,6 +99,9 @@
     // scrape config to preserve namespace etc labels.
     deployment.mixin.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }) +
     deployment.mixin.spec.template.spec.withServiceAccount('kube-state-metrics') +
+    deployment.mixin.spec.template.spec.securityContext.withRunAsUser(65534) +
+    deployment.mixin.spec.template.spec.securityContext.withRunAsGroup(65534) +
+    deployment.mixin.spec.template.spec.securityContext.withFsGroup(0) +  // TODO: remove after kube-state-metrics binary in docker image is not owned by root
     $.util.podPriority('critical'),
 
   kube_state_metrics_service:
