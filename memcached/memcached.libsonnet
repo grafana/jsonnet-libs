@@ -26,7 +26,12 @@ k {
     cpu_limits:: '3',
     connection_limit:: 1024,
     memory_request_bytes::
-      std.ceil((self.memory_limit_mb * self.overprovision_factor) + 100) * 1024 * 1024,
+      // Take the smaller of the memory limit and the calculated request, to
+      // ensure request <= limit
+      std.min(
+        std.ceil((self.memory_limit_mb * self.overprovision_factor) + 100) * 1024 * 1024,
+        self.memory_limits_bytes,
+      ),
     memory_limits_bytes::
       self.memory_limit_mb * 1.5 * 1024 * 1024,
 
