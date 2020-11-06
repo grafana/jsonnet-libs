@@ -8,18 +8,18 @@ import (
 let servers = _section & {
 	_panelSize: {w: _dashboardWidth, h: 6}
 	row: {
-		id: 100
+		id:        100
 		title:     "Servers"
 		collapsed: false
 	}
-	panels: [ serverTable ]
+	panels: [serverTable]
 }
 
 let backendRequests = _section & {
 	_panelSize: {h: 6, w: 8}
 	_origin: y: 6
 	row: panel.#Row & {
-		id: 200
+		id:        200
 		title:     "Requests"
 		collapsed: false
 	}
@@ -30,7 +30,7 @@ let backendErrors = _section & {
 	_origin: y: 12
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
-		id: 300
+		id:        300
 		title:     "Errors"
 		collapsed: false
 	}
@@ -41,7 +41,7 @@ let backendDuration = _section & {
 	_origin: y: 12
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
-		id: 400
+		id:        400
 		title:     "Duration"
 		collapsed: false
 	}
@@ -69,7 +69,7 @@ let backendDuration = _section & {
 			[backendRequests.row] +
 			[ for i, panel in backendRequests.panels {
 				panel & {
-					id: backendRequests .row.id + (i + 1)
+					id: backendRequests.row.id + (i + 1)
 					gridPos: {
 						x: backendRequests._origin.x + i*backendRequests._panelSize.w
 						y: backendRequests._origin.y + (i * backendRequests._panelSize.w div _dashboardWidth * backendRequests._panelSize.h)

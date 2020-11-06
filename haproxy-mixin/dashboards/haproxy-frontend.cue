@@ -8,22 +8,22 @@ import (
 let requests = _section & {
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
-		id: 100
+		id:        100
 		title:     "Requests"
 		collapsed: false
 	}
-	panels: [ for panel in [httpRequestsPerSecond, connectionsPerSecond, frontendBytes] {panel & {datasource: "prometheus"}}]
+	panels: [httpRequestsPerSecond, connectionsPerSecond, frontendBytes]
 }
 
 let errors = _section & {
 	_origin: y: 6
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
-		id: 200
+		id:        200
 		title:     "Errors"
 		collapsed: false
 	}
-	panels: [ for panel in [requestErrors, internalErrors] {panel & {datasource: "prometheus"}}]
+	panels: [requestErrors, internalErrors]
 }
 
 {
@@ -34,7 +34,7 @@ let errors = _section & {
 			[requests.row] +
 			[ for i, panel in requests.panels {
 				panel & {
-					id: requests.row.id + (i+1)
+					id: requests.row.id + (i + 1)
 					gridPos: {
 						x: requests._origin.x + i*requests._panelSize.w
 						y: requests._origin.y + (i * requests._panelSize.w div _dashboardWidth * requests._panelSize.h)
@@ -47,7 +47,7 @@ let errors = _section & {
 			[errors.row] +
 			[ for i, panel in errors.panels {
 				panel & {
-					id: errors.row.id + (i+1)
+					id: errors.row.id + (i + 1)
 					gridPos: {
 						x: errors._origin.x + i*errors._panelSize.w
 						y: errors._origin.y + (i * errors._panelSize.w div _dashboardWidth * errors._panelSize.h)
