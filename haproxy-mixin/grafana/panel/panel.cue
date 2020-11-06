@@ -2,7 +2,7 @@ package panel
 
 Base: {
 	title?:       string
-	id?:           int
+	id:           int
 	type:         "row" | "stat" | "table" | *"graph"
 	datasource:   string | *"default"
 	description?: string

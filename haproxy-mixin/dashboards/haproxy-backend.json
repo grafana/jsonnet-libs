@@ -7,6 +7,7 @@
     "panels": [
         {
             "title": "Servers",
+            "id": 100,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -24,6 +25,7 @@
             "titleSize": "h6"
         },
         {
+            "id": 101,
             "type": "table",
             "options": {
                 "sortBy": [
@@ -139,6 +141,7 @@
         },
         {
             "title": "Requests",
+            "id": 200,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -161,6 +164,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 201,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -254,6 +258,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 202,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -347,6 +352,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 203,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -428,6 +434,7 @@
         },
         {
             "title": "Errors",
+            "id": 300,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -450,6 +457,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 301,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -542,6 +550,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 302,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -630,6 +639,7 @@
         },
         {
             "title": "Duration",
+            "id": 400,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -652,6 +662,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 401,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -763,6 +774,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 402,
             "type": "graph",
             "options": {
                 "dataLinks": []

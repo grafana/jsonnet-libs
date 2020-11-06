@@ -7,6 +7,7 @@
     "panels": [
         {
             "title": "Headline",
+            "id": 100,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -25,6 +26,7 @@
         },
         {
             "title": "Uptime",
+            "id": 101,
             "type": "stat",
             "options": {
                 "colorMode": "value",
@@ -70,6 +72,7 @@
         },
         {
             "title": "Current connections",
+            "id": 102,
             "type": "stat",
             "options": {
                 "colorMode": "value",
@@ -114,6 +117,7 @@
         },
         {
             "title": "Memory allocated",
+            "id": 103,
             "type": "stat",
             "options": {
                 "colorMode": "value",
@@ -159,6 +163,7 @@
         },
         {
             "title": "Memory used",
+            "id": 104,
             "type": "stat",
             "options": {
                 "colorMode": "value",
@@ -204,6 +209,7 @@
         },
         {
             "title": "Frontend",
+            "id": 200,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -221,6 +227,7 @@
             "titleSize": "h6"
         },
         {
+            "id": 201,
             "type": "table",
             "options": {
                 "sortBy": [
@@ -313,6 +320,7 @@
         },
         {
             "title": "Backend",
+            "id": 300,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -330,6 +338,7 @@
             "titleSize": "h6"
         },
         {
+            "id": 301,
             "type": "table",
             "options": {},
             "fieldConfig": {
@@ -415,6 +424,7 @@
         },
         {
             "title": "Configuration",
+            "id": 400,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -432,51 +442,8 @@
             "titleSize": "h6"
         },
         {
-            "title": "Threads",
-            "type": "stat",
-            "options": {
-                "colorMode": "value",
-                "graphMode": "none",
-                "justifyMode": "auto",
-                "orientation": "auto",
-                "textMode": "auto"
-            },
-            "fieldConfig": {
-                "defaults": {
-                    "custom": {},
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "blue",
-                                "value": null
-                            }
-                        ]
-                    }
-                },
-                "overrides": []
-            },
-            "datasource": "prometheus",
-            "description": "Configured number of threads",
-            "gridPos": {
-                "x": 0,
-                "y": 15,
-                "h": 2,
-                "w": 3
-            },
-            "targets": [
-                {
-                    "expr": "haproxy_process_nbthread{instance=~\"$instance\",job=~\"$job\"}",
-                    "legendFormat": "",
-                    "interval": "",
-                    "refId": "A"
-                }
-            ],
-            "transparent": false
-        },
-        {
             "title": "Processes",
+            "id": 401,
             "type": "stat",
             "options": {
                 "colorMode": "value",
@@ -504,7 +471,7 @@
             "datasource": "prometheus",
             "description": "Configured number of processes",
             "gridPos": {
-                "x": 3,
+                "x": 0,
                 "y": 15,
                 "h": 2,
                 "w": 3
@@ -520,7 +487,53 @@
             "transparent": false
         },
         {
+            "title": "Threads",
+            "id": 402,
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Configured number of threads",
+            "gridPos": {
+                "x": 3,
+                "y": 15,
+                "h": 2,
+                "w": 3
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_nbthread{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
             "title": "Connections limit",
+            "id": 403,
             "type": "stat",
             "options": {
                 "colorMode": "value",
@@ -565,6 +578,7 @@
         },
         {
             "title": "Memory limit",
+            "id": 404,
             "type": "stat",
             "options": {
                 "colorMode": "value",
@@ -617,6 +631,7 @@
         },
         {
             "title": "File descriptors limit",
+            "id": 405,
             "type": "stat",
             "options": {
                 "colorMode": "value",
@@ -668,6 +683,7 @@
         },
         {
             "title": "Socket limit",
+            "id": 406,
             "type": "stat",
             "options": {
                 "colorMode": "value",
