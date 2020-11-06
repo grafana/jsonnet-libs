@@ -1,7 +1,7 @@
 // Concrete values used throughout dashboards.
 package dashboards
 
-_datasource:       "prometheus"
+_datasource: "prometheus"
 
 _instanceMatcher:  "instance=~\"$instance\""
 _jobMatcher:       "job=~\"$job\""

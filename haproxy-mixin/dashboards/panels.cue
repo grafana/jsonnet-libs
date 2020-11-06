@@ -4,7 +4,7 @@ package dashboards
 import "github.com/jdbaldry/haproxy-mixin/grafana/panel"
 
 // Common configuration for all panels.
-_statPanel: panel.#Stat & {datasource: _datasource}
+_statPanel:  panel.#Stat & {datasource:  _datasource}
 _tablePanel: panel.#Table & {datasource: _datasource}
 _graphPanel: panel.#Graph & {datasource: _datasource}
 
@@ -401,248 +401,248 @@ backendBytes: _graphPanel & {
 }
 
 serverTable: _tablePanel & {
-			datasource: "prometheus"
-			fieldConfig: {
-				defaults: {
-					links: [{
-						title: "Server"
-						url:   "/d/HAProxyServer/haproxy-server?${__all_variables}&var-server=${__data.fields.Server}"
-					}]
-				}
-				overrides: [{
-					matcher: {id: "byName", options: "Status"}
-					properties: [
-						{
-							id: "mappings"
-							value: [
-								{id: 1, type: 1, text: "Down", value: "0"},
-								{id: 2, type: 1, text: "Up", value:   "1"},
-							]
-						},
-						{
-							id:    "custom.displayMode"
-							value: "color-background"
-						},
-						{
-							id: "thresholds"
-							value: {
-								mode: "absolute"
-								steps: [
-									{color: "rgba(0,0,0,0)", value: null},
-									{color: "red", value:           0},
-									{color: "green", value:         1},
-								]
-							}
-						}]}]}
-			options: sortBy: [{displayName: "Status", desc: false}]
-			targets: [{
-				expr:    "haproxy_server_status{\(_backendMatchers)}"
-				refId:   "A"
-				format:  "table"
-				instant: true
+	datasource: "prometheus"
+	fieldConfig: {
+		defaults: {
+			links: [{
+				title: "Server"
+				url:   "/d/HAProxyServer/haproxy-server?${__all_variables}&var-server=${__data.fields.Server}"
 			}]
-			transformations: [
-				{
-					id: "organize"
-					options: {
-						excludeByName: {
-							Time:       true
-							"__name__": true
-						}
-						renameByName: {
-							instance: "Instance"
-							job:      "Job"
-							proxy:    "Backend"
-							server:   "Server"
-							Value:    "Status"
-						}
-					}
-				},
-			]
 		}
+		overrides: [{
+			matcher: {id: "byName", options: "Status"}
+			properties: [
+				{
+					id: "mappings"
+					value: [
+						{id: 1, type: 1, text: "Down", value: "0"},
+						{id: 2, type: 1, text: "Up", value:   "1"},
+					]
+				},
+				{
+					id:    "custom.displayMode"
+					value: "color-background"
+				},
+				{
+					id: "thresholds"
+					value: {
+						mode: "absolute"
+						steps: [
+							{color: "rgba(0,0,0,0)", value: null},
+							{color: "red", value:           0},
+							{color: "green", value:         1},
+						]
+					}
+				}]}]}
+	options: sortBy: [{displayName: "Status", desc: false}]
+	targets: [{
+		expr:    "haproxy_server_status{\(_backendMatchers)}"
+		refId:   "A"
+		format:  "table"
+		instant: true
+	}]
+	transformations: [
+		{
+			id: "organize"
+			options: {
+				excludeByName: {
+					Time:       true
+					"__name__": true
+				}
+				renameByName: {
+					instance: "Instance"
+					job:      "Job"
+					proxy:    "Backend"
+					server:   "Server"
+					Value:    "Status"
+				}
+			}
+		},
+	]
+}
 
 frontendTable: _tablePanel & {
-			datasource: "prometheus"
-			fieldConfig: defaults: {
-				custom: {displayMode: "color-background"}
-				thresholds: {
-					mode: "absolute"
-					steps: [
-						{color: "rgba(0,0,0,0)", value: null},
-						{color: "red", value:           0},
-						{color: "green", value:         1},
-					]
-				}
-				links: [{
-					title: "Frontend"
-					url:   "/d/HAProxyFrontend/haproxy-frontend?${__all_variables}&var-frontend=${__data.fields.Frontend}"
-				}]
-				mappings: [
-					{id: 1, type: 1, text: "Down", value: "0"},
-					{id: 2, type: 1, text: "Up", value:   "1"},
-				]
-			}
-			options: sortBy: [{displayName: "Status", desc: false}]
-			targets: [{
-				expr:    "haproxy_frontend_status" + "{\(_baseMatchers)}"
-				refId:   "A"
-				format:  "table"
-				instant: true
-			}]
-			transformations: [
-				{
-					id: "organize"
-					options: {
-						excludeByName: {
-							Time:       true
-							"__name__": true
-						}
-						renameByName: {
-							instance: "Instance"
-							job:      "Job"
-							proxy:    "Frontend"
-							Value:    "Status"
-						}
-					}
-				},
+	datasource: "prometheus"
+	fieldConfig: defaults: {
+		custom: {displayMode: "color-background"}
+		thresholds: {
+			mode: "absolute"
+			steps: [
+				{color: "rgba(0,0,0,0)", value: null},
+				{color: "red", value:           0},
+				{color: "green", value:         1},
 			]
 		}
+		links: [{
+			title: "Frontend"
+			url:   "/d/HAProxyFrontend/haproxy-frontend?${__all_variables}&var-frontend=${__data.fields.Frontend}"
+		}]
+		mappings: [
+			{id: 1, type: 1, text: "Down", value: "0"},
+			{id: 2, type: 1, text: "Up", value:   "1"},
+		]
+	}
+	options: sortBy: [{displayName: "Status", desc: false}]
+	targets: [{
+		expr:    "haproxy_frontend_status" + "{\(_baseMatchers)}"
+		refId:   "A"
+		format:  "table"
+		instant: true
+	}]
+	transformations: [
+		{
+			id: "organize"
+			options: {
+				excludeByName: {
+					Time:       true
+					"__name__": true
+				}
+				renameByName: {
+					instance: "Instance"
+					job:      "Job"
+					proxy:    "Frontend"
+					Value:    "Status"
+				}
+			}
+		},
+	]
+}
 
 backendTable: _tablePanel & {
-			datasource: "prometheus"
-			fieldConfig: defaults: {
-				custom: {displayMode: "color-background"}
-				thresholds: {
-					mode: "absolute"
-					steps: [
-						{color: "rgba(0,0,0,0)", value: null},
-						{color: "red", value:           0},
-						{color: "green", value:         1},
-					]
-				}
-				links: [{
-					title: "Backend"
-					url:   "/d/HAProxyBackend/haproxy-backend?${__all_variables}&var-backend=${__data.fields.Backend}"
-				}]
-				mappings: [
-					{id: 1, type: 1, text: "Down", value: "0"},
-					{id: 2, type: 1, text: "Up", value:   "1"},
-				]
-			}
-			targets: [{
-				expr:    "haproxy_backend_status" + "{\(_baseMatchers)}"
-				refId:   "A"
-				format:  "table"
-				instant: true
-			}]
-			transformations: [
-				{
-					id: "organize"
-					options: {
-						excludeByName: {
-							Time:       true
-							"__name__": true
-						}
-						renameByName: {
-							instance: "Instance"
-							job:      "Job"
-							proxy:    "Backend"
-							Value:    "Status"
-						}
-					}
-				},
+	datasource: "prometheus"
+	fieldConfig: defaults: {
+		custom: {displayMode: "color-background"}
+		thresholds: {
+			mode: "absolute"
+			steps: [
+				{color: "rgba(0,0,0,0)", value: null},
+				{color: "red", value:           0},
+				{color: "green", value:         1},
 			]
 		}
+		links: [{
+			title: "Backend"
+			url:   "/d/HAProxyBackend/haproxy-backend?${__all_variables}&var-backend=${__data.fields.Backend}"
+		}]
+		mappings: [
+			{id: 1, type: 1, text: "Down", value: "0"},
+			{id: 2, type: 1, text: "Up", value:   "1"},
+		]
+	}
+	targets: [{
+		expr:    "haproxy_backend_status" + "{\(_baseMatchers)}"
+		refId:   "A"
+		format:  "table"
+		instant: true
+	}]
+	transformations: [
+		{
+			id: "organize"
+			options: {
+				excludeByName: {
+					Time:       true
+					"__name__": true
+				}
+				renameByName: {
+					instance: "Instance"
+					job:      "Job"
+					proxy:    "Backend"
+					Value:    "Status"
+				}
+			}
+		},
+	]
+}
 
 processThreads: _statPanel & {
-			title:       "Threads"
-			description: "Configured number of threads"
-			fieldConfig: defaults: {
-				thresholds: {
-					mode: "absolute"
-					steps: [{color: "blue"}]
-				}
-			}
-			targets: [{
-				expr:  "haproxy_process_nbthread" + "{\(_baseMatchers)}"
-				refId: "A"
-			}]
+	title:       "Threads"
+	description: "Configured number of threads"
+	fieldConfig: defaults: {
+		thresholds: {
+			mode: "absolute"
+			steps: [{color: "blue"}]
 		}
+	}
+	targets: [{
+		expr:  "haproxy_process_nbthread" + "{\(_baseMatchers)}"
+		refId: "A"
+	}]
+}
 
 processCount: _statPanel & {
-			title:       "Processes"
-			description: "Configured number of processes"
-			fieldConfig: defaults: {
-				thresholds: {
-					mode: "absolute"
-					steps: [{color: "blue"}]
-				}
-			}
-			targets: [{
-				expr:  "haproxy_process_nbproc" + "{\(_baseMatchers)}"
-				refId: "A"
-			}]
+	title:       "Processes"
+	description: "Configured number of processes"
+	fieldConfig: defaults: {
+		thresholds: {
+			mode: "absolute"
+			steps: [{color: "blue"}]
 		}
+	}
+	targets: [{
+		expr:  "haproxy_process_nbproc" + "{\(_baseMatchers)}"
+		refId: "A"
+	}]
+}
 
 processConnectionsLimit: _statPanel & {
-			title:       "Connections limit"
-			description: "Configured maximum number of concurrent connections"
-			fieldConfig: defaults: {
-				thresholds: {
-					mode: "absolute"
-					steps: [{color: "blue"}]
-				}
-			}
-			targets: [{
-				expr:  "haproxy_process_max_connections" + "{\(_baseMatchers)}"
-				refId: "A"
-			}]
+	title:       "Connections limit"
+	description: "Configured maximum number of concurrent connections"
+	fieldConfig: defaults: {
+		thresholds: {
+			mode: "absolute"
+			steps: [{color: "blue"}]
 		}
+	}
+	targets: [{
+		expr:  "haproxy_process_max_connections" + "{\(_baseMatchers)}"
+		refId: "A"
+	}]
+}
 
 processMemoryLimit: _statPanel & {
-			title:       "Memory limit"
-			description: "Per-process memory limit"
-			fieldConfig: defaults: {
-				unit: "bytes"
-				mappings: [{id: 1, type: 1, text: "unset", value: "0"}]
-				thresholds: {
-					mode: "absolute"
-					steps: [{color: "blue"}]
-				}
-			}
-			targets: [{
-				expr:  "haproxy_process_max_memory_bytes" + "{\(_baseMatchers)}"
-				refId: "A"
-			}]
+	title:       "Memory limit"
+	description: "Per-process memory limit"
+	fieldConfig: defaults: {
+		unit: "bytes"
+		mappings: [{id: 1, type: 1, text: "unset", value: "0"}]
+		thresholds: {
+			mode: "absolute"
+			steps: [{color: "blue"}]
 		}
+	}
+	targets: [{
+		expr:  "haproxy_process_max_memory_bytes" + "{\(_baseMatchers)}"
+		refId: "A"
+	}]
+}
 
 processFDLimit: _statPanel & {
-			title:       "File descriptors limit"
-			description: "Maximum number of open file descriptors"
-			fieldConfig: defaults: {
-				mappings: [{id: 1, type: 1, text: "unset", value: "0"}]
-				thresholds: {
-					mode: "absolute"
-					steps: [{color: "blue"}]
-				}
-			}
-			targets: [{
-				expr:  "haproxy_process_max_fds" + "{\(_baseMatchers)}"
-				refId: "A"
-			}]
+	title:       "File descriptors limit"
+	description: "Maximum number of open file descriptors"
+	fieldConfig: defaults: {
+		mappings: [{id: 1, type: 1, text: "unset", value: "0"}]
+		thresholds: {
+			mode: "absolute"
+			steps: [{color: "blue"}]
 		}
+	}
+	targets: [{
+		expr:  "haproxy_process_max_fds" + "{\(_baseMatchers)}"
+		refId: "A"
+	}]
+}
 
 processSocketLimit: _statPanel & {
-			title:       "Socket limit"
-			description: "Maximum number of open sockets"
-			fieldConfig: defaults: {
-				thresholds: {
-					mode: "absolute"
-					steps: [{color: "blue"}]
-				}
-			}
-			targets: [{
-				expr:  "haproxy_process_max_sockets"
-				refId: "A"
-			}]
+	title:       "Socket limit"
+	description: "Maximum number of open sockets"
+	fieldConfig: defaults: {
+		thresholds: {
+			mode: "absolute"
+			steps: [{color: "blue"}]
 		}
+	}
+	targets: [{
+		expr:  "haproxy_process_max_sockets"
+		refId: "A"
+	}]
+}

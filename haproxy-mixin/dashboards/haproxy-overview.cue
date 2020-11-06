@@ -8,11 +8,11 @@ import (
 let headline = _section & {
 	_panelSize: {h: 3, w: 4}
 	row: panel.#Row & {
-		id: 100
+		id:        100
 		title:     "Headline"
 		collapsed: false
 	}
-	panels: [ uptime, processCurrentConnections, processMemoryAllocated, processMemoryUsed ]
+	panels: [uptime, processCurrentConnections, processMemoryAllocated, processMemoryUsed]
 }
 
 let frontend = _section & {
@@ -22,11 +22,11 @@ let frontend = _section & {
 	}
 	_panelSize: {h: 6, w: _dashboardWidth}
 	row: {
-		id: 200
+		id:        200
 		title:     "Frontend"
 		collapsed: false
 	}
-	panels: [frontendTable	]
+	panels: [frontendTable]
 }
 
 let backend = _section & {
@@ -36,7 +36,7 @@ let backend = _section & {
 	}
 	_panelSize: {w: _dashboardWidth, h: 6}
 	row: {
-		id: 300
+		id:        300
 		title:     "Backend"
 		collapsed: false
 	}
@@ -50,12 +50,12 @@ let configuration = _section & {
 	}
 	_panelSize: {h: 2, w: 3}
 	row: {
-		id: 400
+		id:        400
 		title:     "Configuration"
 		collapsed: false
 	}
 
-	panels: [ processCount, processThreads, processConnectionsLimit, processMemoryLimit, processFDLimit, processSocketLimit ]
+	panels: [processCount, processThreads, processConnectionsLimit, processMemoryLimit, processFDLimit, processSocketLimit]
 }
 
 {
@@ -66,7 +66,7 @@ let configuration = _section & {
 			[headline.row] +
 			[ for i, panel in headline.panels {
 				panel & {
-					id: headline.row.id + (i+1)
+					id: headline.row.id + (i + 1)
 					gridPos: {
 						x: headline._origin.x + i*headline._panelSize.w
 						y: headline._origin.y + (i * headline._panelSize.w div _dashboardWidth * headline._panelSize.h)
@@ -79,7 +79,7 @@ let configuration = _section & {
 			[frontend.row] +
 			[ for i, panel in frontend.panels {
 				panel & {
-					id: frontend.row.id + (i+1)
+					id: frontend.row.id + (i + 1)
 					gridPos: {
 						x: frontend._origin.x + i*frontend._panelSize.w
 						y: frontend._origin.y + (i * frontend._panelSize.w div _dashboardWidth * frontend._panelSize.h)
@@ -92,7 +92,7 @@ let configuration = _section & {
 			[backend.row] +
 			[ for i, panel in backend.panels {
 				panel & {
-					id: backend.row.id + (i+1)
+					id: backend.row.id + (i + 1)
 					gridPos: {
 						x: backend._origin.x + i*backend._panelSize.w
 						y: backend._origin.y + (i * backend._panelSize.w div _dashboardWidth * backend._panelSize.h) + 1
@@ -105,7 +105,7 @@ let configuration = _section & {
 			[configuration.row] +
 			[ for i, panel in configuration.panels {
 				panel & {
-					id: configuration.row.id + (i+1)
+					id: configuration.row.id + (i + 1)
 					gridPos: {
 						x: configuration._origin.x + i*configuration._panelSize.w
 						y: configuration._origin.y + (i * headline._panelSize.w div _dashboardWidth * headline._panelSize.h)

@@ -8,7 +8,7 @@ import (
 let serverRequests = _section & {
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
-		id: 100
+		id:        100
 		title:     "Requests"
 		collapsed: false
 	}
@@ -19,7 +19,7 @@ let serverErrors = _section & {
 	_origin: y: 6
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
-		id: 200
+		id:        200
 		title:     "Errors"
 		collapsed: false
 	}
@@ -30,7 +30,7 @@ let serverDuration = _section & {
 	_origin: y: 12
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
-		id: 300
+		id:        300
 		title:     "Duration"
 		collapsed: false
 	}
@@ -45,7 +45,7 @@ let serverDuration = _section & {
 			[serverRequests.row] +
 			[ for i, panel in serverRequests.panels {
 				panel & {
-					id: serverRequests.row.id + (i+1)
+					id: serverRequests.row.id + (i + 1)
 					gridPos: {
 						x: serverRequests._origin.x + i*serverRequests._panelSize.w
 						y: serverRequests._origin.y + (i * serverRequests._panelSize.w div _dashboardWidth * serverRequests._panelSize.h)
@@ -58,7 +58,7 @@ let serverDuration = _section & {
 			[serverErrors.row] +
 			[ for i, panel in serverErrors.panels {
 				panel & {
-					id: serverErrors.row.id + (i+1)
+					id: serverErrors.row.id + (i + 1)
 					gridPos: {
 						x: serverErrors._origin.x + i*serverErrors._panelSize.w
 						y: serverErrors._origin.y + (i * serverErrors._panelSize.w div _dashboardWidth * serverErrors._panelSize.h)
@@ -71,7 +71,7 @@ let serverDuration = _section & {
 			[serverDuration.row] +
 			[ for i, panel in serverDuration.panels {
 				panel & {
-					id: serverDuration.row.id + (i+1)
+					id: serverDuration.row.id + (i + 1)
 					gridPos: {
 						x: serverDuration._origin.x + i*serverDuration._panelSize.w
 						y: serverDuration._origin.y + (i * serverDuration._panelSize.w div _dashboardWidth * serverDuration._panelSize.h)
