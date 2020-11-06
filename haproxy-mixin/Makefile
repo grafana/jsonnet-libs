@@ -11,19 +11,27 @@ help: ## Display this help
 help:
 	@awk 'BEGIN {FS = ": ##"; printf "Usage:\n  make <target>\n\nTargets:\n"} /^[a-zA-Z0-9_\.\-\/%]+: ##/ { printf "  %-45s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-define cue_export
-	cue fmt $(1)
-	cue vet -c $(1)
-	cue export --out=yaml $(1) > $(2)
-endef
+.PHONY: fmt
+fmt: ## Format all files
+fmt:
+	cue fmt ./...
 
 build: ## Build rules and dashboards
-build: alerts/general.yaml rules/rules.yaml
+build: alerts/general.yaml rules/rules.yaml dashboards/haproxy-overview.json dashboards/haproxy-backend.json dashboards/haproxy-frontend.json dashboards/haproxy-server.json
 
 alerts/general.yaml: ## Export the general alert rules as YAML
 alerts/general.yaml: alerts/general.cue $(wildcard cue.mod/**/github.com/prometheus/prometheus/pkg/rulefmt/*.cue)
-	$(call cue_export,$<,$@)
+	cue fmt $<
+	cue vet -c $<
+	cue export --out=yaml $< > $@
 
 rules/rules.yaml: ## Export recording rules rules as YAML
 rules/rules.yaml: rules/rules.cue $(wildcard cue.mod/**/github.com/prometheus/prometheus/pkg/rulefmt/*.cue)
-	$(call cue_export,$<,$@)
+	cue fmt $<
+	cue vet -c $<
+	cue export --out=yaml $< > $@
+
+dashboards/%.json: ## Export a Grafana dashboard definition as JSON
+dashboards/%.json: dashboards/%.cue $(wildcard grafana/*.cue)
+	cue fmt $<
+	cue export -e 'dashboards["$(subst dashboards/,,$@)"]' ./dashboards > $@

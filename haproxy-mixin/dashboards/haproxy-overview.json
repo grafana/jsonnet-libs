@@ -1,0 +1,783 @@
+{
+    "time": {
+        "from": "now-6h",
+        "to": "now"
+    },
+    "title": "HAProxy / Overview",
+    "panels": [
+        {
+            "title": "Headline",
+            "type": "row",
+            "datasource": "default",
+            "gridPos": {
+                "x": 0,
+                "y": 0,
+                "h": 1,
+                "w": 24
+            },
+            "targets": [],
+            "transparent": false,
+            "collapse": true,
+            "collapsed": false,
+            "panels": [],
+            "showTitle": true,
+            "titleSize": "h6"
+        },
+        {
+            "title": "Uptime",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "s"
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Server uptime",
+            "gridPos": {
+                "x": 0,
+                "y": 0,
+                "h": 3,
+                "w": 4
+            },
+            "targets": [
+                {
+                    "expr": "time() - haproxy_process_start_time_seconds{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "Current connections",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Number of active sessions",
+            "gridPos": {
+                "x": 4,
+                "y": 0,
+                "h": 3,
+                "w": 4
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_current_connections{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "Memory allocated",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "bytes"
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Total amount of memory allocated in pools",
+            "gridPos": {
+                "x": 8,
+                "y": 0,
+                "h": 3,
+                "w": 4
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_pool_allocated_bytes{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "Memory used",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "bytes"
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Total amount of memory used in pools",
+            "gridPos": {
+                "x": 12,
+                "y": 0,
+                "h": 3,
+                "w": 4
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_pool_used_bytes{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "Frontend",
+            "type": "row",
+            "datasource": "default",
+            "gridPos": {
+                "x": 0,
+                "y": 3,
+                "h": 1,
+                "w": 24
+            },
+            "targets": [],
+            "transparent": false,
+            "collapse": true,
+            "collapsed": false,
+            "panels": [],
+            "showTitle": true,
+            "titleSize": "h6"
+        },
+        {
+            "type": "table",
+            "options": {
+                "sortBy": [
+                    {
+                        "displayName": "Status",
+                        "desc": false
+                    }
+                ]
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "displayMode": "color-background"
+                    },
+                    "links": [
+                        {
+                            "url": "/d/HAProxyFrontend/haproxy-frontend?${__all_variables}\u0026var-frontend=${__data.fields.Frontend}",
+                            "title": "Frontend"
+                        }
+                    ],
+                    "mappings": [
+                        {
+                            "text": "Down",
+                            "value": "0",
+                            "id": 1,
+                            "type": 1
+                        },
+                        {
+                            "text": "Up",
+                            "value": "1",
+                            "id": 2,
+                            "type": 1
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "rgba(0,0,0,0)",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 0
+                            },
+                            {
+                                "color": "green",
+                                "value": 1
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "gridPos": {
+                "x": 0,
+                "y": 3,
+                "h": 6,
+                "w": 24
+            },
+            "targets": [
+                {
+                    "format": "table",
+                    "expr": "haproxy_frontend_status{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "instant": true,
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false,
+            "transformations": [
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "Time": true,
+                            "__name__": true
+                        },
+                        "renameByName": {
+                            "Value": "Status",
+                            "instance": "Instance",
+                            "job": "Job",
+                            "proxy": "Frontend"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "title": "Backend",
+            "type": "row",
+            "datasource": "default",
+            "gridPos": {
+                "x": 0,
+                "y": 9,
+                "h": 1,
+                "w": 24
+            },
+            "targets": [],
+            "transparent": false,
+            "collapse": true,
+            "collapsed": false,
+            "panels": [],
+            "showTitle": true,
+            "titleSize": "h6"
+        },
+        {
+            "type": "table",
+            "options": {},
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "displayMode": "color-background"
+                    },
+                    "links": [
+                        {
+                            "url": "/d/HAProxyBackend/haproxy-backend?${__all_variables}\u0026var-backend=${__data.fields.Backend}",
+                            "title": "Backend"
+                        }
+                    ],
+                    "mappings": [
+                        {
+                            "text": "Down",
+                            "value": "0",
+                            "id": 1,
+                            "type": 1
+                        },
+                        {
+                            "text": "Up",
+                            "value": "1",
+                            "id": 2,
+                            "type": 1
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "rgba(0,0,0,0)",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 0
+                            },
+                            {
+                                "color": "green",
+                                "value": 1
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "gridPos": {
+                "x": 0,
+                "y": 10,
+                "h": 6,
+                "w": 24
+            },
+            "targets": [
+                {
+                    "format": "table",
+                    "expr": "haproxy_backend_status{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "instant": true,
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false,
+            "transformations": [
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "Time": true,
+                            "__name__": true
+                        },
+                        "renameByName": {
+                            "Value": "Status",
+                            "instance": "Instance",
+                            "job": "Job",
+                            "proxy": "Backend"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "title": "Configuration",
+            "type": "row",
+            "datasource": "default",
+            "gridPos": {
+                "x": 0,
+                "y": 15,
+                "h": 1,
+                "w": 24
+            },
+            "targets": [],
+            "transparent": false,
+            "collapse": true,
+            "collapsed": false,
+            "panels": [],
+            "showTitle": true,
+            "titleSize": "h6"
+        },
+        {
+            "title": "Threads",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Configured number of threads",
+            "gridPos": {
+                "x": 0,
+                "y": 15,
+                "h": 2,
+                "w": 3
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_nbthread{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "Processes",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Configured number of processes",
+            "gridPos": {
+                "x": 3,
+                "y": 15,
+                "h": 2,
+                "w": 3
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_nbproc{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "Connections limit",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Configured maximum number of concurrent connections",
+            "gridPos": {
+                "x": 6,
+                "y": 15,
+                "h": 2,
+                "w": 3
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_max_connections{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "Memory limit",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [
+                        {
+                            "text": "unset",
+                            "value": "0",
+                            "id": 1,
+                            "type": 1
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    },
+                    "unit": "bytes"
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Per-process memory limit",
+            "gridPos": {
+                "x": 9,
+                "y": 15,
+                "h": 2,
+                "w": 3
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_max_memory_bytes{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "File descriptors limit",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [
+                        {
+                            "text": "unset",
+                            "value": "0",
+                            "id": 1,
+                            "type": 1
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Maximum number of open file descriptors",
+            "gridPos": {
+                "x": 12,
+                "y": 15,
+                "h": 2,
+                "w": 3
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_max_fds{instance=~\"$instance\",job=~\"$job\"}",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        },
+        {
+            "title": "Socket limit",
+            "type": "stat",
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "textMode": "auto"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {},
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "datasource": "prometheus",
+            "description": "Maximum number of open sockets",
+            "gridPos": {
+                "x": 15,
+                "y": 15,
+                "h": 2,
+                "w": 3
+            },
+            "targets": [
+                {
+                    "expr": "haproxy_process_max_sockets",
+                    "legendFormat": "",
+                    "interval": "",
+                    "refId": "A"
+                }
+            ],
+            "transparent": false
+        }
+    ],
+    "editable": true,
+    "graphTooltip": 0,
+    "schemaVersion": 25,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+        "list": [
+            {
+                "name": "datasource",
+                "type": "datasource",
+                "options": [],
+                "refresh": 1,
+                "hide": 0,
+                "includeAll": false,
+                "multi": false,
+                "query": "prometheus",
+                "regex": "",
+                "skipUrlSync": false
+            },
+            {
+                "name": "instance",
+                "type": "query",
+                "options": [],
+                "sort": 0,
+                "datasource": "prometheus",
+                "refresh": 1,
+                "hide": 0,
+                "includeAll": true,
+                "multi": true,
+                "query": "label_values(haproxy_process_start_time_seconds, instance)",
+                "regex": "",
+                "skipUrlSync": false,
+                "definition": "label_values(haproxy_process_start_time_seconds, instance)",
+                "useTags": false
+            },
+            {
+                "name": "job",
+                "type": "query",
+                "options": [],
+                "sort": 0,
+                "datasource": "prometheus",
+                "refresh": 1,
+                "hide": 0,
+                "includeAll": true,
+                "multi": true,
+                "query": "label_values(haproxy_process_start_time_seconds, job)",
+                "regex": "",
+                "skipUrlSync": false,
+                "definition": "label_values(haproxy_process_start_time_seconds, job)",
+                "useTags": false
+            }
+        ]
+    },
+    "timepicker": {
+        "hidden": false,
+        "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+        ]
+    },
+    "uid": "HAProxyOverview"
+}
