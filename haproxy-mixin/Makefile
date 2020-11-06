@@ -32,6 +32,6 @@ rules/rules.yaml: rules/rules.cue $(wildcard cue.mod/**/github.com/prometheus/pr
 	cue export --out=yaml $< > $@
 
 dashboards/%.json: ## Export a Grafana dashboard definition as JSON
-dashboards/%.json: dashboards/%.cue $(wildcard grafana/*.cue)
+dashboards/%.json: dashboards/%.cue $(wildcard grafana/*.cue) $(wildcard grafana/panel/*.cue)
 	cue fmt $<
 	cue export -e 'dashboards["$(subst dashboards/,,$@)"]' ./dashboards > $@
