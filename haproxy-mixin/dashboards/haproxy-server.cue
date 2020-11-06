@@ -5,157 +5,36 @@ import (
 	"github.com/jdbaldry/haproxy-mixin/grafana/panel"
 )
 
-serverHTTPResponsesPerSecond: panel.#Graph & {
-	title:       "HTTP"
-	description: "HTTP responses per second. There will be no data for servers using tcp mode."
-	fieldConfig: defaults: unit: "reqps"
-	targets: [{
-		expr:  "rate(haproxy_server_http_responses_total{\(_serverMatchers)}[$__rate_interval])"
-		refId: "A"
-	}]
-	yaxes: [{min: 0}, {min: 0}]
-}
-
-serverMaxDuration: panel.#Graph & {
-	title:       "Max duration"
-	description: "Max duration for last 1024 succesful connections"
-	fieldConfig: defaults: unit: "s"
-	targets: [
-		{
-			expr:  "haproxy_server_max_queue_time_seconds{\(_serverMatchers)}"
-			refId: "A"
-		},
-		{
-			expr:  "haproxy_server_max_connect_time_seconds{\(_serverMatchers)}"
-			refId: "B"
-		},
-		{
-			expr:  "haproxy_server_max_response_time_seconds{\(_serverMatchers)}"
-			refId: "C"
-		},
-		{
-			expr:  "haproxy_server_max_total_time_seconds{\(_serverMatchers)}"
-			refId: "D"
-		},
-	]
-	yaxes: [{min: 0}, {min: 0}]
-}
-
-serverAverageDuration: panel.#Graph & {
-	title:       "Average duration"
-	description: "Average duration for last 1024 succesful connections"
-	fieldConfig: defaults: unit: "s"
-	targets: [
-		{
-			expr:  "haproxy_server_queue_time_average_seconds{\(_serverMatchers)}"
-			refId: "A"
-		},
-		{
-			expr:  "haproxy_server_connect_time_average_seconds{\(_serverMatchers)}"
-			refId: "B"
-		},
-		{
-			expr:  "haproxy_server_response_time_average_seconds{\(_serverMatchers)}"
-			refId: "C"
-		},
-		{
-			expr:  "haproxy_server_total_time_average_seconds{\(_serverMatchers)}"
-			refId: "D"
-		},
-	]
-	yaxes: [{min: 0}, {min: 0}]
-}
-
-serverConnectionsPerSecond: panel.#Graph & {
-	title:       "Attempted connections"
-	description: "Attempted connections per second"
-	fieldConfig: defaults: unit: "connps"
-	targets: [{
-		expr:  "rate(haproxy_server_connection_attempts_total{\(_serverMatchers)}[$__rate_interval])"
-		refId: "A"
-	}]
-	yaxes: [{min: 0}, {min: 0}]
-}
-
-serverResponseErrors: panel.#Graph & {
-	title:       "Response"
-	datasource:  "prometheus"
-	description: "Response errors per second"
-	targets: [{
-		expr:  "rate(haproxy_server_response_errors_total{\(_serverMatchers)}[$__rate_interval])"
-		refId: "A"
-	}]
-}
-
-serverConnectionErrors: panel.#Graph & {
-	title:       "Connection"
-	datasource:  "prometheus"
-	description: "Connection errors per second"
-	targets: [{
-		expr:  "rate(haproxy_server_connection_errors_total{\(_serverMatchers)}[$__rate_interval])"
-		refId: "A"
-	}]
-	stack: true
-	yaxes: [{min: 0}, {min: 0}]
-}
-
-serverInternalErrors: panel.#Graph & {
-	title:       "Internal"
-	datasource:  "prometheus"
-	description: "Internal errors per second"
-	targets: [{
-		expr:  "rate(haproxy_server_internal_errors_total{\(_serverMatchers)}[$__rate_interval])"
-		refId: "A"
-	}]
-	stack: true
-	yaxes: [{min: 0}, {min: 0}]
-}
-
-serverBytes: panel.#Graph & {
-	title: "Bytes in/out"
-	fieldConfig: defaults: unit: "bytes"
-	targets: [
-		{
-			expr:         "rate(haproxy_server_bytes_in_total{\(_serverMatchers)}[$__rate_interval])"
-			refId:        "A"
-			legendFormat: "in{\(_serverMatchers)}"
-		},
-		{
-			expr:         "rate(haproxy_server_bytes_out_total{\(_serverMatchers)}[$__rate_interval])"
-			refId:        "B"
-			legendFormat: "out{\(_serverMatchers)}"
-		},
-	]
-	seriesOverrides: [{alias: "/.*out.*/", transform: "negative-Y"}]
-}
-
-let serverRequests = _board & {
+let serverRequests = _section & {
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
+		id: 100
 		title:     "Requests"
 		collapsed: false
 	}
-	panels: [ for panel in [serverHTTPResponsesPerSecond, serverConnectionsPerSecond, serverBytes] {panel & {datasource: "prometheus"}}]
+	panels: [serverHTTPResponsesPerSecond, serverConnectionsPerSecond, serverBytes]
 }
 
-let serverErrors = _board & {
+let serverErrors = _section & {
 	_origin: y: 6
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
+		id: 200
 		title:     "Errors"
 		collapsed: false
 	}
-	panels: [ for panel in [serverResponseErrors, serverConnectionErrors, serverInternalErrors] {panel & {datasource: "prometheus"}}]
+	panels: [serverResponseErrors, serverConnectionErrors, serverInternalErrors]
 }
 
-let serverDuration = _board & {
+let serverDuration = _section & {
 	_origin: y: 12
 	_panelSize: {h: 6, w: 8}
 	row: panel.#Row & {
+		id: 300
 		title:     "Duration"
 		collapsed: false
 	}
-	panels: [ for panel in [serverAverageDuration, serverMaxDuration] {panel & {datasource: "prometheus"}}]
+	panels: [serverAverageDuration, serverMaxDuration]
 }
 
 {
@@ -166,6 +45,7 @@ let serverDuration = _board & {
 			[serverRequests.row] +
 			[ for i, panel in serverRequests.panels {
 				panel & {
+					id: serverRequests.row.id + (i+1)
 					gridPos: {
 						x: serverRequests._origin.x + i*serverRequests._panelSize.w
 						y: serverRequests._origin.y + (i * serverRequests._panelSize.w div _dashboardWidth * serverRequests._panelSize.h)
@@ -178,6 +58,7 @@ let serverDuration = _board & {
 			[serverErrors.row] +
 			[ for i, panel in serverErrors.panels {
 				panel & {
+					id: serverErrors.row.id + (i+1)
 					gridPos: {
 						x: serverErrors._origin.x + i*serverErrors._panelSize.w
 						y: serverErrors._origin.y + (i * serverErrors._panelSize.w div _dashboardWidth * serverErrors._panelSize.h)
@@ -190,6 +71,7 @@ let serverDuration = _board & {
 			[serverDuration.row] +
 			[ for i, panel in serverDuration.panels {
 				panel & {
+					id: serverDuration.row.id + (i+1)
 					gridPos: {
 						x: serverDuration._origin.x + i*serverDuration._panelSize.w
 						y: serverDuration._origin.y + (i * serverDuration._panelSize.w div _dashboardWidth * serverDuration._panelSize.h)

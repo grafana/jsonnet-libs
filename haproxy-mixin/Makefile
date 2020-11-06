@@ -32,6 +32,17 @@ rules/rules.yaml: rules/rules.cue $(wildcard cue.mod/**/github.com/prometheus/pr
 	cue export --out=yaml $< > $@
 
 dashboards/%.json: ## Export a Grafana dashboard definition as JSON
-dashboards/%.json: dashboards/%.cue $(wildcard grafana/*.cue) $(wildcard grafana/panel/*.cue)
-	cue fmt $<
+dashboards/%.json: $(wildcard dashboards/*.cue) $(wildcard grafana/*.cue) $(wildcard grafana/panel/*.cue)
 	cue export -e 'dashboards["$(subst dashboards/,,$@)"]' ./dashboards > $@
+
+GRAFANA_URL := http://localhost:3001
+DASHBOARD   := haproxy-backend.json
+.PHONY: post
+post: ## Update a Grafana dashboard from a JSON file
+post: dashboards/$(DASHBOARD)
+	curl \
+		-H 'Content-Type: application/json' \
+		-H 'Accept: application/json' \
+		-H "Authorization: Bearer $${GRAFANA_API_TOKEN}" \
+		-d "$$(jq '{ "dashboard": ., "overwrite": true }' dashboards/$(DASHBOARD))" \
+		$(GRAFANA_URL)/api/dashboards/db

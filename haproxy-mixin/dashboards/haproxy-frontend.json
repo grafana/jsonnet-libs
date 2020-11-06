@@ -7,6 +7,7 @@
     "panels": [
         {
             "title": "Requests",
+            "id": 100,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -29,6 +30,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 101,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -122,6 +124,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 102,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -215,6 +218,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 103,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -296,6 +300,7 @@
         },
         {
             "title": "Errors",
+            "id": 200,
             "type": "row",
             "datasource": "default",
             "gridPos": {
@@ -318,6 +323,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 201,
             "type": "graph",
             "options": {
                 "dataLinks": []
@@ -410,6 +416,7 @@
                 "mode": "absolute",
                 "steps": []
             },
+            "id": 202,
             "type": "graph",
             "options": {
                 "dataLinks": []
