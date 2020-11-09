@@ -22,8 +22,8 @@ g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
     g.statPanel('sum(disk_storage_used{disk=~"$disk", job=~"$job"}) by (disk) / sum(disk_storage_total{disk=~"$disk", job=~"$job"}) by (disk)') +
     {
       type: 'gauge',
-      targets: [super.targets[0] + {
-        legendFormat: '{{disk}}'
+      targets: [super.targets[0] {
+        legendFormat: '{{disk}}',
       }],
       // The default 'percentunit' format of statPanel() doesn't seem to have an effect
       fieldConfig: {
