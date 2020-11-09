@@ -19,7 +19,7 @@ g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
   g.row('Overview')
   .addPanel(
     g.panel('Storage Used') +
-    g.statPanel('sum(disk_storage_used{disk=~"$disk", job=~"$job"}) by (disk) \n                   / sum(disk_storage_total{disk=~"$disk", job=~"$job"}) by (disk)') +
+    g.statPanel('sum(disk_storage_used{disk=~"$disk", job=~"$job"}) by (disk) / sum(disk_storage_total{disk=~"$disk", job=~"$job"}) by (disk)') +
     {
       type: 'gauge',
       // The default 'percentunit' format of statPanel() doesn't seem to have an effect
@@ -85,13 +85,15 @@ g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
     g.latencyPanel('s3_ttfb_seconds', f('{api=~"get.*|list.*|head.*",%s}'))
   )
   .addPanel(
-    g.panel('Internode traffic') +
+    g.panel('Internode traffic') + {
+      description: 'Internode traffic for multi-node clusters. Will be zero for single node configurations.',
+    } +
     g.queryPanel([
-      f('sum(rate(internode_rx_bytes_total{%s}[$__rate_interval]))'),
-      f('sum(rate(internode_tx_bytes_total{%s}[$__rate_interval]))'),
+      f('rate(internode_rx_bytes_total{%s}[$__rate_interval])'),
+      f('rate(internode_tx_bytes_total{%s}[$__rate_interval])'),
     ], [
-      'Inbound',
-      'Outbound',
+      'Inbound-{{instance}}',
+      'Outbound-{{instance}}',
     ],)
   )
 )
