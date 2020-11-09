@@ -2,6 +2,7 @@
   _config+:: {
     admin_services+:: [
       {
+        key: 'grafana_light',
         title: 'Grafana (Light)',
         path: 'grafana',
         params: '/?search=open&theme=light',
@@ -9,6 +10,7 @@
         allowWebsockets: true,
       },
       {
+        key: 'grafana_dark',
         title: 'Grafana (Dark)',
         path: 'grafana',
         params: '/?search=open&theme=dark',

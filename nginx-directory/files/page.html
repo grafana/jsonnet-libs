@@ -1,0 +1,62 @@
+<html>
+  <head><title>%(page_name)s</title></head>
+  <style>
+    body {
+      font-family: Sans-Serif;
+      margin: 0px;
+    }
+    .header {
+      background-color: #777;
+      padding: 20px;
+    }
+    .header .img {
+      float: left;
+    }
+    .header .title {
+      color: white;
+      font-weight: bold;
+      font-size: 200%%;
+      float: right;
+    }
+    .header:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+    .links {
+      margin: 10px;
+      width: 100%%;
+    }
+    ul li {
+      display: block;
+      position: relative;
+      float: left;
+      margin: 20px;
+    }
+    .link-image {
+      width: 150px;
+      height: 150px;
+
+    }
+    .link-text {
+      text-align: center;
+      margin-top: 10px;
+      font-size: 80%%;
+    }
+  </style>
+  <body>
+    <div class="header">
+      <div class="img">
+        <a href="/"><img src="https://grafana.com/static/assets/internal/grafana_logo-web-dark.svg" width="250"/></a>
+      </div>
+      <div class="title">
+        %(page_name)s
+      </div>
+    </div>
+    <div class="links">
+      <ul>
+        %(links)s
+      </ul>
+    </div>
+  </body>
+</html>
