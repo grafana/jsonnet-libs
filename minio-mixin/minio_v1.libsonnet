@@ -22,6 +22,9 @@ g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
     g.statPanel('sum(disk_storage_used{disk=~"$disk", job=~"$job"}) by (disk) / sum(disk_storage_total{disk=~"$disk", job=~"$job"}) by (disk)') +
     {
       type: 'gauge',
+      targets: [super.targets[0] + {
+        legendFormat: '{{disk}}'
+      }],
       // The default 'percentunit' format of statPanel() doesn't seem to have an effect
       fieldConfig: {
         defaults: {
@@ -31,11 +34,13 @@ g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
     }
   )
   .addPanel(
-    g.panel('Disks Total') +
-    g.statPanel(f('sum(minio_disks_total{%s})'), 'none')
+    g.panel('Backend Disks') + {
+      description: 'Total number of disks in Erasure-type backends. This metric is not available for FileSystem backends.',
+    } +
+    g.statPanel(f('sum(minio_disks_total{%s}) > 0'), 'none')
   )
   .addPanel(
-    g.panel('Disks Offline') +
+    g.panel('Backend Disks Offline') +
     g.statPanel(f('sum(minio_disks_offline{%s})'), 'none')
   )
   .addPanel(
@@ -59,6 +64,25 @@ g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
     g.panel('Storage Total') +
     g.queryPanel(f('disk_storage_total{disk=~"$disk",%s}'), '') +
     panel_settings_bytes,
+  )
+)
+.addRow(
+  g.row('Buckets')
+  .addPanel(
+    g.panel('Total Size') +
+    // Every node reports the same stats, therefore reduce with max
+    g.queryPanel(f('max(bucket_usage_size{%s}) by (bucket)'), '{{bucket}}') +
+    panel_settings_bytes,
+  )
+  .addPanel(
+    g.panel('Object Count') +
+    // Every node reports the same stats, therefore reduce with max
+    g.queryPanel(f('max(bucket_objects_count{%s}) by (bucket)'), '{{bucket}}')
+  )
+  .addPanel(
+    g.panel('Object Counts Per Size') +
+    // Every node reports the same stats, therefore reduce with max
+    g.queryPanel(f('max(bucket_objects_histogram{%s}) by (bucket, object_size)'), '{{bucket}}-{{object_size}}')
   )
 )
 .addRow(
