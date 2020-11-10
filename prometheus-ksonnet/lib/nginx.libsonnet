@@ -18,6 +18,7 @@
     ||| else '' + if subfilter then |||
       sub_filter 'href="/' 'href="/%(path)s/';
       sub_filter 'src="/' 'src="/%(path)s/';
+      sub_filter 'action="/' 'action="/%(path)s/';
       sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
       sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
       sub_filter_once off;
