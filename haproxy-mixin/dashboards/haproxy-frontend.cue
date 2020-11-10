@@ -2,28 +2,19 @@ package dashboards
 
 import (
 	"github.com/jdbaldry/haproxy-mixin/grafana"
-	"github.com/jdbaldry/haproxy-mixin/grafana/panel"
 )
 
-let requests = _section & {
+let requests = #_section & {
 	_panelSize: {h: 6, w: 8}
-	row: panel.#Row & {
-		id:        100
-		title:     "Requests"
-		collapsed: false
-	}
-	panels: [httpRequestsPerSecond, connectionsPerSecond, frontendBytes]
+	_row: {id: 100, title: "Requests"}
+	_panels: [httpRequestsPerSecond, connectionsPerSecond, frontendBytes]
 }
 
-let errors = _section & {
+let errors = #_section & {
 	_origin: y: 6
 	_panelSize: {h: 6, w: 8}
-	row: panel.#Row & {
-		id:        200
-		title:     "Errors"
-		collapsed: false
-	}
-	panels: [requestErrors, internalErrors]
+	_row: {id: 200, title: "Errors"}
+	_panels: [requestErrors, internalErrors]
 }
 
 {
@@ -31,32 +22,7 @@ let errors = _section & {
 		title: "HAProxy / Frontend"
 		uid:   "HAProxyFrontend"
 		panels:
-			[requests.row] +
-			[ for i, panel in requests.panels {
-				panel & {
-					id: requests.row.id + (i + 1)
-					gridPos: {
-						x: requests._origin.x + i*requests._panelSize.w
-						y: requests._origin.y + (i * requests._panelSize.w div _dashboardWidth * requests._panelSize.h)
-						w: requests._panelSize.w
-						h: requests._panelSize.h
-					}
-				}
-			},
-			] +
-			[errors.row] +
-			[ for i, panel in errors.panels {
-				panel & {
-					id: errors.row.id + (i + 1)
-					gridPos: {
-						x: errors._origin.x + i*errors._panelSize.w
-						y: errors._origin.y + (i * errors._panelSize.w div _dashboardWidth * errors._panelSize.h)
-						w: errors._panelSize.w
-						h: errors._panelSize.h
-					}
-				}
-			},
-			]
+			requests.panels
 		templating: {
 			list: [
 				grafana.Template & {
