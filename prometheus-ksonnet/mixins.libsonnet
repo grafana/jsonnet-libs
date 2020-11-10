@@ -26,6 +26,8 @@
 
         _config+:: {
           prometheusSelector: 'job="default/prometheus"',
+          prometheusHAGroupLabels: 'job,cluster,namespace',
+          prometheusHAGroupName: '{{$labels.job}} in {{$labels.cluster}}',
         },
       },
 
