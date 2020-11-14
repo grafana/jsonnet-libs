@@ -1,5 +1,1 @@
-groups:
-- name: haproxy_rules
-  rules:
-  - record: :test
-    expr: test
+groups: []
