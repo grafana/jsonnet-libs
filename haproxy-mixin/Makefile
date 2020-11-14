@@ -52,3 +52,15 @@ post: dashboards/$(DASHBOARD)
 		-H "Authorization: Bearer $${GRAFANA_API_TOKEN}" \
 		-d "$$(jq '{ "dashboard": ., "overwrite": true }' dashboards/$(DASHBOARD))" \
 		$(GRAFANA_URL)/api/dashboards/db
+
+.drone/drone.yml: ## Write out YAML drone configuration
+.drone/drone.yml: .drone/drone.cue $(wildcard cue.mod/**/github.com/drone/drone-yaml/yaml/*.cue)
+	cue fmt $<
+	cue vet -c $<
+	cue export --out=yaml $< > $@
+	drone lint $@
+
+.PHONY: haproxy-mixin-build-image
+haproxy-mixin-build-image: ## Build the haproxy-mixin-build-image
+haproxy-mixin-build-image: build-image.nix default.nix $(wildcard nix/*nix)
+	docker load --input $$(nix-build build-image.nix)
