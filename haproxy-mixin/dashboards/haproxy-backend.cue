@@ -10,21 +10,21 @@ let servers = #_section & {
 	_panels: [serverTable]
 }
 
-let backendRequests = #_section & {
+let requests = #_section & {
 	_panelSize: {h: 6, w: 8}
 	_origin: y: 6
 	_row: {id: 200, title: "Requests"}
 	_panels: [backendHTTPRequestsPerSecond, backendConnectionsPerSecond, backendBytes]
 }
 
-let backendErrors = #_section & {
+let errors = #_section & {
 	_origin: y: 12
 	_panelSize: {h: 6, w: 8}
 	_row: {id: 300, title: "Errors"}
 	_panels: [backendConnectionErrors, backendInternalErrors]
 }
 
-let backendDuration = #_section & {
+let duration = #_section & {
 	_origin: y: 12
 	_panelSize: {h: 6, w: 8}
 	_row: {id: 400, title: "Duration"}
@@ -37,9 +37,9 @@ let backendDuration = #_section & {
 		uid:   "HAProxyBackend"
 		panels:
 			servers.panels +
-			backendRequests.panels +
-			backendErrors.panels +
-			backendDuration.panels
+			requests.panels +
+			errors.panels +
+			duration.panels
 		templating: {
 			list: [
 				grafana.Template & {

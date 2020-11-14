@@ -36,6 +36,9 @@ let configuration = #_section & {
 		title: "HAProxy / Overview"
 		uid:   "HAProxyOverview"
 		panels:
+			headline.panels +
+			frontend.panels +
+			backend.panels +
 			configuration.panels
 		templating: {
 			list: [

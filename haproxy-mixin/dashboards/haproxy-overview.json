@@ -389,7 +389,7 @@
             "datasource": "prometheus",
             "gridPos": {
                 "x": 0,
-                "y": 10,
+                "y": 9,
                 "h": 6,
                 "w": 24
             },

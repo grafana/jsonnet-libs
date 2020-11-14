@@ -22,7 +22,8 @@ let errors = #_section & {
 		title: "HAProxy / Frontend"
 		uid:   "HAProxyFrontend"
 		panels:
-			requests.panels
+			requests.panels +
+			errors.panels
 		templating: {
 			list: [
 				grafana.Template & {
