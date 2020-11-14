@@ -41,7 +41,7 @@ dashboards/%.json: ## Export a Grafana dashboard definition as JSON
 dashboards/%.json: $(wildcard dashboards/*.cue) $(wildcard grafana/*.cue) $(wildcard grafana/panel/*.cue)
 	cue export -e 'dashboards["$(subst dashboards/,,$@)"]' ./dashboards > $@
 
-GRAFANA_URL := http://localhost:3001
+GRAFANA_URL := http://localhost:$(GRAFANA_PORT)
 DASHBOARD   := haproxy-backend.json
 .PHONY: post
 post: ## Update a Grafana dashboard from a JSON file
