@@ -4,20 +4,20 @@ import (
 	"github.com/jdbaldry/haproxy-mixin/grafana"
 )
 
-let serverRequests = #_section & {
+let requests = #_section & {
 	_panelSize: {h: 6, w: 8}
 	_row: {id: 100, title: "Requests"}
 	_panels: [serverHTTPResponsesPerSecond, serverConnectionsPerSecond, serverBytes]
 }
 
-let serverErrors = #_section & {
+let errors = #_section & {
 	_origin: y: 6
 	_panelSize: {h: 6, w: 8}
 	_row: {id: 200, title: "Errors"}
 	_panels: [serverResponseErrors, serverConnectionErrors, serverInternalErrors]
 }
 
-let serverDuration = #_section & {
+let duration = #_section & {
 	_origin: y: 12
 	_panelSize: {h: 6, w: 8}
 	_row: {id: 300, title: "Duration"}
@@ -29,7 +29,9 @@ let serverDuration = #_section & {
 		title: "HAProxy / Server"
 		uid:   "HAProxyServer"
 		panels:
-			serverRequests.panels
+			requests.panels +
+			errors.panels +
+			duration.panels
 		templating: {
 			list: [
 				grafana.Template & {
