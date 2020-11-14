@@ -15,6 +15,12 @@ help:
 fmt: ## Format all files
 fmt:
 	cue fmt ./...
+	jsonnetfmt -i mixin.libsonnet
+
+.PHONY: lint
+lint: ## Lint mixin
+lint:
+	mixtool lint mixin.libsonnet
 
 build: ## Build rules and dashboards
 build: alerts/general.yaml rules/rules.yaml dashboards/haproxy-overview.json dashboards/haproxy-backend.json dashboards/haproxy-frontend.json dashboards/haproxy-server.json
