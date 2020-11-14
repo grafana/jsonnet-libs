@@ -463,24 +463,38 @@ serverTable: _tablePanel & {
 
 frontendTable: _tablePanel & {
 	datasource: "prometheus"
-	fieldConfig: defaults: {
-		custom: {displayMode: "color-background"}
-		thresholds: {
-			mode: "absolute"
-			steps: [
-				{color: "rgba(0,0,0,0)", value: null},
-				{color: "red", value:           0},
-				{color: "green", value:         1},
-			]
+	fieldConfig: {
+		defaults: {
+			links: [{
+				title: "Frontend"
+				url:   "/d/HAProxyFrontend/haproxy-frontend?${__all_variables}&var-frontend=${__data.fields.Frontend}"
+			}]
 		}
-		links: [{
-			title: "Frontend"
-			url:   "/d/HAProxyFrontend/haproxy-frontend?${__all_variables}&var-frontend=${__data.fields.Frontend}"
-		}]
-		mappings: [
-			{id: 1, type: 1, text: "Down", value: "0"},
-			{id: 2, type: 1, text: "Up", value:   "1"},
-		]
+		overrides: [{
+			matcher: {id: "byName", options: "Status"}
+			properties: [
+				{
+					id: "mappings"
+					value: [
+						{id: 1, type: 1, text: "Down", value: "0"},
+						{id: 2, type: 1, text: "Up", value:   "1"},
+					]
+				},
+				{
+					id:    "custom.displayMode"
+					value: "color-background"
+				},
+				{
+					id: "thresholds"
+					value: {
+						mode: "absolute"
+						steps: [
+							{color: "rgba(0,0,0,0)", value: null},
+							{color: "red", value:           0},
+							{color: "green", value:         1},
+						]
+					}
+				}]}]
 	}
 	options: sortBy: [{displayName: "Status", desc: false}]
 	targets: [{
@@ -510,24 +524,38 @@ frontendTable: _tablePanel & {
 
 backendTable: _tablePanel & {
 	datasource: "prometheus"
-	fieldConfig: defaults: {
-		custom: {displayMode: "color-background"}
-		thresholds: {
-			mode: "absolute"
-			steps: [
-				{color: "rgba(0,0,0,0)", value: null},
-				{color: "red", value:           0},
-				{color: "green", value:         1},
-			]
+	fieldConfig: {
+		defaults: {
+			links: [{
+				title: "Backend"
+				url:   "/d/HAProxyBackend/haproxy-backend?${__all_variables}&var-backend=${__data.fields.Backend}"
+			}]
 		}
-		links: [{
-			title: "Backend"
-			url:   "/d/HAProxyBackend/haproxy-backend?${__all_variables}&var-backend=${__data.fields.Backend}"
-		}]
-		mappings: [
-			{id: 1, type: 1, text: "Down", value: "0"},
-			{id: 2, type: 1, text: "Up", value:   "1"},
-		]
+		overrides: [{
+			matcher: {id: "byName", options: "Status"}
+			properties: [
+				{
+					id: "mappings"
+					value: [
+						{id: 1, type: 1, text: "Down", value: "0"},
+						{id: 2, type: 1, text: "Up", value:   "1"},
+					]
+				},
+				{
+					id:    "custom.displayMode"
+					value: "color-background"
+				},
+				{
+					id: "thresholds"
+					value: {
+						mode: "absolute"
+						steps: [
+							{color: "rgba(0,0,0,0)", value: null},
+							{color: "red", value:           0},
+							{color: "green", value:         1},
+						]
+					}
+				}]}]
 	}
 	targets: [{
 		expr:    "haproxy_backend_status" + "{\(_baseMatchers)}"
