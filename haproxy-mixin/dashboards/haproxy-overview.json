@@ -239,48 +239,70 @@
             },
             "fieldConfig": {
                 "defaults": {
-                    "custom": {
-                        "displayMode": "color-background"
-                    },
+                    "custom": {},
                     "links": [
                         {
                             "url": "/d/HAProxyFrontend/haproxy-frontend?${__all_variables}\u0026var-frontend=${__data.fields.Frontend}",
                             "title": "Frontend"
                         }
                     ],
-                    "mappings": [
-                        {
-                            "text": "Down",
-                            "value": "0",
-                            "id": 1,
-                            "type": 1
-                        },
-                        {
-                            "text": "Up",
-                            "value": "1",
-                            "id": 2,
-                            "type": 1
-                        }
-                    ],
+                    "mappings": [],
                     "thresholds": {
                         "mode": "absolute",
-                        "steps": [
+                        "steps": []
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Status"
+                        },
+                        "properties": [
                             {
-                                "color": "rgba(0,0,0,0)",
-                                "value": null
+                                "value": [
+                                    {
+                                        "text": "Down",
+                                        "value": "0",
+                                        "id": 1,
+                                        "type": 1
+                                    },
+                                    {
+                                        "text": "Up",
+                                        "value": "1",
+                                        "id": 2,
+                                        "type": 1
+                                    }
+                                ],
+                                "id": "mappings"
                             },
                             {
-                                "color": "red",
-                                "value": 0
+                                "value": "color-background",
+                                "id": "custom.displayMode"
                             },
                             {
-                                "color": "green",
-                                "value": 1
+                                "value": {
+                                    "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "rgba(0,0,0,0)",
+                                            "value": null
+                                        },
+                                        {
+                                            "color": "red",
+                                            "value": 0
+                                        },
+                                        {
+                                            "color": "green",
+                                            "value": 1
+                                        }
+                                    ]
+                                },
+                                "id": "thresholds"
                             }
                         ]
                     }
-                },
-                "overrides": []
+                ]
             },
             "datasource": "prometheus",
             "gridPos": {
@@ -343,48 +365,70 @@
             "options": {},
             "fieldConfig": {
                 "defaults": {
-                    "custom": {
-                        "displayMode": "color-background"
-                    },
+                    "custom": {},
                     "links": [
                         {
                             "url": "/d/HAProxyBackend/haproxy-backend?${__all_variables}\u0026var-backend=${__data.fields.Backend}",
                             "title": "Backend"
                         }
                     ],
-                    "mappings": [
-                        {
-                            "text": "Down",
-                            "value": "0",
-                            "id": 1,
-                            "type": 1
-                        },
-                        {
-                            "text": "Up",
-                            "value": "1",
-                            "id": 2,
-                            "type": 1
-                        }
-                    ],
+                    "mappings": [],
                     "thresholds": {
                         "mode": "absolute",
-                        "steps": [
+                        "steps": []
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Status"
+                        },
+                        "properties": [
                             {
-                                "color": "rgba(0,0,0,0)",
-                                "value": null
+                                "value": [
+                                    {
+                                        "text": "Down",
+                                        "value": "0",
+                                        "id": 1,
+                                        "type": 1
+                                    },
+                                    {
+                                        "text": "Up",
+                                        "value": "1",
+                                        "id": 2,
+                                        "type": 1
+                                    }
+                                ],
+                                "id": "mappings"
                             },
                             {
-                                "color": "red",
-                                "value": 0
+                                "value": "color-background",
+                                "id": "custom.displayMode"
                             },
                             {
-                                "color": "green",
-                                "value": 1
+                                "value": {
+                                    "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "rgba(0,0,0,0)",
+                                            "value": null
+                                        },
+                                        {
+                                            "color": "red",
+                                            "value": 0
+                                        },
+                                        {
+                                            "color": "green",
+                                            "value": 1
+                                        }
+                                    ]
+                                },
+                                "id": "thresholds"
                             }
                         ]
                     }
-                },
-                "overrides": []
+                ]
             },
             "datasource": "prometheus",
             "gridPos": {
