@@ -6,5 +6,5 @@ in pkgs.dockerTools.buildImage {
   name = "haproxy-mixin-build-image";
   created = "now";
   tag = "0.0.1";
-  contents = default.buildTools ++ [ pkgs.bash ];
+  contents = default.buildTools;
 }

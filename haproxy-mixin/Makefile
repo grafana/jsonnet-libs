@@ -54,10 +54,10 @@ post: dashboards/$(DASHBOARD)
 		$(GRAFANA_URL)/api/dashboards/db
 
 .drone/drone.yml: ## Write out YAML drone configuration
-.drone/drone.yml: .drone/drone.cue $(wildcard cue.mod/**/github.com/drone/drone-yaml/yaml/*.cue)
+.drone/drone.yml: .drone/drone.cue .drone/dump_tool.cue $(wildcard cue.mod/**/github.com/drone/drone-yaml/yaml/*.cue)
 	cue fmt $<
 	cue vet -c $<
-	cue export --out=yaml $< > $@
+	cue cmd dump ./.drone/ > $@
 	drone lint $@
 
 .PHONY: haproxy-mixin-build-image
