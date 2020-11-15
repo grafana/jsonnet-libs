@@ -22,7 +22,31 @@ pipelines: [
 					"git diff --exit-code -- .drone/drone.yml",
 				]
 			},
+			{
+				name:  "check formatting"
+				image: build_image
+				commands: [
+					"make fmt",
+					"git diff --exit-code",
+				]
+			},
+			{
+				name:  "check artifacts"
+				image: build_image
+				commands: [
+					"make build",
+					"git diff --exit-code",
+				]
+			},
+			{
+				name:  "lint mixin"
+				image: build_image
+				commands: [
+					"make lint",
+				]
+			},
 		]
+		trigger: event: include: ["pull_request"]
 	},
 	pipeline & {
 		name: "default"
