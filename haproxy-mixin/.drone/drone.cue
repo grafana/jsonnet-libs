@@ -17,7 +17,7 @@ pipelines: [
 				image: "haproxy-mixin-build-image:0.0.1"
 				commands: [
 					"make .drone/drone.yml",
-					"git diff --exit-code",
+					"git diff --exit-code -- .drone/drone.yml",
 				]
 			},
 		]
@@ -30,6 +30,13 @@ pipelines: [
 				image: "haproxy-mixin-build-image:0.0.1"
 				commands: [
 					"make fmt",
+				]
+			},
+			{
+				name:  ".drone/drone.yml"
+				image: "haproxy-mixin-build-image:0.0.1"
+				commands: [
+					"make .drone/drone.yml",
 				]
 			},
 			{
