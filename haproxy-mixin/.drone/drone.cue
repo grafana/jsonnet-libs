@@ -80,5 +80,6 @@ pipelines: [
 				]
 			},
 		]
+		trigger: event: include: ["custom"]
 	},
 ]

@@ -50,4 +50,8 @@ steps:
   image: jdbgrafana/haproxy-mixin-build-image:0.0.1
   commands:
   - make lint
+trigger:
+  event:
+    include:
+    - custom
 
