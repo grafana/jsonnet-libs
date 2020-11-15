@@ -8,13 +8,15 @@ let pipeline = drone.#Pipeline & {
 	platform: {os: "linux", arch: "amd64"}
 }
 
+let build_image = "jdbgrafana/haproxy-mixin-build-image:0.0.1"
+
 pipelines: [
 	pipeline & {
 		name: "pr"
 		steps: [
 			{
 				name:  "check .drone/drone.yml"
-				image: "haproxy-mixin-build-image:0.0.1"
+				image: build_image
 				commands: [
 					"make .drone/drone.yml",
 					"git diff --exit-code -- .drone/drone.yml",
@@ -27,28 +29,28 @@ pipelines: [
 		steps: [
 			{
 				name:  "fmt"
-				image: "haproxy-mixin-build-image:0.0.1"
+				image: build_image
 				commands: [
 					"make fmt",
 				]
 			},
 			{
 				name:  ".drone/drone.yml"
-				image: "haproxy-mixin-build-image:0.0.1"
+				image: build_image
 				commands: [
 					"make .drone/drone.yml",
 				]
 			},
 			{
 				name:  "build"
-				image: "haproxy-mixin-build-image:0.0.1"
+				image: build_image
 				commands: [
 					"make build",
 				]
 			},
 			{
 				name:  "lint"
-				image: "haproxy-mixin-build-image:0.0.1"
+				image: build_image
 				commands: [
 					"make lint",
 				]
