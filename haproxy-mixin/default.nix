@@ -11,16 +11,17 @@ let
     ];
   };
 in {
+  # devTools are packages specifically for development environments.
+  devTools = [ pkgs.docker pkgs.docker-compose ];
+  # buildTools are packages needed for dev and CI builds.
   buildTools = [
-    pkgs.docker-compose
+    pkgs.bash
+    pkgs.cue
     pkgs.drone-cli
+    pkgs.git
+    pkgs.jsonnet
     pkgs.jsonnet-bundler
     pkgs.gnumake
     pkgs.mixtool
-    pkgs.gocode
-    pkgs.golangci-lint
-    pkgs.gotools
-    pkgs.go_1_14
-    pkgs.go-tools
   ];
 }
