@@ -64,3 +64,8 @@ post: dashboards/$(DASHBOARD)
 haproxy-mixin-build-image: ## Build the haproxy-mixin-build-image
 haproxy-mixin-build-image: build-image.nix default.nix $(wildcard nix/*nix)
 	docker load --input $$(nix-build build-image.nix)
+
+.PHONY: inspect-build-image
+inspect-build-image: ## Inspect the haproxy-mixin-build-image
+inspect-build-image:
+	docker save jdbgrafana/haproxy-mixin-build-image | tar x --to-stdout --wildcards '*/layer.tar' | tar tv | sort -nr -k3
