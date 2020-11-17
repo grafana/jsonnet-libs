@@ -69,3 +69,10 @@ haproxy-mixin-build-image: build-image.nix default.nix $(wildcard nix/*nix)
 inspect-build-image: ## Inspect the haproxy-mixin-build-image
 inspect-build-image:
 	docker save jdbgrafana/haproxy-mixin-build-image | tar x --to-stdout --wildcards '*/layer.tar' | tar tv | sort -nr -k3
+
+dist:
+	mkdir -p dist
+
+dist/haproxy-mixin.tar.gz: ## Create a release of the haproxy-mixin artifacts
+dist/haproxy-mixin.tar.gz: $(wildcard dashboards/*.json) $(wildcard alerts/*yaml) $(wildcard rules/*.yaml) | dist
+	tar -c -f $@ $^

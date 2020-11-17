@@ -10,6 +10,17 @@ let pipeline = drone.#Pipeline & {
 
 let build_image = "jdbgrafana/haproxy-mixin-build-image:0.0.1"
 
+let step = {
+	check_artifacts: {
+		name:  "check artifacts"
+		image: build_image
+		commands: [
+			"make build",
+			"git diff --exit-code",
+		]
+	}
+}
+
 pipelines: [
 	pipeline & {
 		name: "pr"
@@ -30,14 +41,7 @@ pipelines: [
 					"git diff --exit-code",
 				]
 			},
-			{
-				name:  "check artifacts"
-				image: build_image
-				commands: [
-					"make build",
-					"git diff --exit-code",
-				]
-			},
+			step.check_artifacts,
 			{
 				name:  "lint mixin"
 				image: build_image
@@ -81,5 +85,27 @@ pipelines: [
 			},
 		]
 		trigger: event: include: ["custom"]
+	},
+	pipeline & {
+		name: "release"
+		steps: [
+			step.check_artifacts,
+			{
+				name:  "make dist/haproxy-mixin.tar.gz"
+				image: build_image
+				commands: [
+					"make dist/haproxy-mixin.tar.gz",
+				]
+			},
+			{
+				name:  "publish"
+				image: "plugins/github-release"
+				settings: {
+					api_key: from_secret: "github_token"
+					files: value: ["dist/*"]
+				}
+			},
+		]
+		trigger: event: include: ["tag"]
 	},
 ]

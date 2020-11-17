@@ -54,4 +54,32 @@ trigger:
   event:
     include:
     - custom
+---
+name: release
+kind: pipeline
+platform:
+  os: linux
+  arch: amd64
+steps:
+- name: check artifacts
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  commands:
+  - make build
+  - git diff --exit-code
+- name: make dist/haproxy-mixin.tar.gz
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  commands:
+  - make dist/haproxy-mixin.tar.gz
+- name: publish
+  image: plugins/github-release
+  settings:
+    files:
+      value:
+      - dist/*
+    api_key:
+      from_secret: github_token
+trigger:
+  event:
+    include:
+    - tag
 
