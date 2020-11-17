@@ -1,7 +1,7 @@
 let
+  common = import ./common.nix;
   sources = import ./nix/sources.nix;
   pkgs = import sources.nixpkgs { };
-  default = import ./default.nix;
 in pkgs.dockerTools.buildImage {
   name = "jdbgrafana/haproxy-mixin-build-image";
   created = "now";
