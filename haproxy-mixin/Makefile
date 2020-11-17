@@ -74,5 +74,5 @@ dist:
 	mkdir -p dist
 
 dist/haproxy-mixin.tar.gz: ## Create a release of the haproxy-mixin artifacts
-dist/haproxy-mixin.tar.gz: $(wildcard dashboards/*.json) $(wildcard alerts/*yaml) $(wildcard rules/*.yaml) | dist
+dist/haproxy-mixin.tar.gz: $(wildcard dashboards/*.json) $(wildcard alerts/*yaml) $(wildcard rules/*.yaml) $(wildcard img/*.png) | dist
 	tar -c -f $@ $^
