@@ -74,8 +74,7 @@ steps:
   image: plugins/github-release
   settings:
     files:
-      value:
-      - dist/*
+      value: dist/*
     api_key:
       from_secret: github_token
 trigger:
