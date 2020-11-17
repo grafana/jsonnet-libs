@@ -16,12 +16,14 @@ in {
   # buildTools are packages needed for dev and CI builds.
   buildTools = [
     pkgs.bash
+    pkgs.coreutils
     pkgs.cue
     pkgs.drone-cli
     pkgs.git
+    pkgs.gnumake
+    pkgs.gnutar
     pkgs.jsonnet
     pkgs.jsonnet-bundler
-    pkgs.gnumake
     pkgs.mixtool
   ];
 }

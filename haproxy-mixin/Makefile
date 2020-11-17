@@ -62,7 +62,7 @@ post: dashboards/$(DASHBOARD)
 
 .PHONY: haproxy-mixin-build-image
 haproxy-mixin-build-image: ## Build the haproxy-mixin-build-image
-haproxy-mixin-build-image: build-image.nix default.nix $(wildcard nix/*nix)
+haproxy-mixin-build-image: build-image.nix common.nix $(wildcard nix/*nix)
 	docker load --input $$(nix-build build-image.nix)
 
 .PHONY: inspect-build-image
