@@ -8,7 +8,7 @@ let pipeline = drone.#Pipeline & {
 	platform: {os: "linux", arch: "amd64"}
 }
 
-let build_image = "jdbgrafana/haproxy-mixin-build-image:0.0.1"
+let build_image = "jdbgrafana/haproxy-mixin-build-image:0.0.2"
 
 let step = {
 	check_artifacts: {

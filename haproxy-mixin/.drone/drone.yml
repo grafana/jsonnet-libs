@@ -5,22 +5,22 @@ platform:
   arch: amd64
 steps:
 - name: check .drone/drone.yml
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make .drone/drone.yml
   - git diff --exit-code -- .drone/drone.yml
 - name: check formatting
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make fmt
   - git diff --exit-code
 - name: check artifacts
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make build
   - git diff --exit-code
 - name: lint mixin
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make lint
 trigger:
@@ -35,19 +35,19 @@ platform:
   arch: amd64
 steps:
 - name: fmt
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make fmt
 - name: .drone/drone.yml
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make .drone/drone.yml
 - name: build
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make build
 - name: lint
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make lint
 trigger:
@@ -62,12 +62,12 @@ platform:
   arch: amd64
 steps:
 - name: check artifacts
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make build
   - git diff --exit-code
 - name: make dist/haproxy-mixin.tar.gz
-  image: jdbgrafana/haproxy-mixin-build-image:0.0.1
+  image: jdbgrafana/haproxy-mixin-build-image:0.0.2
   commands:
   - make dist/haproxy-mixin.tar.gz
 - name: publish
