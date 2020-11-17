@@ -1,10 +1,7 @@
 package drone
 
-import (
-	drone "github.com/drone/drone-yaml/yaml"
-)
-
-let pipeline = drone.#Pipeline & {
+let pipeline = {
+	kind: "pipeline"
 	platform: {os: "linux", arch: "amd64"}
 }
 
@@ -102,7 +99,7 @@ pipelines: [
 				image: "plugins/github-release"
 				settings: {
 					api_key: from_secret: "github_token"
-					files: value:         "Makefile"
+					files: "dist/*"
 				}
 			},
 		]
