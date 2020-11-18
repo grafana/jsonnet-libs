@@ -26,6 +26,7 @@
       },
       server: {
         http_port: 3000,
+        router_logging: true,
         root_url: $._config.grafana_root_url,
       },
       analytics: {
