@@ -252,7 +252,7 @@ k {
 
     // rbac creates a service account, role and role binding with the given
     // name and rules.
-    rbac(name, rules)::
+    rbac(name, rules, pullSecrets={}, annotations={})::
       if $._config.enable_rbac
       then {
         local clusterRole = $.rbac.v1beta1.clusterRole,
@@ -261,7 +261,14 @@ k {
         local serviceAccount = $.core.v1.serviceAccount,
 
         service_account:
-          serviceAccount.new(name),
+          serviceAccount.new(name)
+          + (
+            if (pullSecrets == {}) then {}
+            else serviceAccount.withImagePullSecrets(pullSecrets)
+          ) + (
+            if (annotations == {}) then {}
+            else serviceAccount.metadata.withAnnotationsMixin(annotations)
+          ),
 
         cluster_role:
           clusterRole.new() +
@@ -283,7 +290,7 @@ k {
       }
       else {},
 
-    namespacedRBAC(name, rules)::
+    namespacedRBAC(name, rules, pullSecrets={}, annotations={})::
       if $._config.enable_rbac
       then {
         local role = $.rbac.v1beta1.role,
@@ -293,7 +300,14 @@ k {
 
         service_account:
           serviceAccount.new(name) +
-          serviceAccount.mixin.metadata.withNamespace($._config.namespace),
+          serviceAccount.mixin.metadata.withNamespace($._config.namespace)
+          + (
+            if (pullSecrets == {}) then {}
+            else serviceAccount.withImagePullSecrets(pullSecrets)
+          ) + (
+            if (annotations == {}) then {}
+            else serviceAccount.metadata.withAnnotationsMixin(annotations)
+          ),
 
         role:
           role.new() +
