@@ -78,7 +78,7 @@
       if self.cluster_name in self.alertmanager_clusters then
         self.alertmanager_clusters[self.cluster_name]
       else if std.length(self.alertmanager_clusters) == 0 then
-        { global: true, replicas: 1 }
+        { global: false, replicas: 1 }
       else
         { global: true, replicas: 0 },
 
