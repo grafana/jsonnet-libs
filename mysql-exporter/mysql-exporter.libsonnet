@@ -10,13 +10,20 @@ local deployment = k.apps.v1.deployment;
     mysql_password: error 'must specify mysql password',
     deployment_name: error 'must specify deployment name',
     namespace: error 'must specify namespace',
+    fqdn: '',
   },
 
   image:: 'prom/mysqld-exporter:v0.12.1',
 
   mysqld_exporter_container::
     container.new('mysqld-exporter', $.image) +
-    container.withEnvMap({
+    container.withEnvMap(if std.length($._config.fqdn) > 0 then {
+      DATA_SOURCE_NAME: '%s:%s@tcp(%s:3306)/' % [
+        $._config.mysql_user,
+        $._config.mysql_password,
+        $._config.fqdn,
+      ],
+    } else {
       DATA_SOURCE_NAME: '%s:%s@tcp(%s.%s.svc.cluster.local:3306)/' % [
         $._config.mysql_user,
         $._config.mysql_password,
