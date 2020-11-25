@@ -13,10 +13,17 @@ local deployment = k.apps.v1.deployment;
   },
 
   image:: 'prom/mysqld-exporter:v0.12.1',
+  mysql_fqdn:: '',
 
   mysqld_exporter_container::
     container.new('mysqld-exporter', $.image) +
-    container.withEnvMap({
+    container.withEnvMap(if std.length($.mysql_fqdn) > 0 then {
+      DATA_SOURCE_NAME: '%s:%s@tcp(%s:3306)/' % [
+        $._config.mysql_user,
+        $._config.mysql_password,
+        $.mysql_fqdn,
+      ],
+    } else {
       DATA_SOURCE_NAME: '%s:%s@tcp(%s.%s.svc.cluster.local:3306)/' % [
         $._config.mysql_user,
         $._config.mysql_password,
