@@ -49,6 +49,13 @@
         for service in std.set($._config.admin_services, function(s) s.url)
       ],
       locations: std.join('\n', self.location_stanzas),
+      link_stanzas: [
+        |||
+          <li><a href="/%(path)s%(params)s">%(title)s</a></li>
+        ||| % ({ params: '' } + service)
+        for service in $._config.admin_services
+      ],
+      links: std.join('\n', self.link_stanzas),
     };
 
     configMap.new('nginx-config') +
@@ -76,10 +83,21 @@
             listen 80;
             %(locations)s
             location ~ /(index.html)? {
-              root /var/www/html;
+              root /etc/nginx;
             }
           }
         }
       ||| % ($._config + vars),
+      'index.html': |||
+        <html>
+          <head><title>Admin</title></head>
+          <body>
+            <h1>Admin</h1>
+            <ul>
+              %(links)s
+            </ul>
+          </body>
+        </html>
+      ||| % vars,
     }),
 }

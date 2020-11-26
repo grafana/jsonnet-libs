@@ -11,7 +11,6 @@
   nginx_deployment:
     deployment.new('nginx', 1, [$.nginx_container]) +
     $.util.configMapVolumeMount($.nginx_config_map, '/etc/nginx') +
-    $.util.configMapVolumeMount($.nginx_html, '/var/www/html') +
     $.util.podPriority('critical'),
 
   nginx_service:
