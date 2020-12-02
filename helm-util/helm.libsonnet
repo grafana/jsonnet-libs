@@ -60,23 +60,24 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
       d.arg('patch', d.T.object),
     ]
   ),
-  patchKubernetesObjects(object, patch)::
+  patchKubernetesObjects(object, patch, kind=null, name=null)::
     if std.isObject(object)
     then
       // a Kubernetes object is characterized by having an apiVersion and Kind
       if std.objectHas(object, 'apiVersion') && std.objectHas(object, 'kind')
+         && (kind == null || object.kind == kind) && (name == null || object.metadata.name == name)
       then object + patch
       else
         std.mapWithKey(
           function(key, obj)
-            this.patchKubernetesObjects(obj, patch),
+            this.patchKubernetesObjects(obj, patch, kind, name),
           object
         )
     else if std.isArray(object)
     then
       std.map(
         function(obj)
-          this.patchKubernetesObjects(obj, patch),
+          this.patchKubernetesObjects(obj, patch, kind, name),
         object
       )
     else object,
