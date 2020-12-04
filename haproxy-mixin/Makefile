@@ -26,16 +26,14 @@ build: ## Build rules and dashboards
 build: alerts/general.yaml rules/rules.yaml dashboards/haproxy-overview.json dashboards/haproxy-backend.json dashboards/haproxy-frontend.json dashboards/haproxy-server.json
 
 alerts/general.yaml: ## Export the general alert rules as YAML
-alerts/general.yaml: alerts/general.cue $(wildcard cue.mod/**/github.com/prometheus/prometheus/pkg/rulefmt/*.cue)
-	cue fmt $<
-	cue vet -c $<
-	cue export --out=yaml $< > $@
+alerts/general.yaml: alerts/general.jsonnet
+	jsonnetfmt -i $<
+	jsonnet $< > $@
 
 rules/rules.yaml: ## Export recording rules rules as YAML
-rules/rules.yaml: rules/rules.cue $(wildcard cue.mod/**/github.com/prometheus/prometheus/pkg/rulefmt/*.cue)
-	cue fmt $<
-	cue vet -c $<
-	cue export --out=yaml $< > $@
+rules/rules.yaml: rules/rules.jsonnet
+	jsonnetfmt -i $<
+	jsonnet $< > $@
 
 dashboards/%.json: ## Export a Grafana dashboard definition as JSON
 dashboards/%.json: $(wildcard dashboards/*.cue) $(wildcard grafana/*.cue) $(wildcard grafana/panel/*.cue)
