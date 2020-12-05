@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/dashboard-spec.git",
+          "subdir": "_gen/7.0/jsonnet"
+        }
+      },
+      "version": "6f443d809a30ff03c6a3ae8a4a1b1c3bee9f9753",
+      "sum": "xwQ2pWH8zExUDZL2QSPHMHDioUgWZGiXp16t61zkLKs="
+    }
+  ],
+  "legacyImports": false
+}
