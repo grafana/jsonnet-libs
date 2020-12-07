@@ -38,7 +38,7 @@ rules/rules.yaml: rules/rules.jsonnet
 	$(JSONNET) $< > $@
 
 dashboards/%.json: ## Export a Grafana dashboard definition as JSON
-dashboards/%.json: dashboards/%.jsonnet $(wildcard dashboards/*.libsonnet) | $(wildcard vendor/github.com/grafana/dashboard-spec/_gen/7.0/**/*.libsonnet)
+dashboards/%.json: dashboards/%.jsonnet dashboards/dashboards.libsonnet | $(wildcard vendor/github.com/grafana/dashboard-spec/_gen/7.0/**/*.libsonnet)
 	$(MAKE) fmt JSONNET_FILES="$?"
 	$(JSONNET) $< > $@
 
