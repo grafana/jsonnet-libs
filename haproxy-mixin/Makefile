@@ -43,10 +43,8 @@ dashboards/%.json: dashboards/%.jsonnet dashboards/dashboards.libsonnet | $(wild
 	$(JSONNET) $< > $@
 
 .drone/drone.yml: ## Write out YAML drone configuration
-.drone/drone.yml: .drone/drone.cue .drone/dump_tool.cue $(wildcard cue.mod/**/github.com/drone/drone-yaml/yaml/*.cue)
-	cue fmt $<
-	cue vet -c $<
-	cue cmd dump ./.drone/ > $@
+.drone/drone.yml: .drone/drone.jsonnet
+	drone jsonnet --source $< --target $@ --format --stream
 	drone lint $@
 
 .PHONY: haproxy-mixin-build-image
