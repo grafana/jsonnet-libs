@@ -712,7 +712,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
           },
           {
             expr: $.queries.serverBytesOutRate,
-            legendFormat: 'in{instance="{{instance}}", job="{{job}}", backend="{{proxy}}", server="{{server}}"}',
+            legendFormat: 'out{instance="{{instance}}", job="{{job}}", backend="{{proxy}}", server="{{server}}"}',
           },
         ]),
         seriesOverrides: [{ alias: '/.*out.*/', transform: 'negative-Y' }],
