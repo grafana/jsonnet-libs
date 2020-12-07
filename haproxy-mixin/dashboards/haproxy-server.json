@@ -162,7 +162,7 @@
             },
             {
                "expr": "rate(haproxy_server_bytes_out_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$backend\",server=~\"$server\"}[$__rate_interval])",
-               "legendFormat": "in{instance=\"{{instance}}\", job=\"{{job}}\", backend=\"{{proxy}}\", server=\"{{server}}\"}",
+               "legendFormat": "out{instance=\"{{instance}}\", job=\"{{job}}\", backend=\"{{proxy}}\", server=\"{{server}}\"}",
                "refID": "B"
             }
          ],
