@@ -45,7 +45,7 @@
           "subdir": "doc/alertmanager-mixin"
         }
       },
-      "version": "mixin"
+      "version": "master"
     },
     {
       "source": {
