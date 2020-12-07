@@ -379,9 +379,13 @@
     },
     targets: [
       {
-        expr: 'sum by (status) (label_replace(label_replace(rate(' + selector + '[$__interval]),'
-              + ' "status", "${1}xx", "' + statusLabelName + '", "([0-9]).."),'
-              + ' "status", "${1}", "' + statusLabelName + '", "([a-z]+)"))',
+        expr:
+          |||
+            sum by (status) (
+              label_replace(label_replace(rate(%s[$__interval]),
+              "status", "${1}xx", "%s", "([0-9]).."),
+              "status", "${1}", "%s", "([a-z]+)"))
+          ||| % [selector, statusLabelName, statusLabelName],
         format: 'time_series',
         intervalFactor: 2,
         legendFormat: '{{status}}',
