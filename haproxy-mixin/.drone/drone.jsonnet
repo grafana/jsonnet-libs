@@ -3,7 +3,7 @@ local pipeline = {
   platform: { os: 'linux', arch: 'amd64' },
 };
 
-local build_image = 'jdbgrafana/haproxy-mixin-build-image:0.0.2';
+local build_image = 'jdbgrafana/haproxy-mixin-build-image:0.0.3';
 
 local step = {
   check_artifacts: {

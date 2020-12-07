@@ -5,6 +5,6 @@ let
 in pkgs.dockerTools.buildImage {
   name = "jdbgrafana/haproxy-mixin-build-image";
   created = "now";
-  tag = "0.0.2";
+  tag = "0.0.3";
   contents = common.buildTools;
 }
