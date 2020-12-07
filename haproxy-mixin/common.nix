@@ -19,6 +19,7 @@ in {
     pkgs.coreutils
     pkgs.cue
     pkgs.drone-cli
+    pkgs.findutils
     pkgs.git
     pkgs.gnumake
     pkgs.gnutar
