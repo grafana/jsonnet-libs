@@ -1,8 +1,11 @@
 local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.libsonnet';
 
 {
-  // Opinionated label matchers for Prometheus queries.
   _config+:: {
+    // Grafana Prometheus data source name.
+    datasource: 'prometheus',
+
+    // Opinionated label matchers for Prometheus queries.
     instanceMatcher: 'instance=~"$instance"',
     jobMatcher: 'job=~"$job"',
     frontendMatcher: 'proxy=~"$frontend"',
@@ -15,8 +18,10 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
   },
 
   util:: {
+    addRefIds(targets):: std.mapWithIndex(function(i, e) e { refID: std.char(std.codepoint('A') + i) }, targets),
+
     // section is used to group multiple panels with common dimensions under a single uncollapsed row.
-    section(panels, row, prevSection=null, panelSize={ h: 4, w: 6 })::
+    section(row, panels, prevSection=null, panelSize={ h: 4, w: 6 })::
       local y = if prevSection != null then prevSection[std.length(prevSection) - 1].gridPos.y + 1 else 0;
       local id = if prevSection != null then prevSection[std.length(prevSection) - 1].id + 1 else 0;
       local dashboardWidth = 24;
@@ -38,275 +43,687 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       }, panels),
   },
 
-  // queries is a map of Prometheus queries as functions that take a label set as input so that they can be individually configured and composed.
   queries:: {
-    processUptime(matchers=$._config.baseMatchers):: 'time() - haproxy_process_start_time_seconds{%s}' % matchers,
-    processCurrentConnectionsCount(matchers=$._config.baseMatchers):: 'haproxy_process_current_connections{%s}' % matchers,
-    processMemoryAllocated(matchers=$._config.baseMatchers):: 'haproxy_process_pool_allocated_bytes{%s}' % matchers,
-    processMemoryUsed(matchers=$._config.baseMatchers):: 'haproxy_process_pool_used_bytes{%s}' % matchers,
-    processThreadCount(matchers=$._config.baseMatchers):: 'haproxy_process_nbthread{%s}' % matchers,
-    processCount(matchers=$._config.baseMatchers):: 'haproxy_process_nbproc{%s}' % matchers,
-    processMaxConnectionsCount(matchers=$._config.baseMatchers):: 'haproxy_process_max_connections{%s}' % matchers,
-    processMaxFDs(matchers=$._config.baseMatchers):: 'haproxy_process_max_fds{%s}' % matchers,
-    processMaxMemory(matchers=$._config.baseMatchers):: 'haproxy_process_max_memory_bytes{%s}' % matchers,
-    processMaxSockets(matchers=$._config.baseMatchers):: 'haproxy_process_max_sockets{%s}' % matchers,
-    backendStatus(matchers=$._config.baseMatchers):: 'haproxy_backend_status{%s}' % matchers,
-    frontendStatus(matchers=$._config.baseMatchers):: 'haproxy_frontend_status{%s}' % matchers,
+    processUptime: 'time() - haproxy_process_start_time_seconds{%s}' % $._config.baseMatchers,
+    processCurrentConnections: 'haproxy_process_current_connections{%s}' % $._config.baseMatchers,
+    processMemoryAllocated: 'haproxy_process_pool_allocated_bytes{%s}' % $._config.baseMatchers,
+    processMemoryUsed: 'haproxy_process_pool_used_bytes{%s}' % $._config.baseMatchers,
+    processMemoryFailures: 'haproxy_process_pool_failures_total{%s}' % $._config.baseMatchers,
+    processThreads: 'haproxy_process_nbthread{%s}' % $._config.baseMatchers,
+    processCount: 'haproxy_process_nbproc{%s}' % $._config.baseMatchers,
+    processConnectionLimit: 'haproxy_process_max_connections{%s}' % $._config.baseMatchers,
+    processFdLimit: 'haproxy_process_max_fds{%s}' % $._config.baseMatchers,
+    processMemoryLimit: 'haproxy_process_max_memory_bytes{%s}' % $._config.baseMatchers,
+    processSocketLimit: 'haproxy_process_max_sockets{%s}' % $._config.baseMatchers,
+    processPipeLimit: 'haproxy_process_max_pipes{%s}' % $._config.baseMatchers,
+    processConnectionRateLimit: 'haproxy_process_limit_connection_rate{%s}' % $._config.baseMatchers,
+    processSessionRateLimit: 'haproxy_process_limit_session_rate{%s}' % $._config.baseMatchers,
+    processSslRateLimit: 'haproxy_process_limit_ssl_rate{%s}' % $._config.baseMatchers,
+    backendStatus: 'haproxy_backend_status{%s}' % $._config.baseMatchers,
+    frontendStatus: 'haproxy_frontend_status{%s}' % $._config.baseMatchers,
+    serverStatus: 'haproxy_server_status{%s}' % $._config.backendMatchers,
+    backendBytesInRate: 'rate(haproxy_backend_bytes_in_total{%s}[$__rate_interval])' % $._config.backendMatchers,
+    backendBytesOutRate: 'rate(haproxy_backend_bytes_out_total{%s}[$__rate_interval])' % $._config.backendMatchers,
+    backendHttpRequestRate: 'rate(haproxy_backend_http_requests_total{%s}[$__rate_interval])' % $._config.backendMatchers,
+    backendMaxQueueDuration: 'haproxy_backend_max_queue_time_seconds{%s}' % $._config.backendMatchers,
+    backendMaxConnectDuration: 'haproxy_backend_max_connect_time_seconds{%s}' % $._config.backendMatchers,
+    backendMaxResponseDuration: 'haproxy_backend_max_response_time_seconds{%s}' % $._config.backendMatchers,
+    backendMaxTotalDuration: 'haproxy_backend_max_total_time_seconds{%s}' % $._config.backendMatchers,
+    backendAverageQueueDuration: 'haproxy_backend_queue_time_average_seconds{%s}' % $._config.backendMatchers,
+    backendAverageConnectDuration: 'haproxy_backend_connect_time_average_seconds{%s}' % $._config.backendMatchers,
+    backendAverageResponseDuration: 'haproxy_backend_response_time_average_seconds{%s}' % $._config.backendMatchers,
+    backendAverageTotalDuration: 'haproxy_backend_total_time_average_seconds{%s}' % $._config.backendMatchers,
+    backendConnectionRate: 'rate(haproxy_backend_connection_attempts_total{%s}[$__rate_interval])' % $._config.backendMatchers,
+    backendResponseErrorRate: 'rate(haproxy_backend_response_errors_total{%s}[$__rate_interval])' % $._config.backendMatchers,
+    backendConnectionErrorRate: 'rate(haproxy_backend_connection_errors_total{%s}[$__rate_interval])' % $._config.backendMatchers,
+    backendInternalErrorRate: 'rate(haproxy_backend_internal_errors_total{%s}[$__rate_interval])' % $._config.backendMatchers,
+    frontendRequestErrorRate: 'rate(haproxy_frontend_request_errors_total{%s}[$__rate_interval])' % $._config.frontendMatchers,
+    frontendHttpRequestRate: 'rate(haproxy_frontend_http_requests_total{%s}[$__rate_interval])' % $._config.frontendMatchers,
+    frontendConnectionRate: 'rate(haproxy_frontend_connections_total{%s}[$__rate_interval])' % $._config.frontendMatchers,
+    frontendInternalErrorRate: 'rate(haproxy_frontend_internal_errors_total{%s}[$__rate_interval])' % $._config.frontendMatchers,
+    frontendBytesInRate: 'rate(haproxy_frontend_bytes_in_total{%s}[$__rate_interval])' % $._config.frontendMatchers,
+    frontendBytesOutRate: 'rate(haproxy_frontend_bytes_out_total{%s}[$__rate_interval])' % $._config.frontendMatchers,
+    frontendCacheSuccessRate: |||
+      rate(haproxy_frontend_http_cache_lookups_total{%s}[5m])
+      /
+      rate(haproxy_frontend_http_cache_hits_total{%s}[5m])
+    ||| % $._config.frontendMatchers,
+    serverHttpResponseRate: 'rate(haproxy_server_http_responses_total{%s}[$__rate_interval])' % $._config.serverMatchers,
+    serverMaxQueueDuration: 'haproxy_server_max_queue_time_seconds{%s}' % $._config.serverMatchers,
+    serverMaxConnectDuration: 'haproxy_server_max_connect_time_seconds{%s}' % $._config.serverMatchers,
+    serverMaxResponseDuration: 'haproxy_server_max_response_time_seconds{%s}' % $._config.serverMatchers,
+    serverMaxTotalDuration: 'haproxy_server_max_total_time_seconds{%s}' % $._config.serverMatchers,
+    serverAverageQueueDuration: 'haproxy_server_queue_time_average_seconds{%s}' % $._config.serverMatchers,
+    serverAverageConnectDuration: 'haproxy_server_connect_time_average_seconds{%s}' % $._config.serverMatchers,
+    serverAverageResponseDuration: 'haproxy_server_response_time_average_seconds{%s}' % $._config.serverMatchers,
+    serverAverageTotalDuration: 'haproxy_server_total_time_average_seconds{%s}' % $._config.serverMatchers,
+    serverConnectionRate: 'rate(haproxy_server_connection_attempts_total{%s}[$__rate_interval])' % $._config.serverMatchers,
+    serverResponseErrorRate: 'rate(haproxy_server_response_errors_total{%s}[$__rate_interval])' % $._config.serverMatchers,
+    serverConnectionErrorRate: 'rate(haproxy_server_connection_errors_total{%s}[$__rate_interval])' % $._config.serverMatchers,
+    serverInternalErrorRate: 'rate(haproxy_server_internal_errors_total{%s}[$__rate_interval])' % $._config.serverMatchers,
+    serverBytesInRate: 'rate(haproxy_server_bytes_in_total{%s}[$__rate_interval])' % $._config.serverMatchers,
+    serverBytesOutRate: 'rate(haproxy_server_bytes_out_total{%s}[$__rate_interval])' % $._config.serverMatchers,
   },
 
-  // panels composes queries into panels with best practice configuration.
+  // panels compose queries into useful Grafana panels.
   panels:: {
-    stat:: {
-      // new creates a new stat panel from a data source and array of queries.
-      new(datasource, queries=[])::
-        g.panel.stat.new(datasource, queries) + {
-          targets:
-            local A = std.codepoint('A');
-            std.mapWithIndex(function(i, query) { expr: query, refID: std.char(A + i) }, queries),
-        },
-
-      // infoMixin colors stat panel fields blue so as to represent information that has neutral connotations.
-      infoMixin:: {
-        fieldConfig: {
-          defaults: {
-            thresholds: {
-              mode: 'absolute',
-              steps: [{ color: 'blue', value: null }],
-            },
+    // infoMixin colors stat panel fields blue so as to represent information that has neutral connotations.
+    infoMixin:: {
+      fieldConfig+: {
+        defaults+: {
+          thresholds+: {
+            mode+: 'absolute',
+            steps: [{ color: 'blue', value: null }],
           },
         },
       },
     },
 
-    processUptime(datasource, queries=[$.queries.processUptime()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
+    // zeroUnsetMixin relabels the value '0' to 'unset' to indicate the configuration value has not been set.
+    zeroUnsetMixin:: {
+      fieldConfig+: {
+        defaults+: {
+          mappings: [{ id: 1, type: 1, text: 'unset', value: 0 }],
+        },
+      },
+    },
+
+    // statusUpDownMixin relabels up and down status values and colors them for easy recognition.
+    statusUpDownMixin: {
+      fieldConfig+: {
+        overrides+: [{
+          matcher+: { id: 'byName', options: 'Status' },
+          properties: [
+            {
+              id: 'mappings',
+              value: [
+                { id: 1, type: 1, text: 'Down', value: '0' },
+                { id: 2, type: 1, text: 'Up', value: '1' },
+              ],
+            },
+            {
+              id: 'custom.displayMode',
+              value: 'color-background',
+            },
+            {
+              id: 'thresholds',
+              value: {
+                mode: 'absolute',
+                steps: [
+                  { color: 'rgba(0,0,0,0)', value: null },
+                  { color: 'red', value: 0 },
+                  { color: 'green', value: 1 },
+                ],
+              },
+            },
+          ],
+        }],
+      },
+    },
+
+    processUptime:
+      g.panel.stat.new()
+      + $.panels.infoMixin {
         title: 'Uptime',
+        datasource: $._config.datasource,
         description: 'Process uptime',
-        fieldConfig+: {
-          defaults+: {
-            unit: 's',
-          },
-        },
+        fieldConfig+: { defaults+: { unit: 's' } },
+        targets: $.util.addRefIds([{ expr: $.queries.processUptime }]),
       },
 
-    processCurrentConnections(datasource, queries=[$.queries.processCurrentConnectionsCount()])::
-      $.panels.stat.new(datasource, queries) + {
+    processCurrentConnections:
+      g.panel.stat.new()
+      + $.panels.infoMixin {
         title: 'Current connections',
+        datasource: $._config.datasource,
         description: 'Number of active sessions',
+        targets: $.util.addRefIds([{ expr: $.queries.processCurrentConnections }]),
       },
 
-    processMemoryAllocated(datasource, queries=[$.queries.processMemoryAllocated()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
+    processMemoryAllocated:
+      g.panel.stat.new()
+      + $.panels.infoMixin {
         title: 'Memory allocated',
+        datasource: $._config.datasource,
         description: 'Total amount of memory allocated in pools',
-        fieldConfig+: {
-          defaults+: {
-            unit: 'bytes',
-          },
-        },
+        fieldConfig+: { defaults+: { unit: 'bytes' } },
+        targets: $.util.addRefIds([{ expr: $.queries.processMemoryAllocated }]),
       },
 
-    processMemoryUsed(datasource, queries=[$.queries.processMemoryUsed()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
+    processMemoryUsed:
+      g.panel.stat.new()
+      + $.panels.infoMixin {
         title: 'Memory used',
+        datasource: $._config.datasource,
         description: 'Total amount of memory used in pools',
-        fieldConfig+: {
-          defaults+: {
-            unit: 'bytes',
-          },
-        },
+        fieldConfig+: { defaults+: { unit: 'bytes' } },
+        targets: $.util.addRefIds([{ expr: $.queries.processMemoryUsed }]),
       },
 
-    processThreads(datasource, queries=[$.queries.processThreadCount()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
+    processThreads:
+      g.panel.stat.new()
+      + $.panels.infoMixin {
         title: 'Threads',
+        datasource: $._config.datasource,
         description: 'Configured number of threads',
+        options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processThreads }]),
       },
 
-    processCount(datasource, queries=[$.queries.processCount()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
+    processCount:
+      g.panel.stat.new()
+      + $.panels.infoMixin {
         title: 'Processes',
+        datasource: $._config.datasource,
         description: 'Configured number of processes',
+        options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processCount }]),
       },
 
-    processConnectionsLimit(datasource, queries=[$.queries.processMaxConnectionsCount()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
+    processConnectionLimit:
+      g.panel.stat.new()
+      + $.panels.infoMixin
+      + $.panels.zeroUnsetMixin {
         title: 'Connections limit',
+        datasource: $._config.datasource,
         description: 'Configured maximum number of concurrent connections',
         options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processConnectionLimit }]),
       },
 
-    processMemoryLimit(datasource, queries=[$.queries.processMaxMemory()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
+    processMemoryLimit:
+      g.panel.stat.new()
+      + $.panels.infoMixin
+      + $.panels.zeroUnsetMixin {
         title: 'Memory limit',
+        datasource: $._config.datasource,
         description: 'Per-process memory limit',
-        fieldConfig+: {
-          defaults+: {
-            unit: 'bytes',
-            mappings: [{ id: 1, type: 1, text: 'unset', value: 0 }],
-          },
-        },
+        fieldConfig+: { defaults+: { unit: 'bytes' } },
         options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processMemoryLimit }]),
       },
 
-    processFDLimit(datasource, queries=[$.queries.processMaxFDs()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
+    processFdLimit:
+      g.panel.stat.new()
+      + $.panels.infoMixin
+      + $.panels.zeroUnsetMixin {
         title: 'File descriptors limit',
+        datasource: $._config.datasource,
         description: 'Maximum number of open file descriptors',
+        options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processFdLimit }]),
+      },
+
+    processSocketLimit:
+      g.panel.stat.new()
+      + $.panels.infoMixin
+      + $.panels.zeroUnsetMixin {
+        title: 'Socket limit',
+        datasource: $._config.datasource,
+        description: 'Maximum number of open sockets',
+        options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processSocketLimit }]),
+      },
+
+    processPipeLimit:
+      g.panel.stat.new()
+      + $.panels.infoMixin
+      + $.panels.zeroUnsetMixin {
+        title: 'Pipe limit',
+        datasource: $._config.datasource,
+        description: 'Maximum number of pipes',
+        options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processPipeLimit }]),
+      },
+
+    processConnectionRateLimit:
+      g.panel.stat.new()
+      + $.panels.infoMixin
+      + $.panels.zeroUnsetMixin {
+        title: 'Connection rate limit',
+        datasource: $._config.datasource,
+        description: 'Maximum number of connections per second',
+        options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processConnectionRateLimit }]),
+      },
+
+    processSessionRateLimit:
+      g.panel.stat.new()
+      + $.panels.infoMixin
+      + $.panels.zeroUnsetMixin {
+        title: 'Session rate limit',
+        datasource: $._config.datasource,
+        description: 'Maximum number of sessions per second',
+        options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processSessionRateLimit }]),
+      },
+
+    processSslRateLimit:
+      g.panel.stat.new()
+      + $.panels.infoMixin
+      + $.panels.zeroUnsetMixin {
+        title: 'SSL session rate limit',
+        datasource: $._config.datasource,
+        description: 'Maximum number of SSL sessions per second',
+        options+: { graphMode: 'none' },
+        targets: $.util.addRefIds([{ expr: $.queries.processSslRateLimit }]),
+      },
+
+    frontendStatus:
+      g.panel.table.new()
+      + $.panels.statusUpDownMixin {
         fieldConfig+: {
           defaults+: {
-            mappings: [{ id: 1, type: 1, text: 'unset', value: '0' }],
+            links: [{
+              title: 'Frontend',
+              datasource: $._config.datasource,
+              url: '/d/HAProxyFrontend/haproxy-frontend?${__all_variables}&var-frontend=${__data.fields.Frontend}',
+            }],
           },
-        },
-        options+: { graphMode: 'none' },
-      },
 
-    processSocketLimit(datasource, queries=[$.queries.processMaxSockets()])::
-      $.panels.stat.new(datasource, queries)
-      + $.panels.stat.infoMixin {
-        title: 'Socket limit',
-        description: 'Maximum number of open sockets',
-      },
-
-    frontendStatus(datasource): g.panel.table.new(datasource) {
-      datasource: 'prometheus',
-      fieldConfig: {
-        defaults: {
-          links: [{
-            title: 'Frontend',
-            url: '/d/HAProxyFrontend/haproxy-frontend?${__all_variables}&var-frontend=${__data.fields.Frontend}',
-          }],
         },
-        overrides: [{
-          matcher: { id: 'byName', options: 'Status' },
-          properties: [
-            {
-              id: 'mappings',
-              value: [
-                { id: 1, type: 1, text: 'Down', value: '0' },
-                { id: 2, type: 1, text: 'Up', value: '1' },
-              ],
-            },
-            {
-              id: 'custom.displayMode',
-              value: 'color-background',
-            },
-            {
-              id: 'thresholds',
-              value: {
-                mode: 'absolute',
-                steps: [
-                  { color: 'rgba(0,0,0,0)', value: null },
-                  { color: 'red', value: 0 },
-                  { color: 'green', value: 1 },
-                ],
+        options: { sortBy: [{ displayName: 'Status', desc: false }] },
+        targets: $.util.addRefIds([{
+          expr: $.queries.frontendStatus,
+          format: 'table',
+          instant: true,
+        }]),
+        transformations: [
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {
+                Time: true,
+                __name__: true,
+              },
+              renameByName: {
+                instance: 'Instance',
+                job: 'Job',
+                proxy: 'Frontend',
+                Value: 'Status',
               },
             },
-          ],
-        }],
+          },
+        ],
       },
-      options: { sortBy: [{ displayName: 'Status', desc: false }] },
-      targets: [{
-        expr: $.queries.frontendStatus(),
-        refId: 'A',
-        format: 'table',
-        instant: true,
-      }],
-      transformations: [
-        {
-          id: 'organize',
-          options: {
-            excludeByName: {
-              Time: true,
-              __name__: true,
-            },
-            renameByName: {
-              instance: 'Instance',
-              job: 'Job',
-              proxy: 'Frontend',
-              Value: 'Status',
-            },
+
+    backendStatus:
+      g.panel.table.new()
+      + $.panels.statusUpDownMixin {
+        fieldConfig+: {
+          defaults+: {
+            links: [{
+              title: 'Backend',
+              datasource: $._config.datasource,
+              url: '/d/HAProxyBackend/haproxy-backend?${__all_variables}&var-backend=${__data.fields.Backend}',
+            }],
           },
         },
-      ],
-    },
-
-    backendStatus(datasource):: g.panel.table.new(datasource) {
-      datasource: 'prometheus',
-      fieldConfig: {
-        defaults: {
-          links: [{
-            title: 'Backend',
-            url: '/d/HAProxyBackend/haproxy-backend?${__all_variables}&var-backend=${__data.fields.Backend}',
-          }],
-        },
-        overrides: [{
-          matcher: { id: 'byName', options: 'Status' },
-          properties: [
-            {
-              id: 'mappings',
-              value: [
-                { id: 1, type: 1, text: 'Down', value: '0' },
-                { id: 2, type: 1, text: 'Up', value: '1' },
-              ],
-            },
-            {
-              id: 'custom.displayMode',
-              value: 'color-background',
-            },
-            {
-              id: 'thresholds',
-              value: {
-                mode: 'absolute',
-                steps: [
-                  { color: 'rgba(0,0,0,0)', value: null },
-                  { color: 'red', value: 0 },
-                  { color: 'green', value: 1 },
-                ],
+        targets: $.util.addRefIds([{
+          expr: $.queries.backendStatus,
+          format: 'table',
+          instant: true,
+        }]),
+        transformations: [
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {
+                Time: true,
+                __name__: true,
+              },
+              renameByName: {
+                instance: 'Instance',
+                job: 'Job',
+                proxy: 'Backend',
+                Value: 'Status',
               },
             },
-          ],
-        }],
+          },
+        ],
       },
-      targets: [{
-        expr: $.queries.backendStatus(),
-        refId: 'A',
-        format: 'table',
-        instant: true,
-      }],
-      transformations: [
-        {
-          id: 'organize',
-          options: {
-            excludeByName: {
-              Time: true,
-              __name__: true,
-            },
-            renameByName: {
-              instance: 'Instance',
-              job: 'Job',
-              proxy: 'Backend',
-              Value: 'Status',
-            },
+
+    serverStatus::
+      g.panel.table.new()
+      + $.panels.statusUpDownMixin {
+        fieldConfig+: {
+          defaults+: {
+            links: [{
+              title: 'Server',
+              datasource: $._config.datasource,
+              url: '/d/HAProxyServer/haproxy-server?${__all_variables}&var-server=${__data.fields.Server}',
+            }],
           },
         },
-      ],
-    },
+        options: { sortBy: [{ displayName: 'Status', desc: false }] },
+        targets: $.util.addRefIds([{
+          expr: $.queries.serverStatus,
+          format: 'table',
+          instant: true,
+        }]),
+        transformations: [
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {
+                Time: true,
+                __name__: true,
+              },
+              renameByName: {
+                instance: 'Instance',
+                job: 'Job',
+                proxy: 'Backend',
+                server: 'Server',
+                Value: 'Status',
+              },
+            },
+          },
+        ],
+      },
+
+    frontendCacheSuccessRate:
+      g.panel.graph.new() + {
+        title: 'Cache success',
+        datasource: $._config.datasource,
+        description: 'Percentage of HTTP cache hits.',
+        fieldConfig: { defaults: { unit: 'reqps' } },
+        targets: $.util.addRefIds([{ expr: $.queries.frontendCacheSuccessRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    frontendRequestErrorRate:
+      g.panel.graph.new() + {
+        title: 'Requests',
+        datasource: $._config.datasource,
+        description: 'Request errors per second',
+        targets: $.util.addRefIds([{ expr: $.queries.frontendRequestErrorRate }]),
+        stack: true,
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    frontendHttpRequestRate:
+      g.panel.graph.new() + {
+        title: 'HTTP',
+        datasource: $._config.datasource,
+        description: 'HTTP requests per second',
+        fieldConfig: { defaults: { unit: 'reqps' } },
+        targets: $.util.addRefIds([{ expr: $.queries.frontendHttpRequestRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    frontendConnectionRate:
+      g.panel.graph.new() + {
+        title: 'Connections',
+        datasource: $._config.datasource,
+        description: 'Connections per second',
+        fieldConfig: { defaults: { unit: 'connps' } },
+        targets: $.util.addRefIds([{ expr: $.queries.frontendConnectionRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    frontendInternalErrorRate:
+      g.panel.graph.new() + {
+        title: 'Internal',
+        datasource: $._config.datasource,
+        description: 'Internal errors per second',
+        targets: $.util.addRefIds([{ expr: $.queries.frontendInternalErrorRate }]),
+        stack: true,
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    frontendBytes:
+      g.panel.graph.new() + {
+        title: 'Bytes in/out',
+        datasource: $._config.datasource,
+        fieldConfig: { defaults: { unit: 'bytes' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.frontendBytesInRate,
+            legendFormat: 'in{instance="{{instance}}", job="{{job}}", frontend="{{proxy}}"}',
+          },
+          {
+            expr: $.queries.frontendBytesOutRate,
+            legendFormat: 'out{instance="{{instance}}", job="{{job}}", frontend="{{proxy}}"}',
+          },
+        ]),
+        seriesOverrides: [{ alias: '/.*out.*/', transform: 'negative-Y' }],
+      },
+
+    backendHttpRequestRate:
+      g.panel.graph.new() + {
+        title: 'HTTP',
+        datasource: $._config.datasource,
+        description: 'HTTP requests per second. There will be no data for backends using tcp mode.',
+        fieldConfig: { defaults: { unit: 'reqps' } },
+        targets: $.util.addRefIds([{ expr: $.queries.backendHttpRequestRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    backendMaxDuration:
+      g.panel.graph.new() {
+        title: 'Max duration',
+        datasource: $._config.datasource,
+        description: 'Max duration for last 1024 succesful connections',
+        fieldConfig: { defaults: { unit: 's' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.backendMaxQueueDuration,
+          },
+          {
+            expr: $.queries.backendMaxConnectDuration,
+          },
+          {
+            expr: $.queries.backendMaxResponseDuration,
+          },
+          {
+            expr: $.queries.backendMaxTotalDuration,
+          },
+        ]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    backendAverageDuration:
+      g.panel.graph.new() {
+        title: 'Average duration',
+        datasource: $._config.datasource,
+        description: 'Average duration for last 1024 succesful connections',
+        fieldConfig: { defaults: { unit: 's' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.backendAverageQueueDuration,
+          },
+          {
+            expr: $.queries.backendAverageConnectDuration,
+          },
+          {
+            expr: $.queries.backendAverageResponseDuration,
+          },
+          {
+            expr: $.queries.backendAverageTotalDuration,
+          },
+          {
+            expr: $.queries.backendAverageQueueDuration,
+          },
+        ]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    backendConnectionRate:
+      g.panel.graph.new() {
+        title: 'Connection',
+        datasource: $._config.datasource,
+        description: 'Attempted connections per second',
+        fieldConfig: { defaults: { unit: 'connps' } },
+        targets: $.util.addRefIds([{ expr: $.queries.backendConnectionRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    backendResponseErrorRate:
+      g.panel.graph.new() {
+        title: 'HTTP',
+        datasource: $._config.datasource,
+        description: 'HTTP response errors per second',
+        targets: $.util.addRefIds([{ expr: $.queries.backendResponseErrorRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    backendConnectionErrorRate:
+      g.panel.graph.new() {
+        title: 'Connection',
+        datasource: $._config.datasource,
+        description: 'Connection errors per second',
+        targets: $.util.addRefIds([{ expr: $.queries.backendConnectionErrorRate }]),
+        stack: true,
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    backendInternalErrorRate:
+      g.panel.graph.new() {
+        title: 'Internal',
+        datasource: $._config.datasource,
+        description: 'Internal errors per second',
+        targets: $.util.addRefIds([{ expr: $.queries.backendInternalErrorRate }]),
+        stack: true,
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    backendBytes:
+      g.panel.graph.new() {
+        title: 'Bytes in/out',
+        datasource: $._config.datasource,
+        fieldConfig: { defaults: { unit: 'bytes' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.backendBytesInRate,
+            legendFormat: 'in{instance="{{instance}}", job="{{job}}", backend="{{proxy}}"}',
+          },
+          {
+            expr: $.queries.backendBytesOutRate,
+            legendFormat: 'out{instance="{{instance}}", job="{{job}}", backend="{{proxy}}"}',
+          },
+        ]),
+        seriesOverrides: [{ alias: '/.*out.*/', transform: 'negative-Y' }],
+      },
+
+    serverHttpResponseRate:
+      g.panel.graph.new() + {
+        title: 'HTTP Response',
+        datasource: $._config.datasource,
+        description: 'HTTP responses per second. There will be no data for servers using tcp mode.',
+        fieldConfig: { defaults: { unit: 'reqps' } },
+        targets: $.util.addRefIds([{ expr: $.queries.serverHttpResponseRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    serverMaxDuration:
+      g.panel.graph.new() + {
+        title: 'Max duration',
+        datasource: $._config.datasource,
+        description: 'Max duration for last 1024 succesful connections',
+        fieldConfig: { defaults: { unit: 's' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.serverMaxQueueDuration,
+          },
+          {
+            expr: $.queries.serverMaxConnectDuration,
+          },
+          {
+            expr: $.queries.serverMaxResponseDuration,
+          },
+          {
+            expr: $.queries.serverMaxTotalDuration,
+          },
+        ]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    serverAverageDuration:
+      g.panel.graph.new() + {
+        title: 'Average duration',
+        datasource: $._config.datasource,
+        description: 'Average duration for last 1024 succesful connections',
+        fieldConfig: { defaults: { unit: 's' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.serverAverageQueueDuration,
+          },
+          {
+            expr: $.queries.serverAverageConnectDuration,
+          },
+          {
+            expr: $.queries.serverAverageResponseDuration,
+          },
+          {
+            expr: $.queries.serverAverageTotalDuration,
+          },
+        ]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    serverConnectionRate:
+      g.panel.graph.new() + {
+        title: 'Connection',
+        datasource: $._config.datasource,
+        description: 'Attempted connections per second',
+        fieldConfig: { defaults: { unit: 'connps' } },
+        targets: $.util.addRefIds([{ expr: $.queries.serverConnectionRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    serverResponseErrorRate:
+      g.panel.graph.new() + {
+        title: 'HTTP Response',
+        datasource: $._config.datasource,
+        description: 'Response errors per second',
+        targets: $.util.addRefIds([{ expr: $.queries.serverResponseErrorRate }]),
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    serverConnectionErrorRate:
+      g.panel.graph.new() + {
+        title: 'Connection',
+        datasource: $._config.datasource,
+        description: 'Connection errors per second',
+        targets: $.util.addRefIds([{ expr: $.queries.serverConnectionErrorRate }]),
+        stack: true,
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    serverInternalErrorRate:
+      g.panel.graph.new() + {
+        title: 'Internal',
+        datasource: $._config.datasource,
+        description: 'Internal errors per second',
+        targets: $.util.addRefIds([{ expr: $.queries.serverInternalErrorRate }]),
+        stack: true,
+        yaxes: [{ min: 0 }, { min: 0 }],
+      },
+
+    serverBytes:
+      g.panel.graph.new() + {
+        title: 'Bytes in/out',
+        datasource: $._config.datasource,
+        fieldConfig: { defaults: { unit: 'bytes' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.serverBytesInRate,
+            legendFormat: 'in{instance="{{instance}}", job="{{job}}", backend="{{proxy}}", server="{{server}}"}',
+          },
+          {
+            expr: $.queries.serverBytesOutRate,
+            legendFormat: 'in{instance="{{instance}}", job="{{job}}", backend="{{proxy}}", server="{{server}}"}',
+          },
+        ]),
+        seriesOverrides: [{ alias: '/.*out.*/', transform: 'negative-Y' }],
+      },
   },
 
   // templates can be used as Grafana template variables.
   templates:: {
     datasource: g.template.datasource.new() + {
       name: 'datasource',
-      query: 'prometheus',
+      query: $._config.datasource,
       current: {
         selected: true,
         text: 'prometheus',
@@ -315,7 +732,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     },
     instance: g.template.query.new() + {
       name: 'instance',
-      datasource: 'prometheus',
+      datasource: $._config.datasource,
       definition: 'label_values(haproxy_process_start_time_seconds, instance)',
       includeAll: true,
       multi: true,
@@ -324,11 +741,38 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     },
     job: g.template.query.new() + {
       name: 'job',
-      datasource: 'prometheus',
+      datasource: $._config.datasource,
       definition: 'label_values(haproxy_process_start_time_seconds, job)',
       includeAll: true,
       multi: true,
       query: 'label_values(haproxy_process_start_time_seconds, job)',
+      refresh: 1,
+    },
+    backend: g.template.query.new() + {
+      name: 'backend',
+      datasource: $._config.datasource,
+      definition: 'label_values(haproxy_backend_status, proxy)',
+      includeAll: true,
+      multi: true,
+      query: 'label_values(haproxy_backend_status, proxy)',
+      refresh: 1,
+    },
+    frontend: g.template.query.new() + {
+      name: 'frontend',
+      datasource: $._config.datasource,
+      definition: 'label_values(haproxy_frontend_status, proxy)',
+      includeAll: true,
+      multi: true,
+      query: 'label_values(haproxy_frontend_status, proxy)',
+      refresh: 1,
+    },
+    server: g.template.query.new() + {
+      name: 'server',
+      datasource: $._config.datasource,
+      definition: 'label_values(haproxy_server_status, server)',
+      includeAll: true,
+      multi: true,
+      query: 'label_values(haproxy_server_status, server)',
       refresh: 1,
     },
   },

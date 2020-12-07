@@ -1,592 +1,369 @@
 {
-    "time": {
-        "from": "now-6h",
-        "to": "now"
-    },
-    "title": "HAProxy / Frontend",
-    "panels": [
-        {
-            "title": "Requests",
-            "id": 100,
-            "type": "row",
-            "datasource": "default",
-            "gridPos": {
-                "x": 0,
-                "y": 0,
-                "h": 1,
-                "w": 24
-            },
-            "targets": [],
-            "transparent": false,
-            "collapse": true,
-            "collapsed": false,
-            "panels": [],
-            "showTitle": true,
-            "titleSize": "h6"
-        },
-        {
-            "title": "HTTP",
-            "thresholds": {
-                "mode": "absolute",
-                "steps": []
-            },
-            "id": 101,
-            "type": "graph",
-            "options": {
-                "dataLinks": []
-            },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "fieldConfig": {
-                "defaults": {
-                    "custom": {},
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": []
-                    },
-                    "unit": "reqps"
-                },
-                "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "hiddenSeries": false,
-            "legend": {
-                "max": false,
-                "min": false,
-                "show": true,
-                "values": true,
-                "avg": false,
-                "current": false,
-                "rightSide": false,
-                "total": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "percentage": false,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "tooltip": {
-                "shared": true,
-                "sort": 2,
-                "value_type": "individual"
-            },
-            "yaxes": [
-                {
-                    "max": null,
-                    "min": 0,
-                    "show": true,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1
-                },
-                {
-                    "max": null,
-                    "min": 0,
-                    "show": true,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1
-                }
-            ],
-            "yaxis": {
-                "align": false,
-                "alignLevel": 0
-            },
-            "datasource": "prometheus",
-            "description": "HTTP requests per second",
-            "gridPos": {
-                "x": 0,
-                "y": 0,
-                "h": 6,
-                "w": 8
-            },
-            "targets": [
-                {
-                    "expr": "rate(haproxy_frontend_http_requests_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
-                    "legendFormat": "",
-                    "interval": "",
-                    "refId": "A"
-                }
-            ],
-            "transparent": false
-        },
-        {
-            "title": "Connections",
-            "thresholds": {
-                "mode": "absolute",
-                "steps": []
-            },
-            "id": 102,
-            "type": "graph",
-            "options": {
-                "dataLinks": []
-            },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "fieldConfig": {
-                "defaults": {
-                    "custom": {},
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": []
-                    },
-                    "unit": "connps"
-                },
-                "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "hiddenSeries": false,
-            "legend": {
-                "max": false,
-                "min": false,
-                "show": true,
-                "values": true,
-                "avg": false,
-                "current": false,
-                "rightSide": false,
-                "total": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "percentage": false,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "tooltip": {
-                "shared": true,
-                "sort": 2,
-                "value_type": "individual"
-            },
-            "yaxes": [
-                {
-                    "max": null,
-                    "min": 0,
-                    "show": true,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1
-                },
-                {
-                    "max": null,
-                    "min": 0,
-                    "show": true,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1
-                }
-            ],
-            "yaxis": {
-                "align": false,
-                "alignLevel": 0
-            },
-            "datasource": "prometheus",
-            "description": "Connections per second",
-            "gridPos": {
-                "x": 8,
-                "y": 0,
-                "h": 6,
-                "w": 8
-            },
-            "targets": [
-                {
-                    "expr": "rate(haproxy_frontend_connections_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
-                    "legendFormat": "",
-                    "interval": "",
-                    "refId": "A"
-                }
-            ],
-            "transparent": false
-        },
-        {
-            "title": "Bytes in/out",
-            "thresholds": {
-                "mode": "absolute",
-                "steps": []
-            },
-            "id": 103,
-            "type": "graph",
-            "options": {
-                "dataLinks": []
-            },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "fieldConfig": {
-                "defaults": {
-                    "custom": {},
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": []
-                    },
-                    "unit": "bytes"
-                },
-                "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "hiddenSeries": false,
-            "legend": {
-                "max": false,
-                "min": false,
-                "show": true,
-                "values": true,
-                "avg": false,
-                "current": false,
-                "rightSide": false,
-                "total": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "percentage": false,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [
-                {
-                    "alias": "/.*out.*/",
-                    "transform": "negative-Y"
-                }
-            ],
-            "spaceLength": 10,
-            "stack": false,
-            "steppedLine": false,
-            "tooltip": {
-                "shared": true,
-                "sort": 2,
-                "value_type": "individual"
-            },
-            "yaxis": {
-                "align": false,
-                "alignLevel": 0
-            },
-            "datasource": "prometheus",
-            "gridPos": {
-                "x": 16,
-                "y": 0,
-                "h": 6,
-                "w": 8
-            },
-            "targets": [
-                {
-                    "expr": "rate(haproxy_frontend_bytes_in_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
-                    "legendFormat": "in{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}",
-                    "interval": "",
-                    "refId": "A"
-                },
-                {
-                    "expr": "rate(haproxy_frontend_bytes_out_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
-                    "legendFormat": "out{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}",
-                    "interval": "",
-                    "refId": "B"
-                }
-            ],
-            "transparent": false
-        },
-        {
-            "title": "Errors",
-            "id": 200,
-            "type": "row",
-            "datasource": "default",
-            "gridPos": {
-                "x": 0,
-                "y": 6,
-                "h": 1,
-                "w": 24
-            },
-            "targets": [],
-            "transparent": false,
-            "collapse": true,
-            "collapsed": false,
-            "panels": [],
-            "showTitle": true,
-            "titleSize": "h6"
-        },
-        {
-            "title": "Requests",
-            "thresholds": {
-                "mode": "absolute",
-                "steps": []
-            },
-            "id": 201,
-            "type": "graph",
-            "options": {
-                "dataLinks": []
-            },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "fieldConfig": {
-                "defaults": {
-                    "custom": {},
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": []
-                    }
-                },
-                "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "hiddenSeries": false,
-            "legend": {
-                "max": false,
-                "min": false,
-                "show": true,
-                "values": true,
-                "avg": false,
-                "current": false,
-                "rightSide": false,
-                "total": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "percentage": false,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": true,
-            "steppedLine": false,
-            "tooltip": {
-                "shared": true,
-                "sort": 2,
-                "value_type": "individual"
-            },
-            "yaxes": [
-                {
-                    "max": null,
-                    "min": 0,
-                    "show": true,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1
-                },
-                {
-                    "max": null,
-                    "min": 0,
-                    "show": true,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1
-                }
-            ],
-            "yaxis": {
-                "align": false,
-                "alignLevel": 0
-            },
-            "datasource": "prometheus",
-            "description": "Request errors per second",
-            "gridPos": {
-                "x": 0,
-                "y": 6,
-                "h": 6,
-                "w": 8
-            },
-            "targets": [
-                {
-                    "expr": "rate(haproxy_frontend_request_errors_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
-                    "legendFormat": "",
-                    "interval": "",
-                    "refId": "a"
-                }
-            ],
-            "transparent": false
-        },
-        {
-            "title": "Internal",
-            "thresholds": {
-                "mode": "absolute",
-                "steps": []
-            },
-            "id": 202,
-            "type": "graph",
-            "options": {
-                "dataLinks": []
-            },
-            "bars": false,
-            "dashLength": 10,
-            "dashes": false,
-            "fieldConfig": {
-                "defaults": {
-                    "custom": {},
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": []
-                    }
-                },
-                "overrides": []
-            },
-            "fill": 1,
-            "fillGradient": 0,
-            "hiddenSeries": false,
-            "legend": {
-                "max": false,
-                "min": false,
-                "show": true,
-                "values": true,
-                "avg": false,
-                "current": false,
-                "rightSide": false,
-                "total": false
-            },
-            "lines": true,
-            "linewidth": 1,
-            "nullPointMode": "null",
-            "percentage": false,
-            "points": false,
-            "renderer": "flot",
-            "seriesOverrides": [],
-            "spaceLength": 10,
-            "stack": true,
-            "steppedLine": false,
-            "tooltip": {
-                "shared": true,
-                "sort": 2,
-                "value_type": "individual"
-            },
-            "yaxes": [
-                {
-                    "max": null,
-                    "min": 0,
-                    "show": true,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1
-                },
-                {
-                    "max": null,
-                    "min": 0,
-                    "show": true,
-                    "format": "short",
-                    "label": null,
-                    "logBase": 1
-                }
-            ],
-            "yaxis": {
-                "align": false,
-                "alignLevel": 0
-            },
-            "datasource": "prometheus",
-            "description": "Internal errors per second",
-            "gridPos": {
-                "x": 8,
-                "y": 6,
-                "h": 6,
-                "w": 8
-            },
-            "targets": [
-                {
-                    "expr": "rate(haproxy_frontend_internal_errors_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
-                    "legendFormat": "",
-                    "interval": "",
-                    "refId": "A"
-                }
-            ],
-            "transparent": false
-        }
-    ],
-    "editable": true,
-    "graphTooltip": 0,
-    "schemaVersion": 25,
-    "style": "dark",
-    "tags": [],
-    "templating": {
-        "list": [
-            {
-                "name": "datasource",
-                "type": "datasource",
-                "options": [],
-                "refresh": 1,
-                "hide": 0,
-                "includeAll": false,
-                "multi": false,
-                "query": "prometheus",
-                "regex": "",
-                "skipUrlSync": false
-            },
-            {
-                "name": "instance",
-                "type": "query",
-                "options": [],
-                "sort": 0,
-                "datasource": "prometheus",
-                "refresh": 1,
-                "hide": 0,
-                "includeAll": true,
-                "multi": true,
-                "query": "label_values(haproxy_process_start_time_seconds, instance)",
-                "regex": "",
-                "skipUrlSync": false,
-                "definition": "label_values(haproxy_process_start_time_seconds, instance)",
-                "useTags": false
-            },
-            {
-                "name": "job",
-                "type": "query",
-                "options": [],
-                "sort": 0,
-                "datasource": "prometheus",
-                "refresh": 1,
-                "hide": 0,
-                "includeAll": true,
-                "multi": true,
-                "query": "label_values(haproxy_process_start_time_seconds, job)",
-                "regex": "",
-                "skipUrlSync": false,
-                "definition": "label_values(haproxy_process_start_time_seconds, job)",
-                "useTags": false
-            },
-            {
-                "name": "frontend",
-                "type": "query",
-                "options": [],
-                "sort": 0,
-                "datasource": "prometheus",
-                "refresh": 1,
-                "hide": 0,
-                "includeAll": true,
-                "multi": true,
-                "query": "label_values(haproxy_frontend_status, proxy)",
-                "regex": "",
-                "skipUrlSync": false,
-                "definition": "label_values(haproxy_frontend_status, proxy)",
-                "useTags": false
+   "editable": true,
+   "graphTooltip": 0,
+   "panels": [
+      {
+         "collapse": true,
+         "collapsed": false,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 0
+         },
+         "id": 0,
+         "showTitle": true,
+         "title": "Requests",
+         "titleSize": "h6",
+         "type": "row"
+      },
+      {
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "HTTP requests per second",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "reqps"
             }
-        ]
-    },
-    "timepicker": {
-        "hidden": false,
-        "refresh_intervals": [
-            "5s",
-            "10s",
-            "30s",
-            "1m",
-            "5m",
-            "15m",
-            "30m",
-            "1h",
-            "2h",
-            "1d"
-        ]
-    },
-    "uid": "HAProxyFrontend"
+         },
+         "fill": 1,
+         "fillGradient": 0,
+         "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 0,
+            "y": 0
+         },
+         "hiddenSeries": false,
+         "id": 1,
+         "lines": true,
+         "linewidth": 1,
+         "nullPointMode": "null",
+         "percentage": false,
+         "points": false,
+         "renderer": "flot",
+         "spaceLength": 10,
+         "stack": false,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "rate(haproxy_frontend_http_requests_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "refID": "A"
+            }
+         ],
+         "title": "HTTP",
+         "tooltip": {
+            "value_type": "individual"
+         },
+         "transparent": false,
+         "type": "graph",
+         "yaxes": [
+            {
+               "min": 0
+            },
+            {
+               "min": 0
+            }
+         ]
+      },
+      {
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "Connections per second",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "connps"
+            }
+         },
+         "fill": 1,
+         "fillGradient": 0,
+         "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 8,
+            "y": 0
+         },
+         "hiddenSeries": false,
+         "id": 2,
+         "lines": true,
+         "linewidth": 1,
+         "nullPointMode": "null",
+         "percentage": false,
+         "points": false,
+         "renderer": "flot",
+         "spaceLength": 10,
+         "stack": false,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "rate(haproxy_frontend_connections_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "refID": "A"
+            }
+         ],
+         "title": "Connections",
+         "tooltip": {
+            "value_type": "individual"
+         },
+         "transparent": false,
+         "type": "graph",
+         "yaxes": [
+            {
+               "min": 0
+            },
+            {
+               "min": 0
+            }
+         ]
+      },
+      {
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "bytes"
+            }
+         },
+         "fill": 1,
+         "fillGradient": 0,
+         "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 16,
+            "y": 0
+         },
+         "hiddenSeries": false,
+         "id": 3,
+         "lines": true,
+         "linewidth": 1,
+         "nullPointMode": "null",
+         "percentage": false,
+         "points": false,
+         "renderer": "flot",
+         "seriesOverrides": [
+            {
+               "alias": "/.*out.*/",
+               "transform": "negative-Y"
+            }
+         ],
+         "spaceLength": 10,
+         "stack": false,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "rate(haproxy_frontend_bytes_in_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "legendFormat": "in{instance=\"{{instance}}\", job=\"{{job}}\", frontend=\"{{proxy}}\"}",
+               "refID": "A"
+            },
+            {
+               "expr": "rate(haproxy_frontend_bytes_out_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "legendFormat": "out{instance=\"{{instance}}\", job=\"{{job}}\", frontend=\"{{proxy}}\"}",
+               "refID": "B"
+            }
+         ],
+         "title": "Bytes in/out",
+         "tooltip": {
+            "value_type": "individual"
+         },
+         "transparent": false,
+         "type": "graph"
+      },
+      {
+         "collapse": true,
+         "collapsed": false,
+         "gridPos": {
+            "h": 1,
+            "w": 24,
+            "x": 0,
+            "y": 1
+         },
+         "id": 4,
+         "showTitle": true,
+         "title": "Errors",
+         "titleSize": "h6",
+         "type": "row"
+      },
+      {
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "Request errors per second",
+         "fill": 1,
+         "fillGradient": 0,
+         "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 0,
+            "y": 1
+         },
+         "hiddenSeries": false,
+         "id": 5,
+         "lines": true,
+         "linewidth": 1,
+         "nullPointMode": "null",
+         "percentage": false,
+         "points": false,
+         "renderer": "flot",
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "rate(haproxy_frontend_request_errors_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "refID": "A"
+            }
+         ],
+         "title": "Requests",
+         "tooltip": {
+            "value_type": "individual"
+         },
+         "transparent": false,
+         "type": "graph",
+         "yaxes": [
+            {
+               "min": 0
+            },
+            {
+               "min": 0
+            }
+         ]
+      },
+      {
+         "bars": false,
+         "dashLength": 10,
+         "dashes": false,
+         "datasource": "prometheus",
+         "description": "Internal errors per second",
+         "fill": 1,
+         "fillGradient": 0,
+         "gridPos": {
+            "h": 6,
+            "w": 8,
+            "x": 8,
+            "y": 1
+         },
+         "hiddenSeries": false,
+         "id": 6,
+         "lines": true,
+         "linewidth": 1,
+         "nullPointMode": "null",
+         "percentage": false,
+         "points": false,
+         "renderer": "flot",
+         "spaceLength": 10,
+         "stack": true,
+         "steppedLine": false,
+         "targets": [
+            {
+               "expr": "rate(haproxy_frontend_internal_errors_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "refID": "A"
+            }
+         ],
+         "title": "Internal",
+         "tooltip": {
+            "value_type": "individual"
+         },
+         "transparent": false,
+         "type": "graph",
+         "yaxes": [
+            {
+               "min": 0
+            },
+            {
+               "min": 0
+            }
+         ]
+      }
+   ],
+   "schemaVersion": 25,
+   "style": "dark",
+   "tags": [ ],
+   "templating": {
+      "list": [
+         {
+            "current": {
+               "selected": true,
+               "text": "prometheus",
+               "value": "prometheus"
+            },
+            "hide": 0,
+            "includeAll": false,
+            "multi": false,
+            "name": "datasource",
+            "query": "prometheus",
+            "refresh": 1,
+            "skipUrlSync": false,
+            "type": "datasource"
+         },
+         {
+            "datasource": "prometheus",
+            "definition": "label_values(haproxy_process_start_time_seconds, instance)",
+            "hide": 0,
+            "includeAll": true,
+            "multi": true,
+            "name": "instance",
+            "query": "label_values(haproxy_process_start_time_seconds, instance)",
+            "refresh": 1,
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query",
+            "useTags": false
+         },
+         {
+            "datasource": "prometheus",
+            "definition": "label_values(haproxy_process_start_time_seconds, job)",
+            "hide": 0,
+            "includeAll": true,
+            "multi": true,
+            "name": "job",
+            "query": "label_values(haproxy_process_start_time_seconds, job)",
+            "refresh": 1,
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query",
+            "useTags": false
+         },
+         {
+            "datasource": "prometheus",
+            "definition": "label_values(haproxy_frontend_status, proxy)",
+            "hide": 0,
+            "includeAll": true,
+            "multi": true,
+            "name": "frontend",
+            "query": "label_values(haproxy_frontend_status, proxy)",
+            "refresh": 1,
+            "skipUrlSync": false,
+            "sort": 0,
+            "type": "query",
+            "useTags": false
+         }
+      ]
+   },
+   "time": {
+      "from": "now-6h",
+      "to": "now"
+   },
+   "timepicker": {
+      "hidden": false,
+      "refresh_intervals": [
+         "5s",
+         "10s",
+         "30s",
+         "1m",
+         "5m",
+         "15m",
+         "30m",
+         "1h",
+         "2h",
+         "1d"
+      ]
+   },
+   "title": "HAProxy / Frontend",
+   "uid": "HAProxyFrontend"
 }

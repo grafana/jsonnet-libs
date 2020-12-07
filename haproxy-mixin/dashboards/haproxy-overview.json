@@ -54,6 +54,19 @@
       {
          "datasource": "prometheus",
          "description": "Number of active sessions",
+         "fieldConfig": {
+            "defaults": {
+               "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                     {
+                        "color": "blue",
+                        "value": null
+                     }
+                  ]
+               }
+            }
+         },
          "gridPos": {
             "h": 4,
             "w": 6,
@@ -155,11 +168,12 @@
          "type": "row"
       },
       {
-         "datasource": "prometheus",
+         "datasource": "default",
          "fieldConfig": {
             "defaults": {
                "links": [
                   {
+                     "datasource": "prometheus",
                      "title": "Frontend",
                      "url": "/d/HAProxyFrontend/haproxy-frontend?${__all_variables}&var-frontend=${__data.fields.Frontend}"
                   }
@@ -237,7 +251,7 @@
                "expr": "haproxy_frontend_status{instance=~\"$instance\",job=~\"$job\"}",
                "format": "table",
                "instant": true,
-               "refId": "A"
+               "refID": "A"
             }
          ],
          "transformations": [
@@ -276,11 +290,12 @@
          "type": "row"
       },
       {
-         "datasource": "prometheus",
+         "datasource": "default",
          "fieldConfig": {
             "defaults": {
                "links": [
                   {
+                     "datasource": "prometheus",
                      "title": "Backend",
                      "url": "/d/HAProxyBackend/haproxy-backend?${__all_variables}&var-backend=${__data.fields.Backend}"
                   }
@@ -350,7 +365,7 @@
                "expr": "haproxy_backend_status{instance=~\"$instance\",job=~\"$job\"}",
                "format": "table",
                "instant": true,
-               "refId": "A"
+               "refID": "A"
             }
          ],
          "transformations": [
@@ -411,6 +426,9 @@
             "y": 3
          },
          "id": 10,
+         "options": {
+            "graphMode": "none"
+         },
          "targets": [
             {
                "expr": "haproxy_process_nbproc{instance=~\"$instance\",job=~\"$job\"}",
@@ -444,6 +462,9 @@
             "y": 3
          },
          "id": 11,
+         "options": {
+            "graphMode": "none"
+         },
          "targets": [
             {
                "expr": "haproxy_process_nbthread{instance=~\"$instance\",job=~\"$job\"}",
@@ -459,6 +480,14 @@
          "description": "Configured maximum number of concurrent connections",
          "fieldConfig": {
             "defaults": {
+               "mappings": [
+                  {
+                     "id": 1,
+                     "text": "unset",
+                     "type": 1,
+                     "value": 0
+                  }
+               ],
                "thresholds": {
                   "mode": "absolute",
                   "steps": [
@@ -500,7 +529,7 @@
                      "id": 1,
                      "text": "unset",
                      "type": 1,
-                     "value": "0"
+                     "value": 0
                   }
                ],
                "thresholds": {
@@ -539,6 +568,14 @@
          "description": "Maximum number of open sockets",
          "fieldConfig": {
             "defaults": {
+               "mappings": [
+                  {
+                     "id": 1,
+                     "text": "unset",
+                     "type": 1,
+                     "value": 0
+                  }
+               ],
                "thresholds": {
                   "mode": "absolute",
                   "steps": [
@@ -557,6 +594,9 @@
             "y": 7
          },
          "id": 14,
+         "options": {
+            "graphMode": "none"
+         },
          "targets": [
             {
                "expr": "haproxy_process_max_sockets{instance=~\"$instance\",job=~\"$job\"}",
@@ -609,6 +649,182 @@
             }
          ],
          "title": "Memory limit",
+         "transparent": false,
+         "type": "stat"
+      },
+      {
+         "datasource": "prometheus",
+         "description": "Maximum number of pipes",
+         "fieldConfig": {
+            "defaults": {
+               "mappings": [
+                  {
+                     "id": 1,
+                     "text": "unset",
+                     "type": 1,
+                     "value": 0
+                  }
+               ],
+               "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                     {
+                        "color": "blue",
+                        "value": null
+                     }
+                  ]
+               }
+            }
+         },
+         "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 12,
+            "y": 7
+         },
+         "id": 16,
+         "options": {
+            "graphMode": "none"
+         },
+         "targets": [
+            {
+               "expr": "haproxy_process_max_pipes{instance=~\"$instance\",job=~\"$job\"}",
+               "refID": "A"
+            }
+         ],
+         "title": "Pipe limit",
+         "transparent": false,
+         "type": "stat"
+      },
+      {
+         "datasource": "prometheus",
+         "description": "Maximum number of connections per second",
+         "fieldConfig": {
+            "defaults": {
+               "mappings": [
+                  {
+                     "id": 1,
+                     "text": "unset",
+                     "type": 1,
+                     "value": 0
+                  }
+               ],
+               "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                     {
+                        "color": "blue",
+                        "value": null
+                     }
+                  ]
+               }
+            }
+         },
+         "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 18,
+            "y": 7
+         },
+         "id": 17,
+         "options": {
+            "graphMode": "none"
+         },
+         "targets": [
+            {
+               "expr": "haproxy_process_limit_connection_rate{instance=~\"$instance\",job=~\"$job\"}",
+               "refID": "A"
+            }
+         ],
+         "title": "Connection rate limit",
+         "transparent": false,
+         "type": "stat"
+      },
+      {
+         "datasource": "prometheus",
+         "description": "Maximum number of sessions per second",
+         "fieldConfig": {
+            "defaults": {
+               "mappings": [
+                  {
+                     "id": 1,
+                     "text": "unset",
+                     "type": 1,
+                     "value": 0
+                  }
+               ],
+               "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                     {
+                        "color": "blue",
+                        "value": null
+                     }
+                  ]
+               }
+            }
+         },
+         "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 0,
+            "y": 11
+         },
+         "id": 18,
+         "options": {
+            "graphMode": "none"
+         },
+         "targets": [
+            {
+               "expr": "haproxy_process_limit_session_rate{instance=~\"$instance\",job=~\"$job\"}",
+               "refID": "A"
+            }
+         ],
+         "title": "Session rate limit",
+         "transparent": false,
+         "type": "stat"
+      },
+      {
+         "datasource": "prometheus",
+         "description": "Maximum number of SSL sessions per second",
+         "fieldConfig": {
+            "defaults": {
+               "mappings": [
+                  {
+                     "id": 1,
+                     "text": "unset",
+                     "type": 1,
+                     "value": 0
+                  }
+               ],
+               "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                     {
+                        "color": "blue",
+                        "value": null
+                     }
+                  ]
+               }
+            }
+         },
+         "gridPos": {
+            "h": 4,
+            "w": 6,
+            "x": 6,
+            "y": 11
+         },
+         "id": 19,
+         "options": {
+            "graphMode": "none"
+         },
+         "targets": [
+            {
+               "expr": "haproxy_process_limit_ssl_rate{instance=~\"$instance\",job=~\"$job\"}",
+               "refID": "A"
+            }
+         ],
+         "title": "SSL session rate limit",
          "transparent": false,
          "type": "stat"
       }
