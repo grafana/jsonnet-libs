@@ -367,7 +367,7 @@
       },
     ],
 
-  qpsPanel(selector):: {
+  qpsPanel(selector, statusLabelName='status_code'):: {
     aliasColors: {
       '1xx': '#EAB839',
       '2xx': '#7EB26D',
@@ -379,9 +379,13 @@
     },
     targets: [
       {
-        expr: 'sum by (status) (label_replace(label_replace(rate(' + selector + '[$__interval]),'
-              + ' "status", "${1}xx", "status_code", "([0-9]).."),'
-              + ' "status", "${1}",   "status_code", "([a-z]+)"))',
+        expr:
+          |||
+            sum by (status) (
+              label_replace(label_replace(rate(%s[$__interval]),
+              "status", "${1}xx", "%s", "([0-9]).."),
+              "status", "${1}", "%s", "([a-z]+)"))
+          ||| % [selector, statusLabelName, statusLabelName],
         format: 'time_series',
         intervalFactor: 2,
         legendFormat: '{{status}}',
