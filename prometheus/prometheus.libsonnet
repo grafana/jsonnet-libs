@@ -1,118 +1,140 @@
-{
-  /*
-   * All Prometheus resources are contained within a `prometheus` node. This allows
-     multiple Prometheus instances to be created by simply cloning this node, like
-     so:
-     `other_prometheus: $.prometheus {name: "other-prometheus"},`
+local k = import 'ksonnet-util/kausal.libsonnet';
 
-     To remove the default Prometheus, use this code:
-     `main_prometheus: {},`
-  */
 
-  prometheus:: {
-    name:: error 'must specify name',
+(import 'config.libsonnet')
++ (import 'images.libsonnet')
++ (import 'mixins.libsonnet')
++ {
+  local _config = self._config,
 
-    _config:: $._config,
-    local _config = self._config,
+  local configMap = k.core.v1.configMap,
 
-    local policyRule = $.rbac.v1beta1.policyRule,
+  prometheus_config_maps:
+    // Can't reference self.foo below as we're in a map context, so
+    // need to capture reference to the configs in scope here.
+    local prometheus_config = self.prometheus_config;
+    local prometheusAlerts = self.prometheusAlerts;
+    local prometheusRules = self.prometheusRules;
+    [
+      configMap.new('%s-config' % _config.name)
+      + configMap.withData({
+        'prometheus.yml': k.util.manifestYaml(prometheus_config),
+      }),
 
-    prometheus_rbac:
-      $.util.rbac(self.name, [
-        policyRule.new() +
-        policyRule.withApiGroups(['']) +
-        policyRule.withResources(['nodes', 'nodes/proxy', 'services', 'endpoints', 'pods']) +
-        policyRule.withVerbs(['get', 'list', 'watch']),
+      configMap.new('%s-alerts' % _config.name)
+      + configMap.withData({
+        'alerts.rules': k.util.manifestYaml(prometheusAlerts),
+      }),
 
-        policyRule.new() +
-        policyRule.withNonResourceUrls('/metrics') +
-        policyRule.withVerbs(['get']),
-      ]),
+      configMap.new('%s-recording' % _config.name)
+      + configMap.withData({
+        'recording.rules': k.util.manifestYaml(prometheusRules),
+      }),
+    ],
 
-    local container = $.core.v1.container,
+  local policyRule = k.rbac.v1.policyRule,
 
-    prometheus_container::
-      container.new('prometheus', $._images.prometheus) +
-      container.withPorts($.core.v1.containerPort.new('http-metrics', _config.prometheus_port)) +
-      container.withArgs([
-        '--config.file=' + _config.prometheus_config_file,
-        '--web.listen-address=:%s' % _config.prometheus_port,
-        '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
-        '--web.enable-admin-api',
-        '--web.enable-lifecycle',
-        '--web.route-prefix=%s' % _config.prometheus_web_route_prefix,
-        '--storage.tsdb.path=/prometheus/data',
-        '--storage.tsdb.wal-compression',
-      ]) +
-      $.util.resourcesRequests(_config.prometheus_requests_cpu,
-                               _config.prometheus_requests_memory) +
-      $.util.resourcesLimits(_config.prometheus_limits_cpu,
-                             _config.prometheus_limits_memory),
+  prometheus_rbac:
+    (k { _config+:: _config }).util.rbac(_config.name, [
+      policyRule.withApiGroups([''])
+      + policyRule.withResources([
+        'nodes',
+        'nodes/proxy',
+        'services',
+        'endpoints',
+        'pods',
+      ])
+      + policyRule.withVerbs(['get', 'list', 'watch']),
 
-    prometheus_watch_container::
-      container.new('watch', $._images.watch) +
-      container.withArgs([
-        '-v',
-        '-t',
-        '-p=' + _config.prometheus_config_dir,
-        'curl',
-        '-X',
-        'POST',
-        '--fail',
-        '-o',
-        '-',
-        '-sS',
-        'http://localhost:%(prometheus_port)s%(prometheus_web_route_prefix)s-/reload' % _config,
-      ]),
+      policyRule.withNonResourceUrls('/metrics')
+      + policyRule.withVerbs(['get']),
+    ]),
 
-    local pvc = $.core.v1.persistentVolumeClaim,
+  local container = k.core.v1.container,
 
-    prometheus_pvc::
-      pvc.new() +
-      pvc.mixin.metadata.withName('%s-data' % (self.name)) +
-      pvc.mixin.spec.withAccessModes('ReadWriteOnce') +
-      pvc.mixin.spec.resources.withRequests({ storage: '300Gi' }),
+  prometheus_container::
+    container.new('prometheus', self._images.prometheus)
+    + container.withPorts([
+      k.core.v1.containerPort.new('http-metrics', _config.prometheus_port),
+    ])
+    + container.withArgs([
+      '--config.file=' + _config.prometheus_config_file,
+      '--web.listen-address=:%s' % _config.prometheus_port,
+      '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
+      '--web.enable-admin-api',
+      '--web.enable-lifecycle',
+      '--web.route-prefix=%s' % _config.prometheus_web_route_prefix,
+      '--storage.tsdb.path=/prometheus/data',
+      '--storage.tsdb.wal-compression',
+    ])
+    + k.util.resourcesRequests(_config.prometheus_requests_cpu,
+                               _config.prometheus_requests_memory)
+    + k.util.resourcesLimits(_config.prometheus_limits_cpu,
+                             _config.prometheus_limits_memory)
+  ,
 
-    local statefulset = $.apps.v1.statefulSet,
-    local volumeMount = $.core.v1.volumeMount,
+  prometheus_watch_container::
+    container.new('watch', self._images.watch) +
+    container.withArgs([
+      '-v',
+      '-t',
+      '-p=' + _config.prometheus_config_dir,
+      'curl',
+      '-X',
+      'POST',
+      '--fail',
+      '-o',
+      '-',
+      '-sS',
+      'http://localhost:%(prometheus_port)s%(prometheus_web_route_prefix)s-/reload' % _config,
+    ]),
 
-    prometheus_config_mount::
-      $.util.configVolumeMount('%s-config' % self.name, _config.prometheus_config_dir)
-      + $.util.configVolumeMount('%s-alerts' % self.name, _config.prometheus_config_dir + '/alerts')
-      + $.util.configVolumeMount('%s-recording' % self.name, _config.prometheus_config_dir + '/recording')
-    ,
+  local pvc = k.core.v1.persistentVolumeClaim,
 
-    prometheus_statefulset:
-      statefulset.new(self.name, 1, [
-        self.prometheus_container + container.withVolumeMountsMixin(
-          volumeMount.new('%s-data' % self.name, '/prometheus')
-        ),
-        self.prometheus_watch_container,
-      ], self.prometheus_pvc) +
-      self.prometheus_config_mount +
-      statefulset.mixin.spec.withServiceName('prometheus') +
-      statefulset.mixin.spec.template.metadata.withAnnotations({
-        'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
-      }) +
-      statefulset.mixin.spec.template.spec.withServiceAccount(self.name) +
-      statefulset.mixin.spec.template.spec.securityContext.withFsGroup(2000) +
-      statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(1000) +
-      statefulset.mixin.spec.template.spec.securityContext.withRunAsNonRoot(true) +
-      $.util.podPriority('critical'),
+  prometheus_pvc::
+    pvc.new('%s-data' % (_config.name))
+    + pvc.mixin.spec.withAccessModes('ReadWriteOnce')
+    + pvc.mixin.spec.resources.withRequests({ storage: '300Gi' })
+  ,
 
-    local service = $.core.v1.service,
-    local servicePort = service.mixin.spec.portsType,
+  local statefulset = k.apps.v1.statefulSet,
+  local volumeMount = k.core.v1.volumeMount,
 
-    prometheus_service:
-      $.util.serviceFor(self.prometheus_statefulset) +
-      service.mixin.spec.withPortsMixin([
-        servicePort.newNamed(
-          name='http',
-          port=80,
-          targetPort=_config.prometheus_port,
-        ),
-      ]),
-  },
+  prometheus_config_mount::
+    k.util.configVolumeMount('%s-config' % _config.name, _config.prometheus_config_dir)
+    + k.util.configVolumeMount('%s-alerts' % _config.name, _config.prometheus_config_dir + '/alerts')
+    + k.util.configVolumeMount('%s-recording' % _config.name, _config.prometheus_config_dir + '/recording')
+  ,
 
-  main_prometheus: $.prometheus { name: 'prometheus' },
+  prometheus_statefulset:
+    statefulset.new(_config.name, 1, [
+      self.prometheus_container + container.withVolum + eMountsMixin(
+        volumeMount.new('%s-data' % _config.name, '/prometheus')
+      ),
+      self.prometheus_watch_container,
+    ], self.prometheus_pvc)
+    + self.prometheus_config_mount
+    + statefulset.mixin.spec.withServiceName('prometheus')
+    + statefulset.mixin.spec.template.metadata.withAnnotations({
+      'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
+    })
+    + statefulset.mixin.spec.template.spec.withServiceAccount(_config.name)
+    + statefulset.mixin.spec.template.spec.securityContext.withFsGroup(2000)
+    + statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(1000)
+    + statefulset.mixin.spec.template.spec.securityContext.withRunAsNonRoot(true)
+    + k.util.podPriority('critical')
+  ,
+
+  local service = k.core.v1.service,
+  local servicePort = service.mixin.spec.portsType,
+
+  prometheus_service:
+    k.util.serviceFor(self.prometheus_statefulset)
+    + service.mixin.spec.withPortsMixin([
+      servicePort.newNamed(
+        name='http',
+        port=80,
+        targetPort=_config.prometheus_port,
+      ),
+    ]),
 }

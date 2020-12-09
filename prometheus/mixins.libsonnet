@@ -1,61 +1,78 @@
 {
-  // Add you mixins here.
   mixins+:: {
-    kubernetes:
-      (import 'kubernetes-mixin/mixin.libsonnet') {
-        grafanaDashboardFolder: 'Kubernetes',
-        grafanaDashboardShards: 8,
-
-        _config+:: {
-          cadvisorSelector: 'job="kube-system/cadvisor"',
-          kubeletSelector: 'job="kube-system/kubelet"',
-          kubeStateMetricsSelector: 'job="%s/kube-state-metrics"' % $._config.namespace,
-          nodeExporterSelector: 'job="%s/node-exporter"' % $._config.namespace,  // Also used by node-mixin.
-          notKubeDnsSelector: 'job!="kube-system/kube-dns"',
-          kubeSchedulerSelector: 'job="kube-system/kube-scheduler"',
-          kubeControllerManagerSelector: 'job="kube-system/kube-controller-manager"',
-          kubeApiserverSelector: 'job="kube-system/kube-apiserver"',
-          podLabel: 'instance',
-          notKubeDnsCoreDnsSelector: 'job!~"kube-system/kube-dns|coredns"',
-        },
+    base: {
+      prometheusAlerts+: {
+        groups+: [
+          {
+            name: 'prometheus-extra',
+            rules: [
+              {
+                alert: 'PromScrapeFailed',
+                expr: |||
+                  up != 1
+                |||,
+                'for': '15m',
+                labels: {
+                  severity: 'warning',
+                },
+                annotations: {
+                  message: 'Prometheus failed to scrape a target {{ $labels.job }} / {{ $labels.instance }}',
+                },
+              },
+              {
+                alert: 'PromScrapeFlapping',
+                expr: |||
+                  avg_over_time(up[5m]) < 1
+                |||,
+                'for': '15m',
+                labels: {
+                  severity: 'warning',
+                },
+                annotations: {
+                  message: 'Prometheus target flapping {{ $labels.job }} / {{ $labels.instance }}',
+                },
+              },
+              {
+                alert: 'PromScrapeTooLong',
+                expr: |||
+                  scrape_duration_seconds > 60
+                |||,
+                'for': '15m',
+                labels: {
+                  severity: 'warning',
+                },
+                annotations: {
+                  message: '{{ $labels.job }} / {{ $labels.instance }} is taking too long to scrape ({{ printf "%.1f" $value }}s)',
+                },
+              },
+            ],
+          },
+        ],
       },
-
-    prometheus:
-      (import 'prometheus-mixin/mixin.libsonnet') {
-        grafanaDashboardFolder: 'Prometheus',
-
-        _config+:: {
-          prometheusSelector: 'job="default/prometheus"',
-          prometheusHAGroupLabels: 'job,cluster,namespace',
-          prometheusHAGroupName: '{{$labels.job}} in {{$labels.cluster}}',
-        },
-      },
-
-    alertmanager:
-      (import 'alertmanager-mixin/mixin.libsonnet') {
-        grafanaDashboardFolder: 'Alertmanager',
-
-        _config+:: {
-          alertmanagerSelector: 'job="default/alertmanager"',
-          alertmanagerClusterLabels: 'job, namespace',
-          alertmanagerName: '{{$labels.instance}} in {{$labels.cluster}}',
-        },
-      },
-
-    node_exporter:
-      (import 'node-mixin/mixin.libsonnet') {
-        grafanaDashboardFolder: 'node_exporter',
-
-        _config+:: {
-          nodeExporterSelector: 'job="%s/node-exporter"' % $._config.namespace,  // Also used by node-mixin.
-
-          // Do not page if nodes run out of disk space.
-          nodeCriticalSeverity: 'warning',
-          grafanaPrefix: '/grafana',
-        },
-      },
-
-    grafana:
-      (import 'grafana-mixin/mixin.libsonnet'),
+    },
   },
+
+  // Legacy Extension points for adding alerts, recording rules and prometheus config.
+  local emptyMixin = {
+    prometheusAlerts+:: {},
+    prometheusRules+:: {},
+  },
+
+  prometheusAlerts::
+    std.foldr(
+      function(mixinName, acc)
+        local mixin = $.mixins[mixinName] + emptyMixin;
+        acc + mixin.prometheusAlerts,
+      std.objectFields($.mixins),
+      {}
+    ),
+
+  prometheusRules::
+    std.foldr(
+      function(mixinName, acc)
+        local mixin = $.mixins[mixinName] + emptyMixin;
+        acc + mixin.prometheusRules,
+      std.objectFields($.mixins),
+      {},
+    ),
 }
