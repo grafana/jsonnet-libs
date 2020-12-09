@@ -25,7 +25,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Postgres Overview",
+      "datasource": "$datasource",
       "editable": true,
       "error": false,
       "fieldConfig": {
@@ -396,7 +396,7 @@
         "rgba(237, 129, 40, 0.89)",
         "rgba(50, 172, 45, 0.97)"
       ],
-      "datasource": "Postgres Overview",
+      "datasource": "$datasource",
       "decimals": 0,
       "editable": true,
       "error": false,
@@ -530,7 +530,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Postgres Overview",
+      "datasource": "$datasource",
       "decimals": 1,
       "editable": true,
       "error": false,
@@ -889,7 +889,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Postgres Overview",
+      "datasource": "$datasource",
       "editable": true,
       "error": false,
       "fieldConfig": {
@@ -1088,7 +1088,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Postgres Overview",
+      "datasource": "$datasource",
       "editable": true,
       "error": false,
       "fieldConfig": {
@@ -1191,7 +1191,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "Postgres Overview",
+      "datasource": "$datasource",
       "editable": true,
       "error": false,
       "fieldConfig": {
@@ -1305,7 +1305,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Postgres Overview",
+        "datasource": "$datasource",
         "definition": "",
         "hide": 0,
         "includeAll": true,
@@ -1331,7 +1331,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "Postgres Overview",
+        "datasource": "$datasource",
         "definition": "label_values(pg_stat_database_tup_fetched{instance=~\"$instance\",datname!~\"template.*|postgres\"},datname)",
         "hide": 0,
         "includeAll": true,
