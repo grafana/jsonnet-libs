@@ -76,12 +76,12 @@ Kustomize functionality.
 * [`obj helm`](#obj-helm)
   * [`fn new(calledFrom)`](#fn-helmnew)
   * [`fn template(name, chart, conf)`](#fn-helmtemplate)
+* [`obj k8s`](#obj-k8s)
+  * [`fn patchKubernetesObjects(object, patch)`](#fn-k8spatchkubernetesobjects)
+  * [`fn patchLabels(object, labels)`](#fn-k8spatchlabels)
 * [`obj kustomize`](#obj-kustomize)
   * [`fn new(calledFrom)`](#fn-kustomizenew)
   * [`fn build(path, conf)`](#fn-kustomizebuild)
-* [`obj util`](#obj-util)
-  * [`fn patchKubernetesObjects(object, patch)`](#fn-utilpatchkubernetesobjects)
-  * [`fn patchLabels(object, labels)`](#fn-utilpatchlabels)
 
 ## Fields
 
@@ -117,6 +117,27 @@ This functionality requires Helmraiser support in Jsonnet (e.g. using Grafana Ta
 the `helm` binary installed on your `$PATH`.
 
 
+## obj k8s
+
+`k8s` provides common utils to modify Kubernetes objects.
+
+
+### fn k8s.patchKubernetesObjects
+
+```ts
+patchKubernetesObjects(object, patch)
+```
+
+`patchKubernetesObjects` applies `patch` to all Kubernetes objects it finds in `object`.
+
+### fn k8s.patchLabels
+
+```ts
+patchLabels(object, labels)
+```
+
+`patchLabels` finds all Kubernetes objects and adds labels to them.
+
 ## obj kustomize
 
 `kustomize` allows the user to expand Kustomize manifests into plain Jsonnet resources.
@@ -149,25 +170,3 @@ This functionality requires Kustomize support in Jsonnet (e.g. using Grafana Tan
 the `kustomize` binary installed on your `$PATH`.
 
 `path` is relative to the file calling this function.
-
-
-## obj util
-
-`util` provides common utils to modify Kubernetes objects.
-
-
-### fn util.patchKubernetesObjects
-
-```ts
-patchKubernetesObjects(object, patch)
-```
-
-`patchKubernetesObjects` applies `patch` to all Kubernetes objects it finds in `object`.
-
-### fn util.patchLabels
-
-```ts
-patchLabels(object, labels)
-```
-
-`patchLabels` finds all Kubernetes objects and adds labels to them.

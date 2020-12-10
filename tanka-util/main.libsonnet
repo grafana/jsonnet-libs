@@ -8,12 +8,12 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     help=(importstr 'README.md.tmpl') % (importstr '_example.jsonnet'),
   ),
 
-  '#util':: d.obj(
+  '#k8s':: d.obj(
     |||
-      `util` provides common utils to modify Kubernetes objects.
+      `k8s` provides common utils to modify Kubernetes objects.
     |||
   ),
-  util: (import 'util.libsonnet'),
+  k8s: (import 'k8s.libsonnet'),
 
   '#helm':: d.obj(
     |||
