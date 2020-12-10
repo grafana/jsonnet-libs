@@ -11,7 +11,10 @@ The [`helm.template`](#fn-helmtemplate) function converts a Helm Chart into
 a Jsonnet object to be consumed by tools like Tanka.
 
 Helm Charts are required to be available on the local file system and are
-resolved relative to the file that calls `helm.template`:
+resolved relative to the file that calls `helm.template`.
+
+Kustomizations are also resolved relative to the file that calls
+`kustomize.build`. 
 
 ```jsonnet
 %s
@@ -31,3 +34,8 @@ functionality into Jsonnet that provides `helm template`.
 
 This however means this library and all libraries using this library are not
 compatible with `google/go-jsonnet` or `google/jsonnet`.
+
+Kustomize is build so that each kustomization can pull another kustomization
+from the internet. Due to this feature it is not feasible to ensure hermetic and
+reprodicible kustomize builds from within Tanka. Beware of that when using the
+Kustomize functionality.

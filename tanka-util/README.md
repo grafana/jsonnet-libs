@@ -21,11 +21,15 @@ The [`helm.template`](#fn-helmtemplate) function converts a Helm Chart into
 a Jsonnet object to be consumed by tools like Tanka.
 
 Helm Charts are required to be available on the local file system and are
-resolved relative to the file that calls `helm.template`:
+resolved relative to the file that calls `helm.template`.
+
+Kustomizations are also resolved relative to the file that calls
+`kustomize.build`. 
 
 ```jsonnet
 local tanka = import 'github.com/grafana/jsonnet-libs/tanka-util/main.libsonnet';
 local helm = tanka.helm.new(std.thisFile);
+local kustomize = tanka.kustomize.new(std.thisFile);
 
 {
   // render the Grafana Chart, set namespace to "test"
@@ -36,6 +40,10 @@ local helm = tanka.helm.new(std.thisFile);
     },
     namespace: 'test',
   }),
+
+  // render the Prometheus Kustomize
+  // then entrypoint for `kustomize build` will be ./base/prometheus/kustomization.yaml
+  prometheus: kustomize.build('./base/prometheus'),
 }
 
 ```
@@ -55,12 +63,20 @@ functionality into Jsonnet that provides `helm template`.
 This however means this library and all libraries using this library are not
 compatible with `google/go-jsonnet` or `google/jsonnet`.
 
+Kustomize is build so that each kustomization can pull another kustomization
+from the internet. Due to this feature it is not feasible to ensure hermetic and
+reprodicible kustomize builds from within Tanka. Beware of that when using the
+Kustomize functionality.
+
 
 ## Index
 
 * [`obj helm`](#obj-helm)
   * [`fn new(calledFrom)`](#fn-helmnew)
   * [`fn template(name, chart, conf)`](#fn-helmtemplate)
+* [`obj kustomize`](#obj-kustomize)
+  * [`fn new(calledFrom)`](#fn-kustomizenew)
+  * [`fn build(path, conf)`](#fn-kustomizebuild)
 * [`obj util`](#obj-util)
   * [`fn patchKubernetesObjects(object, patch)`](#fn-utilpatchkubernetesobjects)
   * [`fn patchLabels(object, labels)`](#fn-utilpatchlabels)
@@ -97,6 +113,40 @@ so they can be consumed and modified from within Jsonnet.
 
 This functionality requires Helmraiser support in Jsonnet (e.g. using Grafana Tanka) and also
 the `helm` binary installed on your `$PATH`.
+
+
+## obj kustomize
+
+`kustomize` allows the user to expand Kustomize manifests into plain Jsonnet resources.
+This implements [Kustomize support](https://tanka.dev/kustomize) for Grafana Tanka.
+
+
+### fn kustomize.new
+
+```ts
+new(calledFrom)
+```
+
+`new` initiates the `kustomize` object. It must be called before any `kustomize.build` call:
+ > ```jsonnet
+ > // std.thisFile required to correctly resolve local Kustomize objects
+ > kustomize.new(std.thisFile)
+ > ```
+
+
+### fn kustomize.build
+
+```ts
+build(path, conf)
+```
+
+`build` expands the Kustomize object to its underlying resources and returns them in an `Object`,
+so they can be consumed and modified from within Jsonnet.
+
+This functionality requires Kustomize support in Jsonnet (e.g. using Grafana Tanka) and also
+the `kustomize` binary installed on your `$PATH`.
+
+`path` is relative to the file calling this function.
 
 
 ## obj util

@@ -22,4 +22,12 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     |||
   ),
   helm: (import 'helm.libsonnet'),
+
+  '#kustomize':: d.obj(
+    |||
+      `kustomize` allows the user to expand Kustomize manifests into plain Jsonnet resources.
+      This implements [Kustomize support](https://tanka.dev/kustomize) for Grafana Tanka.
+    |||
+  ),
+  kustomize: (import 'kustomize.libsonnet'),
 }
