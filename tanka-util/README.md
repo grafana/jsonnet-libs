@@ -2,13 +2,13 @@
 permalink: /
 ---
 
-# package tanka-util
+# package tanka_util
 
 ```jsonnet
-local tanka-util = import "github.com/grafana/jsonnet-libs/tanka-util/main.libsonnet"
+local tanka_util = import "github.com/grafana/jsonnet-libs/tanka-util/main.libsonnet"
 ```
 
-Package `tanka-util` provides jsonnet tooling that works well with [Grafana
+Package `tanka_util` provides jsonnet tooling that works well with [Grafana
 Tanka](https://tanka.dev) features. This package implements [Helm
 support](https://tanka.dev/helm) for Grafana Tanka.
 
@@ -18,7 +18,7 @@ support](https://tanka.dev/helm) for Grafana Tanka.
 > experimental and may break.
 
 The [`helm.template`](#fn-helmtemplate) function converts a Helm Chart into
-Jsonnet object to be consumed by tools like Tanka.
+a Jsonnet object to be consumed by tools like Tanka.
 
 Helm Charts are required to be available on the local file system and are
 resolved relative to the file that calls `helm.template`:

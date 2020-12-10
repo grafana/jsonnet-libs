@@ -3,7 +3,7 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
   local this = self,
 
   '#':: d.pkg(
-    name='tanka-util',
+    name='tanka_util',
     url='github.com/grafana/jsonnet-libs/tanka-util/main.libsonnet',
     help=(importstr 'README.md.tmpl') % (importstr '_example.jsonnet'),
   ),
