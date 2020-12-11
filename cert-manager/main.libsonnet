@@ -1,4 +1,5 @@
-local helm = (import 'github.com/grafana/jsonnet-libs/helm-util/helm.libsonnet').new(std.thisFile);
+local tanka = (import 'github.com/grafana/jsonnet-libs/tanka-util/main.libsonnet');
+local helm = tanka.helm.new(std.thisFile);
 
 {
   values:: {

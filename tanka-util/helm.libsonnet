@@ -1,4 +1,5 @@
 local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
+local k8s = import 'k8s.libsonnet';
 {
   local this = self,
 
@@ -44,5 +45,5 @@ local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
     local cfg = conf { calledFrom: this._config.calledFrom };
     local chartData = std.native('helmTemplate')(name, chart, cfg);
 
-    this.patchLabels(chartData, this.defaultLabels),
+    k8s.patchLabels(chartData, this.defaultLabels),
 }

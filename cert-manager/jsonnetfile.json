@@ -5,7 +5,7 @@
       "source": {
         "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
-          "subdir": "helm-util"
+          "subdir": "tanka-util"
         }
       },
       "version": "master"
