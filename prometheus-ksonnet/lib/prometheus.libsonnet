@@ -1,5 +1,7 @@
+local prometheus_mixins = import 'prometheus/mixins.libsonnet';
 local prometheus = import 'prometheus/prometheus.libsonnet';
 
+prometheus_mixins
 {
   /*
    * All Prometheus resources are contained within a `prometheus` node. This allows
@@ -18,8 +20,6 @@ local prometheus = import 'prometheus/prometheus.libsonnet';
     _config+:: $._config { name: name },
     _images+:: $._images,
     mixins+:: if std.objectHasAll($, 'mixins') then $.mixins else {},
-    prometheusAlerts+:: if std.objectHasAll($, 'prometheusAlerts') then $.prometheusAlerts else {},
-    prometheusRules+:: if std.objectHasAll($, 'prometheusRules') then $.prometheusRules else {},
     prometheus_config+:: $.prometheus_config,
 
   },
