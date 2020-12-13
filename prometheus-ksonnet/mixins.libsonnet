@@ -1,6 +1,30 @@
 {
   // Add you mixins here.
   mixins+:: {
+    base+: {
+      prometheusRules+::
+        {
+          groups+: [
+            {
+              // Add mapping from namespace, pod -> node with node name as pod, as
+              // we use the node name as the node-exporter instance label.
+              name: 'instance_override',
+              rules: [
+                {
+                  record: 'node_namespace_pod:kube_pod_info:',
+                  expr: |||
+                    max by(node, namespace, instance) (
+                      label_replace(kube_pod_info{job="default/kube-state-metrics"}
+                      , "instance", "$1", "node", "(.*)")
+                    )
+                  |||,
+                },
+              ],
+            },
+          ],
+        },
+    },
+
     kubernetes:
       (import 'kubernetes-mixin/mixin.libsonnet') {
         grafanaDashboardFolder: 'Kubernetes',

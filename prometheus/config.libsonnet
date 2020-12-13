@@ -20,10 +20,9 @@
     prometheus_web_route_prefix: self.prometheus_path,
     prometheus_config_dir: '/etc/prometheus',
     prometheus_config_file: self.prometheus_config_dir + '/prometheus.yml',
-
-    alertmanagers: [],
-    scrape_configs: [],
   },
+
+  scrape_configs: {},
 
   prometheus_config:: {
     global: {
@@ -35,10 +34,12 @@
       'recording/recording.rules',
     ],
 
-    alerting: {
-      alertmanagers: $._config.alertmanagers,
-    },
-
-    scrape_configs: $._config.scrape_configs,
+    scrape_configs:
+      std.foldr(
+        function(jobName, acc)
+          acc + $.scrape_configs[jobName],
+        std.objectFields($.scrape_configs),
+        {}
+      ),
   },
 }
