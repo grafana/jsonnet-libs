@@ -17,6 +17,8 @@ local prometheus = import 'prometheus/prometheus.libsonnet';
 
     _config+:: $._config { name: name },
     mixins+:: $.mixins,
+    prometheusAlerts+:: $.prometheusAlerts,
+    prometheusRules+:: $.prometheusRules,
     prometheus_config+:: $.prometheus_config,
 
   },
