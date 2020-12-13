@@ -34,7 +34,7 @@
       'recording/recording.rules',
     ],
 
-    scrape_configs:
+    scrape_configs+:
       std.foldr(
         function(jobName, acc)
           acc + $.scrape_configs[jobName],
