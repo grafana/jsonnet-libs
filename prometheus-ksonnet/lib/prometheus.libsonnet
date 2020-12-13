@@ -17,9 +17,9 @@ local prometheus = import 'prometheus/prometheus.libsonnet';
 
     _config+:: $._config { name: name },
     _images+:: $._images,
-    mixins+:: $.mixins,
-    prometheusAlerts+:: $.prometheusAlerts,
-    prometheusRules+:: $.prometheusRules,
+    mixins+:: if std.objectHasAll($, 'mixins') then $.mixins else {},
+    prometheusAlerts+:: if std.objectHasAll($, 'prometheusAlerts') then $.prometheusAlerts else {},
+    prometheusRules+:: if std.objectHasAll($, 'prometheusRules') then $.prometheusRules else {},
     prometheus_config+:: $.prometheus_config,
 
   },
