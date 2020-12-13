@@ -108,7 +108,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
   prometheus_statefulset:
     statefulset.new(_config.name, 1, [
-      self.prometheus_container + container.withVolum + eMountsMixin(
+      self.prometheus_container + container.withVolumeMountsMixin(
         volumeMount.new('%s-data' % _config.name, '/prometheus')
       ),
       self.prometheus_watch_container,
