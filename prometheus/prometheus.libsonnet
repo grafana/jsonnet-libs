@@ -1,4 +1,4 @@
-local k = import 'ksonnet-util/kausal.libsonnet';
+local kausal = import 'ksonnet-util/kausal.libsonnet';
 
 
 (import 'config.libsonnet')
@@ -6,6 +6,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 + (import 'mixins.libsonnet')
 + {
   local _config = self._config,
+  local k = kausal { _config+:: _config },
 
   local configMap = k.core.v1.configMap,
 
