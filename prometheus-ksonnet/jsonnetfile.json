@@ -32,6 +32,15 @@
     {
       "source": {
         "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "prometheus"
+        }
+      },
+      "version": "215ca8ef9d4c33637b173ce9bcb6a062f23e45d3"
+    },
+    {
+      "source": {
+        "git": {
           "remote": "https://github.com/kubernetes-monitoring/kubernetes-mixin.git",
           "subdir": ""
         }
