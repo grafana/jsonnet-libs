@@ -142,7 +142,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   alertmanager_statefulset:
     statefulset.new(
       'alertmanager',
-      _.config.replicas,
+      _config.replicas,
       [
         self.alertmanager_container,
         self.alertmanager_watch_container,
