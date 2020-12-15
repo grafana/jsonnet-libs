@@ -29,4 +29,19 @@ alertmanager {
     then self.isGossiping().alertmanager_container
     else {}
   ),
+
+  alertmanager_config_map:
+    if replicas > 0
+    then super.alertmanager_config_map
+    else {},
+
+  alertmanager_statefulset:
+    if replicas > 0
+    then super.alertmanager_statefulset
+    else {},
+
+  alertmanager_service:
+    if replicas > 0
+    then super.alertmanager_service
+    else {},
 }
