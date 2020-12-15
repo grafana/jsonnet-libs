@@ -1,6 +1,5 @@
 local kausal = import 'ksonnet-util/kausal.libsonnet';
 
-
 (import 'config.libsonnet')
 + (import 'images.libsonnet')
 + (import 'mixins.libsonnet')
