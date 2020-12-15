@@ -26,7 +26,7 @@ alertmanager {
 
   alertmanager_container+:: (
     if isGossiping
-    then alertmanager.isGossiping().alertmanager_container
+    then self.isGossiping().alertmanager_container
     else {}
   ),
 }

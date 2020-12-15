@@ -96,13 +96,13 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     alertmanager_container+:
       container.withPortsMixin(
         [
-          k.core.v1.containerPort.newUDP('gossip-udp', super._config.alertmanager_gossip_port),
-          k.core.v1.containerPort.new('gossip-tcp', super._config.alertmanager_gossip_port),
+          k.core.v1.containerPort.newUDP('gossip-udp', _config.alertmanager_gossip_port),
+          k.core.v1.containerPort.new('gossip-tcp', _config.alertmanager_gossip_port),
         ]
       )
       + container.withArgsMixin(
-        ['--cluster.listen-address=[$(POD_IP)]:%s' % super._config.alertmanager_gossip_port]
-        + ['--cluster.peer=%s' % peer for peer in super._config.alertmanager_peers]
+        ['--cluster.listen-address=[$(POD_IP)]:%s' % _config.alertmanager_gossip_port]
+        + ['--cluster.peer=%s' % peer for peer in _config.alertmanager_peers]
       ),
   },
 
@@ -142,7 +142,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   alertmanager_statefulset:
     statefulset.new(
       'alertmanager',
-      _config.replicas,
+      _config.alertmanager_replicas,
       [
         self.alertmanager_container,
         self.alertmanager_watch_container,
