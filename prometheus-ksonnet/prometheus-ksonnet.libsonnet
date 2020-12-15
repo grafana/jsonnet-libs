@@ -8,6 +8,5 @@
 (import 'lib/node-exporter.libsonnet') +
 (import 'lib/prometheus.libsonnet') +
 (import 'lib/prometheus-config.libsonnet') +
-(import 'lib/prometheus-configmap.libsonnet') +
 (import 'lib/config.libsonnet') +
 (import 'mixins.libsonnet')
