@@ -1,6 +1,6 @@
 {
   mixins+:: {
-    base: {
+    base+: {
       prometheusAlerts+: {
         groups+: [
           {
