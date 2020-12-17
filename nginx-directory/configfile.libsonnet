@@ -1,3 +1,4 @@
+local kausal = import 'ksonnet-util/kausal.libsonnet';
 {
   local buildHeaders(service, redirect, allowWebsockets, subfilter) =
     if redirect then |||
@@ -40,7 +41,7 @@
       }
     |||,
 
-  local configMap = $.core.v1.configMap,
+  local configMap = k.core.v1.configMap,
 
   nginx_config_map:
     local vars = {

@@ -1,20 +1,21 @@
+local kausal = import 'ksonnet-util/kausal.libsonnet';
 {
-  local container = $.core.v1.container,
+  local container = k.core.v1.container,
 
   nginx_container::
     container.new('nginx', $._images.nginx) +
     container.withPorts($.core.v1.containerPort.new('http', 80)) +
-    $.util.resourcesRequests('50m', '100Mi'),
+    k.util.resourcesRequests('50m', '100Mi'),
 
   local deployment = $.apps.v1.deployment,
 
   nginx_deployment:
     deployment.new('nginx', 1, [$.nginx_container]) +
-    $.util.configMapVolumeMount($.nginx_config_map, '/etc/nginx') +
-    $.util.podPriority('critical'),
+    k.util.configMapVolumeMount($.nginx_config_map, '/etc/nginx') +
+    k.util.podPriority('critical'),
 
   nginx_service:
-    $.util.serviceFor($.nginx_deployment),
+    k.util.serviceFor($.nginx_deployment),
 
   local oauth2_proxy = import 'oauth2_proxy/oauth2-proxy.libsonnet',
 
