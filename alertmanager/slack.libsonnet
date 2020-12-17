@@ -40,13 +40,13 @@
       }],
     },
 
-  alertmanager_config:: {
-    route: {
+  alertmanager_config+:: {
+    route+: {
       group_by: ['alertname'],
       receiver: 'slack',
     },
 
-    receivers: [
+    receivers+: [
       this.build_slack_receiver('slack', this._config.slack_channel),
     ],
   },
