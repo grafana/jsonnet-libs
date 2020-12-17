@@ -32,11 +32,10 @@
       "source": {
         "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
-          "subdir": "oauth2-proxy"
+          "subdir": "nginx-directory"
         }
       },
-      "version": "master",
-      "name": "oauth2_proxy"
+      "version": "master"
     },
     {
       "source": {

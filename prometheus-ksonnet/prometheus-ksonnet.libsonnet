@@ -4,7 +4,7 @@
 (import 'lib/datasources.libsonnet') +
 (import 'lib/alertmanager.libsonnet') +
 (import 'lib/kube-state-metrics.libsonnet') +
-(import 'lib/nginx.libsonnet') +
+(import 'nginx-directory/directory.libsonnet') +
 (import 'lib/node-exporter.libsonnet') +
 (import 'lib/prometheus.libsonnet') +
 (import 'lib/prometheus-config.libsonnet') +
