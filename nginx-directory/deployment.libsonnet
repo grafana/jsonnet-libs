@@ -1,5 +1,7 @@
-local k = import 'ksonnet-util/kausal.libsonnet';
+local kausal = import 'ksonnet-util/kausal.libsonnet';
 {
+  local _config = self._config,
+  local k = kausal { _config+:: _config },
   local container = k.core.v1.container,
 
   nginx_container::
