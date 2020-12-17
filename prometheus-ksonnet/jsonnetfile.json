@@ -26,7 +26,7 @@
           "subdir": "nginx-directory"
         }
       },
-      "version": "5d32dc0b0d0d43e0e38d2a233ed7ef31d7f30c44"
+      "version": "master"
     },
     {
       "source": {
