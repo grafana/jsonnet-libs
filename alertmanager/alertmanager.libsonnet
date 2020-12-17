@@ -16,7 +16,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 
   local configMap = k.core.v1.configMap,
 
-  // Do not create configmap in clusters without any alertmanagers.
   alertmanager_config_map:
     configMap.new('alertmanager-config') +
     configMap.withData({
@@ -96,7 +95,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 
   local statefulset = k.apps.v1.statefulSet,
 
-  // Do not create statefulset in clusters without any alertmanagers.
   alertmanager_statefulset:
     statefulset.new(
       'alertmanager',
@@ -121,7 +119,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   local service = k.core.v1.service,
   local servicePort = service.mixin.spec.portsType,
 
-  // Do not create service in clusters without any alertmanagers.
   alertmanager_service:
     k.util.serviceFor(self.alertmanager_statefulset)
     + service.mixin.spec.withPortsMixin([
