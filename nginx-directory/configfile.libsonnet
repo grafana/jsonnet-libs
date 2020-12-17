@@ -1,4 +1,4 @@
-local kausal = import 'ksonnet-util/kausal.libsonnet';
+local k = import 'ksonnet-util/kausal.libsonnet';
 {
   local buildHeaders(service, redirect, allowWebsockets, subfilter) =
     if redirect then |||
