@@ -1,6 +1,9 @@
 local alertmanager = import 'alertmanager/alertmanager.libsonnet';
+local alertmanager_slack = import 'alertmanager/slack.libsonnet';
 
-alertmanager {
+alertmanager +
+alertmanager_slack +
+{
   local replicas = self._config.alertmanager_cluster_self.replicas,
   local isGlobal = self._config.alertmanager_cluster_self.global,
   local isGossiping = replicas > 1 || isGlobal,

@@ -12,9 +12,6 @@
     alertmanager_port: 9093,
     alertmanager_gossip_port: 9094,
 
-    slack_url: 'http://slack',
-    slack_channel: 'general',
-
     alertmanager_replicas: 1,
     alertmanager_peers: [],
   },
