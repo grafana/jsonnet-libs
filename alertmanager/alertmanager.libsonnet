@@ -7,8 +7,8 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   local _config = self._config,
   local k = kausal { _config+:: _config },
 
-  alertmanager_config:: {
-    templates: [
+  alertmanager_config+:: {
+    templates+: [
       '/etc/alertmanager/*.tmpl',
       '/etc/alertmanager/config/templates.tmpl',
     ],
