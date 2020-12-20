@@ -14,6 +14,9 @@ This repository contains various Jsonnet libraries we use at Grafana Labs:
 * [`memcached-mixin`](memcached-mixin/): A set of reuseable and extensible dashboards
   for Memcached.
 
+* [`nodejs-mixin`](nodejs-mixin/): A set of reuseable and extensible dashboards
+  for Node.js.
+
 * [`oauth2-proxy`](oauth2-proxy/): A jsonnet configuration for deploying bitly's
   OAuth proxy to Kubernetes.
 
