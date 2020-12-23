@@ -63,6 +63,7 @@
           alertmanagerSelector: 'job="default/alertmanager"',
           alertmanagerClusterLabels: 'job, namespace',
           alertmanagerName: '{{$labels.instance}} in {{$labels.cluster}}',
+          alertmanagerCriticalIntegrationsRegEx: @'pagerduty',
         },
       },
 
