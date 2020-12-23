@@ -1,7 +1,21 @@
-local k = import 'ksonnet-util/kausal.libsonnet';
+local kausal = import 'ksonnet-util/kausal.libsonnet';
 
 {
   local this = self,
+  local _config = self._config,
+  local k = kausal {
+    _config+:: _config,
+  } + (
+    // an attempt at providing compat with the original ksonnet-lib
+    if std.objectHas(kausal, '__ksonnet')
+    then
+      {
+        core+: { v1+: {
+          envVar: kausal.core.v1.container.envType,
+        } },
+      }
+    else {}
+  ),
 
   _config+:: {
     prometheus_config_dir: '/etc/$(POD_NAME)',

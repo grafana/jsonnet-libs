@@ -15,7 +15,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       {
         core+: { v1+: {
           servicePort: kausal.core.v1.service.mixin.spec.portsType,
-          envVar: kausal.core.v1.container.envType,
         } },
         rbac+: { v1+: {
           policyRule: kausal.rbac.v1beta1.clusterRole.rulesType,
