@@ -1,0 +1,109 @@
+local k = import 'ksonnet-util/kausal.libsonnet';
+
+{
+  local this = self,
+
+  _config+:: {
+    prometheus_config_dir: '/etc/$(POD_NAME)',
+  },
+
+  // The '__replica__' label is used by Cortex for deduplication.
+  // We add a different one to each HA replica but remove it from
+  // alerts to not break deduplication of alerts in the Alertmanager.
+  prometheus_config+: {
+    alerting+: {
+      alert_relabel_configs+: [
+        {
+          regex: '__replica__',
+          action: 'labeldrop',
+        },
+      ],
+    },
+  },
+
+  prometheus_zero+:: {
+    config+:: this.prometheus_config {
+      global+: {
+        external_labels+: {
+          __replica__: 'prometheus-0',
+        },
+      },
+    },
+    alerts+:: this.prometheusAlerts,
+    rules+:: this.prometheusRules,
+  },
+
+  prometheus_one+:: {
+    config+:: this.prometheus_config {
+      global+: {
+        external_labels+: {
+          __replica__: 'prometheus-1',
+        },
+      },
+    },
+    alerts+:: this.prometheusAlerts,
+    rules+:: this.prometheusRules,
+  },
+
+  local configMap = k.core.v1.configMap,
+
+  prometheus_config_maps: [
+    configMap.new('%s-0-config' % self.name) +
+    configMap.withData({
+      'prometheus.yml': k.util.manifestYaml(this.prometheus_zero.config),
+    }),
+    configMap.new('%s-0-alerts' % self.name) +
+    configMap.withData({
+      'alerts.rules': k.util.manifestYaml(this.prometheus_zero.alerts),
+    }),
+    configMap.new('%s-0-recording' % self.name) +
+    configMap.withData({
+      'recording.rules': k.util.manifestYaml(this.prometheus_zero.rules),
+    }),
+
+    configMap.new('%s-1-config' % self.name) +
+    configMap.withData({
+      'prometheus.yml': k.util.manifestYaml(this.prometheus_one.config),
+    }),
+    configMap.new('%s-1-alerts' % self.name) +
+    configMap.withData({
+      'alerts.rules': k.util.manifestYaml(this.prometheus_one.alerts),
+    }),
+    configMap.new('%s-1-recording' % self.name) +
+    configMap.withData({
+      'recording.rules': k.util.manifestYaml(this.prometheus_one.rules),
+    }),
+  ],
+
+  prometheus_config_mount::
+    k.util.configVolumeMount('%s-0-config' % self.name, '/etc/%s-0' % self.name)
+    + k.util.configVolumeMount('%s-0-alerts' % self.name, '/etc/%s-0/alerts' % self.name)
+    + k.util.configVolumeMount('%s-0-recording' % self.name, '/etc/%s-0/recording' % self.name)
+    + k.util.configVolumeMount('%s-1-config' % self.name, '/etc/%s-1' % self.name)
+    + k.util.configVolumeMount('%s-1-alerts' % self.name, '/etc/%s-1/alerts' % self.name)
+    + k.util.configVolumeMount('%s-1-recording' % self.name, '/etc/%s-1/recording' % self.name)
+  ,
+
+  local container = k.core.v1.container,
+  local envVar = k.core.v1.envVar,
+
+  prometheus_container+::
+    container.withEnv([
+      envVar.fromFieldPath('POD_NAME', 'metadata.name'),
+    ])
+    + container.mixin.readinessProbe.httpGet.withPath('%(prometheus_path)s-/ready' % self._config)
+    + container.mixin.readinessProbe.httpGet.withPort(self._config.prometheus_port)
+    + container.mixin.readinessProbe.withInitialDelaySeconds(15)
+    + container.mixin.readinessProbe.withTimeoutSeconds(1)
+  ,
+
+  prometheus_watch_container+::
+    container.withEnv([
+      envVar.fromFieldPath('POD_NAME', 'metadata.name'),
+    ]),
+
+  local statefulset = k.apps.v1.statefulSet,
+
+  prometheus_statefulset+:
+    statefulset.mixin.spec.withReplicas(2),
+}

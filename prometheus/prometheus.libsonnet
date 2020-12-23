@@ -1,3 +1,4 @@
+local ha_mixin = import 'ha-mixin.libsonnet';
 local kausal = import 'ksonnet-util/kausal.libsonnet';
 
 (import 'config.libsonnet')
@@ -22,6 +23,8 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       }
     else {}
   ),
+
+  withHighAvailability():: ha_mixin,
 
   local configMap = k.core.v1.configMap,
 
