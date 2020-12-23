@@ -62,40 +62,40 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   local configMap = k.core.v1.configMap,
 
   prometheus_config_maps: [
-    configMap.new('%s-0-config' % self.name) +
+    configMap.new('%s-0-config' % _config.name) +
     configMap.withData({
       'prometheus.yml': k.util.manifestYaml(this.prometheus_zero.config),
     }),
-    configMap.new('%s-0-alerts' % self.name) +
+    configMap.new('%s-0-alerts' % _config.name) +
     configMap.withData({
       'alerts.rules': k.util.manifestYaml(this.prometheus_zero.alerts),
     }),
-    configMap.new('%s-0-recording' % self.name) +
+    configMap.new('%s-0-recording' % _config.name) +
     configMap.withData({
       'recording.rules': k.util.manifestYaml(this.prometheus_zero.rules),
     }),
 
-    configMap.new('%s-1-config' % self.name) +
+    configMap.new('%s-1-config' % _config.name) +
     configMap.withData({
       'prometheus.yml': k.util.manifestYaml(this.prometheus_one.config),
     }),
-    configMap.new('%s-1-alerts' % self.name) +
+    configMap.new('%s-1-alerts' % _config.name) +
     configMap.withData({
       'alerts.rules': k.util.manifestYaml(this.prometheus_one.alerts),
     }),
-    configMap.new('%s-1-recording' % self.name) +
+    configMap.new('%s-1-recording' % _config.name) +
     configMap.withData({
       'recording.rules': k.util.manifestYaml(this.prometheus_one.rules),
     }),
   ],
 
   prometheus_config_mount::
-    k.util.configVolumeMount('%s-0-config' % self.name, '/etc/%s-0' % self.name)
-    + k.util.configVolumeMount('%s-0-alerts' % self.name, '/etc/%s-0/alerts' % self.name)
-    + k.util.configVolumeMount('%s-0-recording' % self.name, '/etc/%s-0/recording' % self.name)
-    + k.util.configVolumeMount('%s-1-config' % self.name, '/etc/%s-1' % self.name)
-    + k.util.configVolumeMount('%s-1-alerts' % self.name, '/etc/%s-1/alerts' % self.name)
-    + k.util.configVolumeMount('%s-1-recording' % self.name, '/etc/%s-1/recording' % self.name)
+    k.util.configVolumeMount('%s-0-config' % _config.name, '/etc/%s-0' % _config.name)
+    + k.util.configVolumeMount('%s-0-alerts' % _config.name, '/etc/%s-0/alerts' % _config.name)
+    + k.util.configVolumeMount('%s-0-recording' % _config.name, '/etc/%s-0/recording' % _config.name)
+    + k.util.configVolumeMount('%s-1-config' % _config.name, '/etc/%s-1' % _config.name)
+    + k.util.configVolumeMount('%s-1-alerts' % _config.name, '/etc/%s-1/alerts' % _config.name)
+    + k.util.configVolumeMount('%s-1-recording' % _config.name, '/etc/%s-1/recording' % _config.name)
   ,
 
   local container = k.core.v1.container,
