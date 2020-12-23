@@ -1,3 +1,4 @@
+local ha_mixin = import 'ha-mixin.libsonnet';
 local kausal = import 'ksonnet-util/kausal.libsonnet';
 
 (import 'config.libsonnet')
@@ -5,7 +6,24 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 + (import 'mixins.libsonnet')
 + {
   local _config = self._config,
-  local k = kausal { _config+:: _config },
+  local k = kausal {
+    _config+:: _config,
+  } + (
+    // an attempt at providing compat with the original ksonnet-lib
+    if std.objectHas(kausal, '__ksonnet')
+    then
+      {
+        core+: { v1+: {
+          servicePort: kausal.core.v1.service.mixin.spec.portsType,
+        } },
+        rbac+: { v1+: {
+          policyRule: kausal.rbac.v1beta1.clusterRole.rulesType,
+        } },
+      }
+    else {}
+  ),
+
+  withHighAvailability():: ha_mixin,
 
   local configMap = k.core.v1.configMap,
 
@@ -35,7 +53,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   local policyRule = k.rbac.v1.policyRule,
 
   prometheus_rbac:
-    (k { _config+:: _config }).util.rbac(_config.name, [
+    k.util.rbac(_config.name, [
       policyRule.withApiGroups([''])
       + policyRule.withResources([
         'nodes',
@@ -126,7 +144,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   ,
 
   local service = k.core.v1.service,
-  local servicePort = service.mixin.spec.portsType,
+  local servicePort = k.core.v1.servicePort,
 
   prometheus_service:
     k.util.serviceFor(self.prometheus_statefulset)
