@@ -3,7 +3,7 @@ local prometheus_images = import 'prometheus/images.libsonnet';
 
 {
   _images+::
-    prometheus +
+    prometheus_images +
     alertmanager_images +
     {
       grafana: 'grafana/grafana:7.2.2',
