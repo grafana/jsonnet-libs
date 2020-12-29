@@ -6,9 +6,6 @@ defaults: &defaults
 
 workflows:
   version: 2
-  default:
-    jobs:
-    - lint
 
 jobs:
   lint:
