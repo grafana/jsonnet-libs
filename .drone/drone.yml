@@ -20,4 +20,8 @@ trigger:
   - push
   - pull_request
 
+---
+kind: signature
+hmac: d6c05915444d8389944b22da34f14b8f39abaaf18d52237a1f07cf7c5c42fc5b
+
 ...

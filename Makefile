@@ -31,3 +31,4 @@ lint:
 generate_drone:
 	drone jsonnet --stream --format --source .drone/drone.jsonnet --target .drone/drone.yml
 	drone lint .drone/drone.yml
+	drone sign --save grafana/jsonnet-libs .drone/drone.yml
