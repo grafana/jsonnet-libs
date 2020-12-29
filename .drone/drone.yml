@@ -1,0 +1,23 @@
+---
+kind: pipeline
+type: docker
+name: ci
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+- name: lint
+  image: grafana/jsonnet-build:7f1cb84
+  commands:
+  - make lint
+
+trigger:
+  branch:
+  - master
+  event:
+  - push
+  - pull_request
+
+...

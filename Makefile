@@ -27,3 +27,7 @@ lint:
 				fi; \
 		done; \
 		exit $$RESULT
+
+generate_drone:
+	drone jsonnet --stream --format --source .drone/drone.jsonnet --target .drone/drone.yml
+	drone lint .drone/drone.yml
