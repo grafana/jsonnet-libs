@@ -3383,5 +3383,6 @@
   "timezone": "",
   "title": "Spring Boot Statistics",
   "version": 15,
+  "uid": "20201230-spring",
   "description": "Dashboard for Spring Boot2 Statistics(by micrometer-prometheus)."
 }
