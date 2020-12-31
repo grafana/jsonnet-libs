@@ -1,0 +1,11 @@
+groups:
+  - name: NodejsAlerts
+    rules:
+      - alert: NodejsDown
+        expr: process_start_time_seconds != 1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: 'Node.js {{$labels.job}} on {{$labels.instance}} is not up.'
+          summary: Node.js not up
