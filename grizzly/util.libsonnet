@@ -1,5 +1,5 @@
 {
-  grizzlyAPI:: 'grafana.com/grizzly/v1',
+  grizzlyAPI:: 'grizzly.grafana.com/v1',
   get(obj, key, default):: if std.objectHasAll(obj, key) then obj[key] else default,
 
   makeResource(kind, name, resource, metadata={}):: {
