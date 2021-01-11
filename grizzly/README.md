@@ -12,7 +12,7 @@ or associated libraries, where other resources are using Tanka, place a file
 named `grr.jsonnet` next to your `main.jsonnet`, and give it this content:
 
 ```
-local main = (import 'main.jsonnet').o11y.o11y;
+local main = (import 'main.jsonnet');
 local grizzly = (import 'grizzly/grizzly.libsonnet');
 
 grizzly.fromPrometheusKsonnet(main)
