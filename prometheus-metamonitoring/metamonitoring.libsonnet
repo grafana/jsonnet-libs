@@ -111,7 +111,7 @@ local util = import 'util.libsonnet';
 
       prometheus_container+:
         k.core.v1.container.withVolumeMountsMixin([
-          k.core.v1.volumeMount.new(this._config.clusters[c].secret_name, '/secrets/%s' % c)
+          k.core.v1.volumeMount.new(this._config.clusters[c].secret_name, '/secrets/%s' % this._config.clusters[c].cluster_name)
           for c in std.objectFields(this._config.clusters)
         ]),
       prometheus_statefulset+:
