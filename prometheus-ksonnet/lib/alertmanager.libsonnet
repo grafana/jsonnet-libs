@@ -10,14 +10,14 @@ alertmanager_slack +
   local peers = if isGlobal
   then
     [
-      'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [i, $._config.namespace, cluster, $._config.cluster_dns_tld, $._config.alertmanager_gossip_port]
+      'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [i, $._config.alertmanager_namespace, cluster, $._config.cluster_dns_tld, $._config.alertmanager_gossip_port]
       for cluster in std.objectFields($._config.alertmanager_clusters)
       if $._config.alertmanager_clusters[cluster].global
       for i in std.range(0, $._config.alertmanager_clusters[cluster].replicas - 1)
     ]
   else if isGossiping then
     [
-      'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [i, $._config.namespace, $._config.cluster_name, $._config.cluster_dns_tld, $._config.alertmanager_gossip_port]
+      'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [i, $._config.alertmanager_namespace, $._config.cluster_name, $._config.cluster_dns_tld, $._config.alertmanager_gossip_port]
       for i in std.range(0, replicas - 1)
     ]
   else [],
@@ -25,6 +25,7 @@ alertmanager_slack +
   _config+:: {
     alertmanager_peers: peers,
     alertmanager_replicas: replicas,
+    alertmanager_external_hostname: 'http://alertmanager.%(alertmanager_namespace)s.svc.%(cluster_dns_suffix)s' % self,
   },
 
   alertmanager_container+:: (
