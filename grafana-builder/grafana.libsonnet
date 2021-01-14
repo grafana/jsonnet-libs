@@ -382,7 +382,7 @@
         expr:
           |||
             sum by (status) (
-              label_replace(label_replace(rate(%s[$__interval]),
+              label_replace(label_replace(rate(%s[$__rate_interval]),
               "status", "${1}xx", "%s", "([0-9]).."),
               "status", "${1}", "%s", "([a-z]+)"))
           ||| % [selector, statusLabelName, statusLabelName],
@@ -399,7 +399,7 @@
     nullPointMode: 'null as zero',
     targets: [
       {
-        expr: 'histogram_quantile(0.99, sum(rate(%s_bucket%s[$__interval])) by (le)) * %s' % [metricName, selector, multiplier],
+        expr: 'histogram_quantile(0.99, sum(rate(%s_bucket%s[$__rate_interval])) by (le)) * %s' % [metricName, selector, multiplier],
         format: 'time_series',
         intervalFactor: 2,
         legendFormat: '99th Percentile',
@@ -407,7 +407,7 @@
         step: 10,
       },
       {
-        expr: 'histogram_quantile(0.50, sum(rate(%s_bucket%s[$__interval])) by (le)) * %s' % [metricName, selector, multiplier],
+        expr: 'histogram_quantile(0.50, sum(rate(%s_bucket%s[$__rate_interval])) by (le)) * %s' % [metricName, selector, multiplier],
         format: 'time_series',
         intervalFactor: 2,
         legendFormat: '50th Percentile',
@@ -415,7 +415,7 @@
         step: 10,
       },
       {
-        expr: 'sum(rate(%s_sum%s[$__interval])) * %s / sum(rate(%s_count%s[$__interval]))' % [metricName, selector, multiplier, metricName, selector],
+        expr: 'sum(rate(%s_sum%s[$__rate_interval])) * %s / sum(rate(%s_count%s[$__rate_interval]))' % [metricName, selector, multiplier, metricName, selector],
         format: 'time_series',
         intervalFactor: 2,
         legendFormat: 'Average',
