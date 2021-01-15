@@ -17,6 +17,9 @@ This repository contains various Jsonnet libraries we use at Grafana Labs:
 * [`nodejs-mixin`](nodejs-mixin/): A set of reusable and extensible dashboards
   for Node.js.
 
+* [`caddy-mixin`](caddy-mixin/): A set of reusable and extensible dashboards
+  for Caddy.
+
 * [`oauth2-proxy`](oauth2-proxy/): A jsonnet configuration for deploying bitly's
   OAuth proxy to Kubernetes.
 
