@@ -6,25 +6,36 @@ Usage:
 - Make sure you have [Tanka](https://tanka.dev/install) and
   [jsonnet-bundler](https://tanka.dev/install#jsonnet-bundler) installed:
 
-- In your config repo, init Tanka and point it at your Kubernetes cluster:
+- In your config repo, init Tanka with [`k8s-alpha`](https://github.com/jsonnet-libs/k8s-alpha) and point it at your Kubernetes cluster:
 
 ```bash
-$ tk init
+# set up Tanka project, we will install k8s ourselves
+tk init --k8s=false
+
+# pull k8s-alpha for Kubernetes 1.18
+jb install github.com/jsonnet-libs/k8s-alpha/1.18
+
+# init k.libsonnet
+cat <<EOF > lib/k.libsonnet
+(import "github.com/jsonnet-libs/k8s-alpha/1.18/main.libsonnet")
++ (import "github.com/jsonnet-libs/k8s-alpha/1.18/extensions/kausal-shim.libsonnet")
+EOF
 
 # point at cluster
-$ export CONTEXT=$(kubectl config current-context)
-$ tk env set environments/default  --server-from-context=$CONTEXT
+export CONTEXT=$(kubectl config current-context)
+tk env set environments/default  --server-from-context=$CONTEXT
 ```
 
 - Vendor this package using jsonnet-bundler:
 
 ```bash
-$ jb install github.com/grafana/jsonnet-libs/prometheus-ksonnet
+jb install github.com/grafana/jsonnet-libs/prometheus-ksonnet
 ```
 
 - Assuming you want to run in the default namespace ('environment' in Tanka parlance), add the following to the file `environments/default/main.jsonnet`:
 
-```jsonnet
+```bash
+cat <<EOF > environments/default/main.jsonnet
 local prometheus = import "prometheus-ksonnet/prometheus-ksonnet.libsonnet";
 
 prometheus {
@@ -33,12 +44,13 @@ prometheus {
     namespace: "default",
   },
 }
+EOF
 ```
 
 - Apply your config:
 
 ```bash
-$ tk apply environments/default
+tk apply environments/default
 ```
 
 # Kops
