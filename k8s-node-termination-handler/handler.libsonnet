@@ -5,5 +5,5 @@
       namespace: 'kube-system',
       slack_webhook: '',
     } + config;
-    (import 'gke.libsonnet'),
+    (import 'gke.libsonnet') + _config,
 }
