@@ -1,7 +1,13 @@
 // Override defaults paramters for objects in the ksonnet libs here.
 local k = import 'k.libsonnet';
 
-k {
+k
++ (
+  if std.objectHas(k, '__ksonnet')
+  then (import 'legacy-types.libsonnet')
+  else {}
+)
++ {
   _config+:: {
     enable_rbac: true,
     enable_pod_priorities: false,
@@ -22,7 +28,7 @@ k {
       },
 
       // Expose containerPort type.
-      containerPort:: $.core.v1.container.portsType {
+      containerPort+:: {
         // Force all ports to have names.
         new(name, port)::
           super.newNamed(name=name, containerPort=port),
@@ -34,7 +40,7 @@ k {
       },
 
       // Expose volumes type.
-      volume:: $.core.v1.pod.mixin.spec.volumesType {
+      volume+:: {
         // Make items parameter optional from fromConfigMap
         fromConfigMap(name, configMapName, configMapItems=[])::
           {
@@ -53,7 +59,7 @@ k {
         fromPersistentVolumeClaim(name='', claimName=''):: super.fromPersistentVolumeClaim(name=name, emptyDir=claimName),
       },
 
-      volumeMount:: $.core.v1.container.volumeMountsType {
+      volumeMount+:: {
         // Override new, such that it doesn't always set readOnly: false.
         new(name, mountPath, readOnly=false)::
           {} + self.withName(name) + self.withMountPath(mountPath) +
@@ -73,7 +79,7 @@ k {
             {},
       },
 
-      container:: $.apps.v1.deployment.mixin.spec.template.spec.containersType {
+      container+:: {
         new(name, image)::
           super.new(name, image) +
           super.withImagePullPolicy('IfNotPresent'),
@@ -98,14 +104,10 @@ k {
 
         withEnvMap(es)::
           self.withEnvMixin([
-            $.core.v1.container.envType.new(k, es[k])
+            $.core.v1.envVar.new(k, es[k])
             for k in std.objectFields(es)
           ]),
       },
-
-      toleration:: $.apps.v1.deployment.mixin.spec.template.spec.tolerationsType,
-
-      servicePort:: $.core.v1.service.mixin.spec.portsType,
     },
   },
 
@@ -202,14 +204,6 @@ k {
   apps+: {
     v1beta1+: appsExtentions,
     v1+: appsExtentions,
-  },
-
-  rbac+: {
-    v1beta1+: {
-      // Shortcut to access the hidden types.
-      policyRule:: $.rbac.v1beta1.clusterRole.rulesType,
-      subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType,
-    },
   },
 
   util+::
