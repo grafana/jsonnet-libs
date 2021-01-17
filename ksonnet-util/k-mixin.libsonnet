@@ -1,4 +1,4 @@
-// Override defaults paramters for objects in the ksonnet libs here.
+// Override defaults parameters for objects in the ksonnet libs here.
 local k = import 'k.libsonnet';
 
 k
@@ -7,7 +7,15 @@ k
   then
     (import 'legacy-types.libsonnet')
     + (import 'legacy-custom.libsonnet')
-  else {}
+    + (import 'legacy-noname.libsonnet')({
+      new(name=''):: super.new() + super.mixin.metadata.withName(name),
+    })
+  else
+    (import 'ksonnet-compat.libsonnet')
+    + (import 'legacy-noname.libsonnet')({
+      new(name=''):: super.new(name),
+    })
+
 )
 + {
   core+: {
@@ -72,9 +80,9 @@ k
         // Can't think of a reason we wouldn't want a DaemonSet to run on
         // every node.
         super.mixin.spec.template.spec.withTolerations([
-          k.core.v1.toleration.new() +
-          k.core.v1.toleration.withOperator('Exists') +
-          k.core.v1.toleration.withEffect('NoSchedule'),
+          $.core.v1.toleration.new() +
+          $.core.v1.toleration.withOperator('Exists') +
+          $.core.v1.toleration.withEffect('NoSchedule'),
         ]) +
 
         // We want to specify a minReadySeconds on every deamonset, so we get some

@@ -17,7 +17,7 @@ k {
         else {},
       namespacedRBAC(name, rules)::
         if $._config.enable_rbac
-        then super.namespaceRBAC(name, rules, $._config.namespace)
+        then super.namespacedRBAC(name, rules, $._config.namespace)
         else {},
       podPriority(p):
         if $._config.enable_pod_priorities
