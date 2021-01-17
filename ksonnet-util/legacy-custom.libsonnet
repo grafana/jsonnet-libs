@@ -46,8 +46,8 @@
 
       containerPort+:: {
         // Shortcut constructor for UDP ports.
-        newNamedUDP(name, port)::
-          super.newNamed(name=name, containerPort=port) +
+        newNamedUDP(name, containerPort)::
+          super.newNamed(name=name, containerPort=containerPort) +
           super.withProtocol('UDP'),
       },
 
