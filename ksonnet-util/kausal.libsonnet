@@ -30,7 +30,13 @@ k
 
       persistentVolumeClaim+:: {
         // allow empty name label (backward compat)
-        new(name=''):: super.new(name),
+        new(name='')::
+          if name != ''
+          then super.new(name)
+          else {
+            apiVersion: 'v1',
+            kind: 'PersistentVolumeClaim',
+          },
       },
 
       container+:: {
@@ -46,7 +52,20 @@ k
       cronJob+: {
         // allow empty name label (backward compat)
         new(name='', schedule='', containers=[])::
-          super.new(name, schedule, containers),
+          if name != ''
+          then super.new(name, schedule, containers)
+          else
+            {
+              apiVersion: 'batch/v1beta1',
+              kind: 'CronJob',
+            }
+            + super.mixin.spec.jobTemplate.spec.template.spec.withContainers(containers)
+            + (
+              if schedule != ''
+              then super.mixin.spec.withSchedule(schedule)
+              else {}
+            ),
+
       },
     },
   },
