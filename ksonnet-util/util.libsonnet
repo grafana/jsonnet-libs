@@ -1,3 +1,5 @@
+local k = import 'k-mixin.libsonnet';
+
 {
   // mapToFlags converts a map to a set of golang-style command line flags.
   mapToFlags(map, prefix='-'): [
@@ -8,9 +10,9 @@
 
   // serviceFor create service for a given deployment.
   serviceFor(deployment, ignored_labels=[], nameFormat='%(container)s-%(port)s')::
-    local container = $.core.v1.container;
-    local service = $.core.v1.service;
-    local servicePort = service.mixin.spec.portsType;
+    local container = k.core.v1.container;
+    local service = k.core.v1.service;
+    local servicePort = k.core.v1.servicePort;
     local ports = [
       servicePort.newNamed(
         name=(nameFormat % { container: c.name, port: port.name }),
@@ -39,10 +41,10 @@
   // rbac creates a service account, role and role binding with the given
   // name and rules.
   rbac(name, rules, namespace):: {
-    local clusterRole = $.rbac.v1beta1.clusterRole,
-    local clusterRoleBinding = $.rbac.v1beta1.clusterRoleBinding,
-    local subject = $.rbac.v1beta1.subject,
-    local serviceAccount = $.core.v1.serviceAccount,
+    local clusterRole = k.rbac.v1.clusterRole,
+    local clusterRoleBinding = k.rbac.v1.clusterRoleBinding,
+    local subject = k.rbac.v1.subject,
+    local serviceAccount = k.core.v1.serviceAccount,
 
     service_account:
       serviceAccount.new(name),
@@ -67,10 +69,10 @@
   },
 
   namespacedRBAC(name, rules, namespace):: {
-    local role = $.rbac.v1beta1.role,
-    local roleBinding = $.rbac.v1beta1.roleBinding,
-    local subject = $.rbac.v1beta1.subject,
-    local serviceAccount = $.core.v1.serviceAccount,
+    local role = k.rbac.v1.role,
+    local roleBinding = k.rbac.v1.roleBinding,
+    local subject = k.rbac.v1.subject,
+    local serviceAccount = k.core.v1.serviceAccount,
 
     service_account:
       serviceAccount.new(name) +
@@ -101,10 +103,10 @@
   // For example, passing "volumeMount.withSubPath(subpath)" will result in
   // a subpath mixin.
   configVolumeMount(name, path, volumeMountMixin={})::
-    local container = $.core.v1.container,
-          deployment = $.apps.v1.deployment,
-          volumeMount = $.core.v1.volumeMount,
-          volume = $.core.v1.volume,
+    local container = k.core.v1.container,
+          deployment = k.apps.v1.deployment,
+          volumeMount = k.core.v1.volumeMount,
+          volume = k.core.v1.volume,
           addMount(c) = c + container.withVolumeMountsMixin(
       volumeMount.new(name, path) +
       volumeMountMixin,
@@ -121,10 +123,10 @@
   configMapVolumeMount(configMap, path, volumeMountMixin={})::
     local name = configMap.metadata.name,
           hash = std.md5(std.toString(configMap)),
-          container = $.core.v1.container,
-          deployment = $.apps.v1.deployment,
-          volumeMount = $.core.v1.volumeMount,
-          volume = $.core.v1.volume,
+          container = k.core.v1.container,
+          deployment = k.apps.v1.deployment,
+          volumeMount = k.core.v1.volumeMount,
+          volume = k.core.v1.volume,
           addMount(c) = c + container.withVolumeMountsMixin(
       volumeMount.new(name, path) +
       volumeMountMixin,
@@ -139,10 +141,10 @@
     }),
 
   hostVolumeMount(name, hostPath, path, readOnly=false, volumeMountMixin={})::
-    local container = $.core.v1.container,
-          deployment = $.apps.v1.deployment,
-          volumeMount = $.core.v1.volumeMount,
-          volume = $.core.v1.volume,
+    local container = k.core.v1.container,
+          deployment = k.apps.v1.deployment,
+          volumeMount = k.core.v1.volumeMount,
+          volume = k.core.v1.volume,
           addMount(c) = c + container.withVolumeMountsMixin(
       volumeMount.new(name, path, readOnly=readOnly) +
       volumeMountMixin,
@@ -154,10 +156,10 @@
     ]),
 
   secretVolumeMount(name, path, defaultMode=256, volumeMountMixin={})::
-    local container = $.core.v1.container,
-          deployment = $.apps.v1.deployment,
-          volumeMount = $.core.v1.volumeMount,
-          volume = $.core.v1.volume,
+    local container = k.core.v1.container,
+          deployment = k.apps.v1.deployment,
+          volumeMount = k.core.v1.volumeMount,
+          volume = k.core.v1.volume,
           addMount(c) = c + container.withVolumeMountsMixin(
       volumeMount.new(name, path) +
       volumeMountMixin,
@@ -170,10 +172,10 @@
     ]),
 
   emptyVolumeMount(name, path, volumeMountMixin={}, volumeMixin={})::
-    local container = $.core.v1.container,
-          deployment = $.apps.v1.deployment,
-          volumeMount = $.core.v1.volumeMount,
-          volume = $.core.v1.volume,
+    local container = k.core.v1.container,
+          deployment = k.apps.v1.deployment,
+          volumeMount = k.core.v1.volumeMount,
+          volume = k.core.v1.volume,
           addMount(c) = c + container.withVolumeMountsMixin(
       volumeMount.new(name, path) +
       volumeMountMixin,
@@ -190,7 +192,7 @@
   ),
 
   resourcesRequests(cpu, memory)::
-    $.core.v1.container.mixin.resources.withRequests(
+    k.core.v1.container.mixin.resources.withRequests(
       (if cpu != null
        then { cpu: cpu }
        else {}) +
@@ -200,7 +202,7 @@
     ),
 
   resourcesLimits(cpu, memory)::
-    $.core.v1.container.mixin.resources.withLimits(
+    k.core.v1.container.mixin.resources.withLimits(
       (if cpu != null
        then { cpu: cpu }
        else {}) +
@@ -211,7 +213,7 @@
 
   antiAffinity:
     {
-      local deployment = $.apps.v1.deployment,
+      local deployment = k.apps.v1.deployment,
       local podAntiAffinity = deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
       local name = super.spec.template.metadata.labels.name,
 
@@ -224,7 +226,7 @@
 
   antiAffinityStatefulSet:
     {
-      local statefulSet = $.apps.v1.statefulSet,
+      local statefulSet = k.apps.v1.statefulSet,
       local podAntiAffinity = statefulSet.mixin.spec.template.spec.affinity.podAntiAffinity,
       local name = super.spec.template.metadata.labels.name,
 
@@ -237,7 +239,7 @@
 
   // Add a priority to the pods in a deployment (or deployment-like objects
   // such as a statefulset).
-  local deployment = $.apps.v1.deployment,
+  local deployment = k.apps.v1.deployment,
   podPriority(p):
     deployment.mixin.spec.template.spec.withPriorityClassName(p),
 }
