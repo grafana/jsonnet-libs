@@ -1,4 +1,10 @@
+// legacy-noname.libsonnet provides two-way compatibility, in k8s-alpha many new() functions have a mandatory name
+// argument while they are absent in ksonnet-lib. `noNewEmptyNameMixin` allows us to make the argument optional in
+// either situation.
 function(noNewEmptyNameMixin) {
+  core+: { v1+: {
+    persistentVolumeClaim+: noNewEmptyNameMixin,
+  } },
   extensions+: {
     v1beta1+: {
       ingress+: noNewEmptyNameMixin,

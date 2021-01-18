@@ -1,4 +1,4 @@
-// Retrofit hidden types from ksonnet-lib
+// legacy-types.libsonnet exposes hidden types from ksonnet-lib as first class citizens
 // This list is likely to be incomplete.
 {
   core+: {

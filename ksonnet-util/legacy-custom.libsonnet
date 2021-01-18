@@ -1,4 +1,4 @@
-// Retrofit k8s-alpha functionality into ksonnet-lib
+// legacy-custom.libsonnet retrofits k8s-alpha functionality into ksonnet-lib
 {
   core+: {
     v1+: {

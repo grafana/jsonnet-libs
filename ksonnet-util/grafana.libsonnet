@@ -1,4 +1,4 @@
-// grafana.libsonnet provies the k-compat layer with some grafana-opinionated overlays
+// grafana.libsonnet provides the k-compat layer with grafana-opinionated defaults
 (import 'k-compat.libsonnet')
 + {
   core+: {
@@ -13,44 +13,10 @@
           super.newNamedUDP(name=name, containerPort=port),
       },
 
-      persistentVolumeClaim+:: {
-        // allow empty name label (backward compat)
-        new(name='')::
-          if name != ''
-          then super.new(name)
-          else {
-            apiVersion: 'v1',
-            kind: 'PersistentVolumeClaim',
-          },
-      },
-
       container+:: {
         new(name, image)::
           super.new(name, image) +
           super.withImagePullPolicy('IfNotPresent'),
-      },
-    },
-  },
-
-  batch+: {
-    v1beta1+: {
-      cronJob+: {
-        // allow empty name label (backward compat)
-        new(name='', schedule='', containers=[])::
-          if name != ''
-          then super.new(name, schedule, containers)
-          else
-            {
-              apiVersion: 'batch/v1beta1',
-              kind: 'CronJob',
-            }
-            + super.mixin.spec.jobTemplate.spec.template.spec.withContainers(containers)
-            + (
-              if schedule != ''
-              then super.mixin.spec.withSchedule(schedule)
-              else {}
-            ),
-
       },
     },
   },

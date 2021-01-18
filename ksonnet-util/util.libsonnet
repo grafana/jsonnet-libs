@@ -1,4 +1,5 @@
-local k = import 'k-mixin.libsonnet';
+// util.libsonnet provides a number of useful (opinionated) shortcuts to replace boilerplate code
+local k = import 'grafana.libsonnet';
 
 {
   // mapToFlags converts a map to a set of golang-style command line flags.
