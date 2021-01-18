@@ -1,7 +1,8 @@
-// Override defaults paramters for objects in the ksonnet libs here.
-local k = import 'k-mixin.libsonnet';
+// kausal.libsonnet provides a backwards compatible way as many libraries leverage kausal.libsonnet.
+// Ideally util.libsonnet is consumed separately.
 
-k {
+(import 'grafana.libsonnet')
++ {
   _config+:: {
     enable_rbac: true,
     enable_pod_priorities: false,

@@ -1,25 +1,5 @@
-// Override defaults parameters for objects in the ksonnet libs here.
-local k = import 'k.libsonnet';
-
-k
-+ (
-  if std.trace(
-    'Deprecated: ksonnet-lib is deprecated, please consider using https://github.com/jsonnet-libs/k8s-alpha.',
-    std.objectHas(k, '__ksonnet')
-  )
-  then
-    (import 'legacy-types.libsonnet')
-    + (import 'legacy-custom.libsonnet')
-    + (import 'legacy-noname.libsonnet')({
-      new(name=''):: super.new() + super.mixin.metadata.withName(name),
-    })
-  else
-    (import 'ksonnet-compat.libsonnet')
-    + (import 'legacy-noname.libsonnet')({
-      new(name=''):: super.new(name),
-    })
-
-)
+// grafana.libsonnet provies the k-compat layer with some grafana-opinionated overlays
+(import 'k-compat.libsonnet')
 + {
   core+: {
     v1+: {
