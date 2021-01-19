@@ -1,0 +1,1088 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Inspired from https://github.com/spreaker/prometheus-pgbouncer-exporter",
+    "editable": true,
+    "gnetId": 11806,
+    "graphTooltip": 1,
+    "id": 11,
+    "iteration": 1611068096769,
+    "links": [],
+    "panels": [
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": true,
+        "colors": [
+          "#299c46",
+          "rgba(237, 129, 40, 0.89)",
+          "#d44a3a"
+        ],
+        "datasource": "$datasource",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {}
+          },
+          "overrides": []
+        },
+        "format": "none",
+        "gauge": {
+          "maxValue": 30000,
+          "minValue": 0,
+          "show": true,
+          "thresholdLabels": false,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 5,
+          "x": 0,
+          "y": 0
+        },
+        "id": 6,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "repeat": null,
+        "repeatDirection": "h",
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": true
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "expr": "sum (pgbouncer_pools_client_active_connections{database=~\"$db\"})",
+            "format": "time_series",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "thresholds": "15000,25000,30000",
+        "title": "Client active connections $db",
+        "transparent": true,
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "N/A",
+            "value": "null"
+          }
+        ],
+        "valueName": "current"
+      },
+      {
+        "cacheTimeout": null,
+        "datasource": "$datasource",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {},
+            "mappings": [
+              {
+                "id": 0,
+                "op": "=",
+                "text": "N/A",
+                "type": 1,
+                "value": "null"
+              }
+            ],
+            "max": 300000,
+            "min": 0,
+            "nullValueMode": "connected",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#299c46",
+                  "value": null
+                },
+                {
+                  "color": "rgba(237, 129, 40, 0.89)",
+                  "value": 200000
+                },
+                {
+                  "color": "#d44a3a",
+                  "value": 280000
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 5,
+          "x": 5,
+          "y": 0
+        },
+        "id": 4,
+        "links": [],
+        "options": {
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "pluginVersion": "7.3.6",
+        "repeatDirection": "h",
+        "targets": [
+          {
+            "expr": "sort_desc( sum ( rate(pgbouncer_stats_queries_total{database=~\"$db\"}[5m]) ) )",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "refId": "A"
+          }
+        ],
+        "title": "Stats queries total $db",
+        "transparent": true,
+        "type": "gauge"
+      },
+      {
+        "aliasColors": {},
+        "bars": true,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "$datasource",
+        "decimals": null,
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 2,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 10,
+          "y": 0
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": false,
+        "id": 2,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": true
+        },
+        "lines": false,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.3.6",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum by (project,server,pool_id,database) (pgbouncer_databases_database_pool_size{database=~\"$db\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{database}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Database pool size",
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "series",
+          "name": null,
+          "show": false,
+          "values": [
+            "current"
+          ]
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": true,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "$datasource",
+        "decimals": null,
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 2,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 16,
+          "y": 0
+        },
+        "hiddenSeries": false,
+        "hideTimeOverride": false,
+        "id": 17,
+        "legend": {
+          "alignAsTable": true,
+          "avg": false,
+          "current": true,
+          "hideEmpty": false,
+          "hideZero": false,
+          "max": false,
+          "min": false,
+          "rightSide": true,
+          "show": true,
+          "total": false,
+          "values": true
+        },
+        "lines": false,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.3.6",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sum by (project,server,pool_id,database) (pgbouncer_databases_database_reserve_pool_size{database=~\"$db\"})",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{database}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Databases database reserve pool size",
+        "tooltip": {
+          "shared": false,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "series",
+          "name": null,
+          "show": false,
+          "values": [
+            "current"
+          ]
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "$datasource",
+        "decimals": null,
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 1,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 7,
+          "w": 24,
+          "x": 0,
+          "y": 6
+        },
+        "hiddenSeries": false,
+        "id": 16,
+        "legend": {
+          "avg": true,
+          "current": false,
+          "hideEmpty": true,
+          "hideZero": true,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.3.6",
+        "pointradius": 1,
+        "points": true,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sort_desc( sum by (project,server,pool_id,database) ( rate(pgbouncer_stats_queries_duration_microseconds{database=~\"$db\"}[5m]) ) )",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{database}}",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Total Query Time",
+        "tooltip": {
+          "shared": true,
+          "sort": 2,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "µs",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {
+          "Stats queries duration microseconds": "#5195ce"
+        },
+        "bars": true,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "$datasource",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 13
+        },
+        "hiddenSeries": false,
+        "id": 12,
+        "legend": {
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "hideEmpty": true,
+          "hideZero": true,
+          "max": true,
+          "min": true,
+          "show": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.3.6",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "alias": ""
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sort_desc( sum by (project,server,pool_id,database) ( rate(pgbouncer_stats_queries_duration_microseconds{database=~\"$db\"}[5m]) ) )",
+            "format": "time_series",
+            "hide": false,
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Stats queries duration microseconds",
+            "refId": "B"
+          },
+          {
+            "expr": "sort_desc( sum by (project,server,pool_id,database) ( rate(pgbouncer_stats_waiting_duration_microseconds{database=~\"$db\"}[5m]) ) ) ",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Stats waiting duration microseconds",
+            "refId": "C"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Stats queries $db",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {
+          "Stats transactions duration microseconds": "#cca300",
+          "Stats transactions total": "#962d82"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "$datasource",
+        "decimals": 2,
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 2,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 13
+        },
+        "hiddenSeries": false,
+        "id": 13,
+        "legend": {
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "hideEmpty": true,
+          "hideZero": true,
+          "max": true,
+          "min": true,
+          "show": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": true,
+        "pluginVersion": "7.3.6",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sort_desc( sum by (project,server,pool_id,database) ( rate(pgbouncer_stats_transactions_duration_microseconds{database=~\"$db\"}[5m]) ) )  ",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Stats transactions duration microseconds",
+            "refId": "D"
+          },
+          {
+            "expr": "sort_desc( sum by (project,server,pool_id,database) ( rate(pgbouncer_stats_transactions_total{database=~\"$db\"}[5m]) ) )",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Stats transactions total",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Transactions stats $db",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {
+          "Client active connections": "#b7dbab"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "$datasource",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 0,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 23
+        },
+        "hiddenSeries": false,
+        "id": 15,
+        "legend": {
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "hideEmpty": true,
+          "hideZero": true,
+          "max": true,
+          "min": true,
+          "show": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.3.6",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "pgbouncer_pools_client_active_connections{database=~\"$db\"}",
+            "format": "time_series",
+            "instant": false,
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Client active connections ",
+            "refId": "A"
+          },
+          {
+            "expr": "pgbouncer_pools_client_waiting_connections{database=~\"$db\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Client waiting connections",
+            "refId": "C"
+          },
+          {
+            "expr": "pgbouncer_pools_server_active_connections{database=~\"$db\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Server active connections",
+            "refId": "B"
+          },
+          {
+            "expr": "pgbouncer_pools_server_idle_connections{database=~\"$db\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Server idle connections",
+            "refId": "D"
+          },
+          {
+            "expr": "pgbouncer_pools_server_used_connections{database=~\"$db\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Server used connections",
+            "refId": "E"
+          },
+          {
+            "expr": "pgbouncer_pools_server_testing_connections{database=~\"$db\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Server testing connections",
+            "refId": "F"
+          },
+          {
+            "expr": "pgbouncer_pools_server_login_connections{database=~\"$db\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Server login connections",
+            "refId": "G"
+          },
+          {
+            "expr": "pgbouncer_databases_database_current_connections{database=~\"$db\"}",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Database current connections",
+            "refId": "H"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Pgbouncer pools connections",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {
+          "Stats received bytes total": "#3333ff",
+          "Stats sent bytes total": "#00aa00"
+        },
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "$datasource",
+        "fieldConfig": {
+          "defaults": {
+            "custom": {},
+            "links": []
+          },
+          "overrides": []
+        },
+        "fill": 3,
+        "fillGradient": 0,
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 23
+        },
+        "hiddenSeries": false,
+        "id": 14,
+        "legend": {
+          "alignAsTable": true,
+          "avg": true,
+          "current": true,
+          "hideEmpty": true,
+          "hideZero": true,
+          "max": true,
+          "min": true,
+          "show": true,
+          "total": false,
+          "values": true
+        },
+        "lines": true,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "options": {
+          "alertThreshold": true
+        },
+        "percentage": false,
+        "pluginVersion": "7.3.6",
+        "pointradius": 5,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [
+          {
+            "alias": "/.*sent.*/",
+            "transform": "negative-Y"
+          }
+        ],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "expr": "sort_desc( sum by (project,server,pool_id,database) ( rate(pgbouncer_stats_received_bytes_total{database=~\"$db\"}[5m])*8 ) )",
+            "format": "time_series",
+            "hide": false,
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Stats received bytes total",
+            "refId": "B"
+          },
+          {
+            "expr": "sort_desc( sum by (project,server,pool_id,database) ( rate(pgbouncer_stats_sent_bytes_total{database=~\"$db\"}[5m])*8 ) )",
+            "format": "time_series",
+            "intervalFactor": 1,
+            "legendFormat": "{{ database }}: Stats sent bytes total",
+            "refId": "C"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Total of incoming / outgoing bytes $db",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "bytes",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      }
+    ],
+    "refresh": "10s",
+    "schemaVersion": 26,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "grafanacloud-mattdurham-prom",
+            "value": "grafanacloud-mattdurham-prom"
+          },
+          "error": null,
+          "hide": 2,
+          "includeAll": false,
+          "label": "Datasource",
+          "multi": false,
+          "name": "datasource",
+          "options": [],
+          "query": "prometheus",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          "datasource": "$datasource",
+          "definition": "label_values(pgbouncer_databases_max_connections, database)",
+          "error": null,
+          "hide": 0,
+          "includeAll": true,
+          "label": "Database",
+          "multi": false,
+          "name": "db",
+          "options": [],
+          "query": "label_values(pgbouncer_databases_max_connections, database)",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "tagValuesQuery": "",
+          "tags": [],
+          "tagsQuery": "",
+          "type": "query",
+          "useTags": false
+        }
+      ]
+    },
+    "time": {
+      "from": "now-7d",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ]
+    },
+    "timezone": "browser",
+    "title": "PGbouncer",
+    "uid": "PGbouncer",
+    "version": 8
+  }
