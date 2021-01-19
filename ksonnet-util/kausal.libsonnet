@@ -3,6 +3,7 @@
 
 (import 'grafana.libsonnet')
 + {
+  local this = self,
   _config+:: {
     enable_rbac: true,
     enable_pod_priorities: false,
@@ -10,7 +11,7 @@
   },
 
   util+::
-    (import 'util.libsonnet')
+    (import 'util.libsonnet').withK(this)
     + {
       rbac(name, rules)::
         if $._config.enable_rbac
