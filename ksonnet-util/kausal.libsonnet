@@ -11,7 +11,7 @@
   },
 
   util+::
-    (import 'util.libsonnet')(this)
+    (import 'util.libsonnet').withK(this)
     + {
       rbac(name, rules)::
         if $._config.enable_rbac

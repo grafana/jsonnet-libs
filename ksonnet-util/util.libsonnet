@@ -1,6 +1,6 @@
 // util.libsonnet provides a number of useful (opinionated) shortcuts to replace boilerplate code
 
-function(k=(import 'grafana.libsonnet')) {
+local util(k) = {
   // mapToFlags converts a map to a set of golang-style command line flags.
   mapToFlags(map, prefix='-'): [
     '%s%s=%s' % [prefix, key, map[key]]
@@ -242,4 +242,8 @@ function(k=(import 'grafana.libsonnet')) {
   local deployment = k.apps.v1.deployment,
   podPriority(p):
     deployment.mixin.spec.template.spec.withPriorityClassName(p),
+};
+
+util((import 'grafana.libsonnet')) + {
+  withK(k):: util(k),
 }
