@@ -56,7 +56,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 
   withSecretTLS(cert, key):: {
     _config+:: { vault+: { config+: {
-      listener+: {
+      default_listener+: {
         tcp+: {
           tls_disable: false,
           tls_prefer_server_cipher_suites: true,
@@ -76,6 +76,30 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       ),
     statefulset+:
       k.util.secretVolumeMount(self.ssl_cert.metadata.name, '/vault/tls'),
+  },
+
+  withPrometheusMetrics(port, telemetry={ prometheus_retention_time: '1m' }):: {
+    local this = self,
+    _config+:: { vault+: { config+: {
+      prometheus_listener+:: {
+        tcp: {
+          address: '[::]:%s' % port,
+          telemetry: {
+            unauthenticated_metrics_access: true,
+          },
+        },
+      },
+      listener+: [this._config.vault.config.prometheus_listener],
+      telemetry+: telemetry,
+    } } },
+    container+:
+      container.withPortsMixin([
+        containerPort.new('http-metrics', port),
+      ]),
+    statefulset+:
+      statefulset.metadata.withAnnotationsMixin({
+        'prometheus.io.path': '/v1/sys/metrics?format=prometheus',
+      }),
   },
 
   local container = k.core.v1.container,
