@@ -39,7 +39,6 @@ local mysql_credential(config) =
     container.withEnvMixin(
       [
         { name: 'MYSQL_USER', value: $._config.mysql_user },
-        // use mysql_password or mysql_password_secret
       ] + mysql_credential($._config)
     ) +
     container.withCommand([
