@@ -12,7 +12,7 @@ local volumeMount = k.core.v1.volumeMount;
 
   _config:: {
     mysql_user: error 'must specify mysql user',
-    mysql_password: error 'must specify mysql password',
+    mysql_password: '',
     mysql_password_secret: '',
     deployment_name: error 'must specify deployment name',
     namespace: error 'must specify namespace',
@@ -28,11 +28,16 @@ local volumeMount = k.core.v1.volumeMount;
         $._config.namespace,
       ],
     }) +
-    container.withEnvMixin([
-      { name: 'MYSQL_USER', value: $._config.mysql_user },
-      { name: 'MYSQL_PASSWORD', value: $._config.mysql_password },
-      // envVar.fromSecretRef('MYSQL_PASSWORD', $._config.mysql_password_secret, 'password'),
-    ]) +
+    container.withEnvMixin(
+      [
+        { name: 'MYSQL_USER', value: $._config.mysql_user },
+        // use mysql_password or mysql_password_secret
+      ] + if std.length($._config.mysql_password) > 0 then [
+        { name: 'MYSQL_PASSWORD', value: $._config.mysql_password },
+      ] else if std.length($._config.mysql_password_secret) > 0 then [
+        envVar.fromSecretRef('MYSQL_PASSWORD', $._config.mysql_password_secret, 'password'),
+      ] else error 'must define either _config.mysql_password or _config.mysql_password_secret'
+    ) +
     container.withCommand([
       '/bin/sh',
       '-c',
