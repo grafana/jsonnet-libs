@@ -46,7 +46,6 @@ local mysql_credential(config) =
         $._config.namespace,
     }
 
-
   mysqld_exporter_container::
     container.new('mysqld-exporter', $.image) +
     container.withPorts(k.core.v1.containerPort.new('http-metrics', 9104)) +
