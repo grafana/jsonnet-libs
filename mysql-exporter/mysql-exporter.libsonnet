@@ -64,7 +64,7 @@ local volumeMount = k.core.v1.volumeMount;
       |||,
     ],) +
     container.withVolumeMounts([
-      volumeMount.new('init-dir', '/init-dir')
+      volumeMount.new('init-dir', '/init-dir'),
     ]),
 
   mysqld_exporter_container::
@@ -72,10 +72,10 @@ local volumeMount = k.core.v1.volumeMount;
     container.withPorts(k.core.v1.containerPort.new('http-metrics', 9104)) +
     container.withArgsMixin([
       '--collect.info_schema.innodb_metrics',
-      '--config.my-cnf=/etc/mysql/my.cnf'
+      '--config.my-cnf=/etc/mysql/my.cnf',
     ]) +
     container.withVolumeMounts([
-      volumeMount.new('init-dir', '/etc/mysql')
+      volumeMount.new('init-dir', '/etc/mysql'),
     ]),
 
   local volume = k.core.v1.volume,
