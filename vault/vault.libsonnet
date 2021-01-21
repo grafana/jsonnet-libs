@@ -84,6 +84,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       prometheus_listener+:: {
         tcp: {
           address: '[::]:%s' % port,
+          tls_disable: true,
           telemetry: {
             unauthenticated_metrics_access: true,
           },
@@ -97,8 +98,9 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
         containerPort.new('http-metrics', port),
       ]),
     statefulset+:
-      statefulset.metadata.withAnnotationsMixin({
-        'prometheus.io.path': '/v1/sys/metrics?format=prometheus',
+      statefulset.spec.template.metadata.withAnnotationsMixin({
+        'prometheus.io.path': '/v1/sys/metrics',
+        'prometheus.io.param-format': 'prometheus',
       }),
   },
 
