@@ -6,6 +6,15 @@ local deployment = k.apps.v1.deployment;
 local envVar = k.core.v1.envVar;
 local volumeMount = k.core.v1.volumeMount;
 
+local mysql_credential(config) =
+  if std.length(config.mysql_password) > 0 && std.length(config.mysql_password_secret) > 0 then
+    error 'only one of _config.mysql_password or _config.mysql_password_secret must be defined.'
+  else if std.length(config.mysql_password) == 0 && std.length(config.mysql_password_secret) == 0 then
+    error 'must define one of _config.mysql_password or _config.mysql_password_secret.'
+  else if std.length(config.mysql_password) > 0 then
+    [{ name: 'MYSQL_PASSWORD', value: config.mysql_password }]
+  else [envVar.fromSecretRef('MYSQL_PASSWORD', config.mysql_password_secret, 'password')];
+
 {
   image:: 'prom/mysqld-exporter:v0.12.1',
   mysql_fqdn:: '',
@@ -17,7 +26,6 @@ local volumeMount = k.core.v1.volumeMount;
     deployment_name: error 'must specify deployment name',
     namespace: error 'must specify namespace',
   },
-
   init_container::
     container.new('init', 'busybox') +
     container.withEnvMap(if std.length($.mysql_fqdn) > 0 then {
@@ -32,11 +40,7 @@ local volumeMount = k.core.v1.volumeMount;
       [
         { name: 'MYSQL_USER', value: $._config.mysql_user },
         // use mysql_password or mysql_password_secret
-      ] + if std.length($._config.mysql_password) > 0 then [
-        { name: 'MYSQL_PASSWORD', value: $._config.mysql_password },
-      ] else if std.length($._config.mysql_password_secret) > 0 then [
-        envVar.fromSecretRef('MYSQL_PASSWORD', $._config.mysql_password_secret, 'password'),
-      ] else error 'must define either _config.mysql_password or _config.mysql_password_secret'
+      ] + mysql_credential($._config)
     ) +
     container.withCommand([
       '/bin/sh',
