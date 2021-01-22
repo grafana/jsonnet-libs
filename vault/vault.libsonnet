@@ -84,6 +84,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       prometheus_listener+:: {
         tcp: {
           address: '[::]:%s' % port,
+          disable_clustering: true,
           tls_disable: true,
           telemetry: {
             unauthenticated_metrics_access: true,
