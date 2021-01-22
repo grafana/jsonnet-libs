@@ -7,19 +7,13 @@ local envVar = k.core.v1.envVar;
 
 
 local mysql_credential(config) =
-  if std.length(config.mysql_password) > 0 && std.length(config.mysql_password_secret) > 0 then
-    error 'only one of _config.mysql_password or _config.mysql_password_secret must be defined.'
-  else if std.length(config.mysql_password) == 0 && std.length(config.mysql_password_secret) == 0 then
-    error 'must define one of _config.mysql_password or _config.mysql_password_secret.'
-  else if std.length(config.mysql_password) > 0 then
+  if std.length(config.mysql_password) > 0 then
     [{ name: 'MYSQL_PASSWORD', value: config.mysql_password }]
   else [envVar.fromSecretRef('MYSQL_PASSWORD', config.mysql_password_secret, config.mysql_password_secret_key)];
 
 
 local mysql_host(config, fqdn) =
-  if std.length(fqdn) == 0 && (std.length(config.deployment_name) == 0 || std.length(config.namespace) == 0) then
-    error 'must specify _config.deployment_name and _config.namespace unless fqdn is specified.'
-  else if std.length(fqdn) > 0 then
+  if std.length(fqdn) > 0 then
     '%s' % fqdn
   else
     '%s.%s.svc.cluster.local' % [
@@ -28,6 +22,9 @@ local mysql_host(config, fqdn) =
     ];
 
 {
+  image:: 'prom/mysqld-exporter:v0.12.1',
+  mysql_fqdn:: '',
+
   _config:: {
     mysql_user: error 'must specify mysql user',
     mysql_password: '',
@@ -37,8 +34,15 @@ local mysql_host(config, fqdn) =
     namespace: '',
   },
 
-  image:: 'prom/mysqld-exporter:v0.12.1',
-  mysql_fqdn:: '',
+  assert (
+    !(std.length($._config.mysql_password) == 0 && std.length($._config.mysql_password_secret) == 0) &&
+    !(std.length($._config.mysql_password) > 0 && std.length($._config.mysql_password_secret) > 0)
+  ) : 'mysql-exporter: exactly one of _config.mysql_password and _config.mysql_password_secret must be defined.',
+
+  assert (
+    (!(std.length($.mysql_fqdn) == 0 && (std.length($._config.deployment_name) == 0 || std.length($._config.namespace) == 0))) &&
+    (!(std.length($.mysql_fqdn) > 0 && !(std.length($._config.deployment_name) == 0 && std.length($._config.namespace) == 0)))
+  ) : 'mysql-exporter: exactly one of (_config.deployment_name and _config.namespace) or mysql_fqdn must be specified.',
 
   mysqld_exporter_container::
     container.new('mysqld-exporter', $.image) +
