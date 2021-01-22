@@ -17,6 +17,9 @@ This repository contains various Jsonnet libraries we use at Grafana Labs:
 * [`nodejs-mixin`](nodejs-mixin/): A set of reusable and extensible dashboards
   for Node.js.
 
+* [`phpfpm-mixin`](phpfpm-mixin/): A set of reusable and extensible dashboards
+  for PHP-FPM.
+
 * [`caddy-mixin`](caddy-mixin/): A set of reusable and extensible dashboards
   for Caddy.
 

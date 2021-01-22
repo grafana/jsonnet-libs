@@ -1,0 +1,19 @@
+groups:
+  - name: PhpFpmAlerts
+    rules:
+      - alert: PhpFpmDown
+        expr: phpfpm_up != 1
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: 'PHP-FPM pool "{{$labels.pool}}" is down.'
+          summary: PHP-FPM pool is not serving requests
+      - alert: PhpFpmScrapeErrors
+        expr: increase(phpfpm_scrape_failures[1m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: 'PHP-FPM pool "{{$labels.pool}}" could not be scraped.'
+          summary: PHP-FPM pool could not be scraped
