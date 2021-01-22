@@ -13,7 +13,7 @@ local mysql_credential(config) =
     error 'must define one of _config.mysql_password or _config.mysql_password_secret.'
   else if std.length(config.mysql_password) > 0 then
     [{ name: 'MYSQL_PASSWORD', value: config.mysql_password }]
-  else [envVar.fromSecretRef('MYSQL_PASSWORD', config.mysql_password_secret, 'password')];
+  else [envVar.fromSecretRef('MYSQL_PASSWORD', config.mysql_password_secret, config.mysql_password_secret_key)];
 
 
 local mysql_host(config, fqdn) =
@@ -30,6 +30,7 @@ local mysql_host(config, fqdn) =
     mysql_user: error 'must specify mysql user',
     mysql_password: '',
     mysql_password_secret: '',
+    mysql_password_secret_key: 'password',
     deployment_name: error 'must specify deployment name',
     namespace: error 'must specify namespace',
   },
