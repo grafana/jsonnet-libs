@@ -16,7 +16,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1611307226282,
+  "iteration": 1611319070964,
   "links": [],
   "panels": [
     {
@@ -33,7 +33,7 @@
     },
     {
       "datasource": null,
-      "description": "The number of scrape attempts that have failed (all pools)",
+      "description": "The number of scrape attempts that have failed",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -95,7 +95,7 @@
     },
     {
       "datasource": null,
-      "description": "The number of times the process limit has been reached (all pools), when the process manager tries to start more children (only with \"dynamic\" and \"ondemand\" process management)\n\nGenerally any value > 0 should be interpreted as php-fpm over capacity.",
+      "description": "The number of times the process limit has been reached, when the process manager tries to start more children (only with \"dynamic\" and \"ondemand\" process management)\n\nGenerally any value > 0 should be interpreted as php-fpm over capacity.",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -214,7 +214,7 @@
     },
     {
       "datasource": null,
-      "description": "The number of request accepted (all pools)",
+      "description": "The number of requests accepted",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -270,7 +270,7 @@
     },
     {
       "datasource": null,
-      "description": "The number of request in the queue of pending connections (all pools)",
+      "description": "The number of request in the queue of pending connections",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -335,7 +335,7 @@
     },
     {
       "datasource": null,
-      "description": "The number of requests (across all pools) that took longer to respond than the value configured in \"request_slowlog_timeout\" (hint: \"slowlog\" also needs to be set in order for this to work)",
+      "description": "The number of requests that took longer to respond than the value configured in \"request_slowlog_timeout\" (hint: \"slowlog\" also needs to be set in order for this to work)",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -1079,6 +1079,26 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": true,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
         "allValue": null,
         "current": {
           "selected": true,
@@ -1136,5 +1156,5 @@
   "timezone": "",
   "title": "PHP-FPM Overview",
   "uid": "zZDvUxfMz",
-  "version": 27
+  "version": 29
 }
