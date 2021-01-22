@@ -21,8 +21,10 @@ local mysql_credential(config) =
   ],
 
 local mysql_host(config, fqdn) =
-  if std.length(fqdn) > 0 then
-    fqdn
+  if std.length(fqdn) == 0 && (std.length(config.deployment_name) == 0 || std.length(config.namespace) == 0) then
+    error 'must specify deployment_name and namespace unless fqdn is specified.'
+  else if std.length(fqdn) > 0 then
+    '%s' % fqdn
   else
     '%s.%s.svc.cluster.local' % [
       config.deployment_name,
