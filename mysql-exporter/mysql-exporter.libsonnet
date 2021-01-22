@@ -49,7 +49,6 @@ local mysql_host(config, fqdn) =
     container.withPorts(k.core.v1.containerPort.new('http-metrics', 9104)) +
     container.withArgsMixin([
       '--collect.info_schema.innodb_metrics',
-      '--config.my-cnf=/etc/mysql/my.cnf',
     ]) +
     container.withEnvMixin(
       mysql_credential($._config) +
@@ -57,11 +56,8 @@ local mysql_host(config, fqdn) =
         { name: 'MYSQL_USER', value: $._config.mysql_user },
         { name: 'DATA_SOURCE_NAME', value: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp(%s:3306)/' % mysql_host($._config, $.mysql_fqdn) },
       ]
-    ) +
-    container.withPorts(k.core.v1.containerPort.new('http-metrics', 9104)) +
-    container.withArgsMixin([
-      '--collect.info_schema.innodb_metrics',
-    ]),
+    ),
+
 
   mysql_exporter_deployment:
     deployment.new('%s-mysql-exporter' % $._config.deployment_name, 1, [$.mysqld_exporter_container]),
