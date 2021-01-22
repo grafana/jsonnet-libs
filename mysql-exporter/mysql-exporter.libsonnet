@@ -2,7 +2,11 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 local container = k.core.v1.container;
 local containerPort = k.core.v1.containerPort;
 local envVar = k.core.v1.envVar;
+<<<<<<< HEAD
 local deployment = k.apps.v1.deployment;
+=======
+
+>>>>>>> Create DSN env var from other variables
 
 local mysql_credential(config) =
   if std.length(config.mysql_password) > 0 && std.length(config.mysql_password_secret) > 0 then
@@ -20,6 +24,16 @@ local mysql_credential(config) =
     $._config.namespace,
   ],
 
+local mysql_host(config, fqdn) =
+  if std.length(fqdn) > 0 then
+    fqdn
+  else
+    '%s.%s.svc.cluster.local' % [
+      config.deployment_name,
+      config.namespace,
+    ];
+
+{
   _config:: {
     mysql_user: error 'must specify mysql user',
     mysql_password: '',
