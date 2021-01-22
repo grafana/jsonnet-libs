@@ -4,10 +4,12 @@ local containerPort = k.core.v1.containerPort;
 local envVar = k.core.v1.envVar;
 local deployment = k.apps.v1.deployment;
 
-
 {
   image:: 'prom/mysqld-exporter:v0.12.1',
-  mysql_fqdn:: '',
+  mysql_fqdn:: '%s.%s.svc.cluster.local' % [
+    $._config.deployment_name,
+    $._config.namespace,
+  ],
 
   _config:: {
     mysql_user: error 'must specify mysql user',
