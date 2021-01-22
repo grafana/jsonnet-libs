@@ -2,11 +2,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 local container = k.core.v1.container;
 local containerPort = k.core.v1.containerPort;
 local envVar = k.core.v1.envVar;
-<<<<<<< HEAD
 local deployment = k.apps.v1.deployment;
-=======
-
->>>>>>> Create DSN env var from other variables
 
 local mysql_credential(config) =
   if std.length(config.mysql_password) > 0 && std.length(config.mysql_password_secret) > 0 then
@@ -15,7 +11,7 @@ local mysql_credential(config) =
     error 'must define one of _config.mysql_password or _config.mysql_password_secret.'
   else if std.length(config.mysql_password) > 0 then
     [{ name: 'MYSQL_PASSWORD', value: config.mysql_password }]
-  else [envVar.fromSecretRef('MYSQL_PASSWORD', config.mysql_password_secret, 'password')];
+  else [envVar.fromSecretRef('MYSQL_PASSWORD', config.mysql_password_secret, config.mysql_password_secret_key)];
 
 {
   image:: 'prom/mysqld-exporter:v0.12.1',
