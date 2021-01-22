@@ -17,8 +17,10 @@ local mysql_credential(config) =
 
 
 local mysql_host(config, fqdn) =
-  if std.length(fqdn) > 0 then
-    fqdn
+  if std.length(fqdn) == 0 && (std.length(config.deployment_name) == 0 || std.length(config.namespace) == 0) then
+    error 'must specify deployment_name and namespace unless fqdn is specified.'
+  else if std.length(fqdn) > 0 then
+    '%s' % fqdn
   else
     '%s.%s.svc.cluster.local' % [
       config.deployment_name,
@@ -31,8 +33,8 @@ local mysql_host(config, fqdn) =
     mysql_password: '',
     mysql_password_secret: '',
     mysql_password_secret_key: 'password',
-    deployment_name: error 'must specify deployment name',
-    namespace: error 'must specify namespace',
+    deployment_name: '',
+    namespace: '',
   },
 
   image:: 'prom/mysqld-exporter:v0.12.1',
