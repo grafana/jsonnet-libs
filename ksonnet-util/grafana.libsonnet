@@ -24,7 +24,12 @@
   local appsExtentions = {
     daemonSet+: {
       new(name, containers, podLabels={})::
-        super.new(name, containers, podLabels={}) +
+        local labels = podLabels { name: name };
+
+        super.new() +
+        super.mixin.metadata.withName(name) +
+        super.mixin.spec.template.metadata.withLabels(labels) +
+        super.mixin.spec.template.spec.withContainers(containers) +
 
         // Can't think of a reason we wouldn't want a DaemonSet to run on
         // every node.
@@ -37,7 +42,10 @@
         // We want to specify a minReadySeconds on every deamonset, so we get some
         // very basic canarying, for instance, with bad arguments.
         super.mixin.spec.withMinReadySeconds(10) +
-        super.mixin.spec.updateStrategy.withType('RollingUpdate'),
+        super.mixin.spec.updateStrategy.withType('RollingUpdate') +
+
+        // apps.v1 requires an explicit selector:
+        super.mixin.spec.selector.withMatchLabels(labels),        
     },
 
     deployment+: {
