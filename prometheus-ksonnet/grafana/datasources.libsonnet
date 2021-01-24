@@ -25,6 +25,29 @@
     },
   },
 
+  datasource+:: {
+    new(name, url, type, default=false, method='GET'):: {
+      name: name,
+      type: type,
+      access: 'proxy',
+      url: url,
+      isDefault: default,
+      version: 1,
+      editable: false,
+      jsonData: {
+        httpMethod: method,
+      },
+    },
+    withBasicAuth(username, password):: {
+      basicAuth: true,
+      basicAuthUser: username,
+      basicAuthPassword: password,
+    },
+    withJsonData(data):: {
+      jsonData+: data,
+    },
+  },
+
   /*
     helper to allow adding datasources directly to the datasource_config_map
     eg:
