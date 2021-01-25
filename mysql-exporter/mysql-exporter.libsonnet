@@ -24,7 +24,6 @@ secrets {
     MYSQL_USER: $._config.mysql_user,
     MYSQL_PASSWORD: $._config.mysql_password,
     MYSQL_HOST: $._config.mysql_fqdn,
-    DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):3306)/',
   },
 
   mysqld_exporter_container::
@@ -33,8 +32,11 @@ secrets {
     container.withArgsMixin([
       '--collect.info_schema.innodb_metrics',
     ]) +
-    container.withEnvMap($.mysqld_exporter_env),
-
+    container.withEnvMap($.mysqld_exporter_env) +
+    // Force DATA_SOURCE_NAME to be declared after the variables it references
+    container.withEnvMap({
+      DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):3306)/',
+    }),
 
   mysql_exporter_deployment:
     deployment.new('%s-mysql-exporter' % $._config.deployment_name, 1, [$.mysqld_exporter_container]),
