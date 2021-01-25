@@ -1,48 +1,31 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 local container = k.core.v1.container;
-local service = k.core.v1.service;
 local containerPort = k.core.v1.containerPort;
 local deployment = k.apps.v1.deployment;
-local envVar = k.core.v1.envVar;
+
+local secrets = import 'secrets.libsonnet';
 
 
-local mysql_credential(config) =
-  if std.length(config.mysql_password) > 0 then
-    [{ name: 'MYSQL_PASSWORD', value: config.mysql_password }]
-  else [envVar.fromSecretRef('MYSQL_PASSWORD', config.mysql_password_secret, config.mysql_password_secret_key)];
-
-
-local mysql_host(config, fqdn) =
-  if std.length(fqdn) > 0 then
-    '%s' % fqdn
-  else
-    '%s.%s.svc.cluster.local' % [
-      config.deployment_name,
-      config.namespace,
-    ];
-
-{
+secrets {
   image:: 'prom/mysqld-exporter:v0.12.1',
-  mysql_fqdn:: '',
 
   _config:: {
     mysql_user: error 'must specify mysql user',
     mysql_password: '',
-    mysql_password_secret: '',
-    mysql_password_secret_key: 'password',
+    mysql_fqdn:: '%s.%s.svc.cluster.local' % [
+      $._config.deployment_name,
+      $._config.namespace,
+    ],
     deployment_name: '',
     namespace: '',
   },
 
-  assert (
-    !(std.length($._config.mysql_password) == 0 && std.length($._config.mysql_password_secret) == 0) &&
-    !(std.length($._config.mysql_password) > 0 && std.length($._config.mysql_password_secret) > 0)
-  ) : 'mysql-exporter: exactly one of _config.mysql_password and _config.mysql_password_secret must be defined.',
-
-  assert (
-    (!(std.length($.mysql_fqdn) == 0 && (std.length($._config.deployment_name) == 0 || std.length($._config.namespace) == 0))) &&
-    (!(std.length($.mysql_fqdn) > 0 && !(std.length($._config.deployment_name) == 0 && std.length($._config.namespace) == 0)))
-  ) : 'mysql-exporter: exactly one of (_config.deployment_name and _config.namespace) or mysql_fqdn must be specified.',
+  mysqld_exporter_env:: {
+    MYSQL_USER: $._config.mysql_user,
+    MYSQL_PASSWORD: $._config.mysql_password,
+    MYSQL_HOST: $._config.mysql_fqdn,
+    DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):3306)/',
+  },
 
   mysqld_exporter_container::
     container.new('mysqld-exporter', $.image) +
@@ -50,13 +33,7 @@ local mysql_host(config, fqdn) =
     container.withArgsMixin([
       '--collect.info_schema.innodb_metrics',
     ]) +
-    container.withEnvMixin(
-      mysql_credential($._config) +
-      [
-        { name: 'MYSQL_USER', value: $._config.mysql_user },
-        { name: 'DATA_SOURCE_NAME', value: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp(%s:3306)/' % mysql_host($._config, $.mysql_fqdn) },
-      ]
-    ),
+    container.withEnvMap($.mysqld_exporter_env),
 
 
   mysql_exporter_deployment:
