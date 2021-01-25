@@ -32,7 +32,7 @@ secrets {
     container.withArgsMixin([
       '--collect.info_schema.innodb_metrics',
     ]) +
-    container.withEnvMap($.mysqld_exporter_env) + 
+    container.withEnvMap($.mysqld_exporter_env) +
     // Force DATA_SOURCE_NAME to be declared after the variables it references
     container.withEnvMap({
       DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):3306)/',
