@@ -1,4 +1,26 @@
 {
+  datasource+:: {
+    new(name, url, type, default=false):: {
+      name: name,
+      type: type,
+      access: 'proxy',
+      url: url,
+      isDefault: default,
+      version: 1,
+      editable: false,
+    },
+    withBasicAuth(username, password):: {
+      basicAuth: true,
+      basicAuthUser: username,
+      basicAuthPassword: password,
+    },
+    withJsonData(data):: {
+      jsonData+: data,
+    },
+    withHttpMethod(httpMethod):: self.withJsonData({ httpMethod: httpMethod }),
+  },
+
+
   local configMap = $.core.v1.configMap,
 
   /*
@@ -12,19 +34,10 @@
   grafanaDatasources+:: {},
 
   // Generates yaml string containing datasource config
-  grafana_datasource(name, url, default=false, method='GET', type='prometheus'):: {
-    name: name,
-    type: type,
-    access: 'proxy',
-    url: url,
-    isDefault: default,
-    version: 1,
-    editable: false,
-    jsonData: {
-      httpMethod: method,
-    },
-  },
-
+  grafana_datasource(name, url, default=false, method='GET', type='prometheus')::
+    self.datasource.new(name, url, type, default)
+    + self.datasource.withHttpMethod(method)
+  ,
   /*
     helper to allow adding datasources directly to the datasource_config_map
     eg:
@@ -41,21 +54,11 @@
     }),
 
   // Generates yaml string containing datasource config
-  grafana_datasource_with_basicauth(name, url, username, password, default=false, method='GET', type='prometheus'):: {
-    name: name,
-    type: type,
-    access: 'proxy',
-    url: url,
-    isDefault: default,
-    version: 1,
-    editable: false,
-    basicAuth: true,
-    basicAuthUser: username,
-    basicAuthPassword: password,
-    jsonData: {
-      httpMethod: method,
-    },
-  },
+  grafana_datasource_with_basicauth(name, url, username, password, default=false, method='GET', type='prometheus')::
+    self.datasource.new(name, url, type, default)
+    + self.datasource.withHttpMethod(method)
+    + self.datasource.withBasicAuth(username, password)
+  ,
 
   /*
    helper to allow adding datasources directly to the datasource_config_map
