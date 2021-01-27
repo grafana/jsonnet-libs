@@ -40,7 +40,6 @@ local deployment = k.apps.v1.deployment;
       DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):3306)/',
     }),
 
-
   mysql_exporter_deployment:
     deployment.new('%s-mysql-exporter' % $._config.deployment_name, 1, [$.mysqld_exporter_container]),
 
