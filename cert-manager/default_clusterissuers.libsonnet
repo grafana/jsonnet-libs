@@ -15,7 +15,7 @@
       apiVersion: 'cert-manager.io/v1alpha2',
       kind: 'ClusterIssuer',
       metadata: {
-        name: 'letsencrypt-staging',
+        name: name,
       },
     },
     withACME(email, server='https://acme-v02.api.letsencrypt.org/directory'): {
