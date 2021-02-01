@@ -235,12 +235,6 @@
           },
         }],
 
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
-
         relabel_configs: [
           // Drop anything who's name is not node-exporter.
           {
