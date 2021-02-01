@@ -20,10 +20,6 @@
                 role: 'pod',
               }],
               path_prefix: $._config.alertmanager_path,
-              tls_config: {
-                ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-              },
-              bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
               relabel_configs: [{
                 source_labels: ['__meta_kubernetes_pod_label_name'],
                 regex: 'alertmanager',
