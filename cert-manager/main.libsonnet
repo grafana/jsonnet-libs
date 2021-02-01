@@ -3,7 +3,7 @@ local helm = tanka.helm.new(std.thisFile);
 
 {
   values:: {
-    installCRDs: if $._config.custom_crds then false else true,
+    installCRDs: $._config.install_crds,
     global: {
       podSecurityPolicy: {
         enabled: true,
