@@ -14,7 +14,7 @@ local panel_settings = {
 {
   grafanaDashboards+:: {
     'consul-overview.json':
-      g.dashboard('Consul Overview')
+      g.dashboard('Consul Overview', std.md5('20210205-consul'))
       .addTemplate('job', 'consul_up', 'job')
       .addMultiTemplate('instance', 'consul_up{job="$job"}', 'instance')
       .addRow(
