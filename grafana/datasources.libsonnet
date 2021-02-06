@@ -1,5 +1,16 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
+local configMap = k.core.v1.configMap;
 {
+
+  addDatasource(name, datasource):: {
+    grafanaDatasources+:: {
+      [name]: datasource,
+    },
+  },
+
+  grafanaDatasources+:: {},
+  grafanaDatasourceLabels+:: {},
+
   datasource+:: {
     new(name, url, type, default=false):: {
       name: name,
@@ -20,11 +31,6 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     },
     withHttpMethod(httpMethod):: self.withJsonData({ httpMethod: httpMethod }),
   },
-
-  grafanaDatasources+:: {},
-  grafanaDatasourceLabels+:: {},
-
-  local configMap = k.core.v1.configMap,
 
   grafana_datasource_config_map:
     configMap.new('grafana-datasources') +
