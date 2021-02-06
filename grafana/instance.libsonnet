@@ -98,5 +98,5 @@ local container = k.core.v1.container;
 
   grafana_config_map:
     configMap.new('grafana-config') +
-    configMap.withData({ 'grafana.ini': std.manifestIni($.grafana_config) }),
+    configMap.withData({ 'grafana.ini': std.manifestIni($._config.grafana.grafana_ini) }),
 }

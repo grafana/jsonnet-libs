@@ -4,14 +4,14 @@ local k = import 'k.libsonnet';
     grafana+: {
       rootUrl: error 'Root URL required',
       provisioningDir: '/etc/grafana/provisioning',
-      dashboardConfigMapCount: $._config.dashboard_config_maps,
+      dashboardConfigMapCount: 1,
       labels+: {
-        dashboards: $._config.grafana_dashboard_labels,
-        datasources: $._config.grafana_datasource_labels,
-        notificationChannels: $._config.grafana_notification_channel_labels,
+        dashboards: [],
+        datasources: [],
+        notificationChannels: [],
       },
-      config+: {
-        sections: {
+      grafana_ini+: {
+        sections+: {
           server: {
             http_port: 3000,
             router_logging: true,
@@ -31,17 +31,26 @@ local k = import 'k.libsonnet';
     },
   },
 
-  withConfig(config):: {
+  withGrafanaIniConfig(config):: {
     _config+:: {
       grafana+: {
-        config+: config,
+        sections+: {
+          config+: config,
+        },
       },
     },
   },
 
-  local configMap = k.core.v1.configMap,
+  withTheme(theme):: self.withGrafanaIniConfig({
+    users+: {
+      default_theme: theme,
+    },
+  }),
 
-  grafana_config_map:
-    configMap.new('grafana-config') +
-    configMap.withData({ 'grafana.ini': std.manifestIni($.grafana_config) }),
+  withAnonymous():: self.withGrafanaIniConfig({
+    'auth.anonymous': {
+      enabled: true,
+      org_role: 'Admin',
+    },
+  }),
 }
