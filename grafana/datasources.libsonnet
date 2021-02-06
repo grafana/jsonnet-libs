@@ -1,5 +1,3 @@
-local k = import 'ksonnet-util/kausal.libsonnet';
-local configMap = k.core.v1.configMap;
 {
 
   addDatasource(name, datasource):: {
@@ -31,15 +29,4 @@ local configMap = k.core.v1.configMap;
     },
     withHttpMethod(httpMethod):: self.withJsonData({ httpMethod: httpMethod }),
   },
-
-  grafana_datasource_config_map:
-    configMap.new('grafana-datasources') +
-    configMap.withDataMixin({
-      ['%s.yml' % name]: k.util.manifestYaml({
-        apiVersion: 1,
-        datasources: [$.grafanaDatasources[name]],
-      })
-      for name in std.objectFields($.grafanaDatasources)
-    })
-    + configMap.mixin.metadata.withLabels($.grafanaDatasourceLabels),
 }

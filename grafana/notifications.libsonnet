@@ -1,12 +1,14 @@
-local k = import 'k.libsonnet';
-
 {
-  local configMap = k.core.v1.configMap,
+  addNotificationChannel(name, notifications):: {
+    grafanaNotificationChannels+:: {
+      [name]: notifications,
+    },
+  },
 
   grafanaNotificationChannels+:: {},
   grafanaNotificationChannelLabels+:: {},
 
-  notificationChannel: {
+  notifications+:: {
     new(name, type, uid, org_id, settings, is_default=false, send_reminders=true, frequency='1h', disable_resolve_message=false):: {
       name: name,
       type: type,
@@ -22,16 +24,4 @@ local k = import 'k.libsonnet';
       [name]: value,
     },
   },
-
-  notification_channel_config_map:
-    configMap.new('grafana-notification-channels') +
-    configMap.withDataMixin({
-      [name]: $.util.manifestYaml({
-        notifiers: [
-          $.grafanaNotificationChannels[name],
-        ],
-      })
-      for name in std.objectFields($.grafanaNotificationChannels)
-    }) +
-    configMap.mixin.metadata.withLabels($.grafanaNotificationChannelLabels),
 }
