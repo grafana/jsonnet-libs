@@ -6,9 +6,9 @@ local k = import 'k.libsonnet';
       provisioningDir: '/etc/grafana/provisioning',
       dashboardConfigMapCount: 1,
       labels+: {
-        dashboards: [],
-        datasources: [],
-        notificationChannels: [],
+        dashboards: {},
+        datasources: {},
+        notificationChannels: {},
       },
       grafana_ini+: {
         sections+: {
