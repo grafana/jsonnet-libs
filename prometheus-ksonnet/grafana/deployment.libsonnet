@@ -27,4 +27,7 @@ local grafana = import 'grafana/grafana.libsonnet';
     std.objectFields($.mixins),
     [],
   ),
+
+  // support legacy extension point (grafana_plugins)
+  plugins+:: self.grafana_plugins,
 }
