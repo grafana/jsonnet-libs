@@ -16,8 +16,8 @@
       + (if !std.objectHasAll($.mixins[name], 'grafanaDashboards')
         then {}
         else {
-          [if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.mixins[name].grafanaDashboardFolder else 'General']+: {
-            dashboards+: $.mixins[name].grafanaDashboards,
+          [if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.folderID($.mixins[name].grafanaDashboardFolder) else 'general']+: {
+            dashboards+: ($.mixins[name]+mixinProto).grafanaDashboards,
             shards: if std.objectHasAll($.mixins[name], 'grafanaDashboardShards') then $.mixins[name].grafanaDashboardShards else 1,
             name: if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.mixins[name].grafanaDashboardFolder else 'General',
             id: $.folderID(self.name),
@@ -25,7 +25,11 @@
         }),
     std.objectFields($.mixins),
     {}
-  ),
+  ) + {
+    general+: {
+      shards: $._config.dashboard_config_maps, // legacy dashboard configmap setting
+    },
+  },
 
   // mixinProto allows us to reliably do `mixin.grafanaDashboards` without
   // having to check the field exists first. Some mixins don't declare all
@@ -64,15 +68,4 @@
       for filename in std.objectFields(grafanaDashboards)
     },
   },
-
-  // Legacy extension points for you to add your own dashboards.
-  grafanaDashboards+:: std.foldr(
-    function(mixinName, acc)
-      local mixin = $.mixins[mixinName] + mixinProto;
-      if !$.isFolderedMixin(mixin)
-      then acc + mixin.grafanaDashboards
-      else acc,
-    std.objectFields($.mixins),
-    {}
-  ),
 }

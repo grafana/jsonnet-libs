@@ -91,7 +91,7 @@ local configMap = k.core.v1.configMap;
     + k.util.configVolumeMount('grafana-datasources', '%(grafana_provisioning_dir)s/datasources' % $._config)
     + k.util.configVolumeMount('grafana-notification-channels', '%(grafana_provisioning_dir)s/notifiers' % $._config)
     + std.foldr(
-      function(folder, acc) acc + shardedMounts($.folders[folder]),
+      function(folder, acc) shardedMounts($.folders[folder]) + acc,
       std.objectFields($.folders),
       {},
     ),
