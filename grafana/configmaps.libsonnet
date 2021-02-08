@@ -60,7 +60,7 @@ local configMap = k.core.v1.configMap;
       configMap.withDataMixin({
         [name]: std.toString(folder.dashboards[name])
         for name in std.objectFields(folder.dashboards)
-        if std.codepoint(std.md5(folder.name)[1]) % folder.shards == shard
+        if std.codepoint(std.md5(name)[1]) % folder.shards == shard
       })
       + configMap.mixin.metadata.withLabels($._config.grafana.labels.dashboards)
     for shard in std.range(0, folder.shards - 1)
