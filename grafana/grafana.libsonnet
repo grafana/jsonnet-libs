@@ -4,6 +4,6 @@
 + (import 'datasources.libsonnet')
 + (import 'plugins.libsonnet')
 + (import 'configmaps.libsonnet')
-+ (import 'instance.libsonnet')
++ (import 'deployment.libsonnet')
 + (import 'notifications.libsonnet')
 

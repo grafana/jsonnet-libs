@@ -10,11 +10,10 @@ local container = k.core.v1.container;
     container.withPorts($.core.v1.containerPort.new('grafana-metrics', 3000)) +
     container.withEnvMap({
       GF_PATHS_CONFIG: '/etc/grafana-config/grafana.ini',
-      GF_INSTALL_PLUGINS: std.join(',', $.grafana_plugins),
+      GF_INSTALL_PLUGINS: std.join(',', $.plugins),
     }) +
     k.util.resourcesRequests('10m', '40Mi'),
 
-  // this object may be either a k8s deployment resource or a statefulset depending on user selection
   grafana_deployment:
     deployment.new('grafana', 1, [$.grafana_container])
     + $.configmap_mounts
@@ -29,13 +28,4 @@ local container = k.core.v1.container;
         targetPort=3000,
       ),
     ]),
-
-  withStatelessness():: {
-    kind: 'Deployment',
-    spec+: {
-      minReadySeconds: 10,
-      revisionHistoryLimit: 10,
-    },
-    updateStrategy:: {},
-  },
 }
