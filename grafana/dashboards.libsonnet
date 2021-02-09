@@ -5,7 +5,7 @@
     local space = std.strReplace(underscore, ' ', '-');
     space,
 
-  local folderID(folder)=self.folderID(folder),
+  local folderID(folder) = self.folderID(folder),
 
   // It's super common for the dashboards in a single folder to be too
   // large to fit inside a single Kubernetes ConfigMap. We can specify
@@ -37,5 +37,5 @@
       },
     },
   },
-  folders+::{},
+  folders+:: {},
 }
