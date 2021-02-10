@@ -1,7 +1,30 @@
 (import 'config.libsonnet')
-+ (import 'dashboards.libsonnet')
-+ (import 'datasources.libsonnet')
-+ (import 'plugins.libsonnet')
 + (import 'configmaps.libsonnet')
 + (import 'deployment.libsonnet')
-+ (import 'notifications.libsonnet')
++ (import 'dashboards.libsonnet')
++ {
+
+  addDatasource(name, datasource):: {
+    grafanaDatasources+:: {
+      [name]: datasource,
+    },
+  },
+
+  addNotificationChannel(name, notifications):: {
+    grafanaNotificationChannels+:: {
+      [name]: notifications,
+    },
+  },
+
+  addPlugin(plugin):: {
+    plugins+:: [plugin],
+  },
+
+  datasource: (import 'datasources.libsonnet'),
+  notificationChannel: (import 'notifications.libsonnet'),
+
+  grafanaDashboards+:: {},
+  grafanaNotificationChannels+:: {},
+  grafanaDatasources+:: {},
+  grafanaPlugins+:: [],
+}
