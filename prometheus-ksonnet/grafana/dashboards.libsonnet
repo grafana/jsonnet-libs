@@ -10,24 +10,24 @@
   mixins+:: {},
 
   // convert to format expected by `grafana/grafana.libsonnet`:
-  folders+:: std.foldr(
+  grafanaDashboardFolders+:: std.foldr(
     function(name, acc)
       acc
       + (if !std.objectHasAll($.mixins[name], 'grafanaDashboards')
-        then {}
-        else {
-          [if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.folderID($.mixins[name].grafanaDashboardFolder) else 'general']+: {
-            dashboards+: ($.mixins[name]+mixinProto).grafanaDashboards,
-            shards: if std.objectHasAll($.mixins[name], 'grafanaDashboardShards') then $.mixins[name].grafanaDashboardShards else 1,
-            name: if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.mixins[name].grafanaDashboardFolder else 'General',
-            id: $.folderID(self.name),
-          },
-        }),
+         then {}
+         else {
+           [if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.folderID($.mixins[name].grafanaDashboardFolder) else 'general']+: {
+             dashboards+: ($.mixins[name] + mixinProto).grafanaDashboards,
+             shards: if std.objectHasAll($.mixins[name], 'grafanaDashboardShards') then $.mixins[name].grafanaDashboardShards else 1,
+             name: if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.mixins[name].grafanaDashboardFolder else 'General',
+             id: $.folderID(self.name),
+           },
+         }),
     std.objectFields($.mixins),
     {}
   ) + {
     general+: {
-      shards: $._config.dashboard_config_maps, // legacy dashboard configmap setting
+      shards: $._config.dashboard_config_maps,  // legacy dashboard configmap setting
     },
   },
 

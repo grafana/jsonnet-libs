@@ -1,24 +1,23 @@
 {
   _config+:: {
-    grafana+: {
-      // configure Grafana Lib based upon legacy configs below
-      rootUrl: $._config.grafana_root_url,
-      provisioningDir: $._config.grafana_provisioning_dir,
-      dashboardConfigMapCount: $._config.dashboard_config_maps,
+    // configure Grafana Lib based upon legacy configs below
+    rootUrl: $._config.grafana_root_url,
+    provisioningDir: $._config.grafana_provisioning_dir,
+    dashboardConfigMapCount: $._config.dashboard_config_maps,
 
-      grafana_ini+: {
-        sections+: {
-          'auth.anonymous': {
-            enabled: true,
-            org_role: 'Admin',
-          },
-          explore+: {
-            enabled: true,
-          },
+    grafana_ini+: {
+      sections+: {
+        'auth.anonymous': {
+          enabled: true,
+          org_role: 'Admin',
         },
+        explore+: {
+          enabled: true,
+        },
+      },
 
-      } + $.grafana_config,
-    },
+    } + $.grafana_config,  //<--legacy config
+
     // LEGACY CONFIGS:
     // Grafana config options.
     grafana_root_url: '',
