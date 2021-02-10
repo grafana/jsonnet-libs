@@ -10,7 +10,7 @@ local container = k.core.v1.container;
     container.withPorts($.core.v1.containerPort.new('grafana-metrics', 3000)) +
     container.withEnvMap({
       GF_PATHS_CONFIG: '/etc/grafana-config/grafana.ini',
-      GF_INSTALL_PLUGINS: std.join(',', $.plugins),
+      GF_INSTALL_PLUGINS: std.join(',', $.grafanaPlugins),
     }) +
     k.util.resourcesRequests('10m', '40Mi'),
 
