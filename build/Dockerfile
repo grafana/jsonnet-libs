@@ -18,7 +18,7 @@ RUN chmod +x /usr/bin/jb
 
 # Build mixtool
 FROM golang:1.15-alpine AS mixtool-builder
-RUN GO111MODULE=on go get github.com/monitoring-mixins/mixtool/cmd/mixtool@59d44357240d
+RUN GO111MODULE=on go get github.com/monitoring-mixins/mixtool/cmd/mixtool@ae18e31161ea
 
 FROM alpine:3.7
 RUN apk --no-cache add make python git openssh-client bash

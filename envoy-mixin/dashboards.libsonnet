@@ -21,7 +21,7 @@ local template = import 'grafonnet/template.libsonnet';
   // - HTTP: https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#statistics
   grafanaDashboards+:: {
     'envoy-overview.json':
-      g.dashboard('Envoy Overview')
+      g.dashboard('Envoy Overview', std.md5('20210205-envoy'))
       .addTemplate('job', 'envoy_server_uptime', 'job')
 
       // Hidden variables to be able to repeat panels for each upstream/downstream.
