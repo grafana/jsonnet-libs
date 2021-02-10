@@ -20,10 +20,6 @@
                 role: 'pod',
               }],
               path_prefix: $._config.alertmanager_path,
-              tls_config: {
-                ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-              },
-              bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
               relabel_configs: [{
                 source_labels: ['__meta_kubernetes_pod_label_name'],
                 regex: 'alertmanager',
@@ -62,12 +58,6 @@
         kubernetes_sd_configs: [{
           role: 'pod',
         }],
-
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
 
         // You can specify the following annotations (on pods):
         //   prometheus.io.scrape: false - don't scrape this pod
@@ -207,12 +197,6 @@
           },
         }],
 
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
-
         relabel_configs: [
 
           // Drop anything who's service is not kube-state-metrics
@@ -251,12 +235,6 @@
           },
         }],
 
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
-
         relabel_configs: [
           // Drop anything who's name is not node-exporter.
           {
@@ -291,12 +269,6 @@
             names: ['kube-system'],
           },
         }],
-
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
 
         relabel_configs: [
 
