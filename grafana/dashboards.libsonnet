@@ -13,7 +13,7 @@
 
   // add a new empty folder and set config map shard size
   addFolder(name, shards=1):: {
-    folders+:: {
+    grafanaDashboardFolders+:: {
       [name]: {
         id: folderID(name),
         name: name,
@@ -26,7 +26,7 @@
   // add a new dashboard, creating the folder if necessary
   addDashboard(name, dashboard, folder='General'):: {
     local hasShards = std.objectHas(super.folders[name], 'shards'),
-    folders+:: {
+    grafanaDashboardFolders+:: {
       [folder]+: {
         id: folderID(name),
         name: name,
@@ -37,5 +37,5 @@
       },
     },
   },
-  folders+:: {},
+  grafanaDashboardFolders+:: {},
 }
