@@ -3,7 +3,12 @@
     // configure Grafana Lib based upon legacy configs below
     rootUrl: $._config.grafana_root_url,
     provisioningDir: $._config.grafana_provisioning_dir,
-    dashboardConfigMapCount: $._config.dashboard_config_maps,
+
+    labels+: {
+      dashboards: $._config.grafana_dashboard_labels,
+      datasources: $._config.grafana_dashboard_labels,
+      notificationChannels: $._config.grafana_notification_channel_labels,
+    },
 
     grafana_ini+: {
       sections+: {
