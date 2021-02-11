@@ -7,7 +7,7 @@ local container = k.core.v1.container;
 {
   grafana_container::
     container.new('grafana', $._images.grafana) +
-    container.withPorts($.core.v1.containerPort.new('grafana-metrics', 3000)) +
+    container.withPorts($.core.v1.containerPort.new('grafana-metrics', $._config.containerPort)) +
     container.withEnvMap({
       GF_PATHS_CONFIG: '/etc/grafana-config/grafana.ini',
       GF_INSTALL_PLUGINS: std.join(',', $.grafanaPlugins),
@@ -24,8 +24,8 @@ local container = k.core.v1.container;
     service.mixin.spec.withPortsMixin([
       servicePort.newNamed(
         name='http',
-        port=80,
-        targetPort=3000,
+        port=$._config.port,
+        targetPort=$._config.containerPort,
       ),
     ]),
 }

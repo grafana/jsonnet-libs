@@ -3,6 +3,8 @@ local k = import 'k.libsonnet';
   _config+:: {
     rootUrl: error 'Root URL required',
     provisioningDir: '/etc/grafana/provisioning',
+    port: 80,
+    containerPort: 3000,
     labels+: {
       dashboards: {},
       datasources: {},
@@ -11,7 +13,7 @@ local k = import 'k.libsonnet';
     grafana_ini+: {
       sections+: {
         server: {
-          http_port: 3000,
+          http_port: $._config.containerPort,
           router_logging: true,
           root_url: $._config.rootUrl,
         },
