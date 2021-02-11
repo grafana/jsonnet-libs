@@ -1,4 +1,3 @@
-local k = import 'k.libsonnet';
 {
   _config+:: {
     rootUrl: error 'Root URL required',
