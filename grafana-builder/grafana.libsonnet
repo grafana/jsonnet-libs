@@ -196,7 +196,7 @@
     timeShift: null,
     title: title,
     tooltip: {
-      shared: true,
+      shared: false,
       sort: 0,
       value_type: 'individual',
     },

@@ -52,20 +52,6 @@
         dashboard {
           uid: $.uidForDashboard(filename, dashboard),
           timezone: '',
-
-          [if std.objectHas(dashboard, 'rows') then 'rows']: [
-            row {
-              panels: [
-                panel {
-                  tooltip+: {
-                    shared: false,
-                  },
-                }
-                for panel in super.panels
-              ],
-            }
-            for row in super.rows
-          ],
         }
       for filename in std.objectFields(grafanaDashboards)
     },
