@@ -1,5 +1,15 @@
 {
-  new(name, type, uid, org_id, settings, is_default=false, send_reminders=true, frequency='1h', disable_resolve_message=false):: {
+  new(
+    name,
+    type,
+    uid,
+    org_id,
+    settings,
+    is_default=false,
+    send_reminders=true,
+    frequency='1h',
+    disable_resolve_message=false
+  ):: {
     name: name,
     type: type,
     uid: uid,
