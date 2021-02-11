@@ -1,13 +1,11 @@
 # Synthetic Monitoring Jsonnet Library
 
 This library facilitates the configuration of checks for Grafana Synthetic
-Monitoring with the intend to simplify the interaction with the Synthetic
-Monitoring API through [Grizzly](https://github.com/grafana/grizzly).
+Monitoring. It is intended to be used alongside [Grizzly](https://github.com/grafana/grizzly).
 
 Grafana Labs' Synthetic Monitoring is a blackbox monitoring solution provided
 as a part of Grafana Cloud. It provides users with insights into how their
 applications and services are behaving from an external point of view.
-
 
 ## Usage
 
