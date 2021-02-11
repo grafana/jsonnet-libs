@@ -1,7 +1,8 @@
 # Synthetic Monitoring Jsonnet Library
 
-This library simplifies the interaction with the Grafana Synthetic Monitoring API
-by making the configuration of a check significantly more concise.
+This library facilitates the configuration of checks for Grafana Synthetic
+Monitoring with the intend to simplify the interaction with the Synthetic
+Monitoring API through [Grizzly](https://github.com/grafana/grizzly).
 
 Grafana Labs' Synthetic Monitoring is a blackbox monitoring solution provided
 as a part of Grafana Cloud. It provides users with insights into how their
@@ -42,4 +43,3 @@ $ grr apply main.jsonnet
 ```
 
 This should create four probes for you.
-
