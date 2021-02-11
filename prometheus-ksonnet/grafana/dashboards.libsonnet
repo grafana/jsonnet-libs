@@ -31,6 +31,8 @@
     },
   },
 
+  uidForDashboard(filename, dashboard):: std.md5(filename),
+
   // mixinProto allows us to reliably do `mixin.grafanaDashboards` without
   // having to check the field exists first. Some mixins don't declare all
   // the fields, and that's fine.
@@ -48,7 +50,7 @@
       [filename]:
         local dashboard = grafanaDashboards[filename];
         dashboard {
-          uid: std.md5(filename),
+          uid: $.uidForDashboard(filename, dashboard),
           timezone: '',
 
           [if std.objectHas(dashboard, 'rows') then 'rows']: [
