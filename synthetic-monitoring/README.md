@@ -8,8 +8,6 @@ Grafana Labs' Synthetic Monitoring is a blackbox monitoring solution provided
 as a part of Grafana Cloud. It provides users with insights into how their
 applications and services are behaving from an external point of view.
 
-It can be configured via an HTTP API. This library generates objects that can
-be used when interacting with the API, e.g. with a tool like [Grizzly](https://github.com/grafana/grizzly).
 
 ## Usage
 
