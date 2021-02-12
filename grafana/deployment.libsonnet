@@ -7,7 +7,7 @@ local container = k.core.v1.container;
 {
   grafana_container::
     container.new('grafana', $._images.grafana) +
-    container.withPorts($.core.v1.containerPort.new('grafana-metrics', $._config.containerPort)) +
+    container.withPorts(k.core.v1.containerPort.new('grafana-metrics', $._config.containerPort)) +
     container.withEnvMap({
       GF_PATHS_CONFIG: '/etc/grafana-config/grafana.ini',
       GF_INSTALL_PLUGINS: std.join(',', $.grafanaPlugins),

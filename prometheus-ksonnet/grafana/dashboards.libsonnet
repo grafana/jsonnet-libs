@@ -19,7 +19,7 @@
            [if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.folderID($.mixins[name].grafanaDashboardFolder) else 'general']+: {
              dashboards+: ($.mixins[name] + mixinProto).grafanaDashboards,
              shards: if std.objectHasAll($.mixins[name], 'grafanaDashboardShards') then $.mixins[name].grafanaDashboardShards else 1,
-             name: if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.mixins[name].grafanaDashboardFolder else 'General',
+             name: if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.mixins[name].grafanaDashboardFolder else '',
              id: $.folderID(self.name),
            },
          }),

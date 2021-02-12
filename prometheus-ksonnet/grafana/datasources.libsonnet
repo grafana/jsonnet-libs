@@ -1,5 +1,8 @@
+local grafana = import 'grafana/grafana.libsonnet';
+local k = import 'k.libsonnet';
+local datasource = grafana.datasource;
 {
-  local configMap = $.core.v1.configMap,
+  local configMap = k.core.v1.configMap,
 
   /*
     to add datasources:
@@ -13,8 +16,8 @@
 
   // Generates yaml string containing datasource config
   grafana_datasource(name, url, default=false, method='GET', type='prometheus')::
-    self.datasource.new(name, url, type, default)
-    + self.datasource.withHttpMethod(method)
+    datasource.new(name, url, type, default)
+    + datasource.withHttpMethod(method)
   ,
   /*
     helper to allow adding datasources directly to the datasource_config_map
