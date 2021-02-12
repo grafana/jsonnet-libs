@@ -28,6 +28,9 @@
   ) + {
     general+: {
       shards: $._config.dashboard_config_maps,  // legacy dashboard configmap setting
+      dashboards+: $.grafanaDashboards + mixinProto,
+      name: '',
+      id: '',
     },
   },
 
