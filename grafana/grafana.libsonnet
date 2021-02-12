@@ -1,6 +1,5 @@
 (import 'config.libsonnet')
 + (import 'configmaps.libsonnet')
-+ (import 'images.libsonnet')
 + (import 'deployment.libsonnet')
 + (import 'dashboards.libsonnet')
 + {
