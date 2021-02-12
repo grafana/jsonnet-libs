@@ -22,7 +22,7 @@ local configMap = k.core.v1.configMap;
   notification_channel_config_map:
     configMap.new('grafana-notification-channels') +
     configMap.withDataMixin({
-      [name]: $.util.manifestYaml({
+      [name]: k.util.manifestYaml({
         notifiers: [
           $.grafanaNotificationChannels[name],
         ],
@@ -31,22 +31,24 @@ local configMap = k.core.v1.configMap;
     }) +
     configMap.mixin.metadata.withLabels($._config.labels.notificationChannels),
 
+  local prefix(name) = if name == '' then 'dashboards' else 'dashboards-%s' % name,
+
   // dashboard provisioning configmaps
   dashboard_provisioning_config_map:
     configMap.new('grafana-dashboard-provisioning') +
     configMap.withData({
-      'dashboards.yml': $.util.manifestYaml({
+      'dashboards.yml': k.util.manifestYaml({
         apiVersion: 1,
         providers: [
           {
-            name: 'dashboards-%s' % $.grafanaDashboardFolders[name].id,
+            name: prefix($.grafanaDashboardFolders[name].id),
             orgId: 1,
             folder: $.grafanaDashboardFolders[name].name,
             type: 'file',
             disableDeletion: true,
             editable: false,
             options: {
-              path: '/grafana/dashboards-%s' % $.grafanaDashboardFolders[name].id,
+              path: '/grafana/%s' % prefix($.grafanaDashboardFolders[name].id),
             },
           }
           for name in std.objectFields($.grafanaDashboardFolders)
@@ -56,8 +58,8 @@ local configMap = k.core.v1.configMap;
 
   // dashboard JSON configmaps:
   local shardedConfigMaps(folder) = {
-    ['dashboards-%s-%d' % [folder.id, shard]]+:
-      configMap.new('dashboards-%s-%d' % [folder.id, shard]) +
+    ['%s-%d' % [prefix(folder.id), shard]]+:
+      configMap.new('%s-%d' % [prefix(folder.id), shard]) +
       configMap.withDataMixin({
         [name]: std.toString(folder.dashboards[name])
         for name in std.objectFields(folder.dashboards)
@@ -79,8 +81,8 @@ local configMap = k.core.v1.configMap;
     std.foldl(
       function(acc, shard)
         acc + k.util.configVolumeMount(
-          'dashboards-%s-%d' % [folder.id, shard],
-          '/grafana/dashboards-%s/%d' % [folder.id, shard]
+          '%s-%d' % [prefix(folder.id), shard],
+          '/grafana/%s/%d' % [prefix(folder.id), shard]
         ),
       std.range(0, folder.shards - 1),
       {}
