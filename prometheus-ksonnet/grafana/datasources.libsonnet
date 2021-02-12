@@ -1,5 +1,5 @@
-local k = import 'k.libsonnet';
 local grafana = import 'grafana/grafana.libsonnet';
+local k = import 'k.libsonnet';
 local datasource = grafana.datasource;
 {
   local configMap = k.core.v1.configMap,
