@@ -55,4 +55,20 @@
       },
     },
   }),
+
+  withEnterpriseLicenseText(text):: self.withGrafanaIniConfig({
+    sections+: {
+      enterprise+: {
+        license_text: text,
+      },
+    },
+  }),
+
+  withEnterpriseLicensePath(path):: self.withGrafanaIniConfig({
+    sections+: {
+      enterprise+: {
+        license_path: path,
+      },
+    },
+  }),
 }
