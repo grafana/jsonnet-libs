@@ -4,7 +4,7 @@
   },
 
   _config+:: {
-    rootUrl: error 'Root URL required',
+    rootUrl: '',
     provisioningDir: '/etc/grafana/provisioning',
     port: 80,
     containerPort: 3000,
@@ -35,9 +35,7 @@
 
   withGrafanaIniConfig(config):: {
     _config+:: {
-      grafana_ini+: {
-        config+: config,
-      },
+      grafana_ini+: config,
     },
   },
 

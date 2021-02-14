@@ -25,11 +25,11 @@
 
   // add a new dashboard, creating the folder if necessary
   addDashboard(name, dashboard, folder=''):: {
-    local hasShards = std.objectHas(super.folders[name], 'shards'),
+    local hasShards = std.objectHas(super.grafanaDashboardFolders, folder) && std.objectHas(super.grafanaDashboardFolders[folder], 'shards'),
     grafanaDashboardFolders+:: {
       [folder]+: {
-        id: folderID(name),
-        name: name,
+        id: folderID(folder),
+        name: folder,
         [if !hasShards then 'shards']: 1,
         dashboards+: {
           [name]+: dashboard,
