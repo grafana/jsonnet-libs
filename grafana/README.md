@@ -7,6 +7,26 @@ As well as deploying Grafana itself, it also supports the deployment of
 dashboards, datasources, notification channels and plugins, all from
 within your Jsonnet code.
 
+## Library Notes
+### Statefulness
+Currently, this library creates a stateless Grafana. What this actually
+means is that, on startup, Grafana imports dashboard files into its
+database. However, given Grafana is installed into a deployment without
+an external volume, the database is wiped on restart. This creates a
+stateless Grafana installation.
+
+Statelessness is a **good thing** when deploying all your dashboards, etc
+from Jsonnet code. Through it you avoid your dashboards drifting from the
+Jsonnet/version control managed known good state.
+
+A possible future extension of this library could convert the Grafana
+instance into a stateful one, mounting the database into a PVC.
+
+### Mixins
+This library does not (yet) support Monitoring Mixins directly, although
+it has much of the mechanics required to do so.
+
+## An Example
 ```
 local grafana = import '../grafana.libsonnet';
 local k = import 'k.libsonnet';
