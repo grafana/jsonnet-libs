@@ -13,7 +13,7 @@
   grafanaDashboardFolders+:: std.foldr(
     function(name, acc)
       acc
-      + (if !std.objectHasAll($.mixins[name], 'grafanaDashboards')
+      + (if !std.objectHasAll($.mixins[name], 'grafanaDashboards') && std.length($.mixins[name].grafanaDashboards) > 0
          then {}
          else {
            [if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder') then $.folderID($.mixins[name].grafanaDashboardFolder) else 'general']+: {
