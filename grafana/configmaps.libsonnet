@@ -67,6 +67,7 @@ local configMap = k.core.v1.configMap;
       })
       + configMap.mixin.metadata.withLabels($._config.labels.dashboards)
     for shard in std.range(0, folder.shards - 1)
+    if std.length(folder.dashboards) > 0
   },
 
   dashboard_folders_config_maps: std.foldl(
@@ -77,7 +78,7 @@ local configMap = k.core.v1.configMap;
   ),
 
   // Helper to mount a variable number of sharded config maps.
-  local shardedMounts(folder) =
+  local shardedMounts(folder) = if std.length(folder.dashboards) == 0 then {} else
     std.foldl(
       function(acc, shard)
         acc + k.util.configVolumeMount(
