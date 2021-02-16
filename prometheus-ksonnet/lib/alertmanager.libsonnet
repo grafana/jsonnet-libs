@@ -24,13 +24,14 @@ alertmanager_slack +
 
   _config+:: {
     alertmanager_peers: peers,
+    alertmanager_gossip_port: 9094,
     alertmanager_replicas: replicas,
     alertmanager_external_hostname: 'http://alertmanager.%(alertmanager_namespace)s.svc.%(cluster_dns_suffix)s' % self,
   },
 
   alertmanager_container+:: (
     if isGossiping
-    then self.isGossiping().alertmanager_container
+    then self.isGossiping($._config.alertmanager_peers, $._config.alertmanager_gossip_port).alertmanager_container
     else {}
   ),
 
