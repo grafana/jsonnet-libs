@@ -31,10 +31,14 @@ local util = import 'util.libsonnet';
     // alertmanagers are found by service discovery in the same we as we find
     // prometheis. By default we look for pods in the default namespace with
     // port 9093.
-    alertmanager_clusters: self.clusters,
-    alertmanager_namespace: 'default',
-    alertmanager_path: '/alertmanager/',
-    alertmanager_port: 9093,
+    alertmanager_clusters: {
+      [c]: $._config.clusters[c] {
+        namespace: 'default',
+        path: '/alertmanager/',
+        port: 9093,
+      }
+      for c in std.objectFields(self.clusters)
+    },
   },
 
   prometheus:
@@ -142,10 +146,10 @@ local util = import 'util.libsonnet';
 
         alerting+: {
           alertmanagers: std.prune([
-            local cluster = this._config.clusters[c];
+            local cluster = this._config.alertmanager_clusters[c];
             this.service_discovery(cluster) {
               api_version: 'v2',
-              path_prefix: this._config.alertmanager_path,
+              path_prefix: cluster.path,
 
               relabel_configs: [{
                 source_labels: ['__meta_kubernetes_pod_label_name'],
@@ -153,13 +157,13 @@ local util = import 'util.libsonnet';
                 action: 'keep',
               }, {
                 source_labels: ['__meta_kubernetes_namespace'],
-                regex: this._config.alertmanager_namespace,
+                regex: cluster.namespace,
                 action: 'keep',
               }, {
                 // This prevents port-less containers and the gossip ports
                 // from showing up.
                 source_labels: ['__meta_kubernetes_pod_container_port_number'],
-                regex: this._config.alertmanager_port,
+                regex: cluster.port,
                 action: 'keep',
               }],
             }
