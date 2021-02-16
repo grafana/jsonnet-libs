@@ -32,7 +32,7 @@ local util = import 'util.libsonnet';
     // prometheis. By default we look for pods in the default namespace with
     // port 9093.
     alertmanager_clusters: {
-      [c]: $.config.clusters[c] {
+      [c]: $._config.clusters[c] {
         namespace: 'default',
         path: '/alertmanager/',
         port: 9093,
