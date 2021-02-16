@@ -49,17 +49,17 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       memory: '40Mi',
     }),
 
-  isGossiping():: {
+  isGossiping(peers, port=9094):: {
     alertmanager_container+:
       container.withPortsMixin(
         [
-          k.core.v1.containerPort.newUDP('gossip-udp', _config.alertmanager_gossip_port),
-          k.core.v1.containerPort.new('gossip-tcp', _config.alertmanager_gossip_port),
+          k.core.v1.containerPort.newUDP('gossip-udp', port),
+          k.core.v1.containerPort.new('gossip-tcp', port),
         ]
       )
       + container.withArgsMixin(
-        ['--cluster.listen-address=[$(POD_IP)]:%s' % _config.alertmanager_gossip_port]
-        + ['--cluster.peer=%s' % peer for peer in _config.alertmanager_peers]
+        ['--cluster.listen-address=[$(POD_IP)]:%s' % port]
+        + ['--cluster.peer=%s' % peer for peer in peers]
       ),
   },
 
