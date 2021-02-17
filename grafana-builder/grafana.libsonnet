@@ -44,7 +44,7 @@
     addMultiTemplate(name, metric_name, label_name, hide=0):: self {
       templating+: {
         list+: [{
-          allValue: '.*',
+          allValue: '.+',
           current: {
             selected: true,
             text: 'All',
