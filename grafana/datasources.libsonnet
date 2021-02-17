@@ -8,10 +8,13 @@
     version: 1,
     editable: false,
   },
-  withBasicAuth(username, password):: {
+  withBasicAuth(username, password, legacy=false):: {
     basicAuth: true,
     basicAuthUser: username,
-    basicAuthPassword: password,
+    basicAuthPassword: if legacy then password,
+    secureJsonData+: if !legacy then {
+        basicAuthPassword: password,
+    },
   },
   withJsonData(data):: {
     jsonData+: data,
