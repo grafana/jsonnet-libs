@@ -20,7 +20,7 @@
       if $._config.alertmanager_cluster_self.replicas > 0 then {
         title: 'Alertmanager' + if $._config.alertmanager_cluster_self.global then ' (global)' else ' (local)',
         path: 'alertmanager',
-        url: 'http://alertmanager.%(namespace)s.svc.%(cluster_dns_suffix)s/alertmanager/' % $._config,
+        url: 'http://alertmanager.%(alertmanager_namespace)s.svc.%(cluster_dns_suffix)s/alertmanager/' % $._config,
       },
     ]),
 
