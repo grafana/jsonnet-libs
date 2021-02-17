@@ -15,7 +15,7 @@ alertmanager_slack +
       if $.alertmanagers[am].global
     }
     else {
-      [cluster_name]: $.alertmanagers[cluster_name],
+      [$._config.cluster_name]: $.alertmanagers[$._config.cluster_name],
     }
   ),
 

@@ -1,3 +1,5 @@
+local prometheus = import 'prometheus/prometheus.libsonnet';
+
 {
   prometheus_config:: {
     global: {
@@ -10,7 +12,7 @@
     ],
 
     alerting: {
-      alertmanagers: $.withAlertmanagers(
+      alertmanagers: prometheus.withAlertmanagers(
         $._config.alertmanagers,
         $._config.cluster_name
       ).prometheus_config.alerting.alertmanagers,
