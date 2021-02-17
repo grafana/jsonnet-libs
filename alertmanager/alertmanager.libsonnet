@@ -49,6 +49,40 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       memory: '40Mi',
     }),
 
+  // `buildPeers` constructs an array of alertmanager gossiping peer
+  // URLs. Together with `withAlertmanagers` in the prometheus
+  // jsonnetlib, this is a building block for configuring one global
+  // alertmanager über-cluster spread over multiple kubernetes
+  // clusters. This requires all those clusters to have inter-cluster
+  // network connectivity.
+  //
+  // ref: https://github.com/grafana/jsonnet-libs/tree/master/prometheus
+  //
+  // `global` is set to 'true' if the alertmanager is participating in
+  // the global alertmanager über-cluster.
+  //
+  // Example `alertmanagers` object:
+  // alertmanagers: {
+  //   alertmanager_name: {
+  //     replicas: 2,
+  //     namespace: 'alertmanager',
+  //     cluster_name: 'cluster',
+  //     cluster_dns_tld: 'local',
+  //     gossip_port: 9094,
+  //   },
+  // }
+  buildPeers(alertmanagers):: [
+    'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [
+      i,
+      alertmanagers[am].namespace,
+      alertmanagers[am].cluster_name,
+      alertmanagers[am].cluster_dns_tld,
+      alertmanagers[am].gossip_port,
+    ]
+    for am in std.objectFields(alertmanagers)
+    for i in std.range(0, alertmanagers[am].replicas - 1)
+  ],
+
   isGossiping(peers, port=9094):: {
     alertmanager_container+:
       container.withPortsMixin(

@@ -10,46 +10,10 @@
     ],
 
     alerting: {
-      alertmanagers: std.prune(
-        [
-          // For local alertmanager or local instances of the global alertmanager, use K8s SD.
-          if !$._config.alertmanager_cluster_self.global || $._config.alertmanager_cluster_self.replicas > 0 then
-            {
-              api_version: 'v2',
-              kubernetes_sd_configs: [{
-                role: 'pod',
-              }],
-              path_prefix: $._config.alertmanager_path,
-              relabel_configs: [{
-                source_labels: ['__meta_kubernetes_pod_label_name'],
-                regex: 'alertmanager',
-                action: 'keep',
-              }, {
-                source_labels: ['__meta_kubernetes_namespace'],
-                regex: $._config.alertmanager_namespace,
-                action: 'keep',
-              }, {
-                // This prevents port-less containers and the gossip ports from showing up.
-                source_labels: ['__meta_kubernetes_pod_container_port_number'],
-                regex: $._config.alertmanager_port,
-                action: 'keep',
-              }],
-            },
-        ] + if $._config.alertmanager_cluster_self.global then [{
-          // For non-local instances, use static DNS entries.
-          // Sadly, the K8s-provided DNS-SRV records only point to the service IP,
-          // but we need to send alerts to every Alertmanager instance individually.
-          api_version: 'v2',
-          path_prefix: $._config.alertmanager_path,
-          static_configs: [{ targets: [
-            'alertmanager-%d.alertmanager.%s.svc.%s.%s:%s' % [i, $._config.alertmanager_namespace, cluster, $._config.cluster_dns_tld, $._config.alertmanager_port]
-            for cluster in std.objectFields($._config.alertmanager_clusters)
-            if $._config.cluster_name != cluster && $._config.alertmanager_clusters[cluster].global && $._config.alertmanager_clusters[cluster].replicas > 1
-            for i in std.range(0, $._config.alertmanager_clusters[cluster].replicas - 1)
-          ] }],
-        }]
-        else [],
-      ),
+      alertmanagers: $.withAlertmanagers(
+        $._config.alertmanagers,
+        $._config.cluster_name
+      ).prometheus_config.alerting.alertmanagers,
     },
 
     scrape_configs: [
