@@ -13,7 +13,7 @@
     basicAuthUser: username,
     basicAuthPassword: if legacy then password,
     secureJsonData+: if !legacy then {
-        basicAuthPassword: password,
+      basicAuthPassword: password,
     },
   },
   withJsonData(data):: {
