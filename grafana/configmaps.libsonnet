@@ -61,7 +61,7 @@ local configMap = k.core.v1.configMap;
     ['%s-%d' % [prefix(folder.id), shard]]+:
       configMap.new('%s-%d' % [prefix(folder.id), shard]) +
       configMap.withDataMixin({
-        [name]: std.toString(folder.dashboards[name])
+        [if std.endsWith(name, '.json') then name else '%s.json' % name]: std.toString(folder.dashboards[name])
         for name in std.objectFields(folder.dashboards)
         if std.codepoint(std.md5(name)[1]) % folder.shards == shard
       })
