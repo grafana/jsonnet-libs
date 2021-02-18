@@ -99,7 +99,7 @@
       for c in std.objectFields($._config.alertmanager_clusters)
     },
 
-    // Backwards compatible base entry $.alertmanager_cluster_self
+    // Backwards compatible base entry for $.alertmanager_cluster_self
     local alertmanager_config_base = {
       path: $._config.alertmanager_path,
       namespace: $._config.alertmanager_namespace,
