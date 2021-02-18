@@ -74,15 +74,39 @@
       // own alertmanagers in this cluster:
       //   'us-west3': { global: true, replicas: 0 },
     },
+
+    // This replaces `alertmanager_clusters` to be more granular, this
+    // `alertmanagers` object is build from `alertmanager_clusters`
+    // for backwards compatibility. It is intended to be consumed by
+    // functions in the prometheus (withAlertmanagers) and
+    // alertmanager (buildPeers) jsonnet libs.
+    alertmanagers: {
+      [c]: {
+        // path prefix where the alertmanager is running
+        path: $._config.alertmanager_path,
+
+        // for service discovery and global static config
+        namespace: $._config.alertmanager_namespace,
+        port: $._config.alertmanager_port,
+        gossip_port: $._config.alertmanager_gossip_port,
+
+        // for global static config
+        replicas: $._config.alertmanager_clusters[c].replicas,
+        global: $._config.alertmanager_clusters[c].global,
+        cluster_name: c,
+        cluster_dns_tld: $._config.cluster_dns_tld,
+      }
+      for c in std.objectFields($._config.alertmanager_clusters)
+    },
+
     // Shortcut to alertmanager_clusters entry for this cluster.
     alertmanager_cluster_self:
       if self.cluster_name in self.alertmanager_clusters then
-        self.alertmanager_clusters[self.cluster_name]
+        self.alertmanagers[self.cluster_name]
       else if std.length(self.alertmanager_clusters) == 0 then
         { global: false, replicas: 1 }
       else
         { global: true, replicas: 0 },
-
     slack_url: 'http://slack',
     slack_channel: 'general',
 
