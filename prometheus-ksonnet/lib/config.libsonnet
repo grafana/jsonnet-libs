@@ -99,14 +99,24 @@
       for c in std.objectFields($._config.alertmanager_clusters)
     },
 
-    // Shortcut to alertmanager_clusters entry for this cluster.
+    // Backwards compatible base entry for $.alertmanager_cluster_self
+    local alertmanager_config_base = {
+      path: $._config.alertmanager_path,
+      namespace: $._config.alertmanager_namespace,
+      port: $._config.alertmanager_port,
+      gossip_port: $._config.alertmanager_gossip_port,
+      cluster_name: $._config.cluster_name,
+      cluster_dns_tld: $._config.cluster_dns_tld,
+    },
+
+    // Shortcut to alertmanagers entry for this cluster.
     alertmanager_cluster_self:
-      if self.cluster_name in self.alertmanager_clusters then
+      if self.cluster_name in self.alertmanagers then
         self.alertmanagers[self.cluster_name]
-      else if std.length(self.alertmanager_clusters) == 0 then
-        { global: false, replicas: 1 }
+      else if std.length(self.alertmanagers) == 0 then
+        alertmanager_config_base { global: false, replicas: 1 }
       else
-        { global: true, replicas: 0 },
+        alertmanager_config_base { global: true, replicas: 0 },
     slack_url: 'http://slack',
     slack_channel: 'general',
 
