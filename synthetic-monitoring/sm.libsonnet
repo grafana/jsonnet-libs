@@ -7,6 +7,8 @@
     labels: [],
     target: target,
     job: name,
+    alertSensitivity: '',
+    basicMetricsOnly: true,
   },
 
   local _new = self._new,
