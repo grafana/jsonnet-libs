@@ -68,3 +68,10 @@ $ jsonnet example.jsonnet
 $ # or:
 $ jsonnet patch.jsonnet
 ```
+
+Given that we often want to patch existing rules, and those often exist within mixins,
+we can also do:
+```
+mixins+: prom.v1.mixin.patchRule('base', 'prometheus_metamon', 'PrometheusDown', { 'for': '10m' }),
+```
+This will apply the same patch to the `base` mixin.
