@@ -65,6 +65,7 @@
     // Prometheus servers talk to all clustered alertmanager replicas
     // globally.
     alertmanager_clusters: {
+      [$._config.cluster_name]: { global: false, replicas: 1 },
       // Example for a cluster with global alertmanager instances:
       //   'us-east5': { global: true, replicas: 2 },
       // Example for cluster with isolated local alertmanager instance:
