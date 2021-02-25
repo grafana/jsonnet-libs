@@ -43,12 +43,37 @@
       },
     },
 
-    patchRule(group, rule, patch):: {
-      groups_map+:: {
-        [group]+: {
-          rules_map+:: {
-            [rule]+: patch,
+    patchRule(group, rule, patch)::
+      if 'groups_map' in super then {
+        groups_map+:: {
+          [group]+: {
+            rules_map+:: {
+              [rule]+: patch,
+            },
           },
+        },
+      }
+      else
+        {
+          groups: std.map(function(g)
+                            if g.name == group
+                            then g {
+                              rules: std.map(function(r)
+                                               if ('alert' in r && r.alert == rule) || ('record' in r && r.record == rule)
+                                               then r + patch
+                                               else r,
+                                             g.rules),
+                            }
+                            else g,
+                          super.groups),
+        },
+
+    local patchRule = self.patchRule,
+    mixin: {
+      patchRule(mixin, group, rule, patch):: {
+        [mixin]+: {
+          prometheusRules+: patchRule(group, rule, patch),
+          prometheusAlerts+: patchRule(group, rule, patch),
         },
       },
     },

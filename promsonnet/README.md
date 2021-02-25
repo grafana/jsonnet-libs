@@ -1,4 +1,4 @@
-#PromSonnet
+# PromSonnet
 
 `PromSonnet` is intended as a very simple library for creating Prometheus
 alerts and rules. It is 'patching friendly', as in, it maintains the
