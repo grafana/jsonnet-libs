@@ -1,5 +1,6 @@
 {
-  local podAntiAffinity = $.apps.v1.deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
+  local k = import 'ksonnet-util/kausal.libsonnet',
+  local podAntiAffinity = k.apps.v1.deployment.mixin.spec.template.spec.affinity.podAntiAffinity,
 
   etcd_cluster(name, size=3, version='3.3.13', env=[]):: {
     apiVersion: 'etcd.database.coreos.com/v1beta2',
@@ -29,8 +30,8 @@
         } + (
           // Run etcd with the Burstable QoS class, and without a CPU limit
           // to avoid CFS throttling (best for low latency)
-          $.util.resourcesRequests('500m', '512Mi') +
-          $.util.resourcesLimits(null, '512Mi')
+          k.util.resourcesRequests('500m', '512Mi') +
+          k.util.resourcesLimits(null, '512Mi')
         ),
     },
   },
