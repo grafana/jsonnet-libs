@@ -53,55 +53,10 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
         for service in std.set($._config.admin_services, function(s) s.url)
       ],
       locations: std.join('\n', self.location_stanzas),
-      link_stanzas: [
-        |||
-          <li><a href="/%(path)s%(params)s">%(title)s</a></li>
-        ||| % ({ params: '' } + service)
-        for service in $._config.admin_services
-      ],
-      links: std.join('\n', self.link_stanzas),
     };
 
     configMap.new('nginx-config') +
     configMap.withData({
-      'nginx.conf': |||
-        worker_processes     5;  ## Default: 1
-        error_log            /dev/stderr;
-        pid                  /tmp/nginx.pid;
-        worker_rlimit_nofile 8192;
-
-        events {
-          worker_connections  4096;  ## Default: 1024
-        }
-
-        http {
-          default_type application/octet-stream;
-          log_format   main '$remote_addr - $remote_user [$time_local]  $status '
-            '"$request" $body_bytes_sent "$http_referer" '
-            '"$http_user_agent" "$http_x_forwarded_for"';
-          access_log   /dev/stderr  main;
-          sendfile     on;
-          tcp_nopush   on;
-          resolver     kube-dns.kube-system.svc.%(cluster_dns_suffix)s;
-          server {
-            listen 80;
-            %(locations)s
-            location ~ /(index.html)? {
-              root /etc/nginx;
-            }
-          }
-        }
-      ||| % ($._config + vars),
-      'index.html': |||
-        <html>
-          <head><title>Admin</title></head>
-          <body>
-            <h1>Admin</h1>
-            <ul>
-              %(links)s
-            </ul>
-          </body>
-        </html>
-      ||| % vars,
+      'nginx.conf': (importstr 'files/nginx.conf') % ($._config + vars),
     }),
 }

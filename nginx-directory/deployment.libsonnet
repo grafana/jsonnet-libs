@@ -14,6 +14,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   nginx_deployment:
     deployment.new('nginx', 1, [$.nginx_container]) +
     k.util.configMapVolumeMount($.nginx_config_map, '/etc/nginx') +
+    k.util.configMapVolumeMount($.nginx_html_config_map, '/var/www/html') +
     k.util.podPriority('critical'),
 
   nginx_service:
