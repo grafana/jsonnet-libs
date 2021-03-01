@@ -3,10 +3,11 @@
     operator: 'quay.io/coreos/etcd-operator:v0.9.4',
   },
 
-  local policyRule = $.rbac.v1beta1.policyRule,
+  local k = import 'ksonnet-util/kausal.libsonnet',
+  local policyRule = k.rbac.v1beta1.policyRule,
 
   operator_rbac:
-    $.util.rbac('etcd-operator', [
+    k.util.rbac('etcd-operator', [
       policyRule.new() +
       policyRule.withApiGroups(['etcd.database.coreos.com']) +
       policyRule.withResources(['etcdclusters', 'etcdbackups', 'etcdrestores']) +
@@ -28,7 +29,7 @@
       policyRule.withVerbs(['*']),
     ]),
 
-  local container = $.core.v1.container,
+  local container = k.core.v1.container,
   local env = container.envType,
   operator_container::
     container.new('operator', $._images.operator) +
@@ -38,11 +39,11 @@
       env.fromFieldPath('MY_POD_NAMESPACE', 'metadata.namespace'),
       env.fromFieldPath('MY_POD_NAME', 'metadata.name'),
     ]) +
-    container.withPorts([$.core.v1.containerPort.new('http-metrics', 8080)]) +
-    $.util.resourcesRequests('500m', '200Mi') +
-    $.util.resourcesLimits('1', '500Mi'),
+    container.withPorts([k.core.v1.containerPort.new('http-metrics', 8080)]) +
+    k.util.resourcesRequests('500m', '200Mi') +
+    k.util.resourcesLimits('1', '500Mi'),
 
-  local deployment = $.apps.v1.deployment,
+  local deployment = k.apps.v1.deployment,
 
   operator_deployment:
     deployment.new('etcd-operator', 1, [$.operator_container]) +
