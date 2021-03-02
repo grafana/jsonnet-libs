@@ -15,6 +15,17 @@
         "type": "github"
       }
     },
+    "jdb": {
+      "locked": {
+        "narHash": "sha256-mXPZQISV06WIzYiCkfDRcnA80uD7VpDOusJkv9ujx7A=",
+        "path": "/home/jdb/nixpkgs",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/jdb/nixpkgs",
+        "type": "path"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1614191423,
@@ -34,6 +45,7 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
+        "jdb": "jdb",
         "nixpkgs": "nixpkgs"
       }
     }

@@ -1,8 +1,8 @@
 { pkgs ? import <nixpkgs> }:
 with pkgs;
 mkShell {
-  buildInputs = [ hello ];
+  buildInputs = [ docsonnet go-jsonnet jsonnet-bundler ];
   shellHook = ''
     # ...
-'';
+  '';
 }
