@@ -1,0 +1,379 @@
+local cortex =
+  (import 'github.com/grafana/cortex-jsonnet/cortex/cortex.libsonnet')
+  + (import 'github.com/grafana/cortex-jsonnet/cortex/gossip.libsonnet')
+  + (import 'github.com/grafana/cortex-jsonnet/cortex/tsdb.libsonnet')
+  + {
+    _config+:: {
+      // Remove the blocksStorageConfig from Cortex as this library provides its own config interface.
+      blocksStorageConfig:: {},
+      // No resources should have a pre-configured namespace. These should be removed with removeNamespaceReferences.
+      // TODO: Remove upstream.
+      namespace:: 'namespace',
+      ringConfig+: {
+        // Hide the consul hostname because it isn't used with memberlist.
+        'consul.hostname':: '',
+      },
+      memcached_chunks_enabled: true,
+      memcached_index_queries_enabled: true,
+      memcached_metadata_enabled: true,
+    },
+    distributor_args+:: {
+      // Disable the ha-tracker by default.
+      'distributor.ha-tracker.enable':: null,
+      'distributor.ha-tracker.enable-for-all-users':: null,
+      'distributor.ha-tracker.store':: null,
+      'distributor.ha-tracker.etcd.endpoints':: null,
+      'distributor.ha-tracker.prefix':: null,
+      // Memberlist gossip is used instead of consul for the ring.
+      'distributor.ring.consul.hostname':: null,
+    },
+  };
+local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
+local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet',
+      container = k.core.v1.container,
+      deployment = k.apps.v1.deployment,
+      job = k.batch.v1.job,
+      policyRule = k.rbac.v1.policyRule,
+      role = k.rbac.v1.role,
+      roleBinding = k.rbac.v1.roleBinding,
+      subject = k.rbac.v1.subject,
+      service = k.core.v1.service,
+      serviceAccount = k.core.v1.serviceAccount,
+      statefulSet = k.apps.v1.statefulSet;
+local util = (import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonnet').withK(k);
+
+// removeNamespaceReferences removes the cluster domain and namespace from container arguments.
+local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg, '.namespace.svc.cluster.local', '.svc'), args);
+{
+  '#':: d.pkg(
+    name='enterprise-metrics',
+    url='github.com/grafana/jsonnet-libs/enterprise-metrics/main.libsonnet',
+    help='`enterprise-metrics` produces Kubernetes manifests for a Grafana Enterprise Metrics cluster.',
+  ),
+  local this = self,
+
+  '#_config':: d.obj('`_config` is used for consumer overrides and configuration. Similar to a Helm values.yaml file'),
+  _config:: {
+    '#commonArgs':: d.obj('`commonArgs` is a convenience field that can be used to modify the container arguments of all modules as key-value pairs.'),
+    commonArgs:: {
+      'auth.type': 'enterprise',
+      'admin.client.backend-type': error 'must set the `admin.client.backend-type` flag to an object storage backend ("gcs"|"s3")',
+      'admin.client.gcs.bucket-name': 'admin',
+      'admin.client.s3.bucket-name': 'admin',
+      '#auth.enabled':: d.val(default=self['auth.enabled'], help='`auth.enabled` enables the tenant authentication', type=d.T.bool),
+      'auth.enabled': true,
+      '#auth.type':: d.val(
+        default=self['auth.type'], help=|||
+          `auth.type` configures the type of authentication in use.
+          `enterprise` uses Grafana Enterprise token authentication.
+          `default` uses Cortex authentication.
+        |||, type=d.T.bool
+      ),
+      'blocks-storage.backend': error 'must set the `blocks-storage.backend` flag to an object storage backend ("gcs"|"s3")',
+      'blocks-storage.gcs.bucket-name': 'tsdb',
+      'blocks-storage.s3.bucket-name': 'tsdb',
+      '#cluster-name':: d.val(
+        default=self['cluster-name'],
+        help='`cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.',
+        type=d.T.string
+      ),
+      'cluster-name': error 'must set the `cluster-name` flag to the cluster name associated with your Grafana Enterprise Metrics license',
+      'store.engine': 'blocks',
+    },
+
+    '#licenseSecretName':: d.val(
+      default=self.licenseSecretName,
+      help=|||
+        The admin-api expects a Grafana Enterprise Metrics license configured as 'license.jwt' in the
+        Kubernetes Secret with `licenseSecretName`.
+        To create the Kubernetes Secret from a local 'license.jwt' file:
+        $ kubectl create secret generic gem-license -from-file=license.jwt
+      |||,
+      type=d.T.string,
+    ),
+    licenseSecretName: 'gem-license',
+  },
+  '#_images':: d.obj('`_images` contains fields for container images.'),
+  _images:: {
+    '#gem':: d.val(default=self.gem, help='`gem` is the Grafana Enterprise Metrics container image.', type=d.T.string),
+    gem: 'grafana/metrics-enterprise',
+    '#kubectl':: d.val(default=self.kubectl, help='`kubectl` is the image used for kubectl containers.', type=d.T.string),
+    kubectl: 'bitnami/kubectl',
+  },
+
+  '#adminApi':: d.obj('`adminApi` has configuration for the admin-api.'),
+  adminApi: {
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the admin-api container arguments as key value pairs.'),
+    args:: this._config.commonArgs {
+      '#bootstrap.license.path':: d.val(
+        default=self['bootstrap.license.path'],
+        help='`bootstrap.license.path` configures where the admin-api expects to find a Grafana Enterprise Metrics License.',
+        type=d.T.string
+      ),
+      'bootstrap.license.path': '/etc/gem-license/license.jwt',
+      target: 'admin-api',
+    },
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the admin-api container.'),
+    container::
+      container.new('admin-api', image=this._images.gem)
+      + container.withArgs(util.mapToFlags(self.args))
+      + container.withPorts(cortex.util.defaultPorts)
+      + container.resources.withLimits({ cpu: '2', memory: '4Gi' })
+      + container.resources.withRequests({ cpu: '500m', memory: '1Gi' })
+      + cortex.jaeger_mixin
+      + cortex.util.readinessProbe,
+    '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the admin-api.'),
+    deployment:
+      deployment.new(name='admin-api', replicas=1, containers=[self.container])
+      + deployment.spec.template.spec.withTerminationGracePeriodSeconds(15)
+      + util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/'),
+    '#service':: d.obj('`service` is the Kubernetes Service for the admin-api.'),
+    service:
+      util.serviceFor(self.deployment),
+  },
+
+  '#compactor':: d.obj('`compactor` has configuration for the compactor.'),
+  compactor: {
+    local compactor = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the compactor container arguments as key-value pairs.'),
+    args:: this._config.commonArgs + cortex.compactor_args,
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the compactor container.'),
+    container::
+      cortex.compactor_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(compactor.args)))
+      + container.withImage(this._images.gem),
+    '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the compactor.'),
+    statefulSet:
+      cortex.compactor_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      + statefulSet.spec.template.spec.withContainers([compactor.container]),
+    '#service':: d.obj('`service` is the Kubernetes Service for the compactor.'),
+    service: util.serviceFor(self.statefulSet),
+  },
+
+  '#distributor':: d.obj('`distributor` has configuration for the distributor.'),
+  distributor: {
+    local distributor = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the distributor container arguments as key-value pairs.'),
+    args:: this._config.commonArgs + cortex.distributor_args,
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the distributor container.'),
+    container::
+      cortex.distributor_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(distributor.args)))
+      + container.withImage(this._images.gem)
+      + container.withVolumeMounts([{ name: 'overrides', mountPath: '/etc/cortex' }]),
+    '#statefulSet':: d.obj('`deployment` is the Kubernetes Deployment for the distributor.'),
+    deployment:
+      cortex.distributor_deployment
+      + deployment.spec.template.spec.withContainers([distributor.container]),
+    '#service':: d.obj('`service` is the Kubernetes Service for the distributor.'),
+    service:
+      util.serviceFor(self.deployment)
+      + service.spec.withClusterIp('None'),
+  },
+
+  '#gateway':: d.obj('`gateway` has configuration for the gateway.'),
+  gateway: {
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the gateway container arguments as key-value pairs.'),
+    args:: this._config.commonArgs {
+      '#gateway.proxy.admin-api.url':: d.val(
+        default=self['gateway.proxy.admin-api.url'], help='`gateway.proxy.admin-api.url is the upstream URL of the admin-api.', type=d.T.string
+      ),
+      'gateway.proxy.admin-api.url': 'http://admin-api',
+      '#gateway.proxy.distributor.url':: d.val(
+        default=self['gateway.proxy.distributor.url'], help='`gateway.proxy.distributor.url is the upstream URL of the distributor.', type=d.T.string
+      ),
+      'gateway.proxy.distributor.url': 'dns:///distributor:9095',
+      '#gateway.proxy.ingester.url':: d.val(
+        default=self['gateway.proxy.ingester.url'], help='`gateway.proxy.ingester.url is the upstream URL of the ingester.', type=d.T.string
+      ),
+      'gateway.proxy.ingester.url': 'http://ingester',
+      '#gateway.proxy.query-frontend.url':: d.val(
+        default=self['gateway.proxy.query-frontend.url'], help='`gateway.proxy.query-frontend.url is the upstream URL of the query-frontend.', type=d.T.string
+      ),
+      'gateway.proxy.query-frontend.url': 'http://query-frontend',
+      '#gateway.proxy.store-gateway.url':: d.val(
+        default=self['gateway.proxy.store-gateway.url'], help='`gateway.proxy.store-gateway.url is the upstream URL of the store-gateway.', type=d.T.string
+      ),
+      'gateway.proxy.store-gateway.url': 'http://store-gateway',
+      target: 'gateway',
+    },
+
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the gateway container.'),
+    container::
+      container.new('gateway', this._images.gem)
+      + container.withArgs(util.mapToFlags(self.args))
+      + container.withPorts(cortex.util.defaultPorts)
+      + container.resources.withLimits({ cpu: '2', memory: '4Gi' })
+      + container.resources.withRequests({ cpu: '500m', memory: '1Gi' })
+      + cortex.jaeger_mixin
+      + cortex.util.readinessProbe,
+
+    '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the gateway.'),
+    deployment:
+      deployment.new('gateway', 3, [self.container]) +
+      deployment.spec.template.spec.withTerminationGracePeriodSeconds(15),
+
+    '#service':: d.obj('`service` is the Kubernetes Service for the gateway.'),
+    service:
+      util.serviceFor(self.deployment),
+  },
+
+  '#memcached':: d.obj('`memcached` has configuration for GEM caches'),
+  memcached: {
+    '#chunks':: d.obj('`chunks` is a cache for time series chunks'),
+    chunks: cortex.memcached_chunks,
+    '#metadata':: d.obj('`metadata` is cache for object store metadata used by the queriers and store-gateways'),
+    metadata: cortex.memcached_metadata,
+    '#queries':: d.obj('`queries` is a cache for index queries used by the store-gateways'),
+    queries: cortex.memcached_index_queries,
+  },
+
+  '#ingester':: d.obj('`ingester` has configuration for the ingester.'),
+  ingester: {
+    local ingester = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the ingester container arguments as key-value pairs.'),
+    args:: this._config.commonArgs + cortex.ingester_args,
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the ingester container.'),
+    container::
+      cortex.ingester_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(ingester.args)))
+      + container.withImage(this._images.gem)
+      + container.withVolumeMounts([
+        { name: 'ingester-data', mountPath: '/data' },
+        { name: 'overrides', mountPath: '/etc/cortex' },
+      ]),
+    '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the ingester.'),
+    statefulSet:
+      cortex.ingester_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      + statefulSet.spec.template.spec.withContainers([ingester.container]),
+    '#service':: d.obj('`service` is the Kubernetes Service for the ingester.'),
+    service: util.serviceFor(self.statefulSet),
+  },
+
+  '#querier':: d.obj('`querier` has configuration for the querier.'),
+  querier: {
+    local querier = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.'),
+    args:: this._config.commonArgs + cortex.querier_args,
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the querier container.'),
+    container::
+      cortex.querier_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(querier.args)))
+      + container.withImage(this._images.gem)
+      + container.withVolumeMounts([
+        { name: 'overrides', mountPath: '/etc/cortex' },
+      ]),
+    '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the querier.'),
+    deployment:
+      cortex.querier_deployment
+      + deployment.spec.template.spec.withContainers([querier.container]),
+    '#service':: d.obj('`service` is the Kubernetes Service for the querier.'),
+    service: util.serviceFor(self.deployment),
+  },
+
+  '#queryFrontend':: d.obj('`queryFrontend` has configuration for the query-frontend.'),
+  queryFrontend: {
+    local queryFrontend = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the query-frontend container arguments as key-value pairs.'),
+    args:: this._config.commonArgs + cortex.query_frontend_args,
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the query-frontend container.'),
+    container::
+      cortex.query_frontend_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(queryFrontend.args)))
+      + container.withImage(this._images.gem),
+    '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the query-frontend.'),
+    deployment:
+      cortex.query_frontend_deployment
+      + deployment.spec.template.spec.withContainers([queryFrontend.container]),
+    '#service':: d.obj('`service` is the Kubernetes Service for the query-frontend.'),
+    service: util.serviceFor(self.deployment),
+  },
+
+
+  '#storeGateway':: d.obj('`storeGateway` has configuration for the store-gateway.'),
+  storeGateway: {
+    local storeGateway = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the store-gateway container arguments as key-value pairs.'),
+    args:: this._config.commonArgs + cortex.store_gateway_args,
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the store-gateway container.'),
+    container::
+      cortex.store_gateway_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(storeGateway.args)))
+      + container.withImage(this._images.gem),
+    '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the store-gateway.'),
+    statefulSet:
+      cortex.store_gateway_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      + statefulSet.spec.template.spec.withContainers([storeGateway.container]),
+    '#service':: d.obj('`service` is the Kubernetes Service for the store-gateway.'),
+    service: util.serviceFor(self.statefulSet),
+  },
+
+  '#tokengen':: d.obj('`tokengen` has configuration for tokengen.'),
+  tokengen: {
+    local target = 'tokengen',
+    '#args':: d.obj('`args` is convenience field for modifying the tokegen container arguments as key-value pairs.'),
+    args:: this._config.commonArgs {
+      target: target,
+      'tokengen.token-file': '/shared/admin-token',
+    },
+    '#container':: d.obj(|||
+      `container` is a convenience field for modifying the tokengen container.
+      By default, the container runs GEM with the tokengen target and writes the token to a file.
+    |||),
+    container::
+      container.new(target, this._images.gem)
+      + container.withPorts(cortex.util.defaultPorts)
+      + container.withArgs(util.mapToFlags(self.args))
+      + container.withVolumeMounts([{ mountPath: '/shared', name: 'shared' }])
+      + container.resources.withLimits({ memory: '4Gi' })
+      + container.resources.withRequests({ cpu: '500m', memory: '500Mi' }),
+
+    '#createSecretContainer':: d.obj('`createSecretContainer` creates a Kubernetes Secret from a token file.'),
+    createSecretContainer::
+      container.new('create-secret', this._images.kubectl)
+      + container.withCommand([
+        '/bin/bash',
+        '-euc',
+        'kubectl create secret generic gem-admin-token -from-file=token=/shared/admin-token -from-literal=grafana-token="$(base64 <(echo :$(cat /shared/admin-token)))"',
+      ])
+      + container.withVolumeMounts([{ mountPath: '/shared', name: 'shared' }])
+      // Need to run as root because the GEM container does.
+      + container.securityContext.withRunAsUser(0),
+
+    '#job':: d.obj('`job` is the Kubernetes Job for tokengen'),
+    job:
+      job.new(target)
+      + job.spec.template.spec.withContainers([self.createSecretContainer])
+      + job.spec.template.spec.withInitContainers([self.container])
+      + job.spec.template.spec.withRestartPolicy('Never')
+      + job.spec.template.spec.withServiceAccount(target)
+      + job.spec.template.spec.withServiceAccountName(target)
+      + job.spec.template.spec.withVolumes([{ name: 'shared', emptyDir: {} }]),
+
+    '#serviceAccount':: d.obj('`serviceAccount` is the Kubernetes ServiceAccount for tokengen'),
+    serviceAccount:
+      serviceAccount.new(target),
+
+    '#role':: d.obj('`role` is the Kubernetes Role for tokengen'),
+    role:
+      role.new(target)
+      + role.withRules([
+        policyRule.withApiGroups([''])
+        + policyRule.withResources(['secrets'])
+        + policyRule.withVerbs(['create']),
+      ]),
+
+    '#roleBinding':: d.obj('`roleBinding` is the Kubernetes RoleBinding for tokengen'),
+    roleBinding:
+      roleBinding.new()
+      + roleBinding.metadata.withName(target)
+      + roleBinding.roleRef.withApiGroup('rbac.authorization.k8s.io')
+      + roleBinding.roleRef.withKind('Role')
+      + roleBinding.roleRef.withName(target)
+      + roleBinding.withSubjects([
+        subject.new()
+        + subject.withName(target)
+        + subject.withKind('ServiceAccount'),
+      ]),
+  },
+}
