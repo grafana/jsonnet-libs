@@ -17,7 +17,7 @@
   },
 
   addPlugin(plugin):: {
-    plugins+:: [plugin],
+    grafanaPlugins+:: [plugin],
   },
 
   datasource: (import 'datasources.libsonnet'),
