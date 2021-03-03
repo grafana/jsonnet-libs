@@ -119,5 +119,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   local statefulset = k.apps.v1.statefulSet,
 
   prometheus_statefulset+:
-    statefulset.mixin.spec.withReplicas(2),
+    statefulset.mixin.spec.withReplicas(2)
+    + k.util.antiAffinityStatefulSet,
 }
