@@ -1,81 +1,13 @@
+local api = import 'api.libsonnet';
+local legacy = import 'legacy.libsonnet';
+
 {
-  v1: {
-    ruleGroupSet: {
-      new():: {
-        groups_map:: {},
-        groups_order:: [],
-        local groups_map = self.groups_map,
-        local groups_order = self.groups_order,
-        groups: [groups_map[group] for group in groups_order],
-      },
-
-      addGroup(group):: {
-        groups_map+:: {
-          [group.name]: group,
-        },
-        groups_order+:: [group.name],
-      },
-    },
-
-    ruleGroup: {
-      new(name):: {
-        name: name,
-        rules_map:: {},
-        rules_order:: [],
-        local rules_map = self.rules_map,
-        local rules_order = self.rules_order,
-        rules: [rules_map[rule] for rule in rules_order],
-      },
-
-      rule: {
-        newAlert(name, rule):: {
-          rules_map+:: {
-            [name]: rule { alert: name },
-          },
-          rules_order+:: [name],
-        },
-        newRecording(name, rule):: {
-          rules_map+:: {
-            [name]: rule { record: name },
-          },
-          rules_order+:: [name],
-        },
-      },
-    },
-
+  v1: api.v1 {
     patchRule(group, rule, patch)::
-      if 'groups_map' in super then {
-        groups_map+:: {
-          [group]+: {
-            rules_map+:: {
-              [rule]+: patch,
-            },
-          },
-        },
-      }
-      else
-        {
-          groups: std.map(function(g)
-                            if g.name == group
-                            then g {
-                              rules: std.map(function(r)
-                                               if ('alert' in r && r.alert == rule) || ('record' in r && r.record == rule)
-                                               then r + patch
-                                               else r,
-                                             g.rules),
-                            }
-                            else g,
-                          super.groups),
-        },
+      if 'groups_map' in super
+      then super.patchRule(group, rule, patch)
+      else legacy.v1.patchRule(group, rule, patch),
 
-    local patchRule = self.patchRule,
-    mixin: {
-      patchRule(mixin, group, rule, patch):: {
-        [mixin]+: {
-          prometheusRules+: patchRule(group, rule, patch),
-          prometheusAlerts+: patchRule(group, rule, patch),
-        },
-      },
-    },
+    legacy: legacy.v1,
   },
 }
