@@ -3,8 +3,9 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   local _config = self._config,
   local k = kausal { _config+:: _config },
 
-  local buildHeaders(service, redirect, allowWebsockets, subfilter) =
-    if redirect then |||
+  local buildHeaders(service, redirect, allowWebsockets, subfilter, custom) =
+    (if std.length(custom) > 0 then std.join('\n', custom) + '\n' else '')
+    + if redirect then |||
       return 302 %(url)s;
     ||| % service else |||
       proxy_pass      %(url)s$2$is_args$args;
@@ -39,6 +40,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       if 'redirect' in service then service.redirect else false,
       if 'allowWebsockets' in service then service.allowWebsockets else false,
       if 'subfilter' in service then service.subfilter else false,
+      if 'custom' in service then service.custom else [],
     ) +
     |||
       }
