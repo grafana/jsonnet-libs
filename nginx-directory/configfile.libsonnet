@@ -52,7 +52,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     local vars = {
       location_stanzas: [
         buildLocation(service)
-        for service in std.set($._config.admin_services, function(s) s.url)
+        for service in $._config.admin_services
       ],
       locations: std.join('\n', self.location_stanzas),
     };
