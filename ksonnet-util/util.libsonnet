@@ -155,6 +155,21 @@ local util(k) = {
       volume.fromHostPath(name, hostPath),
     ]),
 
+  pvcVolumeMount(pvcName, path, readOnly=false, volumeMountMixin={})::
+    local container = k.core.v1.container,
+          deployment = k.apps.v1.deployment,
+          volumeMount = k.core.v1.volumeMount,
+          volume = k.core.v1.volume,
+          addMount(c) = c + container.withVolumeMountsMixin(
+      volumeMount.new(pvcName, path, readOnly=readOnly) +
+      volumeMountMixin,
+    );
+
+    deployment.mapContainers(addMount) +
+    deployment.mixin.spec.template.spec.withVolumesMixin([
+      volume.fromPersistentVolumeClaim(pvcName, pvcName),
+    ]),
+
   secretVolumeMount(name, path, defaultMode=256, volumeMountMixin={})::
     local container = k.core.v1.container,
           deployment = k.apps.v1.deployment,
