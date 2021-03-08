@@ -7,6 +7,8 @@ local configMap = k.core.v1.configMap;
   nginx_html_config_map:
     local vars = {
       link_stanzas: [
+        // adding a "hidden" field set to true will cause the link to not be rendered in HTML
+
         if !$.isHidden(service) then (importstr 'files/link.html') % ({ params: '' } + service) else null
         for service in $._config.admin_services
       ],
