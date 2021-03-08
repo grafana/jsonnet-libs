@@ -1,11 +1,13 @@
 local k = import 'k.libsonnet';
 local configMap = k.core.v1.configMap;
 {
+  isHidden(service)::
+    std.objectHas(service, 'hidden') && service.hidden == true,
 
   nginx_html_config_map:
     local vars = {
       link_stanzas: [
-        (importstr 'files/link.html') % ({ params: '' } + service)
+        if !$.isHidden(service) then (importstr 'files/link.html') % ({ params: '' } + service) else null
         for service in $._config.admin_services
       ],
       links: std.join('\n', self.link_stanzas),
