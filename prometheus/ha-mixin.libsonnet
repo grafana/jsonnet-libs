@@ -1,6 +1,6 @@
 local kausal = import 'ksonnet-util/kausal.libsonnet';
 
-{
+function(replicas=2) {
   local this = self,
   local _config = self._config,
   local k = kausal {
@@ -35,67 +35,46 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     },
   },
 
-  prometheus_zero+:: {
-    config+:: this.prometheus_config {
-      global+: {
-        external_labels+: {
-          __replica__: 'prometheus-0',
-        },
-      },
-    },
-    alerts+:: this.prometheusAlerts,
-    rules+:: this.prometheusRules,
-  },
-
-  prometheus_one+:: {
-    config+:: this.prometheus_config {
-      global+: {
-        external_labels+: {
-          __replica__: 'prometheus-1',
-        },
-      },
-    },
-    alerts+:: this.prometheusAlerts,
-    rules+:: this.prometheusRules,
-  },
-
   local configMap = k.core.v1.configMap,
-
-  prometheus_config_maps: [
-    configMap.new('%s-0-config' % _config.name) +
-    configMap.withData({
-      'prometheus.yml': k.util.manifestYaml(this.prometheus_zero.config),
-    }),
-    configMap.new('%s-0-alerts' % _config.name) +
-    configMap.withData({
-      'alerts.rules': k.util.manifestYaml(this.prometheus_zero.alerts),
-    }),
-    configMap.new('%s-0-recording' % _config.name) +
-    configMap.withData({
-      'recording.rules': k.util.manifestYaml(this.prometheus_zero.rules),
-    }),
-
-    configMap.new('%s-1-config' % _config.name) +
-    configMap.withData({
-      'prometheus.yml': k.util.manifestYaml(this.prometheus_one.config),
-    }),
-    configMap.new('%s-1-alerts' % _config.name) +
-    configMap.withData({
-      'alerts.rules': k.util.manifestYaml(this.prometheus_one.alerts),
-    }),
-    configMap.new('%s-1-recording' % _config.name) +
-    configMap.withData({
-      'recording.rules': k.util.manifestYaml(this.prometheus_one.rules),
-    }),
-  ],
+  prometheus_config_maps: std.mapWithIndex(
+    function(i, acc)
+      local name = _config.name + '-' + i;
+      local config =
+        this.prometheus_config {
+          global+: {
+            external_labels+: {
+              __replica__: name,
+            },
+          },
+        };
+      {
+        name:: name,
+        base: configMap.new('%s-config' % name) +
+              configMap.withData({
+                'prometheus.yml': k.util.manifestYaml(config),
+              }),
+        alerts: configMap.new('%s-alerts' % name) +
+                configMap.withData({
+                  'alerts.rules': k.util.manifestYaml(this.prometheusAlerts),
+                }),
+        rules: configMap.new('%s-recording' % name) +
+               configMap.withData({
+                 'recording.rules': k.util.manifestYaml(this.prometheusRules),
+               }),
+      },
+    std.repeat('r', replicas),
+  ),
 
   prometheus_config_mount::
-    k.util.configVolumeMount('%s-0-config' % _config.name, '/etc/%s-0' % _config.name)
-    + k.util.configVolumeMount('%s-0-alerts' % _config.name, '/etc/%s-0/alerts' % _config.name)
-    + k.util.configVolumeMount('%s-0-recording' % _config.name, '/etc/%s-0/recording' % _config.name)
-    + k.util.configVolumeMount('%s-1-config' % _config.name, '/etc/%s-1' % _config.name)
-    + k.util.configVolumeMount('%s-1-alerts' % _config.name, '/etc/%s-1/alerts' % _config.name)
-    + k.util.configVolumeMount('%s-1-recording' % _config.name, '/etc/%s-1/recording' % _config.name)
+    std.foldl(
+      function(mounts, obj)
+        mounts
+        + k.util.configMapVolumeMount(obj.base, '/etc/%s' % obj.name)
+        + k.util.configMapVolumeMount(obj.alerts, '/etc/%s/alerts' % obj.name)
+        + k.util.configMapVolumeMount(obj.rules, '/etc/%s/recording' % obj.name),
+      self.prometheus_config_maps,
+      {},
+    )
   ,
 
   local container = k.core.v1.container,
@@ -119,6 +98,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   local statefulset = k.apps.v1.statefulSet,
 
   prometheus_statefulset+:
-    statefulset.mixin.spec.withReplicas(2)
+    statefulset.mixin.spec.withReplicas(replicas)
     + k.util.antiAffinityStatefulSet,
 }

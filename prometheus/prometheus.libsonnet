@@ -23,7 +23,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     else {}
   ),
 
-  withHighAvailability():: ha_mixin,
+  withHighAvailability(replicas=2):: ha_mixin(replicas),
 
   local configMap = k.core.v1.configMap,
 

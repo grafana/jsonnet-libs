@@ -1,1 +1,1 @@
-(import 'prometheus/ha-mixin.libsonnet')
+(import 'prometheus/ha-mixin.libsonnet')(replicas=2)
