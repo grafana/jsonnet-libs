@@ -52,7 +52,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     local vars = {
       location_stanzas: [
         buildLocation(service)
-        for service in $._config.admin_services
+        for service in std.uniq($.servicesByWeight($._config.admin_services), function(s) s.url)
       ],
       locations: std.join('\n', self.location_stanzas),
     };
@@ -61,4 +61,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     configMap.withData({
       'nginx.conf': (importstr 'files/nginx.conf') % ($._config + vars),
     }),
+
+  servicesByWeight(services)::
+    std.sort(services, function(s) if std.objectHas(s, 'weight') then s.weight else 0),
 }
