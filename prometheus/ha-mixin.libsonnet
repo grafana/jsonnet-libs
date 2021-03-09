@@ -40,17 +40,15 @@ function(replicas=2) {
     function(i, acc)
       local name = _config.name + '-' + i;
       local config =
-        this._config.prometheus_config {
-          prometheus+: {
-            global+: {
-              external_labels+: {
-                __replica__: name,
-              },
+        this.prometheus_config {
+          global+: {
+            external_labels+: {
+              __replica__: name,
             },
           },
         };
       {
-        name: name,
+        name:: name,
         base: configMap.new('%s-config' % name) +
               configMap.withData({
                 'prometheus.yml': k.util.manifestYaml(config),
@@ -73,7 +71,7 @@ function(replicas=2) {
         mounts
         + k.util.configMapVolumeMount(obj.base, '/etc/%s' % obj.name)
         + k.util.configMapVolumeMount(obj.alerts, '/etc/%s/alerts' % obj.name)
-        + k.util.configMapVolumeMount(obj.rules, '/etc/%s/rules' % obj.name),
+        + k.util.configMapVolumeMount(obj.rules, '/etc/%s/recording' % obj.name),
       self.prometheus_config_maps,
       {},
     )
