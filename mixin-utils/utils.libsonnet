@@ -126,10 +126,10 @@ local g = import 'grafana-builder/grafana.libsonnet';
     local update_rule(rule) =
       if std.objectHas(rule, 'alert')
       then rule {
-            annotations+: {
-              runbook_url: url_format % rule.alert,
-            },
-          }
+        annotations+: {
+          runbook_url: url_format % rule.alert,
+        },
+      }
       else rule;
     [
       group {
