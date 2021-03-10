@@ -1,4 +1,4 @@
-local d = import 'github.com/sh0rez/docsonnet/doc-util/main.libsonnet';
+local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
 local k8s = import 'k8s.libsonnet';
 {
   local this = self,
