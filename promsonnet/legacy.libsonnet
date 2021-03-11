@@ -21,7 +21,8 @@
                         if g.name == group
                         then g {
                           rules: std.map(function(r)
-                                           if ('alert' in r && r.alert == rule) || ('record' in r && r.record == rule)
+                                           if ('alert' in r && r.alert == rule) ||
+                                              ('record' in r && r.record == rule)
                                            then r + patch
                                            else r,
                                          g.rules),
