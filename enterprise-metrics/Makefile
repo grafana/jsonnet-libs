@@ -15,7 +15,7 @@ help:
 .PHONY: test
 test: ## Run library tests.
 test:
-	jsonnet -J lib -J vendor main_test.jsonnet
+	jsonnet -J test/lib -J test/vendor -J vendor main_test.jsonnet
 
 docs/README.md: ## Remake the library README file.
 docs/README.md: main.libsonnet
