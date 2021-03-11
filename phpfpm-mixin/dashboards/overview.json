@@ -20,7 +20,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -32,7 +32,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "The number of scrape attempts that have failed",
       "fieldConfig": {
         "defaults": {
@@ -94,7 +94,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "The number of times the process limit has been reached, when the process manager tries to start more children (only with \"dynamic\" and \"ondemand\" process management)\n\nGenerally any value > 0 should be interpreted as php-fpm over capacity.",
       "fieldConfig": {
         "defaults": {
@@ -156,7 +156,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "The number of active workers at present. This value can be misleading since php-fpm allocates workers differently depending on the \"pm\" (process manager) setting.\n\nThis value must ALWAYS be read with the \"Max Children Reached\" value, since all workers being active just means that php-fpm has created an appropriate number of workers for the given requests.\n\nIf \"Max Children Reached\" > 0, this is cause for concern.",
       "fieldConfig": {
         "defaults": {
@@ -213,7 +213,7 @@
       "type": "gauge"
     },
     {
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "The number of requests accepted",
       "fieldConfig": {
         "defaults": {
@@ -269,7 +269,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "The number of request in the queue of pending connections",
       "fieldConfig": {
         "defaults": {
@@ -334,7 +334,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "The number of requests that took longer to respond than the value configured in \"request_slowlog_timeout\" (hint: \"slowlog\" also needs to be set in order for this to work)",
       "fieldConfig": {
         "defaults": {
@@ -400,7 +400,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -417,7 +417,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "decimals": null,
       "description": "The number of request accepted by the pool",
       "fieldConfig": {
@@ -521,7 +521,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "decimals": 0,
       "description": "The number of request in the queue of pending connections",
       "fieldConfig": {
@@ -624,7 +624,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "The number of times the process limit has been reached, when the process manager tries to start more children (only with \"dynamic\" and \"ondemand\" process management)\n\nGenerally any value > 0 should be interpreted as php-fpm over capacity.",
       "fieldConfig": {
         "defaults": {
@@ -739,7 +739,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "decimals": 0,
       "description": "The number of requests that took longer to respond than the value configured in \"request_slowlog_timeout\" (hint: \"slowlog\" also needs to be set in order for this to work)",
       "fieldConfig": {
@@ -842,7 +842,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "decimals": 2,
       "description": "The number of active workers at present. This value can be misleading since php-fpm allocates workers differently depending on the \"pm\" (process manager) setting.\n\nThis value must ALWAYS be read with the \"Max Children Reached\" value, since all workers being active just means that php-fpm has created an appropriate number of workers for the given requests.\n\nIf \"Max Children Reached\" > 0, this is cause for concern.",
       "fieldConfig": {
@@ -959,7 +959,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "decimals": 0,
       "description": "The number of scrape attempts that have failed",
       "fieldConfig": {
