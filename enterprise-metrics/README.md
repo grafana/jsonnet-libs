@@ -24,3 +24,8 @@ $ cat <<EOF > lib/k.libsonnet
 > + (import "github.com/jsonnet-libs/k8s-alpha/1.18/extensions/kausal-shim.libsonnet")
 EOF
 ```
+
+## Unit Tests
+
+To run the unit tests in this repo you first need to ensure the vendored dependencies are installed in the `enterprise-metrics/test/` directory. To do this
+`cd` in to the `test` directory and run `jb install`. Then return to the `enterprise-metrics` directory and run `make test`.
