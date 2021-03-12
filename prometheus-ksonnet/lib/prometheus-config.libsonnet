@@ -29,26 +29,22 @@ local scrape_configs = import 'prometheus/scrape_configs.libsonnet';
 
       // This scrape config gather all kubelet metrics.
       scrape_configs.kubelet($._config.prometheus_api_server_address)
-      + {
+      + (
         // Couldn't get prometheus to validate the kublet cert for scraping, so
         // don't bother for now
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
-      },
+        if $._config.prometheus_insecure_skip_verify
+        then scrape_configs.insecureSkipVerify
+        else {}
+      ),
 
       // As of k8s 1.7.3, cAdvisor metrics are available via kubelet using the
       // /metrics/cadvisor path
       scrape_configs.cadvisor($._config.prometheus_api_server_address)
-      + {
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
-      },
+      + (
+        if $._config.prometheus_insecure_skip_verify
+        then scrape_configs.insecureSkipVerify
+        else {}
+      ),
 
       // If running on GKE, you cannot scrape API server pods, and must instead
       // scrape the API server service endpoints.  On AKS this doesn't work.
@@ -57,13 +53,11 @@ local scrape_configs = import 'prometheus/scrape_configs.libsonnet';
         then scrape_configs.kubernetes_api(role='endpoints')  // GKE
         else scrape_configs.kubernetes_api(role='service')  // AKS et al.
       )
-      + {
-        tls_config: {
-          ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
-          insecure_skip_verify: $._config.prometheus_insecure_skip_verify,
-        },
-        bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
-      },
+      + (
+        if $._config.prometheus_insecure_skip_verify
+        then scrape_configs.insecureSkipVerify
+        else {}
+      ),
     ],
   },
 }

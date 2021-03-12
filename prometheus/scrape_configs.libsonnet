@@ -293,4 +293,12 @@
       },
     ],
   },
+
+  // Don't verify the SSL certificate
+  // Intended to be mixed in with a scrape config.
+  insecureSkipVerify:: {
+    tls_config+: {
+      insecure_skip_verify: true,
+    },
+  },
 }
