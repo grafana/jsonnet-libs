@@ -33,4 +33,44 @@
      then $.util.hostVolumeMount('root', '/', '/rootfs')
      else {}) +
     $.util.podPriority('critical'),
+
+  prometheus_config+:: {
+    scrape_configs+: [
+      // A scrape config for node-exporter which maps the nodename onto the
+      // instance label.
+      {
+        job_name: '%s/node-exporter' % $._config.namespace,
+        kubernetes_sd_configs: [{
+          role: 'pod',
+          namespaces: {
+            names: [$._config.namespace],
+          },
+        }],
+
+        relabel_configs: [
+          // Drop anything who's name is not node-exporter.
+          {
+            source_labels: ['__meta_kubernetes_pod_label_name'],
+            regex: 'node-exporter',
+            action: 'keep',
+          },
+
+          // Rename instances to be the node name.
+          {
+            source_labels: ['__meta_kubernetes_pod_node_name'],
+            action: 'replace',
+            target_label: 'instance',
+          },
+
+          // But also include the namespace as a separate label, for routing alerts
+          {
+            source_labels: ['__meta_kubernetes_namespace'],
+            action: 'replace',
+            target_label: 'namespace',
+          },
+        ],
+      },
+
+    ],
+  },
 }
