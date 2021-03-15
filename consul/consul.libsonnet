@@ -296,15 +296,27 @@ k {
   local deployment = $.apps.v1.deployment,
 
   consul_deployment:
-    deployment.new('consul', $._config.consul_replicas, [
-      $.consul_container,
-      $.consul_sidekick_container,
-      $.consul_statsd_exporter,
-      $.consul_exporter,
-    ]) +
-    deployment.spec.template.spec.withServiceAccount('consul-sidekick') +
-    $.util.configMapVolumeMount($.consul_config_map, '/etc/config') +
-    $.util.antiAffinity,
+    if $._config.consul_replicas > 1
+    then (
+      deployment.new('consul', $._config.consul_replicas, [
+        $.consul_container,
+        $.consul_sidekick_container,
+        $.consul_statsd_exporter,
+        $.consul_exporter,
+      ]) +
+      deployment.spec.template.spec.withServiceAccount('consul-sidekick') +
+      $.util.configMapVolumeMount($.consul_config_map, '/etc/config') +
+      $.util.antiAffinity
+    )
+    else (
+      deployment.new('consul', $._config.consul_replicas, [
+        $.consul_container,
+        $.consul_statsd_exporter,
+        $.consul_exporter,
+      ]) +
+      $.util.configMapVolumeMount($.consul_config_map, '/etc/config') +
+      $.util.antiAffinity
+    ),
 
   consul_service:
     $.util.serviceFor($.consul_deployment),
