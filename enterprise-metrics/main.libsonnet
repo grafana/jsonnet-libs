@@ -136,7 +136,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   compactor: {
     local compactor = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the compactor container arguments as key-value pairs.'),
-    args:: this._config.commonArgs + cortex.compactor_args,
+    args:: cortex.compactor_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the compactor container.'),
     container::
       cortex.compactor_container
@@ -154,7 +154,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   distributor: {
     local distributor = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the distributor container arguments as key-value pairs.'),
-    args:: this._config.commonArgs + cortex.distributor_args,
+    args:: cortex.distributor_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the distributor container.'),
     container::
       cortex.distributor_container
@@ -232,7 +232,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   ingester: {
     local ingester = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the ingester container arguments as key-value pairs.'),
-    args:: this._config.commonArgs + cortex.ingester_args,
+    args:: cortex.ingester_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the ingester container.'),
     container::
       cortex.ingester_container
@@ -254,7 +254,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   querier: {
     local querier = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.'),
-    args:: this._config.commonArgs + cortex.querier_args,
+    args:: cortex.querier_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the querier container.'),
     container::
       cortex.querier_container
@@ -275,7 +275,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   queryFrontend: {
     local queryFrontend = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the query-frontend container arguments as key-value pairs.'),
-    args:: this._config.commonArgs + cortex.query_frontend_args,
+    args:: cortex.query_frontend_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the query-frontend container.'),
     container::
       cortex.query_frontend_container
@@ -294,7 +294,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   storeGateway: {
     local storeGateway = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the store-gateway container arguments as key-value pairs.'),
-    args:: this._config.commonArgs + cortex.store_gateway_args,
+    args:: cortex.store_gateway_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the store-gateway container.'),
     container::
       cortex.store_gateway_container
