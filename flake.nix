@@ -3,14 +3,9 @@
 
   inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.jdb.url = "/home/jdb/nixpkgs";
 
-  outputs = { self, nixpkgs, flake-utils, jdb }:
+  outputs = { self, nixpkgs, flake-utils }:
     (flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [ jdb.overlay ];
-        };
+      let pkgs = import nixpkgs { inherit system; };
       in { devShell = import ./shell.nix { inherit pkgs; }; }));
 }
