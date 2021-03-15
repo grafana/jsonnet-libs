@@ -1,9 +1,9 @@
 .ONESHELL:
 .DELETE_ON_ERROR:
-SHELL       := bash
-SHELLOPTS   := -euf -o pipefail
-MAKEFLAGS   += --warn-undefined-variables
-MAKEFLAGS   += --no-builtin-rule
+export SHELL     := bash
+export SHELLOPTS := pipefail:errexit
+MAKEFLAGS += --warn-undefined-variables
+MAKEFLAGS += --no-builtin-rule
 
 # Adapted from https://suva.sh/posts/well-documented-makefiles/
 .PHONY: help
