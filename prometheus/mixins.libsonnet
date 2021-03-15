@@ -1,4 +1,9 @@
-{
+local k = import 'ksonnet-util/kausal.libsonnet';
+
+(import 'config.libsonnet')
++ {
+  local _config = self._config,
+
   mixins+:: {
     base+: {
       prometheusAlerts+: {
@@ -52,27 +57,44 @@
     },
   },
 
-  // Legacy Extension points for adding alerts, recording rules and prometheus config.
-  local emptyMixin = {
-    prometheusAlerts+:: {},
-    prometheusRules+:: {},
+  local configMap = k.core.v1.configMap,
+  prometheus_config_maps_mixins+: [
+    local mixin = $.mixins[mixinName] {
+      prometheusAlerts+:: {},
+      prometheusRules+:: {},
+    };
+    local prometheusAlerts = mixin.prometheusAlerts;
+    local prometheusRules = mixin.prometheusRules;
+    configMap.new('%s-%s-mixin' % [_config.name, mixinName])
+    + configMap.withData({
+      'alerts.rules': k.util.manifestYaml(prometheusAlerts),
+      'recording.rules': k.util.manifestYaml(prometheusRules),
+    })
+    for mixinName in std.objectFields($.mixins)
+  ],
+
+  prometheus_config+: {
+    rule_files+:
+      std.foldr(
+        function(mixinName, acc)
+          acc + [
+            'mixins/%s/alerts.rules' % mixinName,
+            'mixins/%s/recording.rules' % mixinName,
+          ],
+        std.objectFields($.mixins),
+        []
+      ),
   },
 
-  prometheusAlerts::
+  prometheus_config_mount+::
     std.foldr(
       function(mixinName, acc)
-        local mixin = $.mixins[mixinName] + emptyMixin;
-        acc + mixin.prometheusAlerts,
+        acc
+        + k.util.configMapVolumeMount(
+          '%s-%s-mixin' % [_config.name, mixinName],
+          '%s/mixins/%s' % [_config.prometheus_config_dir, mixinName]
+        ),
       std.objectFields($.mixins),
       {}
-    ),
-
-  prometheusRules::
-    std.foldr(
-      function(mixinName, acc)
-        local mixin = $.mixins[mixinName] + emptyMixin;
-        acc + mixin.prometheusRules,
-      std.objectFields($.mixins),
-      {},
     ),
 }

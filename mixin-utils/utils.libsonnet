@@ -140,4 +140,21 @@ local g = import 'grafana-builder/grafana.libsonnet';
       }
       for group in groups
     ],
+
+  removeRuleGroup(ruleName):: {
+    local removeRuleGroup(rule) = if rule.name == ruleName then null else rule,
+    local currentRuleGroups = super.groups,
+    groups: std.prune(std.map(removeRuleGroup, currentRuleGroups)),
+  },
+
+  overrideAlerts(overrides):: {
+    groups: std.map(function(group)
+      group {
+        rules: std.map(function(rule)
+          rule +
+          if std.objectHas(overrides, rule.alert)
+          then overrides[rule.alert]
+          else {}, super.rules),
+      }, super.groups),
+  },
 }
