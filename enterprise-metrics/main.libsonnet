@@ -43,7 +43,7 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
 local util = (import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonnet').withK(k);
 
 // removeNamespaceReferences removes the cluster domain and namespace from container arguments.
-local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg, '.namespace.svc.cluster.local', '.svc'), args);
+local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg, '.namespace.svc.cluster.local', ''), args);
 {
   '#':: d.pkg(
     name='enterprise-metrics',
