@@ -26,6 +26,8 @@ local cortex =
       'distributor.ha-tracker.prefix':: null,
       // Memberlist gossip is used instead of consul for the ring.
       'distributor.ring.consul.hostname':: null,
+      // TODO: upstream this to github.com/grafana/cortex-jsonnet/cortex/gossip.libsonnet.
+      'distributor.ring.store': 'memberlist',
     },
   };
 local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
