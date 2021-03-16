@@ -161,7 +161,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
         group {
           rules: std.map(function(rule)
             rule +
-            if std.objectHas(overrides, rule.alert)
+            if 'alert' in rule && std.objectHas(overrides, rule.alert)
             then overrides[rule.alert]
             else {}, super.rules),
         }, super.groups),
