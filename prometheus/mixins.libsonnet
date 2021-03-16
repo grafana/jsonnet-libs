@@ -111,7 +111,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       prometheusRules+:: {},
     },
 
-    prometheusAlerts::
+    prometheusAlerts+::
       std.foldr(
         function(mixinName, acc)
           local mixin = mixins[mixinName] + emptyMixin;
@@ -120,7 +120,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
         {}
       ),
 
-    prometheusRules::
+    prometheusRules+::
       std.foldr(
         function(mixinName, acc)
           local mixin = mixins[mixinName] + emptyMixin;
