@@ -78,6 +78,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`string ingester.args.cluster-name`](#string-ingesterargscluster-name)
   * [`obj ingester.container`](#obj-ingestercontainer)
     
+  * [`obj ingester.podDisruptionBudget`](#obj-ingesterpoddisruptionbudget)
+    
   * [`obj ingester.service`](#obj-ingesterservice)
     
   * [`obj ingester.statefulSet`](#obj-ingesterstatefulset)
@@ -118,6 +120,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`string storeGateway.args.cluster-name`](#string-storegatewayargscluster-name)
   * [`obj storeGateway.container`](#obj-storegatewaycontainer)
     
+  * [`obj storeGateway.podDisruptionBudget`](#obj-storegatewaypoddisruptionbudget)
+    
   * [`obj storeGateway.service`](#obj-storegatewayservice)
     
   * [`obj storeGateway.statefulSet`](#obj-storegatewaystatefulset)
@@ -148,7 +152,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 
 ## obj _config.commonArgs
 
-
+`commonArgs` is a convenience field that can be used to modify the container arguments of all modules as key-value pairs.
 
 ### bool _config.commonArgs.auth.enabled
 
@@ -246,7 +250,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj compactor.args
 
-
+`args` is a convenience field that can be used to modify the compactor container arguments as key-value pairs.
 
 ### bool compactor.args.auth.enabled
 
@@ -418,6 +422,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `container` is a convenience field that can be used to modify the ingester container.
 
+## obj ingester.podDisruptionBudget
+
+`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the ingester.
+
 ## obj ingester.service
 
 `service` is the Kubernetes Service for the ingester.
@@ -526,7 +534,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj storeGateway.args
 
-
+`args` is a convenience field that can be used to modify the store-gateway container arguments as key-value pairs.
 
 ### bool storeGateway.args.auth.enabled
 
@@ -551,6 +559,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `container` is a convenience field that can be used to modify the store-gateway container.
 
+## obj storeGateway.podDisruptionBudget
+
+`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the store-gateway.
+
 ## obj storeGateway.service
 
 `service` is the Kubernetes Service for the store-gateway.
@@ -565,7 +577,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj tokengen.args
 
-
+`args` is convenience field for modifying the tokegen container arguments as key-value pairs.
 
 ### bool tokengen.args.auth.enabled
 
