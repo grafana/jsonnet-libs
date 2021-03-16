@@ -147,14 +147,24 @@ local g = import 'grafana-builder/grafana.libsonnet';
     groups: std.prune(std.map(removeRuleGroup, currentRuleGroups)),
   },
 
+  removeAlertRuleGroup(ruleName):: {
+    prometheusAlerts+:: $.removeRuleGroup(ruleName),
+  },
+
+  removeRecordingRuleGroup(ruleName):: {
+    prometheusRules+:: $.removeRuleGroup(ruleName),
+  },
+
   overrideAlerts(overrides):: {
-    groups: std.map(function(group)
-      group {
-        rules: std.map(function(rule)
-          rule +
-          if std.objectHas(overrides, rule.alert)
-          then overrides[rule.alert]
-          else {}, super.rules),
-      }, super.groups),
+    prometheusAlerts+:: {
+      groups: std.map(function(group)
+        group {
+          rules: std.map(function(rule)
+            rule +
+            if std.objectHas(overrides, rule.alert)
+            then overrides[rule.alert]
+            else {}, super.rules),
+        }, super.groups),
+    },
   },
 }

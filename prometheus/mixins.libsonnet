@@ -57,44 +57,76 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     },
   },
 
-  local configMap = k.core.v1.configMap,
-  prometheus_config_maps_mixins+: [
-    local mixin = $.mixins[mixinName] {
-      prometheusAlerts+:: {},
-      prometheusRules+:: {},
-    };
-    local prometheusAlerts = mixin.prometheusAlerts;
-    local prometheusRules = mixin.prometheusRules;
-    configMap.new('%s-%s-mixin' % [_config.name, mixinName])
-    + configMap.withData({
-      'alerts.rules': k.util.manifestYaml(prometheusAlerts),
-      'recording.rules': k.util.manifestYaml(prometheusRules),
-    })
-    for mixinName in std.objectFields($.mixins)
-  ],
+  withMixinsConfigmaps(mixins):: {
+    local configMap = k.core.v1.configMap,
+    prometheus_config_maps_mixins+: [
+      local mixin = mixins[mixinName] {
+        prometheusAlerts+:: {},
+        prometheusRules+:: {},
+      };
+      local prometheusAlerts = mixin.prometheusAlerts;
+      local prometheusRules = mixin.prometheusRules;
+      configMap.new(
+        std.strReplace('%s-%s-mixin' % [_config.name, mixinName], '_', '-')
+      )
+      + configMap.withData({
+        'alerts.rules': k.util.manifestYaml(prometheusAlerts),
+        'recording.rules': k.util.manifestYaml(prometheusRules),
+      })
+      for mixinName in std.objectFields(mixins)
+    ],
 
-  prometheus_config+: {
-    rule_files+:
+    prometheus_config+: {
+      rule_files+:
+        std.foldr(
+          function(mixinName, acc)
+            acc + [
+              'mixins/%s/alerts.rules' % mixinName,
+              'mixins/%s/recording.rules' % mixinName,
+            ],
+          std.objectFields(mixins),
+          []
+        ),
+    },
+
+    prometheus_config_mount+::
       std.foldr(
         function(mixinName, acc)
-          acc + [
-            'mixins/%s/alerts.rules' % mixinName,
-            'mixins/%s/recording.rules' % mixinName,
-          ],
-        std.objectFields($.mixins),
-        []
+          acc
+          + k.util.configVolumeMount(
+            std.strReplace('%s-%s-mixin' % [_config.name, mixinName], '_', '-'),
+            '%s/mixins/%s' % [_config.prometheus_config_dir, mixinName]
+          ),
+        std.objectFields(mixins),
+        {}
       ),
   },
 
-  prometheus_config_mount+::
-    std.foldr(
-      function(mixinName, acc)
-        acc
-        + k.util.configMapVolumeMount(
-          '%s-%s-mixin' % [_config.name, mixinName],
-          '%s/mixins/%s' % [_config.prometheus_config_dir, mixinName]
-        ),
-      std.objectFields($.mixins),
-      {}
-    ),
+  // Extends legacy extension points with the mixins object, adding
+  // the alerts and recording rules to root-level. This functions
+  // should be applied if you want to retain the legacy behavior.
+  withMixinsLegacyConfigmaps(mixins):: {
+    local emptyMixin = {
+      prometheusAlerts+:: {},
+      prometheusRules+:: {},
+    },
+
+    prometheusAlerts::
+      std.foldr(
+        function(mixinName, acc)
+          local mixin = mixins[mixinName] + emptyMixin;
+          acc + mixin.prometheusAlerts,
+        std.objectFields(mixins),
+        {}
+      ),
+
+    prometheusRules::
+      std.foldr(
+        function(mixinName, acc)
+          local mixin = mixins[mixinName] + emptyMixin;
+          acc + mixin.prometheusRules,
+        std.objectFields(mixins),
+        {},
+      ),
+  },
 }
