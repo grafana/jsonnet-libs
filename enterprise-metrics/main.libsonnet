@@ -226,16 +226,6 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     service: cortex.gossip_ring_service,
   },
 
-  '#memcached':: d.obj('`memcached` has configuration for GEM caches'),
-  memcached: {
-    '#chunks':: d.obj('`chunks` is a cache for time series chunks'),
-    chunks: cortex.memcached_chunks,
-    '#metadata':: d.obj('`metadata` is cache for object store metadata used by the queriers and store-gateways'),
-    metadata: cortex.memcached_metadata,
-    '#queries':: d.obj('`queries` is a cache for index queries used by the store-gateways'),
-    queries: cortex.memcached_index_queries,
-  },
-
   '#ingester':: d.obj('`ingester` has configuration for the ingester.'),
   ingester: {
     local ingester = self,
@@ -258,6 +248,16 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + statefulSet.spec.template.spec.withContainers([ingester.container]),
     '#service':: d.obj('`service` is the Kubernetes Service for the ingester.'),
     service: util.serviceFor(self.statefulSet),
+  },
+
+  '#memcached':: d.obj('`memcached` has configuration for GEM caches'),
+  memcached: {
+    '#chunks':: d.obj('`chunks` is a cache for time series chunks'),
+    chunks: cortex.memcached_chunks,
+    '#metadata':: d.obj('`metadata` is cache for object store metadata used by the queriers and store-gateways'),
+    metadata: cortex.memcached_metadata,
+    '#queries':: d.obj('`queries` is a cache for index queries used by the store-gateways'),
+    queries: cortex.memcached_index_queries,
   },
 
   '#querier':: d.obj('`querier` has configuration for the querier.'),
