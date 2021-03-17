@@ -19,8 +19,8 @@ prometheus_mixins {
     _config+:: $._config { name: name },
     _images+:: $._images,
     mixins:: $.mixins,
-    prometheusRules:: $.prometheusRules,
-    prometheusAlerts:: $.prometheusAlerts,
+    prometheusRules:: if std.objectHas($, 'prometheusRules') then $.prometheusRules else {},
+    prometheusAlerts:: if std.objectHas($, 'prometheusAlerts') then $.prometheusAlerts else {},
     prometheus_config+:: $.prometheus_config,
 
   },
