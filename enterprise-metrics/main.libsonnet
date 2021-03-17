@@ -250,13 +250,13 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     service: util.serviceFor(self.statefulSet),
   },
 
-  '#memcached':: d.obj('`memcached` has configuration for GEM caches'),
+  '#memcached':: d.obj('`memcached` has configuration for GEM caches.'),
   memcached: {
-    '#chunks':: d.obj('`chunks` is a cache for time series chunks'),
+    '#chunks':: d.obj('`chunks` is a cache for time series chunks.'),
     chunks: cortex.memcached_chunks,
-    '#metadata':: d.obj('`metadata` is cache for object store metadata used by the queriers and store-gateways'),
+    '#metadata':: d.obj('`metadata` is cache for object store metadata used by the queriers and store-gateways.'),
     metadata: cortex.memcached_metadata,
-    '#queries':: d.obj('`queries` is a cache for index queries used by the store-gateways'),
+    '#queries':: d.obj('`queries` is a cache for index queries used by the store-gateways.'),
     queries: cortex.memcached_index_queries,
   },
 
