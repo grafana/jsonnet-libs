@@ -57,13 +57,16 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     },
   },
 
+  // Legacy Extension points for adding alerts, recording rules and prometheus config.
+  local emptyMixin = {
+    prometheusAlerts+:: {},
+    prometheusRules+:: {},
+  },
+
   withMixinsConfigmaps(mixins):: {
     local configMap = k.core.v1.configMap,
     prometheus_config_maps_mixins+: [
-      local mixin = mixins[mixinName] {
-        prometheusAlerts+:: {},
-        prometheusRules+:: {},
-      };
+      local mixin = mixins[mixinName] + emptyMixin;
       local prometheusAlerts = mixin.prometheusAlerts;
       local prometheusRules = mixin.prometheusRules;
       configMap.new(
@@ -106,11 +109,6 @@ local k = import 'ksonnet-util/kausal.libsonnet';
   // the alerts and recording rules to root-level. This functions
   // should be applied if you want to retain the legacy behavior.
   withMixinsLegacyConfigmaps(mixins):: {
-    local emptyMixin = {
-      prometheusAlerts+:: {},
-      prometheusRules+:: {},
-    },
-
     prometheusAlerts+::
       std.foldr(
         function(mixinName, acc)

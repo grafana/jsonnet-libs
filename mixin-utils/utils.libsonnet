@@ -156,15 +156,13 @@ local g = import 'grafana-builder/grafana.libsonnet';
   },
 
   overrideAlerts(overrides):: {
+    local overrideRule(rule) =
+      if 'alert' in rule && std.objectHas(overrides, rule.alert)
+      then rule + overrides[rule.alert]
+      else rule,
+    local overrideInGroup(group) = group { rules: std.map(overrideRule, super.rules) },
     prometheusAlerts+:: {
-      groups: std.map(function(group)
-        group {
-          rules: std.map(function(rule)
-            rule +
-            if 'alert' in rule && std.objectHas(overrides, rule.alert)
-            then overrides[rule.alert]
-            else {}, super.rules),
-        }, super.groups),
+      groups: std.map(overrideInGroup, super.groups),
     },
   },
 }
