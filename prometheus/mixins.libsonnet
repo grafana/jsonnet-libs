@@ -84,8 +84,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
         std.foldr(
           function(mixinName, acc)
             acc + [
-              'mixins/%s/alerts.rules' % mixinName,
-              'mixins/%s/recording.rules' % mixinName,
+              '%s/mixins/%s/alerts.rules' % [_config.prometheus_config_dir, mixinName],
+              '%s/mixins/%s/recording.rules' % [_config.prometheus_config_dir, mixinName],
             ],
           std.objectFields(mixins),
           []
