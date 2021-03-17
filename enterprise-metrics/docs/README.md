@@ -71,6 +71,9 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
   * [`obj gateway.service`](#obj-gatewayservice)
     
+* [`obj gossipRing`](#obj-gossipring)
+  * [`obj gossipRing.service`](#obj-gossipringservice)
+    
 * [`obj ingester`](#obj-ingester)
   * [`obj ingester.args`](#obj-ingesterargs)
     * [`bool ingester.args.auth.enabled`](#bool-ingesterargsauthenabled)
@@ -201,7 +204,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj adminApi.args
 
-
+`args` is a convenience field that can be used to modify the admin-api container arguments as key value pairs.
 
 ### bool adminApi.args.auth.enabled
 
@@ -246,7 +249,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj compactor.args
 
-
+`args` is a convenience field that can be used to modify the compactor container arguments as key-value pairs.
 
 ### bool compactor.args.auth.enabled
 
@@ -387,6 +390,14 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `service` is the Kubernetes Service for the gateway.
 
+## obj gossipRing
+
+`gossipRing` is used by microservices to discover other memberlist members.
+
+## obj gossipRing.service
+
+`service` is the Kubernetes Service for the gossip ring.
+
 ## obj ingester
 
 `ingester` has configuration for the ingester.
@@ -526,7 +537,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj storeGateway.args
 
-
+`args` is a convenience field that can be used to modify the store-gateway container arguments as key-value pairs.
 
 ### bool storeGateway.args.auth.enabled
 
@@ -565,7 +576,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj tokengen.args
 
-
+`args` is convenience field for modifying the tokegen container arguments as key-value pairs.
 
 ### bool tokengen.args.auth.enabled
 

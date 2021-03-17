@@ -220,6 +220,12 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       util.serviceFor(self.deployment),
   },
 
+  '#gossipRing':: d.obj('`gossipRing` is used by microservices to discover other memberlist members.'),
+  gossipRing: {
+    '#service':: d.obj('`service` is the Kubernetes Service for the gossip ring.'),
+    service: cortex.gossip_ring_service,
+  },
+
   '#memcached':: d.obj('`memcached` has configuration for GEM caches'),
   memcached: {
     '#chunks':: d.obj('`chunks` is a cache for time series chunks'),
