@@ -250,6 +250,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         { name: 'ingester-data', mountPath: '/data' },
         { name: 'overrides', mountPath: '/etc/cortex' },
       ]),
+    '#podDisruptionBudget':: d.obj('`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the ingester.'),
+    podDisruptionBudget: cortex.ingester_pdb,
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the ingester.'),
     statefulSet:
       cortex.ingester_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
@@ -308,6 +310,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       cortex.store_gateway_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(storeGateway.args)))
       + container.withImage(this._images.gem),
+    '#podDisruptionBudget':: d.obj('`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the store-gateway.'),
+    podDisruptionBudget: cortex.store_gateway_pdb,
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the store-gateway.'),
     statefulSet:
       cortex.store_gateway_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
