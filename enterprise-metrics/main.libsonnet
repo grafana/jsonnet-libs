@@ -98,7 +98,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   '#_images':: d.obj('`_images` contains fields for container images.'),
   _images:: {
     '#gem':: d.val(default=self.gem, help='`gem` is the Grafana Enterprise Metrics container image.', type=d.T.string),
-    gem: 'grafana/metrics-enterprise',
+    gem: 'grafana/metrics-enterprise:v1.2.0',
     '#kubectl':: d.val(default=self.kubectl, help='`kubectl` is the image used for kubectl containers.', type=d.T.string),
     kubectl: 'bitnami/kubectl',
   },
