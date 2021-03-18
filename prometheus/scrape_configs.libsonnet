@@ -22,35 +22,35 @@
 
     relabel_configs: [
 
-      // Drop any endpoint who's pod port name does not end with metrics
+      // Drop any endpoint whose pod port name does not end with metrics.
       {
         source_labels: ['__meta_kubernetes_pod_container_port_name'],
         action: 'keep',
         regex: '.*-metrics',
       },
 
-      // Drop pods without a name label
+      // Drop pods without a name label.
       {
         source_labels: ['__meta_kubernetes_pod_label_name'],
         action: 'drop',
         regex: '',
       },
 
-      // Drop pods with phase Succeeded or Failed
+      // Drop pods with phase Succeeded or Failed.
       {
         source_labels: ['__meta_kubernetes_pod_phase'],
         action: 'drop',
         regex: 'Succeeded|Failed',
       },
 
-      // Drop anything annotated with prometheus.io.scrape=false
+      // Drop anything annotated with 'prometheus.io.scrape=false'.
       {
         source_labels: ['__meta_kubernetes_pod_annotation_prometheus_io_scrape'],
         action: 'drop',
         regex: 'false',
       },
 
-      // Allow pods to override the scrape scheme with prometheus.io.scheme=https
+      // Allow pods to override the scrape scheme with 'prometheus.io.scheme=https'.
       {
         source_labels: ['__meta_kubernetes_pod_annotation_prometheus_io_scheme'],
         action: 'replace',
@@ -59,7 +59,7 @@
         replacement: '$1',
       },
 
-      // Allow service to override the scrape path with prometheus.io.path=/other_metrics_path
+      // Allow service to override the scrape path with 'prometheus.io.path=/other_metrics_path'.
       {
         source_labels: ['__meta_kubernetes_pod_annotation_prometheus_io_path'],
         action: 'replace',
@@ -68,7 +68,7 @@
         replacement: '$1',
       },
 
-      // Allow services to override the scrape port with prometheus.io.port=1234
+      // Allow services to override the scrape port with 'prometheus.io.port=1234'.
       {
         source_labels: ['__address__', '__meta_kubernetes_pod_annotation_prometheus_io_port'],
         action: 'replace',
@@ -96,7 +96,7 @@
         action: 'labelmap',
       },
 
-      // Rename jobs to be <namespace>/<name, from pod name label>
+      // Rename jobs to be <namespace>/<name, from pod name label>.
       {
         source_labels: ['__meta_kubernetes_namespace', '__meta_kubernetes_pod_label_name'],
         action: 'replace',
@@ -123,8 +123,8 @@
         target_label: 'container',  // Not 'container_name', which disappeared in K8s 1.16.
       },
 
-      // Rename instances to the concatenation of pod:container:port.
-      // All three components are needed to guarantee a unique instance label.
+      // Rename instances to the concatenation of 'pod:container:port',
+      // all three components are needed to guarantee a unique instance label.
       {
         source_labels: [
           '__meta_kubernetes_pod_name',
@@ -183,8 +183,8 @@
         target_label: 'container',  // Not 'container_name', which disappeared in K8s 1.16.
       },
 
-      // Rename instances to the concatenation of pod:container:port.
-      // All three components are needed to guarantee a unique instance label.
+      // Rename instances to the concatenation of 'pod:container:port',
+      // all three components are needed to guarantee a unique instance label.
       {
         source_labels: [
           '__meta_kubernetes_pod_name',
@@ -237,7 +237,7 @@
         replacement: api_server_address,
       },
 
-      // cAdvisor metrics are available via kubelet using the /metrics/cadvisor path
+      // cAdvisor metrics are available via kubelet using the /metrics/cadvisor path.
       {
         source_labels: ['__meta_kubernetes_node_name'],
         regex: '(.+)',
@@ -254,8 +254,8 @@
         action: 'drop',
       },
 
-      // Drop a bunch of metrics which are disabled but still sent, see
-      // https://github.com/google/cadvisor/issues/1925.
+      // Drop a bunch of metrics which are disabled but still sent,
+      // see https://github.com/google/cadvisor/issues/1925.
       {
         source_labels: ['__name__'],
         regex: 'container_(network_tcp_usage_total|network_udp_usage_total|tasks_state|cpu_load_average_10s)',
@@ -296,7 +296,7 @@
     ],
   },
 
-  // Don't verify the SSL certificate
+  // Don't verify the SSL certificate.
   // Intended to be mixed in with a scrape config.
   insecureSkipVerify:: {
     tls_config+: {
