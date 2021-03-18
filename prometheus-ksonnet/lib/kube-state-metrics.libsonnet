@@ -126,8 +126,7 @@
 
         relabel_configs: [
 
-          // Drop anything who's service is not kube-state-metrics
-          // Rename jobs to be <namespace>/<name, from pod name label>
+          // Drop anything whose service is not kube-state-metrics.
           {
             source_labels: ['__meta_kubernetes_pod_label_name'],
             regex: 'kube-state-metrics',

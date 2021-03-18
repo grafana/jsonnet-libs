@@ -48,7 +48,7 @@
         }],
 
         relabel_configs: [
-          // Drop anything who's name is not node-exporter.
+          // Drop anything whose name is not node-exporter.
           {
             source_labels: ['__meta_kubernetes_pod_label_name'],
             regex: 'node-exporter',
@@ -62,7 +62,7 @@
             target_label: 'instance',
           },
 
-          // But also include the namespace as a separate label, for routing alerts
+          // But also include the namespace as a separate label, for routing alerts.
           {
             source_labels: ['__meta_kubernetes_namespace'],
             action: 'replace',

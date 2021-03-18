@@ -77,6 +77,8 @@
         replacement: '$1:$3',
       },
 
+      // Map all K8s labels/annotations starting with
+      // 'prometheus.io/param-' to URL params for Prometheus scraping.
       {
         regex: '__meta_kubernetes_pod_annotation_prometheus_io_param_(.+)',
         action: 'labelmap',

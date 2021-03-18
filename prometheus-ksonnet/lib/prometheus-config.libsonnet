@@ -20,25 +20,24 @@ local scrape_configs = import 'prometheus/scrape_configs.libsonnet';
     },
 
     scrape_configs: [
-      // Grafana Labs' battle tested scrape config for scraping kubernetes pods
+      // Grafana Labs' battle tested scrape config for scraping kubernetes pods.
       scrape_configs.kubernetes_pods,
 
       // kube-dns does not adhere to the conventions set out by
-      // `scrape_configs.kubernetes_pods`
+      // `scrape_configs.kubernetes_pods`.
       scrape_configs.kube_dns,
 
-      // This scrape config gather all kubelet metrics.
+      // This scrape config gathers all kubelet metrics.
       scrape_configs.kubelet($._config.prometheus_api_server_address)
       + (
-        // Couldn't get prometheus to validate the kublet cert for scraping, so
-        // don't bother for now
+        // Couldn't get prometheus to validate the kubelet cert for scraping, so
+        // don't bother for now.
         if $._config.prometheus_insecure_skip_verify
         then scrape_configs.insecureSkipVerify
         else {}
       ),
 
-      // As of k8s 1.7.3, cAdvisor metrics are available via kubelet using the
-      // /metrics/cadvisor path
+      // This scrape config gathers cAdvisor metrics.
       scrape_configs.cadvisor($._config.prometheus_api_server_address)
       + (
         if $._config.prometheus_insecure_skip_verify
