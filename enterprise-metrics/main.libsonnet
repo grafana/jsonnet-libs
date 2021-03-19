@@ -321,6 +321,9 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the query-frontend.'),
     service: util.serviceFor(self.deployment),
+    '#discoveryService':: d.obj('`discoveryService` is a headless Kubernetes Service used by queriers to discover query-frontend addresses.'),
+    discoveryService:
+      cortex.query_frontend_discovery_service,
   },
 
   '#runtime':: d.obj('`runtime` has configuration for runtime overrides.'),
