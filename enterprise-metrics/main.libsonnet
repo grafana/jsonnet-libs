@@ -13,9 +13,18 @@ local cortex =
         // Hide the consul hostname because it isn't used with memberlist.
         'consul.hostname':: '',
       },
+      ingester+: {
+        wal_dir: '/data',
+      },
       memcached_chunks_enabled: true,
       memcached_index_queries_enabled: true,
       memcached_metadata_enabled: true,
+    },
+    compactor_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'compactor.ring.consul.hostname':: null,
+      'compactor.ring.prefix':: null,
+      'compactor.ring.store': 'memberlist',
     },
     distributor_args+:: {
       // Disable the ha-tracker by default.
@@ -29,9 +38,22 @@ local cortex =
       // TODO: upstream this to github.com/grafana/cortex-jsonnet/cortex/gossip.libsonnet.
       'distributor.ring.store': 'memberlist',
     },
+    querier_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'store-gateway.sharding-ring.consul.hostname':: null,
+      'store-gateway.sharding-ring.prefix':: null,
+      'store-gateway.sharding-ring.store': 'memberlist',
+    },
+    store_gateway_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'store-gateway.sharding-ring.consul.hostname':: null,
+      'store-gateway.sharding-ring.prefix':: null,
+      'store-gateway.sharding-ring.store': 'memberlist',
+    },
   };
 local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
 local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet',
+      configMap = k.core.v1.configMap,
       container = k.core.v1.container,
       deployment = k.apps.v1.deployment,
       job = k.batch.v1.job,
@@ -80,6 +102,14 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         type=d.T.string
       ),
       'cluster-name': error 'must set the `cluster-name` flag to the cluster name associated with your Grafana Enterprise Metrics license',
+      // Remove 'limits-per-user-override-config' flag and use 'runtime-config.file' instead.
+      // TODO: remove this when upstream uses 'runtime-config.file'.
+      'limits.per-user-override-config':: null,
+      '#runtime-config.file':: d.val(
+        help='`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.',
+        type=d.T.string
+      ),
+      'runtime-config.file': '/etc/enterprise-metrics/runtime.yml',
       'store.engine': 'blocks',
     },
 
@@ -128,6 +158,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     deployment:
       deployment.new(name='admin-api', replicas=1, containers=[self.container])
       + deployment.spec.template.spec.withTerminationGracePeriodSeconds(15)
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
       + util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/'),
     '#service':: d.obj('`service` is the Kubernetes Service for the admin-api.'),
     service:
@@ -147,7 +178,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the compactor.'),
     statefulSet:
       cortex.compactor_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
-      + statefulSet.spec.template.spec.withContainers([compactor.container]),
+      + statefulSet.spec.template.spec.withContainers([compactor.container])
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the compactor.'),
     service: util.serviceFor(self.statefulSet),
   },
@@ -161,12 +193,15 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     container::
       cortex.distributor_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(distributor.args)))
-      + container.withImage(this._images.gem)
-      + container.withVolumeMounts([{ name: 'overrides', mountPath: '/etc/cortex' }]),
+      + container.withImage(this._images.gem),
     '#statefulSet':: d.obj('`deployment` is the Kubernetes Deployment for the distributor.'),
     deployment:
       cortex.distributor_deployment
-      + deployment.spec.template.spec.withContainers([distributor.container]),
+      + deployment.spec.template.spec.withContainers([distributor.container])
+      // Remove Cortex volumes.
+      + deployment.spec.template.spec.withVolumes([])
+      // Replace with GEM volumes.
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the distributor.'),
     service:
       util.serviceFor(self.deployment)
@@ -209,12 +244,11 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + container.resources.withRequests({ cpu: '500m', memory: '1Gi' })
       + cortex.jaeger_mixin
       + cortex.util.readinessProbe,
-
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the gateway.'),
     deployment:
       deployment.new('gateway', 3, [self.container]) +
-      deployment.spec.template.spec.withTerminationGracePeriodSeconds(15),
-
+      deployment.spec.template.spec.withTerminationGracePeriodSeconds(15)
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the gateway.'),
     service:
       util.serviceFor(self.deployment),
@@ -226,16 +260,6 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     service: cortex.gossip_ring_service,
   },
 
-  '#memcached':: d.obj('`memcached` has configuration for GEM caches'),
-  memcached: {
-    '#chunks':: d.obj('`chunks` is a cache for time series chunks'),
-    chunks: cortex.memcached_chunks,
-    '#metadata':: d.obj('`metadata` is cache for object store metadata used by the queriers and store-gateways'),
-    metadata: cortex.memcached_metadata,
-    '#queries':: d.obj('`queries` is a cache for index queries used by the store-gateways'),
-    queries: cortex.memcached_index_queries,
-  },
-
   '#ingester':: d.obj('`ingester` has configuration for the ingester.'),
   ingester: {
     local ingester = self,
@@ -243,21 +267,32 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     args:: cortex.ingester_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the ingester container.'),
     container::
-      cortex.ingester_container
+      cortex.ingester_statefulset_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(ingester.args)))
       + container.withImage(this._images.gem)
-      + container.withVolumeMounts([
-        { name: 'ingester-data', mountPath: '/data' },
-        { name: 'overrides', mountPath: '/etc/cortex' },
-      ]),
+      + container.withVolumeMounts([{ name: 'ingester-data', mountPath: '/data' }]),
     '#podDisruptionBudget':: d.obj('`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the ingester.'),
     podDisruptionBudget: cortex.ingester_pdb,
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the ingester.'),
     statefulSet:
       cortex.ingester_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
-      + statefulSet.spec.template.spec.withContainers([ingester.container]),
+      + statefulSet.spec.template.spec.withContainers([ingester.container])
+      // Remove Cortex volumes.
+      + statefulSet.spec.template.spec.withVolumes([])
+      // Replace with GEM volumes.
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the ingester.'),
     service: util.serviceFor(self.statefulSet),
+  },
+
+  '#memcached':: d.obj('`memcached` has configuration for GEM caches.'),
+  memcached: {
+    '#chunks':: d.obj('`chunks` is a cache for time series chunks.'),
+    chunks: cortex.memcached_chunks,
+    '#metadata':: d.obj('`metadata` is cache for object store metadata used by the queriers and store-gateways.'),
+    metadata: cortex.memcached_metadata,
+    '#queries':: d.obj('`queries` is a cache for index queries used by the store-gateways.'),
+    queries: cortex.memcached_index_queries,
   },
 
   '#querier':: d.obj('`querier` has configuration for the querier.'),
@@ -269,14 +304,15 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     container::
       cortex.querier_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(querier.args)))
-      + container.withImage(this._images.gem)
-      + container.withVolumeMounts([
-        { name: 'overrides', mountPath: '/etc/cortex' },
-      ]),
+      + container.withImage(this._images.gem),
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the querier.'),
     deployment:
       cortex.querier_deployment
-      + deployment.spec.template.spec.withContainers([querier.container]),
+      + deployment.spec.template.spec.withContainers([querier.container])
+      // Remove Cortex volumes.
+      + deployment.spec.template.spec.withVolumes([])
+      // Replace with GEM volumes.
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the querier.'),
     service: util.serviceFor(self.deployment),
   },
@@ -294,11 +330,29 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the query-frontend.'),
     deployment:
       cortex.query_frontend_deployment
-      + deployment.spec.template.spec.withContainers([queryFrontend.container]),
+      + deployment.spec.template.spec.withContainers([queryFrontend.container])
+      // Remove Cortex volumes.
+      + deployment.spec.template.spec.withVolumes([])
+      // Replace with GEM volumes.
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the query-frontend.'),
     service: util.serviceFor(self.deployment),
+    '#discoveryService':: d.obj('`discoveryService` is a headless Kubernetes Service used by queriers to discover query-frontend addresses.'),
+    discoveryService:
+      cortex.query_frontend_discovery_service,
   },
 
+  '#runtime':: d.obj('`runtime` has configuration for runtime overrides.'),
+  runtime: {
+    local runtime = self,
+    '#config':: d.obj('`config` is a convenience field for modifying the runtime configuration.'),
+    configuration:: {
+      '#overrides':: d.obj('`overrides` are per tenant runtime limits overrides.'),
+      overrides: cortex._config.overrides,
+    },
+    '#configMap':: d.obj('`configMap` is the Kubernetes ConfigMap containing the runtime configuration.'),
+    configMap: configMap.new('runtime', { 'runtime.yml': std.manifestYamlDoc(runtime.configuration) }),
+  },
 
   '#storeGateway':: d.obj('`storeGateway` has configuration for the store-gateway.'),
   storeGateway: {
@@ -315,7 +369,11 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the store-gateway.'),
     statefulSet:
       cortex.store_gateway_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
-      + statefulSet.spec.template.spec.withContainers([storeGateway.container]),
+      + statefulSet.spec.template.spec.withContainers([storeGateway.container])
+      // Remove Cortex volumes.
+      + statefulSet.spec.template.spec.withVolumes([])
+      // Replace with GEM volumes.
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the store-gateway.'),
     service: util.serviceFor(self.statefulSet),
   },
@@ -346,7 +404,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + container.withCommand([
         '/bin/bash',
         '-euc',
-        'kubectl create secret generic gem-admin-token -from-file=token=/shared/admin-token -from-literal=grafana-token="$(base64 <(echo :$(cat /shared/admin-token)))"',
+        'kubectl create secret generic gem-admin-token --from-file=token=/shared/admin-token --from-literal=grafana-token="$(base64 <(echo :$(cat /shared/admin-token)))"',
       ])
       + container.withVolumeMounts([{ mountPath: '/shared', name: 'shared' }])
       // Need to run as root because the GEM container does.
@@ -355,6 +413,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#job':: d.obj('`job` is the Kubernetes Job for tokengen'),
     job:
       job.new(target)
+      + job.spec.withCompletions(1)
+      + job.spec.withParallelism(1)
       + job.spec.template.spec.withContainers([self.createSecretContainer])
       + job.spec.template.spec.withInitContainers([self.container])
       + job.spec.template.spec.withRestartPolicy('Never')
