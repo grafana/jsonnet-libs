@@ -388,6 +388,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#job':: d.obj('`job` is the Kubernetes Job for tokengen'),
     job:
       job.new(target)
+      + job.spec.withCompletions(1)
+      + job.spec.withParallelism(1)
       + job.spec.template.spec.withContainers([self.createSecretContainer])
       + job.spec.template.spec.withInitContainers([self.container])
       + job.spec.template.spec.withRestartPolicy('Never')
