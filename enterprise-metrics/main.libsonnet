@@ -17,6 +17,12 @@ local cortex =
       memcached_index_queries_enabled: true,
       memcached_metadata_enabled: true,
     },
+    compactor_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'compactor.ring.consul.hostname':: null,
+      'compactor.ring.prefix':: null,
+      'compactor.ring.store': 'memberlist',
+    },
     distributor_args+:: {
       // Disable the ha-tracker by default.
       'distributor.ha-tracker.enable':: null,
