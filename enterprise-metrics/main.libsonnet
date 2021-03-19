@@ -379,7 +379,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + container.withCommand([
         '/bin/bash',
         '-euc',
-        'kubectl create secret generic gem-admin-token -from-file=token=/shared/admin-token -from-literal=grafana-token="$(base64 <(echo :$(cat /shared/admin-token)))"',
+        'kubectl create secret generic gem-admin-token --from-file=token=/shared/admin-token --from-literal=grafana-token="$(base64 <(echo :$(cat /shared/admin-token)))"',
       ])
       + container.withVolumeMounts([{ mountPath: '/shared', name: 'shared' }])
       // Need to run as root because the GEM container does.
