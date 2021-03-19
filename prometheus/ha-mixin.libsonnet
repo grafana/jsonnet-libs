@@ -18,7 +18,7 @@ function(replicas=2) {
   ),
 
   _config+:: {
-    prometheus_config_dir: '/etc/$(POD_NAME)',
+    prometheus_config_file: _config.prometheus_config_dir + '/$(POD_NAME).yml',
   },
 
   // The '__replica__' label is used by Cortex for deduplication.
@@ -36,46 +36,37 @@ function(replicas=2) {
   },
 
   local configMap = k.core.v1.configMap,
-  prometheus_config_maps: std.mapWithIndex(
-    function(i, acc)
-      local name = _config.name + '-' + i;
-      local config =
-        this.prometheus_config {
-          global+: {
-            external_labels+: {
-              __replica__: name,
-            },
+  prometheus_config_maps: [
+    configMap.new('%s-config' % _config.name) +
+    configMap.withData(
+      std.foldr(
+        function(i, acc)
+          local name = _config.name + '-' + i;
+          local config =
+            this.prometheus_config {
+              global+: {
+                external_labels+: {
+                  __replica__: name,
+                },
+              },
+            };
+          acc {
+            [name + '.yml']: k.util.manifestYaml(config),
           },
-        };
-      {
-        name:: name,
-        base: configMap.new('%s-config' % name) +
-              configMap.withData({
-                'prometheus.yml': k.util.manifestYaml(config),
-              }),
-        alerts: configMap.new('%s-alerts' % name) +
-                configMap.withData({
-                  'alerts.rules': k.util.manifestYaml(this.prometheusAlerts),
-                }),
-        rules: configMap.new('%s-recording' % name) +
-               configMap.withData({
-                 'recording.rules': k.util.manifestYaml(this.prometheusRules),
-               }),
-      },
-    std.repeat('r', replicas),
-  ),
+        std.repeat('r', replicas),
 
-  prometheus_config_mount::
-    std.foldl(
-      function(mounts, obj)
-        mounts
-        + k.util.configMapVolumeMount(obj.base, '/etc/%s' % obj.name)
-        + k.util.configMapVolumeMount(obj.alerts, '/etc/%s/alerts' % obj.name)
-        + k.util.configMapVolumeMount(obj.rules, '/etc/%s/recording' % obj.name),
-      self.prometheus_config_maps,
-      {},
-    )
-  ,
+        {}
+      ),
+    ),
+    configMap.new('%s-alerts' % _config.name) +
+    configMap.withData({
+      'alerts.rules': k.util.manifestYaml(this.prometheusAlerts),
+    }),
+    configMap.new('%s-recording' % _config.name) +
+    configMap.withData({
+      'recording.rules': k.util.manifestYaml(this.prometheusRules),
+    }),
+  ],
 
   local container = k.core.v1.container,
   local envVar = k.core.v1.envVar,
