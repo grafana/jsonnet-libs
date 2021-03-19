@@ -326,7 +326,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       overrides: cortex._config.overrides,
     },
     '#configMap':: d.obj('`configMap` is the Kubernetes ConfigMap containing the runtime configuration.'),
-    configMap: configMap.new('runtime', { 'runtime.yml': runtime.configuration }),
+    configMap: configMap.new('runtime', { 'runtime.yml': std.manifestYamlDoc(runtime.configuration) }),
   },
 
   '#storeGateway':: d.obj('`storeGateway` has configuration for the store-gateway.'),
