@@ -48,11 +48,11 @@ local datasource = grafana.datasource;
    grafana_datasource_config_map+:
      $.grafana_add_datasource_with_basicauth(name, url, username, password, default, method),
   */
-  grafana_add_datasource_with_basicauth(name, url, username, password, default=false, method='GET')::
+  grafana_add_datasource_with_basicauth(name, url, username, password, default=false, method='GET', type='prometheus')::
     configMap.withDataMixin({
       ['%s.yml' % name]: $.util.manifestYaml({
         apiVersion: 1,
-        datasources: [$.grafana_datasource_with_basicauth(name, url, username, password, default, method)],
+        datasources: [$.grafana_datasource_with_basicauth(name, url, username, password, default, method, type)],
       }),
     }),
 
