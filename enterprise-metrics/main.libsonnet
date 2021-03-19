@@ -13,6 +13,9 @@ local cortex =
         // Hide the consul hostname because it isn't used with memberlist.
         'consul.hostname':: '',
       },
+      ingester+: {
+        wal_dir: '/data',
+      },
       memcached_chunks_enabled: true,
       memcached_index_queries_enabled: true,
       memcached_metadata_enabled: true,
@@ -264,7 +267,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     args:: cortex.ingester_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the ingester container.'),
     container::
-      cortex.ingester_container
+      cortex.ingester_statefulset_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(ingester.args)))
       + container.withImage(this._images.gem),
     '#podDisruptionBudget':: d.obj('`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the ingester.'),
