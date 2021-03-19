@@ -269,7 +269,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     container::
       cortex.ingester_statefulset_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(ingester.args)))
-      + container.withImage(this._images.gem),
+      + container.withImage(this._images.gem)
+      + container.withVolumeMounts([{ name: 'ingester-data', mountPath: '/data' }]),
     '#podDisruptionBudget':: d.obj('`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the ingester.'),
     podDisruptionBudget: cortex.ingester_pdb,
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the ingester.'),
