@@ -29,6 +29,12 @@ local cortex =
       // TODO: upstream this to github.com/grafana/cortex-jsonnet/cortex/gossip.libsonnet.
       'distributor.ring.store': 'memberlist',
     },
+    querier_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'store-gateway.sharding-ring.consul.hostname':: null,
+      'store-gateway.sharding-ring.prefix':: null,
+      'store-gateway.sharding-ring.store': 'memberlist',
+    },
     store_gateway_args+:: {
       // Memberlist gossip is used instead of consul for the ring.
       'store-gateway.sharding-ring.consul.hostname':: null,
