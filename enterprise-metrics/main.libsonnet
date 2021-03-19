@@ -88,7 +88,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         help='`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.',
         type=d.T.string
       ),
-      'runtime-config.file': '/etc/enterprise-metrics/runtime.yaml',
+      'runtime-config.file': '/etc/enterprise-metrics/runtime.yml',
       'store.engine': 'blocks',
     },
 
