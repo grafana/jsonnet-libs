@@ -53,7 +53,7 @@ function(replicas=2) {
           acc {
             [name + '.yml']: k.util.manifestYaml(config),
           },
-        std.repeat('r', replicas),
+        std.range(1, replicas),
 
         {}
       ),
