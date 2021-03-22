@@ -90,6 +90,15 @@
         }
       },
       "version": "main"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/rfrail3/grafana-dashboards.git",
+          "subdir": ""
+        }
+      },
+      "version": "master"
     }
   ],
   "legacyImports": true
