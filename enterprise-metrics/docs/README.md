@@ -18,6 +18,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool _config.commonArgs.auth.type`](#bool-_configcommonargsauthtype)
     * [`string _config.commonArgs.cluster-name`](#string-_configcommonargscluster-name)
     * [`string _config.commonArgs.memberlist.join`](#string-_configcommonargsmemberlistjoin)
+    * [`string _config.commonArgs.runtime-config.file`](#string-_configcommonargsruntime-configfile)
   * [`string _config.licenseSecretName`](#string-_configlicensesecretname)
 * [`obj _images`](#obj-_images)
   * [`string _images.gem`](#string-_imagesgem)
@@ -29,6 +30,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`string adminApi.args.bootstrap.license.path`](#string-adminapiargsbootstraplicensepath)
     * [`string adminApi.args.cluster-name`](#string-adminapiargscluster-name)
     * [`string adminApi.args.memberlist.join`](#string-adminapiargsmemberlistjoin)
+    * [`string adminApi.args.runtime-config.file`](#string-adminapiargsruntime-configfile)
   * [`obj adminApi.container`](#obj-adminapicontainer)
     
   * [`obj adminApi.deployment`](#obj-adminapideployment)
@@ -41,6 +43,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool compactor.args.auth.type`](#bool-compactorargsauthtype)
     * [`string compactor.args.cluster-name`](#string-compactorargscluster-name)
     * [`string compactor.args.memberlist.join`](#string-compactorargsmemberlistjoin)
+    * [`string compactor.args.runtime-config.file`](#string-compactorargsruntime-configfile)
   * [`obj compactor.container`](#obj-compactorcontainer)
     
   * [`obj compactor.service`](#obj-compactorservice)
@@ -53,6 +56,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool distributor.args.auth.type`](#bool-distributorargsauthtype)
     * [`string distributor.args.cluster-name`](#string-distributorargscluster-name)
     * [`string distributor.args.memberlist.join`](#string-distributorargsmemberlistjoin)
+    * [`string distributor.args.runtime-config.file`](#string-distributorargsruntime-configfile)
   * [`obj distributor.container`](#obj-distributorcontainer)
     
   * [`obj distributor.service`](#obj-distributorservice)
@@ -70,6 +74,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`string gateway.args.gateway.proxy.query-frontend.url`](#string-gatewayargsgatewayproxyquery-frontendurl)
     * [`string gateway.args.gateway.proxy.store-gateway.url`](#string-gatewayargsgatewayproxystore-gatewayurl)
     * [`string gateway.args.memberlist.join`](#string-gatewayargsmemberlistjoin)
+    * [`string gateway.args.runtime-config.file`](#string-gatewayargsruntime-configfile)
   * [`obj gateway.container`](#obj-gatewaycontainer)
     
   * [`obj gateway.deployment`](#obj-gatewaydeployment)
@@ -85,6 +90,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool ingester.args.auth.type`](#bool-ingesterargsauthtype)
     * [`string ingester.args.cluster-name`](#string-ingesterargscluster-name)
     * [`string ingester.args.memberlist.join`](#string-ingesterargsmemberlistjoin)
+    * [`string ingester.args.runtime-config.file`](#string-ingesterargsruntime-configfile)
   * [`obj ingester.container`](#obj-ingestercontainer)
     
   * [`obj ingester.podDisruptionBudget`](#obj-ingesterpoddisruptionbudget)
@@ -106,6 +112,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool querier.args.auth.type`](#bool-querierargsauthtype)
     * [`string querier.args.cluster-name`](#string-querierargscluster-name)
     * [`string querier.args.memberlist.join`](#string-querierargsmemberlistjoin)
+    * [`string querier.args.runtime-config.file`](#string-querierargsruntime-configfile)
   * [`obj querier.container`](#obj-queriercontainer)
     
   * [`obj querier.deployment`](#obj-querierdeployment)
@@ -118,18 +125,30 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool queryFrontend.args.auth.type`](#bool-queryfrontendargsauthtype)
     * [`string queryFrontend.args.cluster-name`](#string-queryfrontendargscluster-name)
     * [`string queryFrontend.args.memberlist.join`](#string-queryfrontendargsmemberlistjoin)
+    * [`string queryFrontend.args.runtime-config.file`](#string-queryfrontendargsruntime-configfile)
   * [`obj queryFrontend.container`](#obj-queryfrontendcontainer)
     
   * [`obj queryFrontend.deployment`](#obj-queryfrontenddeployment)
     
+  * [`obj queryFrontend.discoveryService`](#obj-queryfrontenddiscoveryservice)
+    
   * [`obj queryFrontend.service`](#obj-queryfrontendservice)
     
+* [`obj runtime`](#obj-runtime)
+  * [`obj runtime.config`](#obj-runtimeconfig)
+    
+  * [`obj runtime.configMap`](#obj-runtimeconfigmap)
+    
+  * [`obj runtime.configuration`](#obj-runtimeconfiguration)
+    * [`obj runtime.configuration.overrides`](#obj-runtimeconfigurationoverrides)
+      
 * [`obj storeGateway`](#obj-storegateway)
   * [`obj storeGateway.args`](#obj-storegatewayargs)
     * [`bool storeGateway.args.auth.enabled`](#bool-storegatewayargsauthenabled)
     * [`bool storeGateway.args.auth.type`](#bool-storegatewayargsauthtype)
     * [`string storeGateway.args.cluster-name`](#string-storegatewayargscluster-name)
     * [`string storeGateway.args.memberlist.join`](#string-storegatewayargsmemberlistjoin)
+    * [`string storeGateway.args.runtime-config.file`](#string-storegatewayargsruntime-configfile)
   * [`obj storeGateway.container`](#obj-storegatewaycontainer)
     
   * [`obj storeGateway.podDisruptionBudget`](#obj-storegatewaypoddisruptionbudget)
@@ -144,6 +163,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool tokengen.args.auth.type`](#bool-tokengenargsauthtype)
     * [`string tokengen.args.cluster-name`](#string-tokengenargscluster-name)
     * [`string tokengen.args.memberlist.join`](#string-tokengenargsmemberlistjoin)
+    * [`string tokengen.args.runtime-config.file`](#string-tokengenargsruntime-configfile)
   * [`obj tokengen.container`](#obj-tokengencontainer)
     
   * [`obj tokengen.createSecretContainer`](#obj-tokengencreatesecretcontainer)
@@ -191,6 +211,10 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 *Default value: * `gossip-ring`
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string _config.commonArgs.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
 
 ### string _config.licenseSecretName
 
@@ -257,6 +281,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
 
+### string adminApi.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
 ## obj adminApi.container
 
 `container` is a convenience field that can be used to modify the admin-api container.
@@ -302,6 +330,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
 
+### string compactor.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
 ## obj compactor.container
 
 `container` is a convenience field that can be used to modify the compactor container.
@@ -346,6 +378,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `gossip-ring`
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string distributor.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
 
 ## obj distributor.container
 
@@ -422,6 +458,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
 
+### string gateway.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
 ## obj gateway.container
 
 `container` is a convenience field that can be used to modify the gateway container.
@@ -475,6 +515,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
 
+### string ingester.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
 ## obj ingester.container
 
 `container` is a convenience field that can be used to modify the ingester container.
@@ -493,19 +537,19 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj memcached
 
-`memcached` has configuration for GEM caches
+`memcached` has configuration for GEM caches.
 
 ## obj memcached.chunks
 
-`chunks` is a cache for time series chunks
+`chunks` is a cache for time series chunks.
 
 ## obj memcached.metadata
 
-`metadata` is cache for object store metadata used by the queriers and store-gateways
+`metadata` is cache for object store metadata used by the queriers and store-gateways.
 
 ## obj memcached.queries
 
-`queries` is a cache for index queries used by the store-gateways
+`queries` is a cache for index queries used by the store-gateways.
 
 ## obj querier
 
@@ -513,7 +557,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj querier.args
 
-`args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.
+
 
 ### bool querier.args.auth.enabled
 
@@ -539,6 +583,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `gossip-ring`
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string querier.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
 
 ## obj querier.container
 
@@ -585,6 +633,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
 
+### string queryFrontend.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
 ## obj queryFrontend.container
 
 `container` is a convenience field that can be used to modify the query-frontend container.
@@ -593,9 +645,33 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `deployment` is the Kubernetes Deployment for the query-frontend.
 
+## obj queryFrontend.discoveryService
+
+`discoveryService` is a headless Kubernetes Service used by queriers to discover query-frontend addresses.
+
 ## obj queryFrontend.service
 
 `service` is the Kubernetes Service for the query-frontend.
+
+## obj runtime
+
+`runtime` has configuration for runtime overrides.
+
+## obj runtime.config
+
+`config` is a convenience field for modifying the runtime configuration.
+
+## obj runtime.configMap
+
+`configMap` is the Kubernetes ConfigMap containing the runtime configuration.
+
+## obj runtime.configuration
+
+
+
+## obj runtime.configuration.overrides
+
+`overrides` are per tenant runtime limits overrides.
 
 ## obj storeGateway
 
@@ -629,6 +705,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `gossip-ring`
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string storeGateway.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
 
 ## obj storeGateway.container
 
@@ -678,6 +758,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `gossip-ring`
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string tokengen.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
 
 ## obj tokengen.container
 
