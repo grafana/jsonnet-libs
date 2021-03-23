@@ -23,6 +23,6 @@
   },
 
   _images+:: {
-    vault: 'vault:1.6.0',
+    vault: 'vault:1.6.3',
   },
 }
