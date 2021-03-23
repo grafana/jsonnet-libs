@@ -102,6 +102,12 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         type=d.T.string
       ),
       'cluster-name': error 'must set the `cluster-name` flag to the cluster name associated with your Grafana Enterprise Metrics license',
+      '#memberlist.join': d.val(
+        default=self['memberlist.join'],
+        help='`memberlist.join` is an address used to find memberlist peers for ring gossip',
+        type=d.T.string
+      ),
+      'memberlist.join': 'gossip-ring',
       // Remove 'limits-per-user-override-config' flag and use 'runtime-config.file' instead.
       // TODO: remove this when upstream uses 'runtime-config.file'.
       'limits.per-user-override-config':: null,

@@ -17,6 +17,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool _config.commonArgs.auth.enabled`](#bool-_configcommonargsauthenabled)
     * [`bool _config.commonArgs.auth.type`](#bool-_configcommonargsauthtype)
     * [`string _config.commonArgs.cluster-name`](#string-_configcommonargscluster-name)
+    * [`string _config.commonArgs.memberlist.join`](#string-_configcommonargsmemberlistjoin)
   * [`string _config.licenseSecretName`](#string-_configlicensesecretname)
 * [`obj _images`](#obj-_images)
   * [`string _images.gem`](#string-_imagesgem)
@@ -27,6 +28,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool adminApi.args.auth.type`](#bool-adminapiargsauthtype)
     * [`string adminApi.args.bootstrap.license.path`](#string-adminapiargsbootstraplicensepath)
     * [`string adminApi.args.cluster-name`](#string-adminapiargscluster-name)
+    * [`string adminApi.args.memberlist.join`](#string-adminapiargsmemberlistjoin)
   * [`obj adminApi.container`](#obj-adminapicontainer)
     
   * [`obj adminApi.deployment`](#obj-adminapideployment)
@@ -38,6 +40,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool compactor.args.auth.enabled`](#bool-compactorargsauthenabled)
     * [`bool compactor.args.auth.type`](#bool-compactorargsauthtype)
     * [`string compactor.args.cluster-name`](#string-compactorargscluster-name)
+    * [`string compactor.args.memberlist.join`](#string-compactorargsmemberlistjoin)
   * [`obj compactor.container`](#obj-compactorcontainer)
     
   * [`obj compactor.service`](#obj-compactorservice)
@@ -49,6 +52,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool distributor.args.auth.enabled`](#bool-distributorargsauthenabled)
     * [`bool distributor.args.auth.type`](#bool-distributorargsauthtype)
     * [`string distributor.args.cluster-name`](#string-distributorargscluster-name)
+    * [`string distributor.args.memberlist.join`](#string-distributorargsmemberlistjoin)
   * [`obj distributor.container`](#obj-distributorcontainer)
     
   * [`obj distributor.service`](#obj-distributorservice)
@@ -65,6 +69,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`string gateway.args.gateway.proxy.ingester.url`](#string-gatewayargsgatewayproxyingesterurl)
     * [`string gateway.args.gateway.proxy.query-frontend.url`](#string-gatewayargsgatewayproxyquery-frontendurl)
     * [`string gateway.args.gateway.proxy.store-gateway.url`](#string-gatewayargsgatewayproxystore-gatewayurl)
+    * [`string gateway.args.memberlist.join`](#string-gatewayargsmemberlistjoin)
   * [`obj gateway.container`](#obj-gatewaycontainer)
     
   * [`obj gateway.deployment`](#obj-gatewaydeployment)
@@ -79,6 +84,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool ingester.args.auth.enabled`](#bool-ingesterargsauthenabled)
     * [`bool ingester.args.auth.type`](#bool-ingesterargsauthtype)
     * [`string ingester.args.cluster-name`](#string-ingesterargscluster-name)
+    * [`string ingester.args.memberlist.join`](#string-ingesterargsmemberlistjoin)
   * [`obj ingester.container`](#obj-ingestercontainer)
     
   * [`obj ingester.podDisruptionBudget`](#obj-ingesterpoddisruptionbudget)
@@ -99,6 +105,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool querier.args.auth.enabled`](#bool-querierargsauthenabled)
     * [`bool querier.args.auth.type`](#bool-querierargsauthtype)
     * [`string querier.args.cluster-name`](#string-querierargscluster-name)
+    * [`string querier.args.memberlist.join`](#string-querierargsmemberlistjoin)
   * [`obj querier.container`](#obj-queriercontainer)
     
   * [`obj querier.deployment`](#obj-querierdeployment)
@@ -110,6 +117,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool queryFrontend.args.auth.enabled`](#bool-queryfrontendargsauthenabled)
     * [`bool queryFrontend.args.auth.type`](#bool-queryfrontendargsauthtype)
     * [`string queryFrontend.args.cluster-name`](#string-queryfrontendargscluster-name)
+    * [`string queryFrontend.args.memberlist.join`](#string-queryfrontendargsmemberlistjoin)
   * [`obj queryFrontend.container`](#obj-queryfrontendcontainer)
     
   * [`obj queryFrontend.deployment`](#obj-queryfrontenddeployment)
@@ -121,6 +129,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool storeGateway.args.auth.enabled`](#bool-storegatewayargsauthenabled)
     * [`bool storeGateway.args.auth.type`](#bool-storegatewayargsauthtype)
     * [`string storeGateway.args.cluster-name`](#string-storegatewayargscluster-name)
+    * [`string storeGateway.args.memberlist.join`](#string-storegatewayargsmemberlistjoin)
   * [`obj storeGateway.container`](#obj-storegatewaycontainer)
     
   * [`obj storeGateway.podDisruptionBudget`](#obj-storegatewaypoddisruptionbudget)
@@ -134,6 +143,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool tokengen.args.auth.enabled`](#bool-tokengenargsauthenabled)
     * [`bool tokengen.args.auth.type`](#bool-tokengenargsauthtype)
     * [`string tokengen.args.cluster-name`](#string-tokengenargscluster-name)
+    * [`string tokengen.args.memberlist.join`](#string-tokengenargsmemberlistjoin)
   * [`obj tokengen.container`](#obj-tokengencontainer)
     
   * [`obj tokengen.createSecretContainer`](#obj-tokengencreatesecretcontainer)
@@ -176,6 +186,12 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string _config.commonArgs.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
 ### string _config.licenseSecretName
 
 *Default value: * `gem-license`
@@ -192,7 +208,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ### string _images.gem
 
-*Default value: * `grafana/metrics-enterprise`
+*Default value: * `grafana/metrics-enterprise:v1.2.0`
 
 `gem` is the Grafana Enterprise Metrics container image.
 
@@ -235,6 +251,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string adminApi.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
 ## obj adminApi.container
 
 `container` is a convenience field that can be used to modify the admin-api container.
@@ -273,6 +295,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string compactor.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string compactor.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
 
 ## obj compactor.container
 
@@ -313,6 +341,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string distributor.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
 ## obj distributor.container
 
 `container` is a convenience field that can be used to modify the distributor container.
@@ -331,7 +365,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj gateway.args
 
-
+`args` is a convenience field that can be used to modify the gateway container arguments as key-value pairs.
 
 ### bool gateway.args.auth.enabled
 
@@ -382,6 +416,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `gateway.proxy.store-gateway.url is the upstream URL of the store-gateway.
 
+### string gateway.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
 ## obj gateway.container
 
 `container` is a convenience field that can be used to modify the gateway container.
@@ -429,6 +469,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string ingester.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
 ## obj ingester.container
 
 `container` is a convenience field that can be used to modify the ingester container.
@@ -467,7 +513,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj querier.args
 
-
+`args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.
 
 ### bool querier.args.auth.enabled
 
@@ -487,6 +533,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string querier.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string querier.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
 
 ## obj querier.container
 
@@ -527,6 +579,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string queryFrontend.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
 ## obj queryFrontend.container
 
 `container` is a convenience field that can be used to modify the query-frontend container.
@@ -565,6 +623,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string storeGateway.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string storeGateway.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
 
 ## obj storeGateway.container
 
@@ -608,6 +672,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string tokengen.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string tokengen.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
 
 ## obj tokengen.container
 
