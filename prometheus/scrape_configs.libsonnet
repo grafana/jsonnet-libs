@@ -201,6 +201,10 @@
   // Gather all kubelet metrics.
   kubelet(api_server_address):: {
     job_name: 'kube-system/kubelet',
+    bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+    tls_config: {
+      ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+    },
     kubernetes_sd_configs: [{
       role: 'node',
     }],
@@ -226,6 +230,10 @@
   // Gather cAdvisor metrics.
   cadvisor(api_server_address):: {
     job_name: 'kube-system/cadvisor',
+    bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+    tls_config: {
+      ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+    },
     kubernetes_sd_configs: [{
       role: 'node',
     }],
@@ -267,6 +275,10 @@
   // Gather kubernetes API metrics.
   kubernetes_api(role='endpoints'):: {
     job_name: 'default/kubernetes',
+    bearer_token_file: '/var/run/secrets/kubernetes.io/serviceaccount/token',
+    tls_config: {
+      ca_file: '/var/run/secrets/kubernetes.io/serviceaccount/ca.crt',
+    },
     kubernetes_sd_configs: [{
       // On GKE you cannot scrape API server pods, and must instead scrape the
       // API server service endpoints.  On AKS this doesn't work and you must
