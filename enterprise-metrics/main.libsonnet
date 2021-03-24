@@ -102,7 +102,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         type=d.T.string
       ),
       'cluster-name': error 'must set the `cluster-name` flag to the cluster name associated with your Grafana Enterprise Metrics license',
-      '#memberlist.join': d.val(
+      '#memberlist.join':: d.val(
         default=self['memberlist.join'],
         help='`memberlist.join` is an address used to find memberlist peers for ring gossip',
         type=d.T.string
@@ -163,6 +163,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the admin-api.'),
     deployment:
       deployment.new(name='admin-api', replicas=1, containers=[self.container])
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'admin-api' })
+      + deployment.spec.template.metadata.withLabelsMixin({ name: 'admin-api', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withTerminationGracePeriodSeconds(15)
       + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
       + util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/'),
@@ -184,6 +186,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the compactor.'),
     statefulSet:
       cortex.compactor_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      + statefulSet.spec.selector.withMatchLabelsMixin({ name: 'compactor' })
+      + statefulSet.spec.template.metadata.withLabelsMixin({ name: 'compactor', gossip_ring_member: 'true' })
       + statefulSet.spec.template.spec.withContainers([compactor.container])
       + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
     '#service':: d.obj('`service` is the Kubernetes Service for the compactor.'),
@@ -203,6 +207,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#statefulSet':: d.obj('`deployment` is the Kubernetes Deployment for the distributor.'),
     deployment:
       cortex.distributor_deployment
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'distributor' })
+      + deployment.spec.template.metadata.withLabelsMixin({ name: 'distributor', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withContainers([distributor.container])
       // Remove Cortex volumes.
       + deployment.spec.template.spec.withVolumes([])
@@ -282,6 +288,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the ingester.'),
     statefulSet:
       cortex.ingester_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'ingester' })
+      + deployment.spec.template.metadata.withLabelsMixin({ name: 'ingester', gossip_ring_member: 'true' })
       + statefulSet.spec.template.spec.withContainers([ingester.container])
       // Remove Cortex volumes.
       + statefulSet.spec.template.spec.withVolumes([])
@@ -314,6 +322,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the querier.'),
     deployment:
       cortex.querier_deployment
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'querier' })
+      + deployment.spec.template.metadata.withLabelsMixin({ name: 'querier', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withContainers([querier.container])
       // Remove Cortex volumes.
       + deployment.spec.template.spec.withVolumes([])
@@ -375,6 +385,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the store-gateway.'),
     statefulSet:
       cortex.store_gateway_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      + statefulSet.spec.selector.withMatchLabelsMixin({ name: 'store-gateway' })
+      + statefulSet.spec.template.metadata.withLabelsMixin({ name: 'store-gateway', gossip_ring_member: 'true' })
       + statefulSet.spec.template.spec.withContainers([storeGateway.container])
       // Remove Cortex volumes.
       + statefulSet.spec.template.spec.withVolumes([])
