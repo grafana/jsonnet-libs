@@ -269,7 +269,10 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   '#gossipRing':: d.obj('`gossipRing` is used by microservices to discover other memberlist members.'),
   gossipRing: {
     '#service':: d.obj('`service` is the Kubernetes Service for the gossip ring.'),
-    service: cortex.gossip_ring_service,
+    service:
+      cortex.gossip_ring_service
+      // Publish not ready addresses for initial memberlist start up.
+      + service.spec.withPublishNotReadyAddresses(true),
   },
 
   '#ingester':: d.obj('`ingester` has configuration for the ingester.'),
