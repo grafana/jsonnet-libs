@@ -5,6 +5,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 + (import 'images.libsonnet')
 + (import 'mixins.libsonnet')
 + {
+  local this = self,
   local _config = self._config,
   local k = kausal {
     _config+:: _config,
