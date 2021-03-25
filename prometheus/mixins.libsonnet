@@ -79,6 +79,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
           [if std.prune(prometheusAlerts) != {} then 'alerts.rules']: k.util.manifestYaml(prometheusAlerts),
           [if std.prune(prometheusRules) != {} then 'recording.rules']: k.util.manifestYaml(prometheusRules),
         },
+        hasFiles: std.length(self.files) > 0,
       }
       for mixinName in std.objectFields(mixins)
     ],
@@ -87,6 +88,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       configMap.new(mixin.configmapName)
       + configMap.withData(mixin.files)
       for mixin in this.mixin_data
+      if mixin.hasFiles
     ],
 
     prometheus_config+: {
@@ -100,7 +102,10 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     prometheus_config_mount+::
       std.foldr(
         function(mixin, acc)
-          acc + k.util.configVolumeMount(mixin.configmapName, mixin.path),
+          acc +
+          if mixin.hasFiles
+          then k.util.configVolumeMount(mixin.configmapName, mixin.path)
+          else {},
         this.mixin_data,
         {}
       ),
