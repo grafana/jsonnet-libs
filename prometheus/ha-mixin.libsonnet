@@ -61,7 +61,7 @@ function(replicas=2) {
       ),
     ]
     + (
-      if std.objectHas(this, 'prometheusAlerts') && std.prune(this.prometheusAlerts) != {}
+      if std.prune(this.prometheusAlerts) != {}
       then [
         configMap.new('%s-alerts' % _config.name) +
         configMap.withData({
@@ -70,7 +70,7 @@ function(replicas=2) {
       ]
       else []
     ) + (
-      if std.objectHas(this, 'prometheusRules') && std.prune(this.prometheusRules) != {}
+      if std.prune(this.prometheusRules) != {}
       then [
         configMap.new('%s-recording' % _config.name) +
         configMap.withData({

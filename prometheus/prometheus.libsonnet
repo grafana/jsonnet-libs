@@ -24,6 +24,9 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     else {}
   ),
 
+  prometheusAlerts+:: {},
+  prometheusRules+:: {},
+
   withHighAvailability(replicas=2):: ha_mixin(replicas),
 
   local configMap = k.core.v1.configMap,
@@ -41,7 +44,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       }),
     ]
     + (
-      if std.objectHas(this, 'prometheusAlerts') && std.prune(this.prometheusAlerts) != {}
+      if std.prune(this.prometheusAlerts) != {}
       then [
         configMap.new('%s-alerts' % _config.name) +
         configMap.withData({
@@ -50,7 +53,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       ]
       else []
     ) + (
-      if std.objectHas(this, 'prometheusRules') && std.prune(this.prometheusRules) != {}
+      if std.prune(this.prometheusRules) != {}
       then [
         configMap.new('%s-recording' % _config.name) +
         configMap.withData({
@@ -130,10 +133,10 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 
   prometheus_config_mount::
     k.util.configVolumeMount('%s-config' % _config.name, _config.prometheus_config_dir)
-    + (if std.objectHas(this, 'prometheusAlerts') && std.prune(this.prometheusAlerts) != {}
+    + (if std.prune(this.prometheusAlerts) != {}
        then k.util.configVolumeMount('%s-alerts' % _config.name, _config.prometheus_config_dir + '/alerts')
        else {})
-    + (if std.objectHas(this, 'prometheusRules') && std.prune(this.prometheusRules) != {}
+    + (if std.prune(this.prometheusRules) != {}
        then k.util.configVolumeMount('%s-recording' % _config.name, _config.prometheus_config_dir + '/recording')
        else {})
   ,
