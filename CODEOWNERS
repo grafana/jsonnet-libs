@@ -5,3 +5,4 @@
 /etcd-operator/ @grafana/cortex-team
 /memcached*/ @grafana/cortex-team @grafana/loki-team
 /prometheus-ksonnet/ @grafana/infra-team @grafana/cortex-team
+/enterprise-metrics/ @grafana/backend-enterprise
