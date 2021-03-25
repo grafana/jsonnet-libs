@@ -15,14 +15,23 @@ $ jb install github.com/grafana/jsonnet-libs/enterprise-metrics
 ```
 
 `k.libsonnet` is a Jsonnet library for Kubernetes. Most other Jsonnet libraries for Kubernetes expect this file to exist in your JSONNET_PATH.
+
 To install `k.libsonnet` for Kubernetes 1.18:
 
+1. Use `jb` to vendor the `k8s-alpha` Kubernetes library
 ```console
 $ jb install github.com/jsonnet-libs/k8s-alpha/1.18
-$ cat <<EOF > lib/k.libsonnet
-> (import "github.com/jsonnet-libs/k8s-alpha/1.18/main.libsonnet")
-> + (import "github.com/jsonnet-libs/k8s-alpha/1.18/extensions/kausal-shim.libsonnet")
-EOF
+```
+
+2. Ensure the `lib` directory exists
+```console
+$ mkdir -p lib
+```
+
+3. Import the `k8s-alpha` Kubernetes library by putting the following Jsonnet into a file called `lib/k.libsonnet`
+```jsonnet
+(import 'github.com/jsonnet-libs/k8s-alpha/1.18/main.libsonnet')
++ (import 'github.com/jsonnet-libs/k8s-alpha/1.18/extensions/kausal-shim.libsonnet')
 ```
 
 ## Unit Tests
