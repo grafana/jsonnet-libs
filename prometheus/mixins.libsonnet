@@ -92,11 +92,11 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     ],
 
     prometheus_config+: {
-      rule_files+: [
+      rule_files+: std.sort([
         '%s/%s' % [mixin.path, file]
         for mixin in this.mixin_data
         for file in std.objectFields(mixin.files)
-      ],
+      ]),
     },
 
     prometheus_config_mount+::
