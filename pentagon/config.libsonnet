@@ -17,18 +17,18 @@
     pentagon: 'grafana/pentagon:41',
   },
 
-  pentagonKVMapping(path, secret):: {
+  pentagonKVMapping(path, secret, type='kv-v2'):: {
     vaultPath: path,
     secretName: secret,
-    vaultEngineType: 'kv',
+    vaultEngineType: type,
   },
 
-  addPentagonMapping(path, secret, type='kv'):: {
+  addPentagonMapping(path, secret, type='kv-v2'):: {
     pentagon_mappings_map+: {
       [secret]+: {
         vaultPath: path,
         secretName: secret,
-        vaultEngineType: 'kv',
+        vaultEngineType: type,
       },
     },
   },
