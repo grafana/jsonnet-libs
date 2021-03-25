@@ -38,17 +38,26 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       + configMap.withData({
         'prometheus.yml': k.util.manifestYaml(prometheus_config),
       }),
-
-      configMap.new('%s-alerts' % _config.name)
-      + configMap.withData({
-        'alerts.rules': k.util.manifestYaml(prometheusAlerts),
-      }),
-
-      configMap.new('%s-recording' % _config.name)
-      + configMap.withData({
-        'recording.rules': k.util.manifestYaml(prometheusRules),
-      }),
-    ],
+    ]
+    + (
+      if std.objectHas(this, 'prometheusAlerts') && std.prune(this.prometheusAlerts) != {}
+      then [
+        configMap.new('%s-alerts' % _config.name) +
+        configMap.withData({
+          'alerts.rules': k.util.manifestYaml(this.prometheusAlerts),
+        }),
+      ]
+      else []
+    ) + (
+      if std.objectHas(this, 'prometheusRules') && std.prune(this.prometheusRules) != {}
+      then [
+        configMap.new('%s-recording' % _config.name) +
+        configMap.withData({
+          'recording.rules': k.util.manifestYaml(this.prometheusRules),
+        }),
+      ]
+      else []
+    ),
 
   local policyRule = k.rbac.v1.policyRule,
 
@@ -120,8 +129,12 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 
   prometheus_config_mount::
     k.util.configVolumeMount('%s-config' % _config.name, _config.prometheus_config_dir)
-    + k.util.configVolumeMount('%s-alerts' % _config.name, _config.prometheus_config_dir + '/alerts')
-    + k.util.configVolumeMount('%s-recording' % _config.name, _config.prometheus_config_dir + '/recording')
+    + (if std.objectHas(this, 'prometheusAlerts') && std.prune(this.prometheusAlerts) != {}
+       then k.util.configVolumeMount('%s-alerts' % _config.name, _config.prometheus_config_dir + '/alerts')
+       else {})
+    + (if std.objectHas(this, 'prometheusRules') && std.prune(this.prometheusRules) != {}
+       then k.util.configVolumeMount('%s-recording' % _config.name, _config.prometheus_config_dir + '/recording')
+       else {})
   ,
 
   prometheus_statefulset:
