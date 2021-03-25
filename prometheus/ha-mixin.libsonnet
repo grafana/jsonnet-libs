@@ -36,37 +36,49 @@ function(replicas=2) {
   },
 
   local configMap = k.core.v1.configMap,
-  prometheus_config_maps: [
-    configMap.new('%s-config' % _config.name) +
-    configMap.withData(
-      std.foldr(
-        function(i, acc)
-          local name = _config.name + '-' + i;
-          local config =
-            this.prometheus_config {
-              global+: {
-                external_labels+: {
-                  __replica__: name,
+  prometheus_config_maps:
+    [
+      configMap.new('%s-config' % _config.name) +
+      configMap.withData(
+        std.foldr(
+          function(i, acc)
+            local name = _config.name + '-' + i;
+            local config =
+              this.prometheus_config {
+                global+: {
+                  external_labels+: {
+                    __replica__: name,
+                  },
                 },
-              },
-            };
-          acc {
-            [name + '.yml']: k.util.manifestYaml(config),
-          },
-        std.range(0, replicas - 1),
+              };
+            acc {
+              [name + '.yml']: k.util.manifestYaml(config),
+            },
+          std.range(0, replicas - 1),
 
-        {}
+          {}
+        ),
       ),
+    ]
+    + (
+      if std.objectHas(this, 'prometheusAlerts') && std.prune(this.prometheusAlerts) != {}
+      then [
+        configMap.new('%s-alerts' % _config.name) +
+        configMap.withData({
+          'alerts.rules': k.util.manifestYaml(this.prometheusAlerts),
+        }),
+      ]
+      else []
+    ) + (
+      if std.objectHas(this, 'prometheusRules') && std.prune(this.prometheusRules) != {}
+      then [
+        configMap.new('%s-recording' % _config.name) +
+        configMap.withData({
+          'recording.rules': k.util.manifestYaml(this.prometheusRules),
+        }),
+      ]
+      else []
     ),
-    configMap.new('%s-alerts' % _config.name) +
-    configMap.withData({
-      'alerts.rules': k.util.manifestYaml(this.prometheusAlerts),
-    }),
-    configMap.new('%s-recording' % _config.name) +
-    configMap.withData({
-      'recording.rules': k.util.manifestYaml(this.prometheusRules),
-    }),
-  ],
 
   local container = k.core.v1.container,
   local envVar = k.core.v1.envVar,
