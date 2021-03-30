@@ -8,7 +8,6 @@
       '--path.procfs=/host/proc',
       '--path.sysfs=/host/sys',
 
-      '--no-collector.netstat',
       '--collector.netdev.ignored-devices=^veth.+$',
 
       // We run an older version due to the renamed metrics.  There ignores are from newer version.
