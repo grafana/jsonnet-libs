@@ -15,25 +15,32 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 
   local secret = k.core.v1.secret,
 
-  withStorageGCS(bucket, key):: {
+  // Add GCS storage settings from a secret
+  withStorageGCSFromSecret(secret_name, secret_key, bucket):: {
     _config+:: { vault+: { config+: {
       // See https://www.vaultproject.io/docs/configuration/storage/
       // for other storage backends
       storage+: {
         gcs+: {
           bucket: bucket,
-          credentials_file: '/var/run/secrets/gcs-auth/key',
+          credentials_file: '/var/run/secrets/gcs-auth/%s' % secret_key,
           ha_enabled: 'true',
         },
       },
     } } },
-    gcs_auth_secret:
-      secret.new('gcs-auth', { key: key }),
     statefulset+:
-      k.util.secretVolumeMount(self.gcs_auth_secret.metadata.name, '/var/run/secrets/gcs-auth'),
+      k.util.secretVolumeMount(secret_name, '/var/run/secrets/gcs-auth'),
   },
 
-  withGoogleCloudKMS(key, project, location, key_ring, crypto_key):: {
+  // Create the secret from a service account key and add the settings
+  withStorageGCS(bucket, key):: {
+    gcs_auth_secret:
+      secret.new('gcs-auth', { key: key }),
+
+  } + self.withStorageGCSFromSecret('gcs-auth', 'key', bucket),
+
+  // Add GCP KMS settings from a secret
+  withGoogleCloudKMSFromSecret(secret_name, secret_key, project, location, key_ring, crypto_key):: {
     _config+:: { vault+: { config+: {
       seal+: {
         gcpckms: {
@@ -44,15 +51,20 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
         },
       },
     } } },
-    kms_auth_secret:
-      secret.new('kms-auth', { key: key }),
     statefulset+:
-      k.util.secretVolumeMount(self.kms_auth_secret.metadata.name, '/var/run/secrets/kms-auth'),
+      k.util.secretVolumeMount(secret_name, '/var/run/secrets/kms-auth'),
     container+::
       container.withEnvMixin([
-        envVar.new('GOOGLE_APPLICATION_CREDENTIALS', '/var/run/secrets/kms-auth/key'),
+        envVar.new('GOOGLE_APPLICATION_CREDENTIALS', '/var/run/secrets/kms-auth/%s' % secret_key),
       ]),
   },
+
+  // Create the secret from a service account key and add the settings
+  withGoogleCloudKMS(key, project, location, key_ring, crypto_key):: {
+    kms_auth_secret:
+      secret.new('kms-auth', { key: key }),
+  } + self.withGoogleCloudKMSFromSecret('kms-auth', 'key', project, location, key_ring, crypto_key),
+
 
   withSecretTLS(cert, key):: {
     _config+:: { vault+: { config+: {
