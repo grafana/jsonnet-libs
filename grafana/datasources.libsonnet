@@ -12,7 +12,7 @@
     basicAuth: true,
     basicAuthUser: username,
     [if legacy then 'basicAuthPassword']: password,
-    secureJsonData+: if !legacy then {
+    [if !legacy] then 'secureJsonData']+: {
       basicAuthPassword: password,
     },
   },
