@@ -11,7 +11,7 @@
   withBasicAuth(username, password, legacy=false):: {
     basicAuth: true,
     basicAuthUser: username,
-    basicAuthPassword: if legacy then password,
+    [if legacy then 'basicAuthPassword']: password,
     secureJsonData+: if !legacy then {
       basicAuthPassword: password,
     },
