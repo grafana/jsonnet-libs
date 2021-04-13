@@ -23,5 +23,5 @@ test: test/vendor
 	jsonnet -J test/lib -J test/vendor -J vendor main_test.jsonnet
 
 docs/README.md: ## Remake the library README file.
-docs/README.md: main.libsonnet
-	docsonnet -J lib -J vendor docs.libsonnet -o ./docs
+docs/README.md: main.libsonnet test/vendor
+	docsonnet -J test/lib -J test/vendor -J vendor docs.libsonnet -o ./docs
