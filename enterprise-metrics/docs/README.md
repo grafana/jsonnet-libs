@@ -37,6 +37,20 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
   * [`obj adminApi.service`](#obj-adminapiservice)
     
+* [`obj alertmanager`](#obj-alertmanager)
+  * [`obj alertmanager.args`](#obj-alertmanagerargs)
+    * [`string alertmanager.args.alertmanager.storage.s3.buckets`](#string-alertmanagerargsalertmanagerstorages3buckets)
+    * [`bool alertmanager.args.auth.enabled`](#bool-alertmanagerargsauthenabled)
+    * [`bool alertmanager.args.auth.type`](#bool-alertmanagerargsauthtype)
+    * [`string alertmanager.args.cluster-name`](#string-alertmanagerargscluster-name)
+    * [`string alertmanager.args.memberlist.join`](#string-alertmanagerargsmemberlistjoin)
+    * [`string alertmanager.args.runtime-config.file`](#string-alertmanagerargsruntime-configfile)
+  * [`obj alertmanager.container`](#obj-alertmanagercontainer)
+    
+  * [`obj alertmanager.service`](#obj-alertmanagerservice)
+    
+  * [`obj alertmanager.statefulSet`](#obj-alertmanagerstatefulset)
+    
 * [`obj compactor`](#obj-compactor)
   * [`obj compactor.args`](#obj-compactorargs)
     * [`bool compactor.args.auth.enabled`](#bool-compactorargsauthenabled)
@@ -133,6 +147,20 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
   * [`obj queryFrontend.discoveryService`](#obj-queryfrontenddiscoveryservice)
     
   * [`obj queryFrontend.service`](#obj-queryfrontendservice)
+    
+* [`obj ruler`](#obj-ruler)
+  * [`obj ruler.args`](#obj-rulerargs)
+    * [`bool ruler.args.auth.enabled`](#bool-rulerargsauthenabled)
+    * [`bool ruler.args.auth.type`](#bool-rulerargsauthtype)
+    * [`string ruler.args.cluster-name`](#string-rulerargscluster-name)
+    * [`string ruler.args.memberlist.join`](#string-rulerargsmemberlistjoin)
+    * [`string ruler.args.ruler.storage.s3.buckets`](#string-rulerargsrulerstorages3buckets)
+    * [`string ruler.args.runtime-config.file`](#string-rulerargsruntime-configfile)
+  * [`obj ruler.container`](#obj-rulercontainer)
+    
+  * [`obj ruler.deployment`](#obj-rulerdeployment)
+    
+  * [`obj ruler.service`](#obj-rulerservice)
     
 * [`obj runtime`](#obj-runtime)
   * [`obj runtime.config`](#obj-runtimeconfig)
@@ -296,6 +324,61 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ## obj adminApi.service
 
 `service` is the Kubernetes Service for the admin-api.
+
+## obj alertmanager
+
+`alertmanager` has configuration for the alertmanager. To disable the alertmanager, ensure the ruler object field is hidden
+
+## obj alertmanager.args
+
+`args` is a convenience field that can be used to modify the alertmanager container arguments as key-value pairs.
+
+### string alertmanager.args.alertmanager.storage.s3.buckets
+
+*Default value: * `alertmanager`
+
+`alertmanager.storage.s3.buckets` is a list of bucket names over which the alertmanager will distribute its chunks
+
+### bool alertmanager.args.auth.enabled
+
+*Default value: * `true`
+
+`auth.enabled` enables the tenant authentication
+
+### bool alertmanager.args.auth.type
+
+*Default value: * `enterprise`
+
+`auth.type` configures the type of authentication in use.
+`enterprise` uses Grafana Enterprise token authentication.
+`default` uses Cortex authentication.
+
+
+### string alertmanager.args.cluster-name
+
+`cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string alertmanager.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string alertmanager.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
+## obj alertmanager.container
+
+`container` is a convenience field that can be used to modify the alertmanager container.
+
+## obj alertmanager.service
+
+`service` is the Kubernetes Service for the alertmanager.
+
+## obj alertmanager.statefulSet
+
+`statefulSet` is the Kubernetes StatefulSet for the alertmanager.
 
 ## obj compactor
 
@@ -557,7 +640,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj querier.args
 
-
+`args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.
 
 ### bool querier.args.auth.enabled
 
@@ -653,6 +736,61 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `service` is the Kubernetes Service for the query-frontend.
 
+## obj ruler
+
+`ruler` has configuration for the ruler.
+
+## obj ruler.args
+
+`args` is a convenience field that can be used to modify the ruler container arguments as key-value pairs.
+
+### bool ruler.args.auth.enabled
+
+*Default value: * `true`
+
+`auth.enabled` enables the tenant authentication
+
+### bool ruler.args.auth.type
+
+*Default value: * `enterprise`
+
+`auth.type` configures the type of authentication in use.
+`enterprise` uses Grafana Enterprise token authentication.
+`default` uses Cortex authentication.
+
+
+### string ruler.args.cluster-name
+
+`cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string ruler.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string ruler.args.ruler.storage.s3.buckets
+
+*Default value: * `ruler`
+
+`ruler.storage.s3.buckets` is a list of bucket names over which the ruler will distribute its chunks
+
+### string ruler.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
+## obj ruler.container
+
+`container` is a convenience field that can be used to modify the ruler container.
+
+## obj ruler.deployment
+
+`deployment` is the Kubernetes Deployment for the ruler.
+
+## obj ruler.service
+
+`service` is the Kubernetes Service for the ruler.
+
 ## obj runtime
 
 `runtime` has configuration for runtime overrides.
@@ -729,6 +867,8 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ## obj tokengen
 
 `tokengen` has configuration for tokengen.
+By default the tokengen object is hidden as it is a one-off task. To deploy the tokengen job, unhide the tokengen object field.
+
 
 ## obj tokengen.args
 
