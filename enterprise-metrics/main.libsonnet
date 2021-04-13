@@ -399,8 +399,11 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     service: util.serviceFor(self.statefulSet),
   },
 
-  '#tokengen':: d.obj('`tokengen` has configuration for tokengen.'),
-  tokengen: {
+  '#tokengen':: d.obj(|||
+    `tokengen` has configuration for tokengen.
+    By default the tokengen object is hidden as it is a one-off task. To deploy the tokengen job, unhide the tokengen object field.
+  |||),
+  tokengen:: {
     local target = 'tokengen',
     '#args':: d.obj('`args` is convenience field for modifying the tokegen container arguments as key-value pairs.'),
     args:: this._config.commonArgs {
