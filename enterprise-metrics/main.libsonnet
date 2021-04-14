@@ -26,6 +26,12 @@ local cortex =
       rulerClientConfig: {},
       ruler_enabled: true,
     },
+    alertmanager_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'alertmanager.sharding-ring.consul.hostname':: null,
+      'alertmanager.sharding-ring.prefix':: null,
+      'alertmanager.sharding-ring.store': 'memberlist',
+    },
     compactor_args+:: {
       // Memberlist gossip is used instead of consul for the ring.
       'compactor.ring.consul.hostname':: null,
@@ -46,6 +52,15 @@ local cortex =
     },
     querier_args+:: {
       // Memberlist gossip is used instead of consul for the ring.
+      'store-gateway.sharding-ring.consul.hostname':: null,
+      'store-gateway.sharding-ring.prefix':: null,
+      'store-gateway.sharding-ring.store': 'memberlist',
+    },
+    ruler_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'ruler.ring.consul.hostname':: null,
+      'ruler.ring.prefix':: null,
+      'ruler.ring.store': 'memberlist',
       'store-gateway.sharding-ring.consul.hostname':: null,
       'store-gateway.sharding-ring.prefix':: null,
       'store-gateway.sharding-ring.store': 'memberlist',
