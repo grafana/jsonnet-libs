@@ -39,7 +39,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
 * [`obj alertmanager`](#obj-alertmanager)
   * [`obj alertmanager.args`](#obj-alertmanagerargs)
-    * [`string alertmanager.args.alertmanager.storage.s3.buckets`](#string-alertmanagerargsalertmanagerstorages3buckets)
+    * [`string alertmanager.args.alertmanager-storage.s3.bucket-name`](#string-alertmanagerargsalertmanager-storages3bucket-name)
     * [`bool alertmanager.args.auth.enabled`](#bool-alertmanagerargsauthenabled)
     * [`bool alertmanager.args.auth.type`](#bool-alertmanagerargsauthtype)
     * [`string alertmanager.args.cluster-name`](#string-alertmanagerargscluster-name)
@@ -154,7 +154,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool ruler.args.auth.type`](#bool-rulerargsauthtype)
     * [`string ruler.args.cluster-name`](#string-rulerargscluster-name)
     * [`string ruler.args.memberlist.join`](#string-rulerargsmemberlistjoin)
-    * [`string ruler.args.ruler.storage.s3.buckets`](#string-rulerargsrulerstorages3buckets)
+    * [`string ruler.args.ruler-storage.s3.bucket-name`](#string-rulerargsruler-storages3bucket-name)
     * [`string ruler.args.runtime-config.file`](#string-rulerargsruntime-configfile)
   * [`obj ruler.container`](#obj-rulercontainer)
     
@@ -333,11 +333,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the alertmanager container arguments as key-value pairs.
 
-### string alertmanager.args.alertmanager.storage.s3.buckets
+
+### string alertmanager.args.alertmanager-storage.s3.bucket-name
 
 *Default value: * `alertmanager`
 
-`alertmanager.storage.s3.buckets` is a list of bucket names over which the alertmanager will distribute its chunks
+`alertmanager-storage.s3.bucket-name` is name of the bucket in which the alertmanager data will be stored.
 
 ### bool alertmanager.args.auth.enabled
 
@@ -769,11 +770,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `memberlist.join` is an address used to find memberlist peers for ring gossip
 
-### string ruler.args.ruler.storage.s3.buckets
+### string ruler.args.ruler-storage.s3.bucket-name
 
 *Default value: * `ruler`
 
-`ruler.storage.s3.buckets` is a list of bucket names over which the ruler will distribute its chunks
+`ruler-storage.s3.bucket-name` is name of the bucket in which the ruler data will be stored.
 
 ### string ruler.args.runtime-config.file
 

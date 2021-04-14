@@ -186,13 +186,16 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     local alertmanager = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the alertmanager container arguments as key-value pairs.'),
     args:: cortex.alertmanager_args + this._config.commonArgs + {
-      'alertmanager.storage.type': error 'you must set the `alertmanager.storage.type` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
-      '#alertmanager.storage.s3.buckets':: d.val(
-        default=self['alertmanager.storage.s3.buckets'],
-        help='`alertmanager.storage.s3.buckets` is a list of bucket names over which the alertmanager will distribute its chunks',
+      'alertmanager-storage.backend':
+        if 'alertmanager-storage.backend' in super then
+          super['alertmanager-storage.backend']
+        else error 'you must set the `alertmanager-storage.backend` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
+      '#alertmanager-storage.s3.bucket-name':: d.val(
+        default=self['alertmanager-storage.s3.bucket-name'],
+        help='`alertmanager-storage.s3.bucket-name` is name of the bucket in which the alertmanager data will be stored.',
         type=d.T.string
       ),
-      'alertmanager.storage.s3.buckets': 'alertmanager',
+      'alertmanager-storage.s3.bucket-name': 'alertmanager',
       'alertmanager.web.external-url': error 'you must set the `alertmanager.web.external-url` flag in order to run an Alertmanager.',
     },
     '#container':: d.obj('`container` is a convenience field that can be used to modify the alertmanager container.'),
@@ -407,13 +410,16 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     local ruler = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the ruler container arguments as key-value pairs.'),
     args:: cortex.ruler_args + this._config.commonArgs + {
-      'ruler.storage.type': error 'you must set the `ruler.storage.type` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
-      '#ruler.storage.s3.buckets':: d.val(
-        default=self['ruler.storage.s3.buckets'],
-        help='`ruler.storage.s3.buckets` is a list of bucket names over which the ruler will distribute its chunks',
+      'ruler-storage.backend':
+        if 'ruler-storage.backend' in super then
+          super['ruler.storage.backend'] else
+          error 'you must set the `ruler.storage.backend` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
+      '#ruler-storage.s3.bucket-name':: d.val(
+        default=self['ruler-storage.s3.bucket-name'],
+        help='`ruler-storage.s3.bucket-name` is name of the bucket in which the ruler data will be stored.',
         type=d.T.string
       ),
-      'ruler.storage.s3.buckets': 'ruler',
+      'ruler-storage.s3.bucket-name': 'ruler',
     },
     '#container':: d.obj('`container` is a convenience field that can be used to modify the ruler container.'),
     container::

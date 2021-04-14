@@ -9,13 +9,13 @@
   },
   alertmanager+: {
     args+:: {
-      'alertmanager.storage.type': null,
+      'alertmanager-storage.backend': null,
       'alertmanager.web.external-url': null,
     },
   },
   ruler+: {
     args+:: {
-      'ruler.storage.type': null,
+      'ruler-storage.backend': null,
     },
   },
 }
