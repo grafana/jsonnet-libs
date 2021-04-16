@@ -28,8 +28,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
         },
       },
     } } },
-    statefulset+:
-      k.util.secretVolumeMount(secret_name, '/var/run/secrets/gcs-auth'),
+    statefulset+: k.util.secretVolumeMount(secret_name, '/var/run/secrets/gcs-auth'),
   },
 
   // Create the secret from a service account key and add the settings
@@ -65,7 +64,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       secret.new('kms-auth', { key: key }),
   } + self.withGoogleCloudKMSFromSecret('kms-auth', 'key', project, location, key_ring, crypto_key),
 
-
   withSecretTLS(cert, key):: {
     _config+:: { vault+: { config+: {
       default_listener+: {
@@ -88,6 +86,22 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       ),
     statefulset+:
       k.util.secretVolumeMount(self.ssl_cert.metadata.name, '/vault/tls'),
+  },
+
+  withExistingTLSSecret(name):: {
+    _config+:: { vault+: { config+: {
+      default_listener+: {
+        tcp+: {
+          tls_disable: false,
+          tls_prefer_server_cipher_suites: true,
+          tls_cipher_suites: 'TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA',
+          tls_cert_file: '/vault/tls/server.crt',
+          tls_key_file: '/vault/tls/server.key',
+        },
+      },
+    } } },
+    statefulset+:
+      k.util.secretVolumeMount(name, '/vault/tls'),
   },
 
   withPrometheusMetrics(port, telemetry={ prometheus_retention_time: '1m' }):: {
