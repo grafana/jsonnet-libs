@@ -64,7 +64,6 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       secret.new('kms-auth', { key: key }),
   } + self.withGoogleCloudKMSFromSecret('kms-auth', 'key', project, location, key_ring, crypto_key),
 
-
   withSecretTLS(cert, key):: {
     _config+:: { vault+: { config+: {
       default_listener+: {
