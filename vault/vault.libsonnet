@@ -87,7 +87,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     statefulset+:
       k.util.secretVolumeMount(self.ssl_cert.metadata.name, '/vault/tls'),
   },
-  
+
   withExistingTLSSecret(name):: {
     _config+:: { vault+: { config+: {
       default_listener+: {
