@@ -28,8 +28,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
         },
       },
     } } },
-    statefulset+:
-      k.util.secretVolumeMount(secret_name, '/var/run/secrets/gcs-auth'),
+    statefulset+: k.util.secretVolumeMount(secret_name, '/var/run/secrets/gcs-auth'),
   },
 
   // Create the secret from a service account key and add the settings
