@@ -98,7 +98,7 @@
           "subdir": ""
         }
       },
-      "rfrail3-grafana-dashboards",
+      "name": "rfrail3-grafana-dashboards",
       "version": "master"
     }
   ],
