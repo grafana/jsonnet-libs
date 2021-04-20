@@ -19,9 +19,6 @@
         explore+: {
           enabled: true,
         },
-        feature_toggle: {
-          enable: 'http_request_histogram, database_metrics',
-        },
       },
 
     } + $.grafana_config,  //<--legacy config
