@@ -16,9 +16,6 @@
           enabled: true,
           org_role: 'Admin',
         },
-        explore+: {
-          enabled: true,
-        },
       },
 
     } + $.grafana_config,  //<--legacy config
