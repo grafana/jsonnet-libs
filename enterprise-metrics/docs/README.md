@@ -83,9 +83,11 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool gateway.args.auth.type`](#bool-gatewayargsauthtype)
     * [`string gateway.args.cluster-name`](#string-gatewayargscluster-name)
     * [`string gateway.args.gateway.proxy.admin-api.url`](#string-gatewayargsgatewayproxyadmin-apiurl)
+    * [`string gateway.args.gateway.proxy.alertmanager.url`](#string-gatewayargsgatewayproxyalertmanagerurl)
     * [`string gateway.args.gateway.proxy.distributor.url`](#string-gatewayargsgatewayproxydistributorurl)
     * [`string gateway.args.gateway.proxy.ingester.url`](#string-gatewayargsgatewayproxyingesterurl)
     * [`string gateway.args.gateway.proxy.query-frontend.url`](#string-gatewayargsgatewayproxyquery-frontendurl)
+    * [`string gateway.args.gateway.proxy.ruler.url`](#string-gatewayargsgatewayproxyrulerurl)
     * [`string gateway.args.gateway.proxy.store-gateway.url`](#string-gatewayargsgatewayproxystore-gatewayurl)
     * [`string gateway.args.memberlist.join`](#string-gatewayargsmemberlistjoin)
     * [`string gateway.args.runtime-config.file`](#string-gatewayargsruntime-configfile)
@@ -512,6 +514,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `gateway.proxy.admin-api.url is the upstream URL of the admin-api.
 
+### string gateway.args.gateway.proxy.alertmanager.url
+
+*Default value: * `http://alertmanager`
+
+`gateway.proxy.alertmanager.url is the upstream URL of the alertmanager.
+
 ### string gateway.args.gateway.proxy.distributor.url
 
 *Default value: * `dns:///distributor:9095`
@@ -529,6 +537,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `http://query-frontend`
 
 `gateway.proxy.query-frontend.url is the upstream URL of the query-frontend.
+
+### string gateway.args.gateway.proxy.ruler.url
+
+*Default value: * `http://ruler`
+
+`gateway.proxy.ruler.url is the upstream URL of the ruler.
 
 ### string gateway.args.gateway.proxy.store-gateway.url
 

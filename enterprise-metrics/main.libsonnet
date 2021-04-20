@@ -290,11 +290,19 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       '#gateway.proxy.distributor.url':: d.val(
         default=self['gateway.proxy.distributor.url'], help='`gateway.proxy.distributor.url is the upstream URL of the distributor.', type=d.T.string
       ),
+      '#gateway.proxy.alertmanager.url':: d.val(
+        default=self['gateway.proxy.alertmanager.url'], help='`gateway.proxy.alertmanager.url is the upstream URL of the alertmanager.', type=d.T.string
+      ),
+      'gateway.proxy.alertmanager.url': 'http://alertmanager',
       'gateway.proxy.distributor.url': 'dns:///distributor:9095',
       '#gateway.proxy.ingester.url':: d.val(
         default=self['gateway.proxy.ingester.url'], help='`gateway.proxy.ingester.url is the upstream URL of the ingester.', type=d.T.string
       ),
       'gateway.proxy.ingester.url': 'http://ingester',
+      '#gateway.proxy.ruler.url':: d.val(
+        default=self['gateway.proxy.ruler.url'], help='`gateway.proxy.ruler.url is the upstream URL of the ruler.', type=d.T.string
+      ),
+      'gateway.proxy.ruler.url': 'http://ruler',
       '#gateway.proxy.query-frontend.url':: d.val(
         default=self['gateway.proxy.query-frontend.url'], help='`gateway.proxy.query-frontend.url is the upstream URL of the query-frontend.', type=d.T.string
       ),
