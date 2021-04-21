@@ -15,7 +15,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj _config`](#obj-_config)
   * [`obj _config.commonArgs`](#obj-_configcommonargs)
     * [`bool _config.commonArgs.auth.enabled`](#bool-_configcommonargsauthenabled)
-    * [`bool _config.commonArgs.auth.type`](#bool-_configcommonargsauthtype)
     * [`string _config.commonArgs.cluster-name`](#string-_configcommonargscluster-name)
     * [`string _config.commonArgs.memberlist.join`](#string-_configcommonargsmemberlistjoin)
     * [`string _config.commonArgs.runtime-config.file`](#string-_configcommonargsruntime-configfile)
@@ -26,7 +25,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj adminApi`](#obj-adminapi)
   * [`obj adminApi.args`](#obj-adminapiargs)
     * [`bool adminApi.args.auth.enabled`](#bool-adminapiargsauthenabled)
-    * [`bool adminApi.args.auth.type`](#bool-adminapiargsauthtype)
     * [`string adminApi.args.bootstrap.license.path`](#string-adminapiargsbootstraplicensepath)
     * [`string adminApi.args.cluster-name`](#string-adminapiargscluster-name)
     * [`string adminApi.args.memberlist.join`](#string-adminapiargsmemberlistjoin)
@@ -41,7 +39,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
   * [`obj alertmanager.args`](#obj-alertmanagerargs)
     * [`string alertmanager.args.alertmanager-storage.s3.bucket-name`](#string-alertmanagerargsalertmanager-storages3bucket-name)
     * [`bool alertmanager.args.auth.enabled`](#bool-alertmanagerargsauthenabled)
-    * [`bool alertmanager.args.auth.type`](#bool-alertmanagerargsauthtype)
     * [`string alertmanager.args.cluster-name`](#string-alertmanagerargscluster-name)
     * [`string alertmanager.args.memberlist.join`](#string-alertmanagerargsmemberlistjoin)
     * [`string alertmanager.args.runtime-config.file`](#string-alertmanagerargsruntime-configfile)
@@ -54,7 +51,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj compactor`](#obj-compactor)
   * [`obj compactor.args`](#obj-compactorargs)
     * [`bool compactor.args.auth.enabled`](#bool-compactorargsauthenabled)
-    * [`bool compactor.args.auth.type`](#bool-compactorargsauthtype)
     * [`string compactor.args.cluster-name`](#string-compactorargscluster-name)
     * [`string compactor.args.memberlist.join`](#string-compactorargsmemberlistjoin)
     * [`string compactor.args.runtime-config.file`](#string-compactorargsruntime-configfile)
@@ -67,7 +63,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj distributor`](#obj-distributor)
   * [`obj distributor.args`](#obj-distributorargs)
     * [`bool distributor.args.auth.enabled`](#bool-distributorargsauthenabled)
-    * [`bool distributor.args.auth.type`](#bool-distributorargsauthtype)
     * [`string distributor.args.cluster-name`](#string-distributorargscluster-name)
     * [`string distributor.args.memberlist.join`](#string-distributorargsmemberlistjoin)
     * [`string distributor.args.runtime-config.file`](#string-distributorargsruntime-configfile)
@@ -103,7 +98,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj ingester`](#obj-ingester)
   * [`obj ingester.args`](#obj-ingesterargs)
     * [`bool ingester.args.auth.enabled`](#bool-ingesterargsauthenabled)
-    * [`bool ingester.args.auth.type`](#bool-ingesterargsauthtype)
     * [`string ingester.args.cluster-name`](#string-ingesterargscluster-name)
     * [`string ingester.args.memberlist.join`](#string-ingesterargsmemberlistjoin)
     * [`string ingester.args.runtime-config.file`](#string-ingesterargsruntime-configfile)
@@ -125,7 +119,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj querier`](#obj-querier)
   * [`obj querier.args`](#obj-querierargs)
     * [`bool querier.args.auth.enabled`](#bool-querierargsauthenabled)
-    * [`bool querier.args.auth.type`](#bool-querierargsauthtype)
     * [`string querier.args.cluster-name`](#string-querierargscluster-name)
     * [`string querier.args.memberlist.join`](#string-querierargsmemberlistjoin)
     * [`string querier.args.runtime-config.file`](#string-querierargsruntime-configfile)
@@ -138,7 +131,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj queryFrontend`](#obj-queryfrontend)
   * [`obj queryFrontend.args`](#obj-queryfrontendargs)
     * [`bool queryFrontend.args.auth.enabled`](#bool-queryfrontendargsauthenabled)
-    * [`bool queryFrontend.args.auth.type`](#bool-queryfrontendargsauthtype)
     * [`string queryFrontend.args.cluster-name`](#string-queryfrontendargscluster-name)
     * [`string queryFrontend.args.memberlist.join`](#string-queryfrontendargsmemberlistjoin)
     * [`string queryFrontend.args.runtime-config.file`](#string-queryfrontendargsruntime-configfile)
@@ -153,7 +145,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj ruler`](#obj-ruler)
   * [`obj ruler.args`](#obj-rulerargs)
     * [`bool ruler.args.auth.enabled`](#bool-rulerargsauthenabled)
-    * [`bool ruler.args.auth.type`](#bool-rulerargsauthtype)
     * [`string ruler.args.cluster-name`](#string-rulerargscluster-name)
     * [`string ruler.args.memberlist.join`](#string-rulerargsmemberlistjoin)
     * [`string ruler.args.ruler-storage.s3.bucket-name`](#string-rulerargsruler-storages3bucket-name)
@@ -175,7 +166,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj storeGateway`](#obj-storegateway)
   * [`obj storeGateway.args`](#obj-storegatewayargs)
     * [`bool storeGateway.args.auth.enabled`](#bool-storegatewayargsauthenabled)
-    * [`bool storeGateway.args.auth.type`](#bool-storegatewayargsauthtype)
     * [`string storeGateway.args.cluster-name`](#string-storegatewayargscluster-name)
     * [`string storeGateway.args.memberlist.join`](#string-storegatewayargsmemberlistjoin)
     * [`string storeGateway.args.runtime-config.file`](#string-storegatewayargsruntime-configfile)
@@ -190,7 +180,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj tokengen`](#obj-tokengen)
   * [`obj tokengen.args`](#obj-tokengenargs)
     * [`bool tokengen.args.auth.enabled`](#bool-tokengenargsauthenabled)
-    * [`bool tokengen.args.auth.type`](#bool-tokengenargsauthtype)
     * [`string tokengen.args.cluster-name`](#string-tokengenargscluster-name)
     * [`string tokengen.args.memberlist.join`](#string-tokengenargsmemberlistjoin)
     * [`string tokengen.args.runtime-config.file`](#string-tokengenargsruntime-configfile)
@@ -222,15 +211,6 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 *Default value: * `true`
 
 `auth.enabled` enables the tenant authentication
-
-### bool _config.commonArgs.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
 
 ### string _config.commonArgs.cluster-name
 
@@ -286,15 +266,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `auth.enabled` enables the tenant authentication
 
-### bool adminApi.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
-
 ### string adminApi.args.bootstrap.license.path
 
 *Default value: * `/etc/gem-license/license.jwt`
@@ -347,15 +318,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `auth.enabled` enables the tenant authentication
 
-### bool alertmanager.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
-
 ### string alertmanager.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
@@ -396,15 +358,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `auth.enabled` enables the tenant authentication
 
-### bool compactor.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
-
 ### string compactor.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
@@ -444,15 +397,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `true`
 
 `auth.enabled` enables the tenant authentication
-
-### bool distributor.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
 
 ### string distributor.args.cluster-name
 
@@ -593,15 +537,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `auth.enabled` enables the tenant authentication
 
-### bool ingester.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
-
 ### string ingester.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
@@ -662,15 +597,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `auth.enabled` enables the tenant authentication
 
-### bool querier.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
-
 ### string querier.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
@@ -710,15 +636,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `true`
 
 `auth.enabled` enables the tenant authentication
-
-### bool queryFrontend.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
 
 ### string queryFrontend.args.cluster-name
 
@@ -763,15 +680,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `true`
 
 `auth.enabled` enables the tenant authentication
-
-### bool ruler.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
 
 ### string ruler.args.cluster-name
 
@@ -839,15 +747,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `auth.enabled` enables the tenant authentication
 
-### bool storeGateway.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
-
 ### string storeGateway.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
@@ -893,15 +792,6 @@ By default the tokengen object is hidden as it is a one-off task. To deploy the 
 *Default value: * `true`
 
 `auth.enabled` enables the tenant authentication
-
-### bool tokengen.args.auth.type
-
-*Default value: * `enterprise`
-
-`auth.type` configures the type of authentication in use.
-`enterprise` uses Grafana Enterprise token authentication.
-`default` uses Cortex authentication.
-
 
 ### string tokengen.args.cluster-name
 
