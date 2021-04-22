@@ -61,6 +61,9 @@ local cortex =
       'ruler.ring.consul.hostname':: null,
       'ruler.ring.prefix':: null,
       'ruler.ring.store': 'memberlist',
+      // Remove ruler limits configuration.
+      'ruler.max-rule-groups-per-tenant':: null,
+      'ruler.max-rules-per-rule-group':: null,
       'store-gateway.sharding-ring.consul.hostname':: null,
       'store-gateway.sharding-ring.prefix':: null,
       'store-gateway.sharding-ring.store': 'memberlist',
