@@ -106,19 +106,11 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   _config:: {
     '#commonArgs':: d.obj('`commonArgs` is a convenience field that can be used to modify the container arguments of all modules as key-value pairs.'),
     commonArgs:: {
-      'auth.type': 'enterprise',
       'admin.client.backend-type': error 'you must set the `admin.client.backend-type` flag to an object storage backend ("gcs"|"s3")',
       'admin.client.gcs.bucket-name': 'admin',
       'admin.client.s3.bucket-name': 'admin',
       '#auth.enabled':: d.val(default=self['auth.enabled'], help='`auth.enabled` enables the tenant authentication', type=d.T.bool),
       'auth.enabled': true,
-      '#auth.type':: d.val(
-        default=self['auth.type'], help=|||
-          `auth.type` configures the type of authentication in use.
-          `enterprise` uses Grafana Enterprise token authentication.
-          `default` uses Cortex authentication.
-        |||, type=d.T.bool
-      ),
       'blocks-storage.backend': error 'you must set the `blocks-storage.backend` flag to an object storage backend ("gcs"|"s3")',
       'blocks-storage.gcs.bucket-name': 'tsdb',
       'blocks-storage.s3.bucket-name': 'tsdb',
@@ -286,6 +278,14 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   gateway: {
     '#args':: d.obj('`args` is a convenience field that can be used to modify the gateway container arguments as key-value pairs.'),
     args:: this._config.commonArgs {
+      '#auth.type':: d.val(
+        default=self['auth.type'], help=|||
+          `auth.type` configures the type of authentication in use.
+          `enterprise` uses Grafana Enterprise token authentication.
+          `default` uses Cortex authentication.
+        |||, type=d.T.bool
+      ),
+      'auth.type': 'enterprise',
       '#gateway.proxy.admin-api.url':: d.val(
         default=self['gateway.proxy.admin-api.url'], help='`gateway.proxy.admin-api.url is the upstream URL of the admin-api.', type=d.T.string
       ),

@@ -17,6 +17,7 @@ Entries should include a reference to the Pull Request that introduced the chang
 - [BUGFIX] The `gossip-ring` Service now publishes not ready addresses. #523
 - [BUGFIX] All ring members now have the `gossip_ring-member` label set. #523
 - [BUGFIX] All microservices now use the `gossip-ring` Service as `memberlist.join` address. #523
+- [BUGFIX] `auth.type=enterprise` is now only configured on the `gateway` fixing auth errors with query_range requests. #545
 
 ## 1.0.0
 
