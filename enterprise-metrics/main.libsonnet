@@ -4,6 +4,9 @@ local cortex =
   + (import 'github.com/grafana/cortex-jsonnet/cortex/tsdb.libsonnet')
   + {
     _config+:: {
+      // Remove the alertmanagerStorageConfig from Cortex as this library provides its own config interface.
+      alertmanagerStorageClientConfig:: {},
+      alertmanager_enabled: true,
       // Remove the blocksStorageConfig from Cortex as this library provides its own config interface.
       blocksStorageConfig:: {},
       // No resources should have a pre-configured namespace. These should be removed with removeNamespaceReferences.
@@ -19,6 +22,15 @@ local cortex =
       memcached_chunks_enabled: true,
       memcached_index_queries_enabled: true,
       memcached_metadata_enabled: true,
+      // Remove the rulerClientConfig from Cortex as this library provides its own config interface.
+      rulerClientConfig: {},
+      ruler_enabled: true,
+    },
+    alertmanager_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'alertmanager.sharding-ring.consul.hostname':: null,
+      'alertmanager.sharding-ring.prefix':: null,
+      'alertmanager.sharding-ring.store': 'memberlist',
     },
     compactor_args+:: {
       // Memberlist gossip is used instead of consul for the ring.
@@ -40,6 +52,18 @@ local cortex =
     },
     querier_args+:: {
       // Memberlist gossip is used instead of consul for the ring.
+      'store-gateway.sharding-ring.consul.hostname':: null,
+      'store-gateway.sharding-ring.prefix':: null,
+      'store-gateway.sharding-ring.store': 'memberlist',
+    },
+    ruler_args+:: {
+      // Memberlist gossip is used instead of consul for the ring.
+      'ruler.ring.consul.hostname':: null,
+      'ruler.ring.prefix':: null,
+      'ruler.ring.store': 'memberlist',
+      // Remove ruler limits configuration.
+      'ruler.max-rule-groups-per-tenant':: null,
+      'ruler.max-rules-per-rule-group':: null,
       'store-gateway.sharding-ring.consul.hostname':: null,
       'store-gateway.sharding-ring.prefix':: null,
       'store-gateway.sharding-ring.store': 'memberlist',
@@ -68,6 +92,8 @@ local util = (import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonne
 
 // removeNamespaceReferences removes the cluster domain and namespace from container arguments.
 local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg, '.namespace.svc.cluster.local', ''), args);
+
+
 {
   '#':: d.pkg(
     name='enterprise-metrics',
@@ -81,7 +107,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#commonArgs':: d.obj('`commonArgs` is a convenience field that can be used to modify the container arguments of all modules as key-value pairs.'),
     commonArgs:: {
       'auth.type': 'enterprise',
-      'admin.client.backend-type': error 'must set the `admin.client.backend-type` flag to an object storage backend ("gcs"|"s3")',
+      'admin.client.backend-type': error 'you must set the `admin.client.backend-type` flag to an object storage backend ("gcs"|"s3")',
       'admin.client.gcs.bucket-name': 'admin',
       'admin.client.s3.bucket-name': 'admin',
       '#auth.enabled':: d.val(default=self['auth.enabled'], help='`auth.enabled` enables the tenant authentication', type=d.T.bool),
@@ -93,7 +119,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
           `default` uses Cortex authentication.
         |||, type=d.T.bool
       ),
-      'blocks-storage.backend': error 'must set the `blocks-storage.backend` flag to an object storage backend ("gcs"|"s3")',
+      'blocks-storage.backend': error 'you must set the `blocks-storage.backend` flag to an object storage backend ("gcs"|"s3")',
       'blocks-storage.gcs.bucket-name': 'tsdb',
       'blocks-storage.s3.bucket-name': 'tsdb',
       '#cluster-name':: d.val(
@@ -101,7 +127,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         help='`cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.',
         type=d.T.string
       ),
-      'cluster-name': error 'must set the `cluster-name` flag to the cluster name associated with your Grafana Enterprise Metrics license',
+      'cluster-name': error 'you must set the `cluster-name` flag to the cluster name associated with your Grafana Enterprise Metrics license',
       '#memberlist.join':: d.val(
         default=self['memberlist.join'],
         help='`memberlist.join` is an address used to find memberlist peers for ring gossip',
@@ -173,6 +199,42 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       util.serviceFor(self.deployment),
   },
 
+  '#alertmanager':: d.obj('`alertmanager` has configuration for the alertmanager. To disable the alertmanager, ensure the alertmanager object field is hidden'),
+  alertmanager: {
+    local alertmanager = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the alertmanager container arguments as key-value pairs.'),
+    args:: cortex.alertmanager_args + this._config.commonArgs + {
+      'alertmanager-storage.backend':
+        if 'alertmanager-storage.backend' in super then
+          super['alertmanager-storage.backend']
+        else error 'you must set the `alertmanager-storage.backend` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
+      '#alertmanager-storage.s3.bucket-name':: d.val(
+        default=self['alertmanager-storage.s3.bucket-name'],
+        help='`alertmanager-storage.s3.bucket-name` is the name of the bucket in which the alertmanager data will be stored.',
+        type=d.T.string
+      ),
+      'alertmanager-storage.s3.bucket-name': 'alertmanager',
+      'alertmanager.web.external-url': error 'you must set the `alertmanager.web.external-url` flag in order to run an Alertmanager.',
+    },
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the alertmanager container.'),
+    container::
+      cortex.alertmanager_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(alertmanager.args)))
+      + container.withImage(this._images.gem),
+    '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the alertmanager.'),
+    statefulSet:
+      cortex.alertmanager_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      + statefulSet.spec.selector.withMatchLabelsMixin({ name: 'alertmanager' })
+      + statefulSet.spec.template.metadata.withLabelsMixin({ name: 'alertmanager', gossip_ring_member: 'true' })
+      + statefulSet.spec.template.spec.withContainers([alertmanager.container])
+      // Remove Cortex volumes.
+      + statefulSet.spec.template.spec.withVolumes([])
+      // Replace with GEM volumes.
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+    '#service':: d.obj('`service` is the Kubernetes Service for the alertmanager.'),
+    service: util.serviceFor(self.statefulSet),
+  },
+
   '#compactor':: d.obj('`compactor` has configuration for the compactor.'),
   compactor: {
     local compactor = self,
@@ -231,11 +293,19 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       '#gateway.proxy.distributor.url':: d.val(
         default=self['gateway.proxy.distributor.url'], help='`gateway.proxy.distributor.url is the upstream URL of the distributor.', type=d.T.string
       ),
+      '#gateway.proxy.alertmanager.url':: d.val(
+        default=self['gateway.proxy.alertmanager.url'], help='`gateway.proxy.alertmanager.url is the upstream URL of the alertmanager.', type=d.T.string
+      ),
+      'gateway.proxy.alertmanager.url': 'http://alertmanager',
       'gateway.proxy.distributor.url': 'dns:///distributor:9095',
       '#gateway.proxy.ingester.url':: d.val(
         default=self['gateway.proxy.ingester.url'], help='`gateway.proxy.ingester.url is the upstream URL of the ingester.', type=d.T.string
       ),
       'gateway.proxy.ingester.url': 'http://ingester',
+      '#gateway.proxy.ruler.url':: d.val(
+        default=self['gateway.proxy.ruler.url'], help='`gateway.proxy.ruler.url is the upstream URL of the ruler.', type=d.T.string
+      ),
+      'gateway.proxy.ruler.url': 'http://ruler',
       '#gateway.proxy.query-frontend.url':: d.val(
         default=self['gateway.proxy.query-frontend.url'], help='`gateway.proxy.query-frontend.url is the upstream URL of the query-frontend.', type=d.T.string
       ),
@@ -361,6 +431,41 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       cortex.query_frontend_discovery_service,
   },
 
+  '#ruler':: d.obj('`ruler` has configuration for the ruler.'),
+  ruler: {
+    local ruler = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the ruler container arguments as key-value pairs.'),
+    args:: cortex.ruler_args + this._config.commonArgs + {
+      'ruler-storage.backend':
+        if 'ruler-storage.backend' in super then
+          super['ruler.storage.backend'] else
+          error 'you must set the `ruler.storage.backend` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
+      '#ruler-storage.s3.bucket-name':: d.val(
+        default=self['ruler-storage.s3.bucket-name'],
+        help='`ruler-storage.s3.bucket-name` is the name of the bucket in which the ruler data will be stored.',
+        type=d.T.string
+      ),
+      'ruler-storage.s3.bucket-name': 'ruler',
+    },
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the ruler container.'),
+    container::
+      cortex.ruler_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(ruler.args)))
+      + container.withImage(this._images.gem),
+    '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the ruler.'),
+    deployment:
+      cortex.ruler_deployment
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'ruler' })
+      + deployment.spec.template.metadata.withLabelsMixin({ name: 'ruler', gossip_ring_member: 'true' })
+      + deployment.spec.template.spec.withContainers([ruler.container])
+      // Remove Cortex volumes.
+      + deployment.spec.template.spec.withVolumes([])
+      // Replace with GEM volumes.
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+    '#service':: d.obj('`service` is the Kubernetes Service for the ruler.'),
+    service: util.serviceFor(self.deployment),
+  },
+
   '#runtime':: d.obj('`runtime` has configuration for runtime overrides.'),
   runtime: {
     local runtime = self,
@@ -399,8 +504,11 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     service: util.serviceFor(self.statefulSet),
   },
 
-  '#tokengen':: d.obj('`tokengen` has configuration for tokengen.'),
-  tokengen: {
+  '#tokengen':: d.obj(|||
+    `tokengen` has configuration for tokengen.
+    By default the tokengen object is hidden as it is a one-off task. To deploy the tokengen job, unhide the tokengen object field.
+  |||),
+  tokengen:: {
     local target = 'tokengen',
     '#args':: d.obj('`args` is convenience field for modifying the tokegen container arguments as key-value pairs.'),
     args:: this._config.commonArgs {
