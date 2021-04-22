@@ -329,18 +329,17 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ## obj alertmanager
 
-`alertmanager` has configuration for the alertmanager. To disable the alertmanager, ensure the ruler object field is hidden
+`alertmanager` has configuration for the alertmanager. To disable the alertmanager, ensure the alertmanager object field is hidden
 
 ## obj alertmanager.args
 
 `args` is a convenience field that can be used to modify the alertmanager container arguments as key-value pairs.
 
-
 ### string alertmanager.args.alertmanager-storage.s3.bucket-name
 
 *Default value: * `alertmanager`
 
-`alertmanager-storage.s3.bucket-name` is name of the bucket in which the alertmanager data will be stored.
+`alertmanager-storage.s3.bucket-name` is the name of the bucket in which the alertmanager data will be stored.
 
 ### bool alertmanager.args.auth.enabled
 
@@ -788,7 +787,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 *Default value: * `ruler`
 
-`ruler-storage.s3.bucket-name` is name of the bucket in which the ruler data will be stored.
+`ruler-storage.s3.bucket-name` is the name of the bucket in which the ruler data will be stored.
 
 ### string ruler.args.runtime-config.file
 

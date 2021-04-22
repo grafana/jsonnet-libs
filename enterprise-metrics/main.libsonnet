@@ -196,7 +196,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       util.serviceFor(self.deployment),
   },
 
-  '#alertmanager':: d.obj('`alertmanager` has configuration for the alertmanager. To disable the alertmanager, ensure the ruler object field is hidden'),
+  '#alertmanager':: d.obj('`alertmanager` has configuration for the alertmanager. To disable the alertmanager, ensure the alertmanager object field is hidden'),
   alertmanager: {
     local alertmanager = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the alertmanager container arguments as key-value pairs.'),
@@ -207,7 +207,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         else error 'you must set the `alertmanager-storage.backend` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
       '#alertmanager-storage.s3.bucket-name':: d.val(
         default=self['alertmanager-storage.s3.bucket-name'],
-        help='`alertmanager-storage.s3.bucket-name` is name of the bucket in which the alertmanager data will be stored.',
+        help='`alertmanager-storage.s3.bucket-name` is the name of the bucket in which the alertmanager data will be stored.',
         type=d.T.string
       ),
       'alertmanager-storage.s3.bucket-name': 'alertmanager',
@@ -439,7 +439,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
           error 'you must set the `ruler.storage.backend` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
       '#ruler-storage.s3.bucket-name':: d.val(
         default=self['ruler-storage.s3.bucket-name'],
-        help='`ruler-storage.s3.bucket-name` is name of the bucket in which the ruler data will be stored.',
+        help='`ruler-storage.s3.bucket-name` is the name of the bucket in which the ruler data will be stored.',
         type=d.T.string
       ),
       'ruler-storage.s3.bucket-name': 'ruler',
