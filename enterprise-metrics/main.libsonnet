@@ -290,6 +290,10 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         default=self['gateway.proxy.admin-api.url'], help='`gateway.proxy.admin-api.url is the upstream URL of the admin-api.', type=d.T.string
       ),
       'gateway.proxy.admin-api.url': 'http://admin-api',
+      '#gateway.proxy.compactor.url':: d.val(
+        default=self['gateway.proxy.compactor.url'], help='`gateway.proxy.compactor.url is the upstream URL of the compactor.', type=d.T.string
+      ),
+      'gateway.proxy.compactor.url': 'http://compactor',
       '#gateway.proxy.distributor.url':: d.val(
         default=self['gateway.proxy.distributor.url'], help='`gateway.proxy.distributor.url is the upstream URL of the distributor.', type=d.T.string
       ),
