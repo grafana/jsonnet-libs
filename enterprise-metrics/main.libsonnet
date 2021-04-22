@@ -439,7 +439,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       'ruler-storage.backend':
         if 'ruler-storage.backend' in super then
           super['ruler.storage.backend'] else
-          error 'you must set the `ruler.storage.backend` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
+          error 'you must set the `ruler-storage.backend` flag to an object storage backend ("azure"|"local"|"gcs"|"s3")',
       '#ruler-storage.s3.bucket-name':: d.val(
         default=self['ruler-storage.s3.bucket-name'],
         help='`ruler-storage.s3.bucket-name` is the name of the bucket in which the ruler data will be stored.',
