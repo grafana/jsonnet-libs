@@ -165,7 +165,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       g.panel.stat.new()
       + $.panels.infoMixin {
         title: 'Uptime',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Process uptime',
         fieldConfig+: { defaults+: { unit: 's' } },
         targets: $.util.addRefIds([{ expr: $.queries.processUptime }]),
@@ -175,7 +175,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       g.panel.stat.new()
       + $.panels.infoMixin {
         title: 'Current connections',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Number of active sessions',
         targets: $.util.addRefIds([{ expr: $.queries.processCurrentConnections }]),
       },
@@ -184,7 +184,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       g.panel.stat.new()
       + $.panels.infoMixin {
         title: 'Memory allocated',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Total amount of memory allocated in pools',
         fieldConfig+: { defaults+: { unit: 'bytes' } },
         targets: $.util.addRefIds([{ expr: $.queries.processMemoryAllocated }]),
@@ -194,7 +194,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       g.panel.stat.new()
       + $.panels.infoMixin {
         title: 'Memory used',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Total amount of memory used in pools',
         fieldConfig+: { defaults+: { unit: 'bytes' } },
         targets: $.util.addRefIds([{ expr: $.queries.processMemoryUsed }]),
@@ -204,7 +204,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       g.panel.stat.new()
       + $.panels.infoMixin {
         title: 'Threads',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Configured number of threads',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processThreads }]),
@@ -214,7 +214,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       g.panel.stat.new()
       + $.panels.infoMixin {
         title: 'Processes',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Configured number of processes',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processCount }]),
@@ -225,7 +225,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       + $.panels.infoMixin
       + $.panels.zeroUnsetMixin {
         title: 'Connections limit',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Configured maximum number of concurrent connections',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processConnectionLimit }]),
@@ -236,7 +236,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       + $.panels.infoMixin
       + $.panels.zeroUnsetMixin {
         title: 'Memory limit',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Per-process memory limit',
         fieldConfig+: { defaults+: { unit: 'bytes' } },
         options+: { graphMode: 'none' },
@@ -248,7 +248,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       + $.panels.infoMixin
       + $.panels.zeroUnsetMixin {
         title: 'File descriptors limit',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Maximum number of open file descriptors',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processFdLimit }]),
@@ -259,7 +259,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       + $.panels.infoMixin
       + $.panels.zeroUnsetMixin {
         title: 'Socket limit',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Maximum number of open sockets',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processSocketLimit }]),
@@ -270,7 +270,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       + $.panels.infoMixin
       + $.panels.zeroUnsetMixin {
         title: 'Pipe limit',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Maximum number of pipes',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processPipeLimit }]),
@@ -281,7 +281,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       + $.panels.infoMixin
       + $.panels.zeroUnsetMixin {
         title: 'Connection rate limit',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Maximum number of connections per second',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processConnectionRateLimit }]),
@@ -292,7 +292,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       + $.panels.infoMixin
       + $.panels.zeroUnsetMixin {
         title: 'Session rate limit',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Maximum number of sessions per second',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processSessionRateLimit }]),
@@ -303,7 +303,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       + $.panels.infoMixin
       + $.panels.zeroUnsetMixin {
         title: 'SSL session rate limit',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Maximum number of SSL sessions per second',
         options+: { graphMode: 'none' },
         targets: $.util.addRefIds([{ expr: $.queries.processSslRateLimit }]),
@@ -316,7 +316,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
           defaults+: {
             links: [{
               title: 'Frontend',
-              datasource: $._config.datasource,
+              datasource: '$datasource',
               url: '/d/HAProxyFrontend/haproxy-frontend?${__all_variables}&var-frontend=${__data.fields.Frontend}',
             }],
           },
@@ -354,7 +354,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
           defaults+: {
             links: [{
               title: 'Backend',
-              datasource: $._config.datasource,
+              datasource: '$datasource',
               url: '/d/HAProxyBackend/haproxy-backend?${__all_variables}&var-backend=${__data.fields.Backend}',
             }],
           },
@@ -390,7 +390,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
           defaults+: {
             links: [{
               title: 'Server',
-              datasource: $._config.datasource,
+              datasource: '$datasource',
               url: '/d/HAProxyServer/haproxy-server?${__all_variables}&var-server=${__data.fields.Server}',
             }],
           },
@@ -424,19 +424,30 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     frontendCacheSuccessRate:
       g.panel.graph.new() + {
         title: 'Cache success',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Percentage of HTTP cache hits.',
         fieldConfig: { defaults: { unit: 'reqps' } },
-        targets: $.util.addRefIds([{ expr: $.queries.frontendCacheSuccessRate }]),
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.frontendCacheSuccessRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     frontendRequestErrorRate:
       g.panel.graph.new() + {
         title: 'Requests',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Request errors per second',
-        targets: $.util.addRefIds([{ expr: $.queries.frontendRequestErrorRate }]),
+        fieldConfig: { defaults: { unit: 'errps' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.frontendRequestErrorRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         stack: true,
         yaxes: [{ min: 0 }, { min: 0 }],
       },
@@ -444,29 +455,45 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     frontendHttpRequestRate:
       g.panel.graph.new() + {
         title: 'HTTP',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'HTTP requests per second',
         fieldConfig: { defaults: { unit: 'reqps' } },
-        targets: $.util.addRefIds([{ expr: $.queries.frontendHttpRequestRate }]),
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.frontendHttpRequestRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     frontendConnectionRate:
       g.panel.graph.new() + {
         title: 'Connections',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Connections per second',
         fieldConfig: { defaults: { unit: 'connps' } },
-        targets: $.util.addRefIds([{ expr: $.queries.frontendConnectionRate }]),
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.frontendConnectionRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     frontendInternalErrorRate:
       g.panel.graph.new() + {
         title: 'Internal',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Internal errors per second',
-        targets: $.util.addRefIds([{ expr: $.queries.frontendInternalErrorRate }]),
+        fieldConfig: { defaults: { unit: 'errps' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.frontendInternalErrorRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         stack: true,
         yaxes: [{ min: 0 }, { min: 0 }],
       },
@@ -474,16 +501,16 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     frontendBytes:
       g.panel.graph.new() + {
         title: 'Bytes in/out',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         fieldConfig: { defaults: { unit: 'bytes' } },
         targets: $.util.addRefIds([
           {
             expr: $.queries.frontendBytesInRate,
-            legendFormat: 'in{instance="{{instance}}", job="{{job}}", frontend="{{proxy}}"}',
+            legendFormat: '{{proxy}}:in',
           },
           {
             expr: $.queries.frontendBytesOutRate,
-            legendFormat: 'out{instance="{{instance}}", job="{{job}}", frontend="{{proxy}}"}',
+            legendFormat: '{{proxy}}:out',
           },
         ]),
         seriesOverrides: [{ alias: '/.*out.*/', transform: 'negative-Y' }],
@@ -492,31 +519,40 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     backendHttpRequestRate:
       g.panel.graph.new() + {
         title: 'HTTP',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'HTTP requests per second. There will be no data for backends using tcp mode.',
         fieldConfig: { defaults: { unit: 'reqps' } },
-        targets: $.util.addRefIds([{ expr: $.queries.backendHttpRequestRate }]),
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.backendHttpRequestRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     backendMaxDuration:
       g.panel.graph.new() {
         title: 'Max duration',
-        datasource: $._config.datasource,
-        description: 'Max duration for last 1024 succesful connections',
+        datasource: '$datasource',
+        description: 'Max duration for last 1024 successful connections',
         fieldConfig: { defaults: { unit: 's' } },
         targets: $.util.addRefIds([
           {
             expr: $.queries.backendMaxQueueDuration,
+            legendFormat: '{{proxy}}:max queue time',
           },
           {
             expr: $.queries.backendMaxConnectDuration,
+            legendFormat: '{{proxy}}:max connect time',
           },
           {
             expr: $.queries.backendMaxResponseDuration,
+            legendFormat: '{{proxy}}:max response time',
           },
           {
             expr: $.queries.backendMaxTotalDuration,
+            legendFormat: '{{proxy}}:max total time',
           },
         ]),
         yaxes: [{ min: 0 }, { min: 0 }],
@@ -525,24 +561,25 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     backendAverageDuration:
       g.panel.graph.new() {
         title: 'Average duration',
-        datasource: $._config.datasource,
-        description: 'Average duration for last 1024 succesful connections',
+        datasource: '$datasource',
+        description: 'Average duration for last 1024 successful connections',
         fieldConfig: { defaults: { unit: 's' } },
         targets: $.util.addRefIds([
           {
             expr: $.queries.backendAverageQueueDuration,
+            legendFormat: '{{proxy}}:avg queue time',
           },
           {
             expr: $.queries.backendAverageConnectDuration,
+            legendFormat: '{{proxy}}:avg connect time',
           },
           {
             expr: $.queries.backendAverageResponseDuration,
+            legendFormat: '{{proxy}}:avg response time',
           },
           {
             expr: $.queries.backendAverageTotalDuration,
-          },
-          {
-            expr: $.queries.backendAverageQueueDuration,
+            legendFormat: '{{proxy}}:avg total time',
           },
         ]),
         yaxes: [{ min: 0 }, { min: 0 }],
@@ -551,28 +588,45 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     backendConnectionRate:
       g.panel.graph.new() {
         title: 'Connection',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Attempted connections per second',
         fieldConfig: { defaults: { unit: 'connps' } },
-        targets: $.util.addRefIds([{ expr: $.queries.backendConnectionRate }]),
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.backendConnectionRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     backendResponseErrorRate:
       g.panel.graph.new() {
         title: 'HTTP',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'HTTP response errors per second',
-        targets: $.util.addRefIds([{ expr: $.queries.backendResponseErrorRate }]),
+        fieldConfig: { defaults: { unit: 'errps' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.backendResponseErrorRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     backendConnectionErrorRate:
       g.panel.graph.new() {
         title: 'Connection',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Connection errors per second',
-        targets: $.util.addRefIds([{ expr: $.queries.backendConnectionErrorRate }]),
+        fieldConfig: { defaults: { unit: 'errps' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.backendConnectionErrorRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         stack: true,
         yaxes: [{ min: 0 }, { min: 0 }],
       },
@@ -580,9 +634,15 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     backendInternalErrorRate:
       g.panel.graph.new() {
         title: 'Internal',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Internal errors per second',
-        targets: $.util.addRefIds([{ expr: $.queries.backendInternalErrorRate }]),
+        fieldConfig: { defaults: { unit: 'errps' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.backendInternalErrorRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         stack: true,
         yaxes: [{ min: 0 }, { min: 0 }],
       },
@@ -590,16 +650,16 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     backendBytes:
       g.panel.graph.new() {
         title: 'Bytes in/out',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         fieldConfig: { defaults: { unit: 'bytes' } },
         targets: $.util.addRefIds([
           {
             expr: $.queries.backendBytesInRate,
-            legendFormat: 'in{instance="{{instance}}", job="{{job}}", backend="{{proxy}}"}',
+            legendFormat: '{{proxy}}:in',
           },
           {
             expr: $.queries.backendBytesOutRate,
-            legendFormat: 'out{instance="{{instance}}", job="{{job}}", backend="{{proxy}}"}',
+            legendFormat: '{{proxy}}:out',
           },
         ]),
         seriesOverrides: [{ alias: '/.*out.*/', transform: 'negative-Y' }],
@@ -608,31 +668,40 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     serverHttpResponseRate:
       g.panel.graph.new() + {
         title: 'HTTP Response',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'HTTP responses per second. There will be no data for servers using tcp mode.',
         fieldConfig: { defaults: { unit: 'reqps' } },
-        targets: $.util.addRefIds([{ expr: $.queries.serverHttpResponseRate }]),
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.serverHttpResponseRate,
+            legendFormat: '{{proxy}}:{{code}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     serverMaxDuration:
       g.panel.graph.new() + {
         title: 'Max duration',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Max duration for last 1024 succesful connections',
         fieldConfig: { defaults: { unit: 's' } },
         targets: $.util.addRefIds([
           {
             expr: $.queries.serverMaxQueueDuration,
+            legendFormat: '{{proxy}}:max queue time',
           },
           {
             expr: $.queries.serverMaxConnectDuration,
+            legendFormat: '{{proxy}}:max connect time',
           },
           {
             expr: $.queries.serverMaxResponseDuration,
+            legendFormat: '{{proxy}}:max response time',
           },
           {
             expr: $.queries.serverMaxTotalDuration,
+            legendFormat: '{{proxy}}:max total time',
           },
         ]),
         yaxes: [{ min: 0 }, { min: 0 }],
@@ -641,21 +710,25 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     serverAverageDuration:
       g.panel.graph.new() + {
         title: 'Average duration',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Average duration for last 1024 succesful connections',
         fieldConfig: { defaults: { unit: 's' } },
         targets: $.util.addRefIds([
           {
             expr: $.queries.serverAverageQueueDuration,
+            legendFormat: '{{proxy}}:avg queue time',
           },
           {
             expr: $.queries.serverAverageConnectDuration,
+            legendFormat: '{{proxy}}:avg connect time',
           },
           {
             expr: $.queries.serverAverageResponseDuration,
+            legendFormat: '{{proxy}}:avg response time',
           },
           {
             expr: $.queries.serverAverageTotalDuration,
+            legendFormat: '{{proxy}}:avg total time',
           },
         ]),
         yaxes: [{ min: 0 }, { min: 0 }],
@@ -664,28 +737,45 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     serverConnectionRate:
       g.panel.graph.new() + {
         title: 'Connection',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Attempted connections per second',
         fieldConfig: { defaults: { unit: 'connps' } },
-        targets: $.util.addRefIds([{ expr: $.queries.serverConnectionRate }]),
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.serverConnectionRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     serverResponseErrorRate:
       g.panel.graph.new() + {
         title: 'HTTP Response',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Response errors per second',
-        targets: $.util.addRefIds([{ expr: $.queries.serverResponseErrorRate }]),
+        fieldConfig: { defaults: { unit: 'errps' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.serverResponseErrorRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         yaxes: [{ min: 0 }, { min: 0 }],
       },
 
     serverConnectionErrorRate:
       g.panel.graph.new() + {
         title: 'Connection',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Connection errors per second',
-        targets: $.util.addRefIds([{ expr: $.queries.serverConnectionErrorRate }]),
+        fieldConfig: { defaults: { unit: 'errps' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.serverConnectionErrorRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         stack: true,
         yaxes: [{ min: 0 }, { min: 0 }],
       },
@@ -693,9 +783,15 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     serverInternalErrorRate:
       g.panel.graph.new() + {
         title: 'Internal',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         description: 'Internal errors per second',
-        targets: $.util.addRefIds([{ expr: $.queries.serverInternalErrorRate }]),
+        fieldConfig: { defaults: { unit: 'errps' } },
+        targets: $.util.addRefIds([
+          {
+            expr: $.queries.serverInternalErrorRate,
+            legendFormat: '{{proxy}}',
+          },
+        ]),
         stack: true,
         yaxes: [{ min: 0 }, { min: 0 }],
       },
@@ -703,16 +799,16 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     serverBytes:
       g.panel.graph.new() + {
         title: 'Bytes in/out',
-        datasource: $._config.datasource,
+        datasource: '$datasource',
         fieldConfig: { defaults: { unit: 'bytes' } },
         targets: $.util.addRefIds([
           {
             expr: $.queries.serverBytesInRate,
-            legendFormat: 'in{instance="{{instance}}", job="{{job}}", backend="{{proxy}}", server="{{server}}"}',
+            legendFormat: '{{proxy}}:{{server}}:in',
           },
           {
             expr: $.queries.serverBytesOutRate,
-            legendFormat: 'out{instance="{{instance}}", job="{{job}}", backend="{{proxy}}", server="{{server}}"}',
+            legendFormat: '{{proxy}}:{{server}}:out',
           },
         ]),
         seriesOverrides: [{ alias: '/.*out.*/', transform: 'negative-Y' }],
@@ -725,14 +821,14 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
       name: 'datasource',
       query: $._config.datasource,
       current: {
-        selected: true,
+        selected: false,
         text: 'prometheus',
         value: 'prometheus',
       },
     },
     instance: g.template.query.new() + {
       name: 'instance',
-      datasource: $._config.datasource,
+      datasource: '$datasource',
       definition: 'label_values(haproxy_process_start_time_seconds, instance)',
       includeAll: true,
       multi: true,
@@ -741,7 +837,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     },
     job: g.template.query.new() + {
       name: 'job',
-      datasource: $._config.datasource,
+      datasource: '$datasource',
       definition: 'label_values(haproxy_process_start_time_seconds, job)',
       includeAll: true,
       multi: true,
@@ -750,7 +846,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     },
     backend: g.template.query.new() + {
       name: 'backend',
-      datasource: $._config.datasource,
+      datasource: '$datasource',
       definition: 'label_values(haproxy_backend_status, proxy)',
       includeAll: true,
       multi: true,
@@ -759,7 +855,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     },
     frontend: g.template.query.new() + {
       name: 'frontend',
-      datasource: $._config.datasource,
+      datasource: '$datasource',
       definition: 'label_values(haproxy_frontend_status, proxy)',
       includeAll: true,
       multi: true,
@@ -768,7 +864,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     },
     server: g.template.query.new() + {
       name: 'server',
-      datasource: $._config.datasource,
+      datasource: '$datasource',
       definition: 'label_values(haproxy_server_status, server)',
       includeAll: true,
       multi: true,
