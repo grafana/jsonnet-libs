@@ -21,7 +21,7 @@
          "bars": false,
          "dashLength": 10,
          "dashes": false,
-         "datasource": "prometheus",
+         "datasource": "$datasource",
          "description": "HTTP requests per second",
          "fieldConfig": {
             "defaults": {
@@ -50,6 +50,7 @@
          "targets": [
             {
                "expr": "rate(haproxy_frontend_http_requests_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "legendFormat": "{{proxy}}",
                "refID": "A"
             }
          ],
@@ -72,7 +73,7 @@
          "bars": false,
          "dashLength": 10,
          "dashes": false,
-         "datasource": "prometheus",
+         "datasource": "$datasource",
          "description": "Connections per second",
          "fieldConfig": {
             "defaults": {
@@ -101,6 +102,7 @@
          "targets": [
             {
                "expr": "rate(haproxy_frontend_connections_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "legendFormat": "{{proxy}}",
                "refID": "A"
             }
          ],
@@ -123,7 +125,7 @@
          "bars": false,
          "dashLength": 10,
          "dashes": false,
-         "datasource": "prometheus",
+         "datasource": "$datasource",
          "fieldConfig": {
             "defaults": {
                "unit": "bytes"
@@ -157,12 +159,12 @@
          "targets": [
             {
                "expr": "rate(haproxy_frontend_bytes_in_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
-               "legendFormat": "in{instance=\"{{instance}}\", job=\"{{job}}\", frontend=\"{{proxy}}\"}",
+               "legendFormat": "{{proxy}}:in",
                "refID": "A"
             },
             {
                "expr": "rate(haproxy_frontend_bytes_out_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
-               "legendFormat": "out{instance=\"{{instance}}\", job=\"{{job}}\", frontend=\"{{proxy}}\"}",
+               "legendFormat": "{{proxy}}:out",
                "refID": "B"
             }
          ],
@@ -192,8 +194,13 @@
          "bars": false,
          "dashLength": 10,
          "dashes": false,
-         "datasource": "prometheus",
+         "datasource": "$datasource",
          "description": "Request errors per second",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "errps"
+            }
+         },
          "fill": 1,
          "fillGradient": 0,
          "gridPos": {
@@ -216,6 +223,7 @@
          "targets": [
             {
                "expr": "rate(haproxy_frontend_request_errors_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "legendFormat": "{{proxy}}",
                "refID": "A"
             }
          ],
@@ -238,8 +246,13 @@
          "bars": false,
          "dashLength": 10,
          "dashes": false,
-         "datasource": "prometheus",
+         "datasource": "$datasource",
          "description": "Internal errors per second",
+         "fieldConfig": {
+            "defaults": {
+               "unit": "errps"
+            }
+         },
          "fill": 1,
          "fillGradient": 0,
          "gridPos": {
@@ -262,6 +275,7 @@
          "targets": [
             {
                "expr": "rate(haproxy_frontend_internal_errors_total{instance=~\"$instance\",job=~\"$job\",proxy=~\"$frontend\"}[$__rate_interval])",
+               "legendFormat": "{{proxy}}",
                "refID": "A"
             }
          ],
@@ -288,7 +302,7 @@
       "list": [
          {
             "current": {
-               "selected": true,
+               "selected": false,
                "text": "prometheus",
                "value": "prometheus"
             },
@@ -302,7 +316,7 @@
             "type": "datasource"
          },
          {
-            "datasource": "prometheus",
+            "datasource": "$datasource",
             "definition": "label_values(haproxy_process_start_time_seconds, instance)",
             "hide": 0,
             "includeAll": true,
@@ -316,7 +330,7 @@
             "useTags": false
          },
          {
-            "datasource": "prometheus",
+            "datasource": "$datasource",
             "definition": "label_values(haproxy_process_start_time_seconds, job)",
             "hide": 0,
             "includeAll": true,
@@ -330,7 +344,7 @@
             "useTags": false
          },
          {
-            "datasource": "prometheus",
+            "datasource": "$datasource",
             "definition": "label_values(haproxy_frontend_status, proxy)",
             "hide": 0,
             "includeAll": true,
