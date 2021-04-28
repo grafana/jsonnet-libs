@@ -57,6 +57,11 @@
       policyRule.withVerbs(['list', 'watch']),
 
       policyRule.new() +
+      policyRule.withApiGroups(['authorization.k8s.io']) +
+      policyRule.withResources(['subjectaccessreviews']) +
+      policyRule.withVerbs(['create']),
+
+      policyRule.new() +
       policyRule.withApiGroups(['ingresses']) +
       policyRule.withResources(['ingress']) +
       policyRule.withVerbs(['list', 'watch']),
@@ -69,6 +74,35 @@
       policyRule.new() +
       policyRule.withApiGroups(['certificates.k8s.io']) +
       policyRule.withResources(['certificatesigningrequests']) +
+      policyRule.withVerbs(['list', 'watch']),
+
+      policyRule.new() +
+      policyRule.withApiGroups(['storage.k8s.io']) +
+      policyRule.withResources([
+        'storageclasses',
+        'volumeattachments',
+      ]) +
+      policyRule.withVerbs(['list', 'watch']),
+
+      policyRule.new() +
+      policyRule.withApiGroups(['admissionregistration.k8s.io']) +
+      policyRule.withResources([
+        'mutatingwebhookconfigurations',
+        'validatingwebhookconfigurations',
+      ]) +
+      policyRule.withVerbs(['list', 'watch']),
+
+      policyRule.new() +
+      policyRule.withApiGroups(['networking.k8s.io']) +
+      policyRule.withResources([
+        'networkpolicies',
+        'ingresses',
+      ]) +
+      policyRule.withVerbs(['list', 'watch']),
+
+      policyRule.new() +
+      policyRule.withApiGroups(['coordination.k8s.io']) +
+      policyRule.withResources(['leases']) +
       policyRule.withVerbs(['list', 'watch']),
     ]),
 
