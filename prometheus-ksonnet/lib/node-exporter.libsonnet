@@ -8,7 +8,7 @@
       '--path.procfs=/host/proc',
       '--path.sysfs=/host/sys',
 
-      '--collector.netdev.ignored-devices=^veth.+$',
+      '--collector.netdev.device-exclude=^veth.+$',
 
       // We run an older version due to the renamed metrics.  There ignores are from newer version.
       '--collector.filesystem.ignored-fs-types=^(tmpfs|autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$',
