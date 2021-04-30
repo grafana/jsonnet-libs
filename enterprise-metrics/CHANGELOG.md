@@ -13,6 +13,7 @@ Entries should include a reference to the Pull Request that introduced the chang
 ## Unreleased
 
 - [CHANGE] The tokengen configuration is now hidden by default to avoid confusing errors when immutable fields are changed. #541
+- [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.3.0](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v130----april-26th-2021). #552
 - [FEATURE] Alertmanager and ruler Kubernetes App manifests are now included. #541
 - [BUGFIX] The `gossip-ring` Service now publishes not ready addresses. #523
 - [BUGFIX] All ring members now have the `gossip_ring-member` label set. #523
