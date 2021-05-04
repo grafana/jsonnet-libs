@@ -3,6 +3,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 k {
   _config+:: {
     consul_replicas: 3,
+    consul_exporter_timeout: '1s',
   },
 
   _images+:: {
@@ -289,7 +290,7 @@ k {
     container.withArgs([
       '--consul.server=localhost:8500',
       '--web.listen-address=:9107',
-      '--consul.timeout=1s',
+      '--consul.timeout=%s' % $._config.consul_exporter_timeout,
     ]) +
     container.withPorts(containerPort.new('http-metrics', 9107)),
 
