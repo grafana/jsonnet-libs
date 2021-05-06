@@ -111,6 +111,14 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       'admin.client.s3.bucket-name': 'admin',
       '#auth.enabled':: d.val(default=self['auth.enabled'], help='`auth.enabled` enables the tenant authentication', type=d.T.bool),
       'auth.enabled': true,
+      '#auth.type':: d.val(
+        default=self['auth.type'], help=|||
+          `auth.type` configures the type of authentication in use.
+          `enterprise` uses Grafana Enterprise token authentication.
+          `default` uses Cortex authentication.
+        |||, type=d.T.bool
+      ),
+      'auth.type': 'enterprise',
       'blocks-storage.backend': error 'you must set the `blocks-storage.backend` flag to an object storage backend ("gcs"|"s3")',
       'blocks-storage.gcs.bucket-name': 'tsdb',
       'blocks-storage.s3.bucket-name': 'tsdb',
@@ -278,14 +286,6 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   gateway: {
     '#args':: d.obj('`args` is a convenience field that can be used to modify the gateway container arguments as key-value pairs.'),
     args:: this._config.commonArgs {
-      '#auth.type':: d.val(
-        default=self['auth.type'], help=|||
-          `auth.type` configures the type of authentication in use.
-          `enterprise` uses Grafana Enterprise token authentication.
-          `default` uses Cortex authentication.
-        |||, type=d.T.bool
-      ),
-      'auth.type': 'enterprise',
       '#gateway.proxy.admin-api.url':: d.val(
         default=self['gateway.proxy.admin-api.url'], help='`gateway.proxy.admin-api.url is the upstream URL of the admin-api.', type=d.T.string
       ),
@@ -390,7 +390,10 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   querier: {
     local querier = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.'),
-    args:: cortex.querier_args + this._config.commonArgs,
+    args:: cortex.querier_args + this._config.commonArgs {
+      // Disable enterprise authentication on the querier so that query_range queries succeed.
+      'auth.type': 'default',
+    },
     '#container':: d.obj('`container` is a convenience field that can be used to modify the querier container.'),
     container::
       cortex.querier_container
