@@ -26,8 +26,8 @@
         users: {
           default_theme: 'light',
         },
-        explore+: {
-          enabled: true,
+        feature_toggle: {
+          enable: 'http_request_histogram, database_metrics',
         },
       },
     },
