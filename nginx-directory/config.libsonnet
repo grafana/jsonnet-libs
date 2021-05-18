@@ -2,6 +2,7 @@
   _config+:: {
     namespace: error 'namespace required',
     cluster_dns_suffix: error 'cluster_dns_suffix required',
+    title: 'Admin',
 
     admin_services+: [
       // an entry should look like this:
