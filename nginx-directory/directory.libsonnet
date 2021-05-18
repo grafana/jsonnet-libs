@@ -77,6 +77,6 @@ local link_data = import 'link_data.libsonnet';
   // backwards compatible
   oauth2_proxy:
     if this._config.oauth_enabled
-    then this.withOAuth2Proxy(this._config)
+    then this.withOAuth2Proxy(this._config).oauth2_proxy
     else {},
 }
