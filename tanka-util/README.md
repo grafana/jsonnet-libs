@@ -83,6 +83,8 @@ Kustomize functionality.
   * [`fn withLabelsMixin(labels)`](#fn-environmentwithlabelsmixin)
   * [`fn withName(name)`](#fn-environmentwithname)
   * [`fn withNamespace(namespace)`](#fn-environmentwithnamespace)
+  * [`fn withResourceDefaults(labels)`](#fn-environmentwithresourcedefaults)
+  * [`fn withResourceDefaultsMixin(labels)`](#fn-environmentwithresourcedefaultsmixin)
 * [`obj helm`](#obj-helm)
   * [`fn new(calledFrom)`](#fn-helmnew)
   * [`fn template(name, chart, conf)`](#fn-helmtemplate)
@@ -162,7 +164,7 @@ withLabels(labels)
 withLabelsMixin(labels)
 ```
 
-`withLabels` adds arbitrary key:value labels.
+`withLabelsMixin` adds arbitrary key:value labels.
 *Note:* This function appends passed data to existing values
 
 
@@ -181,6 +183,24 @@ withNamespace(namespace)
 ```
 
 `withNamespace` sets the default namespace for objects that don't explicitely specify one.
+
+### fn environment.withResourceDefaults
+
+```ts
+withResourceDefaults(labels)
+```
+
+`withResourceDefaults` sets defaults for all resources in this environment.
+
+### fn environment.withResourceDefaultsMixin
+
+```ts
+withResourceDefaultsMixin(labels)
+```
+
+`withResourceDefaultsMixin` sets defaults for all resources in this environment.
+*Note:* This function appends passed data to existing values
+
 
 ## obj helm
 
