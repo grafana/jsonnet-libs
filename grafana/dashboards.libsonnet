@@ -24,18 +24,34 @@
   },
 
   // add a new dashboard, creating the folder if necessary
-  addDashboard(name, dashboard, folder=''):: {
+  addDashboard(name, dashboard, folder='', shards=1):: {
     local hasShards = std.objectHas(super.grafanaDashboardFolders, folder) && std.objectHas(super.grafanaDashboardFolders[folder], 'shards'),
     grafanaDashboardFolders+:: {
       [folder]+: {
         id: folderID(folder),
         name: folder,
-        [if !hasShards then 'shards']: 1,
+        [if !hasShards then 'shards']: shards,
         dashboards+: {
           [name]+: dashboard,
         },
       },
     },
   },
+
+  // add dashboards via mixin
+  addMixinDashboards(mixin, folder, shards=1)::
+    std.foldl(
+      function(acc, name)
+        acc
+        + self.addDashboard(
+          name,
+          mixin.grafanaDashboards[name],
+          folder=folder,
+          shards=shards,
+        ),
+      std.objectFields(mixin.grafanaDashboards),
+      {},
+    ),
+
   grafanaDashboardFolders+:: {},
 }
