@@ -88,21 +88,35 @@ local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
     ),
   withLabels(labels):: {
     metadata+: {
-      labels: labels,
+      labels:
+        std.mapWithKey(
+          function(k, v)
+            if std.isString(v)
+            then v
+            else error '%s has non-string value' % k,
+          labels
+        ),
     },
   },
 
   '#withLabelsMixin'::
     d.fn(
       |||
-        `withLabels` adds arbitrary key:value labels.
+        `withLabelsMixin` adds arbitrary key:value labels.
         *Note:* This function appends passed data to existing values
       |||,
       [d.arg('labels', d.T.string)]
     ),
   withLabelsMixin(labels):: {
     metadata+: {
-      labels+: labels,
+      labels+:
+        std.mapWithKey(
+          function(k, v)
+            if std.isString(v)
+            then v
+            else error '%s has non-string value' % k,
+          labels
+        ),
     },
   },
 
@@ -117,6 +131,31 @@ local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
   withInjectLabels(bool=true):: {
     spec+: {
       injectLabels: bool,
+    },
+  },
+
+  '#withResourceDefaults'::
+    d.fn(
+      '`withResourceDefaults` sets defaults for all resources in this environment.',
+      [d.arg('labels', d.T.string)]
+    ),
+  withResourceDefaults(defaults):: {
+    spec+: {
+      resourceDefaults: defaults,
+    },
+  },
+
+  '#withResourceDefaultsMixin'::
+    d.fn(
+      |||
+        `withResourceDefaultsMixin` sets defaults for all resources in this environment.
+        *Note:* This function appends passed data to existing values
+      |||,
+      [d.arg('labels', d.T.string)]
+    ),
+  withResourceDefaultsMixin(defaults):: {
+    spec+: {
+      resourceDefaults+: defaults,
     },
   },
 }
