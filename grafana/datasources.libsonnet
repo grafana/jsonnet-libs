@@ -21,5 +21,8 @@
   withJsonData(data):: {
     jsonData+: data,
   },
+  withSecureJsonData(data):: {
+    secureJsonData+: data,
+  },
   withHttpMethod(httpMethod):: self.withJsonData({ httpMethod: httpMethod }),
 }
