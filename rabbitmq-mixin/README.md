@@ -1,4 +1,4 @@
-# Node.js Mixin
+# RabbitMQ Mixin
 
 The RabbitMQ Mixin is a set of configurable, reusable, and extensible alerts and dashboards based on the default metrics exported by RabbitMQ's prometheus monitoring plugin, shipped natively as of version 3.8.0. The mixin creates alerting rules for Prometheus and suitable dashboard descriptions for Grafana.
 For more information on the plugin please refer to [Monitoring with Prometheus & Grafana](https://www.rabbitmq.com/prometheus.html).
