@@ -129,7 +129,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "sum by(host) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"}[$__interval]))  ",
+          "expr": "sum by($label_name) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"}[$__interval]))  ",
           "legendFormat": "",
           "refId": "A"
         }
@@ -190,7 +190,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "sum by (status) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval]))",
+          "expr": "sum by (status) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval]))",
           "instant": false,
           "legendFormat": "HTTP Status: {{status}}",
           "range": true,
@@ -261,7 +261,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "sum(count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json | status >= 500 |__error__=\"\"[$__interval])) / (sum(count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json | __error__=\"\"[$__interval]))/ 100)",
+          "expr": "sum(count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json | status >= 500 |__error__=\"\"[$__interval])) / (sum(count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json | __error__=\"\"[$__interval]))/ 100)",
           "instant": false,
           "legendFormat": "",
           "range": true,
@@ -326,7 +326,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": " sum(count_over_time(({job=\"nginx_access_log\", host=\"$host\", job=~\"$job\", instance=~\"$instance\"} |= \"Googlebot\")[$__interval])) / (sum(count_over_time(({job=\"nginx_access_log\", host=\"$host\", job=~\"$job\", instance=~\"$instance\"} != \"Googlebot\")[$__interval])) / 100)",
+          "expr": " sum(count_over_time(({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} |= \"Googlebot\")[$__interval])) / (sum(count_over_time(({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} != \"Googlebot\")[$__interval])) / 100)",
           "instant": true,
           "legendFormat": "",
           "range": false,
@@ -389,7 +389,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "bytes_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"}[$__interval])",
+          "expr": "bytes_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"}[$__interval])",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -448,7 +448,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "count(sum by (remote_addr) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval])))",
+          "expr": "count(sum by (remote_addr) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "",
           "range": false,
@@ -511,7 +511,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "sum by (host) (sum_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json | unwrap body_bytes_sent |  __error__=\"\" [$__interval]))",
+          "expr": "sum by ($label_name) (sum_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json | unwrap body_bytes_sent |  __error__=\"\" [$__interval]))",
           "instant": true,
           "legendFormat": "Bytes sent",
           "range": false,
@@ -575,7 +575,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"}[$__interval])",
+          "expr": "count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"}[$__interval])",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -638,7 +638,7 @@
       },
       "targets": [
         {
-          "expr": "sum by (geoip_country_code) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json | geoip_country_code != \"\" | __error__=\"\" [$__interval]))",
+          "expr": "sum by (geoip_country_code) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json | geoip_country_code != \"\" | __error__=\"\" [$__interval]))",
           "instant": false,
           "legendFormat": "{{geoip_country_code}}",
           "range": true,
@@ -679,7 +679,7 @@
       },
       "targets": [
         {
-          "expr": "{container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json | line_format \"request for {{.request_uri}} with HTTP status: {{.status}} \"",
+          "expr": "{$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json | line_format \"request for {{.request_uri}} with HTTP status: {{.status}} \"",
           "legendFormat": "",
           "refId": "A"
         }
@@ -765,12 +765,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "quantile_over_time(0.95,{container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json | unwrap request_time |  __error__=\"\"  [$__interval]) by (host)",
+          "expr": "quantile_over_time(0.95,{$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json | unwrap request_time |  __error__=\"\"  [$__interval]) by ($label_name)",
           "legendFormat": "95th percentile",
           "refId": "C"
         },
         {
-          "expr": "max by (host) (max_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json | unwrap request_time |  __error__=\"\"  [$__interval]))",
+          "expr": "max by ($label_name) (max_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json | unwrap request_time |  __error__=\"\"  [$__interval]))",
           "legendFormat": "max latency",
           "refId": "D"
         }
@@ -884,7 +884,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (status) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval]))",
+          "expr": "sum by (status) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval]))",
           "legendFormat": "HTTP Status {{status}}",
           "refId": "A"
         }
@@ -1005,7 +1005,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (host) (sum_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json | status=200 | unwrap body_bytes_sent |  __error__=\"\" [$__interval]))",
+          "expr": "sum by ($label_name) (sum_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json | status=200 | unwrap body_bytes_sent |  __error__=\"\" [$__interval]))",
           "legendFormat": "Bytes sent",
           "refId": "A"
         }
@@ -1149,7 +1149,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "topk(100, sum by (http_referer) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json |  http_referer != \"\" and http_referer !~ \".*?$host.*?\" and http_referer !~ \".*?\\\\*\\\\*\\\\*.*?\" | __error__=\"\" [$__interval])))",
+          "expr": "topk(100, sum by (http_referer) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json |  http_referer != \"\" and http_referer !~ \".*?\\\\*\\\\*\\\\*.*?\" | __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{http_referer}}",
           "range": false,
@@ -1251,7 +1251,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "topk(100, sum by (http_user_agent) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval])))",
+          "expr": "topk(100, sum by (http_user_agent) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{http_user_agent}}",
           "range": false,
@@ -1354,7 +1354,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "topk(100, sum by (remote_addr, geoip_country_code) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval])))",
+          "expr": "topk(100, sum by (remote_addr, geoip_country_code) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} | json |  __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{remote_addr}}",
           "range": false,
@@ -1463,7 +1463,7 @@
       "pluginVersion": "7.4.0",
       "targets": [
         {
-          "expr": "topk(300, sum by (request_uri) (count_over_time({container=`nginx`, host=\"$host\", job=~\"$job\", instance=~\"$instance\"} !~ `\\.ico|\\.svg|\\.css|\\.png|\\.txt|\\.js|\\.xml` | json | status = 200 and request_uri != \"/\" | __error__=\"\" [$__interval])))",
+          "expr": "topk(300, sum by (request_uri) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} !~ `\\.ico|\\.svg|\\.css|\\.png|\\.txt|\\.js|\\.xml` | json | status = 200 and request_uri != \"/\" | __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{request_uri}}",
           "range": false,
@@ -1522,16 +1522,16 @@
         "allValue": null,
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values({container=`nginx`}, host)",
+        "definition": "label_names()",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": true,
-        "label": "host",
+        "includeAll": false,
+        "label": "label_name",
         "multi": false,
-        "name": "host",
+        "name": "label_name",
         "options": [],
-        "query": "label_values({container=`nginx`}, host)",
+        "query": "label_names()",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1546,16 +1546,40 @@
         "allValue": null,
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values({container=`nginx`}, job)",
+        "definition": "label_values($label_name)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "label_value",
+        "multi": true,
+        "name": "label_value",
+        "options": [],
+        "query": "label_values($label_name)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values({$label_name=~\"$label_value\"}, job)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "job",
-        "multi": false,
+        "multi": true,
         "name": "job",
         "options": [],
-        "query": "label_values({container=`nginx`}, job)",
+        "query": "label_values({$label_name=~\"$label_value\"}, job)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1570,16 +1594,16 @@
         "allValue": null,
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values({container=`nginx`}, instance)",
+        "definition": "label_values({$label_name=~\"$label_value\"}, instance)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "instance",
-        "multi": false,
+        "multi": true,
         "name": "instance",
         "options": [],
-        "query": "label_values({container=`nginx`}, instance)",
+        "query": "label_values({$label_name=~\"$label_value\"}, instance)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
