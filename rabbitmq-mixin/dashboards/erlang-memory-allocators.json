@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": 11350,
   "graphTooltip": 1,
-  "id": 2,
-  "iteration": 1621966486884,
+  "id": 7,
+  "iteration": 1620762843970,
   "links": [],
   "panels": [
     {
@@ -32,7 +32,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "percent",
@@ -121,7 +123,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "percent",
@@ -208,7 +212,9 @@
       "decimals": 1,
       "description": "Total Size of Allocated Blocks  Memory that is actively used by Erlang data.  The smallest unit of memory that an allocator can work with is called a `block`. When you call an allocator to allocate a certain amount of memory what you get back is a block. It is also blocks that you give as an argument to the allocator when you want to deallocate memory.  The allocator does not allocate blocks from the operating system directly though. Instead the allocator allocates a carrier from the operating system, either through `sys_alloc` or through `mseg_alloc`, which in turn uses `malloc` or `mmap`. If `sys_alloc` is used the carrier is placed on the C-heap and if `mseg_alloc` is used the carrier is placed in a segment.  Small blocks are placed in a multiblock carrier. A multiblock carrier can as the name suggests contain many blocks. Larger blocks are placed in a singleblock carrier, which as the name implies on contains one block.  What’s considered a small and a large block is determined by the parameter singleblock carrier threshold (`sbct`).  * [erts_alloc](http://erlang.org/doc/man/erts_alloc.html) * [The Memory Subsystem](https://github.com/happi/theBeamBook/blob/master/chapters/memory.asciidoc)",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -295,7 +301,9 @@
       "decimals": 1,
       "description": "Allocated Carriers - Allocated Blocks  * [erts_alloc](http://erlang.org/doc/man/erts_alloc.html) * [The Memory Subsystem](https://github.com/happi/theBeamBook/blob/master/chapters/memory.asciidoc)",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -382,7 +390,9 @@
       "decimals": 1,
       "description": "Total Size of Allocated Carriers  Memory that is reserved by the Erlang VM, which fits  one of the following descriptions:  * actively used memory * memory given by the OS, yet-to-be-used * deallocated memory kept around before it is destroyed * carrier gaps in multi-block carriers (a.k.a. memory fragmentation)  The total size of allocated carriers can be either larger or smaller than the Erlang VM system process RSS memory.  * [erts_alloc](http://erlang.org/doc/man/erts_alloc.html) * [The Memory Subsystem](https://github.com/happi/theBeamBook/blob/master/chapters/memory.asciidoc)",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -469,7 +479,9 @@
       "decimals": 1,
       "description": "Erlang VM Resident Set Size (RSS)  As reported by the OS",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -564,7 +576,9 @@
       ],
       "datasource": "$datasource",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "fontSize": "100%",
@@ -650,6 +664,7 @@
       "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
+          "custom": {},
           "links": []
         },
         "overrides": []
@@ -685,7 +700,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.3.0-beta2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -805,7 +820,9 @@
       "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "fontSize": "100%",
@@ -881,6 +898,7 @@
       "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
+          "custom": {},
           "links": []
         },
         "overrides": []
@@ -916,7 +934,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.3.0-beta2",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1007,7 +1025,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "percent",
@@ -1093,7 +1113,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -1179,7 +1201,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -1265,7 +1289,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "percent",
@@ -1351,7 +1377,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -1437,7 +1465,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -1523,7 +1553,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "percent",
@@ -1609,7 +1641,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -1695,7 +1729,9 @@
       "datasource": "$datasource",
       "decimals": 1,
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "format": "decbytes",
@@ -1791,7 +1827,9 @@
       "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "fontSize": "100%",
@@ -1892,6 +1930,7 @@
       "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
+          "custom": {},
           "links": []
         },
         "overrides": []
@@ -1925,7 +1964,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.3.0-beta2",
       "pointradius": 0.5,
       "points": false,
       "renderer": "flot",
@@ -2056,7 +2095,9 @@
       "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "custom": {}
+        },
         "overrides": []
       },
       "fontSize": "100%",
@@ -2157,6 +2198,7 @@
       "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
+          "custom": {},
           "links": []
         },
         "overrides": []
@@ -2190,7 +2232,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.3.0-beta2",
       "pointradius": 0.5,
       "points": false,
       "renderer": "flot",
@@ -2301,7 +2343,7 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 27,
+  "schemaVersion": 26,
   "style": "dark",
   "tags": [
     "rabbitmq-integration"
@@ -2319,7 +2361,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
+        "label": "datasource",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -2346,10 +2388,7 @@
         "multi": true,
         "name": "rabbitmq_cluster",
         "options": [],
-        "query": {
-          "query": "label_values(rabbitmq_identity_info, rabbitmq_cluster)",
-          "refId": "Cortex-rabbitmq_cluster-Variable-Query"
-        },
+        "query": "label_values(rabbitmq_identity_info, rabbitmq_cluster)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2377,10 +2416,7 @@
         "multi": true,
         "name": "rabbitmq_node",
         "options": [],
-        "query": {
-          "query": "label_values(rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
-          "refId": "Cortex-rabbitmq_node-Variable-Query"
-        },
+        "query": "label_values(rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2408,10 +2444,7 @@
         "multi": true,
         "name": "memory_allocator",
         "options": [],
-        "query": {
-          "query": "label_values(erlang_vm_allocators, alloc)",
-          "refId": "Cortex-memory_allocator-Variable-Query"
-        },
+        "query": "label_values(erlang_vm_allocators, alloc)",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -2451,5 +2484,5 @@
   "timezone": "",
   "title": "Erlang-Memory-Allocators-v2",
   "uid": "eFbBOMCGk",
-  "version": 2
+  "version": 1
 }
