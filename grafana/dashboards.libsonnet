@@ -44,7 +44,7 @@
         acc
         + (
           if std.objectHasAll($.mixins[name], 'grafanaDashboards')
-            && std.length($.mixins[name].grafanaDashboards) > 0
+             && std.length($.mixins[name].grafanaDashboards) > 0
           then
             local key = (
               if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder')
