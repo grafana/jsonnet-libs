@@ -2,6 +2,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 local container = k.core.v1.container;
 
 {
+  local root = self,
+
   new(
     name,
     user,
@@ -61,7 +63,7 @@ local container = k.core.v1.container;
   withPasswordSecretRef(secretRefName, key='password'):: {
     local envVar = k.core.v1.envVar,
     container+:: container.withEnvMixin([
-      envVar.fromSecretRef('MYSQL_PASS', secretRefName, key),
+      envVar.fromSecretRef('MYSQL_PASSWORD', secretRefName, key),
     ]),
   },
 
