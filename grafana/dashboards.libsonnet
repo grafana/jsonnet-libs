@@ -38,7 +38,7 @@
     },
   },
 
-  addMixinDashboards(mixin, mixinProto={}):: {
+  addMixinDashboards(mixins, mixinProto={}):: {
     grafanaDashboardFolders+:: std.foldr(
       function(name, acc)
         acc
@@ -83,6 +83,6 @@
     grafanaGeneralFolderShards: shards,
   },
 
-  grafanaGeneralFolderShards: 1,
+  grafanaGeneralFolderShards:: 1,
   grafanaDashboardFolders+:: {},
 }
