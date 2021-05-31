@@ -9,11 +9,15 @@ local grafana = import 'grafana/grafana.libsonnet';
   },
 
   mixins+:: {},
+  grafanaGeneralFolderShards:: $._config.dashboard_config_maps,
 
   // convert to format expected by `grafana/grafana.libsonnet`:
-  local grafanaConfig = grafana.addMixinDashboards($.mixins, mixinProto)
-                        + grafana.withGeneralFolderShards($.dashboard_config_maps),
-  grafanaDashboardFolders+:: grafanaConfig.grafanaDashboardFolders,
+  local grafanaConfig = {
+                          grafanaDashboards: $.grafanaDashboards,
+                        } + grafana.withGeneralFolderShards($.grafanaGeneralFolderShards)
+                        + grafana.addMixinDashboards($.mixins, mixinProto),
+  grafanaDashboardFolders+:: grafanaConfig.grafanaDashboardFolders
+  ,
 
   // mixinProto (below) is applied to every dashboard managed by
   // prometheus-ksonnet. One thing it does is sets the UID of the dashboard
