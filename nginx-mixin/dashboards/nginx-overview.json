@@ -1567,7 +1567,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".*",
         "current": {},
         "datasource": "$datasource",
         "definition": "label_values({$label_name=~\"$label_value\"}, job)",
@@ -1591,7 +1591,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".*",
         "current": {},
         "datasource": "$datasource",
         "definition": "label_values({$label_name=~\"$label_value\"}, instance)",
