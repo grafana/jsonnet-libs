@@ -4,6 +4,7 @@
   },
 
   _config+:: {
+    replicas: 1,
     rootUrl: '',
     provisioningDir: '/etc/grafana/provisioning',
     port: 80,
@@ -81,6 +82,12 @@
   withRootUrl(url):: {
     _config+:: {
       rootUrl: url,
+    },
+  },
+
+  withReplicas(replicas):: {
+    _config+:: {
+      replicas: replicas,
     },
   },
 }
