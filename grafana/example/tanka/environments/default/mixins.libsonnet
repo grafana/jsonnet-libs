@@ -6,6 +6,6 @@ local node_exporter = import 'node-mixin/mixin.libsonnet';
       _config+:: {
         nodeExporterSelector: 'job="kubernetes-service-endpoints"',
       },
-      grafanaDashboardFolder: 'Node Exporter',
+      grafanaDashboardFolder: 'Node Exporter Mixin',
     },
 }

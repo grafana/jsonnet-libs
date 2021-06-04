@@ -36,6 +36,15 @@
         }
       },
       "version": "master"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/rfrail3/grafana-dashboards.git",
+          "subdir": "prometheus"
+        }
+      },
+      "version": "master"
     }
   ],
   "legacyImports": true

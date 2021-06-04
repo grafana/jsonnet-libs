@@ -1,5 +1,5 @@
 local grafana = import '../../../grafana.libsonnet';
-local nyc_dashboard = import 'dashboards/nyc.json';
+local dashboards = import 'dashboards.libsonnet';
 local datasources = import 'datasources.libsonnet';
 local mixins = import 'mixins.libsonnet';
 
@@ -17,7 +17,8 @@ grafana
 + grafana.addDatasource('NYC', datasources.sun_and_moon)
 
 // Dashboards
-+ grafana.addDashboard('NYC', nyc_dashboard, 'Sun and Moon')
++ grafana.addDashboard('node-exporter-full', dashboards.node_exporter, 'Node Exporter')
++ grafana.addDashboard('nyc', dashboards.nyc, 'Sun and Moon')
 
 // Mixins
 + grafana.addMixinDashboards(mixins)
