@@ -33,6 +33,12 @@
     },
   },
 
+  withImage(image):: {
+    _images+:: {
+      grafana: image,
+    },
+  },
+
   withGrafanaIniConfig(config):: {
     _config+:: {
       grafana_ini+: config,
@@ -71,4 +77,10 @@
       },
     },
   }),
+
+  withRootUrl(url):: {
+    _config+:: {
+      rootUrl: url,
+    },
+  },
 }
