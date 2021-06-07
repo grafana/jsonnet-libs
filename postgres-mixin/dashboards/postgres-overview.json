@@ -584,7 +584,7 @@
         {
           "alias": "Buffers Allocated",
           "dsType": "prometheus",
-          "expr": "irate(pg_stat_bgwriter_buffers_alloc{instance='$instance'}[5m])",
+          "expr": "irate(pg_stat_bgwriter_buffers_alloc{instance=~'$instance'}[5m])",
           "format": "time_series",
           "groupBy": [
             {
@@ -636,7 +636,7 @@
         {
           "alias": "Buffers Allocated",
           "dsType": "prometheus",
-          "expr": "irate(pg_stat_bgwriter_buffers_backend_fsync{instance='$instance'}[5m])",
+          "expr": "irate(pg_stat_bgwriter_buffers_backend_fsync{instance=~'$instance'}[5m])",
           "format": "time_series",
           "groupBy": [
             {
@@ -688,7 +688,7 @@
         {
           "alias": "Buffers Allocated",
           "dsType": "prometheus",
-          "expr": "irate(pg_stat_bgwriter_buffers_backend{instance='$instance'}[5m])",
+          "expr": "irate(pg_stat_bgwriter_buffers_backend{instance=~'$instance'}[5m])",
           "format": "time_series",
           "groupBy": [
             {
@@ -740,7 +740,7 @@
         {
           "alias": "Buffers Allocated",
           "dsType": "prometheus",
-          "expr": "irate(pg_stat_bgwriter_buffers_clean{instance='$instance'}[5m])",
+          "expr": "irate(pg_stat_bgwriter_buffers_clean{instance=~'$instance'}[5m])",
           "format": "time_series",
           "groupBy": [
             {
@@ -792,7 +792,7 @@
         {
           "alias": "Buffers Allocated",
           "dsType": "prometheus",
-          "expr": "irate(pg_stat_bgwriter_buffers_checkpoint{instance='$instance'}[5m])",
+          "expr": "irate(pg_stat_bgwriter_buffers_checkpoint{instance=~'$instance'}[5m])",
           "format": "time_series",
           "groupBy": [
             {
@@ -1136,10 +1136,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(pg_stat_database_blks_hit{datname=~\"$db\",instance=~\"$instance\"}) / (sum(pg_stat_database_blks_hit{datname=~\"$db\",instance=~\"$instance\"}) + sum(pg_stat_database_blks_read{datname=~\"$db\",instance=~\"$instance\"}))",
+          "expr": "sum by (datname) (rate(pg_stat_database_blks_hit{datname=~\"$db\",instance=~\"$instance\"}[5m])) / (sum by (datname)(rate(pg_stat_database_blks_hit{datname=~\"$db\",instance=~\"$instance\"}[5m])) + sum by (datname)(rate(pg_stat_database_blks_read{datname=~\"$db\",instance=~\"$instance\"}[5m])))",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "cache hit rate",
+          "legendFormat": "{{datname}} - cache hit rate",
           "refId": "A",
           "step": 240
         }
@@ -1242,7 +1242,7 @@
           "expr": "pg_stat_database_numbackends{datname=~\"$db\",instance=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "{{__name__}}",
+          "legendFormat": "{{datname}} - {{__name__}}",
           "refId": "A",
           "step": 240
         }
@@ -1325,7 +1325,7 @@
         "useTags": false
       },
       {
-        "allValue": ".*",
+        "allValue": null,
         "current": {
           "selected": false,
           "text": "All",
