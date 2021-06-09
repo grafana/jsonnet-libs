@@ -27,7 +27,7 @@ local stackstyle = {
   fillGradient: 10,
 };
 
-# Templates
+// Templates
 local ds_template = {
   current: {
     text: 'default',
@@ -76,13 +76,13 @@ local container_template = grafana.template.new(
   sort=1,
 );
 
-# Panels
+// Panels
 local total_containers_panel = grafana.singlestat.new(
   'Total Containers',
   span=2,
   datasource='$datasource',
 )
-.addTarget(
+                               .addTarget(
   grafana.prometheus.target(queries.total_containers)
 );
 
@@ -91,7 +91,7 @@ local total_images_panel = grafana.singlestat.new(
   span=2,
   datasource='$datasource',
 )
-.addTarget(
+                           .addTarget(
   grafana.prometheus.target(queries.total_images)
 );
 
@@ -104,7 +104,7 @@ local cpu_usage_panel = grafana.singlestat.new(
   datasource='$datasource',
   gaugeMaxValue=1,
 )
-.addTarget(
+                        .addTarget(
   grafana.prometheus.target(queries.cpu_usage)
 );
 
@@ -117,7 +117,7 @@ local mem_reserved_panel = grafana.singlestat.new(
   datasource='$datasource',
   gaugeMaxValue=1,
 )
-.addTarget(
+                           .addTarget(
   grafana.prometheus.target(queries.host_mem_reserved)
 );
 
@@ -130,66 +130,66 @@ local mem_usage_panel = grafana.singlestat.new(
   datasource='$datasource',
   gaugeMaxValue=1,
 )
-.addTarget(
+                        .addTarget(
   grafana.prometheus.target(queries.host_mem_consumed)
 );
 
 local cpu_by_container_panel = grafana.graphPanel.new(
-  'CPU',
-  span=6,
-  datasource='$datasource',
-) +
-g.queryPanel(
-  [queries.cpu_by_container],
-  ['{{name}}'],
-) +
-g.stack +
-stackstyle +
-{
-  yaxes: g.yaxes('percentunit'),
-};
+                                 'CPU',
+                                 span=6,
+                                 datasource='$datasource',
+                               ) +
+                               g.queryPanel(
+                                 [queries.cpu_by_container],
+                                 ['{{name}}'],
+                               ) +
+                               g.stack +
+                               stackstyle +
+                               {
+                                 yaxes: g.yaxes('percentunit'),
+                               };
 
 local mem_by_container_panel = grafana.graphPanel.new(
-    'Memory',
-    span=6,
-    datasource='$datasource',
-  ) +
-  g.queryPanel(
-    [queries.mem_by_container],
-    ['{{name}}'],
-  ) +
-  g.stack +
-  stackstyle +
-  { yaxes: g.yaxes('bytes') };
+                                 'Memory',
+                                 span=6,
+                                 datasource='$datasource',
+                               ) +
+                               g.queryPanel(
+                                 [queries.mem_by_container],
+                                 ['{{name}}'],
+                               ) +
+                               g.stack +
+                               stackstyle +
+                               { yaxes: g.yaxes('bytes') };
 
 local net_throughput_panel = grafana.graphPanel.new(
-  'Bandwidth',
-  span=6,
-  datasource='$datasource',
-) +
-g.queryPanel(
-  [queries.net_rx_by_container, queries.net_tx_by_container],
-  ['{{name}} rx', '{{name}} tx'],
-) +
-g.stack +
-stackstyle +
-{
-  yaxes: g.yaxes({ format: 'binBps', min: null }),
-} + {
+                               'Bandwidth',
+                               span=6,
+                               datasource='$datasource',
+                             ) +
+                             g.queryPanel(
+                               [queries.net_rx_by_container, queries.net_tx_by_container],
+                               ['{{name}} rx', '{{name}} tx'],
+                             ) +
+                             g.stack +
+                             stackstyle +
+                             {
+                               yaxes: g.yaxes({ format: 'binBps', min: null }),
+                             } + {
   seriesOverrides: [{ alias: '/.*tx/', transform: 'negative-Y' }],
 };
 
 local tcp_socket_by_state_panel = grafana.graphPanel.new(
-  'TCP Sockets By State',
-  datasource='$datasource',
-  span=6,
-) +
-g.queryPanel(
-  [queries.tcp_socket_by_state],
-  ['{{tcp_state}}'],
-) +
-g.stack +
-stackstyle;
+                                    'TCP Sockets By State',
+                                    datasource='$datasource',
+                                    span=6,
+                                  ) +
+                                  g.queryPanel(
+                                    [queries.tcp_socket_by_state],
+                                    ['{{tcp_state}}'],
+                                  ) +
+                                  g.stack +
+                                  stackstyle;
 
 local disk_usage_panel = g.tablePanel(
   [queries.fs_usage_by_device, queries.fs_inode_usage_by_device],
@@ -200,7 +200,7 @@ local disk_usage_panel = g.tablePanel(
   }
 ) + { span: 12, datasource: '$datasource' };
 
-# Manifested stuff starts here
+// Manifested stuff starts here
 {
   grafanaDashboards+:: {
     'docker.json':
@@ -209,7 +209,7 @@ local disk_usage_panel = g.tablePanel(
         ds_template,
         job_template,
         instance_template,
-        container_template
+        container_template,
       ])
 
       # Overview Row
@@ -259,6 +259,6 @@ local disk_usage_panel = g.tablePanel(
         # Disk
         .addPanel(disk_usage_panel)
       ) +
-      { graphTooltip: 2 }, # Shared tooltip. When you hover over a graph, the same time is selected on all graphs, and tooltip is shown. Set to 1 to only share crosshair
+      { graphTooltip: 2 },  // Shared tooltip. When you hover over a graph, the same time is selected on all graphs, and tooltip is shown. Set to 1 to only share crosshair
   },
 }
