@@ -4,6 +4,7 @@
   },
 
   _config+:: {
+    replicas: 1,
     rootUrl: '',
     provisioningDir: '/etc/grafana/provisioning',
     port: 80,
@@ -30,6 +31,12 @@
           enable: 'http_request_histogram, database_metrics',
         },
       },
+    },
+  },
+
+  withImage(image):: {
+    _images+:: {
+      grafana: image,
     },
   },
 
@@ -71,4 +78,16 @@
       },
     },
   }),
+
+  withRootUrl(url):: {
+    _config+:: {
+      rootUrl: url,
+    },
+  },
+
+  withReplicas(replicas):: {
+    _config+:: {
+      replicas: replicas,
+    },
+  },
 }

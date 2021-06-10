@@ -15,7 +15,7 @@ local container = k.core.v1.container;
     k.util.resourcesRequests('10m', '40Mi'),
 
   grafana_deployment:
-    deployment.new('grafana', 1, [$.grafana_container])
+    deployment.new('grafana', $._config.replicas, [$.grafana_container])
     + $.configmap_mounts
     + k.util.podPriority('critical'),
 

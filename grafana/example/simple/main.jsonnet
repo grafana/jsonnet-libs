@@ -1,4 +1,4 @@
-local grafana = import '../grafana.libsonnet';
+local grafana = import '../../grafana.libsonnet';
 local k = import 'k.libsonnet';
 {
   config+:: {

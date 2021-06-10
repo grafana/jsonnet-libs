@@ -1,3 +1,4 @@
+local grafana = import 'grafana/grafana.libsonnet';
 {
   local configMap = $.core.v1.configMap,
 
@@ -8,46 +9,15 @@
   },
 
   mixins+:: {},
+  grafanaGeneralFolderShards:: $._config.dashboard_config_maps,
 
   // convert to format expected by `grafana/grafana.libsonnet`:
-  grafanaDashboardFolders+:: std.foldr(
-    function(name, acc)
-      acc
-      + (
-        if std.objectHasAll($.mixins[name], 'grafanaDashboards')
-           && std.length($.mixins[name].grafanaDashboards) > 0
-        then
-          local key = (
-            if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder')
-            then $.folderID($.mixins[name].grafanaDashboardFolder)
-            else 'general'
-          );
-          {
-            [key]+: {
-              dashboards+: ($.mixins[name] + mixinProto).grafanaDashboards,
-              shards:
-                if std.objectHasAll($.mixins[name], 'grafanaDashboardShards')
-                then $.mixins[name].grafanaDashboardShards
-                else 1,
-              name:
-                if std.objectHasAll($.mixins[name], 'grafanaDashboardFolder')
-                then $.mixins[name].grafanaDashboardFolder
-                else '',
-              id: $.folderID(self.name),
-            },
-          }
-        else {}
-      ),
-    std.objectFields($.mixins),
-    {}
-  ) + {
-    general+: {
-      shards: $._config.dashboard_config_maps,  // legacy dashboard configmap setting
-      dashboards+: $.grafanaDashboards + mixinProto,
-      name: '',
-      id: '',
-    },
-  },
+  local grafanaConfig = {
+                          grafanaDashboards: $.grafanaDashboards,
+                        } + grafana.withGeneralFolderShards($.grafanaGeneralFolderShards)
+                        + grafana.addMixinDashboards($.mixins, mixinProto),
+  grafanaDashboardFolders+:: grafanaConfig.grafanaDashboardFolders
+  ,
 
   // mixinProto (below) is applied to every dashboard managed by
   // prometheus-ksonnet. One thing it does is sets the UID of the dashboard
