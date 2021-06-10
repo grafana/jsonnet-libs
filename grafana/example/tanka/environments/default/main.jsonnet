@@ -5,7 +5,7 @@ local mixins = import 'mixins.libsonnet';
 
 grafana
 + grafana.withReplicas(3)
-+ grafana.withImage('grafana/grafana:8.0.0-beta3')
++ grafana.withImage('grafana/grafana:8.0.0')
 + grafana.withRootUrl('http://grafana.example.com')
 + grafana.withTheme('dark')
 + grafana.withAnonymous()
