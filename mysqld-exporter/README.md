@@ -1,4 +1,4 @@
-# mysql-exporter jsonnet library
+# mysqld-exporter jsonnet library
 
 Jsonnet library for [mysqld_exporter](https://github.com/prometheus/mysqld_exporter).
 
@@ -7,22 +7,22 @@ Jsonnet library for [mysqld_exporter](https://github.com/prometheus/mysqld_expor
 Install it with jsonnet-bundler:
 
 ```console
-jb install github.com/grafana/jsonnet-libs/mysql-exporter
+jb install github.com/grafana/jsonnet-libs/mysqld-exporter
 ```
 
 Import into your jsonnet:
 
 ```jsonnet
 // environments/default/main.jsonnet
-local mysql_exporter = import 'github.com/grafana/jsonnet-libs/mysql-exporter/main.libsonnet';
+local mysqld_exporter = import 'github.com/grafana/jsonnet-libs/mysqld-exporter/main.libsonnet';
 
 {
-  mysql_exporter:
-    mysql_exporter.new(
+  mysqld_exporter:
+    mysqld_exporter.new(
       name='cloudsql-mysql-exporter',
       user='admin',
       host='mysql',
     )
-    + mysql_exporter.withPassword(error 'requires superSecurePassword'),
+    + mysqld_exporter.withPassword(error 'requires superSecurePassword'),
 }
 ```

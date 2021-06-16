@@ -1,8 +1,7 @@
-// This is here for backwards compatibility, please use main.libsonnet
-
 local k = import 'ksonnet-util/kausal.libsonnet';
 local container = k.core.v1.container;
-local exporter = import './main.libsonnet';
+local mysqld_exporter = import 'github.com/grafana/jsonnet-libs/mysqld-exporter/main.libsonnet';
+local exporter = std.trace('Deprecated: please consider switching to github.com/grafana/jsonnet-libs/mysqld-exporter', mysqld_exporter);
 
 {
   local this = self,
