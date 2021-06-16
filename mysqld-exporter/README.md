@@ -19,7 +19,7 @@ local mysqld_exporter = import 'github.com/grafana/jsonnet-libs/mysqld-exporter/
 {
   mysqld_exporter:
     mysqld_exporter.new(
-      name='cloudsql-mysql-exporter',
+      name='cloudsql-mysqld-exporter',
       user='admin',
       host='mysql',
     )

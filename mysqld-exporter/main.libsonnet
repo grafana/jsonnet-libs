@@ -21,7 +21,7 @@ local container = k.core.v1.container;
 
     local containerPort = k.core.v1.containerPort,
     container::
-      container.new('mysql-exporter', image)
+      container.new('mysqld-exporter', image)
       + container.withPorts(k.core.v1.containerPort.new('http-metrics', 9104))
       + container.withArgsMixin([
         '--collect.info_schema.innodb_metrics',
