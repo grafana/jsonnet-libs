@@ -12,8 +12,7 @@ On the Atlassian Marketplace, there is a [free version of the exporter](https://
 
 ## Alerts
 
-The Mixin includes 5 pre-configured alerts:
-- `InstanceDown`: Alerts when the JIRA server is down for more than 1 minute
+The Mixin includes 4 pre-configured alerts:
 - `LicenseExpired`: Alerts when the JIRA license has expired
 - `LicenseWarning`: Warns when there are 7 days left until the JIRA license expires
 - `NoUserCapacity`: Alerts if there are no more user accounts available on the server
