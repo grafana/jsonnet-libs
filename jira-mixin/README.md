@@ -13,11 +13,11 @@ On the Atlassian Marketplace, there is a [free version of the exporter](https://
 ## Alerts
 
 The Mixin includes 5 pre-configured alerts:
-- InstanceDown: Alerts when the JIRA server is down for more than 1 minute
-- LicenseExpired: Alerts when the JIRA license has expired
-- LicenseWarning: Warns when there are 7 days left until the JIRA license expires
-- NoUserCapacity: Alerts if there are no more user accounts available on the server
-- EmailErrorsHigh: Alerts if more than 1% of emails fail to send
+- `InstanceDown`: Alerts when the JIRA server is down for more than 1 minute
+- `LicenseExpired`: Alerts when the JIRA license has expired
+- `LicenseWarning`: Warns when there are 7 days left until the JIRA license expires
+- `NoUserCapacity`: Alerts if there are no more user accounts available on the server
+- `EmailErrorsHigh`: Alerts if more than 1% of emails fail to send
 
 ## Dashboard
 
@@ -30,9 +30,13 @@ The Mixin comes with preconfigured Grafana dashboard. The dashboard looks like t
 
 To use the Mixin, you need to have mixtool and jsonnetfmt installed. If you have a working Go development environment, it's easiest to run the following:
 
+```
 $ go get github.com/monitoring-mixins/mixtool/cmd/mixtool
 $ go get github.com/google/go-jsonnet/cmd/jsonnetfmt
+```
 
 You can then build the Prometheus rules files alerts.yaml and rules.yaml and a directory dashboard_out with the JSON dashboard files for Grafana:
 
+```
 $ make build
+```
