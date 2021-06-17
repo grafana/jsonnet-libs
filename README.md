@@ -26,6 +26,7 @@ This repository contains various Jsonnet libraries we use at Grafana Labs:
 * [`prometheus-ksonnet`](prometheus-ksonnet/): A set of extensible configurations
   for running Prometheus on Kubernetes.
 
+* [`jira-mixin`](jira-mixin/): A set of reusable and extensible dashboards and alerts for JIRA.
 
 ## LICENSE
 
