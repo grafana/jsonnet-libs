@@ -10,7 +10,7 @@ groups:
       summary: "JIRA server down"
       description: "The JIRA server has been down for more than 1 minute."
   - alert: LicenseExpired
-    expr: jira_maintenance_expiry_days_gauge == 0
+    expr: jira_maintenance_expiry_days_gauge <= 0
     for: 1m
     labels:
       severity: "critical"
@@ -18,7 +18,7 @@ groups:
       summary: "JIRA license expired"
       description: "The JIRA license has expired."
   - alert: LicenseWarning
-    expr: jira_maintenance_expiry_days_gauge == 7
+    expr: jira_maintenance_expiry_days_gauge <= 7 and jira_maintenance_expiry_days_gauge > 0
     for: 1m
     labels:
       severity: "warning"
