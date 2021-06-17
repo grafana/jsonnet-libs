@@ -184,7 +184,6 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + container.withPorts(cortex.util.defaultPorts)
       + container.resources.withLimits({ cpu: '2', memory: '4Gi' })
       + container.resources.withRequests({ cpu: '500m', memory: '1Gi' })
-      + cortex.jaeger_mixin
       + cortex.util.readinessProbe,
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the admin-api.'),
     deployment:
@@ -328,7 +327,6 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + container.withPorts(cortex.util.defaultPorts)
       + container.resources.withLimits({ cpu: '2', memory: '4Gi' })
       + container.resources.withRequests({ cpu: '500m', memory: '1Gi' })
-      + cortex.jaeger_mixin
       + cortex.util.readinessProbe,
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the gateway.'),
     deployment:
