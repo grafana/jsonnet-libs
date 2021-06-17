@@ -24,7 +24,7 @@ groups:
       severity: "warning"
     annotations:
       summary: "License expiring soon"
-      description: "The JIRA license will expire in one week."
+      description: "The JIRA license will expire in less than one week."
   - alert: NoUserCapacity
     expr: jira_all_active_users_gauge/jira_allowed_users_gauge == 1
     for: 1m
