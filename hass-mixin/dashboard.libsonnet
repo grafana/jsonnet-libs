@@ -18,7 +18,12 @@ local queries = {
   switch_state: 'switch_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="switch", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
   binary_sensor_state: 'binary_sensor_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="binary_sensor", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
   temperature_c: 'temperature_c{' + entity_matcher + '}',
+  current_temperature_c: 'current_temperature_c{' + entity_matcher + '}',
   light_state: 'light_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="light", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  lock_state: 'lock_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="lock", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  climate_action: 'climate_action{' + entity_matcher + '} > 0 or label_replace(humidifier_mode{' + entity_matcher + '} > 0, "action", "$1", "mode", "(.*)")',
+  humidity: 'humidity_percent{' + entity_matcher + '}',
+  humidity_target: 'humidifier_target_humidity_percent{' + entity_matcher + '}',
 };
 
 local inverse_colors = ['red', 'yellow', 'green'];
@@ -203,10 +208,247 @@ local input_bool_panel = grafana.statPanel.new(
                          ])
                          +
                          {
-                           span: 12,
+                           span: 2,
                            options+: { textMode: 'name' },
-                         } +
-                         inactive_overrides;
+                         };
+
+
+local climate_panel = grafana.statPanel.new(
+                        'Climate',
+                        colorMode='background',
+                        datasource='$datasource',
+                      )
+                      .addTarget(
+                        grafana.prometheus.target(
+                          queries.climate_action,
+                          legendFormat='{{friendly_name}} {{action}}',
+                          instant=true
+                        ),
+                      )
+                      +
+                      {
+                        span: 2,
+                        options+: { textMode: 'value_and_name' },
+                        fieldConfig+: {
+                          overrides: [
+                            {
+                              matcher: {
+                                id: 'byRegexp',
+                                options: '.*cooling',
+                              },
+                              properties: [
+                                {
+                                  id: 'mappings',
+                                  value: [
+                                    {
+                                      type: 1,
+                                      from: '',
+                                      to: '',
+                                      text: '❄',
+                                      value: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'color',
+                                  value: {
+                                    mode: 'fixed',
+                                    fixedColor: 'blue',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              matcher: {
+                                id: 'byRegexp',
+                                options: '.*heating',
+                              },
+                              properties: [
+                                {
+                                  id: 'mappings',
+                                  value: [
+                                    {
+                                      type: 1,
+                                      from: '',
+                                      to: '',
+                                      text: '🔥',
+                                      value: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'color',
+                                  value: {
+                                    mode: 'fixed',
+                                    fixedColor: 'red',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              matcher: {
+                                id: 'byRegexp',
+                                options: '.*drying',
+                              },
+                              properties: [
+                                {
+                                  id: 'mappings',
+                                  value: [
+                                    {
+                                      type: 1,
+                                      from: '',
+                                      to: '',
+                                      text: '🏜',
+                                      value: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'color',
+                                  value: {
+                                    mode: 'fixed',
+                                    fixedColor: 'super-light-orange',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              matcher: {
+                                id: 'byRegexp',
+                                options: '.*fan',
+                              },
+                              properties: [
+                                {
+                                  id: 'mappings',
+                                  value: [
+                                    {
+                                      type: 1,
+                                      from: '',
+                                      to: '',
+                                      text: '💨',
+                                      value: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'color',
+                                  value: {
+                                    mode: 'fixed',
+                                    fixedColor: 'green',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              matcher: {
+                                id: 'byRegexp',
+                                options: '.*idle',
+                              },
+                              properties: [
+                                {
+                                  id: 'mappings',
+                                  value: [
+                                    {
+                                      type: 1,
+                                      from: '',
+                                      to: '',
+                                      text: '💤',
+                                      value: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'color',
+                                  value: {
+                                    mode: 'fixed',
+                                    fixedColor: 'super-light-yellow',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              matcher: {
+                                id: 'byRegexp',
+                                options: '.*off',
+                              },
+                              properties: [
+                                {
+                                  id: 'mappings',
+                                  value: [
+                                    {
+                                      type: 1,
+                                      from: '',
+                                      to: '',
+                                      text: '⛔',
+                                      value: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'color',
+                                  value: {
+                                    mode: 'fixed',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              matcher: {
+                                id: 'byRegexp',
+                                options: '.*eco',
+                              },
+                              properties: [
+                                {
+                                  id: 'mappings',
+                                  value: [
+                                    {
+                                      type: 1,
+                                      from: '',
+                                      to: '',
+                                      text: '🌏',
+                                      value: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'color',
+                                  value: {
+                                    mode: 'fixed',
+                                    fixedColor: 'green',
+                                  },
+                                },
+                              ],
+                            },
+                            {
+                              matcher: {
+                                id: 'byRegexp',
+                                options: '.*home',
+                              },
+                              properties: [
+                                {
+                                  id: 'mappings',
+                                  value: [
+                                    {
+                                      type: 1,
+                                      from: '',
+                                      to: '',
+                                      text: '🏠',
+                                      value: 1,
+                                    },
+                                  ],
+                                },
+                                {
+                                  id: 'color',
+                                  value: {
+                                    mode: 'fixed',
+                                    fixedColor: 'yellow',
+                                  },
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                      };
 
 local battery_percent_panel = grafana.barGaugePanel.new(
                                 'Battery Levels',
@@ -231,7 +473,7 @@ local battery_percent_panel = grafana.barGaugePanel.new(
                                   displayMode: 'lcd',
                                   showUnfilled: true,
                                 },
-                                span: 12,
+                                span: 4,
                               }
                               + inactive_overrides;
 
@@ -239,6 +481,7 @@ local switch_state_panel = grafana.statPanel.new(
                              'Switch States',
                              colorMode='background',
                              datasource='$datasource',
+                             graphMode='none',
                            )
                            .addTarget(
                              grafana.prometheus.target(
@@ -247,12 +490,26 @@ local switch_state_panel = grafana.statPanel.new(
                                instant=true
                              ),
                            )
+                           .addMappings([
+                             {
+                               to: '',
+                               text: '✔',
+                               value: 1,
+                               type: 1,
+                             },
+                             {
+                               to: '',
+                               text: '❌',
+                               value: 0,
+                               type: 1,
+                             },
+                           ])
                            .addThresholds([
                              { color: 'red', value: 0 },
                              { color: 'green', value: 1 },
                            ])
                            +
-                           { span: 12, options+: { textMode: 'name' } } +
+                           { span: 4, options+: { textMode: 'value_and_name' } } +
                            inactive_overrides;
 
 local binary_sensor_panel = grafana.statPanel.new(
@@ -273,22 +530,35 @@ local binary_sensor_panel = grafana.statPanel.new(
                             ])
                             +
                             {
-                              span: 12,
+                              span: 4,
                               options+: { textMode: 'name' },
                             } + inactive_overrides;
 
 local temperature_c_panel = grafana.graphPanel.new(
                               'Temperature',
-                              span=12,
+                              span=6,
                               datasource='$datasource',
                             ) +
                             g.queryPanel(
-                              [queries.temperature_c],
-                              ['{{friendly_name}}'],
+                              [queries.temperature_c, queries.current_temperature_c],
+                              ['{{friendly_name}}', '{{friendly_name}} Current'],
                             ) +
                             {
                               yaxes: g.yaxes('celsius'),
                             };
+
+local humidity_panel = grafana.graphPanel.new(
+                         'Humidity',
+                         span=6,
+                         datasource='$datasource',
+                       ) +
+                       g.queryPanel(
+                         [queries.humidity, queries.humidity_target],
+                         ['{{friendly_name}}', '{{friendly_name}} Target'],
+                       ) +
+                       {
+                         yaxes: g.yaxes('percent'),
+                       };
 
 local lights_panel = grafana.barGaugePanel.new(
                        'Lights',
@@ -318,6 +588,43 @@ local lights_panel = grafana.barGaugePanel.new(
                        span: 6,
                      }
                      + inactive_overrides;
+
+local lock_state_panel = grafana.statPanel.new(
+                           'Locks',
+                           colorMode='background',
+                           datasource='$datasource',
+                           graphMode='none',
+                         )
+                         .addTarget(
+                           grafana.prometheus.target(
+                             queries.lock_state,
+                             legendFormat='{{friendly_name}}',
+                             instant=true
+                           ),
+                         )
+                         .addMappings([
+                           {
+                             to: '',
+                             text: '🔒',
+                             value: 1,
+                             type: 1,
+                           },
+                           {
+                             to: '',
+                             text: '🔓',
+                             value: 0,
+                             type: 1,
+                           },
+                         ])
+                         .addThresholds([
+                           { color: 'red', value: 0 },
+                           { color: 'green', value: 1 },
+                         ])
+                         +
+                         {
+                           span: 6,
+                           options+: { textMode: 'value_and_name' },
+                         } + inactive_overrides;
 
 local unsupported_sensors_panel = g.tablePanel(
   [queries.unsupported_sensors],
@@ -359,36 +666,40 @@ local unsupported_sensors_panel = g.tablePanel(
 
         // Input States
         .addPanel(input_bool_panel)
-      )
 
-      // Battery Row
-      .addRow(
-        grafana.row.new('Battery Level')
-
-        // Battery Level
-        .addPanel(battery_percent_panel)
+        // Climate
+        .addPanel(climate_panel)
       )
 
       // Switch Row
       .addRow(
-        grafana.row.new('Switch States')
+        grafana.row.new('States')
 
         // Switch States
         .addPanel(switch_state_panel)
+
+        // Binary Sensors
+        .addPanel(binary_sensor_panel)
+
+        // Battery Level
+        .addPanel(battery_percent_panel)
+
+        // Lights
+        .addPanel(lights_panel)
+
+        // Locks
+        .addPanel(lock_state_panel)
       )
 
       // Sensors Row
       .addRow(
         grafana.row.new('Sensors')
 
-        // Lights
-        .addPanel(lights_panel)
-
         // Temperature C
         .addPanel(temperature_c_panel)
 
-        // Binary Sensors
-        .addPanel(binary_sensor_panel)
+        // Humidity
+        .addPanel(humidity_panel)
 
         // Unsuported Sensors
         .addPanel(unsupported_sensors_panel)
