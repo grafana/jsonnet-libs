@@ -2,46 +2,46 @@ local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 
 local base_matcher = 'job=~"$job", instance=~"$instance"';
-local entity_matcher = base_matcher+', entity=~"$entity", friendly_name=~"$friendly_name"';
+local entity_matcher = base_matcher + ', entity=~"$entity", friendly_name=~"$friendly_name"';
 local available_entity_matcher_decoration = 'and on (entity) entity_available > 0';
 
 local queries = {
-  unsupported_sensor_count: 'count({__name__=~"sensor_unit_.+", '+base_matcher+'})',
-  unsupported_sensors: '{__name__=~"sensor_unit_.+", '+base_matcher+'}',
-  entity_count: 'count(entity_available{'+base_matcher+'})',
-  available_entity_percent: 'count(entity_available{'+base_matcher+'} > 0) / '+queries.entity_count,
-  latest_state_change_time: 'bottomk(1, (time() - last_updated_time_seconds{'+base_matcher+'}))',
+  unsupported_sensor_count: 'count({__name__=~"sensor_unit_.+", ' + base_matcher + '})',
+  unsupported_sensors: '{__name__=~"sensor_unit_.+", ' + base_matcher + '}',
+  entity_count: 'count(entity_available{' + base_matcher + '})',
+  available_entity_percent: 'count(entity_available{' + base_matcher + '} > 0) / ' + queries.entity_count,
+  latest_state_change_time: 'bottomk(1, (time() - last_updated_time_seconds{' + base_matcher + '}))',
 
-  input_boolean_state: 'input_boolean_state{'+base_matcher+'}',
+  input_boolean_state: 'input_boolean_state{' + base_matcher + '}',
 
-  battery_percent: 'battery_level_percent{'+entity_matcher+'} or battery_percent{'+entity_matcher+'} $Inactive on (entity) label_replace(entity_available{entity=~".+battery_level.*", '+entity_matcher+'} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
-  switch_state: 'switch_state{'+entity_matcher+'} $Inactive on (entity) label_replace(entity_available{domain="switch", '+entity_matcher+'} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
-  binary_sensor_state: 'binary_sensor_state{'+entity_matcher+'} $Inactive on (entity) label_replace(entity_available{domain="binary_sensor", '+entity_matcher+'} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
-  temperature_c: 'temperature_c{'+entity_matcher+'}',
-  light_state: 'light_state{'+entity_matcher+'} $Inactive on (entity) label_replace(entity_available{domain="light", '+entity_matcher+'} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  battery_percent: 'battery_level_percent{' + entity_matcher + '} or battery_percent{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{entity=~".+battery_level.*", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  switch_state: 'switch_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="switch", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  binary_sensor_state: 'binary_sensor_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="binary_sensor", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  temperature_c: 'temperature_c{' + entity_matcher + '}',
+  light_state: 'light_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="light", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
 };
 
-local inverse_colors = ['red','yellow','green'];
+local inverse_colors = ['red', 'yellow', 'green'];
 
 local inactive_overrides = {
   fieldConfig+: {
     overrides: [
       {
         matcher: {
-          id: "byRegexp",
-          options: ".+\\(Inactive\\)"
+          id: 'byRegexp',
+          options: '.+\\(Inactive\\)',
         },
         properties: [
           {
-            id: "color",
+            id: 'color',
             value: {
-              mode: "fixed"
-            }
-          }
-        ]
-      }
-    ]
-  }
+              mode: 'fixed',
+            },
+          },
+        ],
+      },
+    ],
+  },
 };
 
 // Templates
@@ -108,32 +108,32 @@ local inactive_template = {
   allValue: null,
   current: {
     selected: true,
-    text: "Include",
-    value: "or"
+    text: 'Include',
+    value: 'or',
   },
   description: null,
-  "error": null,
+  'error': null,
   hide: 0,
   includeAll: false,
   label: null,
   multi: false,
-  name: "Inactive",
+  name: 'Inactive',
   options: [
     {
       selected: true,
-      text: "Include",
-      value: "or"
+      text: 'Include',
+      value: 'or',
     },
     {
       selected: false,
-      text: "Exclude",
-      value: "unless"
-    }
+      text: 'Exclude',
+      value: 'unless',
+    },
   ],
-  query: "Include : or, Exclude : unless",
-  queryValue: "",
+  query: 'Include : or, Exclude : unless',
+  queryValue: '',
   skipUrlSync: false,
-  type: "custom"
+  type: 'custom',
 };
 
 // Panels
@@ -142,7 +142,7 @@ local unsupported_sensor_count_panel = grafana.singlestat.new(
   span=2,
   datasource='$datasource',
 )
-                               .addTarget(
+                                       .addTarget(
   grafana.prometheus.target(queries.unsupported_sensor_count)
 );
 
@@ -151,7 +151,7 @@ local entity_count_panel = grafana.singlestat.new(
   span=2,
   datasource='$datasource',
 )
-                               .addTarget(
+                           .addTarget(
   grafana.prometheus.target(queries.entity_count)
 );
 
@@ -165,154 +165,159 @@ local entities_available_percent_panel = grafana.singlestat.new(
   datasource='$datasource',
   gaugeMaxValue=1,
 )
-.addTarget(grafana.prometheus.target(queries.available_entity_percent));
+                                         .addTarget(grafana.prometheus.target(queries.available_entity_percent));
 
 local latest_update_panel = grafana.statPanel.new(
-  'Latest Update',
-  datasource='$datasource',
-)
-.addTarget(
-  grafana.prometheus.target(
-    queries.latest_state_change_time,
-    legendFormat='{{friendly_name}}',
-    instant=true,
-  )
-)
-+ {
-  span: 2,
-  options+: {
-    textMode: 'value_and_name',
-  }
-};
+                              'Latest Update',
+                              datasource='$datasource',
+                            )
+                            .addTarget(
+                              grafana.prometheus.target(
+                                queries.latest_state_change_time,
+                                legendFormat='{{friendly_name}}',
+                                instant=true,
+                              )
+                            )
+                            + {
+                              span: 2,
+                              options+: {
+                                textMode: 'value_and_name',
+                              },
+                            };
 
 local input_bool_panel = grafana.statPanel.new(
-  'Input States',
-  colorMode='background',
-  datasource='$datasource',
-)
-.addTarget(
-  grafana.prometheus.target(
-    queries.input_boolean_state,
-    legendFormat='{{friendly_name}}',
-    instant=true),
-)
-.addThresholds([
-  {color: 'red', value: 0},
-  {color: 'green', value: 1},
-])
-+
-{
-span: 12,
-options+: { textMode: 'name' }
-} +
-inactive_overrides;
+                           'Input States',
+                           colorMode='background',
+                           datasource='$datasource',
+                         )
+                         .addTarget(
+                           grafana.prometheus.target(
+                             queries.input_boolean_state,
+                             legendFormat='{{friendly_name}}',
+                             instant=true
+                           ),
+                         )
+                         .addThresholds([
+                           { color: 'red', value: 0 },
+                           { color: 'green', value: 1 },
+                         ])
+                         +
+                         {
+                           span: 12,
+                           options+: { textMode: 'name' },
+                         } +
+                         inactive_overrides;
 
 local battery_percent_panel = grafana.barGaugePanel.new(
-  'Battery Levels',
-  unit='percent',
-  datasource='$datasource',
-  thresholds=[
-    {color: 'red', value: 0},
-    {color: 'yellow', value: 40},
-    {color: 'green', value: 75},
-  ],
-)
-.addTarget(
-  grafana.prometheus.target(
-    queries.battery_percent,
-    legendFormat='{{friendly_name}}',
-    instant=true)
-)
-+
-{
-options+: {
-  displayMode: "lcd",
-  showUnfilled: true
-},
-span: 12,
-}
-+ inactive_overrides;
+                                'Battery Levels',
+                                unit='percent',
+                                datasource='$datasource',
+                                thresholds=[
+                                  { color: 'red', value: 0 },
+                                  { color: 'yellow', value: 40 },
+                                  { color: 'green', value: 75 },
+                                ],
+                              )
+                              .addTarget(
+                                grafana.prometheus.target(
+                                  queries.battery_percent,
+                                  legendFormat='{{friendly_name}}',
+                                  instant=true
+                                )
+                              )
+                              +
+                              {
+                                options+: {
+                                  displayMode: 'lcd',
+                                  showUnfilled: true,
+                                },
+                                span: 12,
+                              }
+                              + inactive_overrides;
 
 local switch_state_panel = grafana.statPanel.new(
-  'Switch States',
-  colorMode='background',
-  datasource='$datasource',
-)
-.addTarget(
-  grafana.prometheus.target(
-    queries.switch_state,
-    legendFormat='{{friendly_name}}',
-    instant=true),
-)
-.addThresholds([
-  {color: 'red', value: 0},
-  {color: 'green', value: 1},
-])
-+
-{ span: 12, options+: { textMode: 'name' }} +
-inactive_overrides;
+                             'Switch States',
+                             colorMode='background',
+                             datasource='$datasource',
+                           )
+                           .addTarget(
+                             grafana.prometheus.target(
+                               queries.switch_state,
+                               legendFormat='{{friendly_name}}',
+                               instant=true
+                             ),
+                           )
+                           .addThresholds([
+                             { color: 'red', value: 0 },
+                             { color: 'green', value: 1 },
+                           ])
+                           +
+                           { span: 12, options+: { textMode: 'name' } } +
+                           inactive_overrides;
 
 local binary_sensor_panel = grafana.statPanel.new(
-  'Binary Sensors',
-  colorMode='background',
-  datasource='$datasource',
-)
-.addTarget(
-  grafana.prometheus.target(
-    queries.binary_sensor_state,
-    legendFormat='{{friendly_name}}',
-    instant=true),
-)
-.addThresholds([
-  {color: 'red', value: 0},
-  {color: 'green', value: 1},
-])
-+
-{
-span: 12,
-options+: { textMode: 'name' },
-} + inactive_overrides;
+                              'Binary Sensors',
+                              colorMode='background',
+                              datasource='$datasource',
+                            )
+                            .addTarget(
+                              grafana.prometheus.target(
+                                queries.binary_sensor_state,
+                                legendFormat='{{friendly_name}}',
+                                instant=true
+                              ),
+                            )
+                            .addThresholds([
+                              { color: 'red', value: 0 },
+                              { color: 'green', value: 1 },
+                            ])
+                            +
+                            {
+                              span: 12,
+                              options+: { textMode: 'name' },
+                            } + inactive_overrides;
 
 local temperature_c_panel = grafana.graphPanel.new(
-  'Temperature',
-  span=12,
-  datasource='$datasource',
-) +
-g.queryPanel(
-  [queries.temperature_c],
-  ['{{friendly_name}}'],
-) +
-{
-  yaxes: g.yaxes('celsius')
-};
+                              'Temperature',
+                              span=12,
+                              datasource='$datasource',
+                            ) +
+                            g.queryPanel(
+                              [queries.temperature_c],
+                              ['{{friendly_name}}'],
+                            ) +
+                            {
+                              yaxes: g.yaxes('celsius'),
+                            };
 
 local lights_panel = grafana.barGaugePanel.new(
-  'Lights',
-  unit='percent',
-  datasource='$datasource',
-)
-.addTarget(
-  grafana.prometheus.target(
-    queries.light_state,
-    legendFormat='{{friendly_name}}',
-    instant=true)
-)
-+
-{
-options+: {
-  displayMode: "gradient",
-  showUnfilled: true,
-},
-fieldConfig+: {
-  defaults+: {
-    color: {
-      mode: "continuous-purples"
-    }
-  }
-},
-span: 6,
-}
-+ inactive_overrides;
+                       'Lights',
+                       unit='percent',
+                       datasource='$datasource',
+                     )
+                     .addTarget(
+                       grafana.prometheus.target(
+                         queries.light_state,
+                         legendFormat='{{friendly_name}}',
+                         instant=true
+                       )
+                     )
+                     +
+                     {
+                       options+: {
+                         displayMode: 'gradient',
+                         showUnfilled: true,
+                       },
+                       fieldConfig+: {
+                         defaults+: {
+                           color: {
+                             mode: 'continuous-purples',
+                           },
+                         },
+                       },
+                       span: 6,
+                     }
+                     + inactive_overrides;
 
 local unsupported_sensors_panel = g.tablePanel(
   [queries.unsupported_sensors],
@@ -321,7 +326,7 @@ local unsupported_sensors_panel = g.tablePanel(
     __name__: { alias: 'Metric' },
     'Value #A': { alias: 'Value' },
   }
-) + { span: 12, datasource: '$datasource', title: "Unsupported Sensors" };
+) + { span: 12, datasource: '$datasource', title: 'Unsupported Sensors' };
 
 // Manifested stuff starts here
 {
@@ -337,57 +342,57 @@ local unsupported_sensors_panel = g.tablePanel(
         inactive_template,
       ])
 
-      # Overview Row
+      // Overview Row
       .addRow(
         grafana.row.new('Overview')
-        # Unsupported Sensors
+        // Unsupported Sensors
         .addPanel(unsupported_sensor_count_panel)
 
-        # Total Entities
+        // Total Entities
         .addPanel(entity_count_panel)
 
-        # Available Entities
+        // Available Entities
         .addPanel(entities_available_percent_panel)
 
-        # Latest Update
+        // Latest Update
         .addPanel(latest_update_panel)
 
-        # Input States
+        // Input States
         .addPanel(input_bool_panel)
       )
 
-      # Battery Row
+      // Battery Row
       .addRow(
         grafana.row.new('Battery Level')
 
-        # Battery Level
+        // Battery Level
         .addPanel(battery_percent_panel)
       )
 
-      # Switch Row
+      // Switch Row
       .addRow(
         grafana.row.new('Switch States')
 
-        # Switch States
+        // Switch States
         .addPanel(switch_state_panel)
       )
 
-      # Sensors Row
+      // Sensors Row
       .addRow(
         grafana.row.new('Sensors')
 
-        # Lights
+        // Lights
         .addPanel(lights_panel)
 
-        # Temperature C
+        // Temperature C
         .addPanel(temperature_c_panel)
 
-        # Binary Sensors
+        // Binary Sensors
         .addPanel(binary_sensor_panel)
 
-        # Unsuported Sensors
+        // Unsuported Sensors
         .addPanel(unsupported_sensors_panel)
       ) +
       { graphTooltip: 2 },  // Shared tooltip. When you hover over a graph, the same time is selected on all graphs, and tooltip is shown. Set to 1 to only share crosshair
-      }
-  }
+  },
+}
