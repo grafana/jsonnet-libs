@@ -15,8 +15,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 10,
-  "iteration": 1623180758317,
+  "id": 12,
+  "iteration": 1623958852526,
   "links": [],
   "panels": [
     {
@@ -99,7 +99,8 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "count(zookeeper_status_quorumsize{job=\"zookeeper\"})",
+          "exemplar": true,
+          "expr": "count(zookeeper_status_quorumsize{server_id=~\"$serverid\",job=\"zookeeper\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -188,7 +189,8 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(zookeeper_numaliveconnections{job=\"zookeeper\"})",
+          "exemplar": true,
+          "expr": "sum(zookeeper_numaliveconnections{server_id=~\"$serverid\",job=\"zookeeper\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -209,7 +211,7 @@
       ],
       "valueName": "current"
     },
-    {      
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -251,7 +253,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.5.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -261,7 +263,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "zookeeper_outstandingrequests{job=\"zookeeper\"}",
+          "exemplar": true,
+          "expr": "zookeeper_outstandingrequests{server_id=~\"$serverid\",job=\"zookeeper\"}",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -386,7 +389,8 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "avg(zookeeper_inmemorydatatree_nodecount{job=\"zookeeper\"})",
+          "exemplar": true,
+          "expr": "avg(zookeeper_inmemorydatatree_nodecount{server_id=~\"$serverid\",job=\"zookeeper\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -475,7 +479,8 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum(zookeeper_inmemorydatatree_watchcount{job=\"zookeeper\"})",
+          "exemplar": true,
+          "expr": "sum(zookeeper_inmemorydatatree_watchcount{server_id=~\"$serverid\",job=\"zookeeper\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -548,7 +553,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.5.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -558,6 +563,7 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "irate(process_cpu_seconds_total{job=\"zookeeper\"}[5m])*100",
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -645,7 +651,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.5.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -655,12 +661,14 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "sum without(area)(jvm_memory_bytes_used{job=\"zookeeper\"})",
           "interval": "",
           "legendFormat": "Used:{{instance}}",
           "refId": "A"
         },
         {
+          "exemplar": true,
           "expr": "jvm_memory_bytes_max{job=\"zookeeper\",area=\"heap\"}",
           "interval": "",
           "legendFormat": "Max:{{instance}}",
@@ -748,7 +756,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.5.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -758,6 +766,7 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"zookeeper\"}[5m]))",
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -857,7 +866,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.5.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -867,7 +876,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "zookeeper_minrequestlatency{job=\"zookeeper\"} * zookeeper_ticktime",
+          "exemplar": true,
+          "expr": "zookeeper_minrequestlatency{server_id=~\"$serverid\",job=\"zookeeper\"} * zookeeper_ticktime",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -915,7 +925,7 @@
         "alignLevel": null
       }
     },
-    {      
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -954,7 +964,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.5.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -964,7 +974,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "zookeeper_avgrequestlatency{job=\"zookeeper\"} * zookeeper_ticktime",
+          "exemplar": true,
+          "expr": "zookeeper_avgrequestlatency{server_id=~\"$serverid\",job=\"zookeeper\"} * zookeeper_ticktime{server_id=~\"$serverid\",job=\"zookeeper\"}",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -1060,7 +1071,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.6",
+      "pluginVersion": "7.5.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1070,7 +1081,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "zookeeper_maxrequestlatency{job=\"zookeeper\"} * zookeeper_ticktime",
+          "exemplar": true,
+          "expr": "zookeeper_maxrequestlatency{server_id=~\"$serverid\",job=\"zookeeper\"} * zookeeper_ticktime",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -1144,11 +1156,68 @@
         "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "tags": [],
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "${datasource}",
+        "definition": "label_values(zookeeper_status_quorumsize,server_id)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "serverId",
+        "multi": true,
+        "name": "serverid",
+        "options": [
+          {
+            "selected": true,
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "1",
+            "value": "1"
+          },
+          {
+            "selected": false,
+            "text": "2",
+            "value": "2"
+          },
+          {
+            "selected": false,
+            "text": "3",
+            "value": "3"
+          }
+        ],
+        "query": {
+          "query": "label_values(zookeeper_status_quorumsize,server_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 0,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       }
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -1167,5 +1236,5 @@
   "timezone": "",
   "title": "Zookeeper Overview",
   "uid": "H4xS98vWk",
-  "version": 1
+  "version": 2
 }
