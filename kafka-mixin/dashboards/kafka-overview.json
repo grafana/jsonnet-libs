@@ -13,11 +13,11 @@
     ]
   },
   "description": "Kafka resource usage and throughput",
-  "editable": true,
+  "editable": false,
   "gnetId": 721,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1623181909997,
+  "id": 5,
+  "iteration": 1624298233560,
   "links": [],
   "panels": [
     {
@@ -102,7 +102,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_controller_kafkacontroller_activecontrollercount{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_controller_kafkacontroller_activecontrollercount{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -184,7 +184,7 @@
       "repeatDirection": "h",
       "targets": [
         {
-          "expr": "count(kafka_server_replicamanager_leadercount{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "count(kafka_server_replicamanager_leadercount{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -262,7 +262,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_controller_controllerstats_uncleanleaderelectionspersec{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_controller_controllerstats_uncleanleaderelectionspersec{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -339,7 +339,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_controller_kafkacontroller_preferredreplicaimbalancecount{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_controller_kafkacontroller_preferredreplicaimbalancecount{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -401,7 +401,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"kafka\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
+          "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"integrations/kafka\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "Bytes in",
@@ -410,7 +410,7 @@
           "step": 4
         },
         {
-          "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"kafka\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
+          "expr": "sum(rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"integrations/kafka\",instance=~\"$broker_id\",topic!=\"\"}[5m]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -528,7 +528,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_controller_kafkacontroller_offlinepartitionscount{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_controller_kafkacontroller_offlinepartitionscount{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -608,7 +608,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_server_replicamanager_underreplicatedpartitions{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_server_replicamanager_underreplicatedpartitions{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "format": "time_series",
           "hide": false,
           "intervalFactor": 2,
@@ -683,7 +683,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_cluster_partition_underminisr{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_cluster_partition_underminisr{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -764,7 +764,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_server_replicamanager_partitioncount{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_server_replicamanager_partitioncount{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -844,7 +844,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(process_cpu_seconds_total{job=\"kafka\",instance=~\"$broker_id\"}[5m])*100",
+          "expr": "irate(process_cpu_seconds_total{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m])*100",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
@@ -950,7 +950,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
           "metric": "jvm_memory_bytes_used",
@@ -1055,7 +1055,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"kafka\",instance=~\"$broker_id\"}[5m]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m]))",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
           "metric": "jvm_gc_collection_seconds_sum",
@@ -1172,7 +1172,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance)(rate(kafka_server_brokertopicmetrics_messagesinpersec{job=\"kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
+          "expr": "sum without(instance)(rate(kafka_server_brokertopicmetrics_messagesinpersec{job=\"integrations/kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
           "interval": "",
           "intervalFactor": 2,
           "legendFormat": "{{topic}}",
@@ -1276,7 +1276,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
+          "expr": "sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"integrations/kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1381,7 +1381,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
+          "expr": "sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"integrations/kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
           "interval": "",
           "intervalFactor": 2,
           "legendFormat": "{{topic}}",
@@ -1485,7 +1485,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_messagesinpersec{job=\"kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
+          "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_messagesinpersec{job=\"integrations/kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1590,7 +1590,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
+          "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"integrations/kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1691,7 +1691,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
+          "expr": "sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"integrations/kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}[5m]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1803,7 +1803,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_replicamanager_partitioncount{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_server_replicamanager_partitioncount{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1899,7 +1899,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_controller_kafkacontroller_offlinepartitionscount{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_controller_kafkacontroller_offlinepartitionscount{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1995,7 +1995,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_cluster_partition_underreplicated{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_cluster_partition_underreplicated{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -2091,7 +2091,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_cluster_partition_underminisr{job=\"kafka\",instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_cluster_partition_underminisr{job=\"integrations/kafka\",instance=~\"$broker_id\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -2158,7 +2158,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "Average fraction of time the network processor threads are idle. Values are between 0 (all resources are used) and 100 (all resources are available)\n",
+      "description": "Average fraction of time the network processor threads are idle. Values are between 0 (all resources are used) and 100 (all resources are available) ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -2201,7 +2201,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_socketserver_networkprocessoravgidlepercent{job=\"kafka\",instance=~\"$broker_id\"}",
+          "expr": "kafka_network_socketserver_networkprocessoravgidlepercent{job=\"integrations/kafka\",instance=~\"$broker_id\"}",
           "legendFormat": "{{instance}}",
           "refId": "A"
         }
@@ -2253,7 +2253,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "Average fraction of time the request handler threads are idle. Values are between 0 (all resources are used) and 100 (all resources are available).\n",
+      "description": "Average fraction of time the request handler threads are idle. Values are between 0 (all resources are used) and 100 (all resources are available). ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -2296,7 +2296,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent_total{job=\"kafka\",instance=~\"$broker_id\"}",
+          "expr": "kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent_total{job=\"integrations/kafka\",instance=~\"$broker_id\"}",
           "legendFormat": "{{instance}}",
           "refId": "A"
         }
@@ -2390,7 +2390,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestchannel_requestqueuesize{job=\"kafka\",  instance=~\"$broker_id\"}",
+          "expr": "kafka_network_requestchannel_requestqueuesize{job=\"integrations/kafka\",  instance=~\"$broker_id\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -2485,7 +2485,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestchannel_responsequeuesize{job=\"kafka\",  instance=~\"$broker_id\",processor=\"\"}",
+          "expr": "kafka_network_requestchannel_responsequeuesize{job=\"integrations/kafka\",  instance=~\"$broker_id\",processor=\"\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -2552,7 +2552,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "Latency in millseconds for ZooKeeper requests from broker.\n",
+      "description": "Latency in millseconds for ZooKeeper requests from broker. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -2595,7 +2595,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\"}",
+          "expr": "kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -2691,7 +2691,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(kafka_server_sessionexpirelistener_zookeepersyncconnectspersec{job=\"kafka\",instance=~\"$broker_id\"}[5m])",
+          "expr": "rate(kafka_server_sessionexpirelistener_zookeepersyncconnectspersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m])",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -2789,7 +2789,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(kafka_server_sessionexpirelistener_zookeeperexpirespersec{job=\"kafka\",instance=~\"$broker_id\"}[5m])",
+          "expr": "rate(kafka_server_sessionexpirelistener_zookeeperexpirespersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -2886,7 +2886,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(kafka_server_sessionexpirelistener_zookeeperdisconnectspersec{job=\"kafka\",instance=~\"$broker_id\"}[5m])",
+          "expr": "rate(kafka_server_sessionexpirelistener_zookeeperdisconnectspersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -2983,7 +2983,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(kafka_server_sessionexpirelistener_zookeeperauthfailurespersec{job=\"kafka\",instance=~\"$broker_id\"}[5m])",
+          "expr": "rate(kafka_server_sessionexpirelistener_zookeeperauthfailurespersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -3094,7 +3094,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_server_replicamanager_isrshrinkspersec{job=\"kafka\",instance=~\"$broker_id\"}",
+          "expr": "kafka_server_replicamanager_isrshrinkspersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}",
           "legendFormat": "{{instance}}",
           "refId": "A"
         }
@@ -3189,7 +3189,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_server_replicamanager_isrexpandspersec{job=\"kafka\",instance=~\"$broker_id\"}",
+          "expr": "kafka_server_replicamanager_isrexpandspersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}",
           "hide": false,
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -3298,7 +3298,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_log_log_size{job=\"kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}) by (topic)",
+          "expr": "sum(kafka_log_log_size{job=\"integrations/kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}) by (topic)",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -3393,7 +3393,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_log_log_size{job=\"kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}) by (instance)",
+          "expr": "sum(kafka_log_log_size{job=\"integrations/kafka\",instance=~\"$broker_id\",topic=~\"$topic\"}) by (instance)",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -3503,7 +3503,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_requestqueuetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
+          "expr": "kafka_network_requestmetrics_requestqueuetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -3599,7 +3599,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_localtimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
+          "expr": "kafka_network_requestmetrics_localtimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -3652,7 +3652,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms.\n",
+      "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -3695,7 +3695,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_remotetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
+          "expr": "kafka_network_requestmetrics_remotetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -3748,7 +3748,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue.\n",
+      "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -3791,7 +3791,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_responsequeuetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
+          "expr": "kafka_network_requestmetrics_responsequeuetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -3844,7 +3844,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block.\n",
+      "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -3887,7 +3887,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_responsesendtimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
+          "expr": "kafka_network_requestmetrics_responsesendtimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Produce\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -3997,7 +3997,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_requestqueuetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
+          "expr": "kafka_network_requestmetrics_requestqueuetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4093,7 +4093,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_localtimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
+          "expr": "kafka_network_requestmetrics_localtimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4146,7 +4146,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms.\n",
+      "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -4189,7 +4189,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_remotetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
+          "expr": "kafka_network_requestmetrics_remotetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4242,7 +4242,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue.\n",
+      "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -4285,7 +4285,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_responsequeuetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
+          "expr": "kafka_network_requestmetrics_responsequeuetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4338,7 +4338,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block.\n",
+      "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -4381,7 +4381,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_responsesendtimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
+          "expr": "kafka_network_requestmetrics_responsesendtimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"Fetch\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4491,7 +4491,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_requestqueuetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
+          "expr": "kafka_network_requestmetrics_requestqueuetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4587,7 +4587,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_localtimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
+          "expr": "kafka_network_requestmetrics_localtimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4640,7 +4640,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms.\n",
+      "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -4683,7 +4683,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_remotetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
+          "expr": "kafka_network_requestmetrics_remotetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4736,7 +4736,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue.\n",
+      "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -4779,7 +4779,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_responsequeuetimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
+          "expr": "kafka_network_requestmetrics_responsequeuetimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4832,7 +4832,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
-      "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block.\n",
+      "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block. ",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -4875,7 +4875,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_requestmetrics_responsesendtimems{job=\"kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
+          "expr": "kafka_network_requestmetrics_responsesendtimems{job=\"integrations/kafka\",instance=~\"$broker_id\",quantile=~\"$percentile\",request=\"FetchFollower\"}",
           "hide": false,
           "legendFormat": "{{instance}} - {{quantile}}",
           "refId": "A"
@@ -4985,7 +4985,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_coordinator_group_groupmetadatamanager_numgroups{job=\"kafka\",  instance=~\"$broker_id\"}",
+          "expr": "kafka_coordinator_group_groupmetadatamanager_numgroups{job=\"integrations/kafka\",  instance=~\"$broker_id\"}",
           "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -5082,32 +5082,32 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupsstable{job=\"kafka\",  instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupsstable{job=\"integrations/kafka\",  instance=~\"$broker_id\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "stable",
           "refId": "A"
         },
         {
-          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupspreparingrebalance{job=\"kafka\",  instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupspreparingrebalance{job=\"integrations/kafka\",  instance=~\"$broker_id\"})",
           "interval": "",
           "legendFormat": "preparing-rebalance",
           "refId": "B"
         },
         {
-          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupsdead{job=\"kafka\",  instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupsdead{job=\"integrations/kafka\",  instance=~\"$broker_id\"})",
           "interval": "",
           "legendFormat": "dead",
           "refId": "C"
         },
         {
-          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupscompletingrebalance{job=\"kafka\",  instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupscompletingrebalance{job=\"integrations/kafka\",  instance=~\"$broker_id\"})",
           "interval": "",
           "legendFormat": "completing-rebalance",
           "refId": "D"
         },
         {
-          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupsempty{job=\"kafka\",  instance=~\"$broker_id\"})",
+          "expr": "sum(kafka_coordinator_group_groupmetadatamanager_numgroupsempty{job=\"integrations/kafka\",  instance=~\"$broker_id\"})",
           "interval": "",
           "legendFormat": "empty",
           "refId": "E"
@@ -5216,7 +5216,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_socketservermetrics_connection_count{job=\"kafka\",  instance=~\"$broker_id\"}) by (listener)",
+          "expr": "sum(kafka_server_socketservermetrics_connection_count{job=\"integrations/kafka\",  instance=~\"$broker_id\"}) by (listener)",
           "interval": "",
           "legendFormat": "{{listener}}",
           "refId": "A"
@@ -5311,7 +5311,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_socketservermetrics_connection_count{job=\"kafka\",  instance=~\"$broker_id\"}) by (instance)",
+          "expr": "sum(kafka_server_socketservermetrics_connection_count{job=\"integrations/kafka\",  instance=~\"$broker_id\"}) by (instance)",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -5406,7 +5406,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_socketservermetrics_connection_creation_rate{job=\"kafka\",  instance=~\"$broker_id\"}) by (listener)",
+          "expr": "sum(kafka_server_socketservermetrics_connection_creation_rate{job=\"integrations/kafka\",  instance=~\"$broker_id\"}) by (listener)",
           "interval": "",
           "legendFormat": "{{listener}}",
           "refId": "A"
@@ -5501,7 +5501,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_socketservermetrics_connection_creation_rate{job=\"kafka\",  instance=~\"$broker_id\"}) by (instance)",
+          "expr": "sum(kafka_server_socketservermetrics_connection_creation_rate{job=\"integrations/kafka\",  instance=~\"$broker_id\"}) by (instance)",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -5596,7 +5596,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_socketservermetrics_connection_close_rate{job=\"kafka\",  instance=~\"$broker_id\"}) by (listener)",
+          "expr": "sum(kafka_server_socketservermetrics_connection_close_rate{job=\"integrations/kafka\",  instance=~\"$broker_id\"}) by (listener)",
           "interval": "",
           "legendFormat": "{{listener}}",
           "refId": "A"
@@ -5691,7 +5691,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_socketservermetrics_connection_close_rate{job=\"kafka\",  instance=~\"$broker_id\"}) by (instance)",
+          "expr": "sum(kafka_server_socketservermetrics_connection_close_rate{job=\"integrations/kafka\",  instance=~\"$broker_id\"}) by (instance)",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -5787,7 +5787,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_network_acceptor_acceptorblockedpercent{job=\"kafka\",  instance=~\"$broker_id\"}",
+          "expr": "kafka_network_acceptor_acceptorblockedpercent{job=\"integrations/kafka\",  instance=~\"$broker_id\"}",
           "interval": "",
           "legendFormat": "{{instance}} - {{listener}}",
           "refId": "A"
@@ -5882,7 +5882,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_server_socketservermetrics_connections{job=\"kafka\",  instance=~\"$broker_id\"}) by (client_software_name, client_software_version)",
+          "expr": "sum(kafka_server_socketservermetrics_connections{job=\"integrations/kafka\",  instance=~\"$broker_id\"}) by (client_software_name, client_software_version)",
           "interval": "",
           "legendFormat": "{{client_software_name}} {{client_software_version}}",
           "refId": "A"
@@ -6004,7 +6004,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"kafka\",instance=~\"$broker_id\"}[5m]))",
+          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -6076,7 +6076,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"kafka\",instance=~\"$broker_id\",request=\"Produce\"}[5m]))",
+          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"integrations/kafka\",instance=~\"$broker_id\",request=\"Produce\"}[5m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -6148,7 +6148,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"kafka\",instance=~\"$broker_id\",request=\"FetchConsumer\"}[5m]))",
+          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"integrations/kafka\",instance=~\"$broker_id\",request=\"FetchConsumer\"}[5m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -6220,7 +6220,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"kafka\",instance=~\"$broker_id\",request=\"OffsetCommit\"}[5m]))",
+          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"integrations/kafka\",instance=~\"$broker_id\",request=\"OffsetCommit\"}[5m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -6292,7 +6292,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"kafka\",instance=~\"$broker_id\",request=\"Metadata\"}[5m]))",
+          "expr": "sum(rate(kafka_network_requestmetrics_requestspersec{job=\"integrations/kafka\",instance=~\"$broker_id\",request=\"Metadata\"}[5m]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -6352,7 +6352,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(kafka_server_brokertopicmetrics_totalproducerequestspersec{job=\"kafka\",  instance=~\"$broker_id\",topic=~\"$topic\"}[5m])) by (topic)",
+          "expr": "sum(rate(kafka_server_brokertopicmetrics_totalproducerequestspersec{job=\"integrations/kafka\",  instance=~\"$broker_id\",topic=~\"$topic\"}[5m])) by (topic)",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -6448,7 +6448,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(kafka_server_brokertopicmetrics_totalfetchrequestspersec{job=\"kafka\",  instance=~\"$broker_id\",topic=~\"$topic\"}[5m])) by (topic)",
+          "expr": "sum(rate(kafka_server_brokertopicmetrics_totalfetchrequestspersec{job=\"integrations/kafka\",  instance=~\"$broker_id\",topic=~\"$topic\"}[5m])) by (topic)",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -6558,7 +6558,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(kafka_server_brokertopicmetrics_producemessageconversionspersec{job=\"kafka\",instance=~\"$broker_id\"}[5m]))",
+          "expr": "sum(rate(kafka_server_brokertopicmetrics_producemessageconversionspersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "",
@@ -6655,7 +6655,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(kafka_server_brokertopicmetrics_fetchmessageconversionspersec{job=\"kafka\",instance=~\"$broker_id\"}[5m]))",
+          "expr": "sum(rate(kafka_server_brokertopicmetrics_fetchmessageconversionspersec{job=\"integrations/kafka\",instance=~\"$broker_id\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{topic}}",
@@ -6757,7 +6757,7 @@
       },
       "targets": [
         {
-          "expr": "sum(kafka_server_socketservermetrics_connections{job=\"kafka\",  instance=~\"$broker_id\"}) by (client_software_name, client_software_version) ",
+          "expr": "sum(kafka_server_socketservermetrics_connections{job=\"integrations/kafka\",  instance=~\"$broker_id\"}) by (client_software_name, client_software_version) ",
           "interval": "",
           "legendFormat": "{{client_software_name}} - {{client_software_version}}",
           "refId": "A"
@@ -6769,10 +6769,12 @@
       "type": "piechart"
     }
   ],
-  "refresh": "1m",
+  "refresh": "30s",
   "schemaVersion": 27,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "kafka-integration"
+  ],
   "templating": {
     "list": [
       {
@@ -6899,7 +6901,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -6929,5 +6931,5 @@
   "timezone": "browser",
   "title": "Kafka Overview",
   "uid": "qu-QZdfZz",
-  "version": 3
+  "version": 1
 }

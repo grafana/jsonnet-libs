@@ -16,8 +16,8 @@
   "editable": true,
   "gnetId": 7589,
   "graphTooltip": 0,
-  "id": 5,
-  "iteration": 1623351715762,
+  "id": 4,
+  "iteration": 1624298095330,
   "links": [],
   "panels": [
     {
@@ -72,8 +72,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(kafka_topic_partition_current_offset{instance=\"$instance\", topic=~\"$topic\"}[1m])) by (topic)",
+          "exemplar": true,
+          "expr": "sum(delta(kafka_topic_partition_current_offset{instance=~'$instance', topic=~\"$topic\"}[1m])/60) by (topic)",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{topic}}",
           "refId": "B"
@@ -172,8 +174,10 @@
       "steppedLine": false,
       "targets": [
         {
+          "exemplar": true,
           "expr": "sum(delta(kafka_topic_partition_current_offset{instance=~'$instance', topic=~\"$topic\"}[5m])/5) by (topic)",
           "format": "time_series",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -241,13 +245,15 @@
       "hiddenSeries": false,
       "id": 20,
       "legend": {
+        "alignAsTable": true,
         "avg": false,
-        "current": false,
-        "max": false,
+        "current": true,
+        "max": true,
         "min": false,
+        "rightSide": false,
         "show": true,
         "total": false,
-        "values": false
+        "values": true
       },
       "lines": true,
       "linewidth": 1,
@@ -569,7 +575,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(kafka_consumergroup_uncommitted_offsets{instance=\"$instance\",topic=~\"$topic\"}) by (consumergroup, topic) ",
+          "expr": "avg(kafka_consumergroup_uncommitted_offsets{instance=~'$instance',topic=~\"$topic\"}) by (consumergroup, topic)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -622,7 +628,7 @@
       }
     },
     {
-      "datasource": "${datasource}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -664,7 +670,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by(topic) (kafka_topic_partitions{instance=\"$instance\",topic=~\"$topic\"})",
+          "expr": "sum by(topic) (kafka_topic_partitions{instance=~'$instance',topic=~\"$topic\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -679,19 +685,19 @@
       "type": "table"
     }
   ],
-  "refresh": false,
+  "refresh": "30s",
   "schemaVersion": 27,
   "style": "dark",
   "tags": [
-    "Kafka"
+    "kafka-integration"
   ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
+          "text": "default",
+          "value": "default"
         },
         "description": null,
         "error": null,
@@ -712,23 +718,32 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "192.168.99.101:9308",
-          "value": "192.168.99.101:9308"
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": "${datasource}",
         "definition": "label_values(kafka_consumergroup_current_offset, instance)",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Exporter Instance",
-        "multi": false,
+        "multi": true,
         "name": "instance",
         "options": [
           {
             "selected": true,
-            "text": "192.168.99.101:9308",
-            "value": "192.168.99.101:9308"
+            "text": "All",
+            "value": "$__all"
+          },
+          {
+            "selected": false,
+            "text": "192.168.99.103:9308",
+            "value": "192.168.99.103:9308"
           }
         ],
         "query": {
@@ -748,12 +763,12 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": [
-            "WIKIPEDIABOT"
+            "All"
           ],
           "value": [
-            "WIKIPEDIABOT"
+            "$__all"
           ]
         },
         "datasource": "${datasource}",
@@ -783,7 +798,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -814,5 +829,5 @@
   "timezone": "browser",
   "title": "Kafka Lag Overview",
   "uid": "jwPKIsniz",
-  "version": 2
+  "version": 5
 }

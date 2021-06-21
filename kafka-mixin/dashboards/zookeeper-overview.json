@@ -100,7 +100,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(zookeeper_status_quorumsize{server_id=~\"$serverid\",job=\"zookeeper\"})",
+          "expr": "count(zookeeper_status_quorumsize{server_id=~\"$serverid\",job=\"integrations/zookeeper\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -190,7 +190,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(zookeeper_numaliveconnections{server_id=~\"$serverid\",job=\"zookeeper\"})",
+          "expr": "sum(zookeeper_numaliveconnections{server_id=~\"$serverid\",job=\"integrations/zookeeper\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -264,7 +264,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "zookeeper_outstandingrequests{server_id=~\"$serverid\",job=\"zookeeper\"}",
+          "expr": "zookeeper_outstandingrequests{server_id=~\"$serverid\",job=\"integrations/zookeeper\"}",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -390,7 +390,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg(zookeeper_inmemorydatatree_nodecount{server_id=~\"$serverid\",job=\"zookeeper\"})",
+          "expr": "avg(zookeeper_inmemorydatatree_nodecount{server_id=~\"$serverid\",job=\"integrations/zookeeper\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -480,7 +480,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(zookeeper_inmemorydatatree_watchcount{server_id=~\"$serverid\",job=\"zookeeper\"})",
+          "expr": "sum(zookeeper_inmemorydatatree_watchcount{server_id=~\"$serverid\",job=\"integrations/zookeeper\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -564,7 +564,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(process_cpu_seconds_total{job=\"zookeeper\"}[5m])*100",
+          "expr": "irate(process_cpu_seconds_total{job=\"integrations/zookeeper\"}[5m])*100",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -662,14 +662,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"zookeeper\"})",
+          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"integrations/zookeeper\"})",
           "interval": "",
           "legendFormat": "Used:{{instance}}",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "jvm_memory_bytes_max{job=\"zookeeper\",area=\"heap\"}",
+          "expr": "jvm_memory_bytes_max{job=\"integrations/zookeeper\",area=\"heap\"}",
           "interval": "",
           "legendFormat": "Max:{{instance}}",
           "refId": "B"
@@ -767,7 +767,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"zookeeper\"}[5m]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/zookeeper\"}[5m]))",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -877,7 +877,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "zookeeper_minrequestlatency{server_id=~\"$serverid\",job=\"zookeeper\"} * zookeeper_ticktime",
+          "expr": "zookeeper_minrequestlatency{server_id=~\"$serverid\",job=\"integrations/zookeeper\"} * zookeeper_ticktime",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -975,7 +975,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "zookeeper_avgrequestlatency{server_id=~\"$serverid\",job=\"zookeeper\"} * zookeeper_ticktime{server_id=~\"$serverid\",job=\"zookeeper\"}",
+          "expr": "zookeeper_avgrequestlatency{server_id=~\"$serverid\",job=\"integrations/zookeeper\"} * zookeeper_ticktime{server_id=~\"$serverid\",job=\"integrations/zookeeper\"}",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -1082,7 +1082,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "zookeeper_maxrequestlatency{server_id=~\"$serverid\",job=\"zookeeper\"} * zookeeper_ticktime",
+          "expr": "zookeeper_maxrequestlatency{server_id=~\"$serverid\",job=\"integrations/zookeeper\"} * zookeeper_ticktime",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
