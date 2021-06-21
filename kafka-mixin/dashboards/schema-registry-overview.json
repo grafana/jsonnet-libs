@@ -80,7 +80,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg(kafka_schema_registry_registered_count{instance=~\"$instance\",job=\"integrations/schemaregistry\"})",
+          "expr": "avg(kafka_schema_registry_registered_count{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -139,7 +139,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by(schema_type) (kafka_schema_registry_schemas_created{instance=~\"$instance\",job=\"integrations/schemaregistry\"})",
+          "expr": "avg by(schema_type) (kafka_schema_registry_schemas_created{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"})",
           "interval": "",
           "legendFormat": "{{schema_type}}",
           "refId": "A"
@@ -240,7 +240,7 @@
       "pluginVersion": "7.3.4",
       "targets": [
         {
-          "expr": "avg by(schema_type)(kafka_schema_registry_schemas_created{instance=~\"$instance\",job=\"integrations/schemaregistry\"})",
+          "expr": "avg by(schema_type)(kafka_schema_registry_schemas_created{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{schema_type}}",
@@ -306,7 +306,7 @@
       "pluginVersion": "7.3.4",
       "targets": [
         {
-          "expr": "avg by(schema_type)(kafka_schema_registry_schemas_deleted{instance=~\"$instance\",job=\"integrations/schemaregistry\"})",
+          "expr": "avg by(schema_type)(kafka_schema_registry_schemas_deleted{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{schema_type}}",
@@ -382,7 +382,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(process_cpu_seconds_total{instance=~\"$instance\",job=\"integrations/schemaregistry\"}[5m])*100",
+          "expr": "irate(process_cpu_seconds_total{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"}[5m])*100",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -479,13 +479,13 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(area)(jvm_memory_bytes_used{instance=~\"$instance\",job=\"integrations/schemaregistry\"})",
+          "expr": "sum without(area)(jvm_memory_bytes_used{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"})",
           "interval": "",
           "legendFormat": "Used:{{instance}}",
           "refId": "A"
         },
         {
-          "expr": "jvm_memory_bytes_max{job=\"integrations/schemaregistry\",area=\"heap\"}",
+          "expr": "jvm_memory_bytes_max{job=\"integrations/kafka-schemaregistry\",area=\"heap\"}",
           "interval": "",
           "legendFormat": "Max:{{instance}}",
           "refId": "B"
@@ -582,7 +582,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{instance=~\"$instance\",job=\"integrations/schemaregistry\"}[5m]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"}[5m]))",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -689,7 +689,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_schema_registry_jetty_metrics_connections_active{instance=~\"$instance\",job=\"integrations/schemaregistry\"}",
+          "expr": "kafka_schema_registry_jetty_metrics_connections_active{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -783,7 +783,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_schema_registry_jersey_metrics_request_rate{instance=~\"$instance\",job=\"integrations/schemaregistry\"}",
+          "expr": "kafka_schema_registry_jersey_metrics_request_rate{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -877,7 +877,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_schema_registry_jersey_metrics_request_latency_99{instance=~\"$instance\",job=\"integrations/schemaregistry\"}",
+          "expr": "kafka_schema_registry_jersey_metrics_request_latency_99{instance=~\"$instance\",job=\"integrations/kafka-schemaregistry\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
