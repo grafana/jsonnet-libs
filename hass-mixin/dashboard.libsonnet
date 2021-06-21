@@ -8,22 +8,22 @@ local available_entity_matcher_decoration = 'and on (entity) entity_available > 
 local queries = {
   unsupported_sensor_count: 'count({__name__=~"sensor_unit_.+", ' + base_matcher + '})',
   unsupported_sensors: '{__name__=~"sensor_unit_.+", ' + base_matcher + '}',
-  entity_count: 'count(entity_available{' + base_matcher + '})',
-  available_entity_percent: 'count(entity_available{' + base_matcher + '} > 0) / ' + queries.entity_count,
-  latest_state_change_time: 'bottomk(1, (time() - last_updated_time_seconds{' + base_matcher + '}))',
+  entity_count: 'count({__name__=~"$prefix\\\\_?entity_available", ' + base_matcher + '})',
+  available_entity_percent: 'count({__name__=~"$prefix\\\\_?entity_available", ' + base_matcher + '} > 0) / ' + queries.entity_count,
+  latest_state_change_time: 'bottomk(1, (time() - {__name__=~"$prefix\\\\_?last_updated_time_seconds", ' + base_matcher + '}))',
 
-  input_boolean_state: 'input_boolean_state{' + base_matcher + '}',
+  input_boolean_state: '{__name__=~"$prefix\\\\_?input_boolean_state", ' + base_matcher + '}',
 
-  battery_percent: 'battery_level_percent{' + entity_matcher + '} or battery_percent{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{entity=~".+battery_level.*", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
-  switch_state: 'switch_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="switch", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
-  binary_sensor_state: 'binary_sensor_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="binary_sensor", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
-  temperature_c: 'temperature_c{' + entity_matcher + '}',
-  current_temperature_c: 'current_temperature_c{' + entity_matcher + '}',
-  light_state: 'light_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="light", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
-  lock_state: 'lock_state{' + entity_matcher + '} $Inactive on (entity) label_replace(entity_available{domain="lock", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
-  climate_action: 'climate_action{' + entity_matcher + '} > 0 or label_replace(humidifier_mode{' + entity_matcher + '} > 0, "action", "$1", "mode", "(.*)")',
-  humidity: 'humidity_percent{' + entity_matcher + '}',
-  humidity_target: 'humidifier_target_humidity_percent{' + entity_matcher + '}',
+  battery_percent: '{__name__=~"$prefix\\\\_?battery_level_percent", ' + entity_matcher + '} or {__name__=~"$prefix\\\\_?battery_percent", ' + entity_matcher + '} $Inactive on (entity) label_replace({__name__=~"$prefix\\\\_?entity_available", entity=~".+battery_level.*", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  switch_state: '{__name__=~"$prefix\\\\_?switch_state", ' + entity_matcher + '} $Inactive on (entity) label_replace({__name__=~"$prefix\\\\_?entity_available", domain="switch", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  binary_sensor_state: '{__name__=~"$prefix\\\\_?binary_sensor_state", ' + entity_matcher + '} $Inactive on (entity) label_replace({__name__=~"$prefix\\\\_?entity_available", domain="binary_sensor", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  temperature_c: '{__name__=~"$prefix\\\\_?temperature_c", ' + entity_matcher + '}',
+  current_temperature_c: '{__name__=~"$prefix\\\\_?current_temperature_c", ' + entity_matcher + '}',
+  light_state: '{__name__=~"$prefix\\\\_?light_state", ' + entity_matcher + '} $Inactive on (entity) label_replace({__name__=~"$prefix\\\\_?entity_available", domain="light", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  lock_state: '{__name__=~"$prefix\\\\_?lock_state", ' + entity_matcher + '} $Inactive on (entity) label_replace({__name__=~"$prefix\\\\_?entity_available", domain="lock", ' + entity_matcher + '} == 0, "friendly_name", "$1 (Inactive)", "friendly_name", "(.*)")',
+  climate_action: '{__name__=~"$prefix\\\\_?climate_action", ' + entity_matcher + '} > 0 or label_replace({__name__=~"$prefix\\\\_?humidifier_mode", ' + entity_matcher + '} > 0, "action", "$1", "mode", "(.*)")',
+  humidity: '{__name__=~"$prefix\\\\_?humidity_percent", ' + entity_matcher + '}',
+  humidity_target: '{__name__=~"$prefix\\\\_?humidifier_target_humidity_percent", ' + entity_matcher + '}',
 };
 
 local inverse_colors = ['red', 'yellow', 'green'];
@@ -109,6 +109,29 @@ local fname_template = grafana.template.new(
   sort=1,
 );
 
+local prefix_template = {
+  current: {
+    selected: false,
+    text: 'entity',
+    value: 'entity',
+  },
+  description: null,
+  'error': null,
+  hide: 0,
+  label: null,
+  name: 'prefix',
+  options: [
+    {
+      selected: true,
+      text: 'entity',
+      value: 'entity',
+    },
+  ],
+  query: 'entity',
+  skipUrlSync: false,
+  type: 'textbox',
+};
+
 local inactive_template = {
   allValue: null,
   current: {
@@ -146,6 +169,18 @@ local unsupported_sensor_count_panel = grafana.singlestat.new(
   'Unsupported Sensors',
   span=2,
   datasource='$datasource',
+  description=|||
+    Sensors which are not supported by the Home Assistant Prometheus will be reported
+    as `<namespace>_sensor_unit_<unit>`.
+
+    A full list of unsupported sensors can be found in a table at the bottom of this dashboard.
+
+    You can use [component_config](https://www.home-assistant.io/integrations/prometheus/#component_config)
+    and [component_config_glob](https://www.home-assistant.io/integrations/prometheus/#component_config_glob),
+    combined with `override_metric` in your Home Assistant configuration file to rewrite unsupported sensors to supported values.
+
+    See the [configuration docs](https://www.home-assistant.io/integrations/prometheus/) for more details.
+  |||,
 )
                                        .addTarget(
   grafana.prometheus.target(queries.unsupported_sensor_count)
@@ -647,6 +682,7 @@ local unsupported_sensors_panel = g.tablePanel(
         entity_template,
         fname_template,
         inactive_template,
+        prefix_template,
       ])
 
       // Overview Row
