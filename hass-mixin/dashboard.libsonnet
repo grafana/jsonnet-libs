@@ -6,8 +6,8 @@ local entity_matcher = base_matcher + ', entity=~"$entity", friendly_name=~"$fri
 local available_entity_matcher_decoration = 'and on (entity) entity_available > 0';
 
 local queries = {
-  unsupported_sensor_count: 'count({__name__=~"sensor_unit_.+", ' + base_matcher + '})',
-  unsupported_sensors: '{__name__=~"sensor_unit_.+", ' + base_matcher + '}',
+  unsupported_sensor_count: 'count({__name__=~"$prefix\\\\_?sensor_unit_.+", ' + base_matcher + '})',
+  unsupported_sensors: '{__name__=~"$prefix\\\\_?sensor_unit_.+", ' + base_matcher + '}',
   entity_count: 'count({__name__=~"$prefix\\\\_?entity_available", ' + base_matcher + '})',
   available_entity_percent: 'count({__name__=~"$prefix\\\\_?entity_available", ' + base_matcher + '} > 0) / ' + queries.entity_count,
   latest_state_change_time: 'bottomk(1, (time() - {__name__=~"$prefix\\\\_?last_updated_time_seconds", ' + base_matcher + '}))',
@@ -90,7 +90,7 @@ local instance_template = grafana.template.new(
 local entity_template = grafana.template.new(
   'entity',
   '$datasource',
-  'label_values(last_updated_time_seconds{job=~"$job", instance=~"$instance"}, entity)',
+  'label_values({__name__=~"$prefix\\\\_?last_updated_time_seconds", job=~"$job", instance=~"$instance"}, entity)',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -101,7 +101,7 @@ local entity_template = grafana.template.new(
 local fname_template = grafana.template.new(
   'friendly_name',
   '$datasource',
-  'label_values(last_updated_time_seconds{job=~"$job", instance=~"$instance"}, friendly_name)',
+  'label_values({__name__=~"$prefix\\\\_?last_updated_time_seconds", job=~"$job", instance=~"$instance"}, friendly_name)',
   refresh='load',
   multi=true,
   includeAll=true,
