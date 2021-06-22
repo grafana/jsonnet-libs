@@ -72,7 +72,7 @@ local configMap = k.core.v1.configMap;
 
     // Shard configmaps at around 100kB per shard
     local totalCharacters = std.foldl(function(x, y) x + y, [std.length(d.content) for d in dashboards], 0);
-    local shardCount = std.min(count, std.floor(totalCharacters / 100000));
+    local shardCount = std.min(count, std.ceil(totalCharacters / 100000));
 
     {
       // Calculate the number of dashboards per shard
