@@ -1,4 +1,5 @@
 {
+  grafanaDashboardShards: 2,
   grafanaDashboards: {
     'istio_control_plane_dashboard.json': (import 'dashboards/istio_control_plane_dashboard.json'),
     'istio_mesh_dashboard.json': (import 'dashboards/istio_mesh_dashboard.json'),
