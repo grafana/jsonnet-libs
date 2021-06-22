@@ -28,7 +28,6 @@
     kubernetes:
       (import 'kubernetes-mixin/mixin.libsonnet') {
         grafanaDashboardFolder: 'Kubernetes',
-        grafanaDashboardShards: 8,
 
         _config+:: {
           cadvisorSelector: 'job="kube-system/cadvisor"',
