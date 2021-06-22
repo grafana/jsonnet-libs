@@ -59,7 +59,7 @@ local configMap = k.core.v1.configMap;
   // Dashboard JSON configmaps
   // An effort is made to balance config maps by
   //   matching the smallest dashboards with the biggest ones
-  local shardedConfigMaps(folder) = {
+  local shardedConfigMaps(folder) =
     // Sort dashboards descending by size
     local dashboards = std.sort([
       {
@@ -67,41 +67,47 @@ local configMap = k.core.v1.configMap;
         content: std.toString(folder.dashboards[name]),
       }
       for name in std.objectFields(folder.dashboards)
-    ], function(d) -std.length(d.content)),
+    ], function(d) -std.length(d.content));
+    local count = std.length(dashboards);
 
-    // Calculate the number of dashboards per shard
-    // This is skewed towards tail dashboards (smallest ones)
-    // For example, if we need 3 per shard, it will be 1 big and 2 smalls
-    local count = std.length(dashboards),
-    local perShard = std.floor(count / folder.shards),
-    local perShardHead = std.floor(perShard / 2),
-    local perShardTail = std.ceil(perShard / 2),
+    // Shard configmaps at around 100kB per shard
+    local totalCharacters = std.foldl(function(x, y) x + y, [std.length(d.content) for d in dashboards], 0);
+    local shardCount = std.min(count, std.floor(totalCharacters / 100000));
 
-    // perShard is a floor, so we can have a remainder
-    // It is taken from the end of the array (smallest dashboards)
-    // At the end of the loop, we add the remainder to the last shard
-    local maxTail = folder.shards * perShard,
-    local remainder = count - maxTail,
+    {
+      // Calculate the number of dashboards per shard
+      // This is skewed towards tail dashboards (smallest ones)
+      // For example, if we need 3 per shard, it will be 1 big and 2 smalls
 
-    ['%s-%d' % [prefix(folder.id), shard]]+:
-      local head = shard * perShardHead;
-      local nextHead = head + perShardHead;
-      local tail = maxTail - (shard * perShardTail);
-      local nextTail = tail - perShardTail;
+      local perShard = std.floor(count / shardCount),
+      local perShardHead = std.floor(perShard / 2),
+      local perShardTail = std.ceil(perShard / 2),
 
-      configMap.new('%s-%d' % [prefix(folder.id), shard]) +
-      configMap.withDataMixin({
-        [dashboard.name]: dashboard.content
-        for dashboard in
-          // Dashboards from beginning + from end + remainder for last shard
-          std.slice(dashboards, head, nextHead, 1)
-          + std.slice(dashboards, nextTail, tail, 1)
-          + if shard == folder.shards - 1 && remainder > 0 then std.slice(dashboards, maxTail, maxTail + remainder, 1) else []
-      })
-      + configMap.mixin.metadata.withLabels($._config.labels.dashboards)
-    for shard in std.range(0, folder.shards - 1)
-    if std.length(folder.dashboards) > 0
-  },
+      // perShard is a floor, so we can have a remainder
+      // It is taken from the end of the array (smallest dashboards)
+      // At the end of the loop, we add the remainder to the last shard
+      local maxTail = shardCount * perShard,
+      local remainder = count - maxTail,
+
+      ['%s-%d' % [prefix(folder.id), shard]]+:
+        local head = shard * perShardHead;
+        local nextHead = head + perShardHead;
+        local tail = maxTail - (shard * perShardTail);
+        local nextTail = tail - perShardTail;
+
+        configMap.new('%s-%d' % [prefix(folder.id), shard]) +
+        configMap.withDataMixin({
+          [dashboard.name]: dashboard.content
+          for dashboard in
+            // Dashboards from beginning + from end + remainder for last shard
+            std.slice(dashboards, head, nextHead, 1)
+            + std.slice(dashboards, nextTail, tail, 1)
+            + if shard == shardCount - 1 && remainder > 0 then std.slice(dashboards, maxTail, maxTail + remainder, 1) else []
+        })
+        + configMap.mixin.metadata.withLabels($._config.labels.dashboards)
+      for shard in std.range(0, shardCount - 1)
+      if count > 0
+    },
 
   dashboard_folders_config_maps: std.foldl(
     function(acc, name)
