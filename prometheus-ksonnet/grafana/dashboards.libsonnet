@@ -2,22 +2,14 @@ local grafana = import 'grafana/grafana.libsonnet';
 {
   local configMap = $.core.v1.configMap,
 
-  _config+:: {
-    // Shard dashboards across multiple config maps to overcome annotation
-    // length limits.
-    dashboard_config_maps: 8,
-  },
-
   mixins+:: {},
-  grafanaGeneralFolderShards:: $._config.dashboard_config_maps,
 
   // convert to format expected by `grafana/grafana.libsonnet`:
   local grafanaConfig = {
                           grafanaDashboards: $.grafanaDashboards,
-                        } + grafana.withGeneralFolderShards($.grafanaGeneralFolderShards)
+                        }
                         + grafana.addMixinDashboards($.mixins, mixinProto),
-  grafanaDashboardFolders+:: grafanaConfig.grafanaDashboardFolders
-  ,
+  grafanaDashboardFolders+:: grafanaConfig.grafanaDashboardFolders,
 
   // mixinProto (below) is applied to every dashboard managed by
   // prometheus-ksonnet. One thing it does is sets the UID of the dashboard
