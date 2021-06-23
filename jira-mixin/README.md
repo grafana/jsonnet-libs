@@ -8,7 +8,7 @@ The JIRA Mixin is a set of reusable and extensible alerts and dashboards to help
 
 This Mixin relies on the usage of the [JIRA prometheus exporter](https://github.com/AndreyVMarkelov/jira-prometheus-exporter). 
 
-On the Atlassian Marketplace, there is a [free version of the exporter](https://marketplace.atlassian.com/apps/1222502/prometheus-exporter-for-jira?hosting=server&tab=overview) if you are running your own JIRA server and a [pro version](https://marketplace.atlassian.com/apps/1217960/prometheus-exporter-pro-for-jira?tab=overview&hosting=datacenter) if you are running on a hosted JIRA server.
+On the Atlassian Marketplace, there is a [free version of the exporter](https://marketplace.atlassian.com/apps/1222502/prometheus-exporter-for-jira?hosting=server&tab=overview) if you are running a JIRA Server instance and a [pro version](https://marketplace.atlassian.com/apps/1217960/prometheus-exporter-pro-for-jira?tab=overview&hosting=datacenter) if you are running a JIRA Data Center instance. This exporter (and thus the mixin) will not work for JIRA Cloud instances. 
 
 ## Alerts
 
