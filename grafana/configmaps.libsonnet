@@ -59,7 +59,7 @@ local configMap = k.core.v1.configMap;
   // Dashboard JSON configmaps
   // An effort is made to balance config maps by
   //   matching the smallest dashboards with the biggest ones
-  local shardedConfigMaps(folder) =
+  local calculateShards(folder) =
     // Sort dashboards descending by size
     local dashboards = std.sort([
       {
@@ -73,12 +73,10 @@ local configMap = k.core.v1.configMap;
     // Shard configmaps at around 100kB per shard
     local totalCharacters = std.foldl(function(x, y) x + y, [std.length(d.content) for d in dashboards], 0);
     local shardCount = std.min(count, std.ceil(totalCharacters / 100000));
-
     {
       // Calculate the number of dashboards per shard
       // This is skewed towards tail dashboards (smallest ones)
       // For example, if we need 3 per shard, it will be 1 big and 2 smalls
-
       local perShard = std.floor(count / shardCount),
       local perShardHead = std.floor(perShard / 2),
       local perShardTail = std.ceil(perShard / 2),
@@ -88,25 +86,33 @@ local configMap = k.core.v1.configMap;
       // At the end of the loop, we add the remainder to the last shard
       local maxTail = shardCount * perShard,
       local remainder = count - maxTail,
-
       ['%s-%d' % [prefix(folder.id), shard]]+:
         local head = shard * perShardHead;
         local nextHead = head + perShardHead;
         local tail = maxTail - (shard * perShardTail);
         local nextTail = tail - perShardTail;
 
-        configMap.new('%s-%d' % [prefix(folder.id), shard]) +
-        configMap.withDataMixin({
+        {
           [dashboard.name]: dashboard.content
           for dashboard in
             // Dashboards from beginning + from end + remainder for last shard
             std.slice(dashboards, head, nextHead, 1)
             + std.slice(dashboards, nextTail, tail, 1)
             + if shard == shardCount - 1 && remainder > 0 then std.slice(dashboards, maxTail, maxTail + remainder, 1) else []
-        })
-        + configMap.mixin.metadata.withLabels($._config.labels.dashboards)
+        }
       for shard in std.range(0, shardCount - 1)
       if count > 0
+    },
+
+
+  local shardedConfigMaps(folder) =
+    local shards = calculateShards(folder);
+    {
+      [shardName]+:
+        configMap.new(shardName) +
+        configMap.withDataMixin(shards[shardName])
+        + configMap.mixin.metadata.withLabels($._config.labels.dashboards)
+      for shardName in std.objectFields(shards)
     },
 
   dashboard_folders_config_maps: std.foldl(
@@ -117,14 +123,12 @@ local configMap = k.core.v1.configMap;
   ),
 
   // Helper to mount a variable number of sharded config maps.
-  local shardedMounts(folder) = if std.length(folder.dashboards) == 0 then {} else
+  local shardedMounts(folder) =
+    local shards = calculateShards(folder);
     std.foldl(
       function(acc, shard)
-        acc + k.util.configVolumeMount(
-          '%s-%d' % [prefix(folder.id), shard],
-          '/grafana/%s/%d' % [prefix(folder.id), shard]
-        ),
-      std.range(0, folder.shards - 1),
+        acc + k.util.configVolumeMount(shard, '/grafana/%s/%s' % [prefix(folder.id), shard]),
+      std.objectFields(shards),
       {}
     ),
 
