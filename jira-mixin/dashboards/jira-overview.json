@@ -199,7 +199,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "jira_maintenance_expiry_days_gauge{job=\"$job\", instance=\"$instance\"}",
+          "expr": "jira_license_expiry_days_gauge{job=\"$job\", instance=\"$instance\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -269,7 +269,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "1 - (jira_all_active_users_gauge{job=\"$job\", instance=\"$instance\"}/jira_allowed_users_gauge{job=\"$job\", instance=\"$instance\"})",
+          "expr": "1 - (jira_all_users_gauge{job=\"$job\", instance=\"$instance\"}/jira_allowed_users_gauge{job=\"$job\", instance=\"$instance\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"

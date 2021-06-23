@@ -2,7 +2,7 @@ groups:
 - name: alert.rules
   rules:
   - alert: LicenseExpired
-    expr: jira_maintenance_expiry_days_gauge <= 0
+    expr: jira_license_expiry_days_gauge <= 0
     for: 1m
     labels:
       severity: "critical"
@@ -10,7 +10,7 @@ groups:
       summary: "JIRA license expired"
       description: "The JIRA license has expired."
   - alert: LicenseWarning
-    expr: jira_maintenance_expiry_days_gauge <= 7 and jira_maintenance_expiry_days_gauge > 0
+    expr: jira_license_expiry_days_gauge <= 7 and jira_license_expiry_days_gauge > 0
     for: 1m
     labels:
       severity: "warning"
@@ -18,7 +18,7 @@ groups:
       summary: "License expiring soon"
       description: "The JIRA license will expire in less than one week."
   - alert: NoUserCapacity
-    expr: jira_all_active_users_gauge/jira_allowed_users_gauge == 1
+    expr: jira_all_users_gauge/jira_allowed_users_gauge == 1
     for: 1m
     labels:
       severity: "critical"
