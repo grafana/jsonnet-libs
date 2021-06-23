@@ -112,8 +112,8 @@ local fname_template = grafana.template.new(
 local prefix_template = {
   current: {
     selected: false,
-    text: 'entity',
-    value: 'entity',
+    text: '',
+    value: '',
   },
   description: null,
   'error': null,
@@ -123,11 +123,11 @@ local prefix_template = {
   options: [
     {
       selected: true,
-      text: 'entity',
-      value: 'entity',
+      text: '',
+      value: '',
     },
   ],
-  query: 'entity',
+  query: '',
   skipUrlSync: false,
   type: 'textbox',
 };
