@@ -13,7 +13,6 @@ local kube_state_metrics = 'kube-state-metrics/main.libsonnet';
   kube_state_metrics_deployment:
     ksm.deployment
     + deployment.spec.template.spec.withContainers([$.kube_state_metrics_container])
-    + deployment.mixin.spec.template.spec.securityContext.withFsGroup(0)  // TODO: remove after kube-state-metrics binary in docker image is not owned by root
     + $.util.podPriority('critical'),
 
   kube_state_metrics_service:
