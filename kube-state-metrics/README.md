@@ -15,15 +15,14 @@ Import into your jsonnet:
 ```jsonnet
 // environments/default/main.jsonnet
 local ksm = import 'github.com/grafana/jsonnet-libs/kube-state-metrics/main.libsonnet';
-local ksm_scrape_config = import 'github.com/grafana/jsonnet-libs/kube-state-metrics/scrape_config.libsonnet';
 
 {
   local namespace = 'default',
-  ksm: ksm(namespace),
+  ksm: ksm.new(namespace),
 
   prometheus_config+: {
     scape_configs+: [
-      ksm_scrape_config(namespace),
+      ksm.scrape_config(namespace),
     ],
   },
 }
