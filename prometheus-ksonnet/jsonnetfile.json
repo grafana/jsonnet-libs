@@ -50,6 +50,15 @@
       "source": {
         "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "node-exporter"
+        }
+      },
+      "version": "master"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "prometheus"
         }
       },
