@@ -17,9 +17,9 @@ Import into your jsonnet:
 local node_exporter = import 'github.com/grafana/jsonnet-libs/node-exporter/main.libsonnet';
 
 {
-  node_exporter: 
-  node_exporter.new()
-  + node_exporter.mountRoot(),
+  node_exporter:
+    node_exporter.new()
+    + node_exporter.mountRoot(),
 
   prometheus_config+: {
     scape_configs+: [
