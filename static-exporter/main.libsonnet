@@ -31,8 +31,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     self.withDataMixin({
       metrics:
         std.lines(
-          std.foldr(
-            function(metric, acc)
+          std.foldl(
+            function(acc, metric)
               acc + [
                 '# HELP %(name)s %(description)s' % metric,
                 '# TYPE %(name)s counter' % metric,
