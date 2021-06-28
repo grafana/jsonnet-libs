@@ -2,7 +2,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
   new(name, image='httpd:2.4-alpine'):: {
-    data: { metrics: '' },
+    data:: { metrics: '' },
 
     local configMap = k.core.v1.configMap,
     configmap:
