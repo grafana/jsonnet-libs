@@ -1,4 +1,4 @@
-local kube_state_metrics = 'kube-state-metrics/main.libsonnet';
+local kube_state_metrics = import 'kube-state-metrics/main.libsonnet';
 
 {
   local ksm = kube_state_metrics.new(
@@ -12,7 +12,7 @@ local kube_state_metrics = 'kube-state-metrics/main.libsonnet';
 
   kube_state_metrics_deployment:
     ksm.deployment
-    + deployment.spec.template.spec.withContainers([$.kube_state_metrics_container])
+    + $.apps.v1.deployment.spec.template.spec.withContainers([$.kube_state_metrics_container])
     + $.util.podPriority('critical'),
 
   kube_state_metrics_service:
