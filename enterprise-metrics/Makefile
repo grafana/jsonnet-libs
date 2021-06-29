@@ -39,9 +39,9 @@ environments/minio/vendor: environments/minio/jsonnetfile.json
 	cd $(@D)
 	jb install
 
-e2e-test: ## Deploy GEM to a local k3d cluster.
-e2e-test: environments/minio/vendor
-	./scripts/k3d create
+local-test: ## Deploy GEM to a local k3d cluster. Tear down with ./scripts/k3d-cluster delete.
+local-test: environments/minio/vendor
+	./scripts/k3d-cluster create
 	tk apply --tla-code kubeconfig="$$(kubectl config view -o json)" environments/minio
 
 docs/README.md: ## Remake the library README file.

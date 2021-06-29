@@ -55,5 +55,5 @@ $ make eval
 To deploy a minimal GEM to a local k3d cluster:
 
 ```console
-$ make e2e-test
+$ make local-test
 ```
