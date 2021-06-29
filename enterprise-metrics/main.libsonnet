@@ -193,7 +193,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + deployment.spec.template.metadata.withLabelsMixin({ name: 'admin-api', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withTerminationGracePeriodSeconds(15)
       + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
-      + util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/'),
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the admin-api.'),
     service:
       util.serviceFor(self.deployment),
@@ -606,5 +606,15 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         + subject.withName(target)
         + subject.withKind('ServiceAccount'),
       ]),
+  },
+
+  '#util':: d.obj('`util` contains utility functions for working with the GEM Jsonnet library'),
+  util:: {
+    '#util':: d.arr('`modules` is an array of the names of all modules in the cluster'),
+    modules:: ['adminApi', 'alertmanager', 'compactor', 'distributor', 'gateway', 'ingester', 'querier', 'queryFrontend', 'ruler', 'storeGateway'],
+    '#mapModules': d.fn('`mapModules` applies the function fn to each module in the GEM cluster', [d.arg('fn', d.T.func)]),
+    mapModules(fn=function(module) module)::
+      local activeModules = std.filter(function(field) std.member(self.modules, field), std.objectFields($));
+      std.foldl(function(acc, module) acc { [module]: fn(super[module]) }, activeModules, {}),
   },
 }
