@@ -11,7 +11,7 @@ local node_exporter = import 'github.com/grafana/jsonnet-libs/node-exporter/main
 
   node_exporter_daemonset:
     exporter.daemonset
-    + daemonSet.spec.template.spec.withContainers($.node_exporter_container)
+    + $.apps.v1.daemonSet.spec.template.spec.withContainers($.node_exporter_container)
     + $.util.podPriority('critical'),
 
   prometheus_config+:: {

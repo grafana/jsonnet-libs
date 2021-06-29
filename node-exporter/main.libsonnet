@@ -50,7 +50,7 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
 
     local daemonSet = k.apps.v1.daemonSet,
     daemonset:
-      daemonSet.new('node-exporter', [this.container])
+      daemonSet.new('node-exporter', [self.container])
       + daemonSet.mixin.spec.template.spec.withHostPid(true)
       + daemonSet.mixin.spec.template.spec.withHostNetwork(true)
       + k.util.hostVolumeMount('proc', '/proc', '/host/proc')
