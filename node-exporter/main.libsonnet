@@ -2,6 +2,32 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
 
 {
   new(image='prom/node-exporter:v1.1.2'):: {
+    ignored_fs_types:: [
+      'tmpfs',
+      'autofs',
+      'binfmt_misc',
+      'bpf',
+      'cgroup2?',
+      'configfs',
+      'debugfs',
+      'devpts',
+      'devtmpfs',
+      'fusectl',
+      'hugetlbfs',
+      'mqueue',
+      'nsfs',
+      'overlay',
+      'proc',
+      'procfs',
+      'pstore',
+      'rpc_pipefs',
+      'securityfs',
+      'selinuxfs',
+      'squashfs',
+      'sysfs',
+      'tracefs',
+    ],
+
     local container = k.core.v1.container,
     container::
       container.new('node-exporter', image)
@@ -12,10 +38,9 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
         '--path.procfs=/host/proc',
         '--path.sysfs=/host/sys',
 
+        // Reduces cardinality by ignoring a few devices, fs-types and mount-points.
         '--collector.netdev.device-exclude=^veth.+$',
-
-        // We run an older version due to the renamed metrics.  There ignores are from newer version.
-        '--collector.filesystem.ignored-fs-types=^(tmpfs|autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$',
+        '--collector.filesystem.ignored-fs-types=^(%s)$' % std.join('|', self.ignored_fs_types),
         '--collector.filesystem.ignored-mount-points=^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)',
       ])
       + container.mixin.securityContext.withPrivileged(true)
