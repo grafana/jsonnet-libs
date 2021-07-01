@@ -7,17 +7,15 @@
 
   local folderID(folder) = self.folderID(folder),
 
+  // add a new empty folder
   // It's super common for the dashboards in a single folder to be too
-  // large to fit inside a single Kubernetes ConfigMap. We can specify
-  // how many ConfigMaps to use for a folder (aka how many shards).
-
-  // add a new empty folder and set config map shard size
-  addFolder(name, shards=1):: {
+  // large to fit inside a single Kubernetes ConfigMap. In that case,
+  // dashboards will be sharded into multiple ConfigMaps
+  addFolder(name):: {
     grafanaDashboardFolders+:: {
       [name]: {
         id: folderID(name),
         name: name,
-        shards: shards,
         dashboards: {},
       },
     },
@@ -25,12 +23,10 @@
 
   // add a new dashboard, creating the folder if necessary
   addDashboard(name, dashboard, folder=''):: {
-    local hasShards = std.objectHas(super.grafanaDashboardFolders, folder) && std.objectHas(super.grafanaDashboardFolders[folder], 'shards'),
     grafanaDashboardFolders+:: {
       [folder]+: {
         id: folderID(folder),
         name: folder,
-        [if !hasShards then 'shards']: 1,
         dashboards+: {
           [name]+: dashboard,
         },
@@ -39,7 +35,6 @@
   },
 
   addMixinDashboards(mixins, mixinProto={}):: {
-    local generalShards = super.grafanaGeneralFolderShards,
     local grafanaDashboards = super.grafanaDashboards,
     grafanaDashboardFolders+:: std.foldr(
       function(name, acc)
@@ -69,7 +64,6 @@
       {}
     ) + {
       general+: {
-        shards: generalShards,
         dashboards+: grafanaDashboards + mixinProto,
         name: '',
         id: '',
@@ -77,10 +71,5 @@
     },
   },
 
-  withGeneralFolderShards(shards):: {
-    grafanaGeneralFolderShards: shards,
-  },
-
-  grafanaGeneralFolderShards:: 1,
   grafanaDashboardFolders+:: {},
 }

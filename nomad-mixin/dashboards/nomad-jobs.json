@@ -471,7 +471,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "instance",
+        "label": "Host",
         "multi": true,
         "name": "instance",
         "options": [],
@@ -523,4 +523,3 @@
   "title": "Nomad Jobs",
   "uid": "TvqbbhViz",
   "version": 1
-}
