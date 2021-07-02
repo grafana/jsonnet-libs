@@ -6,20 +6,11 @@ Usage:
 - Make sure you have [Tanka](https://tanka.dev/install) and
   [jsonnet-bundler](https://tanka.dev/install#jsonnet-bundler) installed:
 
-- In your config repo, init Tanka with [`k8s-alpha`](https://github.com/jsonnet-libs/k8s-alpha) and point it at your Kubernetes cluster:
+- In your config repo, init Tanka with [`k8s-libsonnet`](https://github.com/jsonnet-libs/k8s-libsonnet) and point it at your Kubernetes cluster:
 
 ```bash
-# set up Tanka project, we will install k8s ourselves
-tk init --k8s=false
-
-# pull k8s-alpha for Kubernetes 1.18
-jb install github.com/jsonnet-libs/k8s-alpha/1.18
-
-# init k.libsonnet
-cat <<EOF > lib/k.libsonnet
-(import "github.com/jsonnet-libs/k8s-alpha/1.18/main.libsonnet")
-+ (import "github.com/jsonnet-libs/k8s-alpha/1.18/extensions/kausal-shim.libsonnet")
-EOF
+# set up Tanka project
+tk init --k8s=1.18
 
 # point at cluster
 export CONTEXT=$(kubectl config current-context)
