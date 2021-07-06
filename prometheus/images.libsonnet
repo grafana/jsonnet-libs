@@ -1,6 +1,6 @@
 {
   _images+:: {
-    prometheus: 'prom/prometheus:v2.28.0',
+    prometheus: 'prom/prometheus:v2.28.1',
     watch: 'weaveworks/watch:master-5fc29a9',
   },
 }
