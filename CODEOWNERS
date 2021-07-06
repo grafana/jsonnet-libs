@@ -4,5 +4,5 @@
 /consul*/ @grafana/cortex-team @grafana/loki-team
 /etcd-operator/ @grafana/cortex-team
 /memcached*/ @grafana/cortex-team @grafana/loki-team
-/prometheus-ksonnet/ @grafana/infra-team @grafana/cortex-team
+/prometheus-ksonnet/ @grafana/infra-team @grafana/cortex-team @grafana/cloud-platform
 /enterprise-metrics/ @grafana/backend-enterprise
