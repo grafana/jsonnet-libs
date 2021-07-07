@@ -11,12 +11,12 @@ help: ## Display this help.
 help:
 	@awk 'BEGIN {FS = ": ##"; printf "Usage:\n  make <target>\n\nTargets:\n"} /^[a-zA-Z0-9_\.\-\/%]+: ##/ { printf "  %-45s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
-vendor: ## Vendor the library dependencies.
-vendor:
+vendor: ## Vendor the Jsonnet libraries.
+vendor: jsonnetfile.json
 	jb install
 
 test/vendor: ## Vendor the test Jsonnet libraries.
-test/vendor: test/jsonnetfile.json test/jsonnetfile.lock.json
+test/vendor: test/jsonnetfile.json
 	cd test
 	jb install
 
@@ -44,6 +44,15 @@ local-test: environments/minio/vendor
 	./scripts/k3d-cluster create
 	tk apply --tla-code kubeconfig="$$(kubectl config view -o json)" environments/minio
 
-docs/README.md: ## Remake the library README file.
-docs/README.md: main.libsonnet test/vendor
+.PHONY: docs
+docs: ## Remake the library README file.
+docs: docs/README.md
+
+docs/README.md: main.libsonnet vendor test/vendor
 	docsonnet -J test/lib -J test/vendor -J vendor docs.jsonnet -o ./docs
+
+.PHONY: clean
+clean: ## Clean vendor directories and lock files
+clean:
+	rm -rf vendor jsonnetfile.lock.json
+	rm -rf test/vendor test/jsonnetfile.lock.json

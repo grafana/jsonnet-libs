@@ -144,6 +144,18 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       ),
       'runtime-config.file': '/etc/enterprise-metrics/runtime.yml',
       'store.engine': 'blocks',
+      '#instrumentation.enabled':: d.val(
+        default=self['instrumentation.enabled'],
+        help='`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance',
+        type=d.T.string
+      ),
+      'instrumentation.enabled': true,
+      '#instrumentation.distributor-client.address':: d.val(
+        default=self['instrumentation.distributor-client.address'],
+        help='`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.',
+        type=d.T.string
+      ),
+      'instrumentation.distributor-client.address': 'dns:///distributor:9095',
     },
 
     '#licenseSecretName':: d.val(
@@ -161,7 +173,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   '#_images':: d.obj('`_images` contains fields for container images.'),
   _images:: {
     '#gem':: d.val(default=self.gem, help='`gem` is the Grafana Enterprise Metrics container image.', type=d.T.string),
-    gem: 'grafana/metrics-enterprise:v1.4.0',
+    gem: 'grafana/metrics-enterprise:v1.4.1',
     '#kubectl':: d.val(default=self.kubectl, help='`kubectl` is the image used for kubectl containers.', type=d.T.string),
     kubectl: 'bitnami/kubectl',
   },
@@ -610,7 +622,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
 
   '#util':: d.obj('`util` contains utility functions for working with the GEM Jsonnet library'),
   util:: {
-    '#util':: d.arr('`modules` is an array of the names of all modules in the cluster'),
+    '#util':: d.val(d.T.array, '`modules` is an array of the names of all modules in the cluster'),
     modules:: ['adminApi', 'alertmanager', 'compactor', 'distributor', 'gateway', 'ingester', 'querier', 'queryFrontend', 'ruler', 'storeGateway'],
     '#mapModules': d.fn('`mapModules` applies the function fn to each module in the GEM cluster', [d.arg('fn', d.T.func)]),
     mapModules(fn=function(module) module)::
