@@ -35,6 +35,13 @@ $ mkdir -p lib
 
 ## Development
 
+In order to reflect changes made to the library also in the documentation (`docs/README.md`), one
+needs to run the `docs` target:
+
+```console
+$ make docs
+```
+
 ### Unit tests
 
 To run the unit tests:

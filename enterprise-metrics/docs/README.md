@@ -2,7 +2,7 @@
 permalink: /
 ---
 
-# package enterprise-metrics
+# enterprise-metrics
 
 ```jsonnet
 local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-metrics/main.libsonnet"
@@ -17,6 +17,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool _config.commonArgs.auth.enabled`](#bool-_configcommonargsauthenabled)
     * [`bool _config.commonArgs.auth.type`](#bool-_configcommonargsauthtype)
     * [`string _config.commonArgs.cluster-name`](#string-_configcommonargscluster-name)
+    * [`string _config.commonArgs.instrumentation.distributor-client.address`](#string-_configcommonargsinstrumentationdistributor-clientaddress)
+    * [`string _config.commonArgs.instrumentation.enabled`](#string-_configcommonargsinstrumentationenabled)
     * [`string _config.commonArgs.memberlist.join`](#string-_configcommonargsmemberlistjoin)
     * [`string _config.commonArgs.runtime-config.file`](#string-_configcommonargsruntime-configfile)
   * [`string _config.licenseSecretName`](#string-_configlicensesecretname)
@@ -29,6 +31,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool adminApi.args.auth.type`](#bool-adminapiargsauthtype)
     * [`string adminApi.args.bootstrap.license.path`](#string-adminapiargsbootstraplicensepath)
     * [`string adminApi.args.cluster-name`](#string-adminapiargscluster-name)
+    * [`string adminApi.args.instrumentation.distributor-client.address`](#string-adminapiargsinstrumentationdistributor-clientaddress)
+    * [`string adminApi.args.instrumentation.enabled`](#string-adminapiargsinstrumentationenabled)
     * [`string adminApi.args.memberlist.join`](#string-adminapiargsmemberlistjoin)
     * [`string adminApi.args.runtime-config.file`](#string-adminapiargsruntime-configfile)
   * [`obj adminApi.container`](#obj-adminapicontainer)
@@ -43,6 +47,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool alertmanager.args.auth.enabled`](#bool-alertmanagerargsauthenabled)
     * [`bool alertmanager.args.auth.type`](#bool-alertmanagerargsauthtype)
     * [`string alertmanager.args.cluster-name`](#string-alertmanagerargscluster-name)
+    * [`string alertmanager.args.instrumentation.distributor-client.address`](#string-alertmanagerargsinstrumentationdistributor-clientaddress)
+    * [`string alertmanager.args.instrumentation.enabled`](#string-alertmanagerargsinstrumentationenabled)
     * [`string alertmanager.args.memberlist.join`](#string-alertmanagerargsmemberlistjoin)
     * [`string alertmanager.args.runtime-config.file`](#string-alertmanagerargsruntime-configfile)
   * [`obj alertmanager.container`](#obj-alertmanagercontainer)
@@ -58,6 +64,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool compactor.args.auth.enabled`](#bool-compactorargsauthenabled)
     * [`bool compactor.args.auth.type`](#bool-compactorargsauthtype)
     * [`string compactor.args.cluster-name`](#string-compactorargscluster-name)
+    * [`string compactor.args.instrumentation.distributor-client.address`](#string-compactorargsinstrumentationdistributor-clientaddress)
+    * [`string compactor.args.instrumentation.enabled`](#string-compactorargsinstrumentationenabled)
     * [`string compactor.args.memberlist.join`](#string-compactorargsmemberlistjoin)
     * [`string compactor.args.runtime-config.file`](#string-compactorargsruntime-configfile)
   * [`obj compactor.container`](#obj-compactorcontainer)
@@ -73,6 +81,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool distributor.args.auth.enabled`](#bool-distributorargsauthenabled)
     * [`bool distributor.args.auth.type`](#bool-distributorargsauthtype)
     * [`string distributor.args.cluster-name`](#string-distributorargscluster-name)
+    * [`string distributor.args.instrumentation.distributor-client.address`](#string-distributorargsinstrumentationdistributor-clientaddress)
+    * [`string distributor.args.instrumentation.enabled`](#string-distributorargsinstrumentationenabled)
     * [`string distributor.args.memberlist.join`](#string-distributorargsmemberlistjoin)
     * [`string distributor.args.runtime-config.file`](#string-distributorargsruntime-configfile)
   * [`obj distributor.container`](#obj-distributorcontainer)
@@ -94,6 +104,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`string gateway.args.gateway.proxy.query-frontend.url`](#string-gatewayargsgatewayproxyquery-frontendurl)
     * [`string gateway.args.gateway.proxy.ruler.url`](#string-gatewayargsgatewayproxyrulerurl)
     * [`string gateway.args.gateway.proxy.store-gateway.url`](#string-gatewayargsgatewayproxystore-gatewayurl)
+    * [`string gateway.args.instrumentation.distributor-client.address`](#string-gatewayargsinstrumentationdistributor-clientaddress)
+    * [`string gateway.args.instrumentation.enabled`](#string-gatewayargsinstrumentationenabled)
     * [`string gateway.args.memberlist.join`](#string-gatewayargsmemberlistjoin)
     * [`string gateway.args.runtime-config.file`](#string-gatewayargsruntime-configfile)
   * [`obj gateway.container`](#obj-gatewaycontainer)
@@ -110,6 +122,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool ingester.args.auth.enabled`](#bool-ingesterargsauthenabled)
     * [`bool ingester.args.auth.type`](#bool-ingesterargsauthtype)
     * [`string ingester.args.cluster-name`](#string-ingesterargscluster-name)
+    * [`string ingester.args.instrumentation.distributor-client.address`](#string-ingesterargsinstrumentationdistributor-clientaddress)
+    * [`string ingester.args.instrumentation.enabled`](#string-ingesterargsinstrumentationenabled)
     * [`string ingester.args.memberlist.join`](#string-ingesterargsmemberlistjoin)
     * [`string ingester.args.runtime-config.file`](#string-ingesterargsruntime-configfile)
   * [`obj ingester.container`](#obj-ingestercontainer)
@@ -134,6 +148,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool querier.args.auth.enabled`](#bool-querierargsauthenabled)
     * [`bool querier.args.auth.type`](#bool-querierargsauthtype)
     * [`string querier.args.cluster-name`](#string-querierargscluster-name)
+    * [`string querier.args.instrumentation.distributor-client.address`](#string-querierargsinstrumentationdistributor-clientaddress)
+    * [`string querier.args.instrumentation.enabled`](#string-querierargsinstrumentationenabled)
     * [`string querier.args.memberlist.join`](#string-querierargsmemberlistjoin)
     * [`string querier.args.runtime-config.file`](#string-querierargsruntime-configfile)
   * [`obj querier.container`](#obj-queriercontainer)
@@ -147,6 +163,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool queryFrontend.args.auth.enabled`](#bool-queryfrontendargsauthenabled)
     * [`bool queryFrontend.args.auth.type`](#bool-queryfrontendargsauthtype)
     * [`string queryFrontend.args.cluster-name`](#string-queryfrontendargscluster-name)
+    * [`string queryFrontend.args.instrumentation.distributor-client.address`](#string-queryfrontendargsinstrumentationdistributor-clientaddress)
+    * [`string queryFrontend.args.instrumentation.enabled`](#string-queryfrontendargsinstrumentationenabled)
     * [`string queryFrontend.args.memberlist.join`](#string-queryfrontendargsmemberlistjoin)
     * [`string queryFrontend.args.runtime-config.file`](#string-queryfrontendargsruntime-configfile)
   * [`obj queryFrontend.container`](#obj-queryfrontendcontainer)
@@ -162,6 +180,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool ruler.args.auth.enabled`](#bool-rulerargsauthenabled)
     * [`bool ruler.args.auth.type`](#bool-rulerargsauthtype)
     * [`string ruler.args.cluster-name`](#string-rulerargscluster-name)
+    * [`string ruler.args.instrumentation.distributor-client.address`](#string-rulerargsinstrumentationdistributor-clientaddress)
+    * [`string ruler.args.instrumentation.enabled`](#string-rulerargsinstrumentationenabled)
     * [`string ruler.args.memberlist.join`](#string-rulerargsmemberlistjoin)
     * [`string ruler.args.ruler-storage.s3.bucket-name`](#string-rulerargsruler-storages3bucket-name)
     * [`string ruler.args.runtime-config.file`](#string-rulerargsruntime-configfile)
@@ -184,6 +204,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool storeGateway.args.auth.enabled`](#bool-storegatewayargsauthenabled)
     * [`bool storeGateway.args.auth.type`](#bool-storegatewayargsauthtype)
     * [`string storeGateway.args.cluster-name`](#string-storegatewayargscluster-name)
+    * [`string storeGateway.args.instrumentation.distributor-client.address`](#string-storegatewayargsinstrumentationdistributor-clientaddress)
+    * [`string storeGateway.args.instrumentation.enabled`](#string-storegatewayargsinstrumentationenabled)
     * [`string storeGateway.args.memberlist.join`](#string-storegatewayargsmemberlistjoin)
     * [`string storeGateway.args.runtime-config.file`](#string-storegatewayargsruntime-configfile)
   * [`obj storeGateway.container`](#obj-storegatewaycontainer)
@@ -201,6 +223,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`bool tokengen.args.auth.enabled`](#bool-tokengenargsauthenabled)
     * [`bool tokengen.args.auth.type`](#bool-tokengenargsauthtype)
     * [`string tokengen.args.cluster-name`](#string-tokengenargscluster-name)
+    * [`string tokengen.args.instrumentation.distributor-client.address`](#string-tokengenargsinstrumentationdistributor-clientaddress)
+    * [`string tokengen.args.instrumentation.enabled`](#string-tokengenargsinstrumentationenabled)
     * [`string tokengen.args.memberlist.join`](#string-tokengenargsmemberlistjoin)
     * [`string tokengen.args.runtime-config.file`](#string-tokengenargsruntime-configfile)
   * [`obj tokengen.container`](#obj-tokengencontainer)
@@ -215,6 +239,9 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
   * [`obj tokengen.serviceAccount`](#obj-tokengenserviceaccount)
     
+* [`obj util`](#obj-util)
+  * [`fn mapModules(fn)`](#fn-utilmapmodules)
+  * [`array util.util`](#array-utilutil)
 
 ## Fields
 
@@ -245,6 +272,18 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string _config.commonArgs.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string _config.commonArgs.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
 ### string _config.commonArgs.memberlist.join
 
 *Default value: * `gossip-ring`
@@ -271,7 +310,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ### string _images.gem
 
-*Default value: * `grafana/metrics-enterprise:v1.3.0`
+*Default value: * `grafana/metrics-enterprise:v1.4.1`
 
 `gem` is the Grafana Enterprise Metrics container image.
 
@@ -313,6 +352,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string adminApi.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string adminApi.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string adminApi.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
 
 ### string adminApi.args.memberlist.join
 
@@ -369,6 +420,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string alertmanager.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string alertmanager.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
 ### string alertmanager.args.memberlist.join
 
 *Default value: * `gossip-ring`
@@ -422,6 +485,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string compactor.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string compactor.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
 ### string compactor.args.memberlist.join
 
 *Default value: * `gossip-ring`
@@ -474,6 +549,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string distributor.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string distributor.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string distributor.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
 
 ### string distributor.args.memberlist.join
 
@@ -572,6 +659,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `gateway.proxy.store-gateway.url is the upstream URL of the store-gateway.
 
+### string gateway.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string gateway.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
 ### string gateway.args.memberlist.join
 
 *Default value: * `gossip-ring`
@@ -628,6 +727,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string ingester.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string ingester.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string ingester.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
 
 ### string ingester.args.memberlist.join
 
@@ -702,6 +813,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string querier.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string querier.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
 ### string querier.args.memberlist.join
 
 *Default value: * `gossip-ring`
@@ -750,6 +873,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string queryFrontend.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string queryFrontend.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string queryFrontend.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
 
 ### string queryFrontend.args.memberlist.join
 
@@ -803,6 +938,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ### string ruler.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string ruler.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string ruler.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
 
 ### string ruler.args.memberlist.join
 
@@ -879,6 +1026,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string storeGateway.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string storeGateway.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
 ### string storeGateway.args.memberlist.join
 
 *Default value: * `gossip-ring`
@@ -938,6 +1097,18 @@ By default the tokengen object is hidden as it is a one-off task. To deploy the 
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
 
+### string tokengen.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string tokengen.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
 ### string tokengen.args.memberlist.join
 
 *Default value: * `gossip-ring`
@@ -973,3 +1144,19 @@ By default, the container runs GEM with the tokengen target and writes the token
 ## obj tokengen.serviceAccount
 
 `serviceAccount` is the Kubernetes ServiceAccount for tokengen
+
+## obj util
+
+`util` contains utility functions for working with the GEM Jsonnet library
+
+### fn util.mapModules
+
+```ts
+mapModules(fn)
+```
+
+`mapModules` applies the function fn to each module in the GEM cluster
+
+### array util.util
+
+`modules` is an array of the names of all modules in the cluster
