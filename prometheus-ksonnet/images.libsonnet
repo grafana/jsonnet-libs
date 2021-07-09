@@ -7,7 +7,7 @@ local prometheus_images = import 'prometheus/images.libsonnet';
     alertmanager_images +
     {
       watch: 'weaveworks/watch:master-5fc29a9',
-      kubeStateMetrics: 'gcr.io/google_containers/kube-state-metrics:v2.1.0',
+      kubeStateMetrics: 'k8s.gcr.io/kube-state-metrics/kube-state-metrics:v2.1.0',
       nodeExporter: 'prom/node-exporter:v1.1.2',
       nginx: 'nginx:1.15.1-alpine',
     },
