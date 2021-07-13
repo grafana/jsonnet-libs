@@ -33,10 +33,26 @@ $ mkdir -p lib
 (import 'github.com/jsonnet-libs/k8s-libsonnet/1.18/main.libsonnet')
 ```
 
-## Unit Tests
+## Development
+
+### Unit tests
 
 To run the unit tests:
 
 ```console
 $ make test
+```
+
+### QA testing
+
+To build all the manifests:
+
+```console
+$ make eval
+```
+
+To deploy a minimal GEM to a local k3d cluster:
+
+```console
+$ make local-test
 ```
