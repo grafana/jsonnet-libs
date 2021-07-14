@@ -2,7 +2,7 @@
 
 The MongoDB Mixin is a set of configurable, reusable, and extensible alerts and dashboards based on the metrics exported by [Percona MongoDB Exporter](https://github.com/percona/mongodb_exporter).
 
-The dashboards were based on those made available Percona is [this repository](https://github.com/percona/grafana-dashboards/tree/PMM-2.0/dashboards). This mixin includes 5 of the dashboards suited for MongoDB, namely MongoDB_Cluster_Summary, MongoDB_Instances_Compare, MongoDB_Instances_Overview, MongoDB_Instance_Summary and MongoDB_ReplSet_Summary.
+This mixin includes 3 dashboards suited for MongoDB, namely MongoDB Cluster, MongoDB Instance and MongoDB ReplicaSet.
 
 The alerts were based on those published at [https://awesome-prometheus-alerts.grep.to/rules.html#mongodb](https://awesome-prometheus-alerts.grep.to/rules.html#mongodb).
 
