@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/cortex-jsonnet.git",
+          "subdir": "cortex"
+        }
+      },
+      "version": "20d37d030eb5b526d06e1e89e86ef9c8adf22046",
+      "sum": "ZkhPhfB9jaqq1wNU/A7lKfuEjVSdgP8M/HOeXhKxr7c="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "consul"
+        }
+      },
+      "version": "a3b9f8e29c36ab50df57cf9c9410e231d8481899",
+      "sum": "Po3c1Ic96ngrJCtOazic/7OsLkoILOKZWXWyZWl+od8="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "etcd-operator"
+        }
+      },
+      "version": "a3b9f8e29c36ab50df57cf9c9410e231d8481899",
+      "sum": "dnKsZ5FkKBtCycNVVSYa1AMNjCLofO4VGFrmzoz4344="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "jaeger-agent-mixin"
+        }
+      },
+      "version": "a3b9f8e29c36ab50df57cf9c9410e231d8481899",
+      "sum": "DsdBoqgx5kE3zc6fMYnfiGjW2+9Mx2OXFieWm1oFHgY="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "ksonnet-util"
+        }
+      },
+      "version": "a3b9f8e29c36ab50df57cf9c9410e231d8481899",
+      "sum": "OxgtIWL4hjvG0xkMwUzZ7Yjs52zUhLhaVQpwHCbqf8A="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "memcached"
+        }
+      },
+      "version": "a3b9f8e29c36ab50df57cf9c9410e231d8481899",
+      "sum": "dTOeEux3t9bYSqP2L/uCuLo/wUDpCKH4w+4OD9fePUk="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/docsonnet.git",
+          "subdir": "doc-util"
+        }
+      },
+      "version": "fc3f9bca2dff836b0e924a993bdf11bc51af78d4",
+      "sum": "JUBWG9ybm0TlY3uCWrNoQS00BcfPlCvuK9jPFU0NIj8="
+    }
+  ],
+  "legacyImports": false
+}

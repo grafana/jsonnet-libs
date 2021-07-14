@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/jsonnet-libs/k8s-libsonnet.git",
+          "subdir": "1.18"
+        }
+      },
+      "version": "91008dbd2ea5734288467d6dcafef7c285c3f7e6",
+      "sum": "x881PM+6ARMsa9OSJcxO6L+4GOBy91clZipjeYbbzpw="
+    }
+  ],
+  "legacyImports": false
+}
