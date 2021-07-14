@@ -1,10 +1,8 @@
 {
   grafanaDashboards: {
-    'MongoDB_Instances_Compare.json': (import 'dashboards/MongoDB_Instances_Compare.json'),
-    'MongoDB_Instances_Overview.json': (import 'dashboards/MongoDB_Instances_Overview.json'),
-    'MongoDB_ReplSet_Summary.json': (import 'dashboards/MongoDB_ReplSet_Summary.json'),
-    'MongoDB_Cluster_Summary.json': (import 'dashboards/MongoDB_Cluster_Summary.json'),
-    'MongoDB_Instance_Summary.json': (import 'dashboards/MongoDB_Instance_Summary.json'),
+    'MongoDB_Instance.json': (import 'dashboards/MongoDB_Instance.json'),
+    'MongoDB_ReplicaSet.json': (import 'dashboards/MongoDB_ReplicaSet.json'),
+    'MongoDB_Cluster.json': (import 'dashboards/MongoDB_Cluster.json'),
   },
 
   // Helper function to ensure that we don't override other rules, by forcing
