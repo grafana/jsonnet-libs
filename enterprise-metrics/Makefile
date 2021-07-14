@@ -12,11 +12,11 @@ help:
 	@awk 'BEGIN {FS = ": ##"; printf "Usage:\n  make <target>\n\nTargets:\n"} /^[a-zA-Z0-9_\.\-\/%]+: ##/ { printf "  %-45s %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
 
 vendor: ## Vendor the Jsonnet libraries.
-vendor: jsonnetfile.json
+vendor: jsonnetfile.json jsonnetfile.lock.json
 	jb install
 
 test/vendor: ## Vendor the test Jsonnet libraries.
-test/vendor: test/jsonnetfile.json
+test/vendor: test/jsonnetfile.json test/jsonnetfile.lock.json
 	cd test
 	jb install
 
@@ -50,9 +50,3 @@ docs: docs/README.md
 
 docs/README.md: main.libsonnet vendor test/vendor
 	docsonnet -J test/lib -J test/vendor -J vendor docs.jsonnet -o ./docs
-
-.PHONY: clean
-clean: ## Clean vendor directories and lock files
-clean:
-	rm -rf vendor jsonnetfile.lock.json
-	rm -rf test/vendor test/jsonnetfile.lock.json
