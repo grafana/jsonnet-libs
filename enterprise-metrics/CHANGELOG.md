@@ -13,8 +13,13 @@ Entries should include a reference to the Pull Request that introduced the chang
 ## Unreleased
 
 - [CHANGE] The tokengen configuration is now hidden by default to avoid confusing errors when immutable fields are changed. #541
+- [CHANGE] Arbitrary storage class names are removed from PersistentVolumeClaims. If you were using those storage class names, you will need to configure the storageClassName in the persistentVolume object. For example in `$.ingester.persistentVolumeClaim`. #577
+- [CHANGE] Enabled the self-monitoring feature, which was part of the GEM 1.4 release, by default. #608
 - [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.3.0](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v130----april-26th-2021). #552
 - [FEATURE] Alertmanager and ruler Kubernetes App manifests are now included. #541
+- [FEATURE] PersistentVolumeClaims can be configured on all components run as a StatefulSet. This includes the alertmanager, compactor, ingester, and store-gateway components. #577
+- [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.4.0](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v140----june-28th-2021). #598
+- [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.4.1](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v141----june-29th-2021). #608
 - [BUGFIX] The `gossip-ring` Service now publishes not ready addresses. #523
 - [BUGFIX] All ring members now have the `gossip_ring-member` label set. #523
 - [BUGFIX] All microservices now use the `gossip-ring` Service as `memberlist.join` address. #523

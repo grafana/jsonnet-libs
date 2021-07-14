@@ -1,0 +1,42 @@
+{
+   "dependencies": [
+      {
+         "source": {
+            "git": {
+               "remote": "https://github.com/grafana/cortex-jsonnet.git",
+               "subdir": "cortex"
+            }
+         },
+         "version": "1.9.0"
+      },
+      {
+         "source": {
+            "git": {
+               "remote": "https://github.com/grafana/jsonnet-libs.git",
+               "subdir": "ksonnet-util"
+            }
+         },
+         "version": "master"
+      },
+      {
+         "source": {
+            "git": {
+               "remote": "https://github.com/jsonnet-libs/docsonnet.git",
+               "subdir": "doc-util"
+            }
+         },
+         "version": "master"
+      },
+      {
+         "source": {
+            "git": {
+               "remote": "https://github.com/jsonnet-libs/k8s-alpha.git",
+               "subdir": "1.18"
+            }
+         },
+         "version": "master"
+      }
+   ],
+   "legacyImports": true,
+   "version": 1
+}
