@@ -39,6 +39,7 @@ environments/minio/vendor: environments/minio/jsonnetfile.json
 	cd $(@D)
 	jb install
 
+.PHONY: local-test
 local-test: ## Deploy GEM to a local k3d cluster. Tear down with ./scripts/k3d-cluster delete.
 local-test: environments/minio/vendor
 	./scripts/k3d-cluster create
