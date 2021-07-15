@@ -1,4 +1,3 @@
-Nomad Mixin
 The Traefik Mixin is a set of configurable, reusable, and extensible dashboards based on the metrics exported by Traefik itself. It also creates suitable dashboard descriptions for Grafana.
 
 To use them, you need to have mixtool and jsonnetfmt installed. If you have a working Go development environment, it's easiest to run the following:
