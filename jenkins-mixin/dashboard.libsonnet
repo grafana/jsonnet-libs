@@ -153,18 +153,21 @@ local executor_count_panel = grafana.singlestat.new(
 );
 
 local executor_by_state_panel = grafana.pieChartPanel.new(
-  'Executors By State',
-  span=2,
-  datasource='$datasource',
-  showLegendPercentage=false,
-  legendType='Under graph',
-)
+                                  'Executors By State',
+                                  span=2,
+                                  datasource='$datasource',
+                                  showLegendPercentage=false,
+                                  legendType='Under graph',
+                                )
                                 .addTarget(
-  grafana.prometheus.target(queries.executor_free, legendFormat='free', instant=true)
-)
+                                  grafana.prometheus.target(queries.executor_free, legendFormat='free', instant=true)
+                                )
                                 .addTarget(
-  grafana.prometheus.target(queries.executor_inuse, legendFormat='in-use', instant=true)
-);
+                                  grafana.prometheus.target(queries.executor_inuse, legendFormat='in-use', instant=true)
+                                ) +
+                                {
+                                  type: 'piechart',
+                                };
 
 local job_success_rate_panel = grafana.statPanel.new(
                                  'Job Success Rate',
