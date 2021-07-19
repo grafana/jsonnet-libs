@@ -149,6 +149,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       self.prometheus_watch_container,
     ], self.prometheus_pvc)
     + self.prometheus_config_mount
+    + statefulset.mixin.spec.withPodManagementPolicy('Parallel')
     + statefulset.mixin.spec.withServiceName('prometheus')
     + statefulset.mixin.spec.template.metadata.withAnnotations({
       'prometheus.io.path': '%smetrics' % _config.prometheus_web_route_prefix,
