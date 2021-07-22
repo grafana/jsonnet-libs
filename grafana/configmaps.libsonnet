@@ -135,9 +135,9 @@ local configMap = k.core.v1.configMap;
   // configmap mounts for use within statefulset/deployment
   configmap_mounts::
     k.util.configMapVolumeMount($.grafana_ini_config_map, '/etc/grafana-config')
-    + k.util.configVolumeMount('grafana-dashboard-provisioning', '%(provisioningDir)s/dashboards' % $._config)
-    + k.util.configVolumeMount('grafana-datasources', '%(provisioningDir)s/datasources' % $._config)
-    + k.util.configVolumeMount('grafana-notification-channels', '%(provisioningDir)s/notifiers' % $._config)
+    + k.util.configMapVolumeMount($.dashboard_provisioning_config_map, '%(provisioningDir)s/dashboards' % $._config)
+    + k.util.configMapVolumeMount($.grafana_datasource_config_map, '%(provisioningDir)s/datasources' % $._config)
+    + k.util.configMapVolumeMount($.notification_channel_config_map, '%(provisioningDir)s/notifiers' % $._config)
     + std.foldr(
       function(folder, acc) shardedMounts($.grafanaDashboardFolders[folder]) + acc,
       std.objectFields($.grafanaDashboardFolders),
