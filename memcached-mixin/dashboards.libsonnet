@@ -18,8 +18,13 @@ local g = (import 'grafana-builder/grafana.libsonnet');
           { yaxes: g.yaxes('percentunit') },
         )
         .addPanel(
-          g.panel('Connection Usage') +
-          g.queryPanel('(memcached_current_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"} / memcached_max_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"} * 100)', 'Connection Usage') +
+          g.panel('Top 20 Highest Connection Usage') +
+          g.queryPanel(|||
+            topk(20,
+              max by (cluster, job, instance) (
+                memcached_current_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"} / memcached_max_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"}
+            ))
+          |||, '{{cluster }} / {{ job }} / {{ instance }}') +
           { yaxes: g.yaxes('percentunit') },
         )
       )
