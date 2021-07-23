@@ -17,6 +17,11 @@ local g = (import 'grafana-builder/grafana.libsonnet');
           g.queryPanel('sum(rate(memcached_commands_total{cluster=~"$cluster", job=~"$job", instance=~"$instance", command="get", status="hit"}[1m])) / sum(rate(memcached_commands_total{cluster=~"$cluster", job=~"$job", command="get"}[1m]))', 'Hit Rate') +
           { yaxes: g.yaxes('percentunit') },
         )
+        .addPanel(
+          g.panel('Connection Usage') +
+          g.queryPanel('(memcached_current_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"} / memcached_max_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"} * 100)', 'Connection Usage') +
+          { yaxes: g.yaxes('percentunit') },
+        )
       )
       .addRow(
         g.row('Ops')
