@@ -151,7 +151,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     + statefulset.mixin.spec.template.spec.securityContext.withFsGroup(2000)
     + statefulset.mixin.spec.template.spec.securityContext.withRunAsUser(1000)
     + statefulset.mixin.spec.template.spec.securityContext.withRunAsNonRoot(true)
-    + k.util.configVolumeMount('alertmanager-config', '/etc/alertmanager/config')
+    + k.util.configMapVolumeMount($.alertmanager_config_map, '/etc/alertmanager/config')
     + k.util.podPriority('critical')
   ,
 
