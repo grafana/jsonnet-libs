@@ -51,7 +51,7 @@ function(services) {
     |||
       location ^~ /%(path)s {
         # Append trailing / as needed
-        return 302 $scheme://$http_host$request_uri/;
+        rewrite ^/%(path)s$ $scheme://$http_host/%(path)s/ redirect;
       }
       location ^~ /%(path)s/ {
     ||| % service +
