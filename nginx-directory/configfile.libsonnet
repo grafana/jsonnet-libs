@@ -11,8 +11,10 @@ function(services) {
         return 302 %(url)s;
       ||| % service
       else |||
-        proxy_pass      %(url)s$2$is_args$args;
-        proxy_set_header    Host $host;
+        #automagically replaces non-regex location identifier with given proxy_pass url.
+        proxy_pass          %(url)s;
+        #specifying redirect with scheme and http_host because the "default" option doesn't persist the same port.
+        proxy_redirect      %(url)s $scheme://$http_host/%(path)s/;
         proxy_set_header    X-Real-IP $remote_addr;
         proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header    X-Forwarded-Proto $scheme;
@@ -47,7 +49,11 @@ function(services) {
 
   local buildLocation(service) =
     |||
-      location ~ ^/%(path)s(/?)(.*)$ {
+      location ^~ /%(path)s {
+        # Append trailing / as needed
+        return 302 $scheme://$http_host$request_uri/;
+      }
+      location ^~ /%(path)s/ {
     ||| % service +
     buildHeaders(service) +
     |||
