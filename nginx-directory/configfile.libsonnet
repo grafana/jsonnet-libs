@@ -11,9 +11,9 @@ function(services) {
         return 302 %(url)s;
       ||| % service
       else |||
-        #automagically replaces non-regex location identifier with given proxy_pass url.
+        # automagically replaces non-regex location identifier with given proxy_pass url.
         proxy_pass          %(url)s;
-        #specifying redirect with scheme and http_host because the "default" option doesn't persist the same port.
+        # specifying redirect with scheme and http_host because the "default" option doesn't persist the same port.
         proxy_redirect      %(url)s $scheme://$http_host/%(path)s/;
         proxy_set_header    X-Real-IP $remote_addr;
         proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
