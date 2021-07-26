@@ -3,7 +3,8 @@
     operator: 'quay.io/coreos/etcd-operator:v0.9.4',
   },
 
-  local k = import 'ksonnet-util/kausal.libsonnet',
+  local kausal = import 'ksonnet-util/kausal.libsonnet',
+  local k = kausal { _config+:: $._config },
   local policyRule = k.rbac.v1beta1.policyRule,
 
   operator_rbac:
