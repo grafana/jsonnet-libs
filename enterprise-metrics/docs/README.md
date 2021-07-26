@@ -13,6 +13,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 ## Index
 
 * [`obj _config`](#obj-_config)
+  * [`string _config.adminTokenSecretName`](#string-_configadmintokensecretname)
   * [`obj _config.commonArgs`](#obj-_configcommonargs)
     * [`bool _config.commonArgs.auth.enabled`](#bool-_configcommonargsauthenabled)
     * [`bool _config.commonArgs.auth.type`](#bool-_configcommonargsauthtype)
@@ -248,6 +249,20 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 ## obj _config
 
 `_config` is used for consumer overrides and configuration. Similar to a Helm values.yaml file
+
+### string _config.adminTokenSecretName
+
+*Default value: * `gem-admin-token`
+
+When generating an admin token using the `tokengen` target, the result is written to the Kubernetes
+Secret `adminTokenSecretName`.
+There are two versions of the token in the Secret: `token` is the raw token obtained from the `tokengen`,
+and `grafana-token` is a base64 encoded version that can be used directly when provisioning Grafana
+via configuration file.
+To retrieve these tokens from Kubernetes using `kubectl`:
+$ kubectl get secret gem-admin-token -o jsonpath="{.data.token}" | base64 --decode ; echo
+$ kubectl get secret gem-admin-token -o jsonpath="{.data.grafana-token}" | base64 --decode ; echo
+
 
 ## obj _config.commonArgs
 
