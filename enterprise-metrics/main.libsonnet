@@ -456,6 +456,37 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     service: util.serviceFor(self.deployment),
   },
 
+  '#overridesExporter':: d.obj('`overridesExporter` has configuration for the overrides-exporter.'),
+  overridesExporter: {
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the overrides-exporter container arguments as key value pairs.'),
+    args:: this._config.commonArgs {
+      '#bootstrap.license.path':: d.val(
+        default=self['bootstrap.license.path'],
+        help='`bootstrap.license.path` configures where the overrides-exporter expects to find a Grafana Enterprise Metrics License.',
+        type=d.T.string
+      ),
+      'bootstrap.license.path': '/etc/gem-license/license.jwt',
+      target: 'overrides-exporter',
+    },
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the overrides-exporter container.'),
+    container::
+      container.new('overrides-exporter', image=this._images.gem)
+      + container.withArgs(util.mapToFlags(self.args))
+      + container.withPorts(cortex.util.defaultPorts)
+      + container.resources.withLimits({ cpu: '1', memory: '1Gi' })
+      + container.resources.withRequests({ cpu: '100m', memory: '1Gi' })
+      + cortex.util.readinessProbe,
+    '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the overrides-exporter.'),
+    deployment:
+      deployment.new(name='overrides-exporter', replicas=1, containers=[self.container])
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'overrides-exporter' })
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
+    '#service':: d.obj('`service` is the Kubernetes Service for the overrides-exporter.'),
+    service:
+      util.serviceFor(self.deployment),
+  },
+
   '#queryFrontend':: d.obj('`queryFrontend` has configuration for the query-frontend.'),
   queryFrontend: {
     local queryFrontend = self,
