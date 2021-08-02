@@ -23,7 +23,7 @@ local sm = import 'synthetic-monitoring/sm.libsonnet';
                       + sm.withProbes('all'),  // enable all probes
     grafanaPingCheck: sm.ping.new('grafana', 'grafana.com')
                       + sm.withProbes('continents'),  // one check per continent
-    grafanaDnsCheck: sm.dns.new('grafana', 'grafana.com')
+    grafanaDnsCheck: sm.dns.new('grafana-dns', 'grafana.com') // Combination of Job name and Target must be unique
                      + sm.withProbes('europe'),  // just check from Europe
     grafanaTcpCheck: sm.tcp.new('grafana', 'grafana.com:443')
                      + sm.withProbes('small'),  // just use a smaller, predefined set of checks
