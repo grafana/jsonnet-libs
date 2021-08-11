@@ -64,7 +64,7 @@ local link_data = import 'link_data.libsonnet';
     k.util.serviceFor(this.nginx_deployment),
 
   withOAuth2Proxy(config):: {
-    local oauth2_proxy = import 'oauth2_proxy/oauth2-proxy.libsonnet',
+    local oauth2_proxy = import 'oauth2-proxy/oauth2-proxy.libsonnet',
 
     oauth2_proxy:
       oauth2_proxy {
