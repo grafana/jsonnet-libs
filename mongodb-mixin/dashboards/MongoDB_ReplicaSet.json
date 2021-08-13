@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -16,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 15,
-  "iteration": 1626266377046,
+  "iteration": 1628861563344,
   "links": [],
   "panels": [
     {
@@ -79,7 +85,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -136,7 +142,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -193,7 +199,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -245,7 +251,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -401,6 +407,9 @@
         {
           "exemplar": true,
           "expr": "mongodb_mongod_replset_my_state{set=~\"$replset\",service_name=~\"$service_name\"}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
           "interval": "",
           "legendFormat": "",
           "queryType": "randomWalk",
@@ -420,9 +429,11 @@
           "options": {
             "excludeByName": {
               "__name__": true,
+              "agent_hostname": true,
               "cluster": true,
               "instance": true,
               "job": true,
+              "mongodb_cluster": true,
               "set": true
             },
             "indexByName": {},
@@ -1401,7 +1412,7 @@
     "list": [
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "grafanacloud-gabrielantunes-prom",
           "value": "grafanacloud-gabrielantunes-prom"
         },
@@ -1424,11 +1435,11 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "my-cluster",
-          "value": "my-cluster"
+          "text": "mongodb-cluster",
+          "value": "mongodb-cluster"
         },
         "datasource": "${datasource}",
-        "definition": "label_values(mongodb_up,cluster)",
+        "definition": "label_values(mongodb_up,mongodb_cluster)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -1438,7 +1449,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_up,cluster)",
+          "query": "label_values(mongodb_up,mongodb_cluster)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1451,11 +1462,11 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "rs1",
-          "value": "rs1"
+          "text": "cnf-serv",
+          "value": "cnf-serv"
         },
         "datasource": "${datasource}",
-        "definition": "label_values(mongodb_mongod_replset_my_state{cluster=~\"$cluster\"}, set)",
+        "definition": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\"}, set)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -1465,7 +1476,7 @@
         "name": "replset",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_mongod_replset_my_state{cluster=~\"$cluster\"}, set)",
+          "query": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\"}, set)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1482,17 +1493,17 @@
           "value": "$__all"
         },
         "datasource": "${datasource}",
-        "definition": "label_values(mongodb_mongod_replset_my_state{cluster=~\"$cluster\",set=\"$replset\"}, service_name)",
+        "definition": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\",set=\"$replset\"}, service_name)",
         "description": null,
         "error": null,
-        "hide": 0,
+        "hide": 2,
         "includeAll": true,
         "label": null,
         "multi": false,
         "name": "service_name",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_mongod_replset_my_state{cluster=~\"$cluster\",set=\"$replset\"}, service_name)",
+          "query": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\",set=\"$replset\"}, service_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1509,7 +1520,7 @@
           "value": "$__all"
         },
         "datasource": "${datasource}",
-        "definition": "query_result(mongodb_mongod_replset_my_state{cluster=~\"$cluster\",set=\"$replset\"}==2)",
+        "definition": "query_result(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\",set=\"$replset\"}==2)",
         "description": null,
         "error": null,
         "hide": 2,
@@ -1519,7 +1530,7 @@
         "name": "secondary",
         "options": [],
         "query": {
-          "query": "query_result(mongodb_mongod_replset_my_state{cluster=~\"$cluster\",set=\"$replset\"}==2)",
+          "query": "query_result(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\",set=\"$replset\"}==2)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1531,12 +1542,12 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "MongoDB ReplicaSet",
   "uid": "U5CBoam7z",
-  "version": 6
+  "version": 10
 }
