@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -16,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 14,
-  "iteration": 1626283897651,
+  "iteration": 1628858403029,
   "links": [],
   "panels": [
     {
@@ -84,7 +90,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -112,10 +118,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -145,7 +147,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -206,7 +208,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -243,10 +245,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -276,7 +274,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -383,7 +381,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.0.6",
       "targets": [
         {
           "exemplar": true,
@@ -1533,21 +1531,21 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "mongodb-1-1",
-          "value": "mongodb-1-1"
+          "text": "mongodb-cluster",
+          "value": "mongodb-cluster"
         },
         "datasource": "${datasource}",
-        "definition": "label_values(mongodb_up{cluster=~\"$cluster\"}, service_name)",
+        "definition": "label_values(mongodb_up,mongodb_cluster)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
         "label": null,
         "multi": false,
-        "name": "service_name",
+        "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_up{cluster=~\"$cluster\"}, service_name)",
+          "query": "label_values(mongodb_up,mongodb_cluster)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1559,22 +1557,22 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "my-cluster",
-          "value": "my-cluster"
+          "selected": true,
+          "text": "mongodb-rs1-1",
+          "value": "mongodb-rs1-1"
         },
         "datasource": "${datasource}",
-        "definition": "label_values(mongodb_up,cluster)",
+        "definition": "label_values(mongodb_up{mongodb_cluster=~\"$cluster\"}, service_name)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "service",
         "multi": false,
-        "name": "cluster",
+        "name": "service_name",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_up,cluster)",
+          "query": "label_values(mongodb_up{mongodb_cluster=~\"$cluster\"}, service_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1593,5 +1591,5 @@
   "timezone": "",
   "title": "MongoDB Instance",
   "uid": "68bDO-m7k",
-  "version": 4
+  "version": 7
 }
