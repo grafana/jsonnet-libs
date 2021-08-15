@@ -45,8 +45,8 @@
       service_key: service_key,
     } + this.config.withConfigTemplate(),
 
-    newRouting(service_key): {
-      service_key: service_key,
+    newRouting(routing_key): {
+      routing_key: routing_key,
     } + this.config.withConfigTemplate(),
 
     withConfigTemplate(): configTemplate,
