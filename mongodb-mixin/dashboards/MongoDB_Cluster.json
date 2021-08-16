@@ -21,8 +21,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 13,
-  "iteration": 1628861511522,
+  "id": 2,
+  "iteration": 1629145343485,
   "links": [],
   "panels": [
     {
@@ -77,7 +77,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -150,7 +150,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -231,7 +231,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -291,7 +291,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -351,7 +351,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -411,7 +411,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -471,7 +471,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -531,7 +531,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -591,7 +591,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -651,7 +651,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -687,7 +687,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 9
       },
@@ -704,7 +704,7 @@
         "showThresholdMarkers": false,
         "text": {}
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "repeat": "shard",
       "repeatDirection": "h",
       "targets": [
@@ -760,7 +760,7 @@
         "showThresholdMarkers": false,
         "text": {}
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -814,7 +814,7 @@
         "showThresholdMarkers": false,
         "text": {}
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -881,7 +881,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -1231,7 +1231,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -1395,7 +1395,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -1948,7 +1948,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(\nsum(\nirate(mongodb_op_counters_total{mongodb_cluster=\"$cluster\", type!=\"command\"}[5m])) by (instance) * on (instance) \ngroup_right mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\"} / mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\"}) by (set)",
+          "expr": "sum( sum( irate(mongodb_op_counters_total{mongodb_cluster=\"$cluster\", type!=\"command\"}[5m])) by (instance) * on (instance)  group_right mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\"} / mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\"}) by (set)",
           "interval": "",
           "legendFormat": "{{shard}}",
           "queryType": "randomWalk",
@@ -2097,7 +2097,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 85
       },
@@ -2135,7 +2135,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 125
+        "y": 93
       },
       "id": 45,
       "panels": [],
@@ -2198,7 +2198,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 126
+        "y": 94
       },
       "id": 52,
       "options": {
@@ -2280,7 +2280,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 126
+        "y": 94
       },
       "id": 54,
       "options": {
@@ -2296,7 +2296,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by () ( \nmax_over_time(mongodb_mongod_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or\nmax_over_time(mongodb_mongos_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or\nmax_over_time(mongodb_mongod_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) or\nmax_over_time(mongodb_mongos_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m])\n)",
+          "expr": "sum by () (  max_over_time(mongodb_mongod_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or max_over_time(mongodb_mongos_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or max_over_time(mongodb_mongod_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) or max_over_time(mongodb_mongos_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) )",
           "interval": "",
           "legendFormat": "Cursors",
           "queryType": "randomWalk",
@@ -2362,7 +2362,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 134
+        "y": 102
       },
       "id": 55,
       "options": {
@@ -2378,7 +2378,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (service_name) ( \nmax_over_time(mongodb_mongod_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or\nmax_over_time(mongodb_mongos_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or\nmax_over_time(mongodb_mongod_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) or\nmax_over_time(mongodb_mongos_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m])\n)",
+          "expr": "sum by (service_name) (  max_over_time(mongodb_mongod_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or max_over_time(mongodb_mongos_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or max_over_time(mongodb_mongod_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) or max_over_time(mongodb_mongos_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) )",
           "interval": "",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
@@ -2395,7 +2395,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 143
+        "y": 111
       },
       "id": 47,
       "panels": [],
@@ -2458,7 +2458,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 144
+        "y": 112
       },
       "id": 59,
       "options": {
@@ -2540,7 +2540,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 144
+        "y": 112
       },
       "id": 60,
       "options": {
@@ -2567,17 +2567,19 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "30s",
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "mongodb-integration"
+  ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "description": null,
         "error": null,
@@ -2597,7 +2599,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": [
             "All"
           ],
@@ -2628,15 +2630,10 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": [
-            "rs1",
-            "rs2"
-          ],
-          "value": [
-            "rs1",
-            "rs2"
-          ]
+          "text": "None",
+          "value": ""
         },
         "datasource": "${datasource}",
         "definition": "label_values(mongodb_mongos_db_collections_total{mongodb_cluster=\"$cluster\"},shard)",
@@ -2661,37 +2658,16 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": [
-            "mongodb-rs1-2",
-            "mongodb-conf-2",
-            "mongodb-conf-3",
-            "mongodb-rs2-3",
-            "mongodb-conf-1",
-            "mongodb-rs1-1",
-            "mongos",
-            "mongodb-rs2-2",
-            "mongodb-rs2-1",
-            "mongodb-rs1-3"
-          ],
-          "value": [
-            "mongodb-rs1-2",
-            "mongodb-conf-2",
-            "mongodb-conf-3",
-            "mongodb-rs2-3",
-            "mongodb-conf-1",
-            "mongodb-rs1-1",
-            "mongos",
-            "mongodb-rs2-2",
-            "mongodb-rs2-1",
-            "mongodb-rs1-3"
-          ]
+          "text": "None",
+          "value": ""
         },
         "datasource": "${datasource}",
         "definition": "label_values(mongodb_up{mongodb_cluster=\"$cluster\"},service_name)",
         "description": null,
         "error": null,
-        "hide": 0,
+        "hide": 2,
         "includeAll": false,
         "label": null,
         "multi": true,
@@ -2710,12 +2686,12 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "MongoDB Cluster",
   "uid": "nU5ylgi7z",
-  "version": 29
+  "version": 2
 }
