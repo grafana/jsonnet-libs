@@ -21,8 +21,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 15,
-  "iteration": 1628861563344,
+  "id": 4,
+  "iteration": 1629145417397,
   "links": [],
   "panels": [
     {
@@ -85,7 +85,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -142,7 +142,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -199,7 +199,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -251,7 +251,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -693,18 +693,17 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "s"
+          }
         },
         "overrides": []
       },
       "gridPos": {
         "h": 9,
         "w": 12,
-        "x": 0,
-        "y": 29
+        "x": 12,
+        "y": 20
       },
-      "id": 22,
+      "id": 23,
       "options": {
         "legend": {
           "calcs": [
@@ -722,14 +721,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "time() - avg by (service_name) (max(mongodb_mongod_replset_member_last_heartbeat{service_name=~\"$service_name\"}) by (name)) * on (name) group_right avg by (service_name) (mongodb_mongod_replset_my_name{service_name=~\"$service_name\"})",
-          "interval": "5m",
+          "expr": "max by (service_name) (changes(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\"}[5m]))",
+          "interval": "",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
           "refId": "A"
         }
       ],
-      "title": "Max Heartbeat Time",
+      "title": "Elections",
       "type": "timeseries"
     },
     {
@@ -780,17 +779,18 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "s"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 9,
         "w": 12,
-        "x": 12,
+        "x": 0,
         "y": 29
       },
-      "id": 23,
+      "id": 22,
       "options": {
         "legend": {
           "calcs": [
@@ -808,14 +808,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max by (service_name) (changes(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\"}[5m]))",
-          "interval": "",
+          "expr": "time() - avg by (service_name) (max(mongodb_mongod_replset_member_last_heartbeat{service_name=~\"$service_name\"}) by (name)) * on (name) group_right avg by (service_name) (mongodb_mongod_replset_my_name{service_name=~\"$service_name\"})",
+          "interval": "5m",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
           "refId": "A"
         }
       ],
-      "title": "Elections",
+      "title": "Max Heartbeat Time",
       "type": "timeseries"
     },
     {
@@ -1405,22 +1405,25 @@
       "type": "timeseries"
     }
   ],
+  "refresh": "30s",
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "mongodb-integration"
+  ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Datasource",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -1434,9 +1437,10 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "mongodb-cluster",
-          "value": "mongodb-cluster"
+          "text": "None",
+          "value": ""
         },
         "datasource": "${datasource}",
         "definition": "label_values(mongodb_up,mongodb_cluster)",
@@ -1444,7 +1448,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Cluster",
         "multi": false,
         "name": "cluster",
         "options": [],
@@ -1461,9 +1465,10 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "cnf-serv",
-          "value": "cnf-serv"
+          "text": "None",
+          "value": ""
         },
         "datasource": "${datasource}",
         "definition": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\"}, set)",
@@ -1471,7 +1476,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Replica Set",
         "multi": false,
         "name": "replset",
         "options": [],
@@ -1542,12 +1547,12 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "MongoDB ReplicaSet",
   "uid": "U5CBoam7z",
-  "version": 10
+  "version": 2
 }

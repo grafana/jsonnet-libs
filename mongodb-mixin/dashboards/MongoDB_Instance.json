@@ -21,8 +21,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 14,
-  "iteration": 1628858403029,
+  "id": 3,
+  "iteration": 1629145386676,
   "links": [],
   "panels": [
     {
@@ -90,7 +90,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -147,7 +147,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -208,7 +208,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -274,7 +274,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -381,7 +381,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.6",
+      "pluginVersion": "8.0.4",
       "targets": [
         {
           "exemplar": true,
@@ -495,7 +495,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[5m]) or \nirate(mongodb_mongos_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[5m]))",
+          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[5m]) or  irate(mongodb_mongos_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[5m]))",
           "interval": "",
           "legendFormat": "{{type}}",
           "queryType": "randomWalk",
@@ -503,7 +503,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[5m]) or\nirate(mongodb_mongos_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[5m]))",
+          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[5m]) or irate(mongodb_mongos_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{type}}",
@@ -511,7 +511,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[5m]) or\nirate(mongodb_mongos_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "ttl_delete",
@@ -598,7 +598,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"} or\nmongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"} or\nmongodb_connections{service_name=~\"$service_name\", state=\"current\"})",
+          "expr": "avg by (service_name) (mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"} or mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"} or mongodb_connections{service_name=~\"$service_name\", state=\"current\"})",
           "interval": "",
           "legendFormat": "Connections",
           "queryType": "randomWalk",
@@ -946,7 +946,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,state) (mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\"} or\nmongodb_mongod_cursors{service_name=~\"$service_name\"} or\nmongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\"} or \nmongodb_mongos_cursors{service_name=~\"$service_name\"})",
+          "expr": "avg by (service_name,state) (mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\"} or mongodb_mongod_cursors{service_name=~\"$service_name\"} or mongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\"} or  mongodb_mongos_cursors{service_name=~\"$service_name\"})",
           "interval": "",
           "legendFormat": "{{state}}",
           "queryType": "randomWalk",
@@ -1129,7 +1129,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_mongod_asserts_total{service_name=~\"$service_name\"}[5m]) or\nirate(mongodb_mongos_asserts_total{service_name=~\"$service_name\"}[5m]) or\nirate(mongodb_asserts_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_mongod_asserts_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_asserts_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_asserts_total{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "{{type}}",
           "queryType": "randomWalk",
@@ -1216,7 +1216,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[5m]) or\nirate(mongodb_mongos_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "Total",
           "queryType": "randomWalk",
@@ -1224,7 +1224,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[5m]) or\nirate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Timeouts",
@@ -1311,7 +1311,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m]))/\nsum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m]))",
+          "expr": "sum(irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m]))",
           "interval": "",
           "legendFormat": "Document",
           "queryType": "randomWalk",
@@ -1319,7 +1319,7 @@
         },
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[5m]))/\nsum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m]))",
+          "expr": "sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[5m]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Index",
@@ -1403,7 +1403,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[5m]) or\nirate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "Write Wait Time",
           "queryType": "randomWalk",
@@ -1490,7 +1490,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]) or\nirate(mongodb_mongos_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]) or\nirate(mongodb_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "Faults",
           "queryType": "randomWalk",
@@ -1501,23 +1501,25 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "30s",
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "mongodb-integration"
+  ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Datasource",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -1530,9 +1532,10 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "mongodb-cluster",
-          "value": "mongodb-cluster"
+          "text": "None",
+          "value": ""
         },
         "datasource": "${datasource}",
         "definition": "label_values(mongodb_up,mongodb_cluster)",
@@ -1540,7 +1543,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Cluster",
         "multi": false,
         "name": "cluster",
         "options": [],
@@ -1557,9 +1560,10 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": "mongodb-rs1-1",
-          "value": "mongodb-rs1-1"
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
         },
         "datasource": "${datasource}",
         "definition": "label_values(mongodb_up{mongodb_cluster=~\"$cluster\"}, service_name)",
@@ -1567,7 +1571,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "service",
+        "label": "Service Name",
         "multi": false,
         "name": "service_name",
         "options": [],
@@ -1584,12 +1588,12 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "MongoDB Instance",
   "uid": "68bDO-m7k",
-  "version": 7
+  "version": 3
 }
