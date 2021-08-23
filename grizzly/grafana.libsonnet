@@ -1,3 +1,4 @@
+local resource = import 'resource.libsonnet';
 local util = import 'util.libsonnet';
 
 {
@@ -17,5 +18,25 @@ local util = import 'util.libsonnet';
         for k in std.objectFieldsAll(util.get(mixin, 'grafanaDashboards', {}))
       }
     for key in std.objectFields(mixins)
+  },
+
+  dashboard: {
+    new(name, dashboard_json)::
+      resource.new('Dashboard', name)
+      + resource.withSpec(dashboard_json),
+  },
+
+  folder: {
+    new(name, title)::
+      resource.new('DashboardFolder', name)
+      + resource.withSpec({
+        title: title,
+      }),
+  },
+
+  datasource: {
+    new(name, datasource_json)::
+      resource.new('Datasource', name)
+      + resource.withSpec(datasource_json),
   },
 }

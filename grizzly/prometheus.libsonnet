@@ -2,6 +2,8 @@ local util = import 'util.libsonnet';
 local kind = 'PrometheusRuleGroup';
 local recordingRules = 'prometheusRules';
 local alertRules = 'prometheusAlerts';
+local resource = import 'resource.libsonnet';
+
 {
   getMixinRuleNames(mixins)::
     local flatMixins = [mixins[key] for key in std.objectFieldsAll(mixins)];
@@ -26,5 +28,12 @@ local alertRules = 'prometheusAlerts';
         + (if std.objectHasAll(mixins[key], recordingRules) then mixins[key].prometheusRules else {})
       )
     for key in std.objectFields(mixins)
+  },
+
+  rule_group: {
+    new(namespace, name, group)::
+      resource.new('PrometheusRuleGroup', name)
+      + resource.addMetadata('namespace', namespace)
+      + resource.withSpec(group),
   },
 }

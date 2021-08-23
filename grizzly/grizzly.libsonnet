@@ -15,4 +15,12 @@ local prometheus = import 'prometheus.libsonnet';
                 + prometheus.fromMapsFiltered(main.prometheusRules, mixinRules)
                 + prometheus.fromMixins(main.mixins),
   },
+
+  resource: (import 'resource.libsonnet'),
+  dashboard: grafana.dashboard,
+  folder: grafana.folder,
+  datasource: grafana.datasource,
+  rule_group: prometheus.rule_group,
+  synthetic_monitoring_check: (import 'check.libsonnet'),
+
 }
