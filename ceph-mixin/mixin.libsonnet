@@ -1,6 +1,6 @@
 {
   grafanaDashboards: {
-    'ceph-cluster.json': (import 'dashboards/ceph-cluster.json'),    
+    'ceph-cluster.json': (import 'dashboards/ceph-cluster.json'),
   },
 
   // Helper function to ensure that we don't override other rules, by forcing
