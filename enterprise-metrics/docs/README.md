@@ -325,7 +325,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ### string _images.gem
 
-*Default value: * `grafana/metrics-enterprise:v1.4.1`
+*Default value: * `grafana/metrics-enterprise:v1.5.0`
 
 `gem` is the Grafana Enterprise Metrics container image.
 

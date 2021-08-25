@@ -21,6 +21,7 @@ Entries should include a reference to the Pull Request that introduced the chang
 - [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.4.0](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v140----june-28th-2021). #598
 - [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.4.1](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v141----june-29th-2021). #608
 - [FEATURE] Run the Grafana Enterprise Metrics `overrides-exporter` target as a deployment. #626
+- [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.5.0](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v150----august-24th-2021). #638
 - [BUGFIX] The `gossip-ring` Service now publishes not ready addresses. #523
 - [ENHANCEMENT] Make Secret name for GEM admin token configurable via `adminTokenSecretName`. #600- [BUGFIX] The `gossip-ring` Service now publishes not ready addresses. #523
 - [BUGFIX] All ring members now have the `gossip_ring-member` label set. #523
