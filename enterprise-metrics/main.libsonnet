@@ -203,6 +203,18 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         type=d.T.string
       ),
       'bootstrap.license.path': '/etc/gem-license/license.jwt',
+      '#admin-api.leader-election.enabled':: d.val(
+        default=self['admin-api.leader-election.enabled'],
+        help='`admin-api.leader-election.enabled` enables leader election for to avoid inconsistent state with parallel writes when multiple replicas of the admin-api are running.',
+        type=d.T.bool
+      ),
+      'admin-api.leader-election.enabled': true,
+      '#admin-api.leader-election.ring.store':: d.val(
+        default=self['admin-api.leader-election.ring.store'],
+        help='`admin-api.leader-election.ring.store` is the type of key-value store to use for admin-api leader election.',
+        type=d.T.string,
+      ),
+      'admin-api.leader-election.ring.store': 'memberlist',
       target: 'admin-api',
     },
     '#container':: d.obj('`container` is a convenience field that can be used to modify the admin-api container.'),

@@ -26,6 +26,7 @@ Entries should include a reference to the Pull Request that introduced the chang
 - [BUGFIX] All ring members now have the `gossip_ring-member` label set. #523
 - [BUGFIX] All microservices now use the `gossip-ring` Service as `memberlist.join` address. #523
 - [BUGFIX] `auth.type=default` is set on the `querier` to fix hanging query_range queries. #549
+- [BUGFIX] Enable admin-api leader election. This change does not affect single replica deployments of the admin-api but does fix the potential for an inconsistent state when running with multiple replicas of the admin-api and experiencing parallel writes for the same objects.
 
 ## 1.0.0
 
