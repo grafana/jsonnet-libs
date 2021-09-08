@@ -28,6 +28,8 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
   * [`string _images.kubectl`](#string-_imageskubectl)
 * [`obj adminApi`](#obj-adminapi)
   * [`obj adminApi.args`](#obj-adminapiargs)
+    * [`bool adminApi.args.admin-api.leader-election.enabled`](#bool-adminapiargsadmin-apileader-electionenabled)
+    * [`string adminApi.args.admin-api.leader-election.ring.store`](#string-adminapiargsadmin-apileader-electionringstore)
     * [`bool adminApi.args.auth.enabled`](#bool-adminapiargsauthenabled)
     * [`bool adminApi.args.auth.type`](#bool-adminapiargsauthtype)
     * [`string adminApi.args.bootstrap.license.path`](#string-adminapiargsbootstraplicensepath)
@@ -143,6 +145,22 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
   * [`obj memcached.metadata`](#obj-memcachedmetadata)
     
   * [`obj memcached.queries`](#obj-memcachedqueries)
+    
+* [`obj overridesExporter`](#obj-overridesexporter)
+  * [`obj overridesExporter.args`](#obj-overridesexporterargs)
+    * [`bool overridesExporter.args.auth.enabled`](#bool-overridesexporterargsauthenabled)
+    * [`bool overridesExporter.args.auth.type`](#bool-overridesexporterargsauthtype)
+    * [`string overridesExporter.args.bootstrap.license.path`](#string-overridesexporterargsbootstraplicensepath)
+    * [`string overridesExporter.args.cluster-name`](#string-overridesexporterargscluster-name)
+    * [`string overridesExporter.args.instrumentation.distributor-client.address`](#string-overridesexporterargsinstrumentationdistributor-clientaddress)
+    * [`string overridesExporter.args.instrumentation.enabled`](#string-overridesexporterargsinstrumentationenabled)
+    * [`string overridesExporter.args.memberlist.join`](#string-overridesexporterargsmemberlistjoin)
+    * [`string overridesExporter.args.runtime-config.file`](#string-overridesexporterargsruntime-configfile)
+  * [`obj overridesExporter.container`](#obj-overridesexportercontainer)
+    
+  * [`obj overridesExporter.deployment`](#obj-overridesexporterdeployment)
+    
+  * [`obj overridesExporter.service`](#obj-overridesexporterservice)
     
 * [`obj querier`](#obj-querier)
   * [`obj querier.args`](#obj-querierargs)
@@ -342,6 +360,18 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ## obj adminApi.args
 
 `args` is a convenience field that can be used to modify the admin-api container arguments as key value pairs.
+
+### bool adminApi.args.admin-api.leader-election.enabled
+
+*Default value: * `true`
+
+`admin-api.leader-election.enabled` enables leader election for to avoid inconsistent state with parallel writes when multiple replicas of the admin-api are running.
+
+### string adminApi.args.admin-api.leader-election.ring.store
+
+*Default value: * `memberlist`
+
+`admin-api.leader-election.ring.store` is the type of key-value store to use for admin-api leader election.
 
 ### bool adminApi.args.auth.enabled
 
@@ -800,6 +830,73 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ## obj memcached.queries
 
 `queries` is a cache for index queries used by the store-gateways.
+
+## obj overridesExporter
+
+`overridesExporter` has configuration for the overrides-exporter.
+
+## obj overridesExporter.args
+
+`args` is a convenience field that can be used to modify the overrides-exporter container arguments as key value pairs.
+
+### bool overridesExporter.args.auth.enabled
+
+*Default value: * `true`
+
+`auth.enabled` enables the tenant authentication
+
+### bool overridesExporter.args.auth.type
+
+*Default value: * `enterprise`
+
+`auth.type` configures the type of authentication in use.
+`enterprise` uses Grafana Enterprise token authentication.
+`default` uses Cortex authentication.
+
+
+### string overridesExporter.args.bootstrap.license.path
+
+*Default value: * `/etc/gem-license/license.jwt`
+
+`bootstrap.license.path` configures where the overrides-exporter expects to find a Grafana Enterprise Metrics License.
+
+### string overridesExporter.args.cluster-name
+
+`cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string overridesExporter.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string overridesExporter.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
+### string overridesExporter.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string overridesExporter.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
+## obj overridesExporter.container
+
+`container` is a convenience field that can be used to modify the overrides-exporter container.
+
+## obj overridesExporter.deployment
+
+`deployment` is the Kubernetes Deployment for the overrides-exporter.
+
+## obj overridesExporter.service
+
+`service` is the Kubernetes Service for the overrides-exporter.
 
 ## obj querier
 
