@@ -17,7 +17,7 @@
   "gnetId": 12887,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1631727905457,
+  "iteration": 1631736781187,
   "links": [],
   "panels": [
     {
@@ -1213,35 +1213,6 @@
         "align": false,
         "alignLevel": null
       }
-    },
-    {
-      "datasource": "Loki",
-      "description": "Displays the logs(carbon.log) of this node during the selected time period. If no log entries were logged during the selected time pane will be empty.",
-      "gridPos": {
-        "h": 11,
-        "w": 24,
-        "x": 0,
-        "y": 21
-      },
-      "id": 15,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": true
-      },
-      "targets": [
-        {
-          "expr": "{instance=\"[[node]]\"}",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Logs",
-      "type": "logs"
     }
   ],
   "refresh": "30s",

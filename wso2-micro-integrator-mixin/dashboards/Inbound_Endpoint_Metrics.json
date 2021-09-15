@@ -17,16 +17,12 @@
   "gnetId": 12890,
   "graphTooltip": 0,
   "id": 5,
-  "iteration": 1631734494811,
+  "iteration": 1631736860039,
   "links": [],
   "panels": [
     {
       "collapsed": false,
       "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -721,34 +717,6 @@
       "yBucketBound": "upper",
       "yBucketNumber": null,
       "yBucketSize": null
-    },
-    {
-      "datasource": "Loki",
-      "gridPos": {
-        "h": 11,
-        "w": 24,
-        "x": 0,
-        "y": 14
-      },
-      "id": 15,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": true
-      },
-      "targets": [
-        {
-          "expr": "{service=\"{proxy:$service}\"}",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Logs",
-      "type": "logs"
     }
   ],
   "refresh": "30s",
@@ -830,5 +798,5 @@
   "timezone": "",
   "title": "WSO2 Inbound Endpoint Metrics",
   "uid": "x5VJI8S7z",
-  "version": 1
+  "version": 2
 }
