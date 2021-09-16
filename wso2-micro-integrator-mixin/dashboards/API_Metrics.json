@@ -17,7 +17,7 @@
   "gnetId": 12888,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1631731854365,
+  "iteration": 1631820410418,
   "links": [],
   "panels": [
     {
@@ -95,8 +95,8 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "time() - max(wso2_integration_service_up{service_name=~\"$service\"})",
+          "exemplar": false,
+          "expr": "time() - max(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -171,7 +171,8 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "sum((max_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\"}[$__range]))- (min_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\"}[$__range])))",
+          "exemplar": false,
+          "expr": "sum((max_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))- (min_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -237,14 +238,16 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "(sum((max_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\"}[$__range]))- (min_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\"}[$__range]))))-(sum((max_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\"}[$__range]))- (min_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\"}[$__range]))))",
+          "exemplar": false,
+          "expr": "(sum((max_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))- (min_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))))-(sum((max_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))- (min_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))))",
           "hide": false,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         },
         {
-          "expr": "(sum(max_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\"}[$__range])-min_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\"}[$__range])))",
+          "exemplar": false,
+          "expr": "(sum(max_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))",
           "hide": true,
           "interval": "1m",
           "legendFormat": "",
@@ -316,7 +319,8 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "sum((max_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\"}[$__range]))-(min_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\"}[$__range])))",
+          "exemplar": false,
+          "expr": "sum((max_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))-(min_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -356,7 +360,7 @@
               },
               {
                 "color": "red",
-                "value": 75
+                "value": 0.01
               }
             ]
           },
@@ -389,7 +393,8 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "sum((max_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\"}[$__range]))-(min_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\"}[$__range])))/sum((max_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\"}[$__range]))-(min_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\"}[$__range])))",
+          "exemplar": false,
+          "expr": "sum((max_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))-(min_over_time(wso2_integration_api_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))/sum((max_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))-(min_over_time(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))",
           "interval": "30s",
           "legendFormat": "Current",
           "refId": "A"
@@ -445,7 +450,8 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "count(wso2_integration_service_up{service_name=~\"$service\"})",
+          "exemplar": false,
+          "expr": "count(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -507,8 +513,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(wso2_integration_api_request_count_total{service_name=~\"$service\"}[$__interval]))",
-          "interval": "70s",
+          "exemplar": false,
+          "expr": "sum(rate(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -606,7 +613,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(wso2_integration_api_request_count_error_total{service_name=~\"$service\"}[$__interval]))",
+          "exemplar": false,
+          "expr": "sum(rate(wso2_integration_api_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "1m",
           "legendFormat": "{{kubernetes_pod_name}}",
           "refId": "A"
@@ -660,12 +668,12 @@
         "cardRound": null
       },
       "color": {
-        "cardColor": "#b4ff00",
+        "cardColor": "#73BF69",
         "colorScale": "sqrt",
-        "colorScheme": "interpolateYlOrRd",
+        "colorScheme": "interpolateSpectral",
         "exponent": 0.5,
         "min": null,
-        "mode": "spectrum"
+        "mode": "opacity"
       },
       "dataFormat": "tsbuckets",
       "datasource": "$datasource",
@@ -688,7 +696,8 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum by (le)(increase(wso2_integration_api_latency_seconds{service_name=~\"$service\", le=~\".+\"}[5m]))",
+          "exemplar": false,
+          "expr": "sum by (le)(increase(wso2_integration_api_latency_seconds{service_name=~\"$service\", instance=~\"$instance\", le=~\".+\"}[$__rate_interval]))",
           "format": "heatmap",
           "hide": false,
           "instant": false,
@@ -773,7 +782,7 @@
         "options": [],
         "query": {
           "query": "label_values(wso2_integration_service_up{service_type=\"api\"}, service_name)",
-          "refId": "Cortex-service-Variable-Query"
+          "refId": "StandardVariableQuery"
         },
         "refresh": 2,
         "regex": "",
@@ -783,6 +792,33 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "192.168.99.101:9202",
+          "value": "192.168.99.101:9202"
+        },
+        "datasource": null,
+        "definition": "label_values(wso2_integration_service_up{service_type=\"api\", service_name=~\"$service\"}, instance)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(wso2_integration_service_up{service_type=\"api\", service_name=~\"$service\"}, instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -806,5 +842,5 @@
   "timezone": "",
   "title": "WSO2 API Metrics",
   "uid": "0KIvzUI7z",
-  "version": 3
+  "version": 7
 }

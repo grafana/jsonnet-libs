@@ -17,7 +17,7 @@
   "gnetId": 12889,
   "graphTooltip": 0,
   "id": 4,
-  "iteration": 1631731826030,
+  "iteration": 1631820482561,
   "links": [],
   "panels": [
     {
@@ -518,8 +518,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(wso2_integration_proxy_request_count_total{service_name=\"$service\"}[$__interval]))",
-          "interval": "70s",
+          "exemplar": false,
+          "expr": "sum(rate(wso2_integration_proxy_request_count_total{service_name=\"$service\"}[$__rate_interval]))",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -619,7 +620,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(wso2_integration_proxy_request_count_error_total{service_name=\"$service\"}[$__interval]))",
+          "exemplar": false,
+          "expr": "sum(rate(wso2_integration_proxy_request_count_error_total{service_name=\"$service\"}[$__rate_interval]))",
           "interval": "1m",
           "legendFormat": "{{kubernetes_pod_name}}",
           "refId": "A"
@@ -673,12 +675,12 @@
         "cardRound": null
       },
       "color": {
-        "cardColor": "#b4ff00",
+        "cardColor": "#73BF69",
         "colorScale": "sqrt",
         "colorScheme": "interpolateYlOrRd",
         "exponent": 0.5,
         "min": null,
-        "mode": "spectrum"
+        "mode": "opacity"
       },
       "dataFormat": "tsbuckets",
       "datasource": "$datasource",
@@ -701,7 +703,8 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum by (le)(increase(wso2_integration_proxy_latency_seconds{service_name=\"$service\", le=~\".+\"}[5m]))",
+          "exemplar": false,
+          "expr": "sum by (le)(increase(wso2_integration_proxy_latency_seconds{service_name=\"$service\", le=~\".+\"}[$__rate_interval]))",
           "format": "heatmap",
           "hide": false,
           "interval": "1m",

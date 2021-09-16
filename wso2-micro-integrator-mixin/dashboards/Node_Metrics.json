@@ -17,7 +17,7 @@
   "gnetId": 12887,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1631736781187,
+  "iteration": 1631820017868,
   "links": [],
   "panels": [
     {
@@ -99,7 +99,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "max(time()-wso2_integration_server_up{instance=\"$node\", wso2_cluster=\"$wso2_cluster\"})",
           "format": "time_series",
           "instant": true,
@@ -157,7 +157,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "count(wso2_integration_service_up{instance=\"$node\", wso2_cluster=\"$wso2_cluster\"})",
           "instant": true,
           "interval": "30s",
@@ -225,8 +225,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "exemplar": true,
-          "expr": "rate(process_cpu_seconds_total{instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__interval])",
+          "exemplar": false,
+          "expr": "rate(process_cpu_seconds_total{instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__rate_interval])",
           "interval": "1m",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -330,14 +330,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "jvm_memory_bytes_max{instance=\"$node\", wso2_cluster=\"$wso2_cluster\",area=\"heap\"}",
           "interval": "",
           "legendFormat": "Max",
           "refId": "A"
         },
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "jvm_memory_bytes_used{instance=\"$node\", wso2_cluster=\"$wso2_cluster\", area=\"heap\"}",
           "interval": "",
           "legendFormat": "Used",
@@ -516,7 +516,7 @@
       ],
       "targets": [
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "sum by(service_name,service_type, start_time) (wso2_integration_service_up{instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}*1000>0)",
           "format": "table",
           "instant": true,
@@ -587,7 +587,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "sum((max_over_time({__name__ =~\"wso2_integration_.*_request_count_total\",instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__range]))-  (min_over_time({__name__ =~\"wso2_integration_.*_request_count_total\",instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__range])))",
           "interval": "",
           "legendFormat": "",
@@ -654,7 +654,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "sum((max_over_time({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__range]))- (min_over_time({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__range])))",
           "interval": "",
           "legendFormat": "",
@@ -722,28 +722,28 @@
       "steppedLine": true,
       "targets": [
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "jvm_threads_state{instance=\"$node\", wso2_cluster=\"$wso2_cluster\", state=\"RUNNABLE\"}",
           "interval": "30s",
           "legendFormat": "Runnable",
           "refId": "A"
         },
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "jvm_threads_state{instance=\"$node\", wso2_cluster=\"$wso2_cluster\", state=\"WAITING\"} ",
           "interval": "30s",
           "legendFormat": "Waiting",
           "refId": "B"
         },
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "jvm_threads_state{instance=\"$node\", wso2_cluster=\"$wso2_cluster\", state=\"BLOCKED\"}",
           "interval": "30s",
           "legendFormat": "Blocked",
           "refId": "C"
         },
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "jvm_threads_state{instance=\"$node\", wso2_cluster=\"$wso2_cluster\", state=\"TIMED_WAITING\"}",
           "interval": "",
           "legendFormat": "Timed Waiting",
@@ -850,14 +850,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "process_open_fds{instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}",
           "interval": "",
           "legendFormat": "Open",
           "refId": "A"
         },
         {
-          "exemplar": true,
+          "exemplar": false,
           "expr": "process_max_fds{instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}",
           "interval": "",
           "legendFormat": "Max",
@@ -956,9 +956,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "exemplar": true,
-          "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_total\",instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__interval]))",
-          "interval": "70s",
+          "exemplar": false,
+          "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_total\",instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__rate_interval]))",
+          "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1057,8 +1057,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "exemplar": true,
-          "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__interval]))",
+          "exemplar": false,
+          "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=\"$node\", wso2_cluster=\"$wso2_cluster\"}[$__rate_interval]))",
           "interval": "1m",
           "legendFormat": "{{kubernetes_pod_name}}",
           "refId": "A"
@@ -1155,8 +1155,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", instance=\"$node\", wso2_cluster=\"$wso2_cluster\", le=~\".+\"}[10m])) by (le))",
+          "exemplar": false,
+          "expr": "histogram_quantile(0.5, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", instance=\"$node\", wso2_cluster=\"$wso2_cluster\", le=~\".+\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "1m",
@@ -1164,9 +1164,9 @@
           "refId": "A"
         },
         {
-          "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", instance=\"$node\", wso2_cluster=\"$wso2_cluster\", le=~\".+\"}[10m])) by (le))",
-          "interval": "",
+          "exemplar": false,
+          "expr": "histogram_quantile(0.95, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", instance=\"$node\", wso2_cluster=\"$wso2_cluster\", le=~\".+\"}[$__rate_interval])) by (le))",
+          "interval": "1m",
           "legendFormat": "95th Percentile",
           "refId": "B"
         }
@@ -1245,7 +1245,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "my-cluster",
           "value": "my-cluster"
         },
@@ -1272,7 +1272,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "192.168.99.101:9202",
           "value": "192.168.99.101:9202"
         },
