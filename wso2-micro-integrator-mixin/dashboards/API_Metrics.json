@@ -17,7 +17,7 @@
   "gnetId": 12888,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1631820410418,
+  "iteration": 1631821461672,
   "links": [],
   "panels": [
     {
@@ -513,9 +513,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "exemplar": false,
+          "exemplar": true,
           "expr": "sum(rate(wso2_integration_api_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
-          "interval": "1m",
+          "interval": "70s",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"

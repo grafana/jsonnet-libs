@@ -17,7 +17,7 @@
   "gnetId": 12890,
   "graphTooltip": 0,
   "id": 5,
-  "iteration": 1631820585552,
+  "iteration": 1631821326780,
   "links": [],
   "panels": [
     {
@@ -99,7 +99,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "time() - max(wso2_integration_service_up{service_name=\"$service\"})",
+          "expr": "time() - max(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -174,7 +174,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=\"$service\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=\"$service\"}[$__range]))",
+          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -242,7 +242,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "(sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=\"$service\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=\"$service\"}[$__range])))-(sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=\"$service\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=\"$service\"}[$__range])))",
+          "expr": "(sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))-(sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))",
           "interval": "1m",
           "legendFormat": "",
           "refId": "A"
@@ -312,7 +312,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=\"$service\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=\"$service\"}[$__range]))",
+          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -385,7 +385,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=\"$service\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=\"$service\"}[$__range]))/sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=\"$service\"}[$__range])-min_over_time(wso2_integration_proxy_inbound_endpoint_count_total{service_name=\"$service\"}[$__range]))",
+          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))/sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_proxy_inbound_endpoint_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
           "interval": "30s",
           "legendFormat": "Current",
           "refId": "A"
@@ -441,7 +441,7 @@
       "pluginVersion": "8.0.4",
       "targets": [
         {
-          "expr": "count(wso2_integration_service_up{service_name=\"$service\"})",
+          "expr": "count(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -504,7 +504,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum(rate(wso2_integration_inbound_endpoint_request_count_total{service_name=\"$service\"}[$__rate_interval]))",
+          "expr": "sum(rate(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -604,7 +604,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum(rate(wso2_integration_inbound_endpoint_request_count_error_total{service_name=\"$service\"}[$__rate_interval]))",
+          "expr": "sum(rate(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "1m",
           "legendFormat": "{{kubernetes_pod_name}}",
           "refId": "A"
@@ -687,7 +687,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum by (le)(increase(wso2_integration_inbound_endpoint_latency_seconds{service_name=\"$service\", le=~\".+\"}[$__rate_interval]))",
+          "expr": "sum by (le)(increase(wso2_integration_inbound_endpoint_latency_seconds{service_name=~\"$service\", instance=~\"$instance\", le=~\".+\"}[$__rate_interval]))",
           "format": "heatmap",
           "hide": false,
           "interval": "1m",
@@ -778,6 +778,37 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": null,
+        "definition": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\", service_name=~\"$service\"}, instance)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\", service_name=~\"$service\"}, instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -801,5 +832,5 @@
   "timezone": "",
   "title": "WSO2 Inbound Endpoint Metrics",
   "uid": "x5VJI8S7z",
-  "version": 2
+  "version": 4
 }
