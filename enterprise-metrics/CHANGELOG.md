@@ -12,6 +12,7 @@ Entries should include a reference to the Pull Request that introduced the chang
 
 ## Unreleased
 
+- [CHANGE] Use of the deprecated `-bootstrap.license.path` flag has been replaced with `-license.path`. #645 
 - [CHANGE] The tokengen configuration is now hidden by default to avoid confusing errors when immutable fields are changed. #541
 - [CHANGE] Arbitrary storage class names are removed from PersistentVolumeClaims. If you were using those storage class names, you will need to configure the storageClassName in the persistentVolume object. For example in `$.ingester.persistentVolumeClaim`. #577
 - [CHANGE] Enabled the self-monitoring feature, which was part of the GEM 1.4 release, by default. #608

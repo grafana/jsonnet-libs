@@ -197,12 +197,12 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   adminApi: {
     '#args':: d.obj('`args` is a convenience field that can be used to modify the admin-api container arguments as key value pairs.'),
     args:: this._config.commonArgs {
-      '#bootstrap.license.path':: d.val(
-        default=self['bootstrap.license.path'],
-        help='`bootstrap.license.path` configures where the admin-api expects to find a Grafana Enterprise Metrics License.',
+      '#license.path':: d.val(
+        default=self['license.path'],
+        help='`license.path` configures where the admin-api expects to find a Grafana Enterprise Metrics License.',
         type=d.T.string
       ),
-      'bootstrap.license.path': '/etc/gem-license/license.jwt',
+      'license.path': '/etc/gem-license/license.jwt',
       '#admin-api.leader-election.enabled':: d.val(
         default=self['admin-api.leader-election.enabled'],
         help='`admin-api.leader-election.enabled` enables leader election for to avoid inconsistent state with parallel writes when multiple replicas of the admin-api are running.',
@@ -472,12 +472,12 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   overridesExporter: {
     '#args':: d.obj('`args` is a convenience field that can be used to modify the overrides-exporter container arguments as key value pairs.'),
     args:: this._config.commonArgs {
-      '#bootstrap.license.path':: d.val(
-        default=self['bootstrap.license.path'],
-        help='`bootstrap.license.path` configures where the overrides-exporter expects to find a Grafana Enterprise Metrics License.',
+      '#license.path':: d.val(
+        default=self['license.path'],
+        help='`license.path` configures where the overrides-exporter expects to find a Grafana Enterprise Metrics License.',
         type=d.T.string
       ),
-      'bootstrap.license.path': '/etc/gem-license/license.jwt',
+      'license.path': '/etc/gem-license/license.jwt',
       target: 'overrides-exporter',
     },
     '#container':: d.obj('`container` is a convenience field that can be used to modify the overrides-exporter container.'),
