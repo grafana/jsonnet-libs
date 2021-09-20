@@ -8,10 +8,10 @@ For more information, please refer to the [product webpage](https://ei.docs.wso2
 
 This mixin contains 5 dashboards for monitoring a Enterprise Integrator environment, including the Micro Integrator profile. They were based on the dashboards available on the Grafana dashboard registry.
 
-[WSO2 Integration Cluster Metrics](https://grafana.com/grafana/dashboards/12783)
-[WSO2 Integration Node Metrics](https://grafana.com/grafana/dashboards/12887)
-[WSO2 API Metrics](https://grafana.com/grafana/dashboards/12888)
-[WSO2 Proxy Service Metrics](https://grafana.com/grafana/dashboards/12889)
+[WSO2 Integration Cluster Metrics](https://grafana.com/grafana/dashboards/12783)\
+[WSO2 Integration Node Metrics](https://grafana.com/grafana/dashboards/12887)\
+[WSO2 API Metrics](https://grafana.com/grafana/dashboards/12888)\
+[WSO2 Proxy Service Metrics](https://grafana.com/grafana/dashboards/12889)\
 [WSO2 Inbound Endpoint Metrics](https://grafana.com/grafana/dashboards/12890)
 
 
