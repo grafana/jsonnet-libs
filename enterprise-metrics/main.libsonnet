@@ -564,7 +564,25 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     local runtime = self,
     '#config':: d.obj('`config` is a convenience field for modifying the runtime configuration.'),
     configuration:: {
-      '#overrides':: d.obj('`overrides` are per tenant runtime limits overrides.'),
+      '#overrides':: d.obj(|||
+        `overrides` are per tenant runtime limits overrides.
+        Each field should be keyed by tenant ID and have an object value containing the specific overrides.
+        For example:
+        {
+          tenantId: {
+            max_series_per_user: 0,
+            max_series_per_metric: 0,
+            max_global_series_per_user: 150000,
+            max_global_series_per_metric: 20000,
+            max_series_per_query: 100000,
+            ingestion_rate: 10000,
+            ingestion_burst_size: 200000,
+            ruler_max_rules_per_rule_group: 20,
+            ruler_max_rule_groups_per_tenant: 35,
+            compactor_blocks_retention_period: '0',
+          },
+        }
+      |||),
       overrides: cortex._config.overrides,
     },
     '#configMap':: d.obj('`configMap` is the Kubernetes ConfigMap containing the runtime configuration.'),
