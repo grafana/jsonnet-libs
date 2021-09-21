@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -16,8 +22,8 @@
   "editable": true,
   "gnetId": 12887,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1631821544516,
+  "id": 17,
+  "iteration": 1632229366386,
   "links": [],
   "panels": [
     {
@@ -32,7 +38,7 @@
       "id": 4,
       "panels": [],
       "repeat": "node",
-      "title": "[[node]]",
+      "title": "Instance - $instance",
       "type": "row"
     },
     {
@@ -96,7 +102,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "targets": [
         {
           "exemplar": true,
@@ -154,7 +160,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "targets": [
         {
           "exemplar": true,
@@ -215,7 +221,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -320,7 +326,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -584,7 +590,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "targets": [
         {
           "exemplar": true,
@@ -651,7 +657,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "targets": [
         {
           "exemplar": true,
@@ -672,7 +678,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "description": "Displays the thread count per state. \nIf you observe higher number of blocked threads refer below link and take a thread dump to analyze further.",
+      "description": "Displays the thread count per state.  If you observe higher number of blocked threads refer below link and take a thread dump to analyze further.",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -712,7 +718,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -840,7 +846,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -946,7 +952,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1047,7 +1053,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1145,7 +1151,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1218,7 +1224,9 @@
   "refresh": "30s",
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "wso2-enterprise-integrator-integration"
+  ],
   "templating": {
     "list": [
       {
@@ -1299,7 +1307,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -1318,5 +1326,5 @@
   "timezone": "",
   "title": "WSO2 Integration Node Metrics",
   "uid": "j509RUS7z",
-  "version": 4
+  "version": 2
 }
