@@ -1110,7 +1110,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ## obj runtime.configuration.overrides
 
 `overrides` are per tenant runtime limits overrides.
-Each field should be keyed by tenant ID and have an object value containing the specific overrides.
+Each field should be keyed by tenant ID and have an object value containing the specific override.
 For example:
 {
   tenantId: {
