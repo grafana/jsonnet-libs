@@ -32,10 +32,10 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     * [`string adminApi.args.admin-api.leader-election.ring.store`](#string-adminapiargsadmin-apileader-electionringstore)
     * [`bool adminApi.args.auth.enabled`](#bool-adminapiargsauthenabled)
     * [`bool adminApi.args.auth.type`](#bool-adminapiargsauthtype)
-    * [`string adminApi.args.bootstrap.license.path`](#string-adminapiargsbootstraplicensepath)
     * [`string adminApi.args.cluster-name`](#string-adminapiargscluster-name)
     * [`string adminApi.args.instrumentation.distributor-client.address`](#string-adminapiargsinstrumentationdistributor-clientaddress)
     * [`string adminApi.args.instrumentation.enabled`](#string-adminapiargsinstrumentationenabled)
+    * [`string adminApi.args.license.path`](#string-adminapiargslicensepath)
     * [`string adminApi.args.memberlist.join`](#string-adminapiargsmemberlistjoin)
     * [`string adminApi.args.runtime-config.file`](#string-adminapiargsruntime-configfile)
   * [`obj adminApi.container`](#obj-adminapicontainer)
@@ -150,10 +150,10 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
   * [`obj overridesExporter.args`](#obj-overridesexporterargs)
     * [`bool overridesExporter.args.auth.enabled`](#bool-overridesexporterargsauthenabled)
     * [`bool overridesExporter.args.auth.type`](#bool-overridesexporterargsauthtype)
-    * [`string overridesExporter.args.bootstrap.license.path`](#string-overridesexporterargsbootstraplicensepath)
     * [`string overridesExporter.args.cluster-name`](#string-overridesexporterargscluster-name)
     * [`string overridesExporter.args.instrumentation.distributor-client.address`](#string-overridesexporterargsinstrumentationdistributor-clientaddress)
     * [`string overridesExporter.args.instrumentation.enabled`](#string-overridesexporterargsinstrumentationenabled)
+    * [`string overridesExporter.args.license.path`](#string-overridesexporterargslicensepath)
     * [`string overridesExporter.args.memberlist.join`](#string-overridesexporterargsmemberlistjoin)
     * [`string overridesExporter.args.runtime-config.file`](#string-overridesexporterargsruntime-configfile)
   * [`obj overridesExporter.container`](#obj-overridesexportercontainer)
@@ -388,12 +388,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 `default` uses Cortex authentication.
 
 
-### string adminApi.args.bootstrap.license.path
-
-*Default value: * `/etc/gem-license/license.jwt`
-
-`bootstrap.license.path` configures where the admin-api expects to find a Grafana Enterprise Metrics License.
-
 ### string adminApi.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
@@ -409,6 +403,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `true`
 
 `instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
+### string adminApi.args.license.path
+
+*Default value: * `/etc/gem-license/license.jwt`
+
+`license.path` configures where the admin-api expects to find a Grafana Enterprise Metrics License.
 
 ### string adminApi.args.memberlist.join
 
@@ -854,12 +854,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 `default` uses Cortex authentication.
 
 
-### string overridesExporter.args.bootstrap.license.path
-
-*Default value: * `/etc/gem-license/license.jwt`
-
-`bootstrap.license.path` configures where the overrides-exporter expects to find a Grafana Enterprise Metrics License.
-
 ### string overridesExporter.args.cluster-name
 
 `cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
@@ -875,6 +869,12 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `true`
 
 `instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
+### string overridesExporter.args.license.path
+
+*Default value: * `/etc/gem-license/license.jwt`
+
+`license.path` configures where the overrides-exporter expects to find a Grafana Enterprise Metrics License.
 
 ### string overridesExporter.args.memberlist.join
 
@@ -1110,6 +1110,23 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ## obj runtime.configuration.overrides
 
 `overrides` are per tenant runtime limits overrides.
+Each field should be keyed by tenant ID and have an object value containing the specific override.
+For example:
+{
+  tenantId: {
+    max_series_per_user: 0,
+    max_series_per_metric: 0,
+    max_global_series_per_user: 150000,
+    max_global_series_per_metric: 20000,
+    max_series_per_query: 100000,
+    ingestion_rate: 10000,
+    ingestion_burst_size: 200000,
+    ruler_max_rules_per_rule_group: 20,
+    ruler_max_rule_groups_per_tenant: 35,
+    compactor_blocks_retention_period: '0',
+  },
+}
+
 
 ## obj storeGateway
 
