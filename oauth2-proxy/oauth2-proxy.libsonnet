@@ -1,6 +1,6 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 
-k {
+{
   _config+:: {
     oauth_cookie_secret: error 'Must define a cookie secret',
     oauth_client_id: error 'Must define a client id',
@@ -12,10 +12,10 @@ k {
   },
 
   _images+:: {
-    oauth2_proxy: 'a5huynh/oauth2_proxy:latest',
+    oauth2_proxy: 'quay.io/oauth2-proxy/oauth2-proxy:v7.1.3',
   },
 
-  local secret = $.core.v1.secret,
+  local secret = k.core.v1.secret,
 
   oauth2_proxy_secret:
     secret.new('oauth2-proxy', {
@@ -24,28 +24,29 @@ k {
       OAUTH2_PROXY_CLIENT_ID: std.base64($._config.oauth_client_id),
     }),
 
-  local container = $.core.v1.container,
-  local envFrom = $.core.v1.envFromSource,
+  local container = k.core.v1.container,
+  local containerPort = k.core.v1.containerPort,
+  local envFrom = k.core.v1.envFromSource,
 
   oauth2_proxy_container::
     container.new('oauth2-proxy', $._images.oauth2_proxy) +
-    container.withPorts($.core.v1.containerPort.new('http', 80)) +
+    container.withPorts(containerPort.new('http', 4180)) +
     container.withArgs([
-      '-http-address=0.0.0.0:80',
-      '-redirect-url=%s' % $._config.oauth_redirect_url,
-      '-upstream=%s' % $._config.oauth_upstream,
-      '-email-domain=%s' % $._config.oauth_email_domain,
-      '-pass-basic-auth=%s' % $._config.oauth_pass_basic_auth,
+      '--http-address=0.0.0.0:4180',
+      '--redirect-url=%s' % $._config.oauth_redirect_url,
+      '--upstream=%s' % $._config.oauth_upstream,
+      '--email-domain=%s' % $._config.oauth_email_domain,
+      '--pass-basic-auth=%s' % $._config.oauth_pass_basic_auth,
     ]) +
     container.withEnvFrom(
       envFrom.secretRef.withName('oauth2-proxy'),
     ),
 
-  local deployment = $.apps.v1.deployment,
+  local deployment = k.apps.v1.deployment,
 
   oauth2_proxy_deployment:
     deployment.new('oauth2-proxy', 1, [$.oauth2_proxy_container]),
 
   oauth2_proxy_service:
-    $.util.serviceFor($.oauth2_proxy_deployment),
+    k.util.serviceFor($.oauth2_proxy_deployment),
 }
