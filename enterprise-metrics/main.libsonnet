@@ -664,7 +664,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + job.spec.withParallelism(1)
       + job.spec.template.spec.withContainers([self.createSecretContainer])
       + job.spec.template.spec.withInitContainers([self.container])
-      + job.spec.template.spec.withRestartPolicy('Never')
+      + job.spec.template.spec.withRestartPolicy('OnFailure')
       + job.spec.template.spec.withServiceAccount(target)
       + job.spec.template.spec.withServiceAccountName(target)
       + job.spec.template.spec.withVolumes([{ name: 'shared', emptyDir: {} }]),
