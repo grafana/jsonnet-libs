@@ -445,10 +445,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   querier: {
     local querier = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.'),
-    args:: cortex.querier_args + this._config.commonArgs {
-      // Disable enterprise authentication on the querier so that query_range queries succeed.
-      'auth.type': 'default',
-    },
+    args:: cortex.querier_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the querier container.'),
     container::
       cortex.querier_container
