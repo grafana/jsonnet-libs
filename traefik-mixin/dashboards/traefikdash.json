@@ -100,7 +100,7 @@
         "strokeWidth": 1,
         "targets": [
           {
-            "expr": "traefik_service_requests_total{service=\"$service\"}",
+            "expr": "increase(traefik_service_requests_total{service=\"$service\"}[$__rate_interval])",
             "format": "time_series",
             "interval": "",
             "intervalFactor": 2,
@@ -536,7 +536,7 @@
         "strokeWidth": 1,
         "targets": [
           {
-            "expr": "sum(rate(traefik_service_requests_total[5m])) by (service) ",
+            "expr": "increase(traefik_service_requests_total[$__rate_interval])",
             "format": "time_series",
             "interval": "",
             "intervalFactor": 2,
@@ -580,11 +580,11 @@
         "strokeWidth": 1,
         "targets": [
           {
-            "expr": "sum(rate(traefik_entrypoint_requests_total{entrypoint =~ \"$entrypoint\"}[5m])) by (entrypoint) ",
+            "expr": "sum by (protocol) (increase(traefik_entrypoint_requests_total{entrypoint =~ \"$entrypoint\"}[$__rate_interval]))",
             "format": "time_series",
             "interval": "",
             "intervalFactor": 2,
-            "legendFormat": "{{ entrypoint }}",
+            "legendFormat": "{{ protocol }}",
             "refId": "A"
           }
         ],
@@ -676,7 +676,7 @@
       ]
     },
     "time": {
-      "from": "now-5m",
+      "from": "now-30m",
       "to": "now"
     },
     "timepicker": {
