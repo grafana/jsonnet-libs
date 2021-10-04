@@ -181,8 +181,8 @@
           "refId": "B"
         },
         {
-          "expr": "sum(rate(http_server_request_duration_seconds_sum{method=~\"$method\", path=~\"$path\"}[1m])) * 1e3 \n/\nsum(rate(http_server_request_duration_seconds_count{method=~\"$method\", path=~\"$path\"}[1m]))",
-          "interval": "1m",
+          "expr": "sum(rate(http_server_request_duration_seconds_sum{method=~\"$method\", path=~\"$path\"}[$__rate_interval])) * 1e3 \n/\nsum(rate(http_server_request_duration_seconds_count{method=~\"$method\", path=~\"$path\"}[$__rate_interval]))",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Average",
           "refId": "C"
@@ -419,7 +419,7 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {},
