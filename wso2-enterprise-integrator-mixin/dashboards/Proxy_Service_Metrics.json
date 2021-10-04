@@ -518,7 +518,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__interval]))",
+          "expr": "sum(rate(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "70s",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -619,7 +619,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__interval]))",
+          "expr": "sum(rate(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "1m",
           "legendFormat": "{{kubernetes_pod_name}}",
           "refId": "A"
@@ -701,7 +701,7 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum by (le)(increase(wso2_integration_proxy_latency_seconds{service_name=~\"$service\", instance=~\"$instance\", le=~\".+\"}[5m]))",
+          "expr": "sum by (le)(increase(wso2_integration_proxy_latency_seconds{service_name=~\"$service\", instance=~\"$instance\", le=~\".+\"}[$__rate_interval]))",
           "format": "heatmap",
           "hide": false,
           "interval": "1m",
@@ -830,7 +830,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
