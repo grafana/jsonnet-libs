@@ -273,7 +273,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(kafka_consumergroup_current_offset{instance=~'$instance',topic=~\"$topic\"}[1m])) by (consumergroup, topic)",
+          "expr": "sum(rate(kafka_consumergroup_current_offset{instance=~'$instance',topic=~\"$topic\"}[$__rate_interval])) by (consumergroup, topic)",
           "interval": "",
           "legendFormat": "{{consumergroup}} (topic: {{topic}})",
           "refId": "A"
