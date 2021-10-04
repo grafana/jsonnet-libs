@@ -117,7 +117,7 @@
           "expr": "sum without (instance) (ceph_health_status{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": " ",
           "refId": "A",
@@ -188,7 +188,7 @@
           "expr": "sum without (instance, ceph_daemon) (irate(ceph_osd_op_w_in_bytes{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -258,7 +258,7 @@
           "expr": "sum without (ceph_daemon, instance) (irate(ceph_osd_op_r_out_bytes{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -327,7 +327,7 @@
           "expr": "sum without (instance) (ceph_cluster_total_bytes{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -405,7 +405,7 @@
           "expr": "sum without (instance) ((ceph_cluster_total_bytes{ceph_cluster=\"$ceph_cluster\"}-ceph_cluster_total_used_bytes{ceph_cluster=\"$ceph_cluster\"})/ceph_cluster_total_bytes{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -483,7 +483,7 @@
           "expr": "sum without (instance, pool_id) (ceph_pool_objects{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -553,7 +553,7 @@
           "expr": "sum without (instance, ceph_daemon) (ceph_osd_op_w_in_bytes{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": false,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -623,7 +623,7 @@
           "expr": "sum without (instance, ceph_daemon) (ceph_osd_op_r_out_bytes{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": false,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -761,7 +761,7 @@
           "expr": "sum without (ceph_daemon, instance) (irate(ceph_osd_op_w{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -831,7 +831,7 @@
           "expr": "sum without (ceph_daemon, instance) (irate(ceph_osd_op_r{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -900,7 +900,7 @@
           "expr": "sum without (instance) (ceph_cluster_total_used_bytes{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -1050,7 +1050,7 @@
           "expr": "count without (instance, ceph_daemon) (ceph_mon_quorum_status{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -1143,7 +1143,7 @@
           "expr": "count without (instance, ceph_daemon) (ceph_osd_up{ceph_cluster=\"$ceph_cluster\"}) - count without (instance, ceph_daemon) (ceph_osd_in{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -1221,7 +1221,7 @@
           "expr": "count(ceph_osd_up{ceph_cluster=\"$ceph_cluster\"} == 0.0) OR vector(0)",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -1295,7 +1295,7 @@
           "expr": "sum without (instance, ceph_daemon) (ceph_osd_up{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -1369,7 +1369,7 @@
           "expr": "sum without (instance, ceph_daemon) (ceph_osd_in{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -1447,7 +1447,7 @@
           "expr": "avg without (instance, ceph_daemon) (ceph_osd_numpg{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -1525,7 +1525,7 @@
           "expr": "avg without (instance, ceph_daemon) (ceph_osd_apply_latency_ms{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -1603,7 +1603,7 @@
           "expr": "avg(ceph_osd_commit_latency_ms{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "instant": true,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A",
@@ -2387,7 +2387,7 @@
       "height": "300",
       "hiddenSeries": false,
       "id": 1,
-      "interval": "$interval",
+      "interval": "",
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -2426,7 +2426,7 @@
         {
           "expr": "sum without (instance) (ceph_cluster_total_bytes{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Total Capacity",
           "refId": "C",
@@ -2435,7 +2435,7 @@
         {
           "expr": "sum without (instance) (ceph_cluster_total_bytes{ceph_cluster=\"$ceph_cluster\"}-ceph_cluster_total_used_bytes{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Available",
           "refId": "A",
@@ -2444,7 +2444,7 @@
         {
           "expr": "sum without (instance) (ceph_cluster_total_used_bytes{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Used",
           "refId": "B",
@@ -2522,7 +2522,7 @@
       "height": "300",
       "hiddenSeries": false,
       "id": 3,
-      "interval": "$interval",
+      "interval": "",
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -2553,7 +2553,7 @@
         {
           "expr": "sum without (instance, ceph_daemon) (irate(ceph_osd_op_w{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Write",
           "refId": "A",
@@ -2562,7 +2562,7 @@
         {
           "expr": "sum without (instance, ceph_daemon) (irate(ceph_osd_op_r{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Read",
           "refId": "B",
@@ -2633,7 +2633,7 @@
       "height": "300",
       "hiddenSeries": false,
       "id": 7,
-      "interval": "$interval",
+      "interval": "",
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -2664,7 +2664,7 @@
         {
           "expr": "sum without (instance, ceph_daemon) (irate(ceph_osd_op_w_in_bytes{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Write",
           "refId": "A",
@@ -2673,7 +2673,7 @@
         {
           "expr": "sum without (instance, ceph_daemon) (irate(ceph_osd_op_r_out_bytes{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Read",
           "refId": "B",
@@ -3376,7 +3376,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pool_objects)",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Total",
           "refId": "A",
@@ -3480,7 +3480,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_active{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Active",
           "refId": "M"
@@ -3488,7 +3488,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_clean{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Clean",
           "refId": "U"
@@ -3496,7 +3496,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_peering{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Peering",
           "refId": "I"
@@ -3504,7 +3504,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_degraded{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Degraded",
           "refId": "B",
@@ -3513,7 +3513,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_stale{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Stale",
           "refId": "C",
@@ -3522,7 +3522,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_unclean_pgs{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Unclean",
           "refId": "D",
@@ -3531,7 +3531,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_undersized{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Undersized",
           "refId": "E",
@@ -3540,7 +3540,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_incomplete{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Incomplete",
           "refId": "G"
@@ -3548,7 +3548,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_forced_backfill{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Forced Backfill",
           "refId": "H"
@@ -3556,7 +3556,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_inconsistent{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Inconsistent",
           "refId": "F"
@@ -3564,7 +3564,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_forced_recovery{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Forced Recovery",
           "refId": "J"
@@ -3572,7 +3572,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_creating{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Creating",
           "refId": "K"
@@ -3580,7 +3580,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_wait_backfill{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Wait Backfill",
           "refId": "L"
@@ -3588,7 +3588,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_deep{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Deep",
           "refId": "N"
@@ -3596,7 +3596,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_scrubbing{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Scrubbing",
           "refId": "O"
@@ -3604,7 +3604,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_recovering{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Recovering",
           "refId": "P"
@@ -3612,7 +3612,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_repair{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Repair",
           "refId": "Q"
@@ -3620,7 +3620,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_down{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Down",
           "refId": "R"
@@ -3628,7 +3628,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_peered{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Peered",
           "refId": "S"
@@ -3636,7 +3636,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_backfill{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Backfill",
           "refId": "T"
@@ -3644,7 +3644,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_remapped{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Remapped",
           "refId": "V"
@@ -3652,7 +3652,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_backfill_toofull{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Backfill Toofull",
           "refId": "W"
@@ -3755,7 +3755,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_degraded{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Degraded",
           "refId": "F",
@@ -3764,7 +3764,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_stale{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Stale",
           "refId": "A",
@@ -3773,7 +3773,7 @@
         {
           "expr": "sum without (instance, pool_id) (ceph_pg_undersized{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Undersized",
           "refId": "B",
@@ -3870,7 +3870,7 @@
         {
           "expr": "sum without (instance, ceph_daemon) (irate(ceph_osd_recovery_ops{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]))",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "OPS",
           "refId": "A",
@@ -3970,7 +3970,7 @@
           "expr": "ceph_osd_apply_latency_ms{cluster='$cluster'}",
           "format": "time_series",
           "instant": false,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -4034,7 +4034,7 @@
           "expr": "ceph_osd_commit_latency_ms{cluster='$cluster'}",
           "format": "time_series",
           "instant": false,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "refId": "A"
         }
@@ -4097,7 +4097,7 @@
           "expr": "rate(ceph_osd_op_r_latency_sum{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]) / rate(ceph_osd_op_r_latency_count{ceph_cluster=\"$ceph_cluster\"}[$__rate_interval]) >= 0",
           "format": "time_series",
           "instant": false,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "refId": "A"
         }
@@ -4161,7 +4161,7 @@
           "format": "time_series",
           "hide": false,
           "instant": false,
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
@@ -4342,7 +4342,7 @@
         {
           "expr": "avg without (instance, ceph_daemon) (ceph_osd_apply_latency_ms{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "apply",
           "metric": "ceph_osd_perf_apply_latency_seconds",
@@ -4352,7 +4352,7 @@
         {
           "expr": "avg without (instance, ceph_daemon) (ceph_osd_commit_latency_ms{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
-          "interval": "$interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "commit",
           "metric": "ceph_osd_perf_commit_latency_seconds",
@@ -4929,102 +4929,7 @@
         "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
-      },
-      {
-        "auto": true,
-        "auto_count": 10,
-        "auto_min": "1m",
-        "current": {
-          "selected": false,
-          "text": "10s",
-          "value": "10s"
-        },
-        "datasource": null,
-        "description": null,
-        "error": null,
-        "hide": 0,
-        "includeAll": false,
-        "label": "Interval",
-        "multi": false,
-        "name": "interval",
-        "options": [
-          {
-            "selected": false,
-            "text": "auto",
-            "value": "$__auto_interval_interval"
-          },
-          {
-            "selected": false,
-            "text": "5s",
-            "value": "5s"
-          },
-          {
-            "selected": true,
-            "text": "10s",
-            "value": "10s"
-          },
-          {
-            "selected": false,
-            "text": "30s",
-            "value": "30s"
-          },
-          {
-            "selected": false,
-            "text": "1m",
-            "value": "1m"
-          },
-          {
-            "selected": false,
-            "text": "10m",
-            "value": "10m"
-          },
-          {
-            "selected": false,
-            "text": "30m",
-            "value": "30m"
-          },
-          {
-            "selected": false,
-            "text": "1h",
-            "value": "1h"
-          },
-          {
-            "selected": false,
-            "text": "6h",
-            "value": "6h"
-          },
-          {
-            "selected": false,
-            "text": "12h",
-            "value": "12h"
-          },
-          {
-            "selected": false,
-            "text": "1d",
-            "value": "1d"
-          },
-          {
-            "selected": false,
-            "text": "7d",
-            "value": "7d"
-          },
-          {
-            "selected": false,
-            "text": "14d",
-            "value": "14d"
-          },
-          {
-            "selected": false,
-            "text": "30d",
-            "value": "30d"
-          }
-        ],
-        "query": "5s,10s,30s,1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
-        "queryValue": "",
-        "refresh": 2,
-        "skipUrlSync": false,
-        "type": "interval"
-      },
+      },      
       {
         "allValue": "cephpolbo|cepherin|cephkelly",
         "current": {
