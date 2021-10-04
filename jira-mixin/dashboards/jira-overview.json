@@ -370,7 +370,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(jira_request_duration_on_path_sum{job=\"$job\", instance=\"$instance\"}[5m])/rate(jira_request_duration_on_path_count{job=\"$job\", instance=\"$instance\"}[5m])",
+          "expr": "rate(jira_request_duration_on_path_sum{job=\"$job\", instance=\"$instance\"}[$__rate_interval])/rate(jira_request_duration_on_path_count{job=\"$job\", instance=\"$instance\"}[$__rate_interval])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -587,7 +587,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(process_cpu_seconds_total{job=\"$job\", instance=\"$instance\"}[5m])",
+          "expr": "rate(process_cpu_seconds_total{job=\"$job\", instance=\"$instance\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "CPU Utilization",
           "refId": "A"
