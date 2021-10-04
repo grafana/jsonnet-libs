@@ -37,7 +37,7 @@ local panel_settings = {
         .addPanel(
           g.panel('$instance') +
           g.statPanel(|||
-            (rate(consul_raft_leader_lastcontact_count{job="$job",instance=~"$instance"}[1m]) > bool 0)
+            (rate(consul_raft_leader_lastcontact_count{job="$job",instance=~"$instance"}[$__rate_interval]) > bool 0)
               or
             (consul_up{job="$job",instance=~"$instance"} == bool 0)
           |||, 'none') +
@@ -82,7 +82,7 @@ local panel_settings = {
         g.row('Consul Server')
         .addPanel(
           g.panel('QPS') +
-          g.queryPanel('sum(rate(consul_http_request_count{job="$job"}[1m])) by (instance)', '{{instance}}') +
+          g.queryPanel('sum(rate(consul_http_request_count{job="$job"}[$__rate_interval])) by (instance)', '{{instance}}') +
           g.stack
         )
         .addPanel(
