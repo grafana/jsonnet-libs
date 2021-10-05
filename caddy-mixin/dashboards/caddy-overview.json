@@ -10,6 +10,12 @@
         "limit": 100,
         "name": "Annotations & Alerts",
         "showIn": 0,
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -17,8 +23,8 @@
   "editable": true,
   "gnetId": 13460,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1610712590355,
+  "id": 10,
+  "iteration": 1633116262227,
   "links": [],
   "panels": [
     {
@@ -27,12 +33,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -59,7 +59,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.0-beta2",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -69,7 +69,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(caddy_http_requests_total{handler=\"reverse_proxy\"}[$interval]))",
+          "expr": "sum(rate(caddy_http_requests_total{handler=\"reverse_proxy\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -123,12 +123,6 @@
       "dashes": false,
       "datasource": "$datasource",
       "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -157,7 +151,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.0-beta2",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -167,7 +161,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(caddy_http_request_duration_seconds_count{handler=\"reverse_proxy\"}[$interval])) by (code)",
+          "expr": "sum(irate(caddy_http_request_duration_seconds_count{handler=\"reverse_proxy\"}[$__rate_interval])) by (code)",
           "interval": "",
           "legendFormat": "{{code}}",
           "refId": "A"
@@ -221,12 +215,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -253,7 +241,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.0-beta2",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -263,7 +251,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(avg_over_time(caddy_http_requests_in_flight{handler=\"reverse_proxy\"}[$interval]))",
+          "expr": "avg(avg_over_time(caddy_http_requests_in_flight{handler=\"reverse_proxy\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "",
@@ -318,12 +306,6 @@
       "dashes": false,
       "datasource": "$datasource",
       "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -352,7 +334,7 @@
         "alertThreshold": true
       },
       "percentage": true,
-      "pluginVersion": "7.3.0-beta2",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -362,7 +344,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(caddy_http_request_duration_seconds_count{handler=\"reverse_proxy\"}[$interval])) by (code)",
+          "expr": "sum(irate(caddy_http_request_duration_seconds_count{handler=\"reverse_proxy\"}[$__rate_interval])) by (code)",
           "interval": "",
           "legendFormat": "{{code}}",
           "refId": "A"
@@ -416,12 +398,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -448,7 +424,7 @@
         "alertThreshold": true
       },
       "percentage": true,
-      "pluginVersion": "7.3.0-beta2",
+      "pluginVersion": "8.1.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -458,31 +434,31 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$interval])) by (le))",
+          "expr": "histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$__rate_interval])) by (le))",
           "interval": "",
           "legendFormat": "p99",
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(0.95, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$interval])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$__rate_interval])) by (le))",
           "interval": "",
           "legendFormat": "p95",
           "refId": "B"
         },
         {
-          "expr": "histogram_quantile(0.90, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$interval])) by (le))",
+          "expr": "histogram_quantile(0.90, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$__rate_interval])) by (le))",
           "interval": "",
           "legendFormat": "p90",
           "refId": "C"
         },
         {
-          "expr": "histogram_quantile(0.75, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$interval])) by (le))",
+          "expr": "histogram_quantile(0.75, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$__rate_interval])) by (le))",
           "interval": "",
           "legendFormat": "p75",
           "refId": "D"
         },
         {
-          "expr": "histogram_quantile(0.5, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$interval])) by (le))",
+          "expr": "histogram_quantile(0.5, sum(rate(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$__rate_interval])) by (le))",
           "interval": "",
           "legendFormat": "p50",
           "refId": "E"
@@ -543,12 +519,6 @@
       },
       "dataFormat": "tsbuckets",
       "datasource": "$datasource",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {}
-        },
-        "overrides": []
-      },
       "gridPos": {
         "h": 9,
         "w": 12,
@@ -568,7 +538,7 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "sum(increase(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$interval])) by (le)",
+          "expr": "sum(increase(caddy_http_request_duration_seconds_bucket{handler=\"reverse_proxy\"}[$__rate_interval])) by (le)",
           "format": "heatmap",
           "interval": "",
           "legendFormat": "{{le}}",
@@ -603,7 +573,7 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 26,
+  "schemaVersion": 30,
   "style": "dark",
   "tags": [
     "caddy-integration"
@@ -616,6 +586,7 @@
           "text": "Cortex",
           "value": "Cortex"
         },
+        "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
@@ -629,46 +600,11 @@
         "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
-      },
-      {
-        "allValue": null,
-        "current": {
-          "selected": true,
-          "text": "5m",
-          "value": "5m"
-        },
-        "error": null,
-        "hide": 0,
-        "includeAll": false,
-        "label": "Rate Interval",
-        "multi": false,
-        "name": "interval",
-        "options": [
-          {
-            "selected": false,
-            "text": "1m",
-            "value": "1m"
-          },
-          {
-            "selected": true,
-            "text": "5m",
-            "value": "5m"
-          },
-          {
-            "selected": false,
-            "text": "10m",
-            "value": "10m"
-          }
-        ],
-        "query": "1m,5m,10m",
-        "queryValue": "",
-        "skipUrlSync": false,
-        "type": "custom"
       }
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -687,5 +623,5 @@
   "timezone": "",
   "title": "Caddy Overview",
   "uid": "9B0qPnfMz",
-  "version": 8
+  "version": 9
 }
