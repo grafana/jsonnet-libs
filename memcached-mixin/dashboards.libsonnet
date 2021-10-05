@@ -61,15 +61,22 @@ local g = (import 'grafana-builder/grafana.libsonnet');
       .addRow(
         g.row('Network')
         .addPanel(
-          g.panel('Connections') +
+          g.panel('Current Connections') +
+          g.queryPanel([
+            'sum by(instance) (memcached_current_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"})',
+            // Be conservative showing the lowest setting for max connections among all selected instances.
+            'min(memcached_max_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"})',
+          ], [
+            '{{instance}}',
+            'Max Connections (min setting across all instances)',
+          ])
+        )
+        .addPanel(
+          g.panel('Connections / sec') +
           g.queryPanel([
             'sum by(instance) (rate(memcached_connections_total{cluster=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))',
-            'sum by(instance) (memcached_current_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"})',
-            'sum by(instance) (memcached_max_connections{cluster=~"$cluster", job=~"$job", instance=~"$instance"})',
           ], [
-            '{{instance}} - Connection Rate',
-            '{{instance}} - Current Connrections',
-            '{{instance}} - Max Connections',
+            '{{instance}}',
           ])
         )
         .addPanel(
