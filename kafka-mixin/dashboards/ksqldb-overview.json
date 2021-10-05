@@ -983,7 +983,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(ksql_ksql_engine_query_stats_messages_produced_per_sec{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"}[5m])",
+          "expr": "irate(ksql_ksql_engine_query_stats_messages_produced_per_sec{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1095,7 +1095,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(process_cpu_seconds_total{job=\"integrations/kafka-ksqldb\",  instance=~\"$instance\"}[5m])",
+          "expr": "irate(process_cpu_seconds_total{job=\"integrations/kafka-ksqldb\",  instance=~\"$instance\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1297,7 +1297,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/kafka-ksqldb\",  instance=~\"$instance\"}[5m]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/kafka-ksqldb\",  instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1417,9 +1417,6 @@
           "interval": "",
           "legendFormat": "{{thread_id}}_avg",
           "refId": "A"
-        },
-        {
-          "refId": "C"
         }
       ],
       "thresholds": [],

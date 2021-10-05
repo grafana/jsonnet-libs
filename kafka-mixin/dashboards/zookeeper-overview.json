@@ -564,7 +564,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(process_cpu_seconds_total{job=\"integrations/kafka-zookeeper\"}[5m])*100",
+          "expr": "irate(process_cpu_seconds_total{job=\"integrations/kafka-zookeeper\"}[$__rate_interval])*100",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -767,7 +767,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/kafka-zookeeper\"}[5m]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/kafka-zookeeper\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
