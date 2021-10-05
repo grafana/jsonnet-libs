@@ -348,7 +348,7 @@
           steppedLine: false,
           targets: [
             {
-              expr: 'rate(jvm_gc_collection_seconds_sum{instance=~"$instance"}[1m])',
+              expr: 'rate(jvm_gc_collection_seconds_sum{instance=~"$instance"}[$__rate_interval])',
               format: 'time_series',
               interval: '',
               intervalFactor: 5,
@@ -361,7 +361,7 @@
           thresholds: [],
           timeFrom: null,
           timeShift: null,
-          title: 'GC time / 1 min. rate',
+          title: 'GC time rate',
           tooltip: {
             shared: true,
             sort: 0,
