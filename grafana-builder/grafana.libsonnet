@@ -196,8 +196,8 @@
     timeShift: null,
     title: title,
     tooltip: {
-      shared: false,
-      sort: 0,
+      shared: true,
+      sort: 2,
       value_type: 'individual',
     },
     type: 'graph',
