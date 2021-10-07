@@ -125,22 +125,24 @@ local configMap = k.core.v1.configMap;
   // Helper to mount a variable number of sharded config maps.
   local shardedMounts(folder) =
     local shards = calculateShards(folder);
-    std.foldl(
-      function(acc, shard)
-        acc + k.util.configVolumeMount(shard, '/grafana/%s/%s' % [prefix(folder.id), shard]),
-      std.objectFields(shards),
-      {}
-    ),
+    [
+      k.util.volumeMountItem(shard, '/grafana/%s/%s' % [prefix(folder.id), shard])
+      for shard in std.objectFields(shards)
+    ],
 
   // configmap mounts for use within statefulset/deployment
   configmap_mounts::
-    k.util.configMapVolumeMount($.grafana_ini_config_map, '/etc/grafana-config')
-    + k.util.configMapVolumeMount($.dashboard_provisioning_config_map, '%(provisioningDir)s/dashboards' % $._config)
-    + k.util.configMapVolumeMount($.grafana_datasource_config_map, '%(provisioningDir)s/datasources' % $._config)
-    + k.util.configMapVolumeMount($.notification_channel_config_map, '%(provisioningDir)s/notifiers' % $._config)
-    + std.foldr(
-      function(folder, acc) shardedMounts($.grafanaDashboardFolders[folder]) + acc,
-      std.objectFields($.grafanaDashboardFolders),
-      {},
-    ),
+    local mounts =
+      [
+        k.util.configMapVolumeMountItem($.grafana_ini_config_map, '/etc/grafana-config'),
+        k.util.configMapVolumeMountItem($.dashboard_provisioning_config_map, '%(provisioningDir)s/dashboards' % $._config),
+        k.util.configMapVolumeMountItem($.grafana_datasource_config_map, '%(provisioningDir)s/datasources' % $._config),
+        k.util.configMapVolumeMountItem($.notification_channel_config_map, '%(provisioningDir)s/notifiers' % $._config),
+      ]
+      + std.flattenArrays([
+        shardedMounts($.grafanaDashboardFolders[folder])
+        for folder in std.objectFields($.grafanaDashboardFolders)
+      ]);
+
+    k.util.volumeMounts(mounts),
 }
