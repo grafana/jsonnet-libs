@@ -819,6 +819,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
   templates:: {
     datasource: g.template.datasource.new() + {
       name: 'datasource',
+      label: 'Data Source',
       query: $._config.datasource,
       current: {
         selected: false,
