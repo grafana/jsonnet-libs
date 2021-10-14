@@ -509,6 +509,7 @@
             },
             "hide": 0,
             "includeAll": false,
+            "label": "Data Source",
             "multi": false,
             "name": "datasource",
             "query": "prometheus",
