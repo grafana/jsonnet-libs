@@ -710,7 +710,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum by (service_name) (irate(mongodb_op_counters_total{type!=\"command\"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name,set) (mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",set=~\"$shard\"}/ mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",set=~\"$shard\"})",
+          "expr": "(sum by (service_name) (irate(mongodb_op_counters_total{type!=\"command\"}[5m]))) * on (service_name) group_right avg by (service_name,set) (mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",set=~\"$shard\"}/ mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",set=~\"$shard\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{service_name}}",
@@ -764,7 +764,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum by (service_name) (irate(mongodb_op_counters_total{type!=\"command\"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name,set) (mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",set!~\"$shard\"}/ mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",set!~\"$shard\"})",
+          "expr": "(sum by (service_name) (irate(mongodb_op_counters_total{type!=\"command\"}[5m]))) * on (service_name) group_right avg by (service_name,set) (mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",set!~\"$shard\"}/ mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",set!~\"$shard\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{service_name}}",
@@ -818,7 +818,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum by (service_name) (rate(mongodb_op_counters_total{type!=\"command\"}[$__rate_interval]))) * on (service_name) group_right avg by (service_name) (avg by (service_name) (mongodb_mongos_db_collections_total{mongodb_cluster=\"$cluster\"}) / avg by (service_name) (mongodb_mongos_db_collections_total{mongodb_cluster=\"$cluster\"}))",
+          "expr": "(sum by (service_name) (rate(mongodb_op_counters_total{type!=\"command\"}[5m]))) * on (service_name) group_right avg by (service_name) (avg by (service_name) (mongodb_mongos_db_collections_total{mongodb_cluster=\"$cluster\"}) / avg by (service_name) (mongodb_mongos_db_collections_total{mongodb_cluster=\"$cluster\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{service_name}}",
@@ -993,7 +993,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(mongodb_mongos_sharding_shard_chunks_total{mongodb_cluster=\"$cluster\"}[$__rate_interval])",
+          "expr": "irate(mongodb_mongos_sharding_shard_chunks_total{mongodb_cluster=\"$cluster\"}[5m])",
           "interval": "",
           "legendFormat": "{{shard}}",
           "queryType": "randomWalk",
@@ -1082,7 +1082,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(mongodb_mongos_sharding_changelog_10min_total{mongodb_cluster=\"$cluster\", event=~\".*split.*\"}[$__rate_interval])",
+          "expr": "irate(mongodb_mongos_sharding_changelog_10min_total{mongodb_cluster=\"$cluster\", event=~\".*split.*\"}[5m])",
           "interval": "",
           "legendFormat": "{{event}}",
           "queryType": "randomWalk",
@@ -1169,7 +1169,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(mongodb_mongos_sharding_changelog_10min_total{mongodb_cluster=\"$cluster\", event=~\".*moveChunk.*\"}[$__rate_interval])",
+          "expr": "irate(mongodb_mongos_sharding_changelog_10min_total{mongodb_cluster=\"$cluster\", event=~\".*moveChunk.*\"}[5m])",
           "interval": "",
           "legendFormat": "{{event}}",
           "queryType": "randomWalk",
@@ -1344,7 +1344,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(mongodb_mongos_db_indexes_total{mongodb_cluster=\"$cluster\",db!~\"admin|config\"}[$__rate_interval])",
+          "expr": "irate(mongodb_mongos_db_indexes_total{mongodb_cluster=\"$cluster\",db!~\"admin|config\"}[5m])",
           "interval": "",
           "legendFormat": "{{shard}}-{{db}}",
           "queryType": "randomWalk",
@@ -1508,7 +1508,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(mongodb_mongos_db_index_size_bytes{mongodb_cluster=\"$cluster\",db!~\"admin|config\"}[$__rate_interval])",
+          "expr": "rate(mongodb_mongos_db_index_size_bytes{mongodb_cluster=\"$cluster\",db!~\"admin|config\"}[5m])",
           "interval": "",
           "legendFormat": "{{shard}}-{{db}}",
           "queryType": "randomWalk",
@@ -1606,7 +1606,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (service_name) (max_over_time(mongodb_connections{mongodb_cluster=\"$cluster\",state=\"current\"}[$__rate_interval]))",
+          "expr": "sum by (service_name) (max_over_time(mongodb_connections{mongodb_cluster=\"$cluster\",state=\"current\"}[5m]))",
           "interval": "",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
@@ -1688,7 +1688,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (service_name) (max_over_time(mongodb_connections{mongodb_cluster=\"$cluster\",state=\"current\"}[$__rate_interval]))",
+          "expr": "sum by (service_name) (max_over_time(mongodb_connections{mongodb_cluster=\"$cluster\",state=\"current\"}[5m]))",
           "interval": "",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
@@ -1770,7 +1770,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (service_name) (max_over_time(mongodb_connections{mongodb_cluster=\"$cluster\",state=\"available\"}[$__rate_interval]))",
+          "expr": "sum by (service_name) (max_over_time(mongodb_connections{mongodb_cluster=\"$cluster\",state=\"available\"}[5m]))",
           "interval": "",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
@@ -1948,7 +1948,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum( sum( irate(mongodb_op_counters_total{mongodb_cluster=\"$cluster\", type!=\"command\"}[$__rate_interval])) by (instance) * on (instance)  group_right mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\"} / mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\"}) by (set)",
+          "expr": "sum( sum( irate(mongodb_op_counters_total{mongodb_cluster=\"$cluster\", type!=\"command\"}[5m])) by (instance) * on (instance)  group_right mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\"} / mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\"}) by (set)",
           "interval": "",
           "legendFormat": "{{shard}}",
           "queryType": "randomWalk",
@@ -2030,7 +2030,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (type) (irate(mongodb_op_counters_total{mongodb_cluster=\"$cluster\", type!=\"command\"}[$__rate_interval]))",
+          "expr": "sum by (type) (irate(mongodb_op_counters_total{mongodb_cluster=\"$cluster\", type!=\"command\"}[5m]))",
           "interval": "",
           "legendFormat": "{{type}}",
           "queryType": "randomWalk",
@@ -2118,7 +2118,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (type) (irate(mongodb_op_counters_total{mongodb_cluster=\"$cluster\", type!=\"command\",service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "sum by (type) (irate(mongodb_op_counters_total{mongodb_cluster=\"$cluster\", type!=\"command\",service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "{{type}}",
           "queryType": "randomWalk",
@@ -2296,7 +2296,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by () (  max_over_time(mongodb_mongod_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[$__rate_interval]) or max_over_time(mongodb_mongos_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[$__rate_interval]) or max_over_time(mongodb_mongod_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[$__rate_interval]) or max_over_time(mongodb_mongos_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[$__rate_interval]) )",
+          "expr": "sum by () (  max_over_time(mongodb_mongod_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or max_over_time(mongodb_mongos_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or max_over_time(mongodb_mongod_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) or max_over_time(mongodb_mongos_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) )",
           "interval": "",
           "legendFormat": "Cursors",
           "queryType": "randomWalk",
@@ -2378,7 +2378,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (service_name) (  max_over_time(mongodb_mongod_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[$__rate_interval]) or max_over_time(mongodb_mongos_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[$__rate_interval]) or max_over_time(mongodb_mongod_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[$__rate_interval]) or max_over_time(mongodb_mongos_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[$__rate_interval]) )",
+          "expr": "sum by (service_name) (  max_over_time(mongodb_mongod_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or max_over_time(mongodb_mongos_metrics_cursor_open{mongodb_cluster=\"$cluster\", state=\"total\"}[5m]) or max_over_time(mongodb_mongod_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) or max_over_time(mongodb_mongos_cursors{mongodb_cluster=\"$cluster\", state=\"total_open\"}[5m]) )",
           "interval": "",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
@@ -2474,7 +2474,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max by (set) (max(max_over_time(mongodb_mongod_replset_member_replication_lag{mongodb_cluster=\"$cluster\"}[$__rate_interval]) > 0) by (service_name,set) or max(max_over_time(mongodb_mongod_replset_member_replication_lag{mongodb_cluster=\"$cluster\"}[$__rate_interval]) > 0) by (service_name,set))",
+          "expr": "max by (set) (max(max_over_time(mongodb_mongod_replset_member_replication_lag{mongodb_cluster=\"$cluster\"}[5m]) > 0) by (service_name,set) or max(max_over_time(mongodb_mongod_replset_member_replication_lag{mongodb_cluster=\"$cluster\"}[5m]) > 0) by (service_name,set))",
           "interval": "",
           "legendFormat": "{{set}}",
           "queryType": "randomWalk",

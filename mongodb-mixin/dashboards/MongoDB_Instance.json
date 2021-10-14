@@ -151,7 +151,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[$__rate_interval]))",
+          "expr": "sum(irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[5m]) or irate(mongodb_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[5m]))",
           "interval": "",
           "legendFormat": "",
           "queryType": "randomWalk",
@@ -278,7 +278,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$__rate_interval]) > 0))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[5m]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[5m]) > 0))",
           "interval": "",
           "legendFormat": "",
           "queryType": "randomWalk",
@@ -495,7 +495,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]) or  irate(mongodb_mongos_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]))",
+          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[5m]) or  irate(mongodb_mongos_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[5m]))",
           "interval": "",
           "legendFormat": "{{type}}",
           "queryType": "randomWalk",
@@ -503,7 +503,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval]) or irate(mongodb_mongos_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval]))",
+          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[5m]) or irate(mongodb_mongos_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{type}}",
@@ -511,7 +511,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "ttl_delete",
@@ -685,7 +685,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "{{state}}",
           "queryType": "randomWalk",
@@ -772,7 +772,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\"}[$__rate_interval]) > 0))",
+          "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\"}[5m]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\"}[5m]) > 0))",
           "interval": "",
           "legendFormat": "{{type}}",
           "queryType": "randomWalk",
@@ -1033,7 +1033,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "{{state}}",
           "queryType": "randomWalk",
@@ -1041,7 +1041,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_record_moves_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_record_moves_total{service_name=~\"$service_name\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "moved",
@@ -1129,7 +1129,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_mongod_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_mongod_asserts_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_asserts_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_asserts_total{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "{{type}}",
           "queryType": "randomWalk",
@@ -1216,7 +1216,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "Total",
           "queryType": "randomWalk",
@@ -1224,7 +1224,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Timeouts",
@@ -1311,7 +1311,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$__rate_interval]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$__rate_interval]))",
+          "expr": "sum(irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[5m]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m]))",
           "interval": "",
           "legendFormat": "Document",
           "queryType": "randomWalk",
@@ -1319,7 +1319,7 @@
         },
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[$__rate_interval]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$__rate_interval]))",
+          "expr": "sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[5m]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[5m]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Index",
@@ -1403,7 +1403,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "Write Wait Time",
           "queryType": "randomWalk",
@@ -1490,7 +1490,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_mongos_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]) or irate(mongodb_extra_info_page_faults_total{service_name=~\"$service_name\"}[5m]))",
           "interval": "",
           "legendFormat": "Faults",
           "queryType": "randomWalk",
