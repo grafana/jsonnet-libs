@@ -312,6 +312,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     frontendStatus:
       g.panel.table.new()
       + $.panels.statusUpDownMixin {
+        datasource: '$datasource',
         fieldConfig+: {
           defaults+: {
             links: [{
@@ -350,6 +351,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     backendStatus:
       g.panel.table.new()
       + $.panels.statusUpDownMixin {
+        datasource: '$datasource',
         fieldConfig+: {
           defaults+: {
             links: [{
@@ -386,6 +388,7 @@ local g = import 'github.com/grafana/dashboard-spec/_gen/7.0/jsonnet/grafana.lib
     serverStatus::
       g.panel.table.new()
       + $.panels.statusUpDownMixin {
+        datasource: '$datasource',
         fieldConfig+: {
           defaults+: {
             links: [{
