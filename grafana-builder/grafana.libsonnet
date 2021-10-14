@@ -92,7 +92,7 @@
             value: datasource,
           },
           hide: 0,
-          label: null,
+          label: 'Datasource',
           name: 'datasource',
           options: [],
           query: 'prometheus',
