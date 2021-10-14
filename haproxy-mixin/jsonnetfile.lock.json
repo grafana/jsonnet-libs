@@ -10,6 +10,16 @@
       },
       "version": "6f443d809a30ff03c6a3ae8a4a1b1c3bee9f9753",
       "sum": "xwQ2pWH8zExUDZL2QSPHMHDioUgWZGiXp16t61zkLKs="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet-lib.git",
+          "subdir": ""
+        }
+      },
+      "version": "3626fc4dc2326931c530861ac5bebe39444f6cbf",
+      "sum": "Wqp0cxwrZu4CnTZlFOBPJzOCJdaJICYO5dkVi8rQ8Dk="
     }
   ],
   "legacyImports": false
