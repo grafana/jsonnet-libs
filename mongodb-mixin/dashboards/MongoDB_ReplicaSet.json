@@ -530,7 +530,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (max(max_over_time(mongodb_mongod_replset_member_replication_lag{set=\"$replset\",service_name=~\"$secondary\"}[5m]) > 0) by (service_name,set))",
+          "expr": "avg by (service_name) (max(max_over_time(mongodb_mongod_replset_member_replication_lag{set=\"$replset\",service_name=~\"$secondary\"}[$__rate_interval]) > 0) by (service_name,set))",
           "interval": "",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
@@ -619,7 +619,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_op_counters_repl_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_op_counters_repl_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "repl - {{type}}",
           "queryType": "randomWalk",
@@ -627,7 +627,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "repl - {{type}}",
@@ -635,7 +635,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_op_counters_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_op_counters_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{type}}",
@@ -721,7 +721,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max by (service_name) (changes(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\"}[5m]))",
+          "expr": "max by (service_name) (changes(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
@@ -809,7 +809,7 @@
         {
           "exemplar": true,
           "expr": "time() - avg by (service_name) (max(mongodb_mongod_replset_member_last_heartbeat{service_name=~\"$service_name\"}) by (name)) * on (name) group_right avg by (service_name) (mongodb_mongod_replset_my_name{service_name=~\"$service_name\"})",
-          "interval": "5m",
+          "interval": "$__rate_interval",
           "legendFormat": "{{service_name}}",
           "queryType": "randomWalk",
           "refId": "A"
@@ -1087,7 +1087,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_network_getmores_total_milliseconds{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_network_getmores_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{service_name}}",
@@ -1273,7 +1273,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_total_milliseconds{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Document Preload",
@@ -1281,7 +1281,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_total_milliseconds{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Index Preload",
@@ -1289,7 +1289,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_batches_total_milliseconds{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_batches_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Batch Apply",
@@ -1378,7 +1378,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_num_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_num_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Document Preload",
@@ -1386,7 +1386,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_num_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_num_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Index Preload",
@@ -1394,7 +1394,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_ops_total{service_name=~\"$service_name\"}[5m]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_ops_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Batch Apply",
