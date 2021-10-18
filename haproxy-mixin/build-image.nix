@@ -1,10 +1,11 @@
-let
-  common = import ./common.nix;
-  sources = import ./nix/sources.nix;
-  pkgs = import sources.nixpkgs { };
-in pkgs.dockerTools.buildImage {
+{ pkgs ? import <nixpkgs> }:
+
+let common = import ./common.nix { inherit pkgs; };
+in
+with pkgs;
+dockerTools.buildImage {
   name = "jdbgrafana/haproxy-mixin-build-image";
   created = "now";
-  tag = "0.0.3";
+  tag = "0.0.5";
   contents = common.buildTools;
 }

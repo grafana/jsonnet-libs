@@ -1,5 +1,6 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ pkgs ? import <nixpkgs> }:
 
+with pkgs;
 buildGoModule rec {
   pname = "jsonnet-bundler";
   version = "0.4.0";
@@ -14,7 +15,7 @@ buildGoModule rec {
   subPackages = [ "cmd/jb" ];
   vendorSha256 = null;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A Jsonnet package manager";
     license = licenses.asl20;
   };

@@ -40,7 +40,8 @@ rules/rules.yaml: rules/rules.jsonnet
 .PHONY: haproxy-mixin-build-image
 haproxy-mixin-build-image: ## Build the haproxy-mixin-build-image
 haproxy-mixin-build-image: build-image.nix common.nix $(wildcard nix/*nix)
-	docker load --input $$(nix-build build-image.nix)
+	nix build .#haproxy-mixin-build-image -o $@
+	if ! docker load --input $@; then rm $@; fi
 
 .PHONY: inspect-build-image
 inspect-build-image: ## Inspect the haproxy-mixin-build-image
