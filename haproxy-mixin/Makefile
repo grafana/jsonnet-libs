@@ -37,16 +37,6 @@ rules/rules.yaml: rules/rules.jsonnet
 	$(MAKE) fmt JSONNET_FILES="$<"
 	$(JSONNET) $< > $@
 
-dashboards/%.json: ## Export a Grafana dashboard definition as JSON
-dashboards/%.json: dashboards/%.jsonnet dashboards/dashboards.libsonnet | $(wildcard vendor/github.com/grafana/dashboard-spec/_gen/7.0/**/*.libsonnet)
-	$(MAKE) fmt JSONNET_FILES="$?"
-	$(JSONNET) $< > $@
-
-.drone/drone.yml: ## Write out YAML drone configuration
-.drone/drone.yml: .drone/drone.jsonnet
-	drone jsonnet --source $< --target $@ --format --stream
-	drone lint $@
-
 .PHONY: haproxy-mixin-build-image
 haproxy-mixin-build-image: ## Build the haproxy-mixin-build-image
 haproxy-mixin-build-image: build-image.nix common.nix $(wildcard nix/*nix)
