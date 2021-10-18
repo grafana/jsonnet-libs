@@ -1,5 +1,6 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ pkgs ? import <nixpkgs> }:
 
+with pkgs;
 buildGoModule rec {
   pname = "mixtool";
   version = "bd0efc3";
@@ -14,7 +15,7 @@ buildGoModule rec {
   subPackages = [ "cmd/mixtool" ];
   vendorSha256 = "10wvckrwrc7xs3dng9m6lznsaways2wycxnl9h8jynp4h2cw22ml";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Helper for easily working with Jsonnet mixins";
     license = licenses.asl20;
   };
