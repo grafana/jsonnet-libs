@@ -4920,7 +4920,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -4929,7 +4929,7 @@
         "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
-      },      
+      },
       {
         "allValue": "cephpolbo|cepherin|cephkelly",
         "current": {
