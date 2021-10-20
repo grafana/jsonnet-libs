@@ -1309,7 +1309,7 @@
         "definition": "",
         "hide": 0,
         "includeAll": true,
-        "label": null,
+        "label": "Data Source",
         "multi": false,
         "name": "instance",
         "options": [],
