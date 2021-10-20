@@ -1,8 +1,8 @@
 {
   __inputs: [
     {
-      name: 'Prometheus',
-      label: 'prom',
+      name: 'datasource',
+      label: 'Data Source',
       description: 'A prometheus datasource with JMX Exporter scraping',
       type: 'datasource',
       pluginId: 'prometheus',
@@ -50,7 +50,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${Prometheus}',
+          datasource: '${datasource}',
           fill: 1,
           id: 2,
           legend: {
@@ -143,7 +143,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${Prometheus}',
+          datasource: '${datasource}',
           fill: 1,
           id: 3,
           legend: {
@@ -230,7 +230,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${Prometheus}',
+          datasource: '${datasource}',
           fill: 1,
           id: 4,
           legend: {
@@ -321,7 +321,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${Prometheus}',
+          datasource: '${datasource}',
           fill: 1,
           id: 5,
           legend: {
@@ -399,7 +399,7 @@
           bars: false,
           dashLength: 10,
           dashes: false,
-          datasource: '${Prometheus}',
+          datasource: '${datasource}',
           fill: 1,
           id: 6,
           legend: {
@@ -493,7 +493,7 @@
       {
         allValue: '',
         current: {},
-        datasource: '${Prometheus}',
+        datasource: '${datasource}',
         hide: 0,
         includeAll: true,
         label: 'Instance',
@@ -514,9 +514,9 @@
         current: {},
         hide: 0,
         includeAll: false,
-        label: null,
+        label: 'Data Source',
         multi: false,
-        name: 'Prometheus',
+        name: 'datasource',
         options: [],
         query: 'prometheus',
         queryValue: '',

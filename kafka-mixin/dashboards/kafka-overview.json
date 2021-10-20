@@ -22,7 +22,7 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -777,7 +777,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1107,7 +1107,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1742,7 +1742,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1759,7 +1759,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Offline partitions over time",
       "fieldConfig": {
         "defaults": {
@@ -1855,7 +1855,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Offline partitions over time",
       "fieldConfig": {
         "defaults": {
@@ -1951,7 +1951,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Under replicated partitions over time",
       "fieldConfig": {
         "defaults": {
@@ -2047,7 +2047,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Under min in sync replicas partitions over time",
       "fieldConfig": {
         "defaults": {
@@ -2140,7 +2140,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2157,7 +2157,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Average fraction of time the network processor threads are idle. Values are between 0 (all resources are used) and 100 (all resources are available) ",
       "fieldConfig": {
         "defaults": {
@@ -2252,7 +2252,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Average fraction of time the request handler threads are idle. Values are between 0 (all resources are used) and 100 (all resources are available). ",
       "fieldConfig": {
         "defaults": {
@@ -2347,7 +2347,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -2442,7 +2442,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -2534,7 +2534,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2551,7 +2551,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Latency in millseconds for ZooKeeper requests from broker. ",
       "fieldConfig": {
         "defaults": {
@@ -2647,7 +2647,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2745,7 +2745,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2842,7 +2842,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2939,7 +2939,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3033,7 +3033,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3050,7 +3050,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": ": The number of in-sync replicas (ISRs) for a particular partition should remain fairly static, the only exceptions are when you are expanding your broker cluster or removing partitions. In order to maintain high availability, a healthy Kafka cluster requires a minimum number of ISRs for failover. A replica could be removed from the ISR pool for a couple of reasons: it is too far behind the leaders offset (user-configurable by setting the replica.lag.max.messages configuration parameter), or it has not contacted the leader for some time (configurable with the replica.socket.timeout.ms parameter). No matter the reason, an increase in IsrShrinksPerSec without a corresponding increase in IsrExpandsPerSec shortly thereafter is cause for concern and requires user intervention.The Kafka documentation provides a wealth of information on the user-configurable parameters for brokers.",
       "fieldConfig": {
         "defaults": {
@@ -3145,7 +3145,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": ": The number of in-sync replicas (ISRs) for a particular partition should remain fairly static, the only exceptions are when you are expanding your broker cluster or removing partitions. In order to maintain high availability, a healthy Kafka cluster requires a minimum number of ISRs for failover. A replica could be removed from the ISR pool for a couple of reasons: it is too far behind the leaders offset (user-configurable by setting the replica.lag.max.messages configuration parameter), or it has not contacted the leader for some time (configurable with the replica.socket.timeout.ms parameter). No matter the reason, an increase in IsrShrinksPerSec without a corresponding increase in IsrExpandsPerSec shortly thereafter is cause for concern and requires user intervention.The Kafka documentation provides a wealth of information on the user-configurable parameters for brokers.",
       "fieldConfig": {
         "defaults": {
@@ -3238,7 +3238,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3255,7 +3255,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -3350,7 +3350,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -3442,7 +3442,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3459,7 +3459,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply there aren't enough IO threads or the CPU is a bottleneck, or the request queue isnt large enough. The request queue size should match the number of connections.",
       "fieldConfig": {
         "defaults": {
@@ -3555,7 +3555,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "In most cases, a high value can imply slow local storage or the storage is a bottleneck. One should also investigate LogFlushRateAndTimeMs to know how long page flushes are taking, which will also indicate a slow disk. In the case of FetchFollower requests, time spent in LocalTimeMs can be the result of a ZooKeeper write to change the ISR.",
       "fieldConfig": {
         "defaults": {
@@ -3651,7 +3651,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms. ",
       "fieldConfig": {
         "defaults": {
@@ -3747,7 +3747,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue. ",
       "fieldConfig": {
         "defaults": {
@@ -3843,7 +3843,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block. ",
       "fieldConfig": {
         "defaults": {
@@ -3936,7 +3936,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3953,7 +3953,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply there aren't enough IO threads or the CPU is a bottleneck, or the request queue isnt large enough. The request queue size should match the number of connections.",
       "fieldConfig": {
         "defaults": {
@@ -4049,7 +4049,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "In most cases, a high value can imply slow local storage or the storage is a bottleneck. One should also investigate LogFlushRateAndTimeMs to know how long page flushes are taking, which will also indicate a slow disk. In the case of FetchFollower requests, time spent in LocalTimeMs can be the result of a ZooKeeper write to change the ISR.",
       "fieldConfig": {
         "defaults": {
@@ -4145,7 +4145,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms. ",
       "fieldConfig": {
         "defaults": {
@@ -4241,7 +4241,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue. ",
       "fieldConfig": {
         "defaults": {
@@ -4337,7 +4337,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block. ",
       "fieldConfig": {
         "defaults": {
@@ -4430,7 +4430,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -4447,7 +4447,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply there aren't enough IO threads or the CPU is a bottleneck, or the request queue isnt large enough. The request queue size should match the number of connections.",
       "fieldConfig": {
         "defaults": {
@@ -4543,7 +4543,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "In most cases, a high value can imply slow local storage or the storage is a bottleneck. One should also investigate LogFlushRateAndTimeMs to know how long page flushes are taking, which will also indicate a slow disk. In the case of FetchFollower requests, time spent in LocalTimeMs can be the result of a ZooKeeper write to change the ISR.",
       "fieldConfig": {
         "defaults": {
@@ -4639,7 +4639,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply a slow network connection. For fetch request, if the remote time is high, it could be that there is not enough data to give in a fetch response. This can happen when the consumer or replica is caught up and there is no new incoming data. If this is the case, remote time will be close to the max wait time, which is normal. Max wait time is configured via replica.fetch.wait.max.ms and fetch.max.wait.ms. ",
       "fieldConfig": {
         "defaults": {
@@ -4735,7 +4735,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply there aren't enough network threads or the network cant dequeue responses quickly enough, causing back pressure in the response queue. ",
       "fieldConfig": {
         "defaults": {
@@ -4831,7 +4831,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "A high value can imply the zero-copy from disk to the network is slow, or the network is the bottleneck because the network cant dequeue responses of the TCP socket as quickly as theyre being created. If the network buffer gets full, Kafka will block. ",
       "fieldConfig": {
         "defaults": {
@@ -4924,7 +4924,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -4941,7 +4941,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Number of consumer groups per group coordinator",
       "fieldConfig": {
         "defaults": {
@@ -5038,7 +5038,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Number of consumer group per state",
       "fieldConfig": {
         "defaults": {
@@ -5156,7 +5156,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -5173,7 +5173,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -5268,7 +5268,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -5363,7 +5363,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -5458,7 +5458,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -5553,7 +5553,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -5648,7 +5648,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -5743,7 +5743,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Tracks the amount of time Acceptor is blocked from accepting connections. See KIP-402 for more details.",
       "fieldConfig": {
         "defaults": {
@@ -5839,7 +5839,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -5931,7 +5931,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -5945,7 +5945,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Total request rate.",
       "fieldConfig": {
         "defaults": {
@@ -6017,7 +6017,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Produce request rate.",
       "fieldConfig": {
         "defaults": {
@@ -6089,7 +6089,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Fetch request rate.",
       "fieldConfig": {
         "defaults": {
@@ -6161,7 +6161,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Offset Commit request rate.",
       "fieldConfig": {
         "defaults": {
@@ -6233,7 +6233,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Metadata request rate.",
       "fieldConfig": {
         "defaults": {
@@ -6308,7 +6308,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -6404,7 +6404,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -6497,7 +6497,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -6514,7 +6514,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "The number of messages produced converted to match the log.message.format.version.",
       "fieldConfig": {
         "defaults": {
@@ -6705,7 +6705,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "Number of connection per client version",
       "fieldConfig": {
         "defaults": {
@@ -6780,14 +6780,14 @@
       {
         "current": {
           "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],

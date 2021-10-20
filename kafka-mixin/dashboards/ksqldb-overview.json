@@ -21,7 +21,7 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1032,7 +1032,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1347,7 +1347,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2164,7 +2164,7 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2874,7 +2874,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -3671,14 +3671,14 @@
       {
         "current": {
           "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],

@@ -229,7 +229,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -431,7 +431,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -628,7 +628,7 @@
       }
     },
     {
-      "datasource": null,
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -696,14 +696,14 @@
       {
         "current": {
           "selected": false,
-          "text": "default",
-          "value": "default"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
