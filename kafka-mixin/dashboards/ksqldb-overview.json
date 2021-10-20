@@ -3671,14 +3671,14 @@
       {
         "current": {
           "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
