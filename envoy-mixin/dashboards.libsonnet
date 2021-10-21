@@ -9,6 +9,7 @@ local template = import 'grafonnet/template.libsonnet';
       name='instance',
       datasource='$datasource',
       query='label_values(envoy_server_uptime{job="$job"}, instance)',
+      label='Data Source',
       allValues='.*',  // Make sure to always include all instances when "All" is selected.
       current='',
       hide='',
