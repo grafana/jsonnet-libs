@@ -308,6 +308,21 @@
     ],
   },
 
+  // Gather kubernetes-state-metrics metrics.
+  kubernetes_state_metrics:: {
+    job_name: 'default/kube-state-metrics',
+    kubernetes_sd_configs: [{
+      role: 'endpoints',
+    }],
+    scheme: 'http',
+
+    relabel_configs: [{
+      source_labels: ['__meta_kubernetes_endpoint_port_name'],
+      regex: 'kube-state-metrics-http-metrics',
+      action: 'keep',
+    }],
+  },
+
   // Don't verify the SSL certificate.
   // Intended to be mixed in with a scrape config.
   insecureSkipVerify:: {
