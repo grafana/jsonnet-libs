@@ -61,6 +61,12 @@
           text: 'Dashboard :grafana:',
           url: '{{ (index .Alerts 0).Annotations.dashboard_url }}',
         },
+
+        {
+          type: 'button',
+          text: 'logs :lokii:',
+          url: '{{ (index .Alerts 0).Annotations.logs_url }}',
+        },
       ],
     },
 
