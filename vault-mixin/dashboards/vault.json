@@ -1807,7 +1807,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(irate(vault_token_lookup_count[1m]))",
+          "expr": "avg(irate(vault_token_lookup_count[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Lookups",
