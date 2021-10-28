@@ -8,17 +8,25 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "description": "This Dashboard provides an overview of WSO2 integration cluster deployment",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": 12783,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1631820451442,
+  "id": 56,
+  "iteration": 1635428879110,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -86,7 +94,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -144,7 +152,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -278,7 +286,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -473,7 +481,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -551,7 +559,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -618,7 +626,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -674,7 +682,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -775,7 +783,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -873,7 +881,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -941,23 +949,25 @@
       }
     }
   ],
-  "refresh": "10s",
-  "schemaVersion": 30,
+  "refresh": "30s",
+  "schemaVersion": 31,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "wso2-enterprise-integrator-integration"
+  ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
+          "text": "grafanacloud-gabrielantunes-prom",
+          "value": "grafanacloud-gabrielantunes-prom"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Data Source",
+        "label": "Datasource",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -975,7 +985,7 @@
           "text": "my-cluster",
           "value": "my-cluster"
         },
-        "datasource": null,
+        "datasource": "${datasource}",
         "definition": "label_values(wso2_integration_server_up, wso2_cluster)",
         "description": null,
         "error": null,
@@ -1017,5 +1027,5 @@
   "timezone": "",
   "title": "WSO2 Integration Cluster Metrics",
   "uid": "TdzS6sS7z",
-  "version": 5
+  "version": 2
 }

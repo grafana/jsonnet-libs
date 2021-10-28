@@ -8,17 +8,25 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "description": "This Dashboard provides an overview of proxy services deployed in Enterprise Integrator Cluster.",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": 12889,
   "graphTooltip": 0,
-  "id": 4,
-  "iteration": 1631821366654,
+  "id": 59,
+  "iteration": 1635429002701,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -96,7 +104,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "expr": "time() - max(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\"})",
@@ -171,7 +179,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "expr": "sum(max_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
@@ -239,7 +247,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "expr": "(sum(max_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))-(sum(max_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))",
@@ -324,7 +332,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "expr": "sum(max_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
@@ -396,7 +404,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "expr": "sum(max_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))/sum(max_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
@@ -453,7 +461,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "expr": "count(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\"})",
@@ -508,7 +516,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -609,7 +617,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -737,16 +745,18 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 30,
+  "schemaVersion": 31,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "wso2-enterprise-integrator-integration"
+  ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
+          "text": "grafanacloud-gabrielantunes-prom",
+          "value": "grafanacloud-gabrielantunes-prom"
         },
         "description": null,
         "error": null,
@@ -765,27 +775,23 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": [
-            "None"
-          ],
-          "value": [
-            ""
-          ]
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "$datasource",
         "definition": "label_values(wso2_integration_service_up{service_type=\"proxy\"}, service_name)",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Service Name",
         "multi": true,
         "name": "service",
         "options": [],
         "query": {
           "query": "label_values(wso2_integration_service_up{service_type=\"proxy\"}, service_name)",
-          "refId": "Cortex-service-Variable-Query"
+          "refId": "StandardVariableQuery"
         },
         "refresh": 2,
         "regex": "",
@@ -807,7 +813,7 @@
             "$__all"
           ]
         },
-        "datasource": null,
+        "datasource": "${datasource}",
         "definition": "label_values(wso2_integration_service_up{service_type=\"proxy\", service_name=~\"$service\"}, instance)",
         "description": null,
         "error": null,
@@ -849,5 +855,5 @@
   "timezone": "",
   "title": "WSO2 Proxy Service Metrics",
   "uid": "68SKM8I7z",
-  "version": 6
+  "version": 3
 }
