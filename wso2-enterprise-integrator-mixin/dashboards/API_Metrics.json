@@ -8,17 +8,25 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "description": "This Dashboard provides an overview of API services deployed in Enterprise Integrator Cluster.",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": 12888,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1631821461672,
+  "id": 61,
+  "iteration": 1635452761687,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -92,7 +100,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -168,7 +176,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -235,7 +243,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -316,7 +324,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -390,7 +398,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -447,7 +455,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": false,
@@ -503,7 +511,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -603,7 +611,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -734,14 +742,14 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 30,
+  "schemaVersion": 31,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "Cortex",
           "value": "Cortex"
         },
@@ -754,6 +762,7 @@
         "name": "datasource",
         "options": [],
         "query": "prometheus",
+        "queryValue": "",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -762,20 +771,16 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": [
-            "ArithmaticOperationServiceAPI"
-          ],
-          "value": [
-            "ArithmaticOperationServiceAPI"
-          ]
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "$datasource",
         "definition": "label_values(wso2_integration_service_up{service_type=\"api\"}, service_name)",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Service Name",
         "multi": true,
         "name": "service",
@@ -797,10 +802,10 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "192.168.99.101:9202",
-          "value": "192.168.99.101:9202"
+          "text": "All",
+          "value": "$__all"
         },
-        "datasource": null,
+        "datasource": "${datasource}",
         "definition": "label_values(wso2_integration_service_up{service_type=\"api\", service_name=~\"$service\"}, instance)",
         "description": null,
         "error": null,
@@ -842,5 +847,5 @@
   "timezone": "",
   "title": "WSO2 API Metrics",
   "uid": "0KIvzUI7z",
-  "version": 7
+  "version": 8
 }
