@@ -595,14 +595,14 @@
               "refId": "A"
             },
             {
-              "expr": "avg(increase(vault_route_delete_${mountpoint}__count[5m]))",
+              "expr": "avg(increase(vault_route_delete_${mountpoint}__count[$__rate_interval]))",
               "hide": false,
               "interval": "5m",
               "legendFormat": "Delete",
               "refId": "B"
             },
             {
-              "expr": "avg(increase(vault_route_read_${mountpoint}__count[5m]))",
+              "expr": "avg(increase(vault_route_read_${mountpoint}__count[$__rate_interval]))",
               "format": "time_series",
               "hide": false,
               "instant": false,
@@ -612,7 +612,7 @@
               "refId": "C"
             },
             {
-              "expr": "avg(increase(vault_route_list_${mountpoint}__count[5m]))",
+              "expr": "avg(increase(vault_route_list_${mountpoint}__count[$__rate_interval]))",
               "format": "time_series",
               "hide": false,
               "interval": "5m",
@@ -620,7 +620,7 @@
               "refId": "D"
             },
             {
-              "expr": "avg(increase(vault_route_rollback_${mountpoint}__count[5m]))",
+              "expr": "avg(increase(vault_route_rollback_${mountpoint}__count[$__rate_interval]))",
               "hide": true,
               "interval": "5m",
               "legendFormat": "Rollback",
