@@ -1,14 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMXY",
-      "label": "Promxy",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
   "__requires": [
     {
       "type": "grafana",
@@ -51,7 +41,7 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "${DS_PROMXY}",
+        "datasource": "${datasource}",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -69,7 +59,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -149,7 +139,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {
@@ -247,7 +237,7 @@
       "type": "table"
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -306,7 +296,7 @@
         "label": "Others",
         "threshold": 0
       },
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": null,
       "fieldConfig": {
         "defaults": {
@@ -370,7 +360,7 @@
       "valueName": "current"
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -451,7 +441,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -516,7 +506,7 @@
     },
     {
       "collapsed": true,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -530,7 +520,7 @@
           "bars": true,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMXY}",
+          "datasource": "${datasource}",
           "decimals": 0,
           "fieldConfig": {
             "defaults": {
@@ -676,7 +666,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMXY}",
+          "datasource": "${datasource}",
           "decimals": 0,
           "fieldConfig": {
             "defaults": {
@@ -741,27 +731,27 @@
               "refId": "A"
             },
             {
-              "expr": "avg(rate(vault_route_delete_${mountpoint}__sum[1m]) / rate(vault_route_delete_${mountpoint}__count[1m]) * 1000)",
+              "expr": "avg(rate(vault_route_delete_${mountpoint}__sum[$__rate_interval]) / rate(vault_route_delete_${mountpoint}__count[$__rate_interval]) * 1000)",
               "interval": "",
               "legendFormat": "Delete",
               "refId": "B"
             },
             {
-              "expr": "avg(rate(vault_route_read_${mountpoint}__sum[1m]) / rate(vault_route_read_${mountpoint}__count[1m]) * 1000)",
+              "expr": "avg(rate(vault_route_read_${mountpoint}__sum[$__rate_interval]) / rate(vault_route_read_${mountpoint}__count[$__rate_interval]) * 1000)",
               "hide": false,
               "interval": "",
               "legendFormat": "Read",
               "refId": "C"
             },
             {
-              "expr": "avg(rate(vault_route_list_${mountpoint}__sum[1m]) / rate(vault_route_list_${mountpoint}__count[1m]) * 1000)",
+              "expr": "avg(rate(vault_route_list_${mountpoint}__sum[$__rate_interval]) / rate(vault_route_list_${mountpoint}__count[$__rate_interval]) * 1000)",
               "hide": false,
               "interval": "",
               "legendFormat": "List",
               "refId": "D"
             },
             {
-              "expr": "avg(rate(vault_route_rollback_${mountpoint}__sum[1m]) / rate(vault_route_rollback_${mountpoint}__count[1m]) * 1000)",
+              "expr": "avg(rate(vault_route_rollback_${mountpoint}__sum[$__rate_interval]) / rate(vault_route_rollback_${mountpoint}__count[$__rate_interval]) * 1000)",
               "hide": true,
               "interval": "",
               "legendFormat": "Rollback",
@@ -819,7 +809,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -833,7 +823,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -892,7 +882,7 @@
       "type": "stat"
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -961,7 +951,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": 3,
       "fieldConfig": {
         "defaults": {
@@ -1075,7 +1065,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1088,7 +1078,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -1145,7 +1135,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -1243,7 +1233,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {},
@@ -1320,7 +1310,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -1422,7 +1412,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -1523,7 +1513,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -1646,7 +1636,7 @@
       "bars": true,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": 0,
       "fieldConfig": {
         "defaults": {
@@ -1760,7 +1750,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": 3,
       "fieldConfig": {
         "defaults": {
@@ -1860,7 +1850,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1873,7 +1863,7 @@
       "type": "row"
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1919,7 +1909,7 @@
       "pluginVersion": "7.0.3",
       "targets": [
         {
-          "expr": "max(idelta(vault_audit_log_request_failure[1m]))",
+          "expr": "max(idelta(vault_audit_log_request_failure[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "legendFormat": "Request",
@@ -1936,7 +1926,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "decimals": 3,
       "fieldConfig": {
         "defaults": {
@@ -1984,7 +1974,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(irate(vault_audit_log_request_count[1m]))",
+          "expr": "avg(irate(vault_audit_log_request_count[$__rate_interval]))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1993,7 +1983,7 @@
           "refId": "A"
         },
         {
-          "expr": "avg(irate(vault_audit_log_response_count[1m]))",
+          "expr": "avg(irate(vault_audit_log_response_count[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -2003,7 +1993,7 @@
           "refId": "B"
         },
         {
-          "expr": "avg(irate(vault_core_handle_request_count[1m]))",
+          "expr": "avg(irate(vault_core_handle_request_count[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -2061,7 +2051,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -2104,26 +2094,26 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(irate(vault_consul_get_count[1m]))",
+          "expr": "avg(irate(vault_consul_get_count[$__rate_interval]))",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "GET",
           "refId": "A"
         },
         {
-          "expr": "avg(irate(vault_consul_put_count[1m]))",
+          "expr": "avg(irate(vault_consul_put_count[$__rate_interval]))",
           "interval": "",
           "legendFormat": "PUT",
           "refId": "B"
         },
         {
-          "expr": "avg(irate(vault_consul_delete_count[1m]))",
+          "expr": "avg(irate(vault_consul_delete_count[$__rate_interval]))",
           "interval": "",
           "legendFormat": "DELETE",
           "refId": "C"
         },
         {
-          "expr": "irate(vault_consul_list_count{instance=\"$node:$port\"}[1m])",
+          "expr": "irate(vault_consul_list_count{instance=\"$node:$port\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "LIST",
           "refId": "D"
@@ -2173,7 +2163,7 @@
       }
     },
     {
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2219,7 +2209,7 @@
       "pluginVersion": "7.0.3",
       "targets": [
         {
-          "expr": "max(idelta(vault_audit_log_response_failure[1m]))",
+          "expr": "max(idelta(vault_audit_log_response_failure[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "legendFormat": "Request",
@@ -2233,7 +2223,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2252,7 +2242,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -2296,7 +2286,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(irate(vault_policy_set_policy_count[1m]))",
+          "expr": "avg(irate(vault_policy_set_policy_count[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2354,7 +2344,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMXY}",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "custom": {}
@@ -2397,7 +2387,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(irate(vault_policy_get_policy_count[1m]))",
+          "expr": "avg(irate(vault_policy_get_policy_count[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2481,7 +2471,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMXY}",
+        "datasource": "${datasource}",
         "definition": "label_values(up{job=\"vault\"}, instance)",
         "hide": 2,
         "includeAll": false,
@@ -2503,7 +2493,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMXY}",
+        "datasource": "${datasource}",
         "definition": "label_values(up{job=\"vault\",instance=~\"$node:(.*)\"}, instance)",
         "hide": 2,
         "includeAll": false,
@@ -2525,7 +2515,7 @@
       {
         "allValue": "",
         "current": {},
-        "datasource": "${DS_PROMXY}",
+        "datasource": "${datasource}",
         "definition": "label_values(vault_secret_kv_count, mount_point)",
         "hide": 0,
         "includeAll": true,
