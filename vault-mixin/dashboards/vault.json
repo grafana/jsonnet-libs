@@ -733,7 +733,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(rate(vault_route_create_${mountpoint}__sum[1m]) / rate(vault_route_create_${mountpoint}__count[1m]) * 1000)",
+              "expr": "avg(rate(vault_route_create_${mountpoint}__sum[$__rate_interval]) / rate(vault_route_create_${mountpoint}__count[$__rate_interval]) * 1000)",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 1,
