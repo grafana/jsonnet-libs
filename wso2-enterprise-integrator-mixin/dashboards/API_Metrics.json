@@ -23,8 +23,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 12888,
   "graphTooltip": 0,
-  "id": 19,
-  "iteration": 1635428511879,
+  "id": 61,
+  "iteration": 1635452761687,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -744,22 +744,20 @@
   "refresh": "30s",
   "schemaVersion": 31,
   "style": "dark",
-  "tags": [
-    "wso2-enterprise-integrator-integration"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
         "current": {
-          "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "selected": true,
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -773,13 +771,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "$datasource",
         "definition": "label_values(wso2_integration_service_up{service_type=\"api\"}, service_name)",
@@ -807,13 +801,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "${datasource}",
         "definition": "label_values(wso2_integration_service_up{service_type=\"api\", service_name=~\"$service\"}, instance)",
@@ -856,6 +846,6 @@
   },
   "timezone": "",
   "title": "WSO2 API Metrics",
-  "uid": "r0XcZEV7z",
-  "version": 4
+  "uid": "0KIvzUI7z",
+  "version": 2
 }

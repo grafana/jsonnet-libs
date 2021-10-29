@@ -23,8 +23,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 12889,
   "graphTooltip": 0,
-  "id": 59,
-  "iteration": 1635429002701,
+  "id": 65,
+  "iteration": 1635514687282,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -747,16 +747,14 @@
   "refresh": "30s",
   "schemaVersion": 31,
   "style": "dark",
-  "tags": [
-    "wso2-enterprise-integrator-integration"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "description": null,
         "error": null,
@@ -791,7 +789,7 @@
         "options": [],
         "query": {
           "query": "label_values(wso2_integration_service_up{service_type=\"proxy\"}, service_name)",
-          "refId": "StandardVariableQuery"
+          "refId": "Cortex-service-Variable-Query"
         },
         "refresh": 2,
         "regex": "",
@@ -855,5 +853,5 @@
   "timezone": "",
   "title": "WSO2 Proxy Service Metrics",
   "uid": "68SKM8I7z",
-  "version": 3
+  "version": 2
 }

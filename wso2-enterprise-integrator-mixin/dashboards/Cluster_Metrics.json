@@ -23,8 +23,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 12783,
   "graphTooltip": 0,
-  "id": 56,
-  "iteration": 1635428879110,
+  "id": 62,
+  "iteration": 1635514673335,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -952,22 +952,20 @@
   "refresh": "30s",
   "schemaVersion": 31,
   "style": "dark",
-  "tags": [
-    "wso2-enterprise-integrator-integration"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -981,9 +979,10 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "my-cluster",
-          "value": "my-cluster"
+          "text": "None",
+          "value": ""
         },
         "datasource": "${datasource}",
         "definition": "label_values(wso2_integration_server_up, wso2_cluster)",

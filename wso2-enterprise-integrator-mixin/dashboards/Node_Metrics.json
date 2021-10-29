@@ -20,11 +20,13 @@
   },
   "description": "This Dashboard provides an overview of a single WSO2 integration nodes",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": 12887,
   "graphTooltip": 0,
-  "id": 17,
-  "iteration": 1632229366386,
+  "id": 64,
+  "iteration": 1635514716040,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -102,7 +104,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": true,
@@ -160,7 +162,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": true,
@@ -221,7 +223,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -326,7 +328,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -590,7 +592,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": true,
@@ -657,7 +659,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "targets": [
         {
           "exemplar": true,
@@ -718,7 +720,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -846,7 +848,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -952,7 +954,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1053,7 +1055,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1151,7 +1153,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.1.4",
+      "pluginVersion": "8.2.2-39068",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1222,11 +1224,9 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 30,
+  "schemaVersion": 31,
   "style": "dark",
-  "tags": [
-    "wso2-enterprise-integrator-integration"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
@@ -1253,11 +1253,12 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "my-cluster",
-          "value": "my-cluster"
+          "text": "None",
+          "value": ""
         },
-        "datasource": null,
+        "datasource": "${datasource}",
         "definition": "label_values(wso2_integration_server_up, wso2_cluster)",
         "description": null,
         "error": null,
@@ -1280,11 +1281,12 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "192.168.99.101:9202",
-          "value": "192.168.99.101:9202"
+          "text": "None",
+          "value": ""
         },
-        "datasource": null,
+        "datasource": "${datasource}",
         "definition": "label_values(wso2_integration_server_up, instance)",
         "description": null,
         "error": null,

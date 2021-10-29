@@ -23,8 +23,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 12890,
   "graphTooltip": 0,
-  "id": 57,
-  "iteration": 1635428841228,
+  "id": 63,
+  "iteration": 1635514659781,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -733,27 +733,24 @@
   "refresh": "30s",
   "schemaVersion": 31,
   "style": "dark",
-  "tags": [
-    "wso2-enterprise-integrator-integration"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
-        "queryValue": "",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -762,13 +759,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": "$datasource",
         "definition": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\"}, service_name)",
@@ -782,7 +775,7 @@
         "options": [],
         "query": {
           "query": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\"}, service_name)",
-          "refId": "StandardVariableQuery"
+          "refId": "Cortex-service-Variable-Query"
         },
         "refresh": 2,
         "regex": "",
@@ -846,5 +839,5 @@
   "timezone": "",
   "title": "WSO2 Inbound Endpoint Metrics",
   "uid": "x5VJI8S7z",
-  "version": 3
+  "version": 2
 }
