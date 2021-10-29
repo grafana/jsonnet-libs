@@ -587,7 +587,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "avg(increase(vault_route_create_${mountpoint}__count[5m]))",
+              "expr": "avg(increase(vault_route_create_${mountpoint}__count[$__rate_interval]))",
               "format": "time_series",
               "hide": false,
               "interval": "5m",
