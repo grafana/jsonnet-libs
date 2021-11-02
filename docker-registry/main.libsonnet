@@ -16,7 +16,7 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
         image
       )
       + container.withPorts([
-        k.core.v1.containerPort.new('http-metrics', '5000'),
+        k.core.v1.containerPort.new('http-metrics', 5000),
       ])
     ,
 
@@ -35,6 +35,7 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
         containers=[this.container],
         volumeClaims=[this.pvc]
       )
+      + statefulset.spec.withServiceName(name)
       + k_util.pvcVolumeMount(this.pvc.metadata.name, '/var/lib/registry')
     ,
 
