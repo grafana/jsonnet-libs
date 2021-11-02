@@ -10,7 +10,7 @@ Jsonnet library for [docker registry](https://docs.docker.com/registry/).
 Install it with jsonnet-bundler:
 
 ```console
-jb install github.com/jsonnet-libs/docker-registry
+jb install github.com/grafana/jsonnet-libs/docker-registry
 ```
 
 Import into your jsonnet:
