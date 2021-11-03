@@ -99,6 +99,7 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
         rule.withHost(host)
         + rule.http.withPaths([
           path.withPath('/')
+          + path.withPathType('Prefix')
           + path.backend.service.withName(this.service.metadata.name)
           + path.backend.service.port.withNumber(this.port),
         ])
