@@ -22,6 +22,12 @@ local registry = import 'github.com/grafana/jsonnet-libs/docker-registry/main.li
 {
   registry:
     registry.new()
-    + registry.withProxy('proxy-credentials-secret'),
+    + registry.withMetrics()
+    + registry.withProxy('proxy-credentials-secret')
+    + registry.withIngress(
+      'registry.example.org',
+      tlsSecretName='example-org-wildcard',
+      allowlist=['10.0.0.0/8']
+    ),
 }
 ```
