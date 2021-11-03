@@ -81,7 +81,7 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
     local this = self,
     local ingress = k.networking.v1.ingress,
     local rule = k.networking.v1.ingressRule,
-    local path = k.networking.v1beta1.httpIngressPath,
+    local path = k.networking.v1.httpIngressPath,
     ingress:
       ingress.new(self.service.metadata.name)
       + (
@@ -99,8 +99,8 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
         rule.withHost(host)
         + rule.http.withPaths([
           path.withPath('/')
-          + path.backend.withServiceName(this.service.metadata.name)
-          + path.backend.withServicePort(this.port),
+          + path.backend.service.withName(this.service.metadata.name)
+          + path.backend.service.port.withNumber(this.port),
         ])
       ),
   },
