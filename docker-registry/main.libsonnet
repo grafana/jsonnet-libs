@@ -51,9 +51,9 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
     local container = k.core.v1.container,
     container+:
       container.withEnvMixin([
-        k.core.v1.envVar.new('PROXY_REMOTEURL', url),
-        k.core.v1.envVar.fromSecretRef('PROXY_USERNAME', secretRef, 'username'),
-        k.core.v1.envVar.fromSecretRef('PROXY_PASSWORD', secretRef, 'password'),
+        k.core.v1.envVar.new('REGISTRY_PROXY_REMOTEURL', url),
+        k.core.v1.envVar.fromSecretRef('REGISTRY_PROXY_USERNAME', secretRef, 'username'),
+        k.core.v1.envVar.fromSecretRef('REGISTRY_PROXY_PASSWORD', secretRef, 'password'),
       ]),
   },
 }
