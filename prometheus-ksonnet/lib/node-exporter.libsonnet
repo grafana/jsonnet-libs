@@ -15,7 +15,7 @@ local node_exporter = import 'github.com/grafana/jsonnet-libs/node-exporter/main
 
   prometheus_config+:: {
     scrape_configs+: [
-      node_exporter.scrape_config($._config.namespace),
+      node_exporter.scrape_config($._config.node_exporter_namespace),
     ],
   },
 }
