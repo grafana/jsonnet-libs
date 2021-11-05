@@ -33,7 +33,7 @@
           cadvisorSelector: 'job="kube-system/cadvisor"',
           kubeletSelector: 'job="kube-system/kubelet"',
           kubeStateMetricsSelector: 'job="%s/kube-state-metrics"' % $._config.namespace,
-          nodeExporterSelector: 'job="%s/node-exporter"' % $._config.namespace,  // Also used by node-mixin.
+          nodeExporterSelector: 'job="%s/node-exporter"' % $._config.node_exporter_namespace,  // Also used by node-mixin.
           notKubeDnsSelector: 'job!="kube-system/kube-dns"',
           kubeSchedulerSelector: 'job="kube-system/kube-scheduler"',
           kubeControllerManagerSelector: 'job="kube-system/kube-controller-manager"',
@@ -71,7 +71,7 @@
         grafanaDashboardFolder: 'node_exporter',
 
         _config+:: {
-          nodeExporterSelector: 'job="%s/node-exporter"' % $._config.namespace,  // Also used by node-mixin.
+          nodeExporterSelector: 'job="%s/node-exporter"' % $._config.node_exporter_namespace,  // Also used by node-mixin.
 
           // Do not page if nodes run out of disk space.
           nodeCriticalSeverity: 'warning',
