@@ -4,6 +4,8 @@ local grafana = import 'github.com/grafana/jsonnet-libs/grafana/grafana.libsonne
 local kube_state_metrics = import 'github.com/grafana/jsonnet-libs/kube-state-metrics/main.libsonnet';
 local directory = import 'github.com/grafana/jsonnet-libs/nginx-directory/directory.libsonnet';
 local node_exporter = import 'github.com/grafana/jsonnet-libs/node-exporter/main.libsonnet';
+local pushgateway = import 'github.com/grafana/jsonnet-libs/prom-pushgateway/main.libsonnet';
+local pushgateway_scrape_config = import 'github.com/grafana/jsonnet-libs/prom-pushgateway/scrape_config.libsonnet';
 local prometheus = import 'github.com/grafana/jsonnet-libs/prometheus/prometheus.libsonnet';
 local prom_scrape_configs = import 'github.com/grafana/jsonnet-libs/prometheus/scrape_configs.libsonnet';
 local kubernetes_mixin = import 'github.com/kubernetes-monitoring/kubernetes-mixin/mixin.libsonnet';
@@ -365,6 +367,25 @@ local rfrail_node_exporter_full_dashboard = import 'github.com/rfrail3/grafana-d
       ),
   },
 
+  withPushGateway():: {
+    local this = self,
+    pushgateway:
+      pushgateway.new(self.namespace),
+
+    prometheus+:
+      prometheus.addScrapeConfig(
+        pushgateway_scrape_config(self.namespace)
+      ),
+
+    admin_services+: [{
+      title: 'Pushgateway',
+      path: 'pushgateway',
+      url:
+        this.pushgateway.external_hostname
+        + this.pushgateway.path,
+    }],
+  },
+
   withDirectory():: {
     local this = self,
     directory:
@@ -381,6 +402,7 @@ local rfrail_node_exporter_full_dashboard = import 'github.com/rfrail3/grafana-d
     self.new(namespace='default')
     + self.withGrafana()
     + self.withPrometheus()
+    + self.withPushGateway()
     + self.withDirectory()
     + self.withKubernetesScrapeConfigs()
     + self.withKubernetesMixin()

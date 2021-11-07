@@ -59,10 +59,19 @@
       "source": {
         "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "prom-pushgateway"
+        }
+      },
+      "version": "a9c9f8b3cfe8be92986149cbf7e92b0c6b00b597"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "prometheus"
         }
       },
-      "version": "master"
+      "version": "c1424534ef4024f0482179e0f3a1da34caa3da4d"
     },
     {
       "source": {
