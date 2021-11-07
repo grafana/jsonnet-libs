@@ -36,14 +36,6 @@ function(namespace) {
       replacement: '$1',
     },
 
-    // Map all K8s labels/annotations starting with
-    // 'prometheus.io/param-' to URL params for Prometheus scraping.
-    {
-      regex: '__meta_kubernetes_pod_annotation_prometheus_io_param_(.+)',
-      action: 'labelmap',
-      replacement: '__param_$1',
-    },
-
     // Rename jobs to be <namespace>/<name, from pod name label>.
     {
       source_labels: ['__meta_kubernetes_namespace', '__meta_kubernetes_pod_label_name'],
