@@ -12,6 +12,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     run_as_gid=65534,
     image='prom/pushgateway:v1.4.1',
   ):: {
+    local this = self,
+
     external_hostname::
       'http://'
       + std.join('.', [
@@ -53,7 +55,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       + statefulSet.spec.template.spec.securityContext.withRunAsGroup(run_as_gid)
       + statefulSet.spec.template.spec.securityContext.withFsGroup(run_as_uid)
       + statefulSet.spec.template.metadata.withAnnotationsMixin({
-        'prometheus.io.path': '%smetrics' % self.path,
+        'prometheus.io.path': '%smetrics' % this.path,
         'prometheus.io.scrape': 'false',
       }),
 
