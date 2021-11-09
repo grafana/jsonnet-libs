@@ -148,6 +148,6 @@ local deployment = k.apps.v1.deployment;
 
     k.util.volumeMounts(mounts)
     + deployment.mixin.spec.template.metadata.withAnnotationsMixin({
-      'dashboards-hash': std.md5(std.toString($.grafanaDashboardFolders)),
+      'grafana-dashboards-hash': std.md5(std.toString($.grafanaDashboardFolders)),
     }),
 }
