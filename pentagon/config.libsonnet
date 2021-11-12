@@ -14,7 +14,7 @@
   },
 
   _images+:: {
-    pentagon: 'grafana/pentagon:53',
+    pentagon: 'grafana/pentagon:59',
   },
 
   pentagonKVMapping(path, secret, type='kv-v2', keepLabels=false, keepAnnotations=false):: {
