@@ -14,22 +14,21 @@
   },
 
   _images+:: {
-    pentagon: 'grafana/pentagon:41',
+    pentagon: 'grafana/pentagon:53',
   },
 
-  pentagonKVMapping(path, secret, type='kv-v2'):: {
+  pentagonKVMapping(path, secret, type='kv-v2', keepLabels=false, keepAnnotations=false):: {
     vaultPath: path,
     secretName: secret,
     vaultEngineType: type,
+    // We don't need to add the options if they aren't true, they default to false
+    [if keepLabels then 'keepLabels']: true,
+    [if keepAnnotations then 'keepAnnotations']: true,
   },
 
-  addPentagonMapping(path, secret, type='kv-v2'):: {
+  addPentagonMapping(path, secret, type='kv-v2', keepLabels=false, keepAnnotations=false):: {
     pentagon_mappings_map+: {
-      [secret]+: {
-        vaultPath: path,
-        secretName: secret,
-        vaultEngineType: type,
-      },
+      [secret]+: this.pentagonKVMapping(path, secret, type, keepLabels, keepAnnotations),
     },
   },
 
