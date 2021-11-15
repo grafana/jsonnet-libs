@@ -57,7 +57,7 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
         k.core.v1.containerPort.new('http-metrics', port),
       ])
       + container.withEnvMixin([
-        k.core.v1.envVar.new('REGISTRY_HTTP_DEBUG_ADDR', 'localhost:%d' % port),
+        k.core.v1.envVar.new('REGISTRY_HTTP_DEBUG_ADDR', ':%d' % port),
         k.core.v1.envVar.new('REGISTRY_HTTP_DEBUG_PROMETHEUS_ENABLED', 'true'),
         k.core.v1.envVar.new('REGISTRY_HTTP_DEBUG_PROMETHEUS_PATH', '/metrics'),
       ]),
