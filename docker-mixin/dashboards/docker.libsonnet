@@ -212,51 +212,51 @@ local disk_usage_panel = g.tablePanel(
         container_template,
       ])
 
-      # Overview Row
+      // Overview Row
       .addRow(
         grafana.row.new('Overview')
-        # Total containers
+        // Total containers
         .addPanel(total_containers_panel)
 
-        # Total images
+        // Total images
         .addPanel(total_images_panel)
 
-        # Host CPU used by containers
+        // Host CPU used by containers
         .addPanel(cpu_usage_panel)
 
-        # Host memory reserved by containers
+        // Host memory reserved by containers
         .addPanel(mem_reserved_panel)
 
-        # Host memory utilization by containers
+        // Host memory utilization by containers
         .addPanel(mem_usage_panel)
       )
 
-      # Compute Row
+      // Compute Row
       .addRow(
         grafana.row.new('Compute')
-        # CPU by container
+        // CPU by container
         .addPanel(cpu_by_container_panel)
 
-        # Memory by container
+        // Memory by container
         .addPanel(mem_by_container_panel)
       )
 
-      # Network Row
+      // Network Row
       .addRow(
         grafana.row.new('Network')
 
-        # Network throughput
+        // Network throughput
         .addPanel(net_throughput_panel)
 
-        # TCP Socket by state
+        // TCP Socket by state
         .addPanel(tcp_socket_by_state_panel)
       )
 
-      # Storage Row
+      // Storage Row
       .addRow(
         grafana.row.new('Storage')
 
-        # Disk
+        // Disk
         .addPanel(disk_usage_panel)
       ) +
       { graphTooltip: 2 },  // Shared tooltip. When you hover over a graph, the same time is selected on all graphs, and tooltip is shown. Set to 1 to only share crosshair
