@@ -1,14 +1,14 @@
 # Dockerfile for image used to run CI.
 
 # Build jsonnet
-FROM alpine:3.7 AS jsonnet-builder
+FROM alpine:3.14 AS jsonnet-builder
 RUN apk --no-cache add alpine-sdk git
 RUN git clone https://github.com/google/jsonnet
-RUN git  -C jsonnet checkout v0.15.0
+RUN git  -C jsonnet checkout v0.17.0
 RUN make -C jsonnet LDFLAGS=-static
 
 # Build jb
-FROM alpine:3.11 AS jb-builder
+FROM alpine:3.14 AS jb-builder
 ARG JSONNET_BUNDLER_VERSION=0.4.0
 ARG JSONNET_BUNDLER_CHECKSUM="433edab5554a88a0371e11e93080408b225d41c31decf321c02b50d2e44993ce  /usr/bin/jb"
 RUN apk add --no-cache curl
@@ -17,11 +17,11 @@ RUN echo "${JSONNET_BUNDLER_CHECKSUM}" | sha256sum -c || (printf "wanted: %s\n  
 RUN chmod +x /usr/bin/jb
 
 # Build mixtool
-FROM golang:1.15-alpine AS mixtool-builder
-RUN GO111MODULE=on go get github.com/monitoring-mixins/mixtool/cmd/mixtool@ae18e31161ea
+FROM golang:1.17-alpine AS mixtool-builder
+RUN go install github.com/monitoring-mixins/mixtool/cmd/mixtool@0d5bd3c
 
-FROM alpine:3.7
-RUN apk --no-cache add make python git openssh-client bash
+FROM alpine:3.14
+RUN apk --no-cache add make python3 git openssh-client bash
 COPY --from=jsonnet-builder jsonnet/jsonnet /usr/bin
 COPY --from=jsonnet-builder jsonnet/jsonnetfmt /usr/bin
 COPY --from=jb-builder /usr/bin/jb /usr/bin
