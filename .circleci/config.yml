@@ -2,7 +2,7 @@ version: 2
 
 defaults: &defaults
   docker:
-    - image: grafana/jsonnet-build:3989b8d
+    - image: docker.io/grafana/jsonnet-build:4fd8fef
 
 workflows:
   version: 2
