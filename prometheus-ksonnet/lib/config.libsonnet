@@ -7,6 +7,7 @@
     namespace: error 'must specify namespace',
     alertmanager_namespace: self.namespace,
     node_exporter_namespace: self.namespace,
+    kube_state_metrics_namespace: self.namespace,
 
     // Grafana config options.
     grafana_root_url: 'http://nginx.%(namespace)s.svc.%(cluster_dns_suffix)s/grafana' % self,

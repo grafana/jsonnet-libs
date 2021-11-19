@@ -20,7 +20,7 @@ local kube_state_metrics = import 'kube-state-metrics/main.libsonnet';
 
   prometheus_config+:: {
     scrape_configs+: [
-      kube_state_metrics.scrape_config($._config.namespace),
+      kube_state_metrics.scrape_config($._config.kube_state_metrics_namespace),
     ],
   },
 }

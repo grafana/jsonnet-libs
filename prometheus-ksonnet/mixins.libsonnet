@@ -32,7 +32,7 @@
         _config+:: {
           cadvisorSelector: 'job="kube-system/cadvisor"',
           kubeletSelector: 'job="kube-system/kubelet"',
-          kubeStateMetricsSelector: 'job="%s/kube-state-metrics"' % $._config.namespace,
+          kubeStateMetricsSelector: 'job="%s/kube-state-metrics"' % $._config.kube_state_metrics_namespace,
           nodeExporterSelector: 'job="%s/node-exporter"' % $._config.node_exporter_namespace,  // Also used by node-mixin.
           notKubeDnsSelector: 'job!="kube-system/kube-dns"',
           kubeSchedulerSelector: 'job="kube-system/kube-scheduler"',
