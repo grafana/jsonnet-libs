@@ -1,4 +1,3 @@
-(import 'ksonnet-util/kausal.libsonnet') +
 (import 'images.libsonnet') +
 (import 'grafana/grafana.libsonnet') +
 (import 'lib/datasources.libsonnet') +
