@@ -1,3 +1,4 @@
+local k = import 'ksonnet-util/kausal.libsonnet';
 local kube_state_metrics = import 'kube-state-metrics/main.libsonnet';
 
 {
@@ -12,11 +13,11 @@ local kube_state_metrics = import 'kube-state-metrics/main.libsonnet';
 
   kube_state_metrics_deployment:
     ksm.deployment
-    + $.apps.v1.deployment.spec.template.spec.withContainers([$.kube_state_metrics_container])
-    + $.util.podPriority('critical'),
+    + k.apps.v1.deployment.spec.template.spec.withContainers([$.kube_state_metrics_container])
+    + k.util.podPriority('critical'),
 
   kube_state_metrics_service:
-    $.util.serviceFor($.kube_state_metrics_deployment),
+    k.util.serviceFor($.kube_state_metrics_deployment),
 
   prometheus_config+:: {
     scrape_configs+: [
