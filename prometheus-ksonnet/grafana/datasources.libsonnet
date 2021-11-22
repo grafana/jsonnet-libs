@@ -1,5 +1,5 @@
 local grafana = import 'grafana/grafana.libsonnet';
-local k = import 'k.libsonnet';
+local k = import 'ksonnet-util/kausal.libsonnet';
 local datasource = grafana.datasource;
 {
   local configMap = k.core.v1.configMap,
@@ -28,7 +28,7 @@ local datasource = grafana.datasource;
   */
   grafana_add_datasource(name, url, default=false, method='GET')::
     configMap.withDataMixin({
-      ['%s.yml' % name]: $.util.manifestYaml({
+      ['%s.yml' % name]: k.util.manifestYaml({
         apiVersion: 1,
         datasources: [$.grafana_datasource(name, url, default, method)],
       }),
@@ -50,7 +50,7 @@ local datasource = grafana.datasource;
   */
   grafana_add_datasource_with_basicauth(name, url, username, password, default=false, method='GET', type='prometheus')::
     configMap.withDataMixin({
-      ['%s.yml' % name]: $.util.manifestYaml({
+      ['%s.yml' % name]: k.util.manifestYaml({
         apiVersion: 1,
         datasources: [$.grafana_datasource_with_basicauth(name, url, username, password, default, method, type)],
       }),
@@ -63,7 +63,7 @@ local datasource = grafana.datasource;
         if std.isString($.grafanaDatasources[name]) then
           $.grafanaDatasources[name]
         else
-          $.util.manifestYaml({
+          k.util.manifestYaml({
             apiVersion: 1,
             datasources: [$.grafanaDatasources[name]],
           })
