@@ -1,4 +1,5 @@
 local node_exporter = import 'github.com/grafana/jsonnet-libs/node-exporter/main.libsonnet';
+local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
   local exporter =
@@ -11,7 +12,7 @@ local node_exporter = import 'github.com/grafana/jsonnet-libs/node-exporter/main
 
   node_exporter_daemonset:
     (exporter { container:: $.node_exporter_container }).daemonset
-    + $.util.podPriority('critical'),
+    + k.util.podPriority('critical'),
 
   prometheus_config+:: {
     scrape_configs+: [
