@@ -14,10 +14,10 @@
                   record: 'node_namespace_pod:kube_pod_info:',
                   expr: |||
                     max by(node, namespace, instance) (
-                      label_replace(kube_pod_info{job="default/kube-state-metrics"}
+                      label_replace(kube_pod_info{job="%(kube_state_metrics_namespace)s/kube-state-metrics"}
                       , "instance", "$1", "node", "(.*)")
                     )
-                  |||,
+                  ||| % $._config,
                 },
               ],
             },
