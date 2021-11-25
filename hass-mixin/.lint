@@ -1,0 +1,3 @@
+exclusions:
+    panel-promql-rule:
+        reason: "Dashboard uses templates to build joins."
