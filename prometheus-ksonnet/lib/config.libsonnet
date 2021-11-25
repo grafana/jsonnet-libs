@@ -6,6 +6,7 @@
     cluster_name: error 'must specify cluster name',
     namespace: error 'must specify namespace',
     alertmanager_namespace: self.namespace,
+    grafana_namespace: self.namespace,
     node_exporter_namespace: self.namespace,
     kube_state_metrics_namespace: self.namespace,
 
