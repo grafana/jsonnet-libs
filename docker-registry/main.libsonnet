@@ -7,6 +7,7 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
     image='registry:2',
     disk_size='5Gi',
     port=5000,
+    replicas=1,
   ): {
     local this = self,
 
@@ -34,7 +35,7 @@ local k_util = import 'github.com/grafana/jsonnet-libs/ksonnet-util/util.libsonn
     statefulset:
       statefulset.new(
         name,
-        replicas=1,
+        replicas=replicas,
         containers=[this.container],
         volumeClaims=[this.pvc]
       )
