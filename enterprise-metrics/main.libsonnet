@@ -50,6 +50,15 @@ local cortex =
       // TODO: upstream this to github.com/grafana/cortex-jsonnet/cortex/gossip.libsonnet.
       'distributor.ring.store': 'memberlist',
     },
+    ingester_args+:: {
+      // Disable deprecated chunk storage engine options set by cortex-jsonnet
+      'ingester.chunk-encoding':: null,
+      'ingester.max-chunk-age':: null,
+      'ingester.max-chunk-idle':: null,
+      'ingester.max-stale-chunk-idle':: null,
+      'ingester.max-transfer-retries':: null,
+      'ingester.retain-period':: null,
+    },
     querier_args+:: {
       // Memberlist gossip is used instead of consul for the ring.
       'store-gateway.sharding-ring.consul.hostname':: null,
