@@ -97,6 +97,9 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       '--web.route-prefix=%s' % _config.prometheus_web_route_prefix,
       '--storage.tsdb.path=/prometheus/data',
       '--storage.tsdb.wal-compression',
+      (if std.length(_config.prometheus_enabled_features) != 0
+       then '--enable-feature=%s' % std.join(',', _config.prometheus_enabled_features)
+       else ''),
     ])
     + k.util.resourcesRequests(_config.prometheus_requests_cpu,
                                _config.prometheus_requests_memory)
