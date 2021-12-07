@@ -1030,8 +1030,8 @@
       {
         "current": {
           "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "description": null,
         "error": null,
