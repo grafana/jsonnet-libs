@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 66,
-  "iteration": 1638554350020,
+  "id": 2,
+  "iteration": 1638910441248,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -88,11 +88,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "targets": [
         {
           "exemplar": true,
-          "expr": "metrics_spark_app_driver_DAGScheduler_job_allJobs_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"}",
+          "expr": "metrics_spark_app_driver_DAGScheduler_job_allJobs_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"}",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -165,10 +165,10 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "targets": [
         {
-          "expr": "metrics_spark_app_driver_DAGScheduler_job_activeJobs_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"}",
+          "expr": "metrics_spark_app_driver_DAGScheduler_job_activeJobs_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"}",
           "refId": "A"
         }
       ],
@@ -239,10 +239,10 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "targets": [
         {
-          "expr": "metrics_master_workers_Number{instance_type=\"master\", job=\"spark-master\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_master_workers_Number{instance_type=\"master\", job=\"integrations/spark-master\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "maxMem_MB",
           "refId": "A"
         }
@@ -314,10 +314,10 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "targets": [
         {
-          "expr": "metrics_master_workers_Number{instance_type=\"master\", job=\"spark-master\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_master_workers_Number{instance_type=\"master\", job=\"integrations/spark-master\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "maxMem_MB",
           "refId": "A"
         }
@@ -389,10 +389,10 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "targets": [
         {
-          "expr": "metrics_worker_coresFree_Number{instance_type=\"worker\", job=\"spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_worker_coresFree_Number{instance_type=\"worker\", job=\"integrations/spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "maxMem_MB",
           "refId": "A"
         }
@@ -464,7 +464,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "targets": [
         {
           "expr": "metrics_worker_coresUsed_Number{instance_type=\"worker\", job=\"spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
@@ -516,7 +516,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -526,17 +526,17 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "metrics_spark_app_driver_DAGScheduler_stage_runningStages_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_DAGScheduler_stage_runningStages_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "Running Stages",
           "refId": "A"
         },
         {
-          "expr": "metrics_spark_app_driver_DAGScheduler_stage_waitingStages_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_DAGScheduler_stage_waitingStages_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "Waiting Stages",
           "refId": "B"
         },
         {
-          "expr": "metrics_spark_app_driver_DAGScheduler_stage_failedStages_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_DAGScheduler_stage_failedStages_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "Failed Stages",
           "refId": "C"
         }
@@ -621,7 +621,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -632,23 +632,23 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Max{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Max{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "interval": "",
           "legendFormat": "Max",
           "refId": "A"
         },
         {
-          "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Min{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Min{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "Min",
           "refId": "B"
         },
         {
-          "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Mean{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_Mean{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "Mean",
           "refId": "C"
         },
         {
-          "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_StdDev{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_DAGScheduler_messageProcessingTime_StdDev{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "StdDev",
           "refId": "D"
         }
@@ -733,7 +733,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -743,22 +743,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "metrics_spark_app_driver_BlockManager_memory_maxMem_MB_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_BlockManager_memory_maxMem_MB_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "maxMem_MB",
           "refId": "A"
         },
         {
-          "expr": "metrics_spark_app_driver_BlockManager_disk_diskSpaceUsed_MB_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_BlockManager_disk_diskSpaceUsed_MB_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "diskSpaceUsed_MB",
           "refId": "D"
         },
         {
-          "expr": "metrics_spark_app_driver_BlockManager_memory_maxOnHeapMem_MB_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_BlockManager_memory_maxOnHeapMem_MB_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "maxOnHeapMem_MB",
           "refId": "B"
         },
         {
-          "expr": "metrics_spark_app_driver_BlockManager_memory_maxOffHeapMem_MB_Number{instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"} ",
+          "expr": "metrics_spark_app_driver_BlockManager_memory_maxOffHeapMem_MB_Number{instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"} ",
           "legendFormat": "maxOffHeapMem_MB",
           "refId": "C"
         }
@@ -845,7 +845,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -947,7 +947,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.4",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -957,22 +957,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Count{type=\"timers\", instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Count{type=\"timers\", instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "Count",
           "refId": "A"
         },
         {
-          "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Max{type=\"timers\", instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Max{type=\"timers\", instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "Max",
           "refId": "B"
         },
         {
-          "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Mean{type=\"timers\", instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Mean{type=\"timers\", instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "Mean",
           "refId": "C"
         },
         {
-          "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Min{type=\"timers\", instance_type=\"driver\", job=\"spark-driver\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_spark_app_driver_LiveListenerBus_listenerProcessingTime_org_apache_spark_HeartbeatReceiver_Min{type=\"timers\", instance_type=\"driver\", job=\"integrations/spark-driver\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "Min",
           "refId": "D"
         }
@@ -1019,23 +1019,25 @@
       }
     }
   ],
-  "refresh": false,
+  "refresh": "30s",
   "schemaVersion": 32,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "spark-integration"
+  ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -1075,7 +1077,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -1095,5 +1097,5 @@
   "timezone": "",
   "title": "Apache Spark Metrics",
   "uid": "EWIYh-OMz",
-  "version": 4
+  "version": 2
 }
