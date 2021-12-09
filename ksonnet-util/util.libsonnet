@@ -11,12 +11,11 @@ local util(k) = {
 
   // mapToFlags converts a map to a set of golang-style command line flags.
   // if check=true, it will check for 'foo' and '-foo' presence, failing in that case.
-  mapToFlags(map, prefix='-', check=true):
-    if check then $.checkFlagsMap(map, prefix) else [] + [
-      '%s%s=%s' % [prefix, key, map[key]]
-      for key in std.objectFields(map)
-      if map[key] != null
-    ],
+  mapToFlags(map, prefix='-', check=true): [
+    '%s%s=%s' % [prefix, key, map[key]]
+    for key in std.objectFields(map)
+    if map[key] != null
+  ] + if check then $.checkFlagsMap(map, prefix) else [],
 
   // serviceFor create service for a given deployment.
   serviceFor(deployment, ignored_labels=[], nameFormat='%(container)s-%(port)s')::
