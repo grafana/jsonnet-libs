@@ -27,6 +27,9 @@
         users: {
           default_theme: 'light',
         },
+        'log.frontend': {
+          enabled: true,
+        },
       },
     },
   },
