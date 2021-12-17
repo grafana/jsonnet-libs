@@ -88,7 +88,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
     + container.withPorts([
       k.core.v1.containerPort.new('http-metrics', _config.prometheus_port),
     ])
-    + container.withArgs([
+    + container.withArgs(std.prune([
       '--config.file=' + _config.prometheus_config_file,
       '--web.listen-address=:%s' % _config.prometheus_port,
       '--web.external-url=%(prometheus_external_hostname)s%(prometheus_path)s' % _config,
@@ -99,8 +99,8 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       '--storage.tsdb.wal-compression',
       (if std.length(_config.prometheus_enabled_features) != 0
        then '--enable-feature=%s' % std.join(',', _config.prometheus_enabled_features)
-       else ''),
-    ])
+       else null),
+    ]))
     + k.util.resourcesRequests(_config.prometheus_requests_cpu,
                                _config.prometheus_requests_memory)
     + k.util.resourcesLimits(_config.prometheus_limits_cpu,
