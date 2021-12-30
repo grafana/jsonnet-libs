@@ -7,6 +7,7 @@ local prometheus = grafana.prometheus;
 
     local nsqSelector = 'job="$job", instance=~"$instance"',
     local nsqTopicSelector = nsqSelector + ',topic=~"$topic"',
+    local nsqChannelSelector = nsqTopicSelector+ ',channel=~"$channel"',
     local nsqHeapMemory =
       grafana.graphPanel.new(
         'Heap memory',
@@ -114,8 +115,10 @@ local prometheus = grafana.prometheus;
 
     local nsqTopics =
       grafana.graphPanel.new(
-        'Topics',
+        'Topic $topic messages',
         datasource='$datasource',
+        repeat="topic",
+        repeatDirection='v'
       )
       .addTarget(prometheus.target(expr='avg by (topic) (rate(nsq_topic_message_count{%s}[$__rate_interval]))' % nsqTopicSelector, intervalFactor=1, legendFormat='{{topic}} rps'))
       .addTarget(prometheus.target(expr='sum by () (rate(nsq_topic_message_count{%s}[$__rate_interval]))' % nsqTopicSelector, intervalFactor=1, legendFormat='selected topics Bps rate'))
@@ -184,11 +187,72 @@ local prometheus = grafana.prometheus;
 
     local nsqTopicsDepth =
       grafana.graphPanel.new(
-        'Topics depth',
+        'Topic $topic depth',
         datasource='$datasource',
+        repeat="topic",
+        repeatDirection='v'
       )
-      .addTarget(prometheus.target(expr='nsq_topic_depth{%s}' % nsqTopicSelector, intervalFactor=1, legendFormat='{{ instance }} {{topic}} memory depth'))
+      .addTarget(prometheus.target(expr='nsq_topic_depth{%s}' % nsqTopicSelector, intervalFactor=1, legendFormat='{{ instance }} {{topic}} depth'))
       .addTarget(prometheus.target(expr='nsq_topic_backend_depth{%s}' % nsqTopicSelector, intervalFactor=1, legendFormat='{{ instance }} {{topic}} memory+disk depth'))
+      + {
+        type: 'timeseries',
+        options+: {
+          tooltip: {
+            mode: 'multi',
+          },
+        },
+        fieldConfig+: {
+          defaults+: {
+            custom+: {
+              lineInterpolation: 'smooth',
+              fillOpacity: 0,
+              showPoints: 'never',
+            },
+            unit: 'short',
+          },
+        },
+      },
+
+    local nsqChannelClients =
+      grafana.graphPanel.new(
+        'Channel $channel clients',
+        datasource='$datasource',
+        repeat="channel",
+        repeatDirection='v'
+      )
+      .addTarget(prometheus.target(expr='nsq_topic_channel_clients{%s}' % nsqChannelSelector, intervalFactor=1, legendFormat='{{topic}}/{{channel}}'))
+
+      + {
+        type: 'timeseries',
+        options+: {
+          tooltip: {
+            mode: 'multi',
+          },
+        },
+        fieldConfig+: {
+          defaults+: {
+            custom+: {
+              lineInterpolation: 'smooth',
+              fillOpacity: 0,
+              showPoints: 'never',
+            },
+          },
+        },
+      },
+
+    local nsqChannelStats =
+      grafana.graphPanel.new(
+        'Channel $channel stats',
+        datasource='$datasource',
+        repeat="channel",
+        repeatDirection='v'
+      )
+      .addTarget(prometheus.target(expr='nsq_topic_channel_depth{%s}' % nsqChannelSelector, intervalFactor=1, legendFormat='{{topic}}/{{channel}} depth'))
+      .addTarget(prometheus.target(expr='nsq_topic_channel_backend_depth{%s}' % nsqChannelSelector, intervalFactor=1, legendFormat='{{topic}}/{{channel}} memory+disk depth'))
+      .addTarget(prometheus.target(expr='nsq_topic_channel_in_flight_count{%s}' % nsqChannelSelector, intervalFactor=1, legendFormat='{{topic}}/{{channel}} in-flight'))
+      .addTarget(prometheus.target(expr='rate(nsq_topic_channel_requeue_count{%s}[$__rate_interval])' % nsqChannelSelector, intervalFactor=1, legendFormat='{{topic}}/{{channel}} requeue'))
+      .addTarget(prometheus.target(expr='rate(nsq_topic_channel_timeout_count{%s}[$__rate_interval])' % nsqChannelSelector, intervalFactor=1, legendFormat='{{topic}}/{{channel}} timeout'))
+      .addTarget(prometheus.target(expr='nsq_topic_channel_deferred_count{%s}' % nsqChannelSelector, intervalFactor=1, legendFormat='{{topic}}/{{channel}} deferred'))
       + {
         type: 'timeseries',
         options+: {
@@ -256,7 +320,7 @@ local prometheus = grafana.prometheus;
           multi: true,
           options: [],
           query: 'label_values(nsq_topic_message_count{job="$job"},instance)',
-          refresh: 1,
+          refresh: 2,
           regex: '',
           type: 'query',
         },
@@ -270,19 +334,35 @@ local prometheus = grafana.prometheus;
           multi: true,
           options: [],
           query: 'label_values(nsq_topic_message_count{job="$job",instance=~"$instance"},topic)',
-          refresh: 1,
+          refresh: 2,
+          regex: '',
+          type: 'query',
+        },
+      )
+      .addTemplate(
+        {
+          hide: 0,
+          label: null,
+          name: 'channel',
+          includeAll: true,
+          multi: true,
+          options: [],
+          query: 'label_values(nsq_topic_channel_message_count{job="$job",instance=~"$instance",topic=~"$topic"},channel)',
+          refresh: 2,
           regex: '',
           type: 'query',
         },
       )
       .addPanel(grafana.row.new(title='Topics'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
-      .addPanel(nsqTopics, gridPos={ x: 0, y: 0, w: 24, h: 12 })
-      .addPanel(nsqTopicsDepth, gridPos={ x: 0, y: 12, w: 24, h: 12 })
+      .addPanel(nsqTopics, gridPos={ x: 0, y: 0, w: 12, h: 8 })
+      .addPanel(nsqTopicsDepth, gridPos={ x: 12, y: 0, w: 12, h: 8 })
+      .addPanel(grafana.row.new(title='Channels'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
+      .addPanel(nsqChannelClients, gridPos={ x: 0, y: 16, w: 12, h: 8 })
+      .addPanel(nsqChannelStats, gridPos={ x: 12, y: 16, w: 12, h: 8 })
       .addPanel(grafana.row.new(title='Memory'), gridPos={ x: 0, y: 24, w: 0, h: 0 })
-      .addPanel(nsqHeapMemory, gridPos={ x: 0, y: 24, w: 12, h: 12 })
-      .addPanel(nsqHeapObjects, gridPos={ x: 12, y: 36, w: 12, h: 12 })
-      .addPanel(nsqNextGC, gridPos={ x: 0, y: 48, w: 12, h: 12 })
-      .addPanel(nsqGCpause, gridPos={ x: 12, y: 60, w: 12, h: 12 }),
-
+      .addPanel(nsqHeapMemory, gridPos={ x: 0, y: 24, w: 12, h: 8 })
+      .addPanel(nsqHeapObjects, gridPos={ x: 12, y: 36, w: 12, h: 8 })
+      .addPanel(nsqNextGC, gridPos={ x: 0, y: 48, w: 12, h: 8 })
+      .addPanel(nsqGCpause, gridPos={ x: 12, y: 60, w: 12, h: 8 }),
   },
 }
