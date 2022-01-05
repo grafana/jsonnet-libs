@@ -1,7 +1,7 @@
 local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet';
 
 {
-  new(image='prom/node-exporter:v1.2.2'):: {
+  new(image='prom/node-exporter:v1.3.1'):: {
     ignored_fs_types:: [
       'tmpfs',
       'autofs',
