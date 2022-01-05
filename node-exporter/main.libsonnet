@@ -40,8 +40,8 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
 
         // Reduces cardinality by ignoring a few devices, fs-types and mount-points.
         '--collector.netdev.device-exclude=^veth.+$',
-        '--collector.filesystem.ignored-fs-types=^(%s)$' % std.join('|', self.ignored_fs_types),
-        '--collector.filesystem.ignored-mount-points=^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)',
+        '--collector.filesystem.fs-types-exclude=^(%s)$' % std.join('|', self.ignored_fs_types),
+        '--collector.filesystem.mount-points-exclude=^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)',
       ])
       + container.mixin.securityContext.withPrivileged(true)
       + container.mixin.securityContext.withRunAsUser(0)
