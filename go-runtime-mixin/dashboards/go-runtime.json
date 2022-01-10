@@ -283,19 +283,19 @@
         {
           "expr": "avg by (job)(go_memstats_mspan_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: mspan (avg)",
+          "legendFormat": "{{job}}: mspan (avg)",
           "refId": "B"
         },
         {
           "expr": "avg by (job)(go_memstats_mcache_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: mcache (avg)",
+          "legendFormat": "{{job}}: mcache (avg)",
           "refId": "D"
         },
         {
           "expr": "avg by (job)(go_memstats_buck_hash_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{instance}}: buck hash (avg)",
+          "legendFormat": "{{job}}: buck hash (avg)",
           "refId": "E"
         },
         {
@@ -405,24 +405,6 @@
           "interval": "",
           "legendFormat": "{{job}}: heap in use (avg)",
           "refId": "A"
-        },
-        {
-          "expr": "avg by (job)(go_memstats_heap_alloc_bytes{job=~\"tns_app\",instance=~\".*\"})",
-          "interval": "",
-          "legendFormat": "{{job}}: heap alloc (avg)",
-          "refId": "C"
-        },
-        {
-          "expr": "avg by (job)(go_memstats_heap_idle_bytes{job=~\"tns_app\",instance=~\".*\"})",
-          "interval": "",
-          "legendFormat": "{{job}}: heap idle (avg)",
-          "refId": "D"
-        },
-        {
-          "expr": "avg by (job)(go_memstats_heap_released_bytes{job=~\"tns_app\",instance=~\".*\"})",
-          "interval": "",
-          "legendFormat": "{{job}}: heap released (avg)",
-          "refId": "E"
         }
       ],
       "thresholds": [],
@@ -934,7 +916,7 @@
       },
       "yaxes": [
         {
-          "format": "ms",
+          "format": "s",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1006,7 +988,7 @@
         {
           "expr": "avg by (job)(go_memstats_next_gc_bytes{job=\"$job\", instance=~\"$instance\"})",
           "interval": "",
-          "legendFormat": "{{job}} next gc bytes (avg)",
+          "legendFormat": "{{job}}: next gc bytes (avg)",
           "refId": "A"
         }
       ],
