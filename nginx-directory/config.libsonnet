@@ -31,6 +31,9 @@
     nginx_proxy_read_timeout: '60',
     // Nginx proxy_send_timeout (in seconds) 60s is the nginx default
     nginx_proxy_send_timeout: '60',
+
+    // If true, the entries will be sorted by title
+    nginx_directory_sorted: false,
   },
 
   _images+:: {
