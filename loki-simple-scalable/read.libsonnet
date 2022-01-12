@@ -8,7 +8,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
   local service = k.core.v1.service,
 
   _config+:: {
-    read_replicas: 3
+    read_replicas: 3,
   },
 
   // Use PVC for queriers instead of node disk.
