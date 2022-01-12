@@ -6,20 +6,35 @@ local graphPanel = grafana.graphPanel;
 local piechart = grafana.pieChartPanel;
 local singlestat = grafana.singlestat;
 local statPanel = grafana.statPanel;
+local jt = import 'jobTable.libsonnet';
+
+local dashboardUid = 'Mkm2KHPzS';
 
 local matcher = 'job=~"$job", instance=~"$instance"';
 
 local queries = {
+  fdir_deleted_total: 'sum(increase(rclone_dirs_deleted_total{' + matcher + '}[$__range]))',
   fchecked_total: 'sum(increase(rclone_checked_files_total{' + matcher + '}[$__range]))',
   ftransferred_total: 'sum(increase(rclone_files_transferred_total{' + matcher + '}[$__range]))',
   frenamed_total: 'sum(increase(rclone_files_renamed_total{' + matcher + '}[$__range]))',
   fdeleted_total: 'sum(increase(rclone_files_deleted_total{' + matcher + '}[$__range]))',
   err_total: 'sum(increase(rclone_errors_total{' + matcher + '}[$__range]))',
+  
+  fdir_deleted_irate: 'sum(irate(rclone_dirs_deleted_total{' + matcher + '}[$__rate_interval]))',
+  fchecked_irate: 'sum(irate(rclone_checked_files_total{' + matcher + '}[$__rate_interval]))',
+  ftransferred_irate: 'sum(irate(rclone_files_transferred_total{' + matcher + '}[$__rate_interval]))',
+  frenamed_irate: 'sum(irate(rclone_files_renamed_total{' + matcher + '}[$__rate_interval]))',
+  fdeleted_irate: 'sum(irate(rclone_files_deleted_total{' + matcher + '}[$__rate_interval]))',
+  err_irate: 'sum(irate(rclone_errors_total{' + matcher + '}[$__rate_interval]))',
+
   bytes_transferred_rate_sum: 'sum(irate(rclone_bytes_transferred_total{' + matcher + '}[$__rate_interval]))',
   bytes_transferred_range: 'sum(increase(rclone_bytes_transferred_total{' + matcher + '}[$__range]))',
   bytes_transferred_day: 'sum(increase(rclone_bytes_transferred_total{' + matcher + '}[24h]))',
   bytes_transferred_total: 'sum(rclone_bytes_transferred_total{' + matcher + '})',
   bytes_transferred_rate_ts: 'sum(irate(rclone_bytes_transferred_total{' + matcher + '}[$__rate_interval])) by (instance)',
+
+  starttime: 'min_over_time(timestamp(rclone_speed{job=~"$job"})[48h:]) * 1000',
+  endtime: 'max_over_time(timestamp(rclone_speed{job=~"$job"})[48h:]) * 1000',
 };
 
 // Templates
@@ -42,6 +57,7 @@ local job_template = grafana.template.new(
   'job',
   '$datasource',
   'label_values(rclone_speed, job)',
+  label='job',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -65,6 +81,7 @@ local statusPiePanel = piechart.new('Status', span=5, datasource='$datasource', 
                        .addTarget(grafana.prometheus.target(queries.ftransferred_total, legendFormat='Files Transferred'))
                        .addTarget(grafana.prometheus.target(queries.frenamed_total, legendFormat='Files Renamed'))
                        .addTarget(grafana.prometheus.target(queries.fdeleted_total, legendFormat='Files Deleted'))
+                       .addTarget(grafana.prometheus.target(queries.fdir_deleted_total, legendFormat='Directories Deleted'))
                        .addTarget(grafana.prometheus.target(queries.err_total, legendFormat='Transfer Errors'));
 
 local transferGauge = singlestat.new(
@@ -92,9 +109,9 @@ local transferredStat = statPanel.new(
                         .addThreshold({ color: 'green', value: 0 }) { span: 5 };
 
 local transferGraph = graphPanel.new(
-    'Traffic',
+    'Traffic Rate',
     datasource='$datasource',
-    span=12,
+    span=6,
     stack=true,
     format='bps',
 )
@@ -105,10 +122,30 @@ local transferGraph = graphPanel.new(
   fillGradient: 10,
 };
 
+local statusGraph = graphPanel.new(
+  'State Rates',
+  datasource='$datasource',
+  span=6,
+)
+.addTargets([
+  grafana.prometheus.target(queries.fchecked_irate, legendFormat='Files Checked'),
+  grafana.prometheus.target(queries.ftransferred_irate, legendFormat='Files Transferred'),
+  grafana.prometheus.target(queries.frenamed_irate, legendFormat='Files Renamed'),
+  grafana.prometheus.target(queries.fdeleted_irate, legendFormat='Files Deleted'),
+  grafana.prometheus.target(queries.fdir_deleted_irate, legendFormat='Directories Deleted'),
+  grafana.prometheus.target(queries.err_irate, legendFormat='Transfer Errors'),
+]);
+
+local jobsTable = jt.new('$datasource', dashboardUid)
+.addTargets([
+  grafana.prometheus.target(queries.starttime, format='table'),
+  grafana.prometheus.target(queries.endtime, format='table'),
+]);
+
 {
   grafanaDashboards+:: {
     'rclone.json':
-      dashboard.new('rclone', uid='Mkm2KHPzS').addTemplates([
+      dashboard.new('rclone', uid=dashboardUid).addTemplates([
         ds_template,
         job_template,
         instance_template,
@@ -122,6 +159,11 @@ local transferGraph = graphPanel.new(
       .addRow(
         row.new('Realtime')
         .addPanel(transferGraph)
+        .addPanel(statusGraph)
+      )
+      .addRow(
+        row.new('Historical')
+        .addPanel(jobsTable)
       ),
   },
 }
