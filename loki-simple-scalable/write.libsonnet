@@ -7,6 +7,10 @@ local k = import 'ksonnet-util/kausal.libsonnet';
   local volumeMount = k.core.v1.volumeMount,
   local service = k.core.v1.service,
 
+  _config+:: {
+    write_replicas: 3,
+  },
+
   // The writers should persist index files on a persistent
   // volume in order to be crash resilient.
   write_pvc::
@@ -31,13 +35,12 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     container.mixin.readinessProbe.withTimeoutSeconds(1),
 
   write_statefulset:
-    statefulSet.new('write', 3, [$.write_container], $.write_pvc) +
-    $._config.config_hash_mixin +
+    statefulSet.new('write', $._config.write_replicas, [$.write_container], $.write_pvc) +
     statefulSet.mixin.spec.withServiceName('write') +
     statefulSet.mixin.metadata.withLabels({ app: $._config.headless_service_name, name: 'write' }) +
     statefulSet.mixin.spec.selector.withMatchLabels({ name: 'write' }) +
     statefulSet.mixin.spec.template.metadata.withLabels({ name: 'write', app: $._config.headless_service_name }) +
-    $.config_hash_mixin +
+    $._config.config_hash_mixin +
     k.util.configVolumeMount('loki', '/etc/loki') +
     k.util.antiAffinity +
     statefulSet.mixin.spec.updateStrategy.withType('RollingUpdate') +

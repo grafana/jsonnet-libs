@@ -7,12 +7,15 @@ local k = import 'ksonnet-util/kausal.libsonnet';
   local volumeMount = k.core.v1.volumeMount,
   local service = k.core.v1.service,
 
+  _config+:: {
+    read_replicas: 3
+  },
+
   // Use PVC for queriers instead of node disk.
   read_pvc::
     pvc.new('read-data') +
     pvc.mixin.spec.resources.withRequests({ storage: '10Gi' }) +
-    pvc.mixin.spec.withAccessModes(['ReadWriteOnce']) +
-    pvc.mixin.spec.withStorageClassName('fast'),
+    pvc.mixin.spec.withAccessModes(['ReadWriteOnce']),
 
   read_args::
     $._config.commonArgs {
@@ -30,13 +33,12 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     container.mixin.readinessProbe.withTimeoutSeconds(1),
 
   read_statefulset:
-    statefulSet.new('read', 3, [$.read_container], $.read_pvc) +
-    $._config.config_hash_mixin +
+    statefulSet.new('read', $._config.read_replicas, [$.read_container], $.read_pvc) +
     statefulSet.mixin.spec.withServiceName('read') +
     statefulSet.mixin.metadata.withLabels({ app: $._config.headless_service_name, name: 'read' }) +
     statefulSet.mixin.spec.selector.withMatchLabels({ name: 'read' }) +
     statefulSet.mixin.spec.template.metadata.withLabels({ name: 'read', app: $._config.headless_service_name }) +
-    $.config_hash_mixin +
+    $._config.config_hash_mixin +
     k.util.configVolumeMount('loki', '/etc/loki') +
     k.util.antiAffinity +
     statefulSet.mixin.spec.updateStrategy.withType('RollingUpdate') +
