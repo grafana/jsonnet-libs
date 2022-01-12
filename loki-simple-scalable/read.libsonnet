@@ -31,6 +31,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
   read_statefulset:
     statefulSet.new('read', 3, [$.read_container], $.read_pvc) +
+    $._config.config_hash_mixin +
     statefulSet.mixin.spec.withServiceName('read') +
     statefulSet.mixin.metadata.withLabels({ app: $._config.headless_service_name, name: 'read' }) +
     statefulSet.mixin.spec.selector.withMatchLabels({ name: 'read' }) +

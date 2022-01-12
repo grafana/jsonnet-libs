@@ -32,6 +32,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
   write_statefulset:
     statefulSet.new('write', 3, [$.write_container], $.write_pvc) +
+    $._config.config_hash_mixin +
     statefulSet.mixin.spec.withServiceName('write') +
     statefulSet.mixin.metadata.withLabels({ app: $._config.headless_service_name, name: 'write' }) +
     statefulSet.mixin.spec.selector.withMatchLabels({ name: 'write' }) +

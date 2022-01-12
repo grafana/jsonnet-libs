@@ -9,7 +9,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
   headless_service:
     service.new(
-      'loki',
+      $._config.headless_service_name,
       {
         app: 'loki',
       },
