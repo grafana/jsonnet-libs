@@ -19,7 +19,7 @@ local queries = {
   frenamed_total: 'sum(increase(rclone_files_renamed_total{' + matcher + '}[$__range]))',
   fdeleted_total: 'sum(increase(rclone_files_deleted_total{' + matcher + '}[$__range]))',
   err_total: 'sum(increase(rclone_errors_total{' + matcher + '}[$__range]))',
-  
+
   fdir_deleted_irate: 'sum(irate(rclone_dirs_deleted_total{' + matcher + '}[$__rate_interval]))',
   fchecked_irate: 'sum(irate(rclone_checked_files_total{' + matcher + '}[$__rate_interval]))',
   ftransferred_irate: 'sum(irate(rclone_files_transferred_total{' + matcher + '}[$__rate_interval]))',
@@ -109,25 +109,25 @@ local transferredStat = statPanel.new(
                         .addThreshold({ color: 'green', value: 0 }) { span: 5 };
 
 local transferGraph = graphPanel.new(
-    'Traffic Rate',
-    datasource='$datasource',
-    span=6,
-    stack=true,
-    format='bps',
-)
-.addTarget(grafana.prometheus.target(queries.bytes_transferred_rate_ts, legendFormat='{{instance}}'))
-+ {
-  line: 1,
-  fill: 5,
-  fillGradient: 10,
-};
+                        'Traffic Rate',
+                        datasource='$datasource',
+                        span=6,
+                        stack=true,
+                        format='bps',
+                      )
+                      .addTarget(grafana.prometheus.target(queries.bytes_transferred_rate_ts, legendFormat='{{instance}}'))
+                      + {
+                        line: 1,
+                        fill: 5,
+                        fillGradient: 10,
+                      };
 
 local statusGraph = graphPanel.new(
   'State Rates',
   datasource='$datasource',
   span=6,
 )
-.addTargets([
+                    .addTargets([
   grafana.prometheus.target(queries.fchecked_irate, legendFormat='Files Checked'),
   grafana.prometheus.target(queries.ftransferred_irate, legendFormat='Files Transferred'),
   grafana.prometheus.target(queries.frenamed_irate, legendFormat='Files Renamed'),
@@ -137,7 +137,7 @@ local statusGraph = graphPanel.new(
 ]);
 
 local jobsTable = jt.new('$datasource', dashboardUid)
-.addTargets([
+                  .addTargets([
   grafana.prometheus.target(queries.starttime, format='table'),
   grafana.prometheus.target(queries.endtime, format='table'),
 ]);

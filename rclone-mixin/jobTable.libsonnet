@@ -1,137 +1,137 @@
 {
   new(datasource, dashboardUid, span=12):: {
-    "type": "table",
-    "title": "Historical Instances",
-    "span": 12,
-    "transformations": [
+    type: 'table',
+    title: 'Historical Instances',
+    span: 12,
+    transformations: [
       {
-        "id": "seriesToColumns",
-        "options": {
-          "byField": "instance"
-        }
+        id: 'seriesToColumns',
+        options: {
+          byField: 'instance',
+        },
       },
       {
-        "id": "calculateField",
-        "options": {
-          "mode": "binary",
-          "reduce": {
-            "reducer": "sum"
+        id: 'calculateField',
+        options: {
+          mode: 'binary',
+          reduce: {
+            reducer: 'sum',
           },
-          "binary": {
-            "left": "Value #B",
-            "operator": "-",
-            "right": "Value #A",
-            "reducer": "sum"
+          binary: {
+            left: 'Value #B',
+            operator: '-',
+            right: 'Value #A',
+            reducer: 'sum',
           },
-          "alias": "delta"
-        }
+          alias: 'delta',
+        },
       },
       {
-        "id": "filterByValue",
-        "options": {
-          "filters": [
+        id: 'filterByValue',
+        options: {
+          filters: [
             {
-              "fieldName": "delta",
-              "config": {
-                "id": "lowerOrEqual",
-                "options": {
-                  "value": 0
-                }
-              }
-            }
+              fieldName: 'delta',
+              config: {
+                id: 'lowerOrEqual',
+                options: {
+                  value: 0,
+                },
+              },
+            },
           ],
-          "type": "exclude",
-          "match": "any"
-        }
-      }
+          type: 'exclude',
+          match: 'any',
+        },
+      },
     ],
-    "datasource": datasource,
-    "fieldConfig": {
-      "defaults": {
-        "custom": {
-          "align": "auto",
-          "displayMode": "auto"
+    datasource: datasource,
+    fieldConfig: {
+      defaults: {
+        custom: {
+          align: 'auto',
+          displayMode: 'auto',
         },
-        "thresholds": {
-          "mode": "absolute",
-          "steps": [
+        thresholds: {
+          mode: 'absolute',
+          steps: [
             {
-              "color": "green",
-              "value": null
+              color: 'green',
+              value: null,
             },
             {
-              "color": "red",
-              "value": 80
-            }
-          ]
+              color: 'red',
+              value: 80,
+            },
+          ],
         },
-        "mappings": [],
-        "color": {
-          "mode": "continuous-GrYlRd"
+        mappings: [],
+        color: {
+          mode: 'continuous-GrYlRd',
         },
-        "links": [],
-        "unit": "string"
+        links: [],
+        unit: 'string',
       },
-      "overrides": [
+      overrides: [
         {
-          "matcher": {
-            "id": "byRegexp",
-            "options": "^.+[0-9]+|Value\\s#[B-Z]|delta"
+          matcher: {
+            id: 'byRegexp',
+            options: '^.+[0-9]+|Value\\s#[B-Z]|delta',
           },
-          "properties": [
+          properties: [
             {
-              "id": "custom.hidden",
-              "value": true
-            }
-          ]
+              id: 'custom.hidden',
+              value: true,
+            },
+          ],
         },
         {
-          "matcher": {
-            "id": "byName",
-            "options": "instance"
+          matcher: {
+            id: 'byName',
+            options: 'instance',
           },
-          "properties": [
+          properties: [
             {
-              "id": "links",
-              "value": [
+              id: 'links',
+              value: [
                 {
-                  "title": "View",
-                  "url": "d/"+ dashboardUid + "/rclone?var-instance=${__data.fields.instance}&from=${__data.fields[\"Value #A\"]}&to=${__data.fields[\"Value #B\"]}"
-                }
-              ]
+                  title: 'View',
+                  url: 'd/' + dashboardUid + '/rclone?var-instance=${__data.fields.instance}&from=${__data.fields["Value #A"]}&to=${__data.fields["Value #B"]}',
+                },
+              ],
             },
             {
-              "id": "displayName",
-              "value": "Instance"
-            }
-          ]
+              id: 'displayName',
+              value: 'Instance',
+            },
+          ],
         },
         {
-          "matcher": {
-            "id": "byName",
-            "options": "Value #A"
+          matcher: {
+            id: 'byName',
+            options: 'Value #A',
           },
-          "properties": [
+          properties: [
             {
-              "id": "displayName",
-              "value": "Start Time"
-            }
-          ]
-        }
-      ]
+              id: 'displayName',
+              value: 'Start Time',
+            },
+          ],
+        },
+      ],
     },
-    "options": {
-      "showHeader": true,
-      "footer": {
-        "show": false,
-        "reducer": [
-          "sum"
+    options: {
+      showHeader: true,
+      footer: {
+        show: false,
+        reducer: [
+          'sum',
         ],
-        "fields": ""
+        fields: '',
       },
-      "frameIndex": 1
+      frameIndex: 1,
     },
-    "targets": [],
+    targets: [],
     _nextTarget:: 0,
     addTarget(target):: self {
       local nextTarget = super._nextTarget,
@@ -139,5 +139,5 @@
       targets+: [target { refId: std.char(std.codepoint('A') + nextTarget) }],
     },
     addTargets(targets):: std.foldl(function(p, t) p.addTarget(t), targets, self),
-  }
+  },
 }
