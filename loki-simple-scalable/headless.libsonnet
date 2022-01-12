@@ -11,7 +11,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     service.new(
       $._config.headless_service_name,
       {
-        app: 'loki',
+        app: $._config.headless_service_name,
       },
       []
     ) +

@@ -50,5 +50,9 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
   write_service:
     k.util.serviceFor($.write_statefulset) +
-    service.mixin.spec.withClusterIp('None'),
+    service.mixin.spec.withType('ClusterIP') +
+    service.mixin.spec.withPorts([
+      k.core.v1.servicePort.newNamed('write-http-metrics', 80, 'http-metrics'),
+      k.core.v1.servicePort.newNamed('write-grpc', 9095, 'grpc'),
+    ]),
 }

@@ -48,5 +48,9 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
   read_service:
     k.util.serviceFor($.read_statefulset) +
-    service.mixin.spec.withClusterIp('None'),
+    service.mixin.spec.withType('ClusterIP') +
+    service.mixin.spec.withPorts([
+      k.core.v1.servicePort.newNamed('read-http-metrics', 80, 'http-metrics'),
+      k.core.v1.servicePort.newNamed('read-grpc', 9095, 'grpc'),
+    ]),
 }
