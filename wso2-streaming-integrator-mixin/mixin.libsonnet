@@ -9,11 +9,8 @@
     'Siddhi_aggregation.json': (import 'dashboards/Siddhi_aggregation.json'),
     'Siddhi_ondemandquery.json': (import 'dashboards/Siddhi_ondemandquery.json'),
     'StreamingIntegrator_apps.json': (import 'dashboards/StreamingIntegrator_apps.json'),
-    'StreamingIntegrator_overall.json': (import 'dashboards/StreamingIntegrator_overall.json'),	
+    'StreamingIntegrator_overall.json': (import 'dashboards/StreamingIntegrator_overall.json'),
   },
-
-  // Helper function to ensure that we don't override other rules, by forcing
-  // the patching of the groups list, and not the overall rules object.
   local importRules(rules) = {
     groups+: std.native('parseYaml')(rules)[0].groups,
   },
