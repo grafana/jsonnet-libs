@@ -82,7 +82,31 @@ local statusPiePanel = piechart.new('Status', span=5, datasource='$datasource', 
                        .addTarget(grafana.prometheus.target(queries.frenamed_total, legendFormat='Files Renamed'))
                        .addTarget(grafana.prometheus.target(queries.fdeleted_total, legendFormat='Files Deleted'))
                        .addTarget(grafana.prometheus.target(queries.fdir_deleted_total, legendFormat='Directories Deleted'))
-                       .addTarget(grafana.prometheus.target(queries.err_total, legendFormat='Transfer Errors'));
+                       .addTarget(grafana.prometheus.target(queries.err_total, legendFormat='Transfer Errors'))
+                       + {
+                         type: 'piechart',
+                         options: {
+                           reduceOptions: {
+                             values: false,
+                             calcs: [
+                               'lastNotNull',
+                             ],
+                             fields: '',
+                           },
+                           pieType: 'donut',
+                           tooltip: {
+                             mode: 'single',
+                           },
+                           legend: {
+                             displayMode: 'table',
+                             placement: 'right',
+                             values: [
+                               'value',
+                               'percent',
+                             ],
+                           },
+                         },
+                       };
 
 local transferGauge = singlestat.new(
   'Transfer Rate',
