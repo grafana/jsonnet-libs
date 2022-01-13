@@ -92,7 +92,7 @@ local transferGauge = singlestat.new(
   format='Bps',
   span=2,
   thresholds='80000000,200000000',
-  gaugeMaxValue='500000000'
+  gaugeMaxValue=500000000
 )
                       .addTarget(grafana.prometheus.target(queries.bytes_transferred_rate_sum));
 
