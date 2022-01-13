@@ -44,7 +44,7 @@ local link_data = import 'link_data.libsonnet';
   nginx_html_config_map:
     configMap.new('nginx-config-html') +
     configMap.withData({
-      'index.html': (importstr 'files/index.html') % (this._config + link_data(services)),
+      'index.html': (importstr 'files/index.html') % (this._config + link_data(services, this._config.nginx_directory_sorted)),
     }),
 
   local container = k.core.v1.container,
