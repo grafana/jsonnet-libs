@@ -6,7 +6,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
 
   grafanaDashboards+:: {
 
-    local nsqSelector = 'job="$job", instance=~"$instance"',
+    local nsqSelector = 'job=~"$job", instance=~"$instance"',
     local nsqTopicSelector = nsqSelector + ',topic=~"$topic"',
     local nsqChannelSelector = nsqTopicSelector + ',channel=~"$channel"',
     local nsqTopicDataLinkQueryParams = '${datasource:queryparam}&${job:queryparam}&$${__url_time_range}',
@@ -171,13 +171,17 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
       .addTemplate(
         {
           hide: 0,
-          label: null,
+          label: 'job',
           name: 'job',
+          includeAll: true,
+          allValue: '.+',
+          multi: true,
           options: [],
           query: 'label_values(nsq_topic_message_count, job)',
           refresh: 1,
           regex: '',
           type: 'query',
+          datasource: '$datasource',
         },
       )
       .addTemplate(
@@ -188,7 +192,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
           includeAll: true,
           multi: true,
           options: [],
-          query: 'label_values(nsq_topic_message_count{job="$job"},instance)',
+          query: 'label_values(nsq_topic_message_count{job=~"$job"},instance)',
           refresh: 2,
           regex: '',
           type: 'query',
@@ -202,7 +206,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
           includeAll: true,
           multi: true,
           options: [],
-          query: 'label_values(nsq_topic_message_count{job="$job",instance=~"$instance"},topic)',
+          query: 'label_values(nsq_topic_message_count{job=~"$job",instance=~"$instance"},topic)',
           refresh: 2,
           regex: '',
           type: 'query',
@@ -216,7 +220,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
           includeAll: true,
           multi: true,
           options: [],
-          query: 'label_values(nsq_topic_channel_message_count{job="$job",instance=~"$instance",topic=~"$topic"},channel)',
+          query: 'label_values(nsq_topic_channel_message_count{job=~"$job",instance=~"$instance",topic=~"$topic"},channel)',
           refresh: 2,
           regex: '',
           type: 'query',
