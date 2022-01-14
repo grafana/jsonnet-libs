@@ -1,7 +1,7 @@
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 1 --string-style s --comment-style s
 
 .PHONY: all
-all: build dashboards_out
+all: build dashboards_out prometheus_alerts.yaml
 
 vendor: jsonnetfile.json
 	jb install
@@ -26,6 +26,9 @@ dashboards_out: mixin.libsonnet config.libsonnet $(wildcard dashboards/*)
 	@mkdir -p dashboards_out
 	jsonnet -J vendor -m dashboards_out lib/dashboards.jsonnet
 
+prometheus_alerts.yaml: mixin.libsonnet lib/alerts.jsonnet alerts/*.libsonnet
+	jsonnet -J vendor -S lib/alerts.jsonnet > $@
+
 .PHONY: clean
 clean:
-	rm -rf dashboards_out
+	rm -rf dashboards_out prometheus_alerts.yaml
