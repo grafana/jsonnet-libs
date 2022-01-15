@@ -1,0 +1,5 @@
+exclusions:
+  template-job-rule:
+    reason: "please provide a reason here"
+  panel-job-instance-rule:
+    reason: "please provide a reason here"
