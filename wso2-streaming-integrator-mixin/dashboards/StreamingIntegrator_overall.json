@@ -348,7 +348,7 @@
             "uid": "grafanacloud-prom"
           },
           "exemplar": false,
-          "expr": "sum by(app) (rate(siddhi_total_reads{type=~\"cdc|file|kafka|http\"}[$__interval]))",
+          "expr": "sum by(app) (rate(siddhi_total_reads{type=~\"cdc|file|kafka|http\"}[$__rate_interval]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -376,7 +376,7 @@
             "uid": "grafanacloud-prom"
           },
           "exemplar": false,
-          "expr": "sum (rate(siddhi_total_writes{type=~\"rdbms|file|kafka|http\"}[$__interval]))",
+          "expr": "sum (rate(siddhi_total_writes{type=~\"rdbms|file|kafka|http\"}[$__rate_interval]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -646,7 +646,7 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],

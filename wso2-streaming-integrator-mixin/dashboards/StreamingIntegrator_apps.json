@@ -968,7 +968,7 @@
             "uid": "grafanacloud-prom"
           },
           "exemplar": false,
-          "expr": "sum(rate(siddhi_http_source_event_count{app=~\"$app\"}[5m])) by (url, stream_name)",
+          "expr": "sum(rate(siddhi_http_source_event_count{app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1066,7 +1066,7 @@
     },
     {
       "datasource": {
-        "uid": "Prometheus"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1459,7 +1459,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(rate(siddhi_kafka_source_read_count_per_stream{app=~\"$app\"}[1h])) by (stream_id)",
+          "expr": "sum(rate(siddhi_kafka_source_read_count_per_stream{app=~\"$app\"}[$__rate_interval])) by (stream_id)",
           "format": "table",
           "instant": true,
           "refId": "D"
@@ -2442,7 +2442,7 @@
             "uid": "grafanacloud-prom"
           },
           "exemplar": false,
-          "expr": "sum(rate(siddhi_cdc_source_listening_mode_events_per_table{app=~\"$app\"}[1m])) by (db_url)",
+          "expr": "sum(rate(siddhi_cdc_source_listening_mode_events_per_table{app=~\"$app\"}[$__rate_interval])) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3375,7 +3375,7 @@
             "uid": "grafanacloud-prom"
           },
           "exemplar": false,
-          "expr": "sum(rate(siddhi_http_sink_event_count{app=~\"$app\"}[1m])) by (url, stream_name)",
+          "expr": "sum(rate(siddhi_http_sink_event_count{app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3804,7 +3804,7 @@
             "uid": "grafanacloud-prom"
           },
           "exemplar": false,
-          "expr": "sum(rate(siddhi_kafka_sink_write_count_per_stream{app=~\"$app\"}[1h])) by (stream_id)",
+          "expr": "sum(rate(siddhi_kafka_sink_write_count_per_stream{app=~\"$app\"}[$__rate_interval])) by (stream_id)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -4780,7 +4780,7 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
