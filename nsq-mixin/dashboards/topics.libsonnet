@@ -138,7 +138,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
       grafana.dashboard.new(
         '%s Topics' % $._config.dashboardNamePrefix,
         time_from='%s' % $._config.dashboardPeriod,
-        editable=true,  // TODO change to false
+        editable=false,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,
