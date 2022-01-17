@@ -6,9 +6,9 @@ In order to use it, you would need https://github.com/prometheus/statsd_exporter
 This NSQ mixin interesting features:
 1) Set of two dashboards:
 NSQ Topics - view metrics grouped by topics and channels
-![screenshot-0](https://user-images.githubusercontent.com/14870891/149538092-fa71774e-697d-45d7-a1e2-6f795977872e.png)
+![screenshot-0](https://storage.googleapis.com/grafanalabs-integration-assets/nsq/screenshots/screenshot0.png)
 NSQ Instances - view metrics  grouped by nsqd instances
-![screenshot-1](https://user-images.githubusercontent.com/14870891/149538111-bbbe2712-d3f6-47f0-8b1b-396061f46eb4.png)
+![screenshot-1](https://storage.googleapis.com/grafanalabs-integration-assets/nsq/screenshots/screenshot1.png)
 
 2) Dashboard links to quickly jump from one dashboard(view) to another.
 3) [Data links ](https://grafana.com/docs/grafana/latest/linking/data-links/#data-links) to contextually jump from instance view to topics view and vice versa
