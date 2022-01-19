@@ -3,7 +3,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 {
   new(
     name,
-    data_source_name='$(USER):$(PASSWORD)@$(HOST):$(PORT)/',
+    data_source_name='postgresql://$(USER):$(PASSWORD)@$(HOST):$(PORT)/postgres',
+    ssl=true,
     image='quay.io/prometheuscommunity/postgres-exporter:v0.10.0',
   ):: {
     local this = self,
@@ -15,6 +16,11 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       + container.withPorts(containerPort.new('http-metrics', 9187))
     ,
 
+    local ssl_suffix =
+      if ssl
+      then ''
+      else '?ssl=disable',
+
     local deployment = k.apps.v1.deployment,
     deployment:
       deployment.new(
@@ -24,7 +30,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
           this.container
           // Force DATA_SOURCE_NAME to be declared after the variables it references
           + container.withEnvMap({
-            DATA_SOURCE_NAME: data_source_name,
+            DATA_SOURCE_NAME: data_source_name + ssl_suffix,
           }),
         ]
       ),
