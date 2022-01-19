@@ -19,7 +19,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     local ssl_suffix =
       if ssl
       then ''
-      else '?ssl=disable',
+      else '?sslmode=disable',
 
     local deployment = k.apps.v1.deployment,
     deployment:
