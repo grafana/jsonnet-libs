@@ -129,6 +129,7 @@ local transferredStat =
     'Data Transferred',
     datasource='$datasource',
     unit='bytes',
+    reducerFunction='last',
   )
   .addTargets([
     grafana.prometheus.target(queries.bytes_transferred_range, legendFormat='Range'),
