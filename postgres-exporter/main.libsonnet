@@ -3,7 +3,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 {
   new(
     name,
-    data_source_name='$(USER):$(PASSWORD)@tcp($(HOST):$(PORT))/',
+    data_source_name='$(USER):$(PASSWORD)@$(HOST):$(PORT)/',
     image='quay.io/prometheuscommunity/postgres-exporter:v0.10.0',
   ):: {
     local this = self,
