@@ -166,6 +166,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
           refresh: 2,
           regex: '',
           type: 'query',
+          datasource: '$datasource',
         },
       )
       .addTemplate(
@@ -180,6 +181,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
           refresh: 2,
           regex: '',
           type: 'query',
+          datasource: '$datasource',
         },
       )
       .addTemplate(
@@ -194,6 +196,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
           refresh: 2,
           regex: '',
           type: 'query',
+          datasource: '$datasource',
         },
       )
       .addPanel(grafana.row.new(title='Topics'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
