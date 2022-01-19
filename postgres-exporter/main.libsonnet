@@ -46,4 +46,24 @@ local k = import 'ksonnet-util/kausal.libsonnet';
   withImage(image):: {
     container+:: k.core.v1.container.withImage(image),
   },
+
+  withAutoDiscover():: {
+    container+:
+      k.core.v1.container.withEnvMixin([
+        k.core.v1.envVar.new(
+          'PG_EXPORTER_AUTO_DISCOVER_DATABASES',
+          'true',
+        ),
+      ]),
+  },
+
+  withExcludeDatabases(databases):: {
+    container+:
+      k.core.v1.container.withEnvMixin([
+        k.core.v1.envVar.new(
+          'PG_EXPORTER_EXCLUDE_DATABASES',
+          std.join(',', databases),
+        ),
+      ]),
+  },
 }
