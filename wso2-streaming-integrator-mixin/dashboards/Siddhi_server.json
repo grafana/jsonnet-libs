@@ -28,9 +28,7 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -174,9 +172,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -212,9 +208,7 @@
       "type": "dashlist"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -283,10 +277,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -560,10 +551,7 @@
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_source_throughput_total{instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"}) by (instance)",
           "format": "table",
@@ -573,10 +561,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(jvm_os_system_load_average{instance=~\"$instance\"}) by (instance)",
           "format": "table",
@@ -586,10 +571,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(jvm_os_cpu_load_system{instance=~\"$instance\"}) by (instance)",
           "format": "table",
@@ -599,10 +581,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(jvm_memory_heap_usage{instance=~\"$instance\"}) by (instance)",
           "format": "table",
@@ -634,10 +613,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -772,10 +748,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "sum by (instance)(siddhi_source_throughput_total{instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"})",
           "format": "time_series",
@@ -789,10 +762,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -896,10 +866,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "jvm_os_system_load_average{instance=~\"$instance\"}",
           "interval": "",
@@ -911,10 +878,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1048,10 +1012,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "jvm_os_cpu_load_system{instance=~\"$instance\"}",
           "interval": "",
@@ -1059,10 +1020,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "jvm_os_cpu_load_process{instance=~\"$instance\"}",
           "interval": "",
@@ -1074,9 +1032,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1224,9 +1180,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1419,9 +1373,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1614,9 +1566,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1859,9 +1809,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2036,8 +1984,8 @@
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "hide": 0,
         "includeAll": false,
@@ -2061,9 +2009,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "uid": "$datasource"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(jvm_memory_heap_max,instance)",
         "hide": 0,
         "includeAll": true,
@@ -2073,7 +2019,7 @@
         "options": [],
         "query": {
           "query": "label_values(jvm_memory_heap_max,instance)",
-          "refId": "grafanacloud-gabrielantunes-prom-instance-Variable-Query"
+          "refId": "StandardVariableQuery"
         },
         "refresh": 2,
         "regex": "",
@@ -2094,9 +2040,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "uid": "$datasource"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_stream_throughput_total,app)",
         "hide": 2,
         "includeAll": true,
@@ -2106,7 +2050,7 @@
         "options": [],
         "query": {
           "query": "label_values(siddhi_stream_throughput_total,app)",
-          "refId": "grafanacloud-gabrielantunes-prom-application-Variable-Query"
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
@@ -2127,9 +2071,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "uid": "$datasource"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_stream_throughput_total{app=\"$application\"},element)",
         "hide": 2,
         "includeAll": true,
@@ -2139,7 +2081,7 @@
         "options": [],
         "query": {
           "query": "label_values(siddhi_stream_throughput_total{app=\"$application\"},element)",
-          "refId": "grafanacloud-gabrielantunes-prom-element-Variable-Query"
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
@@ -2160,9 +2102,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "uid": "$datasource"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(type)",
         "hide": 2,
         "includeAll": true,
@@ -2172,7 +2112,7 @@
         "options": [],
         "query": {
           "query": "label_values(type)",
-          "refId": "grafanacloud-gabrielantunes-prom-type-Variable-Query"
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",

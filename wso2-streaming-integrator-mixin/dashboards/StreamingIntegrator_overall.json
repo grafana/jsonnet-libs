@@ -37,9 +37,7 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -111,10 +109,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -329,10 +324,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_total_reads{type=~\"cdc|file|kafka|http\"}) by (app)",
           "format": "table",
@@ -343,10 +335,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum by(app) (rate(siddhi_total_reads{type=~\"cdc|file|kafka|http\"}[$__rate_interval]))",
           "format": "table",
@@ -357,10 +346,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_total_writes{type=~\"rdbms|file|kafka|http\"}) by (app)",
           "format": "table",
@@ -371,10 +357,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum (rate(siddhi_total_writes{type=~\"rdbms|file|kafka|http\"}[$__rate_interval]))",
           "format": "table",
@@ -407,9 +390,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -481,9 +462,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -641,8 +620,8 @@
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "hide": 0,
         "includeAll": false,
@@ -662,10 +641,7 @@
           "text": "AggregateDataIncrementally",
           "value": "AggregateDataIncrementally"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_stream_throughput_total, app)",
         "hide": 2,
         "includeAll": false,

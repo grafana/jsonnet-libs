@@ -27,10 +27,7 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -221,10 +218,7 @@
       "repeatDirection": "h",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_aggregation_memory{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}) by (instance,app,element,operation,quantile)",
           "format": "table",
@@ -234,10 +228,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}) by (instance,app,element,operation,quantile)",
           "format": "table",
@@ -247,10 +238,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}) by (instance,app,element)",
           "format": "table",
@@ -295,9 +283,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 3,
         "w": 5,
@@ -332,10 +318,7 @@
       "type": "dashlist"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -396,10 +379,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(count(count by (element) (siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\"})))",
           "instant": true,
@@ -412,10 +392,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -488,10 +465,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "siddhi_aggregation_memory{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\"}",
           "format": "time_series",
@@ -505,10 +479,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -581,10 +552,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\",element=\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}",
           "format": "time_series",
@@ -598,10 +566,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -674,10 +639,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\",element=\"$element\",operation=~\"$operation\"}",
           "format": "time_series",
@@ -703,8 +665,8 @@
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "hide": 0,
         "includeAll": false,
@@ -728,9 +690,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "uid": "$datasource"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_aggregation_latency,instance)",
         "hide": 0,
         "includeAll": true,
@@ -761,9 +721,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "uid": "$datasource"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_aggregation_latency{instance=~\"$instance\"},app)",
         "hide": 0,
         "includeAll": true,
@@ -794,10 +752,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\"},element)",
         "hide": 0,
         "includeAll": true,
@@ -825,10 +780,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"},operation)",
         "hide": 0,
         "includeAll": true,
@@ -852,10 +804,7 @@
           "text": "All",
           "value": "$__all"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_aggregation_latency{instance=~\"$instance\"},quantile)",
         "description": "",
         "hide": 0,

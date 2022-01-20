@@ -28,9 +28,7 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -43,10 +41,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -106,10 +101,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_total_reads{app=~\"$app\", type=~\"file|cdc|kafka|http\"}) ",
           "format": "time_series",
@@ -123,9 +115,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -283,10 +273,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -347,10 +334,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(rate(siddhi_total_reads{app=~\"$app\"}[$__interval]))",
           "format": "time_series",
@@ -365,10 +349,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -428,10 +409,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_total_writes{app=~\"$app\", type=~\"file|rdbms|kafka|http\"})",
           "format": "time_series",
@@ -446,9 +424,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -520,10 +496,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "description": "Total errors occurred while consuming & publishing events",
       "fieldConfig": {
         "defaults": {
@@ -584,10 +557,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "(sum(siddhi_store_rdbms_total_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_file_source_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_listening_mode_total_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_polling_mode_total_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_file_sink_total_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_source_error_count_per_stream{app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_sink_error_count{app=~\"$app\"}) or vector(0))",
           "format": "time_series",
@@ -602,9 +572,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "description": "Number of dropped events due to invalid mapping.",
       "fieldConfig": {
         "defaults": {
@@ -677,9 +645,7 @@
     },
     {
       "collapsed": false,
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -692,9 +658,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -711,10 +675,7 @@
       "type": "text"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -949,10 +910,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_source_event_count{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -963,10 +921,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(rate(siddhi_http_source_event_count{app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
           "format": "table",
@@ -977,10 +932,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_source_error_count{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -990,10 +942,7 @@
           "refId": "G"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_source_status{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -1003,10 +952,7 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_source_request_size{app=~\"$app\"}) by (url, stream_name) / sum(siddhi_http_source_event_count{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -1039,9 +985,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -1065,9 +1009,7 @@
       "type": "text"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1505,9 +1447,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -1524,10 +1464,7 @@
       "type": "text"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1930,10 +1867,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_source_event_count{app=~\"$app\"}) by (file_name, mode, stream_name, file_path, app)",
           "format": "table",
@@ -1944,10 +1878,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_source_file_size{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -1958,10 +1889,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_source_file_status{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -1972,10 +1900,7 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_source_elapse_time{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -1986,10 +1911,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_source_started_time{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -2000,10 +1922,7 @@
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum((siddhi_file_source_event_count{app=~\"$app\"} - ignoring(file_name, mode, stream_name)siddhi_file_source_total_valid_events_count{app=~\"$app\"}) + siddhi_file_source_error_count{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -2036,9 +1955,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -2055,10 +1972,7 @@
       "type": "text"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2423,10 +2337,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_event_count{app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_host, app)",
           "format": "table",
@@ -2437,10 +2348,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(rate(siddhi_cdc_source_listening_mode_events_per_table{app=~\"$app\"}[$__rate_interval])) by (db_url)",
           "format": "table",
@@ -2451,10 +2359,7 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_db_status{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2465,10 +2370,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_idle_time{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2479,10 +2381,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_last_receive_time{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2493,10 +2392,7 @@
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_events_per_table{app=~\"$app\"} - ignoring(tablename)siddhi_cdc_source_listening_mode_total_valid_events_count{app=~\"$app\"} + siddhi_cdc_source_listening_mode_total_error_count{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2529,10 +2425,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2897,10 +2790,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_event_count{app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_host, app)",
           "format": "table",
@@ -2911,10 +2801,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_events_in_last_polling_interval{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2925,10 +2812,7 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_db_status{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2939,10 +2823,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_idle_time{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2953,10 +2834,7 @@
           "refId": "F"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_last_receive_time{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2967,10 +2845,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_event_count{app=~\"$app\"} - ignoring(A_db_type, B_host, C_database, D_tablename)siddhi_cdc_source_polling_mode_total_valid_events_count{app=~\"$app\"} + siddhi_cdc_source_polling_mode_total_error_count{app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -3004,9 +2879,7 @@
     },
     {
       "collapsed": false,
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3019,9 +2892,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -3038,10 +2909,7 @@
       "type": "text"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3342,10 +3210,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_event_count{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3356,10 +3221,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_error_count{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3370,10 +3232,7 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(rate(siddhi_http_sink_event_count{app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
           "format": "table",
@@ -3384,10 +3243,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_status{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3397,10 +3253,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_request_size{app=~\"$app\"}) by (url, stream_name) / sum(siddhi_http_sink_event_count{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3410,10 +3263,7 @@
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_average_latency{app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3445,9 +3295,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -3464,10 +3312,7 @@
       "type": "text"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3773,10 +3618,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_kafka_sink_current_offset{app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3786,10 +3628,7 @@
           "refId": "F"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_kafka_sink_write_count_per_stream{app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3799,10 +3638,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(rate(siddhi_kafka_sink_write_count_per_stream{app=~\"$app\"}[$__rate_interval])) by (stream_id)",
           "format": "table",
@@ -3812,10 +3648,7 @@
           "refId": "G"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "avg(siddhi_kafka_sink_per_stream_last_message_size_in_bytes{app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3825,10 +3658,7 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "avg(siddhi_kafka_sink_per_stream_last_message_latency_in_millis{app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3838,10 +3668,7 @@
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_kafka_sink_error_count_per_stream{app=~\"$app\"}) by (stream_id) ",
           "format": "table",
@@ -3851,10 +3678,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "(sum(siddhi_kafka_sink_error_count_per_stream{app=~\"$app\"}) by (stream_id) / sum(siddhi_kafka_sink_write_count_per_stream{app=~\"$app\"}) by (stream_id)) ",
           "format": "table",
@@ -3864,10 +3688,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_kafka_sink_per_stream_last_message_published_at{app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3899,9 +3720,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -3918,10 +3737,7 @@
       "type": "text"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4334,10 +4150,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_event_count{app=~\"$app\"}) by (file_name, mode, stream_name, file_path,app)",
           "format": "table",
@@ -4348,10 +4161,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_file_size{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -4362,10 +4172,7 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_file_status{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -4376,10 +4183,7 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_lines_count{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -4389,10 +4193,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_elapsed_time{app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -4402,10 +4203,7 @@
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
+          "datasource": "$datasource",
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_total_error_count{app=~\"$app\"} + siddhi_file_sink_dropped_events{app=~\"$app\"} ) by (file_path)",
           "format": "table",
@@ -4437,9 +4235,7 @@
       "type": "table"
     },
     {
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -4457,9 +4253,7 @@
     },
     {
       "columns": [],
-      "datasource": {
-        "uid": "$datasource"
-      },
+      "datasource": "$datasource",
       "fontSize": "120%",
       "gridPos": {
         "h": 8,
@@ -4775,8 +4569,8 @@
       {
         "current": {
           "selected": false,
-          "text": "grafanacloud-gabrielantunes-prom",
-          "value": "grafanacloud-gabrielantunes-prom"
+          "text": "Prometheus",
+          "value": "Prometheus"
         },
         "hide": 0,
         "includeAll": false,
@@ -4800,9 +4594,7 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "uid": "$datasource"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_stream_throughput_total, app)",
         "hide": 0,
         "includeAll": true,
@@ -4812,7 +4604,7 @@
         "options": [],
         "query": {
           "query": "label_values(siddhi_stream_throughput_total, app)",
-          "refId": "grafanacloud-gabrielantunes-prom-app-Variable-Query"
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
