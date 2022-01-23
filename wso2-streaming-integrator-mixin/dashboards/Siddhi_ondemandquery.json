@@ -211,12 +211,7 @@
         "y": 0
       },
       "id": 12,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi Overall Statistics",
