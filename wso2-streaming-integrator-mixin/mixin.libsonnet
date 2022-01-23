@@ -8,6 +8,7 @@
     'Siddhi_table.json': (import 'dashboards/Siddhi_table.json'),
     'Siddhi_aggregation.json': (import 'dashboards/Siddhi_aggregation.json'),
     'Siddhi_ondemandquery.json': (import 'dashboards/Siddhi_ondemandquery.json'),
+    'Siddhi_stream.json': (import 'dashboards/Siddhi_stream.json'),
     'StreamingIntegrator_apps.json': (import 'dashboards/StreamingIntegrator_apps.json'),
     'StreamingIntegrator_overall.json': (import 'dashboards/StreamingIntegrator_overall.json'),
   },
