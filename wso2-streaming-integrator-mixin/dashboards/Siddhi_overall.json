@@ -142,12 +142,7 @@
         "y": 1
       },
       "id": 441,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi Server Statistics",
@@ -1398,12 +1393,7 @@
         "y": 28
       },
       "id": 442,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi Stream Statistics",
@@ -1724,12 +1714,7 @@
         "y": 36
       },
       "id": 447,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi Query Statistics",
@@ -2098,12 +2083,7 @@
         "y": 45
       },
       "id": 449,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi Source Statistics",
@@ -2472,12 +2452,7 @@
         "y": 53
       },
       "id": 453,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi Sink Statistics",
@@ -2813,12 +2788,7 @@
         "y": 61
       },
       "id": 457,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi Table Statistics",
@@ -3178,12 +3148,7 @@
         "y": 69
       },
       "id": 461,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi aggregation Statistics",
@@ -3473,12 +3438,7 @@
         "y": 78
       },
       "id": 463,
-      "links": [
-        {
-          "title": "",
-          "url": ""
-        }
-      ],
+      "links": [],
       "options": {
         "maxItems": 10,
         "query": "Siddhi On-Demand query Statistics",
