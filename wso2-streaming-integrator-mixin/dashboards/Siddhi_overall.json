@@ -3501,7 +3501,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 34,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "prometheus",

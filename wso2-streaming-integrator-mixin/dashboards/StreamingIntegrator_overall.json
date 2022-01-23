@@ -607,7 +607,7 @@
     }
   ],
   "refresh": "5s",
-  "schemaVersion": 34,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "wso2",
