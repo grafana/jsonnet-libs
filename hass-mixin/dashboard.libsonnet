@@ -5,6 +5,7 @@ local base_matcher = 'job=~"$job", instance=~"$instance"';
 local entity_matcher = base_matcher + ', entity=~"$entity", friendly_name=~"$friendly_name"';
 local available_entity_matcher_decoration = 'and on (entity) entity_available > 0';
 
+local prefix_default = 'homeassistant';
 local queries = {
   unsupported_sensor_count: 'count({__name__=~"$prefix\\\\_?sensor_unit_.+", ' + base_matcher + '})',
   unsupported_sensors: '{__name__=~"$prefix\\\\_?sensor_unit_.+", ' + base_matcher + '}',
@@ -112,8 +113,8 @@ local fname_template = grafana.template.new(
 local prefix_template = {
   current: {
     selected: false,
-    text: '',
-    value: '',
+    text: prefix_default,
+    value: prefix_default,
   },
   description: null,
   'error': null,
@@ -123,11 +124,11 @@ local prefix_template = {
   options: [
     {
       selected: true,
-      text: '',
-      value: '',
+      text: prefix_default,
+      value: prefix_default,
     },
   ],
-  query: '',
+  query: prefix_default,
   skipUrlSync: false,
   type: 'textbox',
 };
@@ -246,7 +247,6 @@ local input_bool_panel = grafana.statPanel.new(
                            span: 2,
                            options+: { textMode: 'name' },
                          };
-
 
 local climate_panel = grafana.statPanel.new(
                         'Climate',
