@@ -1,0 +1,5 @@
+exclusions:
+  template-job-rule:
+    reason: "Job name changes dinamically."
+  panel-job-instance-rule:
+    reason: "Job name changes dinamically."
