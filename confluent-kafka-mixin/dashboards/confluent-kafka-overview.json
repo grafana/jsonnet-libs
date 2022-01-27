@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 96,
-  "iteration": 1642111919865,
+  "id": 1,
+  "iteration": 1643318120142,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -39,74 +39,6 @@
       "panels": [],
       "title": "Global",
       "type": "row"
-    },
-    {
-      "datasource": "$datasource",
-      "description": "The sum of partitions in a cluster. Basic cluster max partitions limit is 2048.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "max": 2048,
-          "min": 0,
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 80
-              },
-              {
-                "color": "red",
-                "value": 90
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 0,
-        "y": 1
-      },
-      "id": 19,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.3.3",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum(confluent_kafka_server_partition_count{kafka_id=~\"$cluster\"})",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "{{cluster}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Partition count ",
-      "type": "stat"
     },
     {
       "datasource": "$datasource",
@@ -136,14 +68,14 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "Bps"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 3,
+        "x": 0,
         "y": 1
       },
       "id": 17,
@@ -167,9 +99,9 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(deriv(confluent_kafka_server_received_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"$partition\"}[$__rate_interval]))",
+          "expr": "sum(rate(confluent_kafka_server_received_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"$partition\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{cluster}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -204,14 +136,14 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "Bps"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 6,
+        "x": 3,
         "y": 1
       },
       "id": 18,
@@ -235,9 +167,9 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(deriv(confluent_kafka_server_sent_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"$partition\"}[$__rate_interval]))",
+          "expr": "sum(rate(confluent_kafka_server_sent_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"$partition\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{cluster}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -272,14 +204,14 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "reqps"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 9,
+        "x": 6,
         "y": 1
       },
       "id": 10,
@@ -303,9 +235,9 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(deriv(confluent_kafka_server_request_count{type=~\".*\", kafka_id=~\"$cluster\", principal_id=~\"$principal_id\"}[$__rate_interval]))",
+          "expr": "sum(rate(confluent_kafka_server_request_count{type=~\".*\", kafka_id=~\"$cluster\", principal=~\"$principal_id\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{cluster}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -347,7 +279,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 12,
+        "x": 9,
         "y": 1
       },
       "id": 12,
@@ -369,14 +301,84 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "sum(confluent_kafka_server_retained_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"$partition\"})/3",
           "interval": "",
-          "legendFormat": "{{cluster}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
       "title": "Retained bytes",
+      "type": "stat"
+    },
+    {
+      "datasource": "$datasource",
+      "description": "The sum of partitions in a cluster. Basic cluster max partitions limit is 2048.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 2048,
+          "min": 0,
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 12,
+        "y": 1
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.3",
+      "targets": [
+        {
+          "datasource": "$datasource",
+          "exemplar": true,
+          "expr": "sum (confluent_kafka_server_partition_count{kafka_id=~\"$cluster\"})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Partition count ",
       "type": "stat"
     },
     {
@@ -437,11 +439,12 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "abs(idelta(confluent_kafka_server_partition_count{kafka_id=~\"$cluster\"}[$__rate_interval]))",
+          "expr": "sum(abs(idelta(confluent_kafka_server_partition_count{kafka_id=~\"$cluster\"}[$__rate_interval])))",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{cluster}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -508,10 +511,10 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "avg(confluent_kafka_server_active_connection_count{kafka_id=~\"$cluster\",principal_id=~\"$principal_id\"})",
+          "expr": "avg(confluent_kafka_server_active_connection_count{kafka_id=~\"$cluster\",principal=~\"$principal_id\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{cluster}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -538,7 +541,7 @@
               }
             ]
           },
-          "unit": "s"
+          "unit": "none"
         },
         "overrides": []
       },
@@ -567,11 +570,12 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(confluent_kafka_server_successful_authentication_count{kafka_id=~\"$cluster\",principal_id=~\"$principal_id\"})",
+          "expr": "sum(confluent_kafka_server_successful_authentication_count{kafka_id=~\"$cluster\",principal=~\"$principal_id\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{cluster}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -667,11 +671,12 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "sum by (kafka_id, topic) (confluent_kafka_server_retained_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\", partition=~\"$partition\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{kafka_id}}-{{topic}}",
+          "legendFormat": "{{kafka_id}} - {{topic}}",
           "refId": "A"
         }
       ],
@@ -839,6 +844,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
           "expr": "sum by (topic, kafka_id) (confluent_kafka_server_sent_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\", partition=~\"$partition\"})",
           "hide": false,
@@ -1011,8 +1017,9 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum by (topic, kafka_id) (ccloud_metric_sent_records{topic=~\"$topic\", kafka_id=~\"$cluster\", partition=~\"$partition\"})",
+          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_sent_records{topic=~\"$topic\", kafka_id=~\"$cluster\", partition=~\"$partition\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{topic}} - {{kafka_id}}",
@@ -1097,11 +1104,12 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_server_request_count{kafka_id=~\"$cluster\", principal=~\"$principal\"}",
+          "expr": "sum by (kafka_id) (confluent_kafka_server_request_count{kafka_id=~\"$cluster\", principal=~\"$principal_id\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{kafka_id}} - {{type}}",
+          "legendFormat": "{{kafka_id}}",
           "refId": "A"
         }
       ],
@@ -1127,6 +1135,13 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -1145,39 +1160,68 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 9,
         "w": 24,
         "x": 0,
         "y": 37
       },
       "id": 39,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
+        "footer": {
           "fields": "",
-          "values": false
+          "reducer": [
+            "sum"
+          ],
+          "show": false
         },
-        "textMode": "auto"
+        "showHeader": true
       },
       "pluginVersion": "8.3.3",
       "targets": [
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_connect_dead_letter_queue_records{connector_kafka_id=~\"$cluster\"}",
+          "expr": "confluent_kafka_connect_dead_letter_queue_records{connector_id=~\"$connector_id\"}",
+          "format": "time_series",
+          "instant": false,
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
+          "legendFormat": "{{connector_id}}",
           "refId": "A"
         }
       ],
       "title": "Dead letter queue records Count",
-      "type": "stat"
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "includeTimeField": false,
+            "labelsToFields": false,
+            "mode": "seriesToRows",
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "__name__": true,
+              "instance": true,
+              "job": true,
+              "scrape_job": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Field": "Connector",
+              "Last *": "Count",
+              "Value #A": "Records",
+              "connector_id": "Connector"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": "$datasource",
@@ -1236,7 +1280,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 46
       },
       "id": 36,
       "options": {
@@ -1254,9 +1298,9 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_connect_received_records{connector_kafka_id=~\"$cluster\"}",
+          "expr": "confluent_kafka_connect_received_records{connector_id=~\"$connector_id\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
+          "legendFormat": "{{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1320,7 +1364,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 46
       },
       "id": 38,
       "options": {
@@ -1336,10 +1380,11 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_connect_received_bytes{connector_kafka_id=~\"$cluster\"}",
+          "expr": "confluent_kafka_connect_received_bytes{connector_id=~\"$connector_id\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
+          "legendFormat": "{{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1403,7 +1448,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 54
       },
       "id": 35,
       "options": {
@@ -1419,10 +1464,11 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_connect_sent_records{connector_kafka_id=~\"$cluster\"}",
+          "expr": "confluent_kafka_connect_sent_records{connector_id=~\"$connector_id\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
+          "legendFormat": "{{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1486,7 +1532,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 54
       },
       "id": 37,
       "options": {
@@ -1502,10 +1548,11 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_connect_sent_bytes{connector_kafka_id=~\"$cluster\"}",
+          "expr": "confluent_kafka_connect_sent_bytes{connector_id=~\"$connector_id\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
+          "legendFormat": "{{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1519,7 +1566,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 62
       },
       "id": 42,
       "panels": [],
@@ -1531,6 +1578,13 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -1549,38 +1603,56 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 9,
         "w": 24,
         "x": 0,
-        "y": 57
+        "y": 63
       },
       "id": 44,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
+        "footer": {
           "fields": "",
-          "values": false
+          "reducer": [
+            "sum"
+          ],
+          "show": false
         },
-        "textMode": "auto"
+        "showHeader": true
       },
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_ksql_streaming_unit_count",
+          "expr": "confluent_kafka_ksql_streaming_unit_count{ksql_id=~\"$ksql_id\"}",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{ksql_id}}",
           "refId": "A"
         }
       ],
       "title": "Streaming Unit Count",
-      "type": "stat"
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Field": "Ksql",
+              "Last *": "Count"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "collapsed": false,
@@ -1589,7 +1661,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 61
+        "y": 72
       },
       "id": 25,
       "panels": [],
@@ -1601,6 +1673,13 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -1615,38 +1694,56 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 62
+        "y": 73
       },
       "id": 45,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
+        "footer": {
           "fields": "",
-          "values": false
+          "reducer": [
+            "sum"
+          ],
+          "show": false
         },
-        "textMode": "auto"
+        "showHeader": true
       },
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_schema_registry_schema_count",
+          "expr": "confluent_kafka_schema_registry_schema_count{schema_registry_id=\"$schema_registry_id\"}",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{schema_registry_id}}",
           "refId": "A"
         }
       ],
       "title": "Schema Count",
-      "type": "stat"
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Field": "Schema Registry",
+              "Last *": "Count"
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": "5m",
@@ -1788,7 +1885,88 @@
           "query": "label_values(confluent_kafka_server_request_count{kafka_id=~\"$kafka_id\"},principal_id)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "label_values(confluent_kafka_connect_dead_letter_queue_records, connector_id)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Connector",
+        "multi": true,
+        "name": "connector_id",
+        "options": [],
+        "query": {
+          "query": "label_values(confluent_kafka_connect_dead_letter_queue_records, connector_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "label_values(confluent_kafka_ksql_streaming_unit_count, ksql_id)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Ksql",
+        "multi": true,
+        "name": "ksql_id",
+        "options": [],
+        "query": {
+          "query": "label_values(confluent_kafka_ksql_streaming_unit_count, ksql_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "label_values(confluent_kafka_schema_registry_schema_count, schema_registry_id)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Schema Registry",
+        "multi": true,
+        "name": "schema_registry_id",
+        "options": [],
+        "query": {
+          "query": "label_values(confluent_kafka_schema_registry_schema_count, schema_registry_id)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -1797,7 +1975,7 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {
@@ -1817,6 +1995,6 @@
   "timezone": "",
   "title": "Confluent Cloud",
   "uid": "ATs3kp1nz",
-  "version": 1,
+  "version": 7,
   "weekStart": ""
 }
