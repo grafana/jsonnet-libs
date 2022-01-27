@@ -167,7 +167,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(deriv(confluent_kafka_server_received_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"partition\"}[$__rate_interval]))",
+          "expr": "sum(deriv(confluent_kafka_server_received_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"$partition\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{cluster}}",
           "refId": "A"
@@ -235,7 +235,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(deriv(confluent_kafka_server_sent_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"partition\"}[$__rate_interval]))",
+          "expr": "sum(deriv(confluent_kafka_server_sent_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"$partition\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{cluster}}",
           "refId": "A"
@@ -370,18 +370,18 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(confluent_kafka_server_retained_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"partition\"})/3",
+          "expr": "sum(confluent_kafka_server_retained_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\",partition=~\"$partition\"})/3",
           "interval": "",
           "legendFormat": "{{cluster}}",
           "refId": "A"
         }
       ],
-      "title": "Retained bytes ",
+      "title": "Retained bytes",
       "type": "stat"
     },
     {
       "datasource": "$datasource",
-      "description": "Basic clusters have a limit on the number of partitions that can be created and deleted in a 5 minute period. This single stat provides the absolute difference between the number of partitions are the beginning and end of the 5 minute period. This over simplifies the problem, so more conservative thresholds are put in place. ",
+      "description": "Basic clusters have a limit on the number of partitions that can be created and deleted in a 5 minute period. This single stat provides the absolute difference between the number of partitions are the beginning and end of the 5 minute period. This over simplifies the problem, so more conservative thresholds are put in place.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -508,7 +508,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "avg(confluent_kafka_server_active_connection_count{kafka_id=~\"$cluster\",principal_id=~\"principal_id\"})",
+          "expr": "avg(confluent_kafka_server_active_connection_count{kafka_id=~\"$cluster\",principal_id=~\"$principal_id\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{cluster}}",
@@ -568,7 +568,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(confluent_kafka_server_successful_authentication_count{kafka_id=~\"cluster\",principal_id=~\"principal_id\"})",
+          "expr": "sum(confluent_kafka_server_successful_authentication_count{kafka_id=~\"$cluster\",principal_id=~\"$principal_id\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{cluster}}",
@@ -668,7 +668,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (kafka_id, topic) (confluent_kafka_server_retained_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\", partition=~\"partition\"})",
+          "expr": "sum by (kafka_id, topic) (confluent_kafka_server_retained_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\", partition=~\"$partition\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{kafka_id}}-{{topic}}",
@@ -754,7 +754,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_received_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\", partition=~\"partition\"})",
+          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_received_bytes{topic=~\"$topic\", kafka_id=~\"$cluster\", partition=~\"$partition\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{topic}} - {{kafka_id}}",
@@ -1101,7 +1101,7 @@
           "expr": "confluent_kafka_server_request_count{kafka_id=~\"$cluster\", principal=~\"$principal\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{kafka_id}}-{{type}}",
+          "legendFormat": "{{kafka_id}} - {{type}}",
           "refId": "A"
         }
       ],
@@ -1172,7 +1172,7 @@
           "exemplar": true,
           "expr": "confluent_kafka_connect_dead_letter_queue_records{connector_kafka_id=~\"$cluster\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} -- {{connector_id}}",
+          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1256,7 +1256,7 @@
           "exemplar": true,
           "expr": "confluent_kafka_connect_received_records{connector_kafka_id=~\"$cluster\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} -- {{connector_id}}",
+          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1339,7 +1339,7 @@
           "exemplar": true,
           "expr": "confluent_kafka_connect_received_bytes{connector_kafka_id=~\"$cluster\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} -- {{connector_id}}",
+          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1422,7 +1422,7 @@
           "exemplar": true,
           "expr": "confluent_kafka_connect_sent_records{connector_kafka_id=~\"$cluster\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} -- {{connector_id}}",
+          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1505,7 +1505,7 @@
           "exemplar": true,
           "expr": "confluent_kafka_connect_sent_bytes{connector_kafka_id=~\"$cluster\"}",
           "interval": "",
-          "legendFormat": "{{connector_kafka_id}} -- {{connector_id}}",
+          "legendFormat": "{{connector_kafka_id}} - {{connector_id}}",
           "refId": "A"
         }
       ],
@@ -1718,7 +1718,7 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(confluent_kafka_server_retained_bytes{kafka_id=~\"cluster\"}, topic)",
+        "definition": "label_values(confluent_kafka_server_retained_bytes{kafka_id=~\"$cluster\"}, topic)",
         "hide": 0,
         "includeAll": true,
         "label": "Topics",
@@ -1726,7 +1726,7 @@
         "name": "topic",
         "options": [],
         "query": {
-          "query": "label_values(confluent_kafka_server_retained_bytes{kafka_id=~\"cluster\"}, topic)",
+          "query": "label_values(confluent_kafka_server_retained_bytes{kafka_id=~\"$cluster\"}, topic)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
