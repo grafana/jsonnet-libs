@@ -15,7 +15,12 @@ local resource = import 'resource.libsonnet';
 
   fromMapsFiltered(rules, excludes):: {
     local filterRules(rules, exclude_list) = [rule for rule in rules.groups if !std.member(exclude_list, rule.name)],
-    [k]: util.makeResource(kind, k, { groups: filterRules(rules, excludes) }, {})
+    [k]: util.makeResource(
+      kind,
+      std.strReplace(std.strReplace(std.strReplace(k, '.json', ''), '.yaml', ''), '.yml', ''),
+      { groups: filterRules(rules, excludes) },
+      {}
+    )
     for k in std.objectFields(rules)
   },
 
@@ -23,7 +28,7 @@ local resource = import 'resource.libsonnet';
     [if std.objectHasAll(mixins[key], alertRules) || std.objectHasAll(mixins[key], recordingRules) then key else null]:
       util.makeResource(
         kind,
-        key,
+        std.strReplace(std.strReplace(std.strReplace(key, '.json', ''), '.yaml', ''), '.yml', ''),
         (if std.objectHasAll(mixins[key], alertRules) then mixins[key].prometheusAlerts else {})
         + (if std.objectHasAll(mixins[key], recordingRules) then mixins[key].prometheusRules else {})
       )
