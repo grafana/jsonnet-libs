@@ -5,27 +5,35 @@ local prometheus = grafana.prometheus;
 local graphPanel = grafana.graphPanel;
 local statPanel = grafana.statPanel;
 local pieChartPanel = grafana.pieChartPanel;
+local it = import 'instancetable.libsonnet';
 
 local dashboardUid = 'eqcdR8HDA';
 
-local matcher = 'job=~"$job", instance=~"$instance"';
+local matcher = 'job=~"$job", instance="$instance"';
 
 local queries = {
   awx_system_info: 'awx_system_info{' + matcher + '}',
-  orgs_total: 'sum (awx_organizations_total{' + matcher + '})',
-  users_total: 'sum (awx_users_total{' + matcher + '})',
-  teams_total: 'sum (awx_teams_total{' + matcher + '})',
-  inventories_total: 'sum (awx_inventories_total{' + matcher + '})',
-  projects_total: 'sum (awx_projects_total{' + matcher + '})',
-  job_templates_total: 'sum (awx_job_templates_total{' + matcher + '})',
-  workflow_job_templates_total: 'sum (awx_workflow_job_templates_total{' + matcher + '})',
-  active_hosts: 'sum (awx_hosts_total{type="active", ' + matcher + '})',
-  inactive_hosts: 'sum (awx_hosts_total{type="total", ' + matcher + '}) - ' + queries.active_hosts,
-  schedules_total: 'sum (awx_schedules_total{' + matcher + '})',
+  orgs_total: 'awx_organizations_total{' + matcher + '}',
+  users_total: 'awx_users_total{' + matcher + '}',
+  teams_total: 'awx_teams_total{' + matcher + '}',
+  inventories_total: 'awx_inventories_total{' + matcher + '}',
+  projects_total: 'awx_projects_total{' + matcher + '}',
+  job_templates_total: 'awx_job_templates_total{' + matcher + '}',
+  workflow_job_templates_total: 'awx_workflow_job_templates_total{' + matcher + '}',
+  active_hosts: 'awx_hosts_total{type="active", ' + matcher + '}',
+  inactive_hosts: 'awx_hosts_total{type="total", ' + matcher + '} - ' + queries.active_hosts,
+  schedules_total: 'awx_schedules_total{' + matcher + '}',
   sessions_by_type: 'sum by (type) (awx_sessions_total{' + matcher + '})',
 
-  license_expiry_seconds: '',
-  external_logging: '',
+  license_free: 'awx_license_instance_free{' + matcher + '}',
+  license_total: 'awx_license_instance_total{' + matcher + '}',
+
+  instance_info: 'awx_instance_info{' + matcher + '}',
+  instance_cpu: 'sum by (hostname) (awx_instance_cpu{' + matcher + '})',
+  instance_memory: 'sum by (hostname) (awx_instance_memory{' + matcher + '})',
+  instance_capacity: 'sum by (hostname) (awx_instance_capacity{' + matcher + '})',
+  instance_consumed_capacity: 'sum by (hostname) (awx_instance_consumed_capacity{' + matcher + '})',
+  instance_consumed_capacity_percent: queries.instance_consumed_capacity + ' / ' + queries.instance_capacity,
 };
 
 // Templates
@@ -48,7 +56,7 @@ local job_template =
   grafana.template.new(
     'job',
     '$datasource',
-    'label_values(rclone_speed, job)',
+    'label_values(awx_system_info, job)',
     label='job',
     refresh='load',
     multi=true,
@@ -61,11 +69,10 @@ local instance_template =
   grafana.template.new(
     'instance',
     '$datasource',
-    'label_values(rclone_speed{job=~"$job"}, instance)',
+    'label_values(awx_system_info{job=~"$job"}, instance)',
     refresh='load',
-    multi=true,
-    includeAll=true,
-    allValues='.+',
+    multi=false,
+    includeAll=false,
     sort=1,
   );
 
@@ -148,9 +155,18 @@ local target_matchmake(panels) = {
       function(p)
         if std.objectHasAll(p, 'target_subscriber') then
           p {
+            datasource: {
+              uid: '-- Dashboard --',
+              type: 'datasource',
+            },
             targets+: std.map(function(sub) {
               panelId: $.pubMap[sub].panel.id,
               refId: $.pubMap[sub].target.refId,
+              // This is probably redundant since we're overriding the datasource for the panel
+              datasource: {
+                uid: '-- Dashboard --',
+                type: 'datasource',
+              },
             }, p.target_subscriber),
           }
         else p, panels
@@ -170,6 +186,8 @@ local cluster_objs =
   .addTargets([
     grafana.prometheus.target(queries.orgs_total, legendFormat='Orgs'),
     grafana.prometheus.target(queries.teams_total, legendFormat='Teams'),
+    grafana.prometheus.target(queries.users_total, legendFormat='Users'),
+    grafana.prometheus.target(queries.inventories_total, legendFormat='Inventories'),
     grafana.prometheus.target(queries.projects_total, legendFormat='Projects'),
     grafana.prometheus.target(queries.schedules_total, legendFormat='Schedules'),
   ]) +
@@ -230,6 +248,38 @@ local sessions_pie =
     ],
   };
 
+local baseurl_stat =
+  statPanel.new(
+    'Tower Base URL',
+    colorMode='background',
+    graphMode='none',
+    justifyMode='center',
+  )
+  {
+    target_subscriber:: [queries.awx_system_info],
+    options+: {
+      reduceOptions: {
+        values: false,
+        calcs: [
+          'lastNotNull',
+        ],
+        fields: '/^tower_url_base$/',
+      },
+    },
+    fieldConfig+: {
+      defaults+: {
+        color: { mode: 'fixed', fixedColor: 'purple' },
+        links: [
+          {
+            title: '',
+            url: '${__value.text}',
+            targetBlank: true,
+          },
+        ],
+      },
+    },
+  };
+
 local hosts_pie =
   pieChartPanel.new('Hosts', datasource='$datasource')
   .addTarget(grafana.prometheus.target(queries.active_hosts, legendFormat='Active'))
@@ -238,8 +288,8 @@ local hosts_pie =
 
 local tower_ver_stat =
   statPanel.new('Tower Version', datasource='$datasource', colorMode='background', graphMode='none')
-  .addTarget(grafana.prometheus.target(queries.awx_system_info)) +
-  {
+  .addTarget(grafana.prometheus.target(queries.awx_system_info, format='table', instant=true))
+  + {
     target_publisher:: true,
     options+: {
       reduceOptions: {
@@ -255,12 +305,33 @@ local tower_ver_stat =
         color: { mode: 'palette-classic' },
       },
     },
-    transformations: [
-      {
-        id: 'labelsToFields',
-      },
-    ],
   };
+
+local license_type_stat =
+  statPanel.new(
+    'License Type',
+    colorMode='background',
+    graphMode='none',
+    justifyMode='center',
+  )
+  {
+    target_subscriber:: [queries.awx_system_info],
+    options+: {
+      reduceOptions: {
+        values: false,
+        calcs: [
+          'lastNotNull',
+        ],
+        fields: '/^license_type$/',
+      },
+    },
+    fieldConfig+: {
+      defaults+: {
+        color: { mode: 'fixed', fixedColor: 'blue' },
+      },
+    },
+  };
+
 
 local license_expiry_stat =
   statPanel.new('License Expiry', datasource='$datasource', colorMode='background', graphMode='none', unit='s')
@@ -305,6 +376,57 @@ local license_expiry_stat =
     ],
   };
 
+local license_total_free_stat =
+  statPanel.new('Licenses Free/Total', datasource='$datasource', colorMode='background', graphMode='none', textMode='value', justifyMode='center')
+  .addTargets([
+    grafana.prometheus.target(queries.license_free),
+    grafana.prometheus.target(queries.license_total),
+  ])
+  .addThresholds([
+    {
+      color: 'red',
+      value: null,
+    },
+    {
+      value: 10,
+      color: '#EAB839',
+    },
+    {
+      value: 20,
+      color: '#EF843C',
+    },
+    {
+      value: 40,
+      color: 'green',
+    },
+  ])
+  .addOverride(
+    matcher={
+      id: 'byName',
+      options: 'awx_license_instance_total{cluster="my-cluster", instance="awx-service.sample-apps.svc.cluster.local:80", job="integrations/awx"}',
+    },
+    properties=[
+      {
+        id: 'thresholds',
+        value: {
+          mode: 'absolute',
+          steps: [
+            {
+              color: 'blue',
+              value: null,
+            },
+          ],
+        },
+      },
+    ]
+  );
+
+local templates_by_type_pie =
+  pieChartPanel.new('Templates by Type', datasource='$datasource')
+  .addTarget(grafana.prometheus.target(queries.job_templates_total, legendFormat='Job'))
+  .addTarget(grafana.prometheus.target(queries.workflow_job_templates_total, legendFormat='Workflow Job'))
+  + piechartupdate;
+
 local awx_dashboard =
   dashboard.new(
     'AWX',
@@ -317,11 +439,22 @@ local awx_dashboard =
   ])
   .addPanels([
     row.new('Overview'),
-    sessions_pie { gridPos: { x: 0, y: 1, w: 8, h: 8 } },
-    cluster_objs { gridPos: { x: 8, y: 1, w: 8, h: 8 } },
-    hosts_pie { gridPos: { x: 16, y: 1, w: 8, h: 8 } },
-    tower_ver_stat { gridPos: { x: 0, y: 8, w: 3, h: 3 } },
-    license_expiry_stat { gridPos: { x: 0, y: 11, w: 3, h: 3 } },
+    tower_ver_stat { gridPos: { h: 3, w: 3, x: 0, y: 1 } },
+    license_type_stat { gridPos: { h: 3, w: 3, x: 15, y: 1 } },
+    license_expiry_stat { gridPos: { h: 3, w: 3, x: 15, y: 4 } },
+    license_total_free_stat { gridPos: { h: 3, w: 3, x: 15, y: 7 } },
+    sessions_pie { gridPos: { h: 5, w: 6, x: 18, y: 6 } },
+    baseurl_stat { gridPos: { h: 3, w: 12, x: 3, y: 1 } },
+    cluster_objs { gridPos: { h: 6, w: 15, x: 0, y: 4 } },
+    hosts_pie { gridPos: { h: 5, w: 6, x: 18, y: 1 } },
+    it.new(
+      '$datasource',
+      grafana.prometheus.target(queries.instance_info, format='table', instant=true),
+      grafana.prometheus.target(queries.instance_cpu, format='table', instant=true),
+      grafana.prometheus.target(queries.instance_memory, format='table', instant=true),
+      grafana.prometheus.target(queries.instance_consumed_capacity_percent, format='table', instant=true),
+    ) { gridPos: { h: 6, w: 18, x: 0, y: 10 } },
+    templates_by_type_pie { gridPos: { h: 5, w: 6, x: 18, y: 11 } },
   ]);
 
 {
