@@ -55,26 +55,30 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
     withDescription(description): { description: description },
 
-    // withValue adds a labeled metric with a value
-    // labelMap = { key: value }
-    withValue(labelMap, value=1): {
+    local generateValues(labelMap, value=1) =
       local labels = [
         key + '="' + labelMap[key] + '"'
         for key in std.objectFields(labelMap)
-      ],
-      values+: [
+      ];
+      [
         '{%s} %d' % [std.join(',', labels), value],
       ],
+
+    // withValue adds a labeled metric with a value
+    // labelMap = { key: value }
+    withValue(labelMap, value=1): {
+      values+: generateValues(labelMap, value),
     },
 
     // withLabelMapList adds multiple labeled metrics with the same value
     // labelMapList = [labelMap1, labelMap2]
-    withLabelMapList(labelMapList, value=1)::
-      std.foldr(
+    withLabelMapList(labelMapList, value=1):: {
+      values+: std.foldr(
         function(data, acc)
-          acc + self.withValue(data, value),
+          acc + generateValues(data, value),
         labelMapList,
-        {}
+        []
       ),
+    },
   },
 }
