@@ -6,6 +6,7 @@ local graphPanel = grafana.graphPanel;
 local statPanel = grafana.statPanel;
 local pieChartPanel = grafana.pieChartPanel;
 local it = import 'instancetable.libsonnet';
+local ct = import 'clustertable.libsonnet';
 
 local dashboardUid = 'eqcdR8HDA';
 
@@ -34,6 +35,11 @@ local queries = {
   instance_capacity: 'sum by (hostname) (awx_instance_capacity{' + matcher + '})',
   instance_consumed_capacity: 'sum by (hostname) (awx_instance_consumed_capacity{' + matcher + '})',
   instance_consumed_capacity_percent: queries.instance_consumed_capacity + ' / ' + queries.instance_capacity,
+
+  launch_type_total: 'sum by (launch_type) (awx_instance_launch_type_total{' + matcher + '})',
+  running_job_count: 'awx_running_jobs_total{' + matcher + '}',
+  pending_job_count: 'awx_running_jobs_total{' + matcher + '}',
+  job_status_rate: 'irate(awx_status_total{' + matcher + '}[$__rate_interval])',
 };
 
 // Templates
@@ -199,10 +205,11 @@ local cluster_objs =
     },
   };
 
+// This should be a timeseries since it will likely change over time
 local sessions_pie =
-  pieChartPanel.new('Sessions', datasource='$datasource')
+  graphPanel.new('Sessions', datasource='$datasource')
   .addTarget(grafana.prometheus.target(queries.sessions_by_type, legendFormat='{{type}}'))
-  + piechartupdate +
+  // + piechartupdate +
   {
     fieldConfig+: {
       overrides+: [
@@ -427,6 +434,28 @@ local templates_by_type_pie =
   .addTarget(grafana.prometheus.target(queries.workflow_job_templates_total, legendFormat='Workflow Job'))
   + piechartupdate;
 
+local jobs_by_status =
+  graphPanel.new(
+    'Active Jobs by State',
+    datasource='$datasource',
+    stack=true,
+    description='Total number of jobs in the Running or Pending state, on all AWX instances in the cluster.'
+  )
+  .addTargets([
+    grafana.prometheus.target(queries.running_job_count, legendFormat='Running'),
+    grafana.prometheus.target(queries.pending_job_count, legendFormat='Pending'),
+  ]);
+
+
+local job_status_rate =
+  graphPanel.new(
+    'Job Completion Status Rate',
+    datasource='$datasource',
+    stack=true,
+    description='Rate of job completion status, on all AWX instances in the cluster.'
+  )
+  .addTarget(grafana.prometheus.target(queries.job_status_rate, legendFormat='{{status}}'));
+
 local awx_dashboard =
   dashboard.new(
     'AWX',
@@ -438,23 +467,26 @@ local awx_dashboard =
     instance_template,
   ])
   .addPanels([
-    row.new('Overview'),
-    tower_ver_stat { gridPos: { h: 3, w: 3, x: 0, y: 1 } },
-    license_type_stat { gridPos: { h: 3, w: 3, x: 15, y: 1 } },
-    license_expiry_stat { gridPos: { h: 3, w: 3, x: 15, y: 4 } },
-    license_total_free_stat { gridPos: { h: 3, w: 3, x: 15, y: 7 } },
-    sessions_pie { gridPos: { h: 5, w: 6, x: 18, y: 6 } },
-    baseurl_stat { gridPos: { h: 3, w: 12, x: 3, y: 1 } },
-    cluster_objs { gridPos: { h: 6, w: 15, x: 0, y: 4 } },
-    hosts_pie { gridPos: { h: 5, w: 6, x: 18, y: 1 } },
+    row.new('Cluster'),
+    tower_ver_stat { gridPos: { h: 3, w: 3, x: 0, y: 7 } },
+    license_type_stat { gridPos: { h: 3, w: 3, x: 15, y: 7 } },
+    license_expiry_stat { gridPos: { h: 3, w: 3, x: 18, y: 7 } },
+    license_total_free_stat { gridPos: { h: 3, w: 3, x: 21, y: 7 } },
+    sessions_pie { gridPos: { h: 5, w: 12, x: 6, y: 16 } },
+    baseurl_stat { gridPos: { h: 3, w: 12, x: 3, y: 7 } },
+    ct.new(dashboardUid) { gridPos: { h: 6, w: 24, x: 0, y: 1 } },
+    hosts_pie { gridPos: { h: 5, w: 6, x: 0, y: 16 } },
     it.new(
       '$datasource',
       grafana.prometheus.target(queries.instance_info, format='table', instant=true),
       grafana.prometheus.target(queries.instance_cpu, format='table', instant=true),
       grafana.prometheus.target(queries.instance_memory, format='table', instant=true),
       grafana.prometheus.target(queries.instance_consumed_capacity_percent, format='table', instant=true),
-    ) { gridPos: { h: 6, w: 18, x: 0, y: 10 } },
-    templates_by_type_pie { gridPos: { h: 5, w: 6, x: 18, y: 11 } },
+    ) { gridPos: { h: 6, w: 24, x: 0, y: 10 } },
+    templates_by_type_pie { gridPos: { h: 5, w: 6, x: 18, y: 16 } },
+    row.new('Jobs') + { gridPos+: { y: 22 } },
+    jobs_by_status { gridPos: { x: 0, y: 23, w: 9, h: 6 } },
+    job_status_rate { gridPos: { x: 0, y: 29, w: 9, h: 6 } },
   ]);
 
 {

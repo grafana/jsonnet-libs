@@ -1,7 +1,7 @@
 {
   new(datasource, info_target, cpu_target, mem_target, consumed_capacity_target):: {
     type: 'table',
-    title: 'AWX Instances',
+    title: 'Cluster Instances',
     targets: [
       info_target,
       cpu_target,
