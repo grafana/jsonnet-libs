@@ -1781,10 +1781,7 @@
             "finaljob"
           ]
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
+        "datasource": "$datasource",
         "definition": "label_values(confluent_kafka_server_retained_bytes, scrape_job)",
         "hide": 0,
         "includeAll": true,
@@ -1846,7 +1843,7 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",scrape_job=~\"$job\",kafka_id=~\"$cluster\"}, topic)",
+        "definition": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\"}, topic)",
         "hide": 0,
         "includeAll": true,
         "label": "Topics",
@@ -1854,7 +1851,7 @@
         "name": "topic",
         "options": [],
         "query": {
-          "query": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",scrape_job=~\"$job\",kafka_id=~\"$cluster\"}, topic)",
+          "query": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\"}, topic)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -1877,7 +1874,7 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"},partition)",
+        "definition": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"},partition)",
         "hide": 0,
         "includeAll": true,
         "label": "Partition",
@@ -1885,7 +1882,7 @@
         "name": "partition",
         "options": [],
         "query": {
-          "query": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"},partition)",
+          "query": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"},partition)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
