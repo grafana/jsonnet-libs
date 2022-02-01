@@ -1,0 +1,5 @@
+exclusions:
+  template-job-rule:
+    reason: "Job label is named scrape_job and is being used."
+  panel-job-instance-rule:
+    reason: "Job label is named scrape_job and is being used."
