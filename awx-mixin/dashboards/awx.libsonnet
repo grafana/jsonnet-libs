@@ -524,8 +524,8 @@ local awx_dashboard =
     job_status_rate { gridPos: { x: 0, y: 29, w: 9, h: 6 } },
     jobs_launch_type_rate_graph { gridPos: { x: 9, y: 22, w: 9, h: 6 } },
     jobs_status_rate_graph { gridPos: { x: 9, y: 28, w: 9, h: 6 } },
-    jobs_by_launch_type_pie { gridPos: { x: 18, y: 22, w: 6, h: 6 }},
-    jobs_by_status_pie { gridPos: { x: 18, y: 28, w: 6, h: 6 }},
+    jobs_by_launch_type_pie { gridPos: { x: 18, y: 22, w: 6, h: 6 } },
+    jobs_by_status_pie { gridPos: { x: 18, y: 28, w: 6, h: 6 } },
   ]);
 
 {
