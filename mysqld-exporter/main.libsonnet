@@ -9,8 +9,8 @@ local container = k.core.v1.container;
     user,
     host,
     port=3306,
-    tlsMode='preferred',
     image='prom/mysqld-exporter:v0.13.0',
+    tlsMode='preferred',
   ):: {
     local this = self,
 
