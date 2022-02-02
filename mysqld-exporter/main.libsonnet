@@ -9,6 +9,7 @@ local container = k.core.v1.container;
     user,
     host,
     port=3306,
+    tlsMode='preferred',
     image='prom/mysqld-exporter:v0.13.0',
   ):: {
     local this = self,
@@ -17,6 +18,7 @@ local container = k.core.v1.container;
       MYSQL_USER: user,
       MYSQL_HOST: host,
       MYSQL_PORT: std.toString(port),
+      MYSQL_TLS_MODE: tlsMode,
     },
 
     local containerPort = k.core.v1.containerPort,
@@ -38,7 +40,7 @@ local container = k.core.v1.container;
           this.container
           // Force DATA_SOURCE_NAME to be declared after the variables it references
           + container.withEnvMap({
-            DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/',
+            DATA_SOURCE_NAME: '$(MYSQL_USER):$(MYSQL_PASSWORD)@tcp($(MYSQL_HOST):$(MYSQL_PORT))/?tls=$(MYSQL_TLS_MODE)',
           }),
         ]
       ),
@@ -69,6 +71,13 @@ local container = k.core.v1.container;
 
   withImage(image):: {
     container+:: container.withImage(image),
+  },
+
+  withTLSMode(mode):: {
+    local envVar = k.core.v1.envVar,
+    container+:: container.withEnvMixin([
+      envVar.new('MYSQL_TLS_MODE', mode),
+    ]),
   },
 
   args:: {
