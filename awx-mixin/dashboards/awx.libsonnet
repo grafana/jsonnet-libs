@@ -43,7 +43,7 @@ local queries = {
   job_launch_type_total: 'sum by (launch_type) (awx_instance_launch_type_total{' + matcher + '})',
   job_status_total: 'sum by (status) (awx_instance_status_total{' + matcher + '})',
   job_launch_type_rate: 'sum by (launch_type) (irate(awx_instance_launch_type_total{' + matcher + '}[$__rate_interval]))',
-  instance_job_status_rate: 'sum by (status) (irate(awx_instance_status_total{' + matcher + '}[$__rate_interval]))',
+  instance_job_status_rate: 'sum by (status, node) (irate(awx_instance_status_total{' + matcher + '}[$__rate_interval]))',
 };
 
 // Templates
@@ -118,6 +118,7 @@ local piechartupdate =
 by not repeating queries.
 
 The `panels` input parameter is expected to be a flat array of panels. I.E. No panels which themselves have a "panels" property, as used by the old rows pattern.
+This does require that you use rigid `gridPos` rather than the default behavior of the `row` and `dashboard` libs of grafonnet.
 
 Panels may either announce themselves as a publisher of shared queries, or specify that they subscribe to one or more queries.
 
@@ -471,13 +472,13 @@ local jobs_launch_type_rate_graph =
 
 local jobs_status_rate_graph =
   graphPanel.new(
-    'Job Rate by Completion Status',
+    'Job Rate by Node and Completion Status',
     datasource='$datasource',
     stack=true,
-    description='Rate of new jobs being completed, by their Completion Status.'
+    description='Rate of new jobs being completed, by their Node and Completion Status.'
   )
   .addTargets([
-    grafana.prometheus.target(queries.instance_job_status_rate, legendFormat='{{status}}'),
+    grafana.prometheus.target(queries.instance_job_status_rate, legendFormat='{{status}} - {{node}}'),
   ]);
 
 local jobs_by_launch_type_pie =
