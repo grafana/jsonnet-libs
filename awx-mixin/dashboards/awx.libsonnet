@@ -40,6 +40,10 @@ local queries = {
   running_job_count: 'awx_running_jobs_total{' + matcher + '}',
   pending_job_count: 'awx_running_jobs_total{' + matcher + '}',
   job_status_rate: 'irate(awx_status_total{' + matcher + '}[$__rate_interval])',
+  job_launch_type_total: 'sum by (launch_type) (awx_instance_launch_type_total{' + matcher + '})',
+  job_status_total: 'sum by (status) (awx_instance_status_total{' + matcher + '})',
+  job_launch_type_rate: 'sum by (launch_type) (irate(awx_instance_launch_type_total{' + matcher + '}[$__rate_interval]))',
+  instance_job_status_rate: 'sum by (status) (irate(awx_instance_status_total{' + matcher + '}[$__rate_interval]))',
 };
 
 // Templates
@@ -209,8 +213,7 @@ local cluster_objs =
 local sessions_pie =
   graphPanel.new('Sessions', datasource='$datasource')
   .addTarget(grafana.prometheus.target(queries.sessions_by_type, legendFormat='{{type}}'))
-  // + piechartupdate +
-  {
+  + {
     fieldConfig+: {
       overrides+: [
         {
@@ -446,7 +449,6 @@ local jobs_by_status =
     grafana.prometheus.target(queries.pending_job_count, legendFormat='Pending'),
   ]);
 
-
 local job_status_rate =
   graphPanel.new(
     'Job Completion Status Rate',
@@ -455,6 +457,38 @@ local job_status_rate =
     description='Rate of job completion status, on all AWX instances in the cluster.'
   )
   .addTarget(grafana.prometheus.target(queries.job_status_rate, legendFormat='{{status}}'));
+
+local jobs_launch_type_rate_graph =
+  graphPanel.new(
+    'Job Rate by Launch Type',
+    datasource='$datasource',
+    stack=true,
+    description='Rate of new jobs being started, by Launch Type.'
+  )
+  .addTargets([
+    grafana.prometheus.target(queries.job_launch_type_rate, legendFormat='{{launch_type}}'),
+  ]);
+
+local jobs_status_rate_graph =
+  graphPanel.new(
+    'Job Rate by Completion Status',
+    datasource='$datasource',
+    stack=true,
+    description='Rate of new jobs being completed, by their Completion Status.'
+  )
+  .addTargets([
+    grafana.prometheus.target(queries.instance_job_status_rate, legendFormat='{{status}}'),
+  ]);
+
+local jobs_by_launch_type_pie =
+  pieChartPanel.new('Jobs by Launch Type', datasource='$datasource')
+  .addTarget(grafana.prometheus.target(queries.job_launch_type_total, legendFormat='{{launch_type}}'))
+  + piechartupdate;
+
+local jobs_by_status_pie =
+  pieChartPanel.new('Jobs by Completion Status', datasource='$datasource')
+  .addTarget(grafana.prometheus.target(queries.job_status_total, legendFormat='{{status}}'))
+  + piechartupdate;
 
 local awx_dashboard =
   dashboard.new(
@@ -487,6 +521,10 @@ local awx_dashboard =
     row.new('Jobs') + { gridPos+: { y: 22 } },
     jobs_by_status { gridPos: { x: 0, y: 23, w: 9, h: 6 } },
     job_status_rate { gridPos: { x: 0, y: 29, w: 9, h: 6 } },
+    jobs_launch_type_rate_graph { gridPos: { x: 9, y: 22, w: 9, h: 6 } },
+    jobs_status_rate_graph { gridPos: { x: 9, y: 28, w: 9, h: 6 } },
+    jobs_by_launch_type_pie { gridPos: { x: 18, y: 22, w: 6, h: 6 }},
+    jobs_by_status_pie { gridPos: { x: 18, y: 28, w: 6, h: 6 }},
   ]);
 
 {
