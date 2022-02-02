@@ -38,7 +38,7 @@
               value: [
                 {
                   title: '',
-                  url: 'd/'+dashboardUid+'/var-datasource=${datasource}&var-job=${job}&var-instance=${__data.fields.Instance}',
+                  url: 'd/' + dashboardUid + '/var-datasource=${datasource}&var-job=${job}&var-instance=${__data.fields.Instance}',
                 },
               ],
             },
