@@ -1,12 +1,9 @@
 {
-  new(dashboardUid):: {
+  new(datasource, dashboardUid):: {
     type: 'table',
     title: 'Cluster List',
     description: 'List of available clusters with counts of cluster level objects. Selectable by the "instance" variable.',
-    datasource: {
-      uid: '$datasource',
-      type: 'prometheus',
-    },
+    datasource: datasource,
     links: [],
     fieldConfig: {
       defaults: {

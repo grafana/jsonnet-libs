@@ -514,7 +514,7 @@ local awx_dashboard =
     license_total_free_stat { gridPos: { h: 3, w: 3, x: 21, y: 7 } },
     sessions_pie { gridPos: { h: 5, w: 12, x: 6, y: 16 } },
     baseurl_stat { gridPos: { h: 3, w: 12, x: 3, y: 7 } },
-    ct.new(dashboardUid) { gridPos: { h: 6, w: 24, x: 0, y: 1 } },
+    ct.new('$datasource', dashboardUid) { gridPos: { h: 6, w: 24, x: 0, y: 1 } },
     hosts_pie { gridPos: { h: 5, w: 6, x: 0, y: 16 } },
     it.new(
       '$datasource',
