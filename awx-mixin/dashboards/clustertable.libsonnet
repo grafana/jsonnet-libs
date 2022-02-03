@@ -62,10 +62,6 @@
         format: 'table',
         intervalFactor: 2,
         refId: 'A',
-        datasource: {
-          type: 'prometheus',
-          uid: 'grafanacloud-prom',
-        },
         instant: true,
       },
       {
@@ -76,10 +72,6 @@
         format: 'table',
         intervalFactor: 2,
         refId: 'B',
-        datasource: {
-          type: 'prometheus',
-          uid: 'grafanacloud-prom',
-        },
         instant: true,
       },
       {
@@ -90,10 +82,6 @@
         format: 'table',
         intervalFactor: 2,
         refId: 'C',
-        datasource: {
-          type: 'prometheus',
-          uid: 'grafanacloud-prom',
-        },
         instant: true,
       },
       {
@@ -104,10 +92,6 @@
         format: 'table',
         intervalFactor: 2,
         refId: 'D',
-        datasource: {
-          type: 'prometheus',
-          uid: 'grafanacloud-prom',
-        },
         instant: true,
       },
       {
@@ -118,10 +102,6 @@
         format: 'table',
         intervalFactor: 2,
         refId: 'E',
-        datasource: {
-          type: 'prometheus',
-          uid: 'grafanacloud-prom',
-        },
         instant: true,
       },
       {
@@ -132,10 +112,6 @@
         format: 'table',
         intervalFactor: 2,
         refId: 'F',
-        datasource: {
-          type: 'prometheus',
-          uid: 'grafanacloud-prom',
-        },
         instant: true,
       },
     ],
