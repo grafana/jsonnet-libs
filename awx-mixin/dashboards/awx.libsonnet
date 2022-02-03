@@ -166,18 +166,23 @@ local target_matchmake(panels) = {
       function(p)
         if std.objectHasAll(p, 'target_subscriber') then
           p {
-            datasource: {
-              uid: '-- Dashboard --',
-              type: 'datasource',
-            },
+            datasource: '-- Dashboard --',
+            // TODO: In a downstream project, the grafana SDK is used for some evaluation, and extracting data.
+            // As a result of a change to the grafana schema (covered in this PR -> https://github.com/grafana-tools/sdk/pull/190)
+            // the only acceptable form of datasource is a string. Once that is sorted out, this can use the proper form which is
+            // commented out below
+            // datasource: {
+            //   uid: '-- Dashboard --',
+            //   type: 'datasource',
+            // },
             targets+: std.map(function(sub) {
               panelId: $.pubMap[sub].panel.id,
               refId: $.pubMap[sub].target.refId,
               // This is probably redundant since we're overriding the datasource for the panel
-              datasource: {
-                uid: '-- Dashboard --',
-                type: 'datasource',
-              },
+              // datasource: {
+              //   uid: '-- Dashboard --',
+              //   type: 'datasource',
+              // },
             }, p.target_subscriber),
           }
         else p, panels
