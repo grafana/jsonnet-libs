@@ -2,7 +2,7 @@ groups:
 - name: Kafka_Alerts
   rules:
     - alert: Offline_Partiton_Count
-      expr: sum(kafka_controller_KafkaController_OfflinePartitionsCount{job="integrations/kafka"})by(instance)  > 0
+      expr: sum(kafka_controller_KafkaController_OfflinePartitionsCount{job="integrations/kafka"}) by (instance) > 0
       for: 1m
       labels:
         severity: critical
