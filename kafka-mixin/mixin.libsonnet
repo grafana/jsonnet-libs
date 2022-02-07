@@ -14,4 +14,7 @@
   local importRules(rules) = {
     groups+: std.native('parseYaml')(rules)[0].groups,
   },
+
+  prometheusAlerts+:
+    importRules(importstr 'alerts/KafkaAlerts.yml'),
 }

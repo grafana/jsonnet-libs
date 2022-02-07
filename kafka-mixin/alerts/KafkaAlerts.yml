@@ -1,0 +1,74 @@
+groups:
+- name: Kafka_Alerts
+  rules:
+    - alert: Offline_Partiton_Count
+      expr: sum(kafka_controller_KafkaController_OfflinePartitionsCount{job="integrations/kafka"})by(instance)  > 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: 'Kafka {{ $labels.instance }}: {{ $value }} partitons offline'
+        description: 'After successful leader election, if the leader for partition dies, then the partition moves to the OfflinePartition state. Offline partitions are not available for reading and writing. Restart the brokers, if needed, and check the logs for errors.'
+
+    - alert: Under_Replicated_Partition_Count
+      expr: sum(kafka_server_ReplicaManager_UnderReplicatedPartitions{job="integrations/kafka"})by(instance) > 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: 'Kafka {{ $labels.instance }}: {{ $value }} under replicated partitons'
+        description: 'Under-replicated partitions means that one or more replicas are not available. This is usually because a broker is down.  Restart the broker, and check for errors in the logs.'
+
+    - alert: Active_Controller
+      expr: sum(kafka_controller_KafkaController_ActiveControllerCount{job="integrations/kafka"})by(instance) != 1
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: 'Kafka {{ $labels.instance }}: No active controller'
+        description: 'No broker in the cluster is reporting as the active controller in the last 1 minute interval. During steady state there should be only one active controller per cluster.'
+
+    - alert: Unclean_Leader_Election
+      expr: max(rate(kafka_controller_ControllerStats_UncleanLeaderElectionsPerSec{job="integrations/kafka"}[5m]))by(instance) != 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: 'Kafka {{ $labels.instance }}: {{ $value }} unclean leader elections'
+        description: '{{ $value }} unclean partition leader elections in the cluster reported in the last 1 minute interval. When unclean leader election is held among out-of-sync replicas, there is a possibility of data loss if any messages were not synced prior to the loss of the former leader. So if the number of unclean elections is greater than 0, investigate broker logs to determine why leaders were re-elected, and look for WARN or ERROR messages. Consider setting the broker configuration parameter unclean.leader.election.enable to false so that a replica outside of the set of in-sync replicas is never elected leader.'
+
+    - alert: ISR_Expand_Rate
+      expr: sum(rate(kafka_server_ReplicaManager_IsrExpandsPerSec[5m]))by(instance) != 0
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: 'Kafka {{ $labels.instance }}: {{ $value }} ISR Expansion Rate'
+        description: 'If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR expansion rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.'
+
+    - alert: ISR_Shrink_Rate
+      expr: sum(rate(kafka_server_ReplicaManager_IsrShrinksPerSec[5m]))by(instance) != 0
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: 'Kafka {{ $labels.instance }}: {{ $value }} ISR Shrink Rate'
+        description: 'If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR shrink rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.'
+
+    - alert: Broker_Count
+      expr: count(kafka_server_KafkaServer_BrokerState{job="integrations/kafka"})by(instance) == 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: 'Kafka {{ $labels.instance }}: No Brokers online!'
+        description: 'Broker count is 0'
+
+    - alert: Zookeeper_Sync_Connect
+      expr: avg(kafka_server_SessionExpireListener_ZooKeeperSyncConnectsPerSec{job="integrations/kafka"})by(instance) < 1
+      for: 1m
+      labels:
+        severity: warning
+      annotations:
+        summary: 'Kafka {{ $labels.instance }}: Zookeeper Sync Disconected'
+        description: 'Zookeeper Sync Disconected'
