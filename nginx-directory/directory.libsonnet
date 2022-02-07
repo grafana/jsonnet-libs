@@ -25,6 +25,7 @@ local link_data = import 'link_data.libsonnet';
       redirect: false,
       allowWebsockets: false,
       subfilter: false,
+      disable_downstream_subfilter: false,
       custom: [],
 
       // backwards compatible, service level config allows for more granular configuration

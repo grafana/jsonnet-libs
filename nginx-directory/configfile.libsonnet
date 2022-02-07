@@ -31,16 +31,25 @@ function(services) {
       else ''
     )
     + (
+      if service.disable_downstream_subfilter
+      then |||
+        add_header X-Nginx-Subfilter disable;
+      ||| % service
+      else ''
+    )
+    + (
       if service.subfilter
       then |||
-        sub_filter 'href="/' 'href="/%(path)s/';
-        sub_filter 'src="/' 'src="/%(path)s/';
-        sub_filter 'action="/' 'action="/%(path)s/';
-        sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
-        sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
-        sub_filter_once off;
-        sub_filter_types text/css application/xml application/json application/javascript;
-        proxy_redirect   "/" "/%(path)s/";
+        if ($http_x_nginx_subfilter != "disable") {
+          sub_filter 'href="/' 'href="/%(path)s/';
+          sub_filter 'src="/' 'src="/%(path)s/';
+          sub_filter 'action="/' 'action="/%(path)s/';
+          sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
+          sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
+          sub_filter_once off;
+          sub_filter_types text/css application/xml application/json application/javascript;
+          proxy_redirect   "/" "/%(path)s/";
+        }
       ||| % service
       else ''
     ),
