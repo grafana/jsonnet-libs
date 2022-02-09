@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1643649215694,
+  "id": 8,
+  "iteration": 1644350829423,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -86,7 +86,7 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "mean"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -94,12 +94,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(rate(confluent_kafka_server_received_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\",partition=~\"$partition\"}[$__rate_interval]))",
+          "expr": "sum(sum_over_time(confluent_kafka_server_received_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/count_over_time(confluent_kafka_server_received_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -154,7 +154,7 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "mean"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -162,12 +162,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(rate(confluent_kafka_server_sent_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\",partition=~\"$partition\"}[$__rate_interval]))",
+          "expr": "sum(sum_over_time(confluent_kafka_server_sent_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/count_over_time(confluent_kafka_server_sent_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -230,12 +230,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(rate(confluent_kafka_server_request_count{scrape_job=~\"$job\",kafka_id=~\"$cluster\",principal=~\"$principal_id\",type=~\".*\"}[$__rate_interval]))",
+          "expr": "sum(sum_over_time(confluent_kafka_server_request_count{scrape_job=~\"$job\",kafka_id=~\"$cluster\",principal=~\"$principal_id\"}[$__rate_interval])/count_over_time(confluent_kafka_server_request_count{scrape_job=~\"$job\",kafka_id=~\"$cluster\",principal=~\"$principal_id\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -246,7 +246,82 @@
     },
     {
       "datasource": "$datasource",
-      "description": "Basic clusters have a max retained bytes limit of 5 TB prior to replication. ccloud_metrics_retained_bytes is after replication thus needs to be divided by 3.",
+      "description": "The percentage of records being written vs messages being read from the cluster.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              },
+              {
+                "color": "orange",
+                "value": 85
+              },
+              {
+                "color": "yellow",
+                "value": 90
+              },
+              {
+                "color": "green",
+                "value": 95
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 9,
+        "y": 1
+      },
+      "id": 23,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.5",
+      "targets": [
+        {
+          "datasource": "$datasource",
+          "exemplar": true,
+          "expr": "avg((sum_over_time(confluent_kafka_server_received_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/count_over_time(confluent_kafka_server_received_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval]))/(sum_over_time(confluent_kafka_server_sent_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/count_over_time(confluent_kafka_server_sent_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Write/Read Records Percentage",
+      "type": "stat"
+    },
+    {
+      "datasource": "$datasource",
+      "description": "Basic clusters have a max retained bytes limit of 5 TB prior to replication. confluent_kafka_server_retained_bytes is after replication thus needs to be divided by 3.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -279,7 +354,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 9,
+        "x": 12,
         "y": 1
       },
       "id": 12,
@@ -298,12 +373,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\",partition=~\"$partition\"})/3",
+          "expr": "sum(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"})/3",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -347,7 +422,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 12,
+        "x": 15,
         "y": 1
       },
       "id": 19,
@@ -358,7 +433,7 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "last"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -366,13 +441,14 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum (confluent_kafka_server_partition_count{scrape_job=~\"$job\",kafka_id=~\"$cluster\"})",
+          "expr": "sum(confluent_kafka_server_partition_count{scrape_job=~\"$job\",kafka_id=~\"$cluster\"})",
           "hide": false,
+          "instant": false,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -417,7 +493,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 15,
+        "x": 18,
         "y": 1
       },
       "id": 8,
@@ -436,7 +512,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
@@ -453,7 +529,7 @@
     },
     {
       "datasource": "$datasource",
-      "description": "The average active connections to a cluster. Basic clusters limit active connections to 1000.",
+      "description": "The number of active connections to a cluster. Basic clusters limit active connections to 1000.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -487,7 +563,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 18,
+        "x": 21,
         "y": 1
       },
       "id": 22,
@@ -498,7 +574,7 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "max"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -506,12 +582,12 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "avg(confluent_kafka_server_active_connection_count{scrape_job=~\"$job\",kafka_id=~\"$cluster\",principal=~\"$principal_id\"})",
+          "expr": "sum(confluent_kafka_server_active_connection_count{scrape_job=~\"$job\",kafka_id=~\"$cluster\",principal=~\"$principal_id\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "",
@@ -519,67 +595,6 @@
         }
       ],
       "title": "Active connections",
-      "type": "stat"
-    },
-    {
-      "datasource": "$datasource",
-      "description": "The count of successful authentications.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "max": 90,
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 21,
-        "y": 1
-      },
-      "id": 23,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "max"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.3.3",
-      "targets": [
-        {
-          "datasource": "$datasource",
-          "exemplar": true,
-          "expr": "sum(confluent_kafka_server_successful_authentication_count{scrape_job=~\"$job\",kafka_id=~\"$cluster\",principal=~\"$principal_id\"})",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Successful Authentications",
       "type": "stat"
     },
     {
@@ -673,7 +688,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum by (kafka_id, topic) (confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\",partition=~\"$partition\"})",
+          "expr": "sum by (kafka_id, topic) (confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{kafka_id}} - {{topic}}",
@@ -759,7 +774,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_received_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\",partition=~\"$partition\"})",
+          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_received_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{topic}} - {{kafka_id}}",
@@ -846,7 +861,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_sent_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\",partition=~\"$partition\"})",
+          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_sent_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{topic}} - {{kafka_id}}",
@@ -932,7 +947,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_received_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\",partition=~\"$partition\"})",
+          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_received_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{topic}} - {{kafka_id}}",
@@ -1019,7 +1034,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_sent_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\",partition=~\"$partition\"})",
+          "expr": "sum by (topic, kafka_id) (confluent_kafka_server_sent_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{topic}} - {{kafka_id}}",
@@ -1176,7 +1191,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
@@ -1619,7 +1634,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
@@ -1710,12 +1725,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.3.5",
       "targets": [
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "confluent_kafka_schema_registry_schema_count{scrape_job=~\"$job\",schema_registry_id=\"$schema_registry_id\"}",
+          "expr": "confluent_kafka_schema_registry_schema_count{scrape_job=~\"$job\",schema_registry_id=~\"$schema_registry_id\"}",
           "interval": "",
           "legendFormat": "{{schema_registry_id}}",
           "refId": "A"
@@ -1746,10 +1761,12 @@
       "type": "table"
     }
   ],
-  "refresh": "5m",
+  "refresh": "30s",
   "schemaVersion": 32,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "confluent-cloud-integration"
+  ],
   "templating": {
     "list": [
       {
@@ -1772,13 +1789,14 @@
         "type": "datasource"
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
-            "finaljob"
+            "All"
           ],
           "value": [
-            "finaljob"
+            "$__all"
           ]
         },
         "datasource": "$datasource",
@@ -1800,7 +1818,7 @@
         "type": "query"
       },
       {
-        "allValue": ".*",
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -1832,7 +1850,7 @@
         "useTags": false
       },
       {
-        "allValue": "",
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -1864,6 +1882,7 @@
         "useTags": false
       },
       {
+        "allValue": ".*",
         "current": {
           "selected": true,
           "text": [
@@ -1874,35 +1893,7 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"},partition)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "Partition",
-        "multi": true,
-        "name": "partition",
-        "options": [],
-        "query": {
-          "query": "label_values(confluent_kafka_server_retained_bytes{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"},partition)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 2,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(confluent_kafka_server_request_count{scrape_job=~\"$job\", kafka_id=~\"$kafka_id\"},principal_id)",
+        "definition": "label_values(confluent_kafka_server_request_count{scrape_job=~\"$job\", kafka_id=~\"$cluster\"},principal_id)",
         "hide": 0,
         "includeAll": true,
         "label": "Principal ID",
@@ -1910,7 +1901,7 @@
         "name": "principal_id",
         "options": [],
         "query": {
-          "query": "label_values(confluent_kafka_server_request_count{scrape_job=~\"$job\", kafka_id=~\"$kafka_id\"},principal_id)",
+          "query": "label_values(confluent_kafka_server_request_count{scrape_job=~\"$job\", kafka_id=~\"$cluster\"},principal_id)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -1920,6 +1911,7 @@
         "type": "query"
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -1929,6 +1921,7 @@
             "$__all"
           ]
         },
+        "datasource": "$datasource",
         "definition": "label_values(confluent_kafka_connect_dead_letter_queue_records{scrape_job=~\"$job\"}, connector_id)",
         "hide": 0,
         "includeAll": true,
@@ -1947,6 +1940,7 @@
         "type": "query"
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -1956,6 +1950,7 @@
             "$__all"
           ]
         },
+        "datasource": "$datasource",
         "definition": "label_values(confluent_kafka_ksql_streaming_unit_count{scrape_job=~\"$job\"}, ksql_id)",
         "hide": 0,
         "includeAll": true,
@@ -1974,6 +1969,7 @@
         "type": "query"
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -1983,6 +1979,7 @@
             "$__all"
           ]
         },
+        "datasource": "$datasource",
         "definition": "label_values(confluent_kafka_schema_registry_schema_count{scrape_job=~\"$job\"}, schema_registry_id)",
         "hide": 0,
         "includeAll": true,
@@ -2003,7 +2000,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
@@ -2023,6 +2020,6 @@
   "timezone": "",
   "title": "Confluent Cloud",
   "uid": "5CSjVXbnk",
-  "version": 3,
+  "version": 7,
   "weekStart": ""
 }
