@@ -321,7 +321,7 @@
     },
     {
       "datasource": "$datasource",
-      "description": "Basic clusters have a max retained bytes limit of 5 TB prior to replication. ccloud_metrics_retained_bytes is after replication thus needs to be divided by 3.",
+      "description": "Basic clusters have a max retained bytes limit of 5 TB prior to replication. confluent_kafka_server_retained_bytes is after replication thus needs to be divided by 3.",
       "fieldConfig": {
         "defaults": {
           "color": {
