@@ -166,7 +166,7 @@
             enabled: 'Enabled',
             instance_uuid: 'UUID',
             managed_by_policy: 'Managed by Policy',
-            version: "Version",
+            version: 'Version',
             'Value #B': 'CPU Cores',
             'Value #C': 'Memory',
             'Value #D': 'Consumed Capacity',
