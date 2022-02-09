@@ -309,7 +309,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "avg(sum_over_time(confluent_kafka_server_received_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/count_over_time(confluent_kafka_server_received_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/sum_over_time(confluent_kafka_server_sent_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/count_over_time(confluent_kafka_server_sent_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval]))",
+          "expr": "avg((sum_over_time(confluent_kafka_server_received_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/count_over_time(confluent_kafka_server_received_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval]))/(sum_over_time(confluent_kafka_server_sent_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])/count_over_time(confluent_kafka_server_sent_records{scrape_job=~\"$job\",kafka_id=~\"$cluster\",topic=~\"$topic\"}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "",
