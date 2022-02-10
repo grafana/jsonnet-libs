@@ -3,7 +3,7 @@ groups:
   rules:
     - alert: OfflinePartitonCount
       expr: sum(kafka_controller_KafkaController_OfflinePartitionsCount{job="integrations/kafka"}) by (instance) > 0
-      for: 1m
+      for: 5m
       labels:
         severity: critical
       annotations:
@@ -12,7 +12,7 @@ groups:
 
     - alert: UnderReplicatedPartitionCount
       expr: sum(kafka_server_ReplicaManager_UnderReplicatedPartitions{job="integrations/kafka"}) by (instance) > 0
-      for: 1m
+      for: 5m
       labels:
         severity: critical
       annotations:
@@ -21,7 +21,7 @@ groups:
 
     - alert: ActiveController
       expr: sum(kafka_controller_KafkaController_ActiveControllerCount{job="integrations/kafka"}) by (instance) != 1
-      for: 1m
+      for: 5m
       labels:
         severity: critical
       annotations:
@@ -30,7 +30,7 @@ groups:
 
     - alert: UncleanLeaderElection
       expr: max(rate(kafka_controller_ControllerStats_UncleanLeaderElectionsPerSec{job="integrations/kafka"}[5m])) by (instance) != 0
-      for: 1m
+      for: 5m
       labels:
         severity: critical
       annotations:
@@ -39,7 +39,7 @@ groups:
 
     - alert: ISRExpandRate
       expr: sum(rate(kafka_server_ReplicaManager_IsrExpandsPerSec[5m])) by (instance) != 0
-      for: 1m
+      for: 5m
       labels:
         severity: warning
       annotations:
@@ -48,7 +48,7 @@ groups:
 
     - alert: ISRShrinkRate
       expr: sum(rate(kafka_server_ReplicaManager_IsrShrinksPerSec[5m])) by (instance) != 0
-      for: 1m
+      for: 5m
       labels:
         severity: warning
       annotations:
@@ -57,7 +57,7 @@ groups:
 
     - alert: BrokerCount
       expr: count(kafka_server_KafkaServer_BrokerState{job="integrations/kafka"}) by (instance) == 0
-      for: 1m
+      for: 5m
       labels:
         severity: critical
       annotations:
@@ -66,7 +66,7 @@ groups:
 
     - alert: ZookeeperSyncConnect
       expr: avg(kafka_server_SessionExpireListener_ZooKeeperSyncConnectsPerSec{job="integrations/kafka"}) by (instance) < 1
-      for: 1m
+      for: 5m
       labels:
         severity: warning
       annotations:
