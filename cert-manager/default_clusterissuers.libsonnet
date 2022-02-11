@@ -11,8 +11,8 @@
   },
 
   clusterIssuer:: {
-    new(name): {
-      apiVersion: 'cert-manager.io/v1alpha2',
+    new(name, alphaApi=true): {
+      apiVersion: if alphaApi then 'cert-manager.io/v1alpha2' else 'cert-manager.io/v1',
       kind: 'ClusterIssuer',
       metadata: {
         name: name,
@@ -44,6 +44,25 @@
             // Secret resource used to retrieve the account's private key.
             name: secret_name,
           },
+        },
+      },
+    },
+    withACMESolverCloudDns01(project, serviceAccountSecretName, serviceAccountSecretKey): {
+      spec+: {
+        acme+: {
+          solvers+: [
+            {
+              dns01: {
+                cloudDNS: {
+                  project: project,
+                  serviceAccountSecretRef: {
+                    name: serviceAccountSecretName,
+                    key: serviceAccountSecretKey,
+                  },
+                },
+              },
+            },
+          ],
         },
       },
     },
