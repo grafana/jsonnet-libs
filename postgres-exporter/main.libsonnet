@@ -3,7 +3,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 {
   new(
     name,
-    data_source_uri='postgresql://@$(HOSTNAME):$(PORT)/postgres',
+    data_source_uri='postgresql://$(HOSTNAME):$(PORT)/postgres',
     ssl=true,
     image='quay.io/prometheuscommunity/postgres-exporter:v0.10.0',
   ):: {
