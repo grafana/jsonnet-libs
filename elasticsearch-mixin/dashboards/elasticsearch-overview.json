@@ -18,53 +18,7 @@
   "graphTooltip": 1,
   "id": 14,
   "iteration": 1611742973621,
-  "links": [
-    {
-      "asDropdown": true,
-      "icon": "external link",
-      "includeVars": false,
-      "keepTime": true,
-      "tags": [
-        "OS"
-      ],
-      "targetBlank": true,
-      "title": "OS",
-      "type": "dashboards"
-    },
-    {
-      "asDropdown": true,
-      "icon": "external link",
-      "keepTime": true,
-      "tags": [
-        "MySQL"
-      ],
-      "targetBlank": true,
-      "title": "MySQL",
-      "type": "dashboards"
-    },
-    {
-      "asDropdown": true,
-      "icon": "external link",
-      "keepTime": true,
-      "tags": [
-        "MongoDB"
-      ],
-      "targetBlank": true,
-      "title": "MongoDB",
-      "type": "dashboards"
-    },
-    {
-      "asDropdown": true,
-      "icon": "external link",
-      "keepTime": true,
-      "tags": [
-        "App"
-      ],
-      "targetBlank": true,
-      "title": "App",
-      "type": "dashboards"
-    }
-  ],
+  "links": [],
   "panels": [
     {
       "collapsed": false,
@@ -149,7 +103,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "elasticsearch_cluster_health_status{job=\"$job\",instance=~\"$instance\",cluster=\"$cluster\",color=\"red\"}==1 or (elasticsearch_cluster_health_status{job=\"$job\",instance=~\"$instance\",cluster=\"$cluster\",color=\"green\"}==1)+4 or (elasticsearch_cluster_health_status{job=\"$job\",instance=~\"$instance\",cluster=\"$cluster\",color=\"yellow\"}==1)+22",
+          "expr": "elasticsearch_cluster_health_status{job=\"$job\",instance=~\"$instance\",cluster=\"$cluster\",color=\"red\"}==1 or (elasticsearch_cluster_health_status{job=\"$job\",instance=~\"$instance\",cluster=\"$cluster\",color=\"green\"}==1)+4 or (elasticsearch_cluster_health_status{job=\"$job\",instance=~\"$instance\",cluster=\"$cluster\",color=\"yellow\"}==1)+2",
           "format": "time_series",
           "instant": true,
           "interval": "",
