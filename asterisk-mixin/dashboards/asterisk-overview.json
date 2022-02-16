@@ -2282,7 +2282,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(asterisk_core_uptime_seconds, job)",
         "hide": 0,
