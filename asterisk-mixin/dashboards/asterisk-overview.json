@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 6,
-  "iteration": 1644534316539,
+  "iteration": 1645037401036,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -985,7 +985,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1028,7 +1029,7 @@
           "type": "timeseries"
         },
         {
-          "description": "State of current channels",
+          "description": "Details of channels in the instance",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1044,7 +1045,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1260,7 +1262,7 @@
                 "uid": "u47FCkxnk"
               },
               "exemplar": true,
-              "expr": "asterisk_channels_duration_seconds{instance=\"$instance\",job=\"$job\",eid=\"$eid\"}",
+              "expr": "asterisk_channels_duration_seconds{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
               "format": "table",
               "hide": false,
               "interval": "",
@@ -1268,7 +1270,7 @@
               "refId": "B"
             }
           ],
-          "title": "Channels Information",
+          "title": "Channels Details",
           "transformations": [
             {
               "id": "groupBy",
@@ -1392,7 +1394,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1404,7 +1407,7 @@
             "h": 8,
             "w": 24,
             "x": 0,
-            "y": 40
+            "y": 19
           },
           "id": 65,
           "options": {
@@ -1435,7 +1438,7 @@
           "type": "timeseries"
         },
         {
-          "description": "Information regarding current active channels",
+          "description": "Information regarding channels in the instance",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1451,7 +1454,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1568,7 +1572,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 48
+            "y": 27
           },
           "id": 62,
           "options": {
@@ -1603,7 +1607,7 @@
               "refId": "A"
             }
           ],
-          "title": "Endpoints Information",
+          "title": "Endpoints Details",
           "transformations": [
             {
               "id": "groupBy",
@@ -1731,7 +1735,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1774,7 +1779,7 @@
           "type": "timeseries"
         },
         {
-          "description": "Information regarding current active bridges",
+          "description": "Information regarding bridges in the instance",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1790,7 +1795,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -1938,7 +1944,7 @@
               "refId": "A"
             }
           ],
-          "title": "Endpoints Information",
+          "title": "Bridges Details",
           "transformations": [
             {
               "id": "groupBy",
@@ -2253,7 +2259,7 @@
     "list": [
       {
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "Prometheus-Ubu-Local",
           "value": "Prometheus-Ubu-Local"
         },
@@ -2273,16 +2279,12 @@
       {
         "current": {
           "selected": false,
-          "text": [
-            "asterisk"
-          ],
-          "value": [
-            "asterisk"
-          ]
+          "text": "asterisk",
+          "value": "asterisk"
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "$datasource"
+          "uid": "${datasource}"
         },
         "definition": "label_values(asterisk_core_uptime_seconds, job)",
         "hide": 0,
@@ -2304,12 +2306,8 @@
       {
         "current": {
           "selected": false,
-          "text": [
-            "localhost:8088"
-          ],
-          "value": [
-            "localhost:8088"
-          ]
+          "text": "localhost:8088",
+          "value": "localhost:8088"
         },
         "datasource": {
           "type": "prometheus",
@@ -2335,12 +2333,8 @@
       {
         "current": {
           "selected": false,
-          "text": [
-            "f2:19:a6:ce:98:23"
-          ],
-          "value": [
-            "f2:19:a6:ce:98:23"
-          ]
+          "text": "f2:19:a6:ce:98:23",
+          "value": "f2:19:a6:ce:98:23"
         },
         "datasource": {
           "type": "prometheus",
@@ -2373,6 +2367,6 @@
   "timezone": "",
   "title": "Asterisk - Overview",
   "uid": "integration_asterisk_overview",
-  "version": 27,
+  "version": 30,
   "weekStart": ""
 }
