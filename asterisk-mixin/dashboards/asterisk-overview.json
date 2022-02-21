@@ -21,9 +21,24 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
-  "iteration": 1645037401036,
-  "links": [],
+  "id": 2,
+  "iteration": 1645231103655,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "asterisk-integration"
+      ],
+      "targetBlank": false,
+      "title": "Asterisk Dashboards",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -506,7 +521,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 6,
         "w": 24,
         "x": 0,
         "y": 5
@@ -572,7 +587,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 13
+        "y": 11
       },
       "id": 43,
       "options": {
@@ -635,7 +650,7 @@
         "h": 4,
         "w": 4,
         "x": 4,
-        "y": 13
+        "y": 11
       },
       "id": 52,
       "options": {
@@ -701,7 +716,7 @@
         "h": 4,
         "w": 4,
         "x": 8,
-        "y": 13
+        "y": 11
       },
       "id": 45,
       "options": {
@@ -764,7 +779,7 @@
         "h": 4,
         "w": 4,
         "x": 12,
-        "y": 13
+        "y": 11
       },
       "id": 53,
       "options": {
@@ -830,7 +845,7 @@
         "h": 4,
         "w": 4,
         "x": 16,
-        "y": 13
+        "y": 11
       },
       "id": 47,
       "options": {
@@ -893,7 +908,7 @@
         "h": 4,
         "w": 4,
         "x": 20,
-        "y": 13
+        "y": 11
       },
       "id": 54,
       "options": {
@@ -933,7 +948,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 15
       },
       "id": 56,
       "panels": [
@@ -985,8 +1000,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -995,10 +1009,10 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 10,
-            "w": 24,
+            "h": 9,
+            "w": 9,
             "x": 0,
-            "y": 18
+            "y": 16
           },
           "id": 63,
           "options": {
@@ -1029,6 +1043,10 @@
           "type": "timeseries"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
           "description": "Details of channels in the instance",
           "fieldConfig": {
             "defaults": {
@@ -1045,8 +1063,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -1224,10 +1241,10 @@
             ]
           },
           "gridPos": {
-            "h": 11,
-            "w": 24,
-            "x": 0,
-            "y": 28
+            "h": 9,
+            "w": 15,
+            "x": 9,
+            "y": 16
           },
           "id": 58,
           "options": {
@@ -1247,7 +1264,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "u47FCkxnk"
+                "uid": "${datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_channels_state{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1259,7 +1276,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "u47FCkxnk"
+                "uid": "${datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_channels_duration_seconds{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1342,7 +1359,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 16
       },
       "id": 60,
       "panels": [
@@ -1394,8 +1411,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -1404,10 +1420,10 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
-            "w": 24,
+            "h": 10,
+            "w": 9,
             "x": 0,
-            "y": 19
+            "y": 17
           },
           "id": 65,
           "options": {
@@ -1438,6 +1454,10 @@
           "type": "timeseries"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
           "description": "Information regarding channels in the instance",
           "fieldConfig": {
             "defaults": {
@@ -1454,8 +1474,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -1569,10 +1588,10 @@
             ]
           },
           "gridPos": {
-            "h": 9,
-            "w": 24,
-            "x": 0,
-            "y": 27
+            "h": 10,
+            "w": 15,
+            "x": 9,
+            "y": 17
           },
           "id": 62,
           "options": {
@@ -1597,7 +1616,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "u47FCkxnk"
+                "uid": "${datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_endpoints_channels_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1683,7 +1702,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 17
       },
       "id": 68,
       "panels": [
@@ -1735,8 +1754,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -1745,10 +1763,10 @@
             "overrides": []
           },
           "gridPos": {
-            "h": 8,
-            "w": 24,
+            "h": 9,
+            "w": 9,
             "x": 0,
-            "y": 20
+            "y": 18
           },
           "id": 71,
           "options": {
@@ -1779,6 +1797,10 @@
           "type": "timeseries"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
           "description": "Information regarding bridges in the instance",
           "fieldConfig": {
             "defaults": {
@@ -1795,8 +1817,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   }
                 ]
               },
@@ -1906,10 +1927,10 @@
             ]
           },
           "gridPos": {
-            "h": 10,
-            "w": 24,
-            "x": 0,
-            "y": 28
+            "h": 9,
+            "w": 15,
+            "x": 9,
+            "y": 18
           },
           "id": 70,
           "options": {
@@ -1934,7 +1955,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "u47FCkxnk"
+                "uid": "${datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_bridges_channels_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -2027,7 +2048,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 18
       },
       "id": 49,
       "panels": [
@@ -2156,10 +2177,10 @@
             ]
           },
           "gridPos": {
-            "h": 8,
+            "h": 6,
             "w": 24,
             "x": 0,
-            "y": 21
+            "y": 19
           },
           "id": 51,
           "options": {
@@ -2249,7 +2270,7 @@
       "type": "row"
     }
   ],
-  "refresh": "5s",
+  "refresh": "30s",
   "schemaVersion": 34,
   "style": "dark",
   "tags": [
@@ -2259,9 +2280,9 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "Prometheus-Ubu-Local",
-          "value": "Prometheus-Ubu-Local"
+          "selected": false,
+          "text": "Cortex",
+          "value": "Cortex"
         },
         "hide": 0,
         "includeAll": false,
@@ -2279,8 +2300,8 @@
       {
         "current": {
           "selected": false,
-          "text": "asterisk",
-          "value": "asterisk"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "type": "prometheus",
@@ -2367,6 +2388,6 @@
   "timezone": "",
   "title": "Asterisk - Overview",
   "uid": "integration_asterisk_overview",
-  "version": 30,
+  "version": 8,
   "weekStart": ""
 }
