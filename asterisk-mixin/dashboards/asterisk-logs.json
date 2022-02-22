@@ -1,775 +1,775 @@
 {
-    "annotations": {
-      "list": [
-        {
-          "builtIn": 1,
-          "datasource": "-- Grafana --",
-          "enable": true,
-          "hide": true,
-          "iconColor": "rgba(0, 211, 255, 1)",
-          "name": "Annotations & Alerts",
-          "target": {
-            "limit": 100,
-            "matchAny": false,
-            "tags": [],
-            "type": "dashboard"
-          },
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
           "type": "dashboard"
-        }
-      ]
-    },
-    "editable": true,
-    "fiscalYearStartMonth": 0,
-    "graphTooltip": 0,
-    "id": 5,
-    "iteration": 1645231145736,
-    "links": [
-      {
-        "asDropdown": false,
-        "icon": "external link",
-        "includeVars": false,
-        "keepTime": true,
-        "tags": [
-          "asterisk-integration"
-        ],
-        "targetBlank": false,
-        "title": "Asterisk Dashboards",
-        "tooltip": "",
-        "type": "dashboards",
-        "url": ""
+        },
+        "type": "dashboard"
       }
-    ],
-    "liveNow": false,
-    "panels": [
-      {
-        "collapsed": false,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 0
-        },
-        "id": 8,
-        "panels": [],
-        "title": "Logs Overview",
-        "type": "row"
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 3,
+  "iteration": 1645473976668,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "asterisk-integration"
+      ],
+      "targetBlank": false,
+      "title": "Asterisk Dashboards",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
       },
-      {
-        "gridPos": {
-          "h": 4,
-          "w": 4,
-          "x": 0,
-          "y": 1
-        },
-        "id": 16,
-        "options": {
-          "content": "<img style=\"margin: 20px;\" src=\"https://storage.googleapis.com/grafanalabs-integration-logos/asterisk.png\">",
-          "mode": "html"
-        },
-        "pluginVersion": "8.3.3",
-        "type": "text"
+      "id": 8,
+      "panels": [],
+      "title": "Logs Overview",
+      "type": "row"
+    },
+    {
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 1
       },
-      {
-        "datasource": {
-          "type": "loki",
-          "uid": "grafanacloud-logs"
+      "id": 16,
+      "options": {
+        "content": "<img style=\"margin: 20px;\" src=\"https://storage.googleapis.com/grafanalabs-integration-logos/asterisk.png\">",
+        "mode": "html"
+      },
+      "pluginVersion": "8.4.0",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "grafanacloud-logs"
+      },
+      "description": "Total number of log lines",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "super-light-blue",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
         },
-        "description": "Total number of log lines",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "fixedColor": "super-light-blue",
-              "mode": "fixed"
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 4,
+        "y": 1
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-logs"
+          },
+          "expr": "count_over_time({job=\"$job\", filename=\"$filename\"}[$__interval])",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Log Lines",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "grafanacloud-logs"
+      },
+      "description": "Total number of log lines with the type \"WARNING\"",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "orange",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 7,
+        "y": 1
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-logs"
+          },
+          "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"WARNING\" [$__interval])",
+          "refId": "A"
+        }
+      ],
+      "title": "Warnings",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "grafanacloud-logs"
+      },
+      "description": "Total number of log lines with the type \"ERROR\"",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 10,
+        "y": 1
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-logs"
+          },
+          "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"ERROR\" [$__interval])",
+          "refId": "A"
+        }
+      ],
+      "title": "Errors",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "grafanacloud-logs"
+      },
+      "description": "Total number of log lines with the type \"ERROR\"",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "red",
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-red",
+                "value": null
+              },
+              {
+                "color": "light-red",
+                "value": 25
+              },
+              {
+                "color": "dark-red",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 13,
+        "y": 1
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "sum"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-logs"
+          },
+          "expr": "( count_over_time({job=\"$job\", filename=\"$filename\"} |= \"ERROR\" [$__interval]) / count_over_time({job=\"$job\", filename=\"$filename\"} [$__interval]) )",
+          "refId": "A"
+        }
+      ],
+      "title": "Error Percentage",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "grafanacloud-logs"
+      },
+      "description": "Total number of bytes used by the log file in the time period",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "super-light-red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 17,
+        "y": 1
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-logs"
+          },
+          "expr": "bytes_over_time({job=\"$job\", filename=\"$filename\"} [$__interval])",
+          "refId": "A"
+        }
+      ],
+      "title": "Bytes Used",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${loki_datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "hidden",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
             },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "type": "linear"
             }
           },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 3,
-          "x": 4,
-          "y": 1
-        },
-        "id": 6,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "textMode": "auto"
-        },
-        "pluginVersion": "8.3.3",
-        "targets": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-logs"
-            },
-            "expr": "count_over_time({job=\"$job\", filename=\"$filename\"}[$__interval])",
-            "refId": "A"
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
           }
-        ],
-        "title": "Total Log Lines",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "loki",
-          "uid": "grafanacloud-logs"
         },
-        "description": "Total number of log lines with the type \"WARNING\"",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "fixedColor": "orange",
-              "mode": "fixed"
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
             },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Lines"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "super-light-blue",
+                  "mode": "fixed"
                 }
-              ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Warnings"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "orange",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Errors"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 5
+      },
+      "id": 12,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.49,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "percent",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} [$__interval])",
+          "queryType": "range",
+          "refId": "A",
+          "resolution": 1
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"WARNING\" [$__interval])",
+          "hide": false,
+          "refId": "B",
+          "resolution": 1
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${loki_datasource}"
+          },
+          "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"ERROR\" [$__interval])",
+          "hide": false,
+          "refId": "C"
+        }
+      ],
+      "title": "Historical Logs / Warnings / Errors",
+      "type": "barchart"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 20,
+      "panels": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-logs"
+          },
+          "description": "Errors from the log file",
+          "gridPos": {
+            "h": 12,
+            "w": 24,
+            "x": 0,
+            "y": 13
+          },
+          "id": 21,
+          "options": {
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showLabels": false,
+            "showTime": false,
+            "sortOrder": "Descending",
+            "wrapLogMessage": true
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "grafanacloud-logs"
+              },
+              "expr": "{job=~\"$job\", filename=~\"$filename\"} |= \"ERROR\"",
+              "refId": "A"
             }
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 3,
-          "x": 7,
-          "y": 1
-        },
-        "id": 4,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "textMode": "auto"
-        },
-        "pluginVersion": "8.3.3",
-        "targets": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-logs"
-            },
-            "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"WARNING\" [$__interval])",
-            "refId": "A"
-          }
-        ],
-        "title": "Warnings",
-        "type": "stat"
+          ],
+          "title": "Errors",
+          "type": "logs"
+        }
+      ],
+      "title": "Errors",
+      "type": "row"
+    },
+    {
+      "collapsed": true,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 13
       },
-      {
-        "datasource": {
-          "type": "loki",
-          "uid": "grafanacloud-logs"
-        },
-        "description": "Total number of log lines with the type \"ERROR\"",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "fixedColor": "red",
-              "mode": "fixed"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
+      "id": 18,
+      "panels": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-logs"
+          },
+          "description": "Warnings from the log file",
+          "gridPos": {
+            "h": 12,
+            "w": 24,
+            "x": 0,
+            "y": 14
+          },
+          "id": 22,
+          "options": {
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showLabels": false,
+            "showTime": false,
+            "sortOrder": "Descending",
+            "wrapLogMessage": true
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "grafanacloud-logs"
+              },
+              "expr": "{job=~\"$job\", filename=~\"$filename\"} |= \"WARNING\"",
+              "refId": "A"
             }
+          ],
+          "title": "Warnings",
+          "type": "logs"
+        }
+      ],
+      "title": "Warnings",
+      "type": "row"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Complete Log File",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "grafanacloud-logs"
+      },
+      "description": "*Asterisk Full Log File* The \"full\" log is the most detailed, describing each call in great detail.",
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
+      "id": 2,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": false,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "grafanacloud-logs"
           },
-          "overrides": []
+          "expr": "{job=~\"$job\", filename=~\"$filename\"}",
+          "refId": "A"
+        }
+      ],
+      "title": "Full Log File",
+      "type": "logs"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 35,
+  "style": "dark",
+  "tags": [
+    "asterisk-integration"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Loki",
+          "value": "Loki"
         },
-        "gridPos": {
-          "h": 4,
-          "w": 3,
-          "x": 10,
-          "y": 1
-        },
-        "id": 5,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "textMode": "auto"
-        },
-        "pluginVersion": "8.3.3",
-        "targets": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-logs"
-            },
-            "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"ERROR\" [$__interval])",
-            "refId": "A"
-          }
-        ],
-        "title": "Errors",
-        "type": "stat"
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data Source",
+        "multi": false,
+        "name": "loki_datasource",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
+        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+        "skipUrlSync": false,
+        "type": "datasource"
       },
       {
-        "datasource": {
-          "type": "loki",
-          "uid": "grafanacloud-logs"
+        "current": {
+          "selected": false,
+          "text": "integrations/asterisk-logs",
+          "value": "integrations/asterisk-logs"
         },
-        "description": "Total number of log lines with the type \"ERROR\"",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "fixedColor": "red",
-              "mode": "thresholds"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "super-light-red",
-                  "value": null
-                },
-                {
-                  "color": "light-red",
-                  "value": 25
-                },
-                {
-                  "color": "dark-red",
-                  "value": 50
-                }
-              ]
-            },
-            "unit": "percent"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 4,
-          "x": 13,
-          "y": 1
-        },
-        "id": 13,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "textMode": "auto"
-        },
-        "pluginVersion": "8.3.3",
-        "targets": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-logs"
-            },
-            "expr": "( count_over_time({job=\"$job\", filename=\"$filename\"} |= \"ERROR\" [$__interval]) / count_over_time({job=\"$job\", filename=\"$filename\"} [$__interval]) ) * 100",
-            "refId": "A"
-          }
-        ],
-        "title": "Error Percentage",
-        "type": "stat"
-      },
-      {
-        "datasource": {
-          "type": "loki",
-          "uid": "grafanacloud-logs"
-        },
-        "description": "Total number of bytes used by the log file in the time period",
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "fixedColor": "purple",
-              "mode": "fixed"
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "super-light-red",
-                  "value": null
-                }
-              ]
-            },
-            "unit": "bytes"
-          },
-          "overrides": []
-        },
-        "gridPos": {
-          "h": 4,
-          "w": 4,
-          "x": 17,
-          "y": 1
-        },
-        "id": 14,
-        "options": {
-          "colorMode": "value",
-          "graphMode": "none",
-          "justifyMode": "auto",
-          "orientation": "auto",
-          "reduceOptions": {
-            "calcs": [
-              "lastNotNull"
-            ],
-            "fields": "",
-            "values": false
-          },
-          "textMode": "auto"
-        },
-        "pluginVersion": "8.3.3",
-        "targets": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-logs"
-            },
-            "expr": "bytes_over_time({job=\"$job\", filename=\"$filename\"} [$__interval])",
-            "refId": "A"
-          }
-        ],
-        "title": "Bytes Used",
-        "type": "stat"
-      },
-      {
         "datasource": {
           "type": "loki",
           "uid": "${loki_datasource}"
         },
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "fixed"
-            },
-            "custom": {
-              "axisLabel": "",
-              "axisPlacement": "left",
-              "barAlignment": 0,
-              "drawStyle": "points",
-              "fillOpacity": 0,
-              "gradientMode": "none",
-              "hideFrom": {
-                "legend": false,
-                "tooltip": false,
-                "viz": false
-              },
-              "lineInterpolation": "smooth",
-              "lineWidth": 3,
-              "pointSize": 5,
-              "scaleDistribution": {
-                "type": "linear"
-              },
-              "showPoints": "auto",
-              "spanNulls": false,
-              "stacking": {
-                "group": "A",
-                "mode": "none"
-              },
-              "thresholdsStyle": {
-                "mode": "off"
-              }
-            },
-            "mappings": [],
-            "thresholds": {
-              "mode": "absolute",
-              "steps": [
-                {
-                  "color": "green",
-                  "value": null
-                }
-              ]
-            }
-          },
-          "overrides": [
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "A"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "Lines"
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "super-light-blue",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "B"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "Warnings"
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "orange",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            },
-            {
-              "matcher": {
-                "id": "byFrameRefID",
-                "options": "C"
-              },
-              "properties": [
-                {
-                  "id": "displayName",
-                  "value": "Errors"
-                },
-                {
-                  "id": "color",
-                  "value": {
-                    "fixedColor": "red",
-                    "mode": "fixed"
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        "gridPos": {
-          "h": 7,
-          "w": 24,
-          "x": 0,
-          "y": 5
-        },
-        "id": 12,
-        "options": {
-          "legend": {
-            "calcs": [],
-            "displayMode": "list",
-            "placement": "bottom"
-          },
-          "tooltip": {
-            "mode": "multi"
-          }
-        },
-        "targets": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "${loki_datasource}"
-            },
-            "expr": "count_over_time({job=\"$job\", filename=\"$filename\"}[$__interval])",
-            "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "${loki_datasource}"
-            },
-            "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"WARNING\" [$__interval])",
-            "hide": false,
-            "refId": "B"
-          },
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "${loki_datasource}"
-            },
-            "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"ERROR\" [$__interval])",
-            "hide": false,
-            "refId": "C"
-          }
-        ],
-        "title": "Historical Logs / Warnings / Errors",
-        "type": "timeseries"
+        "definition": "label_values(job)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Job",
+        "multi": false,
+        "name": "job",
+        "options": [],
+        "query": "label_values(job)",
+        "refresh": 1,
+        "regex": ".*asterisk.+",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       },
       {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 12
+        "current": {
+          "selected": false,
+          "text": "/var/log/asterisk/full",
+          "value": "/var/log/asterisk/full"
         },
-        "id": 20,
-        "panels": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-logs"
-            },
-            "description": "Errors from the log file",
-            "gridPos": {
-              "h": 12,
-              "w": 24,
-              "x": 0,
-              "y": 14
-            },
-            "id": 21,
-            "options": {
-              "dedupStrategy": "none",
-              "enableLogDetails": true,
-              "prettifyLogMessage": false,
-              "showCommonLabels": false,
-              "showLabels": false,
-              "showTime": false,
-              "sortOrder": "Descending",
-              "wrapLogMessage": true
-            },
-            "targets": [
-              {
-                "datasource": {
-                  "type": "loki",
-                  "uid": "grafanacloud-logs"
-                },
-                "expr": "{job=~\"$job\", filename=~\"$filename\"} |= \"ERROR\"",
-                "refId": "A"
-              }
-            ],
-            "title": "Errors",
-            "type": "logs"
-          }
-        ],
-        "title": "Errors",
-        "type": "row"
-      },
-      {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 13
+        "datasource": {
+          "type": "loki",
+          "uid": "${loki_datasource}"
         },
-        "id": 18,
-        "panels": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-logs"
-            },
-            "description": "Warnings from the log file",
-            "gridPos": {
-              "h": 12,
-              "w": 24,
-              "x": 0,
-              "y": 15
-            },
-            "id": 22,
-            "options": {
-              "dedupStrategy": "none",
-              "enableLogDetails": true,
-              "prettifyLogMessage": false,
-              "showCommonLabels": false,
-              "showLabels": false,
-              "showTime": false,
-              "sortOrder": "Descending",
-              "wrapLogMessage": true
-            },
-            "targets": [
-              {
-                "datasource": {
-                  "type": "loki",
-                  "uid": "grafanacloud-logs"
-                },
-                "expr": "{job=~\"$job\", filename=~\"$filename\"} |= \"WARNING\"",
-                "refId": "A"
-              }
-            ],
-            "title": "Warnings",
-            "type": "logs"
-          }
-        ],
-        "title": "Warnings",
-        "type": "row"
-      },
-      {
-        "collapsed": true,
-        "gridPos": {
-          "h": 1,
-          "w": 24,
-          "x": 0,
-          "y": 14
-        },
-        "id": 10,
-        "panels": [
-          {
-            "datasource": {
-              "type": "loki",
-              "uid": "grafanacloud-logs"
-            },
-            "description": "*Asterisk Full Log File* The \"full\" log is the most detailed, describing each call in great detail.",
-            "gridPos": {
-              "h": 12,
-              "w": 24,
-              "x": 0,
-              "y": 16
-            },
-            "id": 2,
-            "options": {
-              "dedupStrategy": "none",
-              "enableLogDetails": true,
-              "prettifyLogMessage": false,
-              "showCommonLabels": false,
-              "showLabels": false,
-              "showTime": false,
-              "sortOrder": "Descending",
-              "wrapLogMessage": true
-            },
-            "targets": [
-              {
-                "datasource": {
-                  "type": "loki",
-                  "uid": "grafanacloud-logs"
-                },
-                "expr": "{job=~\"$job\", filename=~\"$filename\"}",
-                "refId": "A"
-              }
-            ],
-            "title": "Full Log File",
-            "type": "logs"
-          }
-        ],
-        "title": "Complete Log File",
-        "type": "row"
+        "definition": "label_values(filename)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "File Name",
+        "multi": false,
+        "name": "filename",
+        "options": [],
+        "query": "label_values(filename)",
+        "refresh": 1,
+        "regex": ".*asterisk.+",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
-    ],
-    "schemaVersion": 34,
-    "style": "dark",
-    "tags": [
-      "asterisk-integration"
-    ],
-    "templating": {
-      "list": [
-        {
-          "current": {
-            "selected": false,
-            "text": "Loki",
-            "value": "Loki"
-          },
-          "hide": 0,
-          "includeAll": false,
-          "label": "Data Source",
-          "multi": false,
-          "name": "loki_datasource",
-          "options": [],
-          "query": "loki",
-          "refresh": 1,
-          "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
-          "skipUrlSync": false,
-          "type": "datasource"
-        },
-        {
-          "current": {
-            "selected": false,
-            "text": "integrations/asterisk-logs",
-            "value": "integrations/asterisk-logs"
-          },
-          "datasource": {
-            "type": "loki",
-            "uid": "${loki_datasource}"
-          },
-          "definition": "label_values(job)",
-          "hide": 0,
-          "includeAll": true,
-          "label": "Job",
-          "multi": false,
-          "name": "job",
-          "options": [],
-          "query": "label_values(job)",
-          "refresh": 1,
-          "regex": ".*asterisk.+",
-          "skipUrlSync": false,
-          "sort": 0,
-          "type": "query"
-        },
-        {
-          "current": {
-            "selected": false,
-            "text": "/var/log/asterisk/full",
-            "value": "/var/log/asterisk/full"
-          },
-          "datasource": {
-            "type": "loki",
-            "uid": "${loki_datasource}"
-          },
-          "definition": "label_values(filename)",
-          "hide": 0,
-          "includeAll": false,
-          "label": "File Name",
-          "multi": false,
-          "name": "filename",
-          "options": [],
-          "query": "label_values(filename)",
-          "refresh": 1,
-          "regex": ".*asterisk.+",
-          "skipUrlSync": false,
-          "sort": 0,
-          "type": "query"
-        }
-      ]
-    },
-    "time": {
-      "from": "now-15m",
-      "to": "now"
-    },
-    "timepicker": {},
-    "timezone": "",
-    "title": "Asterisk - Logs",
-    "uid": "RsYFqvB7z",
-    "version": 31,
-    "weekStart": ""
-  }
+    ]
+  },
+  "time": {
+    "from": "now-30m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Asterisk - Logs",
+  "uid": "RsYFqvB7z",
+  "version": 9,
+  "weekStart": ""
+}

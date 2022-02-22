@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1645231103655,
+  "iteration": 1645487821999,
   "links": [
     {
       "asDropdown": false,
@@ -66,7 +66,7 @@
         "content": "<img style=\"margin: 20px;\" src=\"https://storage.googleapis.com/grafanalabs-integration-logos/asterisk.png\">",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "type": "text"
     },
     {
@@ -117,7 +117,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -182,7 +182,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -248,7 +248,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -313,7 +313,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -378,7 +378,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -443,7 +443,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -534,7 +534,8 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.3",
@@ -602,7 +603,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -667,7 +668,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -731,7 +732,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": false
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -796,7 +797,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -860,7 +861,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -925,7 +926,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "8.4.0",
       "targets": [
         {
           "datasource": {
@@ -2271,7 +2272,7 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 34,
+  "schemaVersion": 35,
   "style": "dark",
   "tags": [
     "asterisk-integration"
@@ -2381,13 +2382,13 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Asterisk - Overview",
   "uid": "integration_asterisk_overview",
-  "version": 8,
+  "version": 2,
   "weekStart": ""
 }

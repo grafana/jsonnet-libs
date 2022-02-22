@@ -1,6 +1,7 @@
 {
   grafanaDashboards: {
     'asterisk-overview.json': (import 'dashboards/asterisk-overview.json'),
+    'asterisk-logs.json': (import 'dashboards/asterisk-logs.json'),
   },
 
   // Helper function to ensure that we don't override other rules, by forcing
