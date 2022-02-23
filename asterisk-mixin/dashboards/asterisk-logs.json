@@ -230,7 +230,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "grafanacloud-logs"
+        "uid": "${loki_datasource}"
       },
       "description": "Total number of log lines",
       "fieldConfig": {
@@ -279,7 +279,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "grafanacloud-logs"
+            "uid": "${loki_datasource}"
           },
           "expr": "count_over_time({job=\"$job\", filename=\"$filename\"}[$__interval])",
           "refId": "A"
@@ -291,7 +291,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "grafanacloud-logs"
+        "uid": "${loki_datasource}"
       },
       "description": "Total number of log lines with the type \"WARNING\"",
       "fieldConfig": {
@@ -340,7 +340,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "grafanacloud-logs"
+            "uid": "${loki_datasource}"
           },
           "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"WARNING\" [$__interval])",
           "refId": "A"
@@ -352,7 +352,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "grafanacloud-logs"
+        "uid": "${loki_datasource}"
       },
       "description": "Total number of log lines with the type \"ERROR\"",
       "fieldConfig": {
@@ -401,7 +401,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "grafanacloud-logs"
+            "uid": "${loki_datasource}"
           },
           "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"ERROR\" [$__interval])",
           "refId": "A"
@@ -413,7 +413,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "grafanacloud-logs"
+        "uid": "${loki_datasource}"
       },
       "description": "Total number of log lines with the type \"ERROR\"",
       "fieldConfig": {
@@ -470,7 +470,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "grafanacloud-logs"
+            "uid": "${loki_datasource}"
           },
           "expr": "( count_over_time({job=\"$job\", filename=\"$filename\"} |= \"ERROR\" [$__interval]) / count_over_time({job=\"$job\", filename=\"$filename\"} [$__interval]) )",
           "refId": "A"
@@ -482,7 +482,7 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "grafanacloud-logs"
+        "uid": "${loki_datasource}"
       },
       "description": "Total number of bytes used by the log file in the time period",
       "fieldConfig": {
@@ -531,7 +531,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "grafanacloud-logs"
+            "uid": "${loki_datasource}"
           },
           "expr": "bytes_over_time({job=\"$job\", filename=\"$filename\"} [$__interval])",
           "refId": "A"
@@ -709,7 +709,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "grafanacloud-logs"
+            "uid": "${loki_datasource}"
           },
           "description": "Errors from the log file",
           "gridPos": {
@@ -733,7 +733,7 @@
             {
               "datasource": {
                 "type": "loki",
-                "uid": "grafanacloud-logs"
+                "uid": "${loki_datasource}"
               },
               "expr": "{job=~\"$job\", filename=~\"$filename\"} |= \"ERROR\"",
               "refId": "A"
@@ -759,7 +759,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "grafanacloud-logs"
+            "uid": "${loki_datasource}"
           },
           "description": "Warnings from the log file",
           "gridPos": {
@@ -783,7 +783,7 @@
             {
               "datasource": {
                 "type": "loki",
-                "uid": "grafanacloud-logs"
+                "uid": "${loki_datasource}"
               },
               "expr": "{job=~\"$job\", filename=~\"$filename\"} |= \"WARNING\"",
               "refId": "A"
@@ -809,7 +809,7 @@
         {
           "datasource": {
             "type": "loki",
-            "uid": "grafanacloud-logs"
+            "uid": "${loki_datasource}"
           },
           "description": "*Asterisk Full Log File* The \"full\" log is the most detailed, describing each call in great detail.",
           "gridPos": {
@@ -833,7 +833,7 @@
             {
               "datasource": {
                 "type": "loki",
-                "uid": "grafanacloud-logs"
+                "uid": "${loki_datasource}"
               },
               "expr": "{job=~\"$job\", filename=~\"$filename\"}",
               "refId": "A"

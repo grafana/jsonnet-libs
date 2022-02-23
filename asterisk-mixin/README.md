@@ -1,7 +1,7 @@
 # Asterisk Mixin
 
 The Asterisk Mixin is a set of configurable, reusable, and extensible alerts and
-dashboards based on the metrics exported by the [prometheus exporter in asterisk](https://wiki.asterisk.org/wiki/display/AST/Asterisk+18+Configuration_res_prometheus). The mixin also creates a dashboard that
+dashboards based on the metrics exported by the [prometheus exporter in Asterisk](https://wiki.asterisk.org/wiki/display/AST/Asterisk+18+Configuration_res_prometheus). The mixin also creates a dashboard that
 uses Loki to monitor Asterisk logs.
 
 The mixin contains 2 dashboards:
@@ -9,7 +9,7 @@ The mixin contains 2 dashboards:
 ## Asterisk Overview
 This dashboard gives a general overview of the Asterisk instance based on all the metrics exposed by the embedded prometheus exporter in Asterisk. This [file](https://storage.googleapis.com/grafanalabs-integration-assets/asterisk/files/asterisk_prometheus_metrics) shows sample metrics exposed by the exporter of an Asterisk instance.
 
-In order for this dashboard to work, you must enable the embedded [prometheus exporter in asterisk](https://wiki.asterisk.org/wiki/display/AST/Asterisk+18+Configuration_res_prometheus) to collect and expose Asterisk metrics.
+In order for this dashboard to work, you must enable the embedded [prometheus exporter in Asterisk](https://wiki.asterisk.org/wiki/display/AST/Asterisk+18+Configuration_res_prometheus) to collect and expose Asterisk metrics.
 
 The embedded prometheus exporter also requires the embedded [asterisk http server](https://wiki.asterisk.org/wiki/display/AST/Asterisk+18+Configuration_res_prometheus) to be [enabled](https://wiki.asterisk.org/wiki/display/AST/Setting+up+the+Asterisk+HTTP+server).
 
