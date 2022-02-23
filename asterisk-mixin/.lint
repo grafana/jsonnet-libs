@@ -1,3 +1,5 @@
 exclusions:
+  template-datasource-rule:
+    reason: "templated datasource variable named 'prometheus_datasource', should be names 'datasource'"
   template-job-rule:
-    reason: "job template should use datasource '$datasource'"
+    reason: "ob template should use datasource '$datasource'"

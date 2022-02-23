@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1645487821999,
+  "id": 3,
+  "iteration": 1645647303361,
   "links": [
     {
       "asDropdown": false,
@@ -42,12 +42,176 @@
   "liveNow": false,
   "panels": [
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prometheus_datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Agent Configured - Sending Metrics"
+                },
+                "to": 10000000000000
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "No Data"
+                },
+                "to": 0
+              },
+              "type": "range"
+            }
+          ],
+          "noValue": "No Data",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 7,
+        "x": 0,
+        "y": 0
+      },
+      "id": 73,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "count"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${prometheus_datasource}"
+          },
+          "exemplar": true,
+          "expr": "asterisk_core_uptime_seconds{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Integration Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${prometheus_datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "No Data",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-blue",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "NA"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 9,
+        "x": 7,
+        "y": 0
+      },
+      "id": 74,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Time$/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${prometheus_datasource}"
+          },
+          "exemplar": true,
+          "expr": "asterisk_core_uptime_seconds{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}",
+          "interval": "",
+          "legendFormat": "Time",
+          "refId": "A"
+        }
+      ],
+      "title": "Latest Metric Received",
+      "type": "stat"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 2
       },
       "id": 18,
       "panels": [],
@@ -59,7 +223,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 1
+        "y": 3
       },
       "id": 4,
       "options": {
@@ -72,7 +236,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Asterisk Uptime",
       "fieldConfig": {
@@ -100,7 +264,7 @@
         "h": 4,
         "w": 3,
         "x": 4,
-        "y": 1
+        "y": 3
       },
       "id": 31,
       "options": {
@@ -122,7 +286,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_core_uptime_seconds{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}",
@@ -137,7 +301,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Time elapsed since last reload",
       "fieldConfig": {
@@ -165,7 +329,7 @@
         "h": 4,
         "w": 3,
         "x": 7,
-        "y": 1
+        "y": 3
       },
       "id": 41,
       "options": {
@@ -187,7 +351,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_core_last_reload_seconds{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}",
@@ -202,7 +366,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Calls count since last restart",
       "fieldConfig": {
@@ -230,7 +394,7 @@
         "h": 4,
         "w": 3,
         "x": 10,
-        "y": 1
+        "y": 3
       },
       "id": 35,
       "options": {
@@ -253,7 +417,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_calls_sum{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}",
@@ -268,7 +432,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Active current calls",
       "fieldConfig": {
@@ -296,7 +460,7 @@
         "h": 4,
         "w": 3,
         "x": 13,
-        "y": 1
+        "y": 3
       },
       "id": 37,
       "options": {
@@ -318,7 +482,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_calls_count{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}",
@@ -333,7 +497,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Max active calls",
       "fieldConfig": {
@@ -361,7 +525,7 @@
         "h": 4,
         "w": 3,
         "x": 16,
-        "y": 1
+        "y": 3
       },
       "id": 39,
       "options": {
@@ -383,7 +547,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_calls_count{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}",
@@ -398,7 +562,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Calls per second arriving in the system",
       "fieldConfig": {
@@ -426,7 +590,7 @@
         "h": 4,
         "w": 3,
         "x": 19,
-        "y": 1
+        "y": 3
       },
       "id": 40,
       "options": {
@@ -448,7 +612,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "rate(asterisk_calls_sum{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}[$__rate_interval])",
@@ -465,7 +629,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Active calls in the system over the selected time interval",
       "fieldConfig": {
@@ -524,7 +688,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 5
+        "y": 7
       },
       "id": 38,
       "options": {
@@ -543,7 +707,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_calls_count{instance=~\"$instance\", job=~\"$job\", eid=~\"$eid\"}",
@@ -559,7 +723,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Current active channels on Asterisk",
       "fieldConfig": {
@@ -588,7 +752,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 11
+        "y": 13
       },
       "id": 43,
       "options": {
@@ -608,7 +772,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_channels_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -623,7 +787,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Current active channels on Asterisk",
       "fieldConfig": {
@@ -651,7 +815,7 @@
         "h": 4,
         "w": 4,
         "x": 4,
-        "y": 11
+        "y": 13
       },
       "id": 52,
       "options": {
@@ -673,7 +837,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_channels_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -688,7 +852,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Current active endpoints on Asterisk",
       "fieldConfig": {
@@ -717,7 +881,7 @@
         "h": 4,
         "w": 4,
         "x": 8,
-        "y": 11
+        "y": 13
       },
       "id": 45,
       "options": {
@@ -737,7 +901,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_endpoints_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -752,7 +916,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Current active endpoints on Asterisk",
       "fieldConfig": {
@@ -780,7 +944,7 @@
         "h": 4,
         "w": 4,
         "x": 12,
-        "y": 11
+        "y": 13
       },
       "id": 53,
       "options": {
@@ -802,7 +966,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_endpoints_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -817,7 +981,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Current active bridges on Asterisk",
       "fieldConfig": {
@@ -846,7 +1010,7 @@
         "h": 4,
         "w": 4,
         "x": 16,
-        "y": 11
+        "y": 13
       },
       "id": 47,
       "options": {
@@ -866,7 +1030,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_bridges_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -881,7 +1045,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource}"
+        "uid": "${prometheus_datasource}"
       },
       "description": "Current active bridges on Asterisk",
       "fieldConfig": {
@@ -909,7 +1073,7 @@
         "h": 4,
         "w": 4,
         "x": 20,
-        "y": 11
+        "y": 13
       },
       "id": 54,
       "options": {
@@ -931,7 +1095,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "exemplar": true,
           "expr": "asterisk_bridges_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -949,14 +1113,14 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 17
       },
       "id": 56,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "description": "Current active channels on Asterisk",
           "fieldConfig": {
@@ -1031,7 +1195,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "${prometheus_datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_channels_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1046,7 +1210,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "description": "Details of channels in the instance",
           "fieldConfig": {
@@ -1265,7 +1429,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "${prometheus_datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_channels_state{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1277,7 +1441,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "${prometheus_datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_channels_duration_seconds{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1360,14 +1524,14 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 18
       },
       "id": 60,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "description": "Current active endpoints on Asterisk",
           "fieldConfig": {
@@ -1442,7 +1606,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "${prometheus_datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_endpoints_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1457,7 +1621,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "description": "Information regarding channels in the instance",
           "fieldConfig": {
@@ -1617,7 +1781,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "${prometheus_datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_endpoints_channels_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1703,14 +1867,14 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 19
       },
       "id": 68,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "description": "Current active bridges on Asterisk",
           "fieldConfig": {
@@ -1785,7 +1949,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "${prometheus_datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_bridges_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -1800,7 +1964,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "description": "Information regarding bridges in the instance",
           "fieldConfig": {
@@ -1956,7 +2120,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "${prometheus_datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_bridges_channels_count{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -2049,14 +2213,14 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 20
       },
       "id": 49,
       "panels": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "${prometheus_datasource}"
           },
           "description": "**Core properties** This table shows core properties of the Asterisk instance reported by embedded prometheus exporter",
           "fieldConfig": {
@@ -2200,7 +2364,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "${prometheus_datasource}"
               },
               "exemplar": true,
               "expr": "asterisk_core_properties{instance=~\"$instance\",job=~\"$job\",eid=~\"$eid\"}",
@@ -2289,7 +2453,7 @@
         "includeAll": false,
         "label": "Data Source",
         "multi": false,
-        "name": "datasource",
+        "name": "prometheus_datasource",
         "options": [],
         "query": "prometheus",
         "queryValue": "",
@@ -2306,9 +2470,12 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "${prometheus_datasource}"
         },
         "definition": "label_values(asterisk_core_uptime_seconds, job)",
+        "error": {
+          "message": "Datasource ${prometheus_datasource} was not found"
+        },
         "hide": 0,
         "includeAll": true,
         "label": "Job",
@@ -2333,9 +2500,12 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "${prometheus_datasource}"
         },
         "definition": "label_values(asterisk_core_uptime_seconds{job =~ \"$job\"}, instance)",
+        "error": {
+          "message": "Datasource ${prometheus_datasource} was not found"
+        },
         "hide": 0,
         "includeAll": true,
         "label": "Instance",
@@ -2360,9 +2530,12 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "${prometheus_datasource}"
         },
         "definition": "label_values(asterisk_core_uptime_seconds{job =~ \"$job\", instance =~ \"$instance\"}, eid)",
+        "error": {
+          "message": "Datasource ${prometheus_datasource} was not found"
+        },
         "hide": 0,
         "includeAll": true,
         "label": "EID",
@@ -2382,13 +2555,13 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Asterisk - Overview",
   "uid": "integration_asterisk_overview",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
