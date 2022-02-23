@@ -1,0 +1,11 @@
+groups:
+- name: AsteriskAlerts
+  rules:
+  - alert: AsteriskRestarted
+    expr: asterisk_core_uptime_seconds < 60
+    for: 1s
+    labels:
+      severity: critical
+    annotations:
+      summary: Asterisk instance restarted in the last minute (instance {{ $labels.instance }})
+      description: "Asterisk instance restarted in the last minute\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

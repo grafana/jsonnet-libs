@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1645473976668,
+  "id": 5,
+  "iteration": 1645488824594,
   "links": [
     {
       "asDropdown": false,
@@ -358,7 +358,7 @@
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "lastNotNull"
+            "sum"
           ],
           "fields": "",
           "values": false
@@ -393,7 +393,7 @@
             "axisLabel": "",
             "axisPlacement": "hidden",
             "axisSoftMin": 0,
-            "fillOpacity": 80,
+            "fillOpacity": 50,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -485,7 +485,7 @@
       "id": 12,
       "options": {
         "barRadius": 0,
-        "barWidth": 0.49,
+        "barWidth": 0.5,
         "groupWidth": 0.7,
         "legend": {
           "calcs": [],
@@ -508,10 +508,8 @@
             "type": "loki",
             "uid": "${loki_datasource}"
           },
-          "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} [$__interval])",
-          "queryType": "range",
-          "refId": "A",
-          "resolution": 1
+          "expr": "count_over_time({job=\"$job\", filename=\"$filename\"}[$__interval])",
+          "refId": "A"
         },
         {
           "datasource": {
@@ -520,8 +518,7 @@
           },
           "expr": "count_over_time({job=\"$job\", filename=\"$filename\"} |= \"WARNING\" [$__interval])",
           "hide": false,
-          "refId": "B",
-          "resolution": 1
+          "refId": "B"
         },
         {
           "datasource": {
@@ -637,7 +634,7 @@
       "type": "row"
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -645,45 +642,46 @@
         "y": 14
       },
       "id": 10,
-      "panels": [],
-      "title": "Complete Log File",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "loki",
-        "uid": "grafanacloud-logs"
-      },
-      "description": "*Asterisk Full Log File* The \"full\" log is the most detailed, describing each call in great detail.",
-      "gridPos": {
-        "h": 12,
-        "w": 24,
-        "x": 0,
-        "y": 15
-      },
-      "id": 2,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": false,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": false,
-        "sortOrder": "Descending",
-        "wrapLogMessage": true
-      },
-      "targets": [
+      "panels": [
         {
           "datasource": {
             "type": "loki",
             "uid": "grafanacloud-logs"
           },
-          "expr": "{job=~\"$job\", filename=~\"$filename\"}",
-          "refId": "A"
+          "description": "*Asterisk Full Log File* The \"full\" log is the most detailed, describing each call in great detail.",
+          "gridPos": {
+            "h": 12,
+            "w": 24,
+            "x": 0,
+            "y": 16
+          },
+          "id": 2,
+          "options": {
+            "dedupStrategy": "none",
+            "enableLogDetails": true,
+            "prettifyLogMessage": false,
+            "showCommonLabels": false,
+            "showLabels": false,
+            "showTime": false,
+            "sortOrder": "Descending",
+            "wrapLogMessage": true
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "loki",
+                "uid": "grafanacloud-logs"
+              },
+              "expr": "{job=~\"$job\", filename=~\"$filename\"}",
+              "refId": "A"
+            }
+          ],
+          "title": "Full Log File",
+          "type": "logs"
         }
       ],
-      "title": "Full Log File",
-      "type": "logs"
+      "title": "Complete Log File",
+      "type": "row"
     }
   ],
   "refresh": "30s",
@@ -770,6 +768,6 @@
   "timezone": "",
   "title": "Asterisk - Logs",
   "uid": "RsYFqvB7z",
-  "version": 9,
+  "version": 6,
   "weekStart": ""
 }
