@@ -21,5 +21,9 @@ local run(name, commands) = {
       'make install-ci-deps',
       'make lint-fmt',
     ]),
+    run('lint-mixtool', [
+      'make install-ci-deps',
+      'make lint-mixins',
+    ]),
   ]),
 ]
