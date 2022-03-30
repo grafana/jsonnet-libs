@@ -20,9 +20,6 @@ local run(name, commands) = {
     run('lint-fmt', [
       'make install-ci-deps',
       'make lint-fmt',
-    ]),
-    run('lint-mixtool', [
-      'make install-ci-deps',
       'make lint-mixins',
     ]),
   ]),

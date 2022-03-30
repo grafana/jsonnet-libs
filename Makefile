@@ -5,7 +5,7 @@ install-ci-deps:
 	go install github.com/google/go-jsonnet/cmd/jsonnet@v0.18.0
 	go install github.com/google/go-jsonnet/cmd/jsonnetfmt@v0.18.0
 	go install github.com/google/go-jsonnet/cmd/jsonnet-lint@v0.18.0
-	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@f9b73f7578b95799448ae1f9e47ac163030d1b44
+	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@ae18e31161ea
 	go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v0.4.0
 
 fmt:
@@ -31,7 +31,7 @@ lint-mixins:
 		fi; \
 	done; \
 	for m in $$(find . -name 'mixin.libsonnet' -print); do \
-			echo "Linting $$m"; \
+			echo "Linting mixin $$m"; \
 			mixtool lint -J $$(dirname "$$m")/vendor "$$m"; \
 			if [ $$? -ne 0 ]; then \
 				RESULT=1; \
