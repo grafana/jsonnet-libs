@@ -4,16 +4,6 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/cortex-jsonnet.git",
-          "subdir": "cortex"
-        }
-      },
-      "version": "20d37d030eb5b526d06e1e89e86ef9c8adf22046",
-      "sum": "ZkhPhfB9jaqq1wNU/A7lKfuEjVSdgP8M/HOeXhKxr7c="
-    },
-    {
-      "source": {
-        "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "consul"
         }
@@ -60,6 +50,16 @@
       },
       "version": "a3b9f8e29c36ab50df57cf9c9410e231d8481899",
       "sum": "dTOeEux3t9bYSqP2L/uCuLo/wUDpCKH4w+4OD9fePUk="
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/mimir.git",
+          "subdir": "operations/mimir"
+        }
+      },
+      "version": "99c90795b497ea372d0cdebfd0e6d69d23e1063e",
+      "sum": "MhA3qnMbcM4zi+hHPSrn+QbCoathsgcpzC2dDZy8C7I="
     },
     {
       "source": {
