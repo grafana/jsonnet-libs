@@ -296,7 +296,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#statefulSet':: d.obj('`deployment` is the Kubernetes Deployment for the distributor.'),
     deployment:
       mimir.distributor_deployment
-      + deployment.spec.selector.withMatchLabelsMixin({ name: 'distributor' })
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'distributor', gossip_ring_member: 'true' })
       + deployment.spec.template.metadata.withLabelsMixin({ name: 'distributor', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withContainers([distributor.container])
       // Remove Mimir volumes.
@@ -317,35 +317,35 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       '#gateway.proxy.admin-api.url':: d.val(
         default=self['gateway.proxy.admin-api.url'], help='`gateway.proxy.admin-api.url is the upstream URL of the admin-api.', type=d.T.string
       ),
-      'gateway.proxy.admin-api.url': 'http://admin-api',
+      'gateway.proxy.admin-api.url': 'http://admin-api:8080',
       '#gateway.proxy.compactor.url':: d.val(
         default=self['gateway.proxy.compactor.url'], help='`gateway.proxy.compactor.url is the upstream URL of the compactor.', type=d.T.string
       ),
-      'gateway.proxy.compactor.url': 'http://compactor',
+      'gateway.proxy.compactor.url': 'http://compactor:8080',
       '#gateway.proxy.distributor.url':: d.val(
         default=self['gateway.proxy.distributor.url'], help='`gateway.proxy.distributor.url is the upstream URL of the distributor.', type=d.T.string
       ),
       '#gateway.proxy.alertmanager.url':: d.val(
         default=self['gateway.proxy.alertmanager.url'], help='`gateway.proxy.alertmanager.url is the upstream URL of the alertmanager.', type=d.T.string
       ),
-      'gateway.proxy.alertmanager.url': 'http://alertmanager',
+      'gateway.proxy.alertmanager.url': 'http://alertmanager:8080',
       'gateway.proxy.distributor.url': 'dns:///distributor:9095',
       '#gateway.proxy.ingester.url':: d.val(
         default=self['gateway.proxy.ingester.url'], help='`gateway.proxy.ingester.url is the upstream URL of the ingester.', type=d.T.string
       ),
-      'gateway.proxy.ingester.url': 'http://ingester',
+      'gateway.proxy.ingester.url': 'http://ingester:8080',
       '#gateway.proxy.ruler.url':: d.val(
         default=self['gateway.proxy.ruler.url'], help='`gateway.proxy.ruler.url is the upstream URL of the ruler.', type=d.T.string
       ),
-      'gateway.proxy.ruler.url': 'http://ruler',
+      'gateway.proxy.ruler.url': 'http://ruler:8080',
       '#gateway.proxy.query-frontend.url':: d.val(
         default=self['gateway.proxy.query-frontend.url'], help='`gateway.proxy.query-frontend.url is the upstream URL of the query-frontend.', type=d.T.string
       ),
-      'gateway.proxy.query-frontend.url': 'http://query-frontend',
+      'gateway.proxy.query-frontend.url': 'http://query-frontend:8080',
       '#gateway.proxy.store-gateway.url':: d.val(
         default=self['gateway.proxy.store-gateway.url'], help='`gateway.proxy.store-gateway.url is the upstream URL of the store-gateway.', type=d.T.string
       ),
-      'gateway.proxy.store-gateway.url': 'http://store-gateway',
+      'gateway.proxy.store-gateway.url': 'http://store-gateway:8080',
       target: 'gateway',
     },
 
@@ -437,7 +437,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the querier.'),
     deployment:
       mimir.querier_deployment
-      + deployment.spec.selector.withMatchLabelsMixin({ name: 'querier' })
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'querier', gossip_ring_member: 'true' })
       + deployment.spec.template.metadata.withLabelsMixin({ name: 'querier', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withContainers([querier.container])
       // Remove Mimir volumes.
@@ -700,7 +700,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   '#util':: d.obj('`util` contains utility functions for working with the GEM Jsonnet library'),
   util:: {
     '#util':: d.val(d.T.array, '`modules` is an array of the names of all modules in the cluster'),
-    modules:: ['adminApi', 'alertmanager', 'compactor', 'distributor', 'gateway', 'ingester', 'querier', 'queryFrontend', 'ruler', 'storeGateway'],
+    modules:: ['adminApi', 'alertmanager', 'compactor', 'distributor', 'gateway', 'ingester', 'querier', 'queryFrontend', 'queryScheduler', 'ruler', 'storeGateway'],
     '#mapModules': d.fn('`mapModules` applies the function fn to each module in the GEM cluster', [d.arg('fn', d.T.func)]),
     mapModules(fn=function(module) module)::
       local activeModules = std.filter(function(field) std.member(self.modules, field), std.objectFields($));

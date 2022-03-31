@@ -70,7 +70,7 @@ function(kubeconfig) {
                'admin.client.s3.endpoint': data.minio.service.metadata.name + ':' + minioPort,
                'admin.client.s3.insecure': 'true',
                'admin.client.s3.secret-access-key': minioSecretKey,
-               'auth.type': 'default',
+               'auth.type': 'trust',
                'blocks-storage.backend': 's3',
                'blocks-storage.s3.access-key-id': minioAccessKey,
                'blocks-storage.s3.bucket-name': tsdbBucket,
@@ -94,6 +94,7 @@ function(kubeconfig) {
            },
 
            memcached+: {
+             frontend+: { statefulSet+: { spec+: { replicas: 1 } } },
              chunks+: { statefulSet+: { spec+: { replicas: 1 } } },
              metadata+: { statefulSet+: { spec+: { replicas: 1 } } },
              queries+: { statefulSet+: { spec+: { replicas: 1 } } },
