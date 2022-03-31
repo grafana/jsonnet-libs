@@ -77,77 +77,23 @@ local container_template = grafana.template.new(
 );
 
 // Panels
-local integration_status_panel = grafana.statPanel.new(
-  'Integration Status',
-  datasource='$datasource',
-  colorMode='background',
-  graphMode='none',
-  noValue='No Data',
-  reducerFunction='lastNotNull'
-)                             .addMappings(
-  [
-    {
-      "options": {
-        "from": 1,
-        "result": {
-          "color": "green",
-          "index": 0,
-          "text": "Agent Configured - Sending Metrics"
-        },
-        "to": 10000000000000
-      },
-      "type": "range"
-    },
-    {
-      "options": {
-        "from": 0,
-        "result": {
-          "color": "red",
-          "index": 1,
-          "text": "No Data"
-        },
-        "to": 0
-      },
-      "type": "range"
-    }
-  ]
-)
-                              .addTarget(
-  grafana.prometheus.target(queries.total_containers)
-);
-
-local latest_metric_panel = grafana.statPanel.new(
-  'Latest Metric Received',
-  datasource='$datasource',
-  colorMode='background',
-  fields='Time',
-  graphMode='none',
-  noValue='No Data',
-  reducerFunction='lastNotNull'
-)
-                              .addTarget(
-  grafana.prometheus.target(queries.total_containers)
-);
-
-local total_containers_panel = grafana.statPanel.new(
+local total_containers_panel = grafana.singlestat.new(
   'Total Containers',
+  span=2,
   datasource='$datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull'
 )
                                .addTarget(
   grafana.prometheus.target(queries.total_containers)
-) + { options+: { reduceOptions+: { calcs: [ 'lastNotNull'] } } };
+);
 
-local total_images_panel = grafana.statPanel.new(
+local total_images_panel = grafana.singlestat.new(
   'Total Images',
+  span=2,
   datasource='$datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull'
 )
                            .addTarget(
   grafana.prometheus.target(queries.total_images)
-) + { options+: { reduceOptions+: { calcs: [ 'lastNotNull'] } } };
+);
 
 local cpu_usage_panel = grafana.singlestat.new(
   'CPU Utilization by Containers',
@@ -266,45 +212,53 @@ local disk_usage_panel = g.tablePanel(
         container_template,
       ])
 
-      # Status Row
-      .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
-      # Integration status
-      .addPanel(integration_status_panel, gridPos={ x: 0, y: 0, w: 8, h: 2 })
-      # Latest metric received
-      .addPanel(latest_metric_panel, gridPos={ x: 8, y: 0, w: 8, h: 2 })
-
       # Overview Row
-      .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
-      # Total containers
-      .addPanel(total_containers_panel, gridPos={ x: 0, y: 2, w: 4, h: 6 })
-      # Total Images
-      .addPanel(total_images_panel, gridPos={ x: 4, y: 2, w: 4, h: 6 })
-      # Host CPU used by containers
-      .addPanel(cpu_usage_panel, gridPos={ x: 8, y: 2, w: 4, h: 6 })
-      # Host memory reserved by containers
-      .addPanel(mem_reserved_panel, gridPos={ x: 12, y: 2, w: 4, h: 6 })
-      # Host memory utilization by containers
-      .addPanel(mem_usage_panel, gridPos={ x: 16, y: 2, w: 4, h: 6 })
+      .addRow(
+        grafana.row.new('Overview')
+        # Total containers
+        .addPanel(total_containers_panel)
+
+        # Total images
+        .addPanel(total_images_panel)
+
+        # Host CPU used by containers
+        .addPanel(cpu_usage_panel)
+
+        # Host memory reserved by containers
+        .addPanel(mem_reserved_panel)
+
+        # Host memory utilization by containers
+        .addPanel(mem_usage_panel)
+      )
 
       # Compute Row
-      .addPanel(grafana.row.new(title='Compute'), gridPos={ x: 0, y: 8, w: 0, h: 0 })
-      # CPU by container
-      .addPanel(cpu_by_container_panel, gridPos={ x: 0, y: 8, w: 12, h: 8 })
-      # Memory by container
-      .addPanel(mem_by_container_panel, gridPos={ x: 12, y: 8, w: 12, h: 8 })
+      .addRow(
+        grafana.row.new('Compute')
+        # CPU by container
+        .addPanel(cpu_by_container_panel)
+
+        # Memory by container
+        .addPanel(mem_by_container_panel)
+      )
 
       # Network Row
-      .addPanel(grafana.row.new(title='Network'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
-      # Network throughput
-      .addPanel(net_throughput_panel, gridPos={ x: 0, y: 16, w: 12, h: 8 })
-      # TCP Socket by state
-      .addPanel(tcp_socket_by_state_panel, gridPos={ x: 12, y: 16, w: 12, h: 8 })
+      .addRow(
+        grafana.row.new('Network')
+
+        # Network throughput
+        .addPanel(net_throughput_panel)
+
+        # TCP Socket by state
+        .addPanel(tcp_socket_by_state_panel)
+      )
 
       # Storage Row
-      .addPanel(grafana.row.new(title='Storage'), gridPos={ x: 0, y: 24, w: 0, h: 0 })
-      # Disk
-      .addPanel(disk_usage_panel, gridPos={ x: 0, y: 24, w: 24, h: 8 })
+      .addRow(
+        grafana.row.new('Storage')
 
-      // + { graphTooltip: 2 },  // Shared tooltip. When you hover over a graph, the same time is selected on all graphs, and tooltip is shown. Set to 1 to only share crosshair
+        # Disk
+        .addPanel(disk_usage_panel)
+      ) +
+      { graphTooltip: 2 },  // Shared tooltip. When you hover over a graph, the same time is selected on all graphs, and tooltip is shown. Set to 1 to only share crosshair
   },
 }
