@@ -17,8 +17,8 @@ local queries = {
   net_rx_error_rate: 'sum(rate(container_network_receive_errors_total{' + container_matcher + '}[$__rate_interval]))',
   net_tx_error_rate: 'sum(rate(container_network_transmit_errors_total{' + container_matcher + '}[$__rate_interval]))',
   tcp_socket_by_state: 'sum(container_network_tcp_usage_total{' + container_matcher + '}) by (tcp_state) > 0',
-  fs_usage_by_device: 'sum by (device) (container_fs_usage_bytes{' + host_matcher + ', id="/", device=~"/dev/.+"} / container_fs_limit_bytes{' + host_matcher + ', id="/", device=~"/dev/.+"})',
-  fs_inode_usage_by_device: '1 - sum by (device) (container_fs_inodes_free{' + host_matcher + ', id="/", device=~"/dev/.+"} / container_fs_inodes_total{' + host_matcher + ', id="/", device=~"/dev/.+"})',
+  fs_usage_by_device: 'sum by (instance, device) (container_fs_usage_bytes{' + host_matcher + ', id="/", device=~"/dev/.+"} / container_fs_limit_bytes{' + host_matcher + ', id="/", device=~"/dev/.+"})',
+  fs_inode_usage_by_device: '1 - sum by (instance, device) (container_fs_inodes_free{' + host_matcher + ', id="/", device=~"/dev/.+"} / container_fs_inodes_total{' + host_matcher + ', id="/", device=~"/dev/.+"})',
 };
 
 local stackstyle = {
@@ -35,18 +35,19 @@ local ds_template = {
   },
   hide: 0,
   label: 'Data Source',
-  name: 'datasource',
+  name: 'prometheus_datasource',
   options: [],
   query: 'prometheus',
   refresh: 1,
-  regex: '',
+  regex: '(?!grafanacloud-usage|grafanacloud-ml-metrics).+',
   type: 'datasource',
 };
 
 local job_template = grafana.template.new(
   'job',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(machine_scrape_error, job)',
+  label='Job',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -56,8 +57,9 @@ local job_template = grafana.template.new(
 
 local instance_template = grafana.template.new(
   'instance',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(machine_scrape_error{job=~"$job"}, instance)',
+  label='Instance',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -67,8 +69,9 @@ local instance_template = grafana.template.new(
 
 local container_template = grafana.template.new(
   'container',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(container_last_seen{job=~"$job", instance=~"$instance"}, name)',
+  label='Container',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -79,7 +82,7 @@ local container_template = grafana.template.new(
 // Panels
 local integration_status_panel = grafana.statPanel.new(
   'Integration Status',
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   colorMode='background',
   graphMode='none',
   noValue='No Data',
@@ -118,7 +121,7 @@ local integration_status_panel = grafana.statPanel.new(
 
 local latest_metric_panel = grafana.statPanel.new(
   'Latest Metric Received',
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   colorMode='background',
   fields='Time',
   graphMode='none',
@@ -131,7 +134,7 @@ local latest_metric_panel = grafana.statPanel.new(
 
 local total_containers_panel = grafana.statPanel.new(
   'Total Containers',
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   graphMode='none',
   reducerFunction='lastNotNull'
 )
@@ -141,7 +144,7 @@ local total_containers_panel = grafana.statPanel.new(
 
 local total_images_panel = grafana.statPanel.new(
   'Total Images',
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   graphMode='none',
   reducerFunction='lastNotNull'
 )
@@ -155,7 +158,7 @@ local cpu_usage_panel = grafana.singlestat.new(
   gaugeShow=true,
   thresholds='.80,.90',
   span=2,
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   gaugeMaxValue=1,
 )
                         .addTarget(
@@ -168,7 +171,7 @@ local mem_reserved_panel = grafana.singlestat.new(
   gaugeShow=true,
   thresholds='.80,.90',
   span=2,
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   gaugeMaxValue=1,
 )
                            .addTarget(
@@ -181,7 +184,7 @@ local mem_usage_panel = grafana.singlestat.new(
   gaugeShow=true,
   thresholds='.80,.90',
   span=2,
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   gaugeMaxValue=1,
 )
                         .addTarget(
@@ -191,7 +194,7 @@ local mem_usage_panel = grafana.singlestat.new(
 local cpu_by_container_panel = grafana.graphPanel.new(
                                  'CPU',
                                  span=6,
-                                 datasource='$datasource',
+                                 datasource='$prometheus_datasource',
                                ) +
                                g.queryPanel(
                                  [queries.cpu_by_container],
@@ -206,7 +209,7 @@ local cpu_by_container_panel = grafana.graphPanel.new(
 local mem_by_container_panel = grafana.graphPanel.new(
                                  'Memory',
                                  span=6,
-                                 datasource='$datasource',
+                                 datasource='$prometheus_datasource',
                                ) +
                                g.queryPanel(
                                  [queries.mem_by_container],
@@ -219,7 +222,7 @@ local mem_by_container_panel = grafana.graphPanel.new(
 local net_throughput_panel = grafana.graphPanel.new(
                                'Bandwidth',
                                span=6,
-                               datasource='$datasource',
+                               datasource='$prometheus_datasource',
                              ) +
                              g.queryPanel(
                                [queries.net_rx_by_container, queries.net_tx_by_container],
@@ -235,24 +238,24 @@ local net_throughput_panel = grafana.graphPanel.new(
 
 local tcp_socket_by_state_panel = grafana.graphPanel.new(
                                     'TCP Sockets By State',
-                                    datasource='$datasource',
+                                    datasource='$prometheus_datasource',
                                     span=6,
                                   ) +
                                   g.queryPanel(
                                     [queries.tcp_socket_by_state],
                                     ['{{tcp_state}}'],
                                   ) +
-                                  g.stack +
                                   stackstyle;
 
 local disk_usage_panel = g.tablePanel(
   [queries.fs_usage_by_device, queries.fs_inode_usage_by_device],
   {
+    instance: { alias: 'Instance' },
     device: { alias: 'Device' },
     'Value #A': { alias: 'Disk Usage', unit: 'percentunit' },
     'Value #B': { alias: 'Inode Usage', unit: 'percentunit' },
   }
-) + { span: 12, datasource: '$datasource' };
+) + { span: 12, datasource: '$prometheus_datasource' };
 
 // Manifested stuff starts here
 {
