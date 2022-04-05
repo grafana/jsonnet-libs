@@ -39,7 +39,7 @@ local ds_template = {
   options: [],
   query: 'prometheus',
   refresh: 1,
-  regex: '(?!grafanacloud-usage|grafanacloud-ml-metrics).+',
+  regex: '',
   type: 'datasource',
 };
 
