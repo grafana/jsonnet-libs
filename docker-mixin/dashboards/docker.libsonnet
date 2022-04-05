@@ -17,8 +17,8 @@ local queries = {
   net_rx_error_rate: 'sum(rate(container_network_receive_errors_total{' + container_matcher + '}[$__rate_interval]))',
   net_tx_error_rate: 'sum(rate(container_network_transmit_errors_total{' + container_matcher + '}[$__rate_interval]))',
   tcp_socket_by_state: 'sum(container_network_tcp_usage_total{' + container_matcher + '}) by (tcp_state) > 0',
-  fs_usage_by_device: 'sum by (device) (container_fs_usage_bytes{' + host_matcher + ', id="/", device=~"/dev/.+"} / container_fs_limit_bytes{' + host_matcher + ', id="/", device=~"/dev/.+"})',
-  fs_inode_usage_by_device: '1 - sum by (device) (container_fs_inodes_free{' + host_matcher + ', id="/", device=~"/dev/.+"} / container_fs_inodes_total{' + host_matcher + ', id="/", device=~"/dev/.+"})',
+  fs_usage_by_device: 'sum by (instance, device) (container_fs_usage_bytes{' + host_matcher + ', id="/", device=~"/dev/.+"} / container_fs_limit_bytes{' + host_matcher + ', id="/", device=~"/dev/.+"})',
+  fs_inode_usage_by_device: '1 - sum by (instance, device) (container_fs_inodes_free{' + host_matcher + ', id="/", device=~"/dev/.+"} / container_fs_inodes_total{' + host_matcher + ', id="/", device=~"/dev/.+"})',
 };
 
 local stackstyle = {
@@ -35,7 +35,7 @@ local ds_template = {
   },
   hide: 0,
   label: 'Data Source',
-  name: 'datasource',
+  name: 'prometheus_datasource',
   options: [],
   query: 'prometheus',
   refresh: 1,
@@ -45,8 +45,9 @@ local ds_template = {
 
 local job_template = grafana.template.new(
   'job',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(machine_scrape_error, job)',
+  label='Job',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -56,8 +57,9 @@ local job_template = grafana.template.new(
 
 local instance_template = grafana.template.new(
   'instance',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(machine_scrape_error{job=~"$job"}, instance)',
+  label='Instance',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -67,8 +69,9 @@ local instance_template = grafana.template.new(
 
 local container_template = grafana.template.new(
   'container',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(container_last_seen{job=~"$job", instance=~"$instance"}, name)',
+  label='Container',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -77,23 +80,77 @@ local container_template = grafana.template.new(
 );
 
 // Panels
-local total_containers_panel = grafana.singlestat.new(
-  'Total Containers',
-  span=2,
-  datasource='$datasource',
+local integration_status_panel = grafana.statPanel.new(
+  'Integration Status',
+  datasource='$prometheus_datasource',
+  colorMode='background',
+  graphMode='none',
+  noValue='No Data',
+  reducerFunction='lastNotNull'
+).addMappings(
+  [
+    {
+      options: {
+        from: 1,
+        result: {
+          color: 'green',
+          index: 0,
+          text: 'Agent Configured - Sending Metrics',
+        },
+        to: 10000000000000,
+      },
+      type: 'range',
+    },
+    {
+      options: {
+        from: 0,
+        result: {
+          color: 'red',
+          index: 1,
+          text: 'No Data',
+        },
+        to: 0,
+      },
+      type: 'range',
+    },
+  ]
 )
-                               .addTarget(
+                                 .addTarget(
   grafana.prometheus.target(queries.total_containers)
 );
 
-local total_images_panel = grafana.singlestat.new(
+local latest_metric_panel = grafana.statPanel.new(
+  'Latest Metric Received',
+  datasource='$prometheus_datasource',
+  colorMode='background',
+  fields='Time',
+  graphMode='none',
+  noValue='No Data',
+  reducerFunction='lastNotNull'
+)
+                            .addTarget(
+  grafana.prometheus.target(queries.total_containers)
+);
+
+local total_containers_panel = grafana.statPanel.new(
+  'Total Containers',
+  datasource='$prometheus_datasource',
+  graphMode='none',
+  reducerFunction='lastNotNull'
+)
+                               .addTarget(
+  grafana.prometheus.target(queries.total_containers)
+) + { options+: { reduceOptions+: { calcs: ['lastNotNull'] } } };
+
+local total_images_panel = grafana.statPanel.new(
   'Total Images',
-  span=2,
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
+  graphMode='none',
+  reducerFunction='lastNotNull'
 )
                            .addTarget(
   grafana.prometheus.target(queries.total_images)
-);
+) + { options+: { reduceOptions+: { calcs: ['lastNotNull'] } } };
 
 local cpu_usage_panel = grafana.singlestat.new(
   'CPU Utilization by Containers',
@@ -101,7 +158,7 @@ local cpu_usage_panel = grafana.singlestat.new(
   gaugeShow=true,
   thresholds='.80,.90',
   span=2,
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   gaugeMaxValue=1,
 )
                         .addTarget(
@@ -114,7 +171,7 @@ local mem_reserved_panel = grafana.singlestat.new(
   gaugeShow=true,
   thresholds='.80,.90',
   span=2,
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   gaugeMaxValue=1,
 )
                            .addTarget(
@@ -127,7 +184,7 @@ local mem_usage_panel = grafana.singlestat.new(
   gaugeShow=true,
   thresholds='.80,.90',
   span=2,
-  datasource='$datasource',
+  datasource='$prometheus_datasource',
   gaugeMaxValue=1,
 )
                         .addTarget(
@@ -137,7 +194,7 @@ local mem_usage_panel = grafana.singlestat.new(
 local cpu_by_container_panel = grafana.graphPanel.new(
                                  'CPU',
                                  span=6,
-                                 datasource='$datasource',
+                                 datasource='$prometheus_datasource',
                                ) +
                                g.queryPanel(
                                  [queries.cpu_by_container],
@@ -152,7 +209,7 @@ local cpu_by_container_panel = grafana.graphPanel.new(
 local mem_by_container_panel = grafana.graphPanel.new(
                                  'Memory',
                                  span=6,
-                                 datasource='$datasource',
+                                 datasource='$prometheus_datasource',
                                ) +
                                g.queryPanel(
                                  [queries.mem_by_container],
@@ -165,7 +222,7 @@ local mem_by_container_panel = grafana.graphPanel.new(
 local net_throughput_panel = grafana.graphPanel.new(
                                'Bandwidth',
                                span=6,
-                               datasource='$datasource',
+                               datasource='$prometheus_datasource',
                              ) +
                              g.queryPanel(
                                [queries.net_rx_by_container, queries.net_tx_by_container],
@@ -181,24 +238,24 @@ local net_throughput_panel = grafana.graphPanel.new(
 
 local tcp_socket_by_state_panel = grafana.graphPanel.new(
                                     'TCP Sockets By State',
-                                    datasource='$datasource',
+                                    datasource='$prometheus_datasource',
                                     span=6,
                                   ) +
                                   g.queryPanel(
                                     [queries.tcp_socket_by_state],
                                     ['{{tcp_state}}'],
                                   ) +
-                                  g.stack +
                                   stackstyle;
 
 local disk_usage_panel = g.tablePanel(
   [queries.fs_usage_by_device, queries.fs_inode_usage_by_device],
   {
+    instance: { alias: 'Instance' },
     device: { alias: 'Device' },
     'Value #A': { alias: 'Disk Usage', unit: 'percentunit' },
     'Value #B': { alias: 'Inode Usage', unit: 'percentunit' },
   }
-) + { span: 12, datasource: '$datasource' };
+) + { span: 12, datasource: '$prometheus_datasource' };
 
 // Manifested stuff starts here
 {
@@ -212,53 +269,43 @@ local disk_usage_panel = g.tablePanel(
         container_template,
       ])
 
+      // Status Row
+      .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
+      // Integration status
+      .addPanel(integration_status_panel, gridPos={ x: 0, y: 0, w: 8, h: 2 })
+      // Latest metric received
+      .addPanel(latest_metric_panel, gridPos={ x: 8, y: 0, w: 8, h: 2 })
+
       // Overview Row
-      .addRow(
-        grafana.row.new('Overview')
-        // Total containers
-        .addPanel(total_containers_panel)
-
-        // Total images
-        .addPanel(total_images_panel)
-
-        // Host CPU used by containers
-        .addPanel(cpu_usage_panel)
-
-        // Host memory reserved by containers
-        .addPanel(mem_reserved_panel)
-
-        // Host memory utilization by containers
-        .addPanel(mem_usage_panel)
-      )
+      .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
+      // Total containers
+      .addPanel(total_containers_panel, gridPos={ x: 0, y: 2, w: 4, h: 6 })
+      // Total Images
+      .addPanel(total_images_panel, gridPos={ x: 4, y: 2, w: 4, h: 6 })
+      // Host CPU used by containers
+      .addPanel(cpu_usage_panel, gridPos={ x: 8, y: 2, w: 4, h: 6 })
+      // Host memory reserved by containers
+      .addPanel(mem_reserved_panel, gridPos={ x: 12, y: 2, w: 4, h: 6 })
+      // Host memory utilization by containers
+      .addPanel(mem_usage_panel, gridPos={ x: 16, y: 2, w: 4, h: 6 })
 
       // Compute Row
-      .addRow(
-        grafana.row.new('Compute')
-        // CPU by container
-        .addPanel(cpu_by_container_panel)
-
-        // Memory by container
-        .addPanel(mem_by_container_panel)
-      )
+      .addPanel(grafana.row.new(title='Compute'), gridPos={ x: 0, y: 8, w: 0, h: 0 })
+      // CPU by container
+      .addPanel(cpu_by_container_panel, gridPos={ x: 0, y: 8, w: 12, h: 8 })
+      // Memory by container
+      .addPanel(mem_by_container_panel, gridPos={ x: 12, y: 8, w: 12, h: 8 })
 
       // Network Row
-      .addRow(
-        grafana.row.new('Network')
-
-        // Network throughput
-        .addPanel(net_throughput_panel)
-
-        // TCP Socket by state
-        .addPanel(tcp_socket_by_state_panel)
-      )
+      .addPanel(grafana.row.new(title='Network'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
+      // Network throughput
+      .addPanel(net_throughput_panel, gridPos={ x: 0, y: 16, w: 12, h: 8 })
+      // TCP Socket by state
+      .addPanel(tcp_socket_by_state_panel, gridPos={ x: 12, y: 16, w: 12, h: 8 })
 
       // Storage Row
-      .addRow(
-        grafana.row.new('Storage')
-
-        // Disk
-        .addPanel(disk_usage_panel)
-      ) +
-      { graphTooltip: 2 },  // Shared tooltip. When you hover over a graph, the same time is selected on all graphs, and tooltip is shown. Set to 1 to only share crosshair
+      .addPanel(grafana.row.new(title='Storage'), gridPos={ x: 0, y: 24, w: 0, h: 0 })
+      // Disk
+      .addPanel(disk_usage_panel, gridPos={ x: 0, y: 24, w: 24, h: 8 }),
   },
 }
