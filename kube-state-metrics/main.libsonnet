@@ -37,7 +37,7 @@ local kausal = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libso
       // to preserve namespace etc labels.
       + deployment.mixin.spec.template.metadata.withAnnotationsMixin({ 'prometheus.io.scrape': 'false' }),
 
-    local policyRule = k.rbac.v1beta1.policyRule,
+    local policyRule = k.rbac.v1.policyRule,
     rbac:
       k.util.rbac('kube-state-metrics', [
         policyRule.new()
