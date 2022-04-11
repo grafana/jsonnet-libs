@@ -6,7 +6,7 @@ local exporter = std.trace('Deprecated: please consider switching to github.com/
 {
   local this = self,
   image:: 'prom/mysqld-exporter:v0.13.0-rc.0',
-  mysql_fqdn:: '%s.%s.svc.cluster.local' % [
+  mysql_fqdn:: '%s.%s.svc.cluster.local.' % [
     this._config.deployment_name,
     this._config.namespace,
   ],

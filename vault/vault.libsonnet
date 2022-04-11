@@ -151,11 +151,11 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
       envVar.fromFieldPath('POD_NAME', 'metadata.name'),
       envVar.new(
         'VAULT_CLUSTER_ADDR',
-        'https://$(POD_NAME).vault.vault.svc.cluster.local:%s' % this._config.vault.clusterPort
+        'https://$(POD_NAME).vault.vault.svc.cluster.local.:%s' % this._config.vault.clusterPort
       ),
       envVar.new(
         'VAULT_API_ADDR',
-        'https://$(POD_NAME).vault.vault.svc.cluster.local:%s' % this._config.vault.port
+        'https://$(POD_NAME).vault.vault.svc.cluster.local.:%s' % this._config.vault.port
       ),
       envVar.new('VAULT_LOG_LEVEL', k._config.vault.logLevel),
     ])
