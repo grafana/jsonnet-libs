@@ -9,10 +9,11 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     oauth_upstream: error 'Must define an upstream',
     oauth_email_domain: '*',
     oauth_pass_basic_auth: 'false',
+    oauth_extra_args: [],
   },
 
   _images+:: {
-    oauth2_proxy: 'quay.io/oauth2-proxy/oauth2-proxy:v7.1.3',
+    oauth2_proxy: 'quay.io/oauth2-proxy/oauth2-proxy:v7.2.1',
   },
 
   local secret = k.core.v1.secret,
@@ -37,7 +38,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       '--upstream=%s' % $._config.oauth_upstream,
       '--email-domain=%s' % $._config.oauth_email_domain,
       '--pass-basic-auth=%s' % $._config.oauth_pass_basic_auth,
-    ]) +
+    ] + $._config.oauth_extra_args) +
     container.withEnvFrom(
       envFrom.secretRef.withName('oauth2-proxy'),
     ),
