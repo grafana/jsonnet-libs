@@ -2,7 +2,7 @@
   _config+:: {
     // Cluster and environment specific overrides.
     cluster_dns_suffix: 'cluster.' + self.cluster_dns_tld,
-    cluster_dns_tld: 'local',
+    cluster_dns_tld: 'local.',
     namespace: error 'must specify namespace',
 
     // Alertmanager config options.

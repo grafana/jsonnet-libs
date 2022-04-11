@@ -67,7 +67,7 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
   //     replicas: 2,
   //     namespace: 'alertmanager',
   //     cluster_name: 'cluster',
-  //     cluster_dns_tld: 'local',
+  //     cluster_dns_tld: 'local.',
   //     gossip_port: 9094,
   //   },
   // }
