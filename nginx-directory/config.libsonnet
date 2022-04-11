@@ -10,7 +10,7 @@
       //    # Required
       //    title: 'Prometheus',
       //    path: 'prometheus',
-      //    url: 'http://prometheus.default.svc.cluster.local/prometheus/',
+      //    url: 'http://prometheus.default.svc.cluster.local./prometheus/',
       //
       //    # Optional
       //    params: '',
