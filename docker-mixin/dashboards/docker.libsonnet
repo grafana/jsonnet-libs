@@ -140,7 +140,7 @@ local total_containers_panel = grafana.statPanel.new(
 )
                                .addTarget(
   grafana.prometheus.target(queries.total_containers)
-) + { options+: { reduceOptions+: { calcs: ['lastNotNull'] } } };
+);
 
 local total_images_panel = grafana.statPanel.new(
   'Total Images',
@@ -150,7 +150,7 @@ local total_images_panel = grafana.statPanel.new(
 )
                            .addTarget(
   grafana.prometheus.target(queries.total_images)
-) + { options+: { reduceOptions+: { calcs: ['lastNotNull'] } } };
+);
 
 local cpu_usage_panel = grafana.singlestat.new(
   'CPU Utilization by Containers',

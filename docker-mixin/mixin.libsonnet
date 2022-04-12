@@ -1,1 +1,1 @@
-(import 'dashboards/docker.libsonnet')
+(import 'dashboards/dashboards.libsonnet')
