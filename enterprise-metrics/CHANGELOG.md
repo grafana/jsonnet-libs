@@ -26,7 +26,7 @@ Entries should include a reference to the Pull Request that introduced the chang
 - [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.4.1](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v141----june-29th-2021). #608
 - [FEATURE] Run the Grafana Enterprise Metrics `overrides-exporter` target as a deployment. #626
 - [FEATURE] Upgrade to [Grafana Enterprise Metrics v1.5.0](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v150----august-24th-2021). #638
-- [FEATURE] Upgrade to [Grafana Enterprise Metrics v2.0.0](TODO). #760
+- [FEATURE] Upgrade to [Grafana Enterprise Metrics v2.0.0](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v200----april-13th-2022). #760
   A few notable changes to defaults have been made in GEM 2.0. Consider whether you are currently relying on any of the following defaults before upgrading:
   - Default HTTP port for all components and services has changed to 8080 (from 80)
   - blocks_storage.backend used to be s3, but is now filesystem
