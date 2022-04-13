@@ -17,8 +17,7 @@ vendor: jsonnetfile.json jsonnetfile.lock.json
 
 test/vendor: ## Vendor the test Jsonnet libraries.
 test/vendor: test/jsonnetfile.json test/jsonnetfile.lock.json
-	cd test
-	jb install
+	cd test; jb install
 
 .PHONY: test
 test: ## Run library tests.
@@ -36,8 +35,7 @@ environments/minio/jsonnetfile.json: environments/minio/jsonnetfile.jsonnet json
 
 environments/minio/vendor: ## Vendor environment dependencies.
 environments/minio/vendor: environments/minio/jsonnetfile.json
-	cd $(@D)
-	jb install
+	cd $(@D); jb install
 
 .PHONY: local-test
 local-test: ## Deploy GEM to a local k3d cluster. Tear down with ./scripts/k3d-cluster delete.
