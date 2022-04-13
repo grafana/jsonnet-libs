@@ -261,13 +261,30 @@ local disk_usage_panel = g.tablePanel(
 {
   grafanaDashboards+:: {
     'docker.json':
-      grafana.dashboard.new('Docker', uid='RwmMppyP3')
+      grafana.dashboard.new(
+        'Docker Overview', 
+        time_from='%s' % $._config.dashboardPeriod,
+        editable=false,
+        tags=($._config.dashboardTags),
+        timezone='%s' % $._config.dashboardTimezone,
+        refresh='%s' % $._config.dashboardRefresh,
+        uid='integration-docker-overview'
+      )
+      
       .addTemplates([
         ds_template,
         job_template,
         instance_template,
         container_template,
       ])
+
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Docker Dashboards',
+        includeVars=false,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
 
       // Status Row
       .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })

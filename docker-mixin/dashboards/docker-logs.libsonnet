@@ -1,15 +1,19 @@
 local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
+local custom_barchart_grafonnet = import '../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
 
 local host_matcher = 'job=~"$job"';
 local container_matcher = host_matcher + ', container=~"$container"';
 
 local queries = {
   total_log_lines: 'sum(count_over_time({' + container_matcher + '}[$__interval]))',
-  total_log_warnings: 'sum(count_over_time({' + container_matcher + '} |= "WARNING" [$__interval]))',
-  total_log_errors: 'sum(count_over_time({' + container_matcher + '} |= "ERROR" [$__interval]))',
-  error_percentage: 'sum( count_over_time({' + container_matcher + '} |= "ERROR" [$__interval]) ) / sum( count_over_time({' + container_matcher + '} [$__interval]) )',
+  total_log_warnings: 'sum(count_over_time({' + container_matcher + '} |= "Warning" [$__interval]))',
+  total_log_errors: 'sum(count_over_time({' + container_matcher + '} |= "Error" [$__interval]))',
+  error_percentage: 'sum( count_over_time({' + container_matcher + '} |= "Error" [$__interval]) ) / sum( count_over_time({' + container_matcher + '} [$__interval]) )',
   total_bytes: 'sum(bytes_over_time({' + container_matcher +  '} [$__interval]))',
+  error_log_lines: '{' + container_matcher + '} |= "Error"',
+  warning_log_lines: '{' + container_matcher + '} |= "Warning"',
+  log_full_lines: '{' + container_matcher + '}',
 };
 
 local stackstyle = {
@@ -75,7 +79,7 @@ local integration_status_panel = grafana.statPanel.new(
         result: {
           color: 'green',
           index: 0,
-          text: 'Agent Configured - Sending Metrics',
+          text: 'Agent Configured - Sending Logs',
         },
         to: 10000000000000,
       },
@@ -171,16 +175,60 @@ local total_bytes_panel = grafana.statPanel.new(
   grafana.loki.target(queries.total_bytes)
 );
 
+local historical_logs_errors_warnings_panel = custom_barchart_grafonnet.new(
+  q1=queries.total_log_lines,
+  q2=queries.total_log_warnings,
+  q3=queries.total_log_errors,
+);
+
+local log_errors_panel = grafana.logPanel.new(
+  'Errors',
+  datasource='$loki_datasource',
+)                               .addTarget(
+  grafana.loki.target(queries.error_log_lines)
+);
+
+local log_warnings_panel = grafana.logPanel.new(
+  'Warnings',
+  datasource='$loki_datasource',
+)                               .addTarget(
+  grafana.loki.target(queries.warning_log_lines)
+);
+
+local log_full_panel = grafana.logPanel.new(
+  'Full Log File',
+  datasource='$loki_datasource',
+)                               .addTarget(
+  grafana.loki.target(queries.log_full_lines)
+);
+
 // Manifested stuff starts here
 {
   grafanaDashboards+:: {
-    'docker.json':
-      grafana.dashboard.new('Docker Logs',  uid='RwmMppyP4')
+    'docker-logs.json':
+      grafana.dashboard.new(
+        'Docker Logs',
+        time_from='%s' % $._config.dashboardPeriod,
+        editable=false,
+        tags=($._config.dashboardTags),
+        timezone='%s' % $._config.dashboardTimezone,
+        refresh='%s' % $._config.dashboardRefresh,
+        uid='integration-docker-logs'
+      )
+
       .addTemplates([
         ds_template,
         job_template,
         container_template,
       ])
+
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Docker Dashboards',
+        includeVars=false,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
 
       // Status Row
       .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
@@ -192,33 +240,38 @@ local total_bytes_panel = grafana.statPanel.new(
       // Overview Row
       .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
       // Total Log Lines
-      .addPanel(total_log_lines_panel, gridPos={ x: 0, y: 2, w: 4, h: 6 })
+      .addPanel(total_log_lines_panel, gridPos={ x: 0, y: 2, w: 4, h: 4 })
       // Warnings
-      .addPanel(total_log_warnings_panel, gridPos={ x: 4, y: 2, w: 4, h: 6 })
+      .addPanel(total_log_warnings_panel, gridPos={ x: 4, y: 2, w: 4, h: 4 })
       // Errors
-      .addPanel(total_log_errors_panel, gridPos={ x: 8, y: 2, w: 4, h: 6 })
+      .addPanel(total_log_errors_panel, gridPos={ x: 8, y: 2, w: 4, h: 4 })
       // Error Percentage
-      .addPanel(error_percentage_panel, gridPos={ x: 12, y: 2, w: 4, h: 6 })
+      .addPanel(error_percentage_panel, gridPos={ x: 12, y: 2, w: 4, h: 4 })
       // Bytes Used
-      .addPanel(total_bytes_panel, gridPos={ x: 16, y: 2, w: 4, h: 6 })
+      .addPanel(total_bytes_panel, gridPos={ x: 16, y: 2, w: 4, h: 4 })
+      // Historical Logs / Warnings / Errors
+      .addPanel(historical_logs_errors_warnings_panel, gridPos={ x: 0, y: 6, w: 24, h: 6 })
 
-    //   // Compute Row
-    //   .addPanel(grafana.row.new(title='Compute'), gridPos={ x: 0, y: 8, w: 0, h: 0 })
-    //   // CPU by container
-    //   .addPanel(cpu_by_container_panel, gridPos={ x: 0, y: 8, w: 12, h: 8 })
-    //   // Memory by container
-    //   .addPanel(mem_by_container_panel, gridPos={ x: 12, y: 8, w: 12, h: 8 })
+      // Errors Row
+      .addPanel(grafana.row.new(title='Errors', collapse=true)
+        // Errors
+        .addPanel(log_errors_panel, gridPos={ x: 0, y: 12, w: 24, h: 8 }),
+        gridPos={ x: 0, y: 12, w: 0, h: 0 }
+      )
+      
 
-    //   // Network Row
-    //   .addPanel(grafana.row.new(title='Network'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
-    //   // Network throughput
-    //   .addPanel(net_throughput_panel, gridPos={ x: 0, y: 16, w: 12, h: 8 })
-    //   // TCP Socket by state
-    //   .addPanel(tcp_socket_by_state_panel, gridPos={ x: 12, y: 16, w: 12, h: 8 })
+      // Warnings Row
+      .addPanel(grafana.row.new(title='Warnings', collapse=true)
+        // Warnings
+        .addPanel(log_warnings_panel, gridPos={ x: 0, y: 20, w: 24, h: 8 }),
+        gridPos={ x: 0, y: 20, w: 0, h: 0 }
+      )
 
-    //   // Storage Row
-    //   .addPanel(grafana.row.new(title='Storage'), gridPos={ x: 0, y: 24, w: 0, h: 0 })
-    //   // Disk
-    //   .addPanel(disk_usage_panel, gridPos={ x: 0, y: 24, w: 24, h: 8 }),
+      // Complete Log File
+      .addPanel(grafana.row.new(title='Complete Log File', collapse=true)
+        // Full Log File
+        .addPanel(log_full_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }), 
+        gridPos={ x: 0, y: 28, w: 0, h: 0 }
+      )
   },
 }
