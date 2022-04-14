@@ -35,7 +35,7 @@ Entries should include a reference to the Pull Request that introduced the chang
   - ruler_storage.backend used to be s3 but is now filesystem
   - alertmanager_storage.backend used to be s3 but is now filesystem
   - See [GEM 2.0 release notes](https://grafana.com/docs/enterprise-metrics/latest/release-notes/v2-0/) for more information
-- [FEATURE] Upgrade to [Grafana Enterprise Metrics v2.0.1](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v200----april-13th-2022). #767
+- [FEATURE] Upgrade to [Grafana Enterprise Metrics v2.0.1](https://grafana.com/docs/metrics-enterprise/latest/downloads/#v201----april-14th-2022). #767
 - [FEATURE] Add memcached for frontend cache #760
 - [ENHANCEMENT] Make Secret name for GEM license configurable via `licenseSecretName` #760
 - [ENHANCEMENT] Make Secret name for GEM admin token configurable via `adminTokenSecretName`. #600
