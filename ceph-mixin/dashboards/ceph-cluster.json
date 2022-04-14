@@ -696,7 +696,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "count(ALERTS{cluster='$cluster',alertstate='firing',alertname=~'^CephCluster.*'}) OR vector(0)",
+          "expr": "count(ALERTS{ceph_cluster=\"$ceph_cluster\",alertstate='firing',alertname=~'^CephCluster.*'}) OR vector(0)",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -981,7 +981,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "sum without (instance, ceph_daemon) (ceph_mon_num_sessions{cluster='$cluster'})",
+          "expr": "sum without (instance, ceph_daemon) (ceph_mon_num_sessions{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1835,7 +1835,7 @@
       ],
       "targets": [
         {
-          "expr": "ALERTS{cluster='$cluster', alertstate='firing'}",
+          "expr": "ALERTS{ceph_cluster=\"$ceph_cluster\", alertstate='firing'}",
           "format": "table",
           "instant": true,
           "intervalFactor": 1,
@@ -1927,7 +1927,7 @@
             "uid": "grafanacloud-prom"
           },
           "exemplar": false,
-          "expr": "topk(5,sort_desc(ceph_osd_apply_latency_ms{cluster='$cluster'} + ceph_osd_commit_latency_ms{cluster='$cluster'}))",
+          "expr": "topk(5,sort_desc(ceph_osd_apply_latency_ms{ceph_cluster=\"$ceph_cluster\"} + ceph_osd_commit_latency_ms{ceph_cluster=\"$ceph_cluster\"}))",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2139,7 +2139,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "count by (ceph_version) (ceph_osd_metadata{cluster='$cluster'})",
+          "expr": "count by (ceph_version) (ceph_osd_metadata{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2229,7 +2229,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "count by (ceph_version)(ceph_mon_metadata{cluster='$cluster'})",
+          "expr": "count by (ceph_version)(ceph_mon_metadata{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2319,7 +2319,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "count by (ceph_version)(ceph_mds_metadata{cluster='$cluster'})",
+          "expr": "count by (ceph_version)(ceph_mds_metadata{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2409,7 +2409,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "count by (ceph_version)(ceph_rgw_metadata{cluster='$cluster'})",
+          "expr": "count by (ceph_version)(ceph_rgw_metadata{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3031,7 +3031,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "sum((ceph_pool_num_bytes_recovered{cluster='$cluster'}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'})) by (name)",
+          "expr": "sum((ceph_pool_num_bytes_recovered{ceph_cluster=\"$ceph_cluster\"}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{ceph_cluster=\"$ceph_cluster\"})) by (name)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3125,7 +3125,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "sum without (instance, pool_id) ((ceph_pool_num_objects_recovered{cluster='$cluster'}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'}))",
+          "expr": "sum without (instance, pool_id) ((ceph_pool_num_objects_recovered{ceph_cluster=\"$ceph_cluster\"}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{ceph_cluster=\"$ceph_cluster\"}))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3217,7 +3217,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "sum without (instance) ((ceph_pool_objects{cluster='$cluster'}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'}))",
+          "expr": "sum without (instance) ((ceph_pool_objects{ceph_cluster=\"$ceph_cluster\"}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{ceph_cluster=\"$ceph_cluster\"}))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3306,7 +3306,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "sum without (instance) ((ceph_pool_quota_bytes{cluster='$cluster'}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'}))",
+          "expr": "sum without (instance) ((ceph_pool_quota_bytes{ceph_cluster=\"$ceph_cluster\"}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{ceph_cluster=\"$ceph_cluster\"}))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3395,7 +3395,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "sum without (instance) (ceph_pool_quota_objects{cluster='$cluster'}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'})",
+          "expr": "sum without (instance) (ceph_pool_quota_objects{ceph_cluster=\"$ceph_cluster\"}) *on (instance, pool_id) group_left(name)(ceph_pool_metadata{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3483,7 +3483,7 @@
       "pluginVersion": "8.4.6",
       "targets": [
         {
-          "expr": "count without (instance, ceph_daemon) (ceph_bluestore_commit_lat_count{cluster='$cluster'})",
+          "expr": "count without (instance, ceph_daemon) (ceph_bluestore_commit_lat_count{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3491,7 +3491,7 @@
           "refId": "A"
         },
         {
-          "expr": "count without (instance, ceph_daemon) (ceph_filestore_journal_latency_count{cluster='$cluster'})",
+          "expr": "count without (instance, ceph_daemon) (ceph_filestore_journal_latency_count{ceph_cluster=\"$ceph_cluster\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4159,7 +4159,7 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "ceph_osd_apply_latency_ms{cluster='$cluster'}",
+          "expr": "ceph_osd_apply_latency_ms{ceph_cluster=\"$ceph_cluster\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -4218,7 +4218,7 @@
       "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "ceph_osd_commit_latency_ms{cluster='$cluster'}",
+          "expr": "ceph_osd_commit_latency_ms{ceph_cluster=\"$ceph_cluster\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
