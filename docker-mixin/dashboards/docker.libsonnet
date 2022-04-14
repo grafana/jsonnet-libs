@@ -262,7 +262,7 @@ local disk_usage_panel = g.tablePanel(
   grafanaDashboards+:: {
     'docker.json':
       grafana.dashboard.new(
-        'Docker Overview', 
+        'Docker Overview',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -270,7 +270,7 @@ local disk_usage_panel = g.tablePanel(
         refresh='%s' % $._config.dashboardRefresh,
         uid='integration-docker-overview'
       )
-      
+
       .addTemplates([
         ds_template,
         job_template,

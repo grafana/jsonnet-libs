@@ -10,7 +10,7 @@ local queries = {
   total_log_warnings: 'sum(count_over_time({' + container_matcher + '} |= "Warning" [$__interval]))',
   total_log_errors: 'sum(count_over_time({' + container_matcher + '} |= "Error" [$__interval]))',
   error_percentage: 'sum( count_over_time({' + container_matcher + '} |= "Error" [$__interval]) ) / sum( count_over_time({' + container_matcher + '} [$__interval]) )',
-  total_bytes: 'sum(bytes_over_time({' + container_matcher +  '} [$__interval]))',
+  total_bytes: 'sum(bytes_over_time({' + container_matcher + '} [$__interval]))',
   error_log_lines: '{' + container_matcher + '} |= "Error"',
   warning_log_lines: '{' + container_matcher + '} |= "Warning"',
   log_full_lines: '{' + container_matcher + '}',
@@ -122,8 +122,8 @@ local total_log_lines_panel = grafana.statPanel.new(
   graphMode='none',
   reducerFunction='lastNotNull',
   unit='short',
-)                              .addThreshold({ color: 'rgb(192, 216, 255)', value: 0 })
-                               .addTarget(
+).addThreshold({ color: 'rgb(192, 216, 255)', value: 0 })
+                              .addTarget(
   grafana.loki.target(queries.total_log_lines)
 );
 
@@ -133,8 +133,8 @@ local total_log_warnings_panel = grafana.statPanel.new(
   graphMode='none',
   reducerFunction='lastNotNull',
   unit='short',
-)                              .addThreshold({ color: 'rgb(255, 152, 48)', value: 0 })
-                               .addTarget(
+).addThreshold({ color: 'rgb(255, 152, 48)', value: 0 })
+                                 .addTarget(
   grafana.loki.target(queries.total_log_warnings)
 );
 
@@ -144,7 +144,7 @@ local total_log_errors_panel = grafana.statPanel.new(
   graphMode='none',
   reducerFunction='lastNotNull',
   unit='short',
-)                              .addThreshold({ color: 'rgb(242, 73, 92)', value: 0 })
+).addThreshold({ color: 'rgb(242, 73, 92)', value: 0 })
                                .addTarget(
   grafana.loki.target(queries.total_log_errors)
 );
@@ -155,11 +155,11 @@ local error_percentage_panel = grafana.statPanel.new(
   graphMode='none',
   reducerFunction='lastNotNull',
   unit='percent',
-)                              .addThresholds([
-                                    { color: 'rgb(255, 166, 176)', value: 0 },
-                                    { color: 'rgb(255, 115, 131)', value: 25 },
-                                    { color: 'rgb(196, 22, 42)', value: 50 },
-                                ])
+).addThresholds([
+  { color: 'rgb(255, 166, 176)', value: 0 },
+  { color: 'rgb(255, 115, 131)', value: 25 },
+  { color: 'rgb(196, 22, 42)', value: 50 },
+])
                                .addTarget(
   grafana.loki.target(queries.error_percentage)
 );
@@ -170,8 +170,8 @@ local total_bytes_panel = grafana.statPanel.new(
   graphMode='none',
   reducerFunction='lastNotNull',
   unit='bytes',
-)                              .addThreshold({ color: 'rgb(184, 119, 217)', value: 0 })
-                               .addTarget(
+).addThreshold({ color: 'rgb(184, 119, 217)', value: 0 })
+                          .addTarget(
   grafana.loki.target(queries.total_bytes)
 );
 
@@ -184,21 +184,21 @@ local historical_logs_errors_warnings_panel = custom_barchart_grafonnet.new(
 local log_errors_panel = grafana.logPanel.new(
   'Errors',
   datasource='$loki_datasource',
-)                               .addTarget(
+).addTarget(
   grafana.loki.target(queries.error_log_lines)
 );
 
 local log_warnings_panel = grafana.logPanel.new(
   'Warnings',
   datasource='$loki_datasource',
-)                               .addTarget(
+).addTarget(
   grafana.loki.target(queries.warning_log_lines)
 );
 
 local log_full_panel = grafana.logPanel.new(
   'Full Log File',
   datasource='$loki_datasource',
-)                               .addTarget(
+).addTarget(
   grafana.loki.target(queries.log_full_lines)
 );
 
@@ -253,25 +253,28 @@ local log_full_panel = grafana.logPanel.new(
       .addPanel(historical_logs_errors_warnings_panel, gridPos={ x: 0, y: 6, w: 24, h: 6 })
 
       // Errors Row
-      .addPanel(grafana.row.new(title='Errors', collapse=true)
+      .addPanel(
+        grafana.row.new(title='Errors', collapse=true)
         // Errors
         .addPanel(log_errors_panel, gridPos={ x: 0, y: 12, w: 24, h: 8 }),
         gridPos={ x: 0, y: 12, w: 0, h: 0 }
       )
-      
+
 
       // Warnings Row
-      .addPanel(grafana.row.new(title='Warnings', collapse=true)
+      .addPanel(
+        grafana.row.new(title='Warnings', collapse=true)
         // Warnings
         .addPanel(log_warnings_panel, gridPos={ x: 0, y: 20, w: 24, h: 8 }),
         gridPos={ x: 0, y: 20, w: 0, h: 0 }
       )
 
       // Complete Log File
-      .addPanel(grafana.row.new(title='Complete Log File', collapse=true)
+      .addPanel(
+        grafana.row.new(title='Complete Log File', collapse=true)
         // Full Log File
-        .addPanel(log_full_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }), 
+        .addPanel(log_full_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
         gridPos={ x: 0, y: 28, w: 0, h: 0 }
-      )
+      ),
   },
 }
