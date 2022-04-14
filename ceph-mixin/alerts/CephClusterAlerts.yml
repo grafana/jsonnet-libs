@@ -1,14 +1,22 @@
 groups:
 - name: CephClusterAlerts
   rules:
-  - alert: CephUnhealthy
-    expr: absent(ceph_health_status == 1)
+  - alert: CephUnhealthyWarining
+    expr: ceph_health_status == 1
+    for: 0m
+    labels:
+      severity: warning
+    annotations:
+      summary: The Ceph cluster has warning level issues
+      description: "The Ceph cluster has warning level issues. Run the ceph -s command on any Ceph node to identify the reason and resolve the issue depending on the output."
+  - alert: CephUnhealthyCritical
+    expr: ceph_health_status == 2
     for: 0m
     labels:
       severity: critical
     annotations:
       summary: The Ceph cluster has critical issues
-      description: "The Ceph cluster has critical issues, please investigate further"
+      description: "The Ceph cluster has critical issues. Run the ceph -s command on any Ceph node to identify the reason and resolve the issue depending on the output."
   - alert: CephDiskLessThan15Left
     expr: (ceph_cluster_total_bytes-ceph_cluster_total_used_bytes)/ceph_cluster_total_bytes < 0.15
     for: 0m
