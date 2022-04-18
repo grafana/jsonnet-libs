@@ -1,42 +1,31 @@
-local cortex =
-  (import 'github.com/grafana/cortex-jsonnet/cortex/cortex.libsonnet')
-  + (import 'github.com/grafana/cortex-jsonnet/cortex/gossip.libsonnet')
-  + (import 'github.com/grafana/cortex-jsonnet/cortex/tsdb.libsonnet')
+local mimir =
+  (import 'github.com/grafana/mimir/operations/mimir/mimir.libsonnet')
   + {
     _config+:: {
-      // Remove the alertmanagerStorageConfig from Cortex as this library provides its own config interface.
+      // Remove the alertmanagerStorageConfig from Mimir as this library provides its own config interface.
       alertmanagerStorageClientConfig:: {},
       alertmanager_enabled: true,
-      // Remove the blocksStorageConfig from Cortex as this library provides its own config interface.
-      blocksStorageConfig:: {},
       // No resources should have a pre-configured namespace. These should be removed with removeNamespaceReferences.
       // TODO: Remove upstream.
       namespace:: 'namespace',
-      ringConfig+: {
-        // Hide the consul hostname because it isn't used with memberlist.
-        'consul.hostname':: '',
-      },
-      ingester+: {
-        wal_dir: '/data',
-      },
-      memcached_chunks_enabled: true,
-      memcached_index_queries_enabled: true,
-      memcached_metadata_enabled: true,
-      // Remove the rulerClientConfig from Cortex as this library provides its own config interface.
+      // Remove the rulerClientConfig from Mimir as this library provides its own config interface.
       rulerClientConfig: {},
       ruler_enabled: true,
+      // Enable memberlist ring
+      memberlist_ring_enabled: true,
+      // Enable mimir query sharding feature by default.
+      query_sharding_enabled: true,
+      // Enable query scheduler by default.
+      query_scheduler_enabled: true,
     },
     alertmanager_args+:: {
       // Memberlist gossip is used instead of consul for the ring.
       'alertmanager.sharding-ring.consul.hostname':: null,
-      'alertmanager.sharding-ring.prefix':: null,
       'alertmanager.sharding-ring.store': 'memberlist',
     },
     compactor_args+:: {
-      // Memberlist gossip is used instead of consul for the ring.
-      'compactor.ring.consul.hostname':: null,
+      // Use default ring prefix
       'compactor.ring.prefix':: null,
-      'compactor.ring.store': 'memberlist',
     },
     distributor_args+:: {
       // Disable the ha-tracker by default.
@@ -45,43 +34,22 @@ local cortex =
       'distributor.ha-tracker.store':: null,
       'distributor.ha-tracker.etcd.endpoints':: null,
       'distributor.ha-tracker.prefix':: null,
-      // Memberlist gossip is used instead of consul for the ring.
-      'distributor.ring.consul.hostname':: null,
-      // TODO: upstream this to github.com/grafana/cortex-jsonnet/cortex/gossip.libsonnet.
-      'distributor.ring.store': 'memberlist',
     },
-    ingester_args+:: {
-      // Disable deprecated chunk storage engine options set by cortex-jsonnet
-      'ingester.chunk-encoding':: null,
-      'ingester.max-chunk-age':: null,
-      'ingester.max-chunk-idle':: null,
-      'ingester.max-stale-chunk-idle':: null,
-      'ingester.max-transfer-retries':: null,
-      'ingester.retain-period':: null,
-    },
+    ingester_args+:: {},
     querier_args+:: {
-      // Memberlist gossip is used instead of consul for the ring.
-      'store-gateway.sharding-ring.consul.hostname':: null,
+      // Use default ring prefix
       'store-gateway.sharding-ring.prefix':: null,
-      'store-gateway.sharding-ring.store': 'memberlist',
     },
     ruler_args+:: {
-      // Memberlist gossip is used instead of consul for the ring.
-      'ruler.ring.consul.hostname':: null,
-      'ruler.ring.prefix':: null,
-      'ruler.ring.store': 'memberlist',
       // Remove ruler limits configuration.
       'ruler.max-rule-groups-per-tenant':: null,
       'ruler.max-rules-per-rule-group':: null,
-      'store-gateway.sharding-ring.consul.hostname':: null,
+      // Use default ring prefix
       'store-gateway.sharding-ring.prefix':: null,
-      'store-gateway.sharding-ring.store': 'memberlist',
     },
     store_gateway_args+:: {
-      // Memberlist gossip is used instead of consul for the ring.
-      'store-gateway.sharding-ring.consul.hostname':: null,
+      // Use default ring prefix
       'store-gateway.sharding-ring.prefix':: null,
-      'store-gateway.sharding-ring.store': 'memberlist',
     },
   };
 local d = import 'github.com/jsonnet-libs/docsonnet/doc-util/main.libsonnet';
@@ -119,13 +87,13 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       'admin.client.backend-type': error 'you must set the `admin.client.backend-type` flag to an object storage backend ("gcs"|"s3")',
       'admin.client.gcs.bucket-name': 'admin',
       'admin.client.s3.bucket-name': 'admin',
-      '#auth.enabled':: d.val(default=self['auth.enabled'], help='`auth.enabled` enables the tenant authentication', type=d.T.bool),
-      'auth.enabled': true,
+      '#auth.multitenancy-enabled':: d.val(default=self['auth.multitenancy-enabled'], help='`auth.multitenancy-enabled` enables multitenancy', type=d.T.bool),
+      'auth.multitenancy-enabled': true,
       '#auth.type':: d.val(
         default=self['auth.type'], help=|||
           `auth.type` configures the type of authentication in use.
           `enterprise` uses Grafana Enterprise token authentication.
-          `default` uses Cortex authentication.
+          `default` uses Mimir authentication.
         |||, type=d.T.bool
       ),
       'auth.type': 'enterprise',
@@ -152,7 +120,6 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         type=d.T.string
       ),
       'runtime-config.file': '/etc/enterprise-metrics/runtime.yml',
-      'store.engine': 'blocks',
       '#instrumentation.enabled':: d.val(
         default=self['instrumentation.enabled'],
         help='`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance',
@@ -165,6 +132,12 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         type=d.T.string
       ),
       'instrumentation.distributor-client.address': 'dns:///distributor:9095',
+      '#license.path':: d.val(
+        default=self['license.path'],
+        help='`license.path` configures where this component expects to find a Grafana Enterprise Metrics License.',
+        type=d.T.string
+      ),
+      'license.path': '/etc/gem-license/license.jwt',
     },
 
     '#licenseSecretName':: d.val(
@@ -197,7 +170,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   '#_images':: d.obj('`_images` contains fields for container images.'),
   _images:: {
     '#gem':: d.val(default=self.gem, help='`gem` is the Grafana Enterprise Metrics container image.', type=d.T.string),
-    gem: 'grafana/metrics-enterprise:v1.5.0',
+    gem: 'grafana/metrics-enterprise:v2.0.1',
     '#kubectl':: d.val(default=self.kubectl, help='`kubectl` is the image used for kubectl containers.', type=d.T.string),
     kubectl: 'bitnami/kubectl',
   },
@@ -206,12 +179,6 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   adminApi: {
     '#args':: d.obj('`args` is a convenience field that can be used to modify the admin-api container arguments as key value pairs.'),
     args:: this._config.commonArgs {
-      '#license.path':: d.val(
-        default=self['license.path'],
-        help='`license.path` configures where the admin-api expects to find a Grafana Enterprise Metrics License.',
-        type=d.T.string
-      ),
-      'license.path': '/etc/gem-license/license.jwt',
       '#admin-api.leader-election.enabled':: d.val(
         default=self['admin-api.leader-election.enabled'],
         help='`admin-api.leader-election.enabled` enables leader election for to avoid inconsistent state with parallel writes when multiple replicas of the admin-api are running.',
@@ -230,10 +197,10 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     container::
       container.new('admin-api', image=this._images.gem)
       + container.withArgs(util.mapToFlags(self.args))
-      + container.withPorts(cortex.util.defaultPorts)
+      + container.withPorts(mimir.util.defaultPorts)
       + container.resources.withLimits({ cpu: '2', memory: '4Gi' })
       + container.resources.withRequests({ cpu: '500m', memory: '1Gi' })
-      + cortex.util.readinessProbe,
+      + mimir.util.readinessProbe,
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the admin-api.'),
     deployment:
       deployment.new(name='admin-api', replicas=1, containers=[self.container])
@@ -251,7 +218,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   alertmanager: {
     local alertmanager = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the alertmanager container arguments as key-value pairs.'),
-    args:: cortex.alertmanager_args + this._config.commonArgs + {
+    args:: mimir.alertmanager_args + this._config.commonArgs + {
       'alertmanager-storage.backend':
         if 'alertmanager-storage.backend' in super then
           super['alertmanager-storage.backend']
@@ -266,22 +233,23 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     },
     '#container':: d.obj('`container` is a convenience field that can be used to modify the alertmanager container.'),
     container::
-      cortex.alertmanager_container
+      mimir.alertmanager_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(alertmanager.args)))
       + container.withImage(this._images.gem),
     '#persistentVolumeClaim':: d.obj('`persistentVolumeClaim` is a convenience field that can be used to modify the alertmanager PersistentVolumeClaim.'),
-    persistentVolumeClaim:: cortex.alertmanager_pvc,
+    persistentVolumeClaim:: mimir.alertmanager_pvc,
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the alertmanager.'),
     statefulSet:
-      cortex.alertmanager_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      mimir.alertmanager_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
       + statefulSet.spec.selector.withMatchLabelsMixin({ name: 'alertmanager' })
       + statefulSet.spec.withVolumeClaimTemplates([self.persistentVolumeClaim])
       + statefulSet.spec.template.metadata.withLabelsMixin({ name: 'alertmanager', gossip_ring_member: 'true' })
       + statefulSet.spec.template.spec.withContainers([alertmanager.container])
-      // Remove Cortex volumes.
+      // Remove Mimir volumes.
       + statefulSet.spec.template.spec.withVolumes([])
       // Replace with GEM volumes.
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the alertmanager.'),
     service: util.serviceFor(self.statefulSet),
   },
@@ -290,10 +258,10 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   compactor: {
     local compactor = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the compactor container arguments as key-value pairs.'),
-    args:: cortex.compactor_args + this._config.commonArgs,
+    args:: mimir.compactor_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the compactor container.'),
     container::
-      cortex.compactor_container
+      mimir.compactor_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(compactor.args)))
       + container.withImage(this._images.gem),
     '#persistentVolumeClaim':: d.obj('`persistentVolumeClaim` is a convenience field that can be used to modify the compactor PersistentVolumeClaim.'),
@@ -304,12 +272,13 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + persistentVolumeClaim.mixin.metadata.withName('compactor-data'),
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the compactor.'),
     statefulSet:
-      cortex.compactor_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      mimir.compactor_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
       + statefulSet.spec.withVolumeClaimTemplates([self.persistentVolumeClaim])
       + statefulSet.spec.selector.withMatchLabelsMixin({ name: 'compactor' })
       + statefulSet.spec.template.metadata.withLabelsMixin({ name: 'compactor', gossip_ring_member: 'true' })
       + statefulSet.spec.template.spec.withContainers([compactor.container])
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the compactor.'),
     service: util.serviceFor(self.statefulSet),
   },
@@ -318,22 +287,23 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   distributor: {
     local distributor = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the distributor container arguments as key-value pairs.'),
-    args:: cortex.distributor_args + this._config.commonArgs,
+    args:: mimir.distributor_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the distributor container.'),
     container::
-      cortex.distributor_container
+      mimir.distributor_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(distributor.args)))
       + container.withImage(this._images.gem),
     '#statefulSet':: d.obj('`deployment` is the Kubernetes Deployment for the distributor.'),
     deployment:
-      cortex.distributor_deployment
-      + deployment.spec.selector.withMatchLabelsMixin({ name: 'distributor' })
+      mimir.distributor_deployment
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'distributor', gossip_ring_member: 'true' })
       + deployment.spec.template.metadata.withLabelsMixin({ name: 'distributor', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withContainers([distributor.container])
-      // Remove Cortex volumes.
+      // Remove Mimir volumes.
       + deployment.spec.template.spec.withVolumes([])
       // Replace with GEM volumes.
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the distributor.'),
     service:
       util.serviceFor(self.deployment)
@@ -347,35 +317,35 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       '#gateway.proxy.admin-api.url':: d.val(
         default=self['gateway.proxy.admin-api.url'], help='`gateway.proxy.admin-api.url is the upstream URL of the admin-api.', type=d.T.string
       ),
-      'gateway.proxy.admin-api.url': 'http://admin-api',
+      'gateway.proxy.admin-api.url': 'http://admin-api:8080',
       '#gateway.proxy.compactor.url':: d.val(
         default=self['gateway.proxy.compactor.url'], help='`gateway.proxy.compactor.url is the upstream URL of the compactor.', type=d.T.string
       ),
-      'gateway.proxy.compactor.url': 'http://compactor',
+      'gateway.proxy.compactor.url': 'http://compactor:8080',
       '#gateway.proxy.distributor.url':: d.val(
         default=self['gateway.proxy.distributor.url'], help='`gateway.proxy.distributor.url is the upstream URL of the distributor.', type=d.T.string
       ),
       '#gateway.proxy.alertmanager.url':: d.val(
         default=self['gateway.proxy.alertmanager.url'], help='`gateway.proxy.alertmanager.url is the upstream URL of the alertmanager.', type=d.T.string
       ),
-      'gateway.proxy.alertmanager.url': 'http://alertmanager',
+      'gateway.proxy.alertmanager.url': 'http://alertmanager:8080',
       'gateway.proxy.distributor.url': 'dns:///distributor:9095',
       '#gateway.proxy.ingester.url':: d.val(
         default=self['gateway.proxy.ingester.url'], help='`gateway.proxy.ingester.url is the upstream URL of the ingester.', type=d.T.string
       ),
-      'gateway.proxy.ingester.url': 'http://ingester',
+      'gateway.proxy.ingester.url': 'http://ingester:8080',
       '#gateway.proxy.ruler.url':: d.val(
         default=self['gateway.proxy.ruler.url'], help='`gateway.proxy.ruler.url is the upstream URL of the ruler.', type=d.T.string
       ),
-      'gateway.proxy.ruler.url': 'http://ruler',
+      'gateway.proxy.ruler.url': 'http://ruler:8080',
       '#gateway.proxy.query-frontend.url':: d.val(
         default=self['gateway.proxy.query-frontend.url'], help='`gateway.proxy.query-frontend.url is the upstream URL of the query-frontend.', type=d.T.string
       ),
-      'gateway.proxy.query-frontend.url': 'http://query-frontend',
+      'gateway.proxy.query-frontend.url': 'http://query-frontend:8080',
       '#gateway.proxy.store-gateway.url':: d.val(
         default=self['gateway.proxy.store-gateway.url'], help='`gateway.proxy.store-gateway.url is the upstream URL of the store-gateway.', type=d.T.string
       ),
-      'gateway.proxy.store-gateway.url': 'http://store-gateway',
+      'gateway.proxy.store-gateway.url': 'http://store-gateway:8080',
       target: 'gateway',
     },
 
@@ -383,15 +353,16 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     container::
       container.new('gateway', this._images.gem)
       + container.withArgs(util.mapToFlags(self.args))
-      + container.withPorts(cortex.util.defaultPorts)
+      + container.withPorts(mimir.util.defaultPorts)
       + container.resources.withLimits({ cpu: '2', memory: '4Gi' })
       + container.resources.withRequests({ cpu: '500m', memory: '1Gi' })
-      + cortex.util.readinessProbe,
+      + mimir.util.readinessProbe,
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the gateway.'),
     deployment:
       deployment.new('gateway', 3, [self.container]) +
       deployment.spec.template.spec.withTerminationGracePeriodSeconds(15)
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the gateway.'),
     service:
       util.serviceFor(self.deployment),
@@ -401,7 +372,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   gossipRing: {
     '#service':: d.obj('`service` is the Kubernetes Service for the gossip ring.'),
     service:
-      cortex.gossip_ring_service
+      mimir.gossip_ring_service
       // Publish not ready addresses for initial memberlist start up.
       + service.spec.withPublishNotReadyAddresses(true),
   },
@@ -410,10 +381,10 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   ingester: {
     local ingester = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the ingester container arguments as key-value pairs.'),
-    args:: cortex.ingester_args + this._config.commonArgs,
+    args:: mimir.ingester_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the ingester container.'),
     container::
-      cortex.ingester_statefulset_container
+      mimir.ingester_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(ingester.args)))
       + container.withImage(this._images.gem)
       + container.withVolumeMounts([{ name: 'ingester-data', mountPath: '/data' }]),
@@ -424,52 +395,56 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + persistentVolumeClaim.mixin.spec.withAccessModes(['ReadWriteOnce'])
       + persistentVolumeClaim.mixin.metadata.withName('ingester-data'),
     '#podDisruptionBudget':: d.obj('`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the ingester.'),
-    podDisruptionBudget: cortex.ingester_pdb,
+    podDisruptionBudget: mimir.ingester_pdb,
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the ingester.'),
     statefulSet:
-      cortex.ingester_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      mimir.ingester_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
       + statefulSet.spec.withVolumeClaimTemplates([self.persistentVolumeClaim])
       + statefulSet.spec.selector.withMatchLabelsMixin({ name: 'ingester' })
       + statefulSet.spec.template.metadata.withLabelsMixin({ name: 'ingester', gossip_ring_member: 'true' })
       + statefulSet.spec.template.spec.withContainers([ingester.container])
-      // Remove Cortex volumes.
+      // Remove Mimir volumes.
       + statefulSet.spec.template.spec.withVolumes([])
       // Replace with GEM volumes.
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the ingester.'),
     service: util.serviceFor(self.statefulSet),
   },
 
   '#memcached':: d.obj('`memcached` has configuration for GEM caches.'),
   memcached: {
+    '#frontend':: d.obj('`frontend` is a cache for query-frontend query results.'),
+    frontend: mimir.memcached_frontend,
     '#chunks':: d.obj('`chunks` is a cache for time series chunks.'),
-    chunks: cortex.memcached_chunks,
+    chunks: mimir.memcached_chunks,
     '#metadata':: d.obj('`metadata` is cache for object store metadata used by the queriers and store-gateways.'),
-    metadata: cortex.memcached_metadata,
+    metadata: mimir.memcached_metadata,
     '#queries':: d.obj('`queries` is a cache for index queries used by the store-gateways.'),
-    queries: cortex.memcached_index_queries,
+    queries: mimir.memcached_index_queries,
   },
 
   '#querier':: d.obj('`querier` has configuration for the querier.'),
   querier: {
     local querier = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.'),
-    args:: cortex.querier_args + this._config.commonArgs,
+    args:: mimir.querier_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the querier container.'),
     container::
-      cortex.querier_container
+      mimir.querier_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(querier.args)))
       + container.withImage(this._images.gem),
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the querier.'),
     deployment:
-      cortex.querier_deployment
-      + deployment.spec.selector.withMatchLabelsMixin({ name: 'querier' })
+      mimir.querier_deployment
+      + deployment.spec.selector.withMatchLabelsMixin({ name: 'querier', gossip_ring_member: 'true' })
       + deployment.spec.template.metadata.withLabelsMixin({ name: 'querier', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withContainers([querier.container])
-      // Remove Cortex volumes.
+      // Remove Mimir volumes.
       + deployment.spec.template.spec.withVolumes([])
       // Replace with GEM volumes.
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the querier.'),
     service: util.serviceFor(self.deployment),
   },
@@ -478,22 +453,16 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   overridesExporter: {
     '#args':: d.obj('`args` is a convenience field that can be used to modify the overrides-exporter container arguments as key value pairs.'),
     args:: this._config.commonArgs {
-      '#license.path':: d.val(
-        default=self['license.path'],
-        help='`license.path` configures where the overrides-exporter expects to find a Grafana Enterprise Metrics License.',
-        type=d.T.string
-      ),
-      'license.path': '/etc/gem-license/license.jwt',
       target: 'overrides-exporter',
     },
     '#container':: d.obj('`container` is a convenience field that can be used to modify the overrides-exporter container.'),
     container::
       container.new('overrides-exporter', image=this._images.gem)
       + container.withArgs(util.mapToFlags(self.args))
-      + container.withPorts(cortex.util.defaultPorts)
+      + container.withPorts(mimir.util.defaultPorts)
       + container.resources.withLimits({ cpu: '1', memory: '1Gi' })
       + container.resources.withRequests({ cpu: '100m', memory: '1Gi' })
-      + cortex.util.readinessProbe,
+      + mimir.util.readinessProbe,
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the overrides-exporter.'),
     deployment:
       deployment.new(name='overrides-exporter', replicas=1, containers=[self.container])
@@ -509,32 +478,59 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   queryFrontend: {
     local queryFrontend = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the query-frontend container arguments as key-value pairs.'),
-    args:: cortex.query_frontend_args + this._config.commonArgs,
+    args:: mimir.query_frontend_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the query-frontend container.'),
     container::
-      cortex.query_frontend_container
+      mimir.query_frontend_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(queryFrontend.args)))
       + container.withImage(this._images.gem),
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the query-frontend.'),
     deployment:
-      cortex.query_frontend_deployment
+      mimir.query_frontend_deployment
       + deployment.spec.template.spec.withContainers([queryFrontend.container])
-      // Remove Cortex volumes.
+      // Remove Mimir volumes.
       + deployment.spec.template.spec.withVolumes([])
       // Replace with GEM volumes.
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the query-frontend.'),
     service: util.serviceFor(self.deployment),
     '#discoveryService':: d.obj('`discoveryService` is a headless Kubernetes Service used by queriers to discover query-frontend addresses.'),
     discoveryService:
-      cortex.query_frontend_discovery_service,
+      mimir.query_frontend_discovery_service,
+  },
+
+  '#queryScheduler':: d.obj('`queryScheduler` has configuration for the query-scheduler.'),
+  queryScheduler: {
+    local queryScheduler = self,
+    '#args':: d.obj('`args` is a convenience field that can be used to modify the query-scheduler container arguments as key-value pairs.'),
+    args:: mimir.query_scheduler_args + this._config.commonArgs,
+    '#container':: d.obj('`container` is a convenience field that can be used to modify the query-scheduler container.'),
+    container::
+      mimir.query_scheduler_container
+      + container.withArgs(removeNamespaceReferences(util.mapToFlags(queryScheduler.args)))
+      + container.withImage(this._images.gem),
+    '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the query-scheduler.'),
+    deployment:
+      mimir.query_scheduler_deployment
+      + deployment.spec.template.spec.withContainers([queryScheduler.container])
+      // Remove Mimir volumes.
+      + deployment.spec.template.spec.withVolumes([])
+      // Replace with GEM volumes.
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
+    '#service':: d.obj('`service` is the Kubernetes Service for the query-scheduler.'),
+    service: util.serviceFor(self.deployment),
+    '#discoveryService':: d.obj('`discoveryService` is a headless Kubernetes Service used by queriers to discover query-scheduler addresses.'),
+    discoveryService:
+      mimir.query_scheduler_discovery_service,
   },
 
   '#ruler':: d.obj('`ruler` has configuration for the ruler.'),
   ruler: {
     local ruler = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the ruler container arguments as key-value pairs.'),
-    args:: cortex.ruler_args + this._config.commonArgs + {
+    args:: mimir.ruler_args + this._config.commonArgs + {
       'ruler-storage.backend':
         if 'ruler-storage.backend' in super then
           super['ruler.storage.backend'] else
@@ -548,19 +544,20 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     },
     '#container':: d.obj('`container` is a convenience field that can be used to modify the ruler container.'),
     container::
-      cortex.ruler_container
+      mimir.ruler_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(ruler.args)))
       + container.withImage(this._images.gem),
     '#deployment':: d.obj('`deployment` is the Kubernetes Deployment for the ruler.'),
     deployment:
-      cortex.ruler_deployment
+      mimir.ruler_deployment
       + deployment.spec.selector.withMatchLabelsMixin({ name: 'ruler' })
       + deployment.spec.template.metadata.withLabelsMixin({ name: 'ruler', gossip_ring_member: 'true' })
       + deployment.spec.template.spec.withContainers([ruler.container])
-      // Remove Cortex volumes.
+      // Remove Mimir volumes.
       + deployment.spec.template.spec.withVolumes([])
       // Replace with GEM volumes.
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the ruler.'),
     service: util.serviceFor(self.deployment),
   },
@@ -576,11 +573,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
         For example:
         {
           tenantId: {
-            max_series_per_user: 0,
-            max_series_per_metric: 0,
             max_global_series_per_user: 150000,
             max_global_series_per_metric: 20000,
-            max_series_per_query: 100000,
             ingestion_rate: 10000,
             ingestion_burst_size: 200000,
             ruler_max_rules_per_rule_group: 20,
@@ -589,7 +583,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
           },
         }
       |||),
-      overrides: cortex._config.overrides,
+      overrides: mimir._config.overrides,
     },
     '#configMap':: d.obj('`configMap` is the Kubernetes ConfigMap containing the runtime configuration.'),
     configMap: configMap.new('runtime', { 'runtime.yml': std.manifestYamlDoc(runtime.configuration) }),
@@ -599,10 +593,10 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   storeGateway: {
     local storeGateway = self,
     '#args':: d.obj('`args` is a convenience field that can be used to modify the store-gateway container arguments as key-value pairs.'),
-    args:: cortex.store_gateway_args + this._config.commonArgs,
+    args:: mimir.store_gateway_args + this._config.commonArgs,
     '#container':: d.obj('`container` is a convenience field that can be used to modify the store-gateway container.'),
     container::
-      cortex.store_gateway_container
+      mimir.store_gateway_container
       + container.withArgs(removeNamespaceReferences(util.mapToFlags(storeGateway.args)))
       + container.withImage(this._images.gem),
     '#persistentVolumeClaim':: d.obj('`persistentVolumeClaim` is a convenience field that can be used to modify the store-gateway PersistentVolumeClaim.'),
@@ -612,10 +606,10 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       + persistentVolumeClaim.mixin.spec.withAccessModes(['ReadWriteOnce'])
       + persistentVolumeClaim.mixin.metadata.withName('store-gateway-data'),
     '#podDisruptionBudget':: d.obj('`podDisruptionBudget` is the Kubernetes PodDisruptionBudget for the store-gateway.'),
-    podDisruptionBudget: cortex.store_gateway_pdb,
+    podDisruptionBudget: mimir.store_gateway_pdb,
     '#statefulSet':: d.obj('`statefulSet` is the Kubernetes StatefulSet for the store-gateway.'),
     statefulSet:
-      cortex.store_gateway_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
+      mimir.store_gateway_statefulset { metadata+: { namespace:: null } }  // Hide the metadata.namespace field as Tanka provides that.
       + statefulSet.spec.withVolumeClaimTemplates([self.persistentVolumeClaim])
       + statefulSet.spec.selector.withMatchLabelsMixin({ name: 'store-gateway' })
       + statefulSet.spec.template.metadata.withLabelsMixin({ name: 'store-gateway', gossip_ring_member: 'true' })
@@ -623,7 +617,8 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
       // Remove Cortex volumes.
       + statefulSet.spec.template.spec.withVolumes([])
       // Replace with GEM volumes.
-      + util.configVolumeMount('runtime', '/etc/enterprise-metrics'),
+      + util.configVolumeMount('runtime', '/etc/enterprise-metrics')
+      + if this._config.licenseSecretName != null then util.secretVolumeMount(this._config.licenseSecretName, '/etc/gem-license/') else {},
     '#service':: d.obj('`service` is the Kubernetes Service for the store-gateway.'),
     service: util.serviceFor(self.statefulSet),
   },
@@ -645,7 +640,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
     |||),
     container::
       container.new(target, this._images.gem)
-      + container.withPorts(cortex.util.defaultPorts)
+      + container.withPorts(mimir.util.defaultPorts)
       + container.withArgs(util.mapToFlags(self.args))
       + container.withVolumeMounts([{ mountPath: '/shared', name: 'shared' }])
       + container.resources.withLimits({ memory: '4Gi' })
@@ -705,7 +700,7 @@ local removeNamespaceReferences(args) = std.map(function(arg) std.strReplace(arg
   '#util':: d.obj('`util` contains utility functions for working with the GEM Jsonnet library'),
   util:: {
     '#util':: d.val(d.T.array, '`modules` is an array of the names of all modules in the cluster'),
-    modules:: ['adminApi', 'alertmanager', 'compactor', 'distributor', 'gateway', 'ingester', 'querier', 'queryFrontend', 'ruler', 'storeGateway'],
+    modules:: ['adminApi', 'alertmanager', 'compactor', 'distributor', 'gateway', 'ingester', 'querier', 'queryFrontend', 'queryScheduler', 'ruler', 'storeGateway'],
     '#mapModules': d.fn('`mapModules` applies the function fn to each module in the GEM cluster', [d.arg('fn', d.T.func)]),
     mapModules(fn=function(module) module)::
       local activeModules = std.filter(function(field) std.member(self.modules, field), std.objectFields($));

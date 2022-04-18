@@ -15,13 +15,14 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj _config`](#obj-_config)
   * [`string _config.adminTokenSecretName`](#string-_configadmintokensecretname)
   * [`obj _config.commonArgs`](#obj-_configcommonargs)
-    * [`bool _config.commonArgs.auth.enabled`](#bool-_configcommonargsauthenabled)
+    * [`bool _config.commonArgs.auth.multitenancy-enabled`](#bool-_configcommonargsauthmultitenancy-enabled)
     * [`bool _config.commonArgs.auth.type`](#bool-_configcommonargsauthtype)
     * [`string _config.commonArgs.cluster-name`](#string-_configcommonargscluster-name)
     * [`string _config.commonArgs.instrumentation.distributor-client.address`](#string-_configcommonargsinstrumentationdistributor-clientaddress)
     * [`string _config.commonArgs.instrumentation.enabled`](#string-_configcommonargsinstrumentationenabled)
     * [`string _config.commonArgs.memberlist.join`](#string-_configcommonargsmemberlistjoin)
     * [`string _config.commonArgs.runtime-config.file`](#string-_configcommonargsruntime-configfile)
+  * [`string _config.license.path`](#string-_configlicensepath)
   * [`string _config.licenseSecretName`](#string-_configlicensesecretname)
 * [`obj _images`](#obj-_images)
   * [`string _images.gem`](#string-_imagesgem)
@@ -30,12 +31,11 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
   * [`obj adminApi.args`](#obj-adminapiargs)
     * [`bool adminApi.args.admin-api.leader-election.enabled`](#bool-adminapiargsadmin-apileader-electionenabled)
     * [`string adminApi.args.admin-api.leader-election.ring.store`](#string-adminapiargsadmin-apileader-electionringstore)
-    * [`bool adminApi.args.auth.enabled`](#bool-adminapiargsauthenabled)
+    * [`bool adminApi.args.auth.multitenancy-enabled`](#bool-adminapiargsauthmultitenancy-enabled)
     * [`bool adminApi.args.auth.type`](#bool-adminapiargsauthtype)
     * [`string adminApi.args.cluster-name`](#string-adminapiargscluster-name)
     * [`string adminApi.args.instrumentation.distributor-client.address`](#string-adminapiargsinstrumentationdistributor-clientaddress)
     * [`string adminApi.args.instrumentation.enabled`](#string-adminapiargsinstrumentationenabled)
-    * [`string adminApi.args.license.path`](#string-adminapiargslicensepath)
     * [`string adminApi.args.memberlist.join`](#string-adminapiargsmemberlistjoin)
     * [`string adminApi.args.runtime-config.file`](#string-adminapiargsruntime-configfile)
   * [`obj adminApi.container`](#obj-adminapicontainer)
@@ -47,7 +47,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj alertmanager`](#obj-alertmanager)
   * [`obj alertmanager.args`](#obj-alertmanagerargs)
     * [`string alertmanager.args.alertmanager-storage.s3.bucket-name`](#string-alertmanagerargsalertmanager-storages3bucket-name)
-    * [`bool alertmanager.args.auth.enabled`](#bool-alertmanagerargsauthenabled)
+    * [`bool alertmanager.args.auth.multitenancy-enabled`](#bool-alertmanagerargsauthmultitenancy-enabled)
     * [`bool alertmanager.args.auth.type`](#bool-alertmanagerargsauthtype)
     * [`string alertmanager.args.cluster-name`](#string-alertmanagerargscluster-name)
     * [`string alertmanager.args.instrumentation.distributor-client.address`](#string-alertmanagerargsinstrumentationdistributor-clientaddress)
@@ -64,7 +64,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
 * [`obj compactor`](#obj-compactor)
   * [`obj compactor.args`](#obj-compactorargs)
-    * [`bool compactor.args.auth.enabled`](#bool-compactorargsauthenabled)
+    * [`bool compactor.args.auth.multitenancy-enabled`](#bool-compactorargsauthmultitenancy-enabled)
     * [`bool compactor.args.auth.type`](#bool-compactorargsauthtype)
     * [`string compactor.args.cluster-name`](#string-compactorargscluster-name)
     * [`string compactor.args.instrumentation.distributor-client.address`](#string-compactorargsinstrumentationdistributor-clientaddress)
@@ -81,7 +81,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
 * [`obj distributor`](#obj-distributor)
   * [`obj distributor.args`](#obj-distributorargs)
-    * [`bool distributor.args.auth.enabled`](#bool-distributorargsauthenabled)
+    * [`bool distributor.args.auth.multitenancy-enabled`](#bool-distributorargsauthmultitenancy-enabled)
     * [`bool distributor.args.auth.type`](#bool-distributorargsauthtype)
     * [`string distributor.args.cluster-name`](#string-distributorargscluster-name)
     * [`string distributor.args.instrumentation.distributor-client.address`](#string-distributorargsinstrumentationdistributor-clientaddress)
@@ -96,7 +96,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
 * [`obj gateway`](#obj-gateway)
   * [`obj gateway.args`](#obj-gatewayargs)
-    * [`bool gateway.args.auth.enabled`](#bool-gatewayargsauthenabled)
+    * [`bool gateway.args.auth.multitenancy-enabled`](#bool-gatewayargsauthmultitenancy-enabled)
     * [`bool gateway.args.auth.type`](#bool-gatewayargsauthtype)
     * [`string gateway.args.cluster-name`](#string-gatewayargscluster-name)
     * [`string gateway.args.gateway.proxy.admin-api.url`](#string-gatewayargsgatewayproxyadmin-apiurl)
@@ -122,7 +122,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
 * [`obj ingester`](#obj-ingester)
   * [`obj ingester.args`](#obj-ingesterargs)
-    * [`bool ingester.args.auth.enabled`](#bool-ingesterargsauthenabled)
+    * [`bool ingester.args.auth.multitenancy-enabled`](#bool-ingesterargsauthmultitenancy-enabled)
     * [`bool ingester.args.auth.type`](#bool-ingesterargsauthtype)
     * [`string ingester.args.cluster-name`](#string-ingesterargscluster-name)
     * [`string ingester.args.instrumentation.distributor-client.address`](#string-ingesterargsinstrumentationdistributor-clientaddress)
@@ -142,18 +142,19 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
 * [`obj memcached`](#obj-memcached)
   * [`obj memcached.chunks`](#obj-memcachedchunks)
     
+  * [`obj memcached.frontend`](#obj-memcachedfrontend)
+    
   * [`obj memcached.metadata`](#obj-memcachedmetadata)
     
   * [`obj memcached.queries`](#obj-memcachedqueries)
     
 * [`obj overridesExporter`](#obj-overridesexporter)
   * [`obj overridesExporter.args`](#obj-overridesexporterargs)
-    * [`bool overridesExporter.args.auth.enabled`](#bool-overridesexporterargsauthenabled)
+    * [`bool overridesExporter.args.auth.multitenancy-enabled`](#bool-overridesexporterargsauthmultitenancy-enabled)
     * [`bool overridesExporter.args.auth.type`](#bool-overridesexporterargsauthtype)
     * [`string overridesExporter.args.cluster-name`](#string-overridesexporterargscluster-name)
     * [`string overridesExporter.args.instrumentation.distributor-client.address`](#string-overridesexporterargsinstrumentationdistributor-clientaddress)
     * [`string overridesExporter.args.instrumentation.enabled`](#string-overridesexporterargsinstrumentationenabled)
-    * [`string overridesExporter.args.license.path`](#string-overridesexporterargslicensepath)
     * [`string overridesExporter.args.memberlist.join`](#string-overridesexporterargsmemberlistjoin)
     * [`string overridesExporter.args.runtime-config.file`](#string-overridesexporterargsruntime-configfile)
   * [`obj overridesExporter.container`](#obj-overridesexportercontainer)
@@ -164,7 +165,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
 * [`obj querier`](#obj-querier)
   * [`obj querier.args`](#obj-querierargs)
-    * [`bool querier.args.auth.enabled`](#bool-querierargsauthenabled)
+    * [`bool querier.args.auth.multitenancy-enabled`](#bool-querierargsauthmultitenancy-enabled)
     * [`bool querier.args.auth.type`](#bool-querierargsauthtype)
     * [`string querier.args.cluster-name`](#string-querierargscluster-name)
     * [`string querier.args.instrumentation.distributor-client.address`](#string-querierargsinstrumentationdistributor-clientaddress)
@@ -179,7 +180,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
 * [`obj queryFrontend`](#obj-queryfrontend)
   * [`obj queryFrontend.args`](#obj-queryfrontendargs)
-    * [`bool queryFrontend.args.auth.enabled`](#bool-queryfrontendargsauthenabled)
+    * [`bool queryFrontend.args.auth.multitenancy-enabled`](#bool-queryfrontendargsauthmultitenancy-enabled)
     * [`bool queryFrontend.args.auth.type`](#bool-queryfrontendargsauthtype)
     * [`string queryFrontend.args.cluster-name`](#string-queryfrontendargscluster-name)
     * [`string queryFrontend.args.instrumentation.distributor-client.address`](#string-queryfrontendargsinstrumentationdistributor-clientaddress)
@@ -194,9 +195,26 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
   * [`obj queryFrontend.service`](#obj-queryfrontendservice)
     
+* [`obj queryScheduler`](#obj-queryscheduler)
+  * [`obj queryScheduler.args`](#obj-queryschedulerargs)
+    * [`bool queryScheduler.args.auth.multitenancy-enabled`](#bool-queryschedulerargsauthmultitenancy-enabled)
+    * [`bool queryScheduler.args.auth.type`](#bool-queryschedulerargsauthtype)
+    * [`string queryScheduler.args.cluster-name`](#string-queryschedulerargscluster-name)
+    * [`string queryScheduler.args.instrumentation.distributor-client.address`](#string-queryschedulerargsinstrumentationdistributor-clientaddress)
+    * [`string queryScheduler.args.instrumentation.enabled`](#string-queryschedulerargsinstrumentationenabled)
+    * [`string queryScheduler.args.memberlist.join`](#string-queryschedulerargsmemberlistjoin)
+    * [`string queryScheduler.args.runtime-config.file`](#string-queryschedulerargsruntime-configfile)
+  * [`obj queryScheduler.container`](#obj-queryschedulercontainer)
+    
+  * [`obj queryScheduler.deployment`](#obj-queryschedulerdeployment)
+    
+  * [`obj queryScheduler.discoveryService`](#obj-queryschedulerdiscoveryservice)
+    
+  * [`obj queryScheduler.service`](#obj-queryschedulerservice)
+    
 * [`obj ruler`](#obj-ruler)
   * [`obj ruler.args`](#obj-rulerargs)
-    * [`bool ruler.args.auth.enabled`](#bool-rulerargsauthenabled)
+    * [`bool ruler.args.auth.multitenancy-enabled`](#bool-rulerargsauthmultitenancy-enabled)
     * [`bool ruler.args.auth.type`](#bool-rulerargsauthtype)
     * [`string ruler.args.cluster-name`](#string-rulerargscluster-name)
     * [`string ruler.args.instrumentation.distributor-client.address`](#string-rulerargsinstrumentationdistributor-clientaddress)
@@ -220,7 +238,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
       
 * [`obj storeGateway`](#obj-storegateway)
   * [`obj storeGateway.args`](#obj-storegatewayargs)
-    * [`bool storeGateway.args.auth.enabled`](#bool-storegatewayargsauthenabled)
+    * [`bool storeGateway.args.auth.multitenancy-enabled`](#bool-storegatewayargsauthmultitenancy-enabled)
     * [`bool storeGateway.args.auth.type`](#bool-storegatewayargsauthtype)
     * [`string storeGateway.args.cluster-name`](#string-storegatewayargscluster-name)
     * [`string storeGateway.args.instrumentation.distributor-client.address`](#string-storegatewayargsinstrumentationdistributor-clientaddress)
@@ -239,7 +257,7 @@ local enterprise-metrics = import "github.com/grafana/jsonnet-libs/enterprise-me
     
 * [`obj tokengen`](#obj-tokengen)
   * [`obj tokengen.args`](#obj-tokengenargs)
-    * [`bool tokengen.args.auth.enabled`](#bool-tokengenargsauthenabled)
+    * [`bool tokengen.args.auth.multitenancy-enabled`](#bool-tokengenargsauthmultitenancy-enabled)
     * [`bool tokengen.args.auth.type`](#bool-tokengenargsauthtype)
     * [`string tokengen.args.cluster-name`](#string-tokengenargscluster-name)
     * [`string tokengen.args.instrumentation.distributor-client.address`](#string-tokengenargsinstrumentationdistributor-clientaddress)
@@ -286,11 +304,11 @@ $ kubectl get secret gem-admin-token -o jsonpath="{.data.grafana-token}" | base6
 
 `commonArgs` is a convenience field that can be used to modify the container arguments of all modules as key-value pairs.
 
-### bool _config.commonArgs.auth.enabled
+### bool _config.commonArgs.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool _config.commonArgs.auth.type
 
@@ -327,6 +345,12 @@ $ kubectl get secret gem-admin-token -o jsonpath="{.data.grafana-token}" | base6
 
 `runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
 
+### string _config.license.path
+
+*Default value: * `/etc/gem-license/license.jwt`
+
+`license.path` configures where this component expects to find a Grafana Enterprise Metrics License.
+
 ### string _config.licenseSecretName
 
 *Default value: * `gem-license`
@@ -343,7 +367,7 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 ### string _images.gem
 
-*Default value: * `grafana/metrics-enterprise:v1.5.0`
+*Default value: * `grafana/metrics-enterprise:v2.0.1`
 
 `gem` is the Grafana Enterprise Metrics container image.
 
@@ -373,11 +397,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `admin-api.leader-election.ring.store` is the type of key-value store to use for admin-api leader election.
 
-### bool adminApi.args.auth.enabled
+### bool adminApi.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool adminApi.args.auth.type
 
@@ -403,12 +427,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `true`
 
 `instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
-
-### string adminApi.args.license.path
-
-*Default value: * `/etc/gem-license/license.jwt`
-
-`license.path` configures where the admin-api expects to find a Grafana Enterprise Metrics License.
 
 ### string adminApi.args.memberlist.join
 
@@ -446,11 +464,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `alertmanager-storage.s3.bucket-name` is the name of the bucket in which the alertmanager data will be stored.
 
-### bool alertmanager.args.auth.enabled
+### bool alertmanager.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool alertmanager.args.auth.type
 
@@ -511,11 +529,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the compactor container arguments as key-value pairs.
 
-### bool compactor.args.auth.enabled
+### bool compactor.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool compactor.args.auth.type
 
@@ -576,11 +594,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the distributor container arguments as key-value pairs.
 
-### bool distributor.args.auth.enabled
+### bool distributor.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool distributor.args.auth.type
 
@@ -637,11 +655,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the gateway container arguments as key-value pairs.
 
-### bool gateway.args.auth.enabled
+### bool gateway.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool gateway.args.auth.type
 
@@ -754,11 +772,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the ingester container arguments as key-value pairs.
 
-### bool ingester.args.auth.enabled
+### bool ingester.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool ingester.args.auth.type
 
@@ -823,6 +841,10 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `chunks` is a cache for time series chunks.
 
+## obj memcached.frontend
+
+`frontend` is a cache for query-frontend query results.
+
 ## obj memcached.metadata
 
 `metadata` is cache for object store metadata used by the queriers and store-gateways.
@@ -839,11 +861,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the overrides-exporter container arguments as key value pairs.
 
-### bool overridesExporter.args.auth.enabled
+### bool overridesExporter.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool overridesExporter.args.auth.type
 
@@ -869,12 +891,6 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 *Default value: * `true`
 
 `instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
-
-### string overridesExporter.args.license.path
-
-*Default value: * `/etc/gem-license/license.jwt`
-
-`license.path` configures where the overrides-exporter expects to find a Grafana Enterprise Metrics License.
 
 ### string overridesExporter.args.memberlist.join
 
@@ -906,15 +922,15 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the querier container arguments as key-value pairs.
 
-### bool querier.args.auth.enabled
+### bool querier.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool querier.args.auth.type
 
-*Default value: * `default`
+*Default value: * `enterprise`
 
 `auth.type` configures the type of authentication in use.
 `enterprise` uses Grafana Enterprise token authentication.
@@ -967,11 +983,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the query-frontend container arguments as key-value pairs.
 
-### bool queryFrontend.args.auth.enabled
+### bool queryFrontend.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool queryFrontend.args.auth.type
 
@@ -1024,6 +1040,71 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `service` is the Kubernetes Service for the query-frontend.
 
+## obj queryScheduler
+
+`queryScheduler` has configuration for the query-scheduler.
+
+## obj queryScheduler.args
+
+`args` is a convenience field that can be used to modify the query-scheduler container arguments as key-value pairs.
+
+### bool queryScheduler.args.auth.multitenancy-enabled
+
+*Default value: * `true`
+
+`auth.multitenancy-enabled` enables multitenancy
+
+### bool queryScheduler.args.auth.type
+
+*Default value: * `enterprise`
+
+`auth.type` configures the type of authentication in use.
+`enterprise` uses Grafana Enterprise token authentication.
+`default` uses Cortex authentication.
+
+
+### string queryScheduler.args.cluster-name
+
+`cluster-name` is the cluster name associated with your Grafana Enterprise Metrics license.
+
+### string queryScheduler.args.instrumentation.distributor-client.address
+
+*Default value: * `dns:///distributor:9095`
+
+`instrumentation.distributor-client.address` specifies the gRPGC listen address of the distributor service to which the self-monitoring metrics are pushed. Must be a DNS address (`dns:///`) to enable client side load balancing.
+
+### string queryScheduler.args.instrumentation.enabled
+
+*Default value: * `true`
+
+`instrumentation.enabled` enables self-monitoring metrics recorded under the system instance
+
+### string queryScheduler.args.memberlist.join
+
+*Default value: * `gossip-ring`
+
+`memberlist.join` is an address used to find memberlist peers for ring gossip
+
+### string queryScheduler.args.runtime-config.file
+
+`runtime-config.file` provides a reloadable runtime configuration file for some specific configuration.
+
+## obj queryScheduler.container
+
+`container` is a convenience field that can be used to modify the query-scheduler container.
+
+## obj queryScheduler.deployment
+
+`deployment` is the Kubernetes Deployment for the query-scheduler.
+
+## obj queryScheduler.discoveryService
+
+`discoveryService` is a headless Kubernetes Service used by queriers to discover query-scheduler addresses.
+
+## obj queryScheduler.service
+
+`service` is the Kubernetes Service for the query-scheduler.
+
 ## obj ruler
 
 `ruler` has configuration for the ruler.
@@ -1032,11 +1113,11 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 
 `args` is a convenience field that can be used to modify the ruler container arguments as key-value pairs.
 
-### bool ruler.args.auth.enabled
+### bool ruler.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool ruler.args.auth.type
 
@@ -1110,20 +1191,16 @@ $ kubectl create secret generic gem-license -from-file=license.jwt
 ## obj runtime.configuration.overrides
 
 `overrides` are per tenant runtime limits overrides.
-Each field should be keyed by tenant ID and have an object value containing the specific override.
+Each field should be keyed by tenant ID and have an object value containing the specific overrides.
 For example:
 {
   tenantId: {
-    max_series_per_user: 0,
-    max_series_per_metric: 0,
     max_global_series_per_user: 150000,
     max_global_series_per_metric: 20000,
-    max_series_per_query: 100000,
     ingestion_rate: 10000,
     ingestion_burst_size: 200000,
     ruler_max_rules_per_rule_group: 20,
     ruler_max_rule_groups_per_tenant: 35,
-    compactor_blocks_retention_period: '0',
   },
 }
 
@@ -1136,11 +1213,11 @@ For example:
 
 `args` is a convenience field that can be used to modify the store-gateway container arguments as key-value pairs.
 
-### bool storeGateway.args.auth.enabled
+### bool storeGateway.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool storeGateway.args.auth.type
 
@@ -1207,11 +1284,11 @@ By default the tokengen object is hidden as it is a one-off task. To deploy the 
 
 `args` is convenience field for modifying the tokegen container arguments as key-value pairs.
 
-### bool tokengen.args.auth.enabled
+### bool tokengen.args.auth.multitenancy-enabled
 
 *Default value: * `true`
 
-`auth.enabled` enables the tenant authentication
+`auth.multitenancy-enabled` enables multitenancy
 
 ### bool tokengen.args.auth.type
 

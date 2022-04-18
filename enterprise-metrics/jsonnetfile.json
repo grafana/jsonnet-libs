@@ -4,20 +4,20 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/cortex-jsonnet.git",
-          "subdir": "cortex"
-        }
-      },
-      "version": "1.9.0"
-    },
-    {
-      "source": {
-        "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",
           "subdir": "ksonnet-util"
         }
       },
       "version": "master"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/mimir.git",
+          "subdir": "operations/mimir"
+        }
+      },
+      "version": "mimir-2.0.0"
     },
     {
       "source": {
