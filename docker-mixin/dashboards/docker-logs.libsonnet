@@ -48,7 +48,7 @@ local job_template = grafana.template.new(
   includeAll=true,
   allValues='.+',
   sort=1,
-  regex='.*docker.+'
+  regex=''
 );
 
 local container_template = grafana.template.new(

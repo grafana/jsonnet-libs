@@ -100,13 +100,6 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
           },
         ],
       },
-      gridPos: {
-        h: 0,
-        w: 0,
-        x: 0,
-        y: 0,
-      },
-      id: 12,
       maxDataPoints: 25,
       interval: '10s',
       options: {
