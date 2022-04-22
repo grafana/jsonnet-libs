@@ -2,7 +2,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local custom_barchart_grafonnet = import '../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
 
-local host_matcher = 'job=~"$job"';
+local host_matcher = 'job=~"$job", instance=~"$instance"';
 local container_matcher = host_matcher + ', container=~"$container"';
 
 local queries = {
@@ -23,13 +23,28 @@ local stackstyle = {
 };
 
 // Templates
-local ds_template = {
+local prometheus_template = {
   current: {
     text: 'default',
     value: 'default',
   },
   hide: 0,
-  label: 'Data Source',
+  label: 'Prometheus Data Source',
+  name: 'prometheus_datasource',
+  options: [],
+  query: 'prometheus',
+  refresh: 1,
+  regex: '',
+  type: 'datasource',
+};
+
+local loki_template = {
+  current: {
+    text: 'default',
+    value: 'default',
+  },
+  hide: 0,
+  label: 'Loki Data Source',
   name: 'loki_datasource',
   options: [],
   query: 'loki',
@@ -40,9 +55,22 @@ local ds_template = {
 
 local job_template = grafana.template.new(
   'job',
-  '$loki_datasource',
-  'label_values(job)',
+  '$prometheus_datasource',
+  'label_values(machine_scrape_error, job)',
   label='Job',
+  refresh='load',
+  multi=true,
+  includeAll=true,
+  allValues='.+',
+  sort=1,
+  regex=''
+);
+
+local instance_template = grafana.template.new(
+  'instance',
+  '$prometheus_datasource',
+  'label_values(machine_scrape_error{job=~"$job"}, instance)',
+  label='Instance',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -53,8 +81,8 @@ local job_template = grafana.template.new(
 
 local container_template = grafana.template.new(
   'container',
-  '$loki_datasource',
-  'label_values({job=~"$job"}, container)',
+  '$prometheus_datasource',
+  'label_values(container_last_seen{job=~"$job", instance=~"$instance"}, name)',
   label='Container',
   refresh='load',
   multi=true,
@@ -64,143 +92,168 @@ local container_template = grafana.template.new(
 );
 
 // Panels
-local integration_status_panel = grafana.statPanel.new(
-  'Integration Status',
-  datasource='$loki_datasource',
-  colorMode='background',
-  graphMode='none',
-  noValue='No Data',
-  reducerFunction='lastNotNull'
-).addMappings(
-  [
-    {
-      options: {
-        from: 1,
-        result: {
-          color: 'green',
-          index: 0,
-          text: 'Agent Configured - Sending Logs',
+local integration_status_panel =
+  grafana.statPanel.new(
+    'Integration Status',
+    datasource='$loki_datasource',
+    colorMode='background',
+    graphMode='none',
+    noValue='No Data',
+    reducerFunction='lastNotNull'
+  )
+  .addMappings(
+    [
+      {
+        options: {
+          from: 1,
+          result: {
+            color: 'green',
+            index: 0,
+            text: 'Agent Configured - Sending Logs',
+          },
+          to: 10000000000000,
         },
-        to: 10000000000000,
+        type: 'range',
       },
-      type: 'range',
-    },
-    {
-      options: {
-        from: 0,
-        result: {
-          color: 'red',
-          index: 1,
-          text: 'No Data',
+      {
+        options: {
+          from: 0,
+          result: {
+            color: 'red',
+            index: 1,
+            text: 'No Data',
+          },
+          to: 0,
         },
-        to: 0,
+        type: 'range',
       },
-      type: 'range',
-    },
-  ]
-)
-                                 .addTarget(
-  grafana.loki.target(queries.total_log_lines)
-);
+    ]
+  )
+  .addTarget(
+    grafana.loki.target(queries.total_log_lines)
+  );
 
-local latest_metric_panel = grafana.statPanel.new(
-  'Latest Metric Received',
-  datasource='$loki_datasource',
-  colorMode='background',
-  fields='Time',
-  graphMode='none',
-  noValue='No Data',
-  reducerFunction='lastNotNull'
-)
-                            .addTarget(
-  grafana.loki.target(queries.total_log_lines)
-);
+local latest_metric_panel =
+  grafana.statPanel.new(
+    'Latest Metric Received',
+    datasource='$loki_datasource',
+    colorMode='background',
+    fields='Time',
+    graphMode='none',
+    noValue='No Data',
+    reducerFunction='lastNotNull'
+  )
+  .addTarget(
+    grafana.loki.target(queries.total_log_lines)
+  );
 
-local total_log_lines_panel = grafana.statPanel.new(
-  'Total Log Lines',
-  datasource='$loki_datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull',
-  unit='short',
-).addThreshold({ color: 'rgb(192, 216, 255)', value: 0 })
-                              .addTarget(
-  grafana.loki.target(queries.total_log_lines)
-);
+local total_log_lines_panel =
+  grafana.statPanel.new(
+    'Total Log Lines',
+    datasource='$loki_datasource',
+    graphMode='none',
+    reducerFunction='lastNotNull',
+    unit='short',
+  )
+  .addThreshold(
+    { color: 'rgb(192, 216, 255)', value: 0 }
+  )
+  .addTarget(
+    grafana.loki.target(queries.total_log_lines)
+  );
 
-local total_log_warnings_panel = grafana.statPanel.new(
-  'Warnings',
-  datasource='$loki_datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull',
-  unit='short',
-).addThreshold({ color: 'rgb(255, 152, 48)', value: 0 })
-                                 .addTarget(
-  grafana.loki.target(queries.total_log_warnings)
-);
+local total_log_warnings_panel =
+  grafana.statPanel.new(
+    'Warnings',
+    datasource='$loki_datasource',
+    graphMode='none',
+    reducerFunction='lastNotNull',
+    unit='short',
+  ).addThreshold(
+    { color: 'rgb(255, 152, 48)', value: 0 }
+  )
+  .addTarget(
+    grafana.loki.target(queries.total_log_warnings)
+  );
 
-local total_log_errors_panel = grafana.statPanel.new(
-  'Errors',
-  datasource='$loki_datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull',
-  unit='short',
-).addThreshold({ color: 'rgb(242, 73, 92)', value: 0 })
-                               .addTarget(
-  grafana.loki.target(queries.total_log_errors)
-);
+local total_log_errors_panel =
+  grafana.statPanel.new(
+    'Errors',
+    datasource='$loki_datasource',
+    graphMode='none',
+    reducerFunction='lastNotNull',
+    unit='short',
+  ).addThreshold(
+    { color: 'rgb(242, 73, 92)', value: 0 }
+  )
+  .addTarget(
+    grafana.loki.target(queries.total_log_errors)
+  );
 
-local error_percentage_panel = grafana.statPanel.new(
-  'Error Percentage',
-  datasource='$loki_datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull',
-  unit='percent',
-).addThresholds([
-  { color: 'rgb(255, 166, 176)', value: 0 },
-  { color: 'rgb(255, 115, 131)', value: 25 },
-  { color: 'rgb(196, 22, 42)', value: 50 },
-])
-                               .addTarget(
-  grafana.loki.target(queries.error_percentage)
-);
+local error_percentage_panel =
+  grafana.statPanel.new(
+    'Error Percentage',
+    datasource='$loki_datasource',
+    graphMode='none',
+    reducerFunction='lastNotNull',
+    unit='percent',
+  ).addThresholds([
+    { color: 'rgb(255, 166, 176)', value: 0 },
+    { color: 'rgb(255, 115, 131)', value: 25 },
+    { color: 'rgb(196, 22, 42)', value: 50 },
+  ])
+  .addTarget(
+    grafana.loki.target(queries.error_percentage)
+  );
 
-local total_bytes_panel = grafana.statPanel.new(
-  'Bytes Used',
-  datasource='$loki_datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull',
-  unit='bytes',
-).addThreshold({ color: 'rgb(184, 119, 217)', value: 0 })
-                          .addTarget(
-  grafana.loki.target(queries.total_bytes)
-);
+local total_bytes_panel =
+  grafana.statPanel.new(
+    'Bytes Used',
+    datasource='$loki_datasource',
+    graphMode='none',
+    reducerFunction='lastNotNull',
+    unit='bytes',
+  )
+  .addThreshold(
+    { color: 'rgb(184, 119, 217)', value: 0 }
+  )
+  .addTarget(
+    grafana.loki.target(queries.total_bytes)
+  );
 
-local historical_logs_errors_warnings_panel = custom_barchart_grafonnet.new(
-  q1=queries.total_log_lines,
-  q2=queries.total_log_warnings,
-  q3=queries.total_log_errors,
-);
+local historical_logs_errors_warnings_panel =
+  custom_barchart_grafonnet.new(
+    q1=queries.total_log_lines,
+    q2=queries.total_log_warnings,
+    q3=queries.total_log_errors,
+  );
 
-local log_errors_panel = grafana.logPanel.new(
-  'Errors',
-  datasource='$loki_datasource',
-).addTarget(
-  grafana.loki.target(queries.error_log_lines)
-);
+local log_errors_panel =
+  grafana.logPanel.new(
+    'Errors',
+    datasource='$loki_datasource',
+  )
+  .addTarget(
+    grafana.loki.target(queries.error_log_lines)
+  );
 
-local log_warnings_panel = grafana.logPanel.new(
-  'Warnings',
-  datasource='$loki_datasource',
-).addTarget(
-  grafana.loki.target(queries.warning_log_lines)
-);
+local log_warnings_panel =
+  grafana.logPanel.new(
+    'Warnings',
+    datasource='$loki_datasource',
+  )
+  .addTarget(
+    grafana.loki.target(queries.warning_log_lines)
+  );
 
-local log_full_panel = grafana.logPanel.new(
-  'Full Log File',
-  datasource='$loki_datasource',
-).addTarget(
-  grafana.loki.target(queries.log_full_lines)
-);
+local log_full_panel =
+  grafana.logPanel.new(
+    'Full Log File',
+    datasource='$loki_datasource',
+  )
+  .addTarget(
+    grafana.loki.target(queries.log_full_lines)
+  );
 
 // Manifested stuff starts here
 {
@@ -217,15 +270,17 @@ local log_full_panel = grafana.logPanel.new(
       )
 
       .addTemplates([
-        ds_template,
+        prometheus_template,
+        loki_template,
         job_template,
+        instance_template,
         container_template,
       ])
 
       .addLink(grafana.link.dashboards(
         asDropdown=false,
         title='Docker Dashboards',
-        includeVars=false,
+        includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
