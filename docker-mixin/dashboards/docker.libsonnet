@@ -80,182 +80,195 @@ local container_template = grafana.template.new(
 );
 
 // Panels
-local integration_status_panel = grafana.statPanel.new(
-  'Integration Status',
-  datasource='$prometheus_datasource',
-  colorMode='background',
-  graphMode='none',
-  noValue='No Data',
-  reducerFunction='lastNotNull'
-).addMappings(
-  [
-    {
-      options: {
-        from: 1,
-        result: {
-          color: 'green',
-          index: 0,
-          text: 'Agent Configured - Sending Metrics',
+local integration_status_panel =
+  grafana.statPanel.new(
+    'Integration Status',
+    datasource='$prometheus_datasource',
+    colorMode='background',
+    graphMode='none',
+    noValue='No Data',
+    reducerFunction='lastNotNull'
+  )
+  .addMappings(
+    [
+      {
+        options: {
+          from: 1,
+          result: {
+            color: 'green',
+            index: 0,
+            text: 'Agent Configured - Sending Metrics',
+          },
+          to: 10000000000000,
         },
-        to: 10000000000000,
+        type: 'range',
       },
-      type: 'range',
-    },
-    {
-      options: {
-        from: 0,
-        result: {
-          color: 'red',
-          index: 1,
-          text: 'No Data',
+      {
+        options: {
+          from: 0,
+          result: {
+            color: 'red',
+            index: 1,
+            text: 'No Data',
+          },
+          to: 0,
         },
-        to: 0,
+        type: 'range',
       },
-      type: 'range',
-    },
-  ]
-)
-                                 .addTarget(
-  grafana.prometheus.target(queries.total_containers)
-);
+    ]
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.total_containers)
+  );
 
-local latest_metric_panel = grafana.statPanel.new(
-  'Latest Metric Received',
-  datasource='$prometheus_datasource',
-  colorMode='background',
-  fields='Time',
-  graphMode='none',
-  noValue='No Data',
-  reducerFunction='lastNotNull'
-)
-                            .addTarget(
-  grafana.prometheus.target(queries.total_containers)
-);
+local latest_metric_panel =
+  grafana.statPanel.new(
+    'Latest Metric Received',
+    datasource='$prometheus_datasource',
+    colorMode='background',
+    fields='Time',
+    graphMode='none',
+    noValue='No Data',
+    reducerFunction='lastNotNull'
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.total_containers)
+  );
 
-local total_containers_panel = grafana.statPanel.new(
-  'Total Containers',
-  datasource='$prometheus_datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull'
-)
-                               .addTarget(
-  grafana.prometheus.target(queries.total_containers)
-);
+local total_containers_panel =
+  grafana.statPanel.new(
+    'Total Containers',
+    datasource='$prometheus_datasource',
+    graphMode='none',
+    reducerFunction='lastNotNull'
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.total_containers)
+  );
 
-local total_images_panel = grafana.statPanel.new(
-  'Total Images',
-  datasource='$prometheus_datasource',
-  graphMode='none',
-  reducerFunction='lastNotNull'
-)
-                           .addTarget(
-  grafana.prometheus.target(queries.total_images)
-);
+local total_images_panel =
+  grafana.statPanel.new(
+    'Total Images',
+    datasource='$prometheus_datasource',
+    graphMode='none',
+    reducerFunction='lastNotNull'
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.total_images)
+  );
 
-local cpu_usage_panel = grafana.singlestat.new(
-  'CPU Utilization by Containers',
-  format='percentunit',
-  gaugeShow=true,
-  thresholds='.80,.90',
-  span=2,
-  datasource='$prometheus_datasource',
-  gaugeMaxValue=1,
-)
-                        .addTarget(
-  grafana.prometheus.target(queries.cpu_usage)
-);
+local cpu_usage_panel =
+  grafana.singlestat.new(
+    'CPU Utilization by Containers',
+    format='percentunit',
+    gaugeShow=true,
+    thresholds='.80,.90',
+    span=2,
+    datasource='$prometheus_datasource',
+    gaugeMaxValue=1,
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.cpu_usage)
+  );
 
-local mem_reserved_panel = grafana.singlestat.new(
-  'Memory Reserved by Containers',
-  format='percentunit',
-  gaugeShow=true,
-  thresholds='.80,.90',
-  span=2,
-  datasource='$prometheus_datasource',
-  gaugeMaxValue=1,
-)
-                           .addTarget(
-  grafana.prometheus.target(queries.host_mem_reserved)
-);
+local mem_reserved_panel =
+  grafana.singlestat.new(
+    'Memory Reserved by Containers',
+    format='percentunit',
+    gaugeShow=true,
+    thresholds='.80,.90',
+    span=2,
+    datasource='$prometheus_datasource',
+    gaugeMaxValue=1,
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.host_mem_reserved)
+  );
 
-local mem_usage_panel = grafana.singlestat.new(
-  'Memory Utilization by Containers',
-  format='percentunit',
-  gaugeShow=true,
-  thresholds='.80,.90',
-  span=2,
-  datasource='$prometheus_datasource',
-  gaugeMaxValue=1,
-)
-                        .addTarget(
-  grafana.prometheus.target(queries.host_mem_consumed)
-);
+local mem_usage_panel =
+  grafana.singlestat.new(
+    'Memory Utilization by Containers',
+    format='percentunit',
+    gaugeShow=true,
+    thresholds='.80,.90',
+    span=2,
+    datasource='$prometheus_datasource',
+    gaugeMaxValue=1,
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.host_mem_consumed)
+  );
 
-local cpu_by_container_panel = grafana.graphPanel.new(
-                                 'CPU',
-                                 span=6,
-                                 datasource='$prometheus_datasource',
-                               ) +
-                               g.queryPanel(
-                                 [queries.cpu_by_container],
-                                 ['{{name}}'],
-                               ) +
-                               g.stack +
-                               stackstyle +
-                               {
-                                 yaxes: g.yaxes('percentunit'),
-                               };
-
-local mem_by_container_panel = grafana.graphPanel.new(
-                                 'Memory',
-                                 span=6,
-                                 datasource='$prometheus_datasource',
-                               ) +
-                               g.queryPanel(
-                                 [queries.mem_by_container],
-                                 ['{{name}}'],
-                               ) +
-                               g.stack +
-                               stackstyle +
-                               { yaxes: g.yaxes('bytes') };
-
-local net_throughput_panel = grafana.graphPanel.new(
-                               'Bandwidth',
-                               span=6,
-                               datasource='$prometheus_datasource',
-                             ) +
-                             g.queryPanel(
-                               [queries.net_rx_by_container, queries.net_tx_by_container],
-                               ['{{name}} rx', '{{name}} tx'],
-                             ) +
-                             g.stack +
-                             stackstyle +
-                             {
-                               yaxes: g.yaxes({ format: 'binBps', min: null }),
-                             } + {
-  seriesOverrides: [{ alias: '/.*tx/', transform: 'negative-Y' }],
-};
-
-local tcp_socket_by_state_panel = grafana.graphPanel.new(
-                                    'TCP Sockets By State',
-                                    datasource='$prometheus_datasource',
-                                    span=6,
-                                  ) +
-                                  g.queryPanel(
-                                    [queries.tcp_socket_by_state],
-                                    ['{{tcp_state}}'],
-                                  ) +
-                                  stackstyle;
-
-local disk_usage_panel = g.tablePanel(
-  [queries.fs_usage_by_device, queries.fs_inode_usage_by_device],
+local cpu_by_container_panel =
+  grafana.graphPanel.new(
+    'CPU',
+    span=6,
+    datasource='$prometheus_datasource',
+  ) +
+  g.queryPanel(
+    [queries.cpu_by_container],
+    ['{{name}}'],
+  ) +
+  g.stack +
+  stackstyle +
   {
-    instance: { alias: 'Instance' },
-    device: { alias: 'Device' },
-    'Value #A': { alias: 'Disk Usage', unit: 'percentunit' },
-    'Value #B': { alias: 'Inode Usage', unit: 'percentunit' },
-  }
-) + { span: 12, datasource: '$prometheus_datasource' };
+    yaxes: g.yaxes('percentunit'),
+  };
+
+local mem_by_container_panel =
+  grafana.graphPanel.new(
+    'Memory',
+    span=6,
+    datasource='$prometheus_datasource',
+  ) +
+  g.queryPanel(
+    [queries.mem_by_container],
+    ['{{name}}'],
+  ) +
+  g.stack +
+  stackstyle +
+  { yaxes: g.yaxes('bytes') };
+
+local net_throughput_panel =
+  grafana.graphPanel.new(
+    'Bandwidth',
+    span=6,
+    datasource='$prometheus_datasource',
+  ) +
+  g.queryPanel(
+    [queries.net_rx_by_container, queries.net_tx_by_container],
+    ['{{name}} rx', '{{name}} tx'],
+  ) +
+  g.stack +
+  stackstyle +
+  {
+    yaxes: g.yaxes({ format: 'binBps', min: null }),
+  } + {
+    seriesOverrides: [{ alias: '/.*tx/', transform: 'negative-Y' }],
+  };
+
+local tcp_socket_by_state_panel =
+  grafana.graphPanel.new(
+    'TCP Sockets By State',
+    datasource='$prometheus_datasource',
+    span=6,
+  ) +
+  g.queryPanel(
+    [queries.tcp_socket_by_state],
+    ['{{tcp_state}}'],
+  ) +
+  stackstyle;
+
+local disk_usage_panel =
+  g.tablePanel(
+    [queries.fs_usage_by_device, queries.fs_inode_usage_by_device],
+    {
+      instance: { alias: 'Instance' },
+      device: { alias: 'Device' },
+      'Value #A': { alias: 'Disk Usage', unit: 'percentunit' },
+      'Value #B': { alias: 'Inode Usage', unit: 'percentunit' },
+    }
+  ) + { span: 12, datasource: '$prometheus_datasource' };
 
 // Manifested stuff starts here
 {
@@ -281,7 +294,7 @@ local disk_usage_panel = g.tablePanel(
       .addLink(grafana.link.dashboards(
         asDropdown=false,
         title='Docker Dashboards',
-        includeVars=false,
+        includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
