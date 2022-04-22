@@ -209,6 +209,29 @@ local util(k) = {
       volume.mixin.secret.withDefaultMode(defaultMode),
     ]),
 
+  // secretVolumeMountAnnotated is like secretVolumeMount but also adds an annotation to ensure the pods are de-reployed,
+  // just like configMapVolumeMount does.
+  // Works for deployments, statefulSets, etc.
+  secretVolumeMountAnnotated(secret, path, defaultMode=256, volumeMountMixin={})::
+    local name = secret.metadata.name;
+    local annotations = { ['%s-secret-hash' % name]: std.md5(std.toString(secret)) };
+    local container = k.core.v1.container,
+          deployment = k.apps.v1.deployment,
+          volumeMount = k.core.v1.volumeMount,
+          volume = k.core.v1.volume;
+
+    local addMount(c) = c + container.withVolumeMountsMixin(
+      volumeMount.new(name, path) +
+      volumeMountMixin,
+    );
+
+    deployment.mapContainers(addMount)
+    + deployment.mixin.spec.template.spec.withVolumesMixin([
+      volume.fromSecret(name, secretName=name) +
+      volume.mixin.secret.withDefaultMode(defaultMode),
+    ])
+    + deployment.mixin.spec.template.metadata.withAnnotationsMixin(annotations),
+
   emptyVolumeMount(name, path, volumeMountMixin={}, volumeMixin={})::
     local container = k.core.v1.container,
           deployment = k.apps.v1.deployment,
