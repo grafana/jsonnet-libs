@@ -3,7 +3,7 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local custom_barchart_grafonnet = import '../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
 
 local host_matcher = 'job=~"$job", instance=~"$instance"';
-local container_matcher = host_matcher + ', name=~"$container"';
+local container_matcher = host_matcher + ', container=~"$container"';
 
 local queries = {
   total_log_lines: 'sum(count_over_time({' + container_matcher + '}[$__interval]))',
