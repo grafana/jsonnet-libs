@@ -1,5 +1,5 @@
 {
-  dashboard(title, uid='', datasource='default'):: {
+  dashboard(title, uid='', datasource='default', datasource_regex=''):: {
     // Stuff that isn't materialised.
     _nextPanel:: 1,
     addRow(row):: self {
@@ -114,7 +114,7 @@
           options: [],
           query: 'prometheus',
           refresh: 1,
-          regex: '',
+          regex: datasource_regex,
           type: 'datasource',
         },
       ],
