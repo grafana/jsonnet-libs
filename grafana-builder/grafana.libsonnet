@@ -178,7 +178,7 @@
     titleSize: 'h6',
   },
 
-  panel(title):: {
+  panel(title, tooltip_shared=true, tooltip_sort=2, tooltip_value_type='individual'):: {
     aliasColors: {},
     bars: false,
     dashLength: 10,
@@ -213,9 +213,9 @@
     timeShift: null,
     title: title,
     tooltip: {
-      shared: true,
-      sort: 2,
-      value_type: 'individual',
+      shared: tooltip_shared,
+      sort: tooltip_sort,
+      value_type: tooltip_value_type,
     },
     type: 'graph',
     xaxis: {
