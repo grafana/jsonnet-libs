@@ -4,120 +4,224 @@ local grafana = import 'grafonnet/grafana.libsonnet';
 local prometheus = grafana.prometheus;
 local graphPanel = grafana.graphPanel;
 
+local host_matcher = 'job=~"$job", agent_hostname=~"$hostname"';
+
+// Templates
+local ds_template = {
+  current: {
+    text: 'default',
+    value: 'default',
+  },
+  hide: 0,
+  label: 'Data Source',
+  name: 'prometheus_datasource',
+  options: [],
+  query: 'prometheus',
+  refresh: 1,
+  regex: '',
+  type: 'datasource',
+};
+
+local job_template = grafana.template.new(
+  'job',
+  '$prometheus_datasource',
+  'label_values(windows_cs_hostname, job)',
+  label='Job',
+  refresh='load',
+  multi=true,
+  includeAll=true,
+  allValues='.+',
+  sort=1,
+);
+
+local hostname_template = grafana.template.new(
+  'hostname',
+  '$prometheus_datasource',
+  'label_values(windows_cs_hostname{job=~"$job"}, hostname)',
+  label='Hostname',
+  refresh='load',
+  multi=true,
+  includeAll=true,
+  allValues='.+',
+  sort=1,
+);
+
 {
   grafanaDashboards+:: {
     'windows_exporter.json':
-      g.dashboard('Windows', 'e68fe518dbf1')
-      .addTemplate('job', 'windows_cs_hostname', 'job')
-      .addMultiTemplate('hostname', 'windows_cs_hostname{job=~"$job"}', 'hostname')
-      .addRow(
-        g.row('Overview')
-        .addPanel(
-          win.wintable('Usage', '$datasource')
-          .addQuery('windows_os_info{job=~"$job"} * on(instance) group_right(product) windows_cs_hostname', 'group', 'group')
-          .addQuery('100 - (avg by (instance) (irate(windows_cpu_time_total{job=~"$job",mode="idle"}[$__rate_interval])) * 100)', 'CPU Usage %', 'cpuusage')
-          .addQuery('time() - windows_system_system_up_time{job=~"$job"}', 'Uptime', 'uptime')
-          .addQuery('windows_cs_logical_processors{job=~"$job"} - 0', 'CPUs', 'cpus')
-          .addQuery('windows_cs_physical_memory_bytes{job=~"$job"} - 0', 'Memory', 'memory')
-          .addQuery('100 - 100 * windows_os_physical_memory_free_bytes{job=~"$job"} / windows_cs_physical_memory_bytes{job=~"$job"}', 'Memory Used', 'memoryused')
-          .addQuery('(windows_logical_disk_free_bytes{job=~"$job",volume=~"C:"}/windows_logical_disk_size_bytes{job=~"$job",volume=~"C:"}) * 100', 'C:\\ Free %', 'cfree')
-          .hideColumn('Time')
-          .hideColumn('domain')
-          .hideColumn('fqdn')
-          .hideColumn('job')
-          .hideColumn('agent_hostname')
-          .hideColumn('Value #group')
-          .hideColumn('instance')
-          .renameColumn('Value #cpuusage', 'CPU Usage %')
-          .addThreshold('CPU Usage %', [
-            {
-              color: 'dark-green',
-              value: 0,
-            },
-            {
-              color: 'dark-yellow',
-              value: 40,
-            },
-            {
-              color: 'dark-red',
-              value: 80,
-            },
-          ], 'absolute')
-          .renameColumn('Value #uptime', 'Uptime')
-          .setColumnUnit('Uptime', 's')
-          .addThreshold('Uptime', [
-            {
-              color: 'dark-red',
-              value: 0,
-            },
-            {
-              color: 'dark-yellow',
-              value: 259200,
-            },
-            {
-              color: 'dark-green',
-              value: 432000,
-            },
-          ], 'absolute')
-          .renameColumn('Value #cpus', 'CPUs')
-          .renameColumn('Value #memory', 'Total Memory')
-          .setColumnUnit('Total Memory', 'bytes')
-          .renameColumn('Value #memoryused', 'Memory Used %')
-          .addThreshold('Memory Used %', [
-            {
-              color: 'dark-green',
-              value: 0,
-            },
-            {
-              color: 'dark-yellow',
-              value: 60,
-            },
-            {
-              color: 'dark-red',
-              value: 80,
-            },
-          ], 'absolute')
-          .renameColumn('Value #cfree', 'C:\\ Free %')
-          .hideColumn('volume')
-          .addThreshold('C:\\ Free %', [
-            {
-              color: 'dark-green',
-              value: 80,
-            },
-            {
-              color: 'dark-yellow',
-              value: 20,
-            },
-            {
-              color: 'dark-red',
-              value: 0,
-            },
-          ], 'absolute')
-        )
-      )
-      .addRow(
-        win.winrow('Overview Graphs')
-        .addWinPanel(perCpu)
-        .addWinPanel(perMemory)
-      )
-      .addRow(
-        win.winrow('Resource details : $hostname')
-        .addWinPanel(uptime)
-        .addWinPanel(errorService)
-        .addWinPanel(diskUsage)
-        .addWinPanel(diskIO)
-        .addWinPanel(networkUsage)
-        .addWinPanel(iisConnections)
-        + { repeat: 'hostname' },
-      ),
+      grafana.dashboard.new('Windows', 'e68fe518dbf1')
+
+      .addTemplates([
+        ds_template,
+        job_template,
+        hostname_template,
+      ])
+
+      // Status Row
+      .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
+      // Integration status
+      .addPanel(integration_status_panel, gridPos={ x: 0, y: 0, w: 8, h: 2 })
+      // Latest metric received
+      .addPanel(latest_metric_panel, gridPos={ x: 8, y: 0, w: 8, h: 2 })
+      
+      .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
+      .addPanel(usageTable, gridPos={ x: 0, y: 2, w: 24, h: 8 })
+
+      .addPanel(grafana.row.new(title='Overview Graphs'), gridPos={ x: 0, y: 10, w: 0, h: 0 })
+      .addPanel(perCpu, gridPos={ x: 0, y: 10, w: 12, h: 6 })
+      .addPanel(perMemory, gridPos={ x: 12, y: 10, w: 12, h: 6 })
+
+      .addPanel(grafana.row.new(title='Overview Graphs'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
+      .addPanel(uptime, gridPos={ x: 0, y: 16, w: 8, h: 4 })
+      .addPanel(errorService, gridPos={ x: 8, y: 16, w: 8, h: 4 })
+      .addPanel(diskUsage, gridPos={ x: 16, y: 16, w: 8, h: 4 })
+      .addPanel(diskIO, gridPos={ x: 0, y: 20, w: 8, h: 8 })
+      .addPanel(networkUsage, gridPos={ x: 8, y: 20, w: 8, h: 8 })
+      .addPanel(iisConnections, gridPos={ x: 16, y: 20, w: 8, h: 8 })
 
   },
 
+  local integration_status_panel =
+    grafana.statPanel.new(
+      'Integration Status',
+      datasource='$prometheus_datasource',
+      colorMode='background',
+      graphMode='none',
+      noValue='No Data',
+      reducerFunction='lastNotNull'
+    )
+    .addMappings(
+      [
+        {
+          options: {
+            from: 1,
+            result: {
+              color: 'green',
+              index: 0,
+              text: 'Agent Configured - Sending Metrics',
+            },
+            to: 10000000000000,
+          },
+          type: 'range',
+        },
+        {
+          options: {
+            from: 0,
+            result: {
+              color: 'red',
+              index: 1,
+              text: 'No Data',
+            },
+            to: 0,
+          },
+          type: 'range',
+        },
+      ]
+    )
+    .addTarget(
+      grafana.prometheus.target('sum(windows_cpu_time_total{' + host_matcher + ',mode="idle"})')
+    ),
+
+  local latest_metric_panel =
+    grafana.statPanel.new(
+      'Latest Metric Received',
+      datasource='$prometheus_datasource',
+      colorMode='background',
+      fields='Time',
+      graphMode='none',
+      noValue='No Data',
+      reducerFunction='lastNotNull'
+    )
+    .addTarget(
+      grafana.prometheus.target('sum(windows_cpu_time_total{' + host_matcher + ',mode="idle"})')
+    ),
+
+  local usageTable =
+    win.wintable('Usage', '$prometheus_datasource')
+      .addQuery('windows_os_info{' + host_matcher + '} * on(instance) group_right(product) windows_cs_hostname', 'group', 'group')
+      .addQuery('100 - (avg by (instance) (irate(windows_cpu_time_total{' + host_matcher + ',mode="idle"}[$__rate_interval])) * 100)', 'CPU Usage %', 'cpuusage')
+      .addQuery('time() - windows_system_system_up_time{' + host_matcher + '}', 'Uptime', 'uptime')
+      .addQuery('windows_cs_logical_processors{' + host_matcher + '} - 0', 'CPUs', 'cpus')
+      .addQuery('windows_cs_physical_memory_bytes{' + host_matcher + '} - 0', 'Memory', 'memory')
+      .addQuery('100 - 100 * windows_os_physical_memory_free_bytes{' + host_matcher + '} / windows_cs_physical_memory_bytes{' + host_matcher + '}', 'Memory Used', 'memoryused')
+      .addQuery('(windows_logical_disk_free_bytes{' + host_matcher + ',volume=~"C:"}/windows_logical_disk_size_bytes{' + host_matcher + ',volume=~"C:"}) * 100', 'C:\\ Free %', 'cfree')
+      .hideColumn('Time')
+      .hideColumn('domain')
+      .hideColumn('fqdn')
+      .hideColumn('job')
+      .hideColumn('agent_hostname')
+      .hideColumn('Value #group')
+      .hideColumn('instance')
+      .renameColumn('Value #cpuusage', 'CPU Usage %')
+      .addThreshold('CPU Usage %', [
+        {
+          color: 'dark-green',
+          value: 0,
+        },
+        {
+          color: 'dark-yellow',
+          value: 40,
+        },
+        {
+          color: 'dark-red',
+          value: 80,
+        },
+      ], 'absolute')
+      .renameColumn('Value #uptime', 'Uptime')
+      .setColumnUnit('Uptime', 's')
+      .addThreshold('Uptime', [
+        {
+          color: 'dark-red',
+          value: 0,
+        },
+        {
+          color: 'dark-yellow',
+          value: 259200,
+        },
+        {
+          color: 'dark-green',
+          value: 432000,
+        },
+      ], 'absolute')
+      .renameColumn('Value #cpus', 'CPUs')
+      .renameColumn('Value #memory', 'Total Memory')
+      .setColumnUnit('Total Memory', 'bytes')
+      .renameColumn('Value #memoryused', 'Memory Used %')
+      .addThreshold('Memory Used %', [
+        {
+          color: 'dark-green',
+          value: 0,
+        },
+        {
+          color: 'dark-yellow',
+          value: 60,
+        },
+        {
+          color: 'dark-red',
+          value: 80,
+        },
+      ], 'absolute')
+      .renameColumn('Value #cfree', 'C:\\ Free %')
+      .hideColumn('volume')
+      .addThreshold('C:\\ Free %', [
+        {
+          color: 'dark-green',
+          value: 80,
+        },
+        {
+          color: 'dark-yellow',
+          value: 20,
+        },
+        {
+          color: 'dark-red',
+          value: 0,
+        },
+      ], 'absolute'),
 
   local perCpu =
     graphPanel.new(
       title='CPU usage % of each host',
-      datasource='$datasource',
+      datasource='$prometheus_datasource',
       span=6,
       min=0,
       max=100,
@@ -126,14 +230,14 @@ local graphPanel = grafana.graphPanel;
       format='percent'
     )
     .addTarget(prometheus.target(
-      expr='100 - (avg by (hostname) (irate(windows_cpu_time_total{job=~"$job",mode="idle"}[$__rate_interval])) * 100)',
+      expr='100 - (avg by (hostname) (irate(windows_cpu_time_total{' + host_matcher + ',mode="idle"}[$__rate_interval])) * 100)',
       legendFormat='{{hostname}}',
       intervalFactor=2,
     )),
   local perMemory =
     graphPanel.new(
       title='Memory usage % of each host',
-      datasource='$datasource',
+      datasource='$prometheus_datasource',
       span=6,
       min=0,
       max=100,
@@ -142,7 +246,7 @@ local graphPanel = grafana.graphPanel;
       format='percent'
     )
     .addTarget(prometheus.target(
-      expr='100.0 - 100 * windows_os_physical_memory_free_bytes{job=~"$job"} / windows_cs_physical_memory_bytes{job=~"$job"}',
+      expr='100.0 - 100 * windows_os_physical_memory_free_bytes{' + host_matcher + '} / windows_cs_physical_memory_bytes{' + host_matcher + '}',
       legendFormat='{{hostname}}',
     )),
 
@@ -150,11 +254,11 @@ local graphPanel = grafana.graphPanel;
   local iisConnections =
     graphPanel.new(
       title='IIS Connections',
-      datasource='$datasource',
+      datasource='$prometheus_datasource',
       span=3,
     )
     .addTarget(prometheus.target(
-      expr='windows_iis_current_connections{job=~"$job",agent_hostname=~"$hostname"}',
+      expr='windows_iis_current_connections{' + host_matcher + '}',
       legendFormat='{{agent_hostname}}',
     )),
 
@@ -172,13 +276,12 @@ local graphPanel = grafana.graphPanel;
         color: 'red',
         value: 90,
       },
-    ], '100 - (windows_logical_disk_free_bytes{job=~"$job",agent_hostname=~"$hostname"} / windows_logical_disk_size_bytes{job=~"$job",agent_hostname=~"$hostname"})*100'
-                    , '{{volume}}', span=2),
+    ], '100 - (windows_logical_disk_free_bytes{' + host_matcher + '} / windows_logical_disk_size_bytes{' + host_matcher + '})*100', '{{volume}}'),
 
   local diskIO =
     graphPanel.new(
       title='Disk Read Write',
-      datasource='$datasource',
+      datasource='$prometheus_datasource',
       legend_min=true,
       legend_max=true,
       legend_avg=true,
@@ -189,18 +292,18 @@ local graphPanel = grafana.graphPanel;
       span=2
     )
     .addTarget(prometheus.target(
-      expr='irate(windows_logical_disk_write_bytes_total{job=~"$job",agent_hostname=~"$hostname"}[$__rate_interval])',
+      expr='irate(windows_logical_disk_write_bytes_total{' + host_matcher + '}[$__rate_interval])',
       legendFormat='write {{volume}}',
     ))
     .addTarget(prometheus.target(
-      expr='irate(windows_logical_disk_read_bytes_total{job=~"$job",agent_hostname=~"$hostname"}[$__rate_interval])',
+      expr='irate(windows_logical_disk_read_bytes_total{' + host_matcher + '}[$__rate_interval])',
       legendFormat='read {{volume}}',
     )),
 
   local errorService = win.winstat(
     span=1,
     title='Services in error',
-    datasource='$datasource',
+    datasource='$prometheus_datasource',
     unit='short',
     overrides=[
       {
@@ -234,14 +337,14 @@ local graphPanel = grafana.graphPanel;
     ],
   )
                        .addTarget(prometheus.target(
-    expr='sum(windows_service_status{status="error",job=~"$job",agent_hostname=~"$hostname"})',
+    expr='sum(windows_service_status{status="error",' + host_matcher + '})',
     instant=true,
 
   )),
 
   local networkUsage = graphPanel.new(
     title='Network Usage',
-    datasource='$datasource',
+    datasource='$prometheus_datasource',
     legend_min=true,
     legend_max=true,
     legend_avg=true,
@@ -256,7 +359,7 @@ local graphPanel = grafana.graphPanel;
     span=3
   )
                        .addTarget(prometheus.target(
-    expr='(irate(windows_net_bytes_total{job=~"$job",agent_hostname=~"$hostname",nic!~"isatap.*|VPN.*"}[$__rate_interval]) * 8 / windows_net_current_bandwidth{job=~"$job",agent_hostname=~"$hostname",nic!~"isatap.*|VPN.*"}) * 100',
+    expr='(irate(windows_net_bytes_total{' + host_matcher + ',nic!~"isatap.*|VPN.*"}[$__rate_interval]) * 8 / windows_net_current_bandwidth{' + host_matcher + ',nic!~"isatap.*|VPN.*"}) * 100',
     legendFormat='{{nic}}',
   )),
 
@@ -264,7 +367,7 @@ local graphPanel = grafana.graphPanel;
   local uptime = win.winstat(
     span=1,
     title='Uptime',
-    datasource='$datasource',
+    datasource='$prometheus_datasource',
     format='s',
     overrides=[
       {
@@ -301,7 +404,7 @@ local graphPanel = grafana.graphPanel;
     ],
   )
                  .addTarget(prometheus.target(
-    expr='time() - windows_system_system_up_time{job=~"$job",agent_hostname=~"$hostname"}',
+    expr='time() - windows_system_system_up_time{' + host_matcher + '}',
     instant=true,
 
   )),

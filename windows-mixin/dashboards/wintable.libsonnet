@@ -260,7 +260,7 @@
     {
       [if span != null then 'span']: span,
 
-      datasource: '${datasource}',
+      datasource: '${prometheus_datasource}',
       fieldConfig: {
         defaults: {
           color: {
