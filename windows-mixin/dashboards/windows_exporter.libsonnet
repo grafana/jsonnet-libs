@@ -78,7 +78,7 @@ local hostname_template = grafana.template.new(
       .addPanel(perCpu, gridPos={ x: 0, y: 10, w: 12, h: 6 })
       .addPanel(perMemory, gridPos={ x: 12, y: 10, w: 12, h: 6 })
 
-      .addPanel(grafana.row.new(title='Overview Graphs'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
+      .addPanel(grafana.row.new(title='Resource details : All'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
       .addPanel(uptime, gridPos={ x: 0, y: 16, w: 8, h: 4 })
       .addPanel(errorService, gridPos={ x: 8, y: 16, w: 8, h: 4 })
       .addPanel(diskUsage, gridPos={ x: 16, y: 16, w: 8, h: 4 })
