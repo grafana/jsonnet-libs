@@ -1,1 +1,2 @@
-(import 'dashboards/dashboards.libsonnet')
+(import 'dashboards/dashboards.libsonnet') +
+(import 'config.libsonnet')

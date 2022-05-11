@@ -48,7 +48,15 @@ local hostname_template = grafana.template.new(
 {
   grafanaDashboards+:: {
     'windows_exporter.json':
-      grafana.dashboard.new('Windows', 'e68fe518dbf1')
+      grafana.dashboard.new(
+        'Windows Overview',
+        time_from='%s' % $._config.dashboardPeriod,
+        editable=false,
+        tags=($._config.dashboardTags),
+        timezone='%s' % $._config.dashboardTimezone,
+        refresh='%s' % $._config.dashboardRefresh,
+        uid='windows-overview',
+      )
 
       .addTemplates([
         ds_template,
