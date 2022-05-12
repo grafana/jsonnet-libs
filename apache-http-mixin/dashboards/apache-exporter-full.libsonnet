@@ -1,6 +1,8 @@
 local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
 local dashboard = grafana.dashboard;
 local template = grafana.template;
+local dashboardUid = 'apache-http';
+local matcher = 'job=~"$job", instance=~"$instance"';
 
 {
   grafanaDashboards+:: {
@@ -14,6 +16,7 @@ local template = grafana.template;
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,
         graphTooltip='shared_crosshair',
+        uid=dashboardUid,
       ).addTemplates(
         [
           {
@@ -37,6 +40,8 @@ local template = grafana.template;
             current='',
             refresh=2,
             includeAll=true,
+            multi=true,
+            allValues='.+',
             sort=1
           ),
           template.new(
@@ -116,7 +121,7 @@ local template = grafana.template;
           pluginVersion: '8.4.5',
           targets: [
             {
-              expr: 'apache_uptime_seconds_total{instance=~"$instance"}',
+              expr: 'apache_uptime_seconds_total{' + matcher + '}',
               format: 'time_series',
               intervalFactor: 1,
               refId: 'A',
@@ -193,7 +198,7 @@ local template = grafana.template;
           },
           targets: [
             {
-              expr: 'apache_version{instance=~"$instance"}',
+              expr: 'apache_version{' + matcher + '}',
               legendFormat: '',
               interval: '',
               exemplar: true,
@@ -201,10 +206,6 @@ local template = grafana.template;
               intervalFactor: 1,
               refId: 'A',
               step: 240,
-              datasource: {
-                type: 'prometheus',
-                uid: 'grafanacloud-prom',
-              },
             },
           ],
         },
@@ -240,7 +241,7 @@ local template = grafana.template;
           },
           targets: [
             {
-              expr: 'apache_up{instance=~"$instance"}',
+              expr: 'apache_up{' + matcher + '}',
               legendFormat: 'Apache up',
               interval: '',
               exemplar: true,
@@ -248,10 +249,6 @@ local template = grafana.template;
               intervalFactor: 1,
               refId: 'A',
               step: 240,
-              datasource: {
-                type: 'prometheus',
-                uid: 'grafanacloud-prom',
-              },
             },
           ],
           fieldConfig: {
@@ -329,7 +326,7 @@ local template = grafana.template;
           },
           targets: [
             {
-              expr: 'rate(apache_sent_kilobytes_total{instance=~"$instance"}[$__rate_interval]) * 1000',
+              expr: 'rate(apache_sent_kilobytes_total{' + matcher + '}[$__rate_interval]) * 1000',
               format: 'time_series',
               intervalFactor: 1,
               legendFormat: 'Bytes sent',
@@ -424,7 +421,7 @@ local template = grafana.template;
           },
           targets: [
             {
-              expr: 'rate(apache_accesses_total{instance=~"$instance"}[$__rate_interval])',
+              expr: 'rate(apache_accesses_total{' + matcher + '}[$__rate_interval])',
               format: 'time_series',
               intervalFactor: 1,
               legendFormat: 'Accesses',
@@ -521,7 +518,7 @@ local template = grafana.template;
           },
           targets: [
             {
-              expr: 'apache_scoreboard{instance=~"$instance"}',
+              expr: 'apache_scoreboard{' + matcher + '}',
               format: 'time_series',
               intervalFactor: 1,
               legendFormat: '{{ state }}',
@@ -616,7 +613,7 @@ local template = grafana.template;
           },
           targets: [
             {
-              expr: 'apache_workers{instance=~"$instance"}\n',
+              expr: 'apache_workers{' + matcher + '}\n',
               format: 'time_series',
               intervalFactor: 1,
               legendFormat: '{{ state }}',
@@ -711,7 +708,7 @@ local template = grafana.template;
           },
           targets: [
             {
-              expr: 'apache_cpuload{instance=~"$instance"}',
+              expr: 'apache_cpuload{' + matcher + '}',
               format: 'time_series',
               intervalFactor: 1,
               legendFormat: 'Load',
