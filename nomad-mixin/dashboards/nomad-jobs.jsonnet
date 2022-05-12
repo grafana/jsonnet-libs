@@ -97,7 +97,7 @@
                     },
                   ],
                 },
-                unit: 'percentunit',
+                unit: 'percent',
               },
               overrides: [],
             },
