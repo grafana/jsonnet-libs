@@ -467,7 +467,7 @@
       "pluginVersion": "8.2.4",
       "targets": [
         {
-          "expr": "metrics_worker_coresUsed_Number{instance_type=\"worker\", job=\"spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_worker_coresUsed_Number{instance_type=\"worker\", job=\"integrations/spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "",
           "refId": "A"
         }
@@ -855,12 +855,12 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "metrics_worker_memFree_MB_Number{instance_type=\"worker\", job=\"spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_worker_memFree_MB_Number{instance_type=\"worker\", job=\"integrations/spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "memFree_MB",
           "refId": "A"
         },
         {
-          "expr": "metrics_worker_memUsed_MB_Number{instance_type=\"worker\", job=\"spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
+          "expr": "metrics_worker_memUsed_MB_Number{instance_type=\"worker\", job=\"integrations/spark-worker\", spark_cluster=\"$spark_cluster\"}  ",
           "legendFormat": "memUsed_MB",
           "refId": "B"
         }
