@@ -65,7 +65,7 @@
                     },
                   ],
                 },
-                unit: 'percentunit',
+                unit: 'percent',
               },
               overrides: [],
             },
@@ -97,7 +97,7 @@
             repeatDirection: 'v',
             targets: [
               {
-                expr: 'nomad_client_unallocated_cpu{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_cpu{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_cpu{datacenter="$datacenter", instance="$instance"})',
+                expr: 'nomad_client_allocated_cpu{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_cpu{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_cpu{datacenter="$datacenter", instance="$instance"})*100',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -137,7 +137,7 @@
                     },
                   ],
                 },
-                unit: 'percentunit',
+                unit: 'percent',
               },
               overrides: [],
             },
@@ -169,7 +169,7 @@
             repeatDirection: 'v',
             targets: [
               {
-                expr: 'nomad_client_unallocated_memory{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_memory{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_memory{datacenter="$datacenter", instance="$instance"})',
+                expr: 'nomad_client_allocated_memory{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_memory{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_memory{datacenter="$datacenter", instance="$instance"})*100',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -210,7 +210,7 @@
                     },
                   ],
                 },
-                unit: 'percentunit',
+                unit: 'percent',
               },
               overrides: [],
             },
@@ -242,7 +242,7 @@
             repeatDirection: 'v',
             targets: [
               {
-                expr: 'nomad_client_unallocated_disk{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_disk{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_disk{datacenter="$datacenter", instance="$instance"})',
+                expr: 'nomad_client_allocated_disk{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_disk{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_disk{datacenter="$datacenter", instance="$instance"})*100',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,

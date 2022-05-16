@@ -83,7 +83,6 @@
                     mode: 'off',
                   },
                 },
-                decimals: 3,
                 mappings: [],
                 thresholds: {
                   mode: 'absolute',
@@ -98,7 +97,7 @@
                     },
                   ],
                 },
-                unit: 'percentunit',
+                unit: 'percent',
               },
               overrides: [],
             },
@@ -118,7 +117,7 @@
               },
               tooltip: {
                 mode: 'multi',
-                sort: 'none',
+                sort: 'desc',
               },
             },
             pluginVersion: '8.4.7',
@@ -173,7 +172,6 @@
                     mode: 'off',
                   },
                 },
-                decimals: 3,
                 mappings: [],
                 thresholds: {
                   mode: 'absolute',
@@ -208,7 +206,7 @@
               },
               tooltip: {
                 mode: 'multi',
-                sort: 'none',
+                sort: 'desc',
               },
             },
             pluginVersion: '8.4.7',
@@ -267,7 +265,6 @@
                     mode: 'off',
                   },
                 },
-                decimals: 3,
                 mappings: [],
                 thresholds: {
                   mode: 'absolute',
@@ -302,7 +299,7 @@
               },
               tooltip: {
                 mode: 'multi',
-                sort: 'none',
+                sort: 'desc',
               },
             },
             pluginVersion: '8.4.7',
@@ -320,49 +317,32 @@
             type: 'timeseries',
           },
           {
-            aliasColors: {},
-            bars: false,
-            dashLength: 10,
-            dashes: false,
-            datasource: {
-              type: 'prometheus',
-              uid: '$datasource',
-            },
-            fill: 1,
-            fillGradient: 0,
+            id: 7,
             gridPos: {
               h: 6,
               w: 12,
               x: 12,
               y: 7,
             },
-            hiddenSeries: false,
-            id: 7,
-            legend: {
-              avg: false,
-              current: false,
-              max: false,
-              min: false,
-              show: true,
-              total: false,
-              values: false,
+            type: 'timeseries',
+            title: 'Memory cache',
+            datasource: {
+              type: 'prometheus',
+              uid: '$datasource',
             },
-            lines: true,
-            linewidth: 1,
-            links: [],
-            nullPointMode: 'null',
-            options: {
-              alertThreshold: true,
-            },
-            percentage: false,
             pluginVersion: '8.4.7',
-            pointradius: 5,
-            points: false,
-            renderer: 'flot',
-            seriesOverrides: [],
-            spaceLength: 10,
-            stack: false,
-            steppedLine: false,
+            links: [],
+            options: {
+              tooltip: {
+                mode: 'multi',
+                sort: 'desc',
+              },
+              legend: {
+                displayMode: 'list',
+                placement: 'bottom',
+                calcs: [],
+              },
+            },
             targets: [
               {
                 datasource: {
@@ -378,38 +358,59 @@
                 refId: 'A',
               },
             ],
-            thresholds: [],
-            timeRegions: [],
-            title: 'Memory cache',
-            tooltip: {
-              shared: true,
-              sort: 0,
-              value_type: 'individual',
-            },
-            type: 'graph',
-            xaxis: {
-              mode: 'time',
-              show: true,
-              values: [],
-            },
-            yaxes: [
-              {
-                '$$hashKey': 'object:906',
-                decimals: 3,
-                format: 'decbytes',
-                logBase: 1,
-                show: true,
+            fieldConfig: {
+              defaults: {
+                custom: {
+                  drawStyle: 'line',
+                  lineInterpolation: 'linear',
+                  barAlignment: 0,
+                  lineWidth: 1,
+                  fillOpacity: 10,
+                  gradientMode: 'none',
+                  spanNulls: true,
+                  showPoints: 'never',
+                  pointSize: 5,
+                  stacking: {
+                    mode: 'none',
+                    group: 'A',
+                  },
+                  axisPlacement: 'auto',
+                  axisLabel: '',
+                  scaleDistribution: {
+                    type: 'linear',
+                  },
+                  hideFrom: {
+                    tooltip: false,
+                    viz: false,
+                    legend: false,
+                  },
+                  thresholdsStyle: {
+                    mode: 'off',
+                  },
+                },
+                color: {
+                  mode: 'palette-classic',
+                },
+                mappings: [],
+                thresholds: {
+                  mode: 'absolute',
+                  steps: [
+                    {
+                      value: null,
+                      color: 'green',
+                    },
+                    {
+                      value: 80,
+                      color: 'red',
+                    },
+                  ],
+                },
+                unit: 'decbytes',
               },
-              {
-                '$$hashKey': 'object:907',
-                format: 'short',
-                logBase: 1,
-                show: true,
-              },
-            ],
-            yaxis: {
-              align: false,
+              overrides: [],
             },
+            timeFrom: null,
+            timeShift: null,
           },
         ],
         schemaVersion: 35,
