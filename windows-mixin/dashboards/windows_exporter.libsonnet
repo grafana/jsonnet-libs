@@ -1,5 +1,4 @@
 local win = import './wintable.libsonnet';
-local g = import 'grafana-builder/grafana.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
 local prometheus = grafana.prometheus;
 local graphPanel = grafana.graphPanel;
@@ -65,7 +64,7 @@ local hostname_template = grafana.template.new(
       ])
 
       // Status Row
-      .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
+      .addPanel(grafana.row.new(title='Integration status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
       // Integration status
       .addPanel(integration_status_panel, gridPos={ x: 0, y: 0, w: 8, h: 2 })
       // Latest metric received
@@ -74,11 +73,11 @@ local hostname_template = grafana.template.new(
       .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
       .addPanel(usageTable, gridPos={ x: 0, y: 2, w: 24, h: 8 })
 
-      .addPanel(grafana.row.new(title='Overview Graphs'), gridPos={ x: 0, y: 10, w: 0, h: 0 })
+      .addPanel(grafana.row.new(title='Overview graphs'), gridPos={ x: 0, y: 10, w: 0, h: 0 })
       .addPanel(perCpu, gridPos={ x: 0, y: 10, w: 12, h: 6 })
       .addPanel(perMemory, gridPos={ x: 12, y: 10, w: 12, h: 6 })
 
-      .addPanel(grafana.row.new(title='Resource details : All'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
+      .addPanel(grafana.row.new(title='Resource details'), gridPos={ x: 0, y: 16, w: 0, h: 0 })
       .addPanel(uptime, gridPos={ x: 0, y: 16, w: 8, h: 4 })
       .addPanel(errorService, gridPos={ x: 8, y: 16, w: 8, h: 4 })
       .addPanel(diskUsage, gridPos={ x: 16, y: 16, w: 8, h: 4 })
@@ -90,7 +89,7 @@ local hostname_template = grafana.template.new(
 
   local integration_status_panel =
     grafana.statPanel.new(
-      'Integration Status',
+      'Integration status',
       datasource='$prometheus_datasource',
       colorMode='background',
       graphMode='none',
@@ -105,7 +104,7 @@ local hostname_template = grafana.template.new(
             result: {
               color: 'green',
               index: 0,
-              text: 'Agent Configured - Sending Metrics',
+              text: 'Agent configured - sending metrics',
             },
             to: 10000000000000,
           },
@@ -131,7 +130,7 @@ local hostname_template = grafana.template.new(
 
   local latest_metric_panel =
     grafana.statPanel.new(
-      'Latest Metric Received',
+      'Latest metric received',
       datasource='$prometheus_datasource',
       colorMode='background',
       fields='Time',
@@ -159,8 +158,10 @@ local hostname_template = grafana.template.new(
     .hideColumn('agent_hostname')
     .hideColumn('Value #group')
     .hideColumn('instance')
-    .renameColumn('Value #cpuusage', 'CPU Usage %')
-    .addThreshold('CPU Usage %', [
+    .renameColumn('Value #cpuusage', 'CPU usage %')
+    .renameColumn('hostname', 'Hostname')
+    .renameColumn('product', 'OS version')
+    .addThreshold('CPU usage %', [
       {
         color: 'dark-green',
         value: 0,
@@ -191,10 +192,10 @@ local hostname_template = grafana.template.new(
       },
     ], 'absolute')
     .renameColumn('Value #cpus', 'CPUs')
-    .renameColumn('Value #memory', 'Total Memory')
-    .setColumnUnit('Total Memory', 'bytes')
-    .renameColumn('Value #memoryused', 'Memory Used %')
-    .addThreshold('Memory Used %', [
+    .renameColumn('Value #memory', 'Total memory')
+    .setColumnUnit('Total memory', 'bytes')
+    .renameColumn('Value #memoryused', 'Memory used %')
+    .addThreshold('Memory used %', [
       {
         color: 'dark-green',
         value: 0,
@@ -208,9 +209,9 @@ local hostname_template = grafana.template.new(
         value: 80,
       },
     ], 'absolute')
-    .renameColumn('Value #cfree', 'C:\\ Free %')
+    .renameColumn('Value #cfree', 'C:\\ free %')
     .hideColumn('volume')
-    .addThreshold('C:\\ Free %', [
+    .addThreshold('C:\\ free %', [
       {
         color: 'dark-green',
         value: 80,
@@ -261,7 +262,7 @@ local hostname_template = grafana.template.new(
 
   local iisConnections =
     graphPanel.new(
-      title='IIS Connections',
+      title='IIS connections',
       datasource='$prometheus_datasource',
       span=3,
     )
@@ -288,7 +289,7 @@ local hostname_template = grafana.template.new(
 
   local diskIO =
     graphPanel.new(
-      title='Disk Read Write',
+      title='Disk read write',
       datasource='$prometheus_datasource',
       legend_min=true,
       legend_max=true,
@@ -344,7 +345,7 @@ local hostname_template = grafana.template.new(
       },
     ],
   )
-                       .addTarget(prometheus.target(
+  .addTarget(prometheus.target(
     expr='sum(windows_service_status{status="error",' + host_matcher + '})',
     instant=true,
 
@@ -352,7 +353,7 @@ local hostname_template = grafana.template.new(
 
   local networkUsage =
     graphPanel.new(
-      title='Network Usage',
+      title='Network usage',
       datasource='$prometheus_datasource',
       legend_min=true,
       legend_max=true,
