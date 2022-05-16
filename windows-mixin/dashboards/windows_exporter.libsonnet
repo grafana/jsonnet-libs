@@ -309,47 +309,48 @@ local hostname_template = grafana.template.new(
       legendFormat='read {{volume}}',
     )),
 
-  local errorService = win.winstat(
-    span=1,
-    title='Services in error',
-    datasource='$prometheus_datasource',
-    unit='short',
-    overrides=[
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'A',
-        },
-        properties: [
-          {
-            id: 'thresholds',
-            value: {
-              mode: 'absolute',
-              steps: [
+  local errorService =
+    win.winstat(
+      span=1,
+      title='Services in error',
+      datasource='$prometheus_datasource',
+      unit='short',
+      overrides=[
+        {
+          matcher: {
+            id: 'byFrameRefID',
+            options: 'A',
+          },
+          properties: [
+            {
+              id: 'thresholds',
+              value: {
+                mode: 'absolute',
+                steps: [
 
-                {
-                  color: 'dark-green',
-                  value: 0,
-                },
-                {
-                  color: 'dark-red',
-                  value: 1,
-                },
-              ],
+                  {
+                    color: 'dark-green',
+                    value: 0,
+                  },
+                  {
+                    color: 'dark-red',
+                    value: 1,
+                  },
+                ],
+              },
             },
-          },
-          {
-            id: 'color',
-          },
-        ],
-      },
-    ],
-  )
-  .addTarget(prometheus.target(
-    expr='sum(windows_service_status{status="error",' + host_matcher + '})',
-    instant=true,
+            {
+              id: 'color',
+            },
+          ],
+        },
+      ],
+    )
+    .addTarget(prometheus.target(
+      expr='sum(windows_service_status{status="error",' + host_matcher + '})',
+      instant=true,
 
-  )),
+    )),
 
   local networkUsage =
     graphPanel.new(
