@@ -296,44 +296,18 @@ local matcher = 'job=~"$job", instance=~"$instance"';
         {
           id: 3,
           gridPos: {
-            h: 10,
+            h: 7,
             w: 12,
-            x: 0,
+            x: 12,
             y: 3,
           },
           type: 'timeseries',
-          title: 'Bytes sent',
+          title: 'Response time',
           datasource: {
             uid: '${datasource}',
           },
           pluginVersion: '8.4.5',
           links: [],
-          options: {
-            tooltip: {
-              mode: 'multi',
-              sort: 'none',
-            },
-            legend: {
-              displayMode: 'table',
-              placement: 'bottom',
-              calcs: [
-                'mean',
-                'lastNotNull',
-                'max',
-                'min',
-              ],
-            },
-          },
-          targets: [
-            {
-              expr: 'rate(apache_sent_kilobytes_total{' + matcher + '}[$__rate_interval]) * 1000',
-              format: 'time_series',
-              intervalFactor: 1,
-              legendFormat: 'Bytes sent',
-              refId: 'A',
-              step: 240,
-            },
-          ],
           fieldConfig: {
             defaults: {
               custom: {
@@ -372,37 +346,144 @@ local matcher = 'job=~"$job", instance=~"$instance"';
                 mode: 'absolute',
                 steps: [
                   {
-                    value: null,
                     color: 'green',
+                    value: null,
                   },
                   {
-                    value: 80,
                     color: 'red',
+                    value: 80,
                   },
                 ],
               },
-              unit: 'Bps',
+              unit: 'ms',
             },
             overrides: [],
           },
+          options: {
+            tooltip: {
+              mode: 'multi',
+              sort: 'none',
+            },
+            legend: {
+              displayMode: 'table',
+              placement: 'bottom',
+              calcs: [
+                'mean',
+                'lastNotNull',
+                'max',
+                'min',
+              ],
+            },
+          },
+          targets: [
+            {
+              expr: 'increase(apache_duration_ms_total{' + matcher + '}[$__rate_interval])/increase(apache_accesses_total{' + matcher + '}[$__rate_interval])',
+              legendFormat: 'Average response time',
+              interval: '',
+              exemplar: false,
+              format: 'time_series',
+              intervalFactor: 1,
+              refId: 'A',
+              step: 240,
+              datasource: {
+                uid: '${datasource}',
+                type: 'prometheus',
+              },
+            },
+          ],
           timeFrom: null,
           timeShift: null,
         },
         {
-          id: 5,
+          id: 6,
           gridPos: {
-            h: 10,
+            h: 7,
             w: 12,
-            x: 12,
+            x: 0,
             y: 3,
           },
           type: 'timeseries',
-          title: 'Apache accesses',
+          title: 'Load',
           datasource: {
             uid: '${datasource}',
           },
           pluginVersion: '8.4.5',
           links: [],
+          fieldConfig: {
+            defaults: {
+              custom: {
+                drawStyle: 'line',
+                lineInterpolation: 'linear',
+                barAlignment: 0,
+                lineWidth: 1,
+                fillOpacity: 10,
+                gradientMode: 'none',
+                spanNulls: true,
+                showPoints: 'never',
+                pointSize: 5,
+                stacking: {
+                  mode: 'none',
+                  group: 'A',
+                },
+                axisPlacement: 'auto',
+                axisLabel: '',
+                scaleDistribution: {
+                  type: 'linear',
+                },
+                hideFrom: {
+                  tooltip: false,
+                  viz: false,
+                  legend: false,
+                },
+                thresholdsStyle: {
+                  mode: 'off',
+                },
+                lineStyle: {
+                  fill: 'solid',
+                },
+              },
+              color: {
+                mode: 'palette-classic',
+              },
+              mappings: [],
+              thresholds: {
+                mode: 'absolute',
+                steps: [
+                  {
+                    color: 'green',
+                    value: null,
+                  },
+                  {
+                    color: 'red',
+                    value: 80,
+                  },
+                ],
+              },
+              unit: 'reqps',
+            },
+            overrides: [
+              {
+                matcher: {
+                  id: 'byName',
+                  options: 'Bytes sent',
+                },
+                properties: [
+                  {
+                    id: 'custom.axisPlacement',
+                    value: 'right',
+                  },
+                  {
+                    id: 'custom.drawStyle',
+                    value: 'bars',
+                  },
+                  {
+                    id: 'unit',
+                    value: 'Bps',
+                  },
+                ],
+              },
+            ],
+          },
           options: {
             tooltip: {
               mode: 'multi',
@@ -422,66 +503,34 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           targets: [
             {
               expr: 'rate(apache_accesses_total{' + matcher + '}[$__rate_interval])',
+              legendFormat: 'Calls',
+              interval: '',
+              exemplar: false,
               format: 'time_series',
               intervalFactor: 1,
-              legendFormat: 'Accesses',
               refId: 'A',
               step: 240,
+              datasource: {
+                type: 'prometheus',
+                uid: '${datasource}',
+              },
+            },
+            {
+              expr: 'rate(apache_sent_kilobytes_total{' + matcher + '}[$__rate_interval]) * 1000',
+              legendFormat: 'Bytes sent',
+              interval: '',
+              exemplar: false,
+              datasource: {
+                uid: '${datasource}',
+                type: 'prometheus',
+              },
+              refId: 'B',
+              hide: false,
             },
           ],
-          fieldConfig: {
-            defaults: {
-              custom: {
-                drawStyle: 'line',
-                lineInterpolation: 'linear',
-                barAlignment: 0,
-                lineWidth: 1,
-                fillOpacity: 10,
-                gradientMode: 'none',
-                spanNulls: true,
-                showPoints: 'never',
-                pointSize: 5,
-                stacking: {
-                  mode: 'none',
-                  group: 'A',
-                },
-                axisPlacement: 'auto',
-                axisLabel: '',
-                scaleDistribution: {
-                  type: 'linear',
-                },
-                hideFrom: {
-                  tooltip: false,
-                  viz: false,
-                  legend: false,
-                },
-                thresholdsStyle: {
-                  mode: 'off',
-                },
-              },
-              color: {
-                mode: 'palette-classic',
-              },
-              mappings: [],
-              thresholds: {
-                mode: 'absolute',
-                steps: [
-                  {
-                    value: null,
-                    color: 'green',
-                  },
-                  {
-                    value: 80,
-                    color: 'red',
-                  },
-                ],
-              },
-              unit: 'reqps',
-            },
-            overrides: [],
-          },
           timeFrom: null,
           timeShift: null,
+          description: '',
         },
         {
           id: 2,
