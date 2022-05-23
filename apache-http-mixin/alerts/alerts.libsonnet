@@ -45,6 +45,23 @@
               ||| % $._config,
             },
           },
+          {
+            alert: 'ApacheResponseTimeTooHigh',
+            expr: |||
+              increase(apache_duration_ms_total[5m])/increase(apache_accesses_total[5m]) > %(alertsWarningResponseTimeMs)s
+            ||| % $._config,
+            'for': '15m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'Apache response time is too high.',
+              description: |||
+                Apache average response time is above the threshold of %(alertsWarningResponseTimeMs)s ms on {{ $labels.instance }}.
+                The currect value is {{ $value }} ms.
+              ||| % $._config,
+            },
+          },
         ],
       },
     ],
