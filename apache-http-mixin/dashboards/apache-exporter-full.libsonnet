@@ -17,16 +17,19 @@ local matcher = 'job=~"$job", instance=~"$instance"';
         refresh='%s' % $._config.dashboardRefresh,
         graphTooltip='shared_crosshair',
         uid=dashboardUid,
-      ).addTemplates(
+      )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache HTTP dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      )).addTemplates(
         [
           {
-            current: {
-              text: 'default',
-              value: 'default',
-            },
             hide: 0,
-            label: 'Data Source',
-            name: 'datasource',
+            label: 'Data source',
+            name: 'prometheus_datasource',
             query: 'prometheus',
             refresh: 1,
             regex: '',
@@ -35,7 +38,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           template.new(
             name='job',
             label='job',
-            datasource='$datasource',
+            datasource='$prometheus_datasource',
             query='label_values(apache_up, job)',
             current='',
             refresh=2,
@@ -47,7 +50,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           template.new(
             name='instance',
             label='instance',
-            datasource='$datasource',
+            datasource='$prometheus_datasource',
             query='label_values(apache_up{job=~"$job"}, instance)',
             current='',
             refresh=2,
@@ -59,7 +62,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
       .addPanels([
         {
           datasource: {
-            uid: '${datasource}',
+            uid: '${prometheus_datasource}',
           },
           fieldConfig: {
             defaults: {
@@ -142,7 +145,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           type: 'stat',
           title: 'Version',
           datasource: {
-            uid: '${datasource}',
+            uid: '${prometheus_datasource}',
             type: 'prometheus',
           },
           pluginVersion: '8.4.5',
@@ -220,7 +223,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           type: 'state-timeline',
           title: 'Apache Up / Down',
           datasource: {
-            uid: '${datasource}',
+            uid: '${prometheus_datasource}',
             type: 'prometheus',
           },
           pluginVersion: '8.4.5',
@@ -304,7 +307,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           type: 'timeseries',
           title: 'Response time',
           datasource: {
-            uid: '${datasource}',
+            uid: '${prometheus_datasource}',
           },
           pluginVersion: '8.4.5',
           links: [],
@@ -386,7 +389,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
               refId: 'A',
               step: 240,
               datasource: {
-                uid: '${datasource}',
+                uid: '${prometheus_datasource}',
                 type: 'prometheus',
               },
             },
@@ -405,7 +408,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           type: 'timeseries',
           title: 'Load',
           datasource: {
-            uid: '${datasource}',
+            uid: '${prometheus_datasource}',
           },
           pluginVersion: '8.4.5',
           links: [],
@@ -512,7 +515,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
               step: 240,
               datasource: {
                 type: 'prometheus',
-                uid: '${datasource}',
+                uid: '${prometheus_datasource}',
               },
             },
             {
@@ -521,7 +524,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
               interval: '',
               exemplar: false,
               datasource: {
-                uid: '${datasource}',
+                uid: '${prometheus_datasource}',
                 type: 'prometheus',
               },
               refId: 'B',
@@ -543,7 +546,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           type: 'timeseries',
           title: 'Apache scoreboard statuses',
           datasource: {
-            uid: '${datasource}',
+            uid: '${prometheus_datasource}',
           },
           pluginVersion: '8.4.5',
           links: [],
@@ -640,7 +643,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           type: 'timeseries',
           title: 'Apache worker statuses',
           datasource: {
-            uid: '${datasource}',
+            uid: '${prometheus_datasource}',
           },
           pluginVersion: '8.4.5',
           links: [],
@@ -735,7 +738,7 @@ local matcher = 'job=~"$job", instance=~"$instance"';
           type: 'timeseries',
           title: 'Apache CPU load',
           datasource: {
-            uid: '${datasource}',
+            uid: '${prometheus_datasource}',
           },
           pluginVersion: '8.4.5',
           links: [],

@@ -8,5 +8,8 @@
     // for alerts
     alertsWarningWorkersBusy: '80',  // %
     alertsWarningResponseTimeMs: '5000',  // ms
+
+    // enable Loki logs
+    enableLokiLogs: false,
   },
 }
