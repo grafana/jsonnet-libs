@@ -110,7 +110,7 @@
          "pluginVersion": "7",
          "targets": [
             {
-               "expr": "sum(count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"}[$__interval]))",
+               "expr": "sum(count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"}[$__interval]))",
                "legendFormat": "",
                "refId": "A"
             }
@@ -158,7 +158,7 @@
          "pluginVersion": "7",
          "targets": [
             {
-               "expr": "sum(count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"}[$__interval]))",
+               "expr": "sum(count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"}[$__interval]))",
                "legendFormat": "",
                "refId": "A"
             }
@@ -229,7 +229,7 @@
          "pluginVersion": "7",
          "targets": [
             {
-               "expr": "sum(count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"}[$__interval]))",
+               "expr": "sum(count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"}[$__interval]))",
                "legendFormat": "",
                "refId": "A"
             }
@@ -281,7 +281,7 @@
          "pluginVersion": "7",
          "targets": [
             {
-               "expr": "sum(count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} |= \"Warning\" [$__interval]))",
+               "expr": "sum(count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} |= \"Warning\" [$__interval]))",
                "legendFormat": "",
                "refId": "A"
             }
@@ -333,7 +333,7 @@
          "pluginVersion": "7",
          "targets": [
             {
-               "expr": "sum(count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} |= \"Error\" [$__interval]))",
+               "expr": "sum(count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} |= \"Error\" [$__interval]))",
                "legendFormat": "",
                "refId": "A"
             }
@@ -393,7 +393,7 @@
          "pluginVersion": "7",
          "targets": [
             {
-               "expr": "sum( count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} |= \"Error\" [$__interval]) ) / sum( count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} [$__interval]) )",
+               "expr": "sum( count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} |= \"Error\" [$__interval]) ) / sum( count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} [$__interval]) )",
                "legendFormat": "",
                "refId": "A"
             }
@@ -445,7 +445,7 @@
          "pluginVersion": "7",
          "targets": [
             {
-               "expr": "sum(bytes_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} [$__interval]))",
+               "expr": "sum(bytes_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} [$__interval]))",
                "legendFormat": "",
                "refId": "A"
             }
@@ -586,7 +586,7 @@
                   "type": "loki",
                   "uid": "${loki_datasource}"
                },
-               "expr": "sum(count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"}[$__interval]))",
+               "expr": "sum(count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"}[$__interval]))",
                "refId": "A"
             },
             {
@@ -594,7 +594,7 @@
                   "type": "loki",
                   "uid": "${loki_datasource}"
                },
-               "expr": "sum(count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} |= \"Warning\" [$__interval]))",
+               "expr": "sum(count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} |= \"Warning\" [$__interval]))",
                "hide": false,
                "refId": "B"
             },
@@ -603,7 +603,7 @@
                   "type": "loki",
                   "uid": "${loki_datasource}"
                },
-               "expr": "sum(count_over_time({job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} |= \"Error\" [$__interval]))",
+               "expr": "sum(count_over_time({job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} |= \"Error\" [$__interval]))",
                "hide": false,
                "refId": "C"
             }
@@ -640,7 +640,7 @@
                "span": 12,
                "targets": [
                   {
-                     "expr": "{job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} |= \"Error\"",
+                     "expr": "{job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} |= \"Error\"",
                      "legendFormat": "",
                      "refId": "A"
                   }
@@ -688,7 +688,7 @@
                "span": 12,
                "targets": [
                   {
-                     "expr": "{job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"} |= \"Warning\"",
+                     "expr": "{job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"} |= \"Warning\"",
                      "legendFormat": "",
                      "refId": "A"
                   }
@@ -736,7 +736,7 @@
                "span": 12,
                "targets": [
                   {
-                     "expr": "{job=~\"$job\", host=~\"$hostname\", channel=~\"$channel\"}",
+                     "expr": "{job=~\"$job\", agent_hostname=~\"$hostname\", channel=~\"$channel\"}",
                      "legendFormat": "",
                      "refId": "A"
                   }
@@ -843,7 +843,7 @@
             "multi": true,
             "name": "channel",
             "options": [ ],
-            "query": "label_values({job=~\"$job\", host=~\"$hostname\"}, channel)",
+            "query": "label_values({job=~\"$job\", agent_hostname=~\"$hostname\"}, channel)",
             "refresh": 1,
             "regex": "",
             "sort": 1,

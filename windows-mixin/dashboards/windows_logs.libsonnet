@@ -2,7 +2,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local custom_barchart_grafonnet = import '../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
 
-local host_matcher = 'job=~"$job", host=~"$hostname"';
+local host_matcher = 'job=~"$job", agent_hostname=~"$hostname"';
 local log_channel_matcher = host_matcher + ', channel=~"$channel"';
 
 local queries = {
@@ -82,7 +82,7 @@ local host_template = grafana.template.new(
 local channel_template = grafana.template.new(
   'channel',
   '$loki_datasource',
-  'label_values({job=~"$job", host=~"$hostname"}, channel)',
+  'label_values({job=~"$job", agent_hostname=~"$hostname"}, channel)',
   label='Channel',
   refresh='load',
   multi=true,
