@@ -20,6 +20,7 @@ local logsByLevel =
     },
     fieldConfig: {
       defaults: {
+        unit: 'short',
         custom: {
           drawStyle: 'bars',
         },
@@ -74,7 +75,7 @@ local logsByLevel =
       legend: {
         displayMode: 'list',
         placement: 'bottom',
-        calcs: ["sum"],
+        calcs: ['sum'],
       },
     },
   };
@@ -89,6 +90,7 @@ local logsByHTTPcodes =
     },
     fieldConfig: {
       defaults: {
+        unit: 'short',
         custom: {
           drawStyle: 'bars',
           lineInterpolation: 'linear',
@@ -99,7 +101,7 @@ local logsByHTTPcodes =
           showPoints: 'never',
           pointSize: 5,
           stacking: {
-            mode: 'percent',
+            mode: 'normal',
             group: 'A',
           },
           axisPlacement: 'auto',
@@ -185,7 +187,12 @@ local logsByHTTPcodes =
     },
     targets: [
       {
-        expr: 'label_replace(\nsum by (le,job, instance) (apache_response_http_codes_bucket{le!="+Inf", ' + matcher + '}),\n  "alias", "HTTP ${1}00-${1}99", "le", "(.).+"\n)',
+        expr: |||
+          label_replace(
+            sum by (le,job, instance) (increase(apache_response_http_codes_bucket{le!="+Inf", %s}[$__rate_interval])),
+            "alias", "HTTP ${1}00-${1}99", "le", "(.).+"
+          )
+        ||| % matcher,
         legendFormat: '{{ alias }}',
         format: 'heatmap',
       },
@@ -198,7 +205,7 @@ local logsByHTTPcodes =
       legend: {
         displayMode: 'list',
         placement: 'bottom',
-        calcs: ["sum"],
+        calcs: ['sum'],
       },
     },
   };
