@@ -63,6 +63,15 @@ local hostname_template = grafana.template.new(
         hostname_template,
       ])
 
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Windows Dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
+
+
       // Status Row
       .addPanel(grafana.row.new(title='Integration status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
       // Integration status
