@@ -29,7 +29,7 @@ local prometheus_template = {
     value: 'default',
   },
   hide: 0,
-  label: 'Prometheus Data Source',
+  label: 'Prometheus data source',
   name: 'prometheus_datasource',
   options: [],
   query: 'prometheus',
@@ -94,7 +94,7 @@ local channel_template = grafana.template.new(
 // Panels
 local integration_status_panel =
   grafana.statPanel.new(
-    'Integration Status',
+    'Integration status',
     datasource='$loki_datasource',
     colorMode='background',
     graphMode='none',
@@ -109,7 +109,7 @@ local integration_status_panel =
           result: {
             color: 'green',
             index: 0,
-            text: 'Agent Configured - Sending Logs',
+            text: 'Agent configured - sending logs',
           },
           to: 10000000000000,
         },
@@ -135,7 +135,7 @@ local integration_status_panel =
 
 local latest_metric_panel =
   grafana.statPanel.new(
-    'Latest Metric Received',
+    'Latest metric received',
     datasource='$loki_datasource',
     colorMode='background',
     fields='Time',
@@ -149,7 +149,7 @@ local latest_metric_panel =
 
 local total_log_lines_panel =
   grafana.statPanel.new(
-    'Total Log Lines',
+    'Total log lines',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='lastNotNull',
@@ -192,7 +192,7 @@ local total_log_errors_panel =
 
 local error_percentage_panel =
   grafana.statPanel.new(
-    'Error Percentage',
+    'Error percentage',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='lastNotNull',
@@ -208,7 +208,7 @@ local error_percentage_panel =
 
 local total_bytes_panel =
   grafana.statPanel.new(
-    'Bytes Used',
+    'Bytes used',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='lastNotNull',
@@ -248,7 +248,7 @@ local log_warnings_panel =
 
 local log_full_panel =
   grafana.logPanel.new(
-    'Full Log File',
+    'Full log file',
     datasource='$loki_datasource',
   )
   .addTarget(
@@ -260,7 +260,7 @@ local log_full_panel =
   grafanaDashboards+:: {
     'windows_logs.json':
       grafana.dashboard.new(
-        'Windows Logs',
+        'Windows logs',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -279,14 +279,14 @@ local log_full_panel =
 
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Windows Dashboards',
+        title='Windows dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
 
       // Status Row
-      .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
+      .addPanel(grafana.row.new(title='Integration status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
       // Integration status
       .addPanel(integration_status_panel, gridPos={ x: 0, y: 0, w: 8, h: 2 })
       // Latest metric received
@@ -326,7 +326,7 @@ local log_full_panel =
 
       // Complete Log File
       .addPanel(
-        grafana.row.new(title='Complete Log File', collapse=true)
+        grafana.row.new(title='Complete log file', collapse=true)
         // Full Log File
         .addPanel(log_full_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
         gridPos={ x: 0, y: 28, w: 0, h: 0 }

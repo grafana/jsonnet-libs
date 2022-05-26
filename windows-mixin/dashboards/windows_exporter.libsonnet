@@ -12,7 +12,7 @@ local ds_template = {
     value: 'default',
   },
   hide: 0,
-  label: 'Data Source',
+  label: 'Data source',
   name: 'prometheus_datasource',
   options: [],
   query: 'prometheus',
