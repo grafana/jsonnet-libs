@@ -12,7 +12,7 @@ local ds_template = {
     value: 'default',
   },
   hide: 0,
-  label: 'Data Source',
+  label: 'Data source',
   name: 'prometheus_datasource',
   options: [],
   query: 'prometheus',
@@ -48,7 +48,7 @@ local hostname_template = grafana.template.new(
   grafanaDashboards+:: {
     'windows_exporter.json':
       grafana.dashboard.new(
-        'Windows Overview',
+        'Windows overview',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -62,6 +62,15 @@ local hostname_template = grafana.template.new(
         job_template,
         hostname_template,
       ])
+
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Windows dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
+
 
       // Status Row
       .addPanel(grafana.row.new(title='Integration status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
