@@ -73,7 +73,6 @@ local uptimePanel =
 
 local versionPanel =
   {
-
     type: 'stat',
     title: 'Version',
     datasource: {
@@ -124,21 +123,24 @@ local versionPanel =
         fields: '',
       },
       orientation: 'horizontal',
-      textMode: 'auto',
+      textMode: 'name',
       colorMode: 'none',
       graphMode: 'none',
       justifyMode: 'auto',
+      text: {
+        titleSize: 2,
+      },
     },
     targets: [
       {
-        expr: 'apache_version{' + matcher + '}',
-        legendFormat: '',
+        expr: 'apache_info{' + matcher + '}',
+        legendFormat: '{{ version }}',
         interval: '',
-        exemplar: true,
+        exemplar: false,
         format: 'time_series',
         intervalFactor: 1,
-        refId: 'A',
         step: 240,
+        instant: true,
       },
     ],
   };
