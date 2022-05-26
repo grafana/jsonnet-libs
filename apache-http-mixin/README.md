@@ -102,6 +102,8 @@ logs:
         - labels:
             module:
             level:
+        - static_labels:
+            logtype: error
     - job_name: integrations/apache_access
       static_configs:
       - targets:
@@ -123,6 +125,8 @@ logs:
                 buckets: [199,299,399,499,599]
         - labels:
             method:
+        - static_labels:
+            logtype: access
 ```
 
 ## Import dashboards and alerts using Grizzly tool
