@@ -65,7 +65,7 @@ local hostname_template = grafana.template.new(
 
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Windows Dashboards',
+        title='Windows dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
