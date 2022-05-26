@@ -7,7 +7,9 @@ exclusions:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   panel-job-instance-rule:
     reason: "No instance label in windows exporter metrics"
-  panel-promql-rule:
+  target-promql-rule:
     reason: "Linter does not support all LogQL queries and gives ivalid PromQL query error"
+    entries:
+    - dashboard: "Windows Logs"
   panel-rate-interval-rule:
     reason: "Cannot use $__rate_interval in LogQL"
