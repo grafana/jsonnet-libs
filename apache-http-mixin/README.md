@@ -102,7 +102,6 @@ logs:
         - labels:
             module:
             level:
-            client:
     - job_name: integrations/apache_access
       static_configs:
       - targets:
