@@ -4,6 +4,7 @@ local custom_barchart_grafonnet = import '../lib/custom-barchart-grafonnet/custo
 
 local host_matcher = 'job=~"$job", agent_hostname=~"$hostname"';
 local log_channel_matcher = host_matcher + ', channel=~"$channel"';
+local windows_event_parser = '| json | line_format "{{.execution_processId}} Source: {{.source}} EventID: {{.event_id}} Level: {{.levelText}} . {{.message}}"';
 
 local queries = {
   total_log_lines: 'sum(count_over_time({' + log_channel_matcher + '}[$__interval]))',
@@ -11,9 +12,9 @@ local queries = {
   total_log_errors: 'sum(count_over_time({' + log_channel_matcher + '} |= "Error" [$__interval]))',
   error_percentage: 'sum( count_over_time({' + log_channel_matcher + '} |= "Error" [$__interval]) ) / sum( count_over_time({' + log_channel_matcher + '} [$__interval]) )',
   total_bytes: 'sum(bytes_over_time({' + log_channel_matcher + '} [$__interval]))',
-  error_log_lines: '{' + log_channel_matcher + '} |= "Error"',
-  warning_log_lines: '{' + log_channel_matcher + '} |= "Warning"',
-  log_full_lines: '{' + log_channel_matcher + '}',
+  error_log_lines: '{' + log_channel_matcher + '} |= "Error" ' + windows_event_parser,
+  warning_log_lines: '{' + log_channel_matcher + '} |= "Warning" ' + windows_event_parser,
+  log_full_lines: '{' + log_channel_matcher + '} ' + windows_event_parser,
 };
 
 local stackstyle = {
