@@ -25,6 +25,8 @@ local link_data = import 'link_data.libsonnet';
       redirect: false,
       allowWebsockets: false,
       subfilter: false,
+      // subfilter_content_types configures the content types handled by the subfilter (nginx sub_filter_types directive).
+      subfilter_content_types: ['text/css', 'application/xml', 'application/json', 'application/javascript'],
       custom: [],
 
       // backwards compatible, service level config allows for more granular configuration
