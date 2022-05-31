@@ -39,7 +39,7 @@ function(services) {
         sub_filter 'endpoint:"/' 'endpoint:"/%(path)s/';  # for XHRs.
         sub_filter 'href:"/v1/' 'href:"/%(path)s/v1/';
         sub_filter_once off;
-        sub_filter_types %(rendered_subfilter_content_types)s';
+        sub_filter_types %(rendered_subfilter_content_types)s;
         proxy_redirect   "/" "/%(path)s/";
       ||| % (service { rendered_subfilter_content_types: std.join(' ', self.subfilter_content_types) })
       else ''
