@@ -288,7 +288,7 @@ local log_full_panel =
         job_template,
         host_template,
         channel_template,
-        source_template
+        source_template,
       ])
 
       .addLink(grafana.link.dashboards(
