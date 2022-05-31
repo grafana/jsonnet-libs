@@ -3,14 +3,14 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local custom_barchart_grafonnet = import '../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
 
 local host_matcher = 'job=~"$job", agent_hostname=~"$hostname"';
-local log_channel_matcher = host_matcher + ', channel=~"$channel"';
-local windows_event_parser = '| json | line_format "{{.execution_processId}} Source: {{.source}} EventID: {{.event_id}} Level: {{.levelText}} . {{.message}}"';
+local log_channel_matcher = host_matcher + ', channel=~"$channel", source=~"$source"';
+local windows_event_parser = '| json | line_format "ProcessID: {{.execution_processId}} Source: {{.source}} EventID: {{.event_id}} Level: {{.levelText}}  Message: {{.message}}"';
 
 local queries = {
   total_log_lines: 'sum(count_over_time({' + log_channel_matcher + '}[$__interval]))',
   total_log_warnings: 'sum(count_over_time({' + log_channel_matcher + '} |= "Warning" [$__interval]))',
   total_log_errors: 'sum(count_over_time({' + log_channel_matcher + '} |= "Error" [$__interval]))',
-  error_percentage: 'sum( count_over_time({' + log_channel_matcher + '} |= "Error" [$__interval]) ) / sum( count_over_time({' + log_channel_matcher + '} [$__interval]) )',
+  error_percentage: 'sum(count_over_time({' + log_channel_matcher + '} |= "Error" [$__interval])) / sum(count_over_time({' + log_channel_matcher + '} [$__interval]))',
   total_bytes: 'sum(bytes_over_time({' + log_channel_matcher + '} [$__interval]))',
   error_log_lines: '{' + log_channel_matcher + '} |= "Error" ' + windows_event_parser,
   warning_log_lines: '{' + log_channel_matcher + '} |= "Warning" ' + windows_event_parser,
@@ -92,6 +92,18 @@ local channel_template = grafana.template.new(
   sort=1,
 );
 
+local source_template = grafana.template.new(
+  'source',
+  '$loki_datasource',
+  'label_values({job=~"$job", agent_hostname=~"$hostname", channel=~"$channel"}, source)',
+  label='Source',
+  refresh='load',
+  multi=true,
+  includeAll=true,
+  allValues='.+',
+  sort=1,
+);
+
 // Panels
 local integration_status_panel =
   grafana.statPanel.new(
@@ -153,7 +165,7 @@ local total_log_lines_panel =
     'Total log lines',
     datasource='$loki_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull',
+    reducerFunction='sum',
     unit='short',
   )
   .addThreshold(
@@ -168,7 +180,7 @@ local total_log_warnings_panel =
     'Warnings',
     datasource='$loki_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull',
+    reducerFunction='sum',
     unit='short',
   ).addThreshold(
     { color: 'rgb(255, 152, 48)', value: 0 }
@@ -182,7 +194,7 @@ local total_log_errors_panel =
     'Errors',
     datasource='$loki_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull',
+    reducerFunction='sum',
     unit='short',
   ).addThreshold(
     { color: 'rgb(242, 73, 92)', value: 0 }
@@ -197,7 +209,7 @@ local error_percentage_panel =
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='lastNotNull',
-    unit='percent',
+    unit='percentunit',
   ).addThresholds([
     { color: 'rgb(255, 166, 176)', value: 0 },
     { color: 'rgb(255, 115, 131)', value: 25 },
@@ -212,7 +224,7 @@ local total_bytes_panel =
     'Bytes used',
     datasource='$loki_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull',
+    reducerFunction='sum',
     unit='bytes',
   )
   .addThreshold(
@@ -276,6 +288,7 @@ local log_full_panel =
         job_template,
         host_template,
         channel_template,
+        source_template
       ])
 
       .addLink(grafana.link.dashboards(
