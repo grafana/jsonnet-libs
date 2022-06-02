@@ -1,3 +1,5 @@
+local k = import 'ksonnet-util/kausal.libsonnet';
+
 {
   _config+:: {
     cluster: error 'Must define a cluster',
@@ -5,7 +7,7 @@
     jaeger_agent_host: null,
   },
 
-  local container = $.core.v1.container,
+  local container = k.core.v1.container,
 
   jaeger_mixin::
     if $._config.jaeger_agent_host == null
