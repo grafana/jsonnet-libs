@@ -35,7 +35,7 @@
               value: [
                 {
                   title: '',
-                  url: 'd/' + dashboardUid + '/var-datasource=${datasource}&var-job=${job}&var-instance=${__data.fields.Instance}',
+                  url: 'd/' + dashboardUid + '/var-datasource=${datasource}&var-job=${job}&var-instance=~${__data.fields.Instance}',
                 },
               ],
             },
@@ -55,7 +55,7 @@
     },
     targets: [
       {
-        expr: 'awx_organizations_total{job=~"$job", instance="$instance"}',
+        expr: 'awx_organizations_total{job=~"$job", instance=~"$instance"}',
         legendFormat: 'Orgs',
         interval: '',
         exemplar: false,
@@ -65,7 +65,7 @@
         instant: true,
       },
       {
-        expr: 'awx_teams_total{job=~"$job", instance="$instance"}',
+        expr: 'awx_teams_total{job=~"$job", instance=~"$instance"}',
         legendFormat: 'Teams',
         interval: '',
         exemplar: false,
@@ -75,7 +75,7 @@
         instant: true,
       },
       {
-        expr: 'awx_users_total{job=~"$job", instance="$instance"}',
+        expr: 'awx_users_total{job=~"$job", instance=~"$instance"}',
         legendFormat: 'Users',
         interval: '',
         exemplar: false,
@@ -85,7 +85,7 @@
         instant: true,
       },
       {
-        expr: 'awx_inventories_total{job=~"$job", instance="$instance"}',
+        expr: 'awx_inventories_total{job=~"$job", instance=~"$instance"}',
         legendFormat: 'Inventories',
         interval: '',
         exemplar: false,
@@ -95,7 +95,7 @@
         instant: true,
       },
       {
-        expr: 'awx_projects_total{job=~"$job", instance="$instance"}',
+        expr: 'awx_projects_total{job=~"$job", instance=~"$instance"}',
         legendFormat: 'Projects',
         interval: '',
         exemplar: false,
@@ -105,7 +105,7 @@
         instant: true,
       },
       {
-        expr: 'awx_schedules_total{job=~"$job", instance="$instance"}',
+        expr: 'awx_schedules_total{job=~"$job", instance=~"$instance"}',
         legendFormat: 'Schedules',
         interval: '',
         exemplar: false,
