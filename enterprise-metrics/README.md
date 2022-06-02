@@ -1,6 +1,6 @@
 # Grafana Enterprise Metrics Jsonnet library
 
-> **Note:** This library is **DEPRECATED** and will be removed in the future. If you are Grafana Labs customer
+> **Note:** This library is **DEPRECATED** and will be removed in the future. If you are a Grafana Labs customer
 > making use of this library, please contact support for help migrating to our [helm chart](https://grafana.com/docs/mimir/v2.1.x/operators-guide/deploying-grafana-mimir/).
 
 
