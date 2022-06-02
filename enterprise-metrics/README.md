@@ -1,6 +1,9 @@
 # Grafana Enterprise Metrics Jsonnet library
 
-> **Note:** This library is in alpha and the structure of the library is subject to breaking changes.
+> **Note:** This library is **DEPRECATED** and will be removed in the future. If you are Grafana Labs customer
+> making use of this library, please contact support for help migrating to our [helm chart](https://grafana.com/docs/mimir/v2.1.x/operators-guide/deploying-grafana-mimir/).
+
+
 
 A [Jsonnet](https://jsonnet.org/) library that can be used to configure and deploy Grafana Enterprise Metrics to Kubernetes.
 
