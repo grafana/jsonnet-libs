@@ -1,5 +1,5 @@
 {
   grafanaDashboards: {
-    'caddy-overview.json': (import 'dashboards/caddy-overview.json'),
+    'caddy-overview.json': (import 'dashboards/caddy-overview.jsonnet'),
   },
 }
