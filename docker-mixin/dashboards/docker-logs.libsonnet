@@ -152,7 +152,7 @@ local total_log_lines_panel =
     'Total Log Lines',
     datasource='$loki_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull',
+    reducerFunction='sum',
     unit='short',
   )
   .addThreshold(
@@ -167,7 +167,7 @@ local total_log_warnings_panel =
     'Warnings',
     datasource='$loki_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull',
+    reducerFunction='sum',
     unit='short',
   ).addThreshold(
     { color: 'rgb(255, 152, 48)', value: 0 }
@@ -181,7 +181,7 @@ local total_log_errors_panel =
     'Errors',
     datasource='$loki_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull',
+    reducerFunction='sum',
     unit='short',
   ).addThreshold(
     { color: 'rgb(242, 73, 92)', value: 0 }
@@ -211,7 +211,7 @@ local total_bytes_panel =
     'Bytes Used',
     datasource='$loki_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull',
+    reducerFunction='sum',
     unit='bytes',
   )
   .addThreshold(
