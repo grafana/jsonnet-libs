@@ -1803,7 +1803,7 @@
         "definition": "label_values(confluent_kafka_server_retained_bytes, scrape_job)",
         "hide": 0,
         "includeAll": true,
-        "label": "Job",
+        "label": "job",
         "multi": true,
         "name": "job",
         "options": [],
