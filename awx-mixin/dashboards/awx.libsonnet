@@ -10,7 +10,7 @@ local ct = import 'clustertable.libsonnet';
 
 local dashboardUid = 'eqcdR8HDA';
 
-local matcher = 'job=~"$job", instance="$instance"';
+local matcher = 'job=~"$job", instance=~"$instance"';
 
 local queries = {
   awx_system_info: 'awx_system_info{' + matcher + '}',
@@ -80,9 +80,11 @@ local instance_template =
     'instance',
     '$datasource',
     'label_values(awx_system_info{job=~"$job"}, instance)',
+    label='instance',
     refresh='load',
-    multi=false,
-    includeAll=false,
+    multi=true,
+    includeAll=true,
+    allValues='.+',
     sort=1,
   );
 
