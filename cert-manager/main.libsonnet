@@ -2,6 +2,7 @@ local tanka = (import 'github.com/grafana/jsonnet-libs/tanka-util/main.libsonnet
 local helm = tanka.helm.new(std.thisFile);
 
 {
+  chartVersion:: '1.1.0',
   values:: {
     installCRDs: $._config.install_crds,
     global: {
@@ -12,7 +13,7 @@ local helm = tanka.helm.new(std.thisFile);
     },
   },
 
-  local generated = helm.template('cert-manager', './charts/cert-manager', {
+  local generated = helm.template('cert-manager', './charts/' + $.chartVersion, {
     values: $.values,
     namespace: $._config.namespace,
   }),
