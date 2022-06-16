@@ -1,36 +1,37 @@
 local g = import 'grafana-builder/grafana.libsonnet';
 
 {
-  histogramRules(metric, labels)::
+  histogramRules(metric, labels, interval='1m')::
     local vars = {
       metric: metric,
       labels_underscore: std.join('_', labels),
       labels_comma: std.join(', ', labels),
+      interval: interval,
     };
     [
       {
         record: '%(labels_underscore)s:%(metric)s:99quantile' % vars,
-        expr: 'histogram_quantile(0.99, sum(rate(%(metric)s_bucket[1m])) by (le, %(labels_comma)s))' % vars,
+        expr: 'histogram_quantile(0.99, sum(rate(%(metric)s_bucket[%(interval)s])) by (le, %(labels_comma)s))' % vars,
       },
       {
         record: '%(labels_underscore)s:%(metric)s:50quantile' % vars,
-        expr: 'histogram_quantile(0.50, sum(rate(%(metric)s_bucket[1m])) by (le, %(labels_comma)s))' % vars,
+        expr: 'histogram_quantile(0.50, sum(rate(%(metric)s_bucket[%(interval)s])) by (le, %(labels_comma)s))' % vars,
       },
       {
         record: '%(labels_underscore)s:%(metric)s:avg' % vars,
-        expr: 'sum(rate(%(metric)s_sum[1m])) by (%(labels_comma)s) / sum(rate(%(metric)s_count[1m])) by (%(labels_comma)s)' % vars,
+        expr: 'sum(rate(%(metric)s_sum[1m])) by (%(labels_comma)s) / sum(rate(%(metric)s_count[%(interval)s])) by (%(labels_comma)s)' % vars,
       },
       {
         record: '%(labels_underscore)s:%(metric)s_bucket:sum_rate' % vars,
-        expr: 'sum(rate(%(metric)s_bucket[1m])) by (le, %(labels_comma)s)' % vars,
+        expr: 'sum(rate(%(metric)s_bucket[%(interval)s])) by (le, %(labels_comma)s)' % vars,
       },
       {
         record: '%(labels_underscore)s:%(metric)s_sum:sum_rate' % vars,
-        expr: 'sum(rate(%(metric)s_sum[1m])) by (%(labels_comma)s)' % vars,
+        expr: 'sum(rate(%(metric)s_sum[%(interval)s])) by (%(labels_comma)s)' % vars,
       },
       {
         record: '%(labels_underscore)s:%(metric)s_count:sum_rate' % vars,
-        expr: 'sum(rate(%(metric)s_count[1m])) by (%(labels_comma)s)' % vars,
+        expr: 'sum(rate(%(metric)s_count[%(interval)s])) by (%(labels_comma)s)' % vars,
       },
     ],
 
