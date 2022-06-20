@@ -111,13 +111,13 @@
 
   local rbacPatch = {
     local role = {
-      rulesType: $.rbac.v1beta1.policyRule,
+      rulesType: $.rbac.v1.policyRule,
     },
     role+: role,
     clusterRole+: role,
 
     local binding = {
-      subjectsType: $.rbac.v1beta1.subject,
+      subjectsType: $.rbac.v1.subject,
     },
     roleBinding+: binding,
     clusterRoleBinding+: binding,

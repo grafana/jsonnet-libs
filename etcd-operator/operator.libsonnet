@@ -5,7 +5,7 @@
 
   local kausal = import 'ksonnet-util/kausal.libsonnet',
   local k = kausal { _config+:: $._config },
-  local policyRule = k.rbac.v1beta1.policyRule,
+  local policyRule = k.rbac.v1.policyRule,
 
   operator_rbac:
     k.util.rbac('etcd-operator', [

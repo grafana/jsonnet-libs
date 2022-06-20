@@ -15,12 +15,12 @@
   },
   rbac+: {
     v1+: {
-      policyRule:: $.rbac.v1beta1.clusterRole.rulesType,
-      subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType,
+      policyRule:: $.rbac.v1.clusterRole.rulesType,
+      subject:: $.rbac.v1.clusterRoleBinding.subjectsType,
     },
     v1beta1+: {
-      policyRule:: $.rbac.v1beta1.clusterRole.rulesType,
-      subject:: $.rbac.v1beta1.clusterRoleBinding.subjectsType,
+      policyRule:: $.rbac.v1.clusterRole.rulesType,
+      subject:: $.rbac.v1.clusterRoleBinding.subjectsType,
     },
   },
 }
