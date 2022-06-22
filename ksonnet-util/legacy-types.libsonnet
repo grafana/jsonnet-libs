@@ -18,6 +18,7 @@
       policyRule:: $.rbac.v1.clusterRole.rulesType,
       subject:: $.rbac.v1.clusterRoleBinding.subjectsType,
     },
+    // TODO: the v1beta1 RBAC API has been removed in Kubernetes 1.22 and should get removed once 1.22 is the oldest supported version
     v1beta1+: {
       policyRule:: $.rbac.v1.clusterRole.rulesType,
       subject:: $.rbac.v1.clusterRoleBinding.subjectsType,
