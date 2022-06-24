@@ -40,7 +40,7 @@
       "type": "row"
     },
     {
-      "datasource": "grafanacloud-gabrielantunes-prom",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -97,7 +97,6 @@
           "expr": "avg by (service_name) (mongodb_instance_uptime_seconds{service_name=~\"$service_name\"})",
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -105,7 +104,7 @@
       "type": "stat"
     },
     {
-      "datasource": "grafanacloud-gabrielantunes-prom",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -154,7 +153,6 @@
           "expr": "sum(irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -162,7 +160,7 @@
       "type": "stat"
     },
     {
-      "datasource": "grafanacloud-gabrielantunes-prom",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -216,7 +214,6 @@
           "instant": true,
           "interval": "",
           "legendFormat": "{{set}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -232,7 +229,7 @@
       "type": "stat"
     },
     {
-      "datasource": "grafanacloud-gabrielantunes-prom",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -281,7 +278,6 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$__rate_interval]) > 0))",
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -289,7 +285,7 @@
       "type": "stat"
     },
     {
-      "datasource": "grafanacloud-gabrielantunes-prom",
+      "datasource": "${datasource}",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -389,7 +385,6 @@
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -498,7 +493,6 @@
           "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]) or  irate(mongodb_mongos_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{type}}",
-          "queryType": "randomWalk",
           "refId": "A"
         },
         {
@@ -601,7 +595,6 @@
           "expr": "avg by (service_name) (mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"} or mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"} or mongodb_connections{service_name=~\"$service_name\", state=\"current\"})",
           "interval": "",
           "legendFormat": "Connections",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -688,7 +681,6 @@
           "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{state}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -775,7 +767,6 @@
           "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\"}[$__rate_interval]) > 0))",
           "interval": "",
           "legendFormat": "{{type}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -862,7 +853,6 @@
           "expr": "avg by (service_name,type) (mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\"})",
           "interval": "",
           "legendFormat": "{{type}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -949,7 +939,6 @@
           "expr": "avg by (service_name,state) (mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\"} or mongodb_mongod_cursors{service_name=~\"$service_name\"} or mongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\"} or  mongodb_mongos_cursors{service_name=~\"$service_name\"})",
           "interval": "",
           "legendFormat": "{{state}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -1036,7 +1025,6 @@
           "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{state}}",
-          "queryType": "randomWalk",
           "refId": "A"
         },
         {
@@ -1132,7 +1120,6 @@
           "expr": "avg by (service_name,type) (irate(mongodb_mongod_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{type}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -1219,7 +1206,6 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "Total",
-          "queryType": "randomWalk",
           "refId": "A"
         },
         {
@@ -1314,7 +1300,6 @@
           "expr": "sum(irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$__rate_interval]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "Document",
-          "queryType": "randomWalk",
           "refId": "A"
         },
         {
@@ -1406,7 +1391,6 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "Write Wait Time",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -1493,7 +1477,6 @@
           "expr": "avg by (service_name) (irate(mongodb_mongod_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "Faults",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
