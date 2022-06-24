@@ -92,7 +92,6 @@
           "expr": "count by (set) (mongodb_mongod_replset_number_of_members{set=~\"$replset\"} or mongodb_mongod_replset_my_state{set=~\"$replset\"})",
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -149,7 +148,6 @@
           "expr": "time() - max(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\"})",
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -206,7 +204,6 @@
           "expr": "avg by (set) (max_over_time(mongodb_mongod_replset_member_replication_lag{set=\"$replset\",service_name=~\"$service_name\"}[${__range}]))",
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -260,7 +257,6 @@
           "instant": true,
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -412,7 +408,6 @@
           "instant": false,
           "interval": "",
           "legendFormat": "",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -533,7 +528,6 @@
           "expr": "avg by (service_name) (max(max_over_time(mongodb_mongod_replset_member_replication_lag{set=\"$replset\",service_name=~\"$secondary\"}[$__rate_interval]) > 0) by (service_name,set))",
           "interval": "",
           "legendFormat": "{{service_name}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -622,7 +616,6 @@
           "expr": "avg by (service_name,type) (irate(mongodb_op_counters_repl_total{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "repl - {{type}}",
-          "queryType": "randomWalk",
           "refId": "A"
         },
         {
@@ -724,7 +717,6 @@
           "expr": "max by (service_name) (changes(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{service_name}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -811,7 +803,6 @@
           "expr": "time() - avg by (service_name) (max(mongodb_mongod_replset_member_last_heartbeat{service_name=~\"$service_name\"}) by (name)) * on (name) group_right avg by (service_name) (mongodb_mongod_replset_my_name{service_name=~\"$service_name\"})",
           "interval": "$__rate_interval",
           "legendFormat": "{{service_name}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
@@ -900,7 +891,6 @@
           "expr": "max by (service_name,name,state) (mongodb_mongod_replset_member_ping_ms{set=~\"$replset\",service_name=~\"$service_name\"} or label_replace(label_replace(mongodb_rs_members_pingMs{service_name=~\"$service_name\", member_state!=\"\"},\"state\", \"$1\", \"member_state\", \"(.*)\"),\"name\", \"$1\", \"member_idx\", \"(.*)\"))",
           "interval": "",
           "legendFormat": "{{service_name}} - {{name}} - {{state}}",
-          "queryType": "randomWalk",
           "refId": "A"
         }
       ],
