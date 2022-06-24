@@ -19,7 +19,7 @@
       {
         title: 'Prometheus',
         path: 'prometheus',
-        url: 'http://prometheus.%(namespace)s.svc.%(cluster_dns_suffix)s/prometheus/' % $._config,
+        url: 'http://prometheus.%(prometheus_namespace)s.svc.%(cluster_dns_suffix)s/prometheus/' % $._config,
       },
       if $._config.alertmanager_cluster_self.replicas > 0 then {
         title: 'Alertmanager' + if $._config.alertmanager_cluster_self.global then ' (global)' else ' (local)',
