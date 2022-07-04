@@ -184,9 +184,9 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
 
   withIngress(host, tlsSecretName, whitelistIps=[]):: {
     local this = self,
-    local ingress = k.networking.v1beta1.ingress,
-    local rule = k.networking.v1beta1.ingressRule,
-    local path = k.networking.v1beta1.httpIngressPath,
+    local ingress = k.networking.v1.ingress,
+    local rule = k.networking.v1.ingressRule,
+    local path = k.networking.v1.httpIngressPath,
     ingress:
       ingress.new('vault')
       + ingress.metadata.withAnnotationsMixin({
@@ -204,8 +204,9 @@ local kausal = import 'ksonnet-util/kausal.libsonnet';
         rule.withHost(host)
         + rule.http.withPaths([
           path.withPath('/')
-          + path.backend.withServiceName(this.service.metadata.name)
-          + path.backend.withServicePort(this._config.vault.port),
+          + path.withPathType('Prefix')
+          + path.backend.service.withName(this.service.metadata.name)
+          + path.backend.service.port.withNumber(this._config.vault.port),
         ])
       ),
   },
