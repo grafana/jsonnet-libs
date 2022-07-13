@@ -255,7 +255,7 @@
           expr: 'avg(avg_over_time(caddy_http_requests_in_flight{' + matcher + '}[$__rate_interval])) by (handler)',
           hide: false,
           interval: '',
-          legendFormat: '',
+          legendFormat: '{{handler}}',
           refId: 'E',
         },
       ],
