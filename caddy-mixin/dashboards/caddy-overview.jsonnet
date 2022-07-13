@@ -70,9 +70,9 @@
       steppedLine: false,
       targets: [
         {
-          expr: 'sum(rate(caddy_http_requests_total{' + matcher + ', handler="reverse_proxy"}[$__rate_interval]))',
+          expr: 'sum(rate(caddy_http_requests_total{' + matcher + '}[$__rate_interval])) by (handler)',
           interval: '',
-          legendFormat: '',
+          legendFormat: '{{handler}}',
           refId: 'A',
         },
       ],
@@ -162,7 +162,7 @@
       steppedLine: false,
       targets: [
         {
-          expr: 'sum(irate(caddy_http_request_duration_seconds_count{' + matcher + ', handler="reverse_proxy"}[$__rate_interval])) by (code)',
+          expr: 'sum(irate(caddy_http_request_duration_seconds_count{' + matcher + '}[$__rate_interval])) by (code)',
           interval: '',
           legendFormat: '{{code}}',
           refId: 'A',
@@ -252,7 +252,7 @@
       steppedLine: false,
       targets: [
         {
-          expr: 'avg(avg_over_time(caddy_http_requests_in_flight{' + matcher + ', handler="reverse_proxy"}[$__rate_interval]))',
+          expr: 'avg(avg_over_time(caddy_http_requests_in_flight{' + matcher + '}[$__rate_interval])) by (handler)',
           hide: false,
           interval: '',
           legendFormat: '',
@@ -345,7 +345,7 @@
       steppedLine: false,
       targets: [
         {
-          expr: 'sum(irate(caddy_http_request_duration_seconds_count{' + matcher + ', handler="reverse_proxy"}[$__rate_interval])) by (code)',
+          expr: 'sum(irate(caddy_http_request_duration_seconds_count{' + matcher + '}[$__rate_interval])) by (code)',
           interval: '',
           legendFormat: '{{code}}',
           refId: 'A',
@@ -435,31 +435,31 @@
       steppedLine: false,
       targets: [
         {
-          expr: 'histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + ', handler="reverse_proxy"}[$__rate_interval])) by (le))',
+          expr: 'histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
           interval: '',
           legendFormat: 'p99',
           refId: 'A',
         },
         {
-          expr: 'histogram_quantile(0.95, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + ', handler="reverse_proxy"}[$__rate_interval])) by (le))',
+          expr: 'histogram_quantile(0.95, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
           interval: '',
           legendFormat: 'p95',
           refId: 'B',
         },
         {
-          expr: 'histogram_quantile(0.90, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + ', handler="reverse_proxy"}[$__rate_interval])) by (le))',
+          expr: 'histogram_quantile(0.90, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
           interval: '',
           legendFormat: 'p90',
           refId: 'C',
         },
         {
-          expr: 'histogram_quantile(0.75, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + ', handler="reverse_proxy"}[$__rate_interval])) by (le))',
+          expr: 'histogram_quantile(0.75, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
           interval: '',
           legendFormat: 'p75',
           refId: 'D',
         },
         {
-          expr: 'histogram_quantile(0.5, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + ', handler="reverse_proxy"}[$__rate_interval])) by (le))',
+          expr: 'histogram_quantile(0.5, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
           interval: '',
           legendFormat: 'p50',
           refId: 'E',
@@ -539,7 +539,7 @@
       reverseYBuckets: false,
       targets: [
         {
-          expr: 'sum(increase(caddy_http_request_duration_seconds_bucket{' + matcher + ', handler="reverse_proxy"}[$__rate_interval])) by (le)',
+          expr: 'sum(increase(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le)',
           format: 'heatmap',
           interval: '',
           legendFormat: '{{le}}',
