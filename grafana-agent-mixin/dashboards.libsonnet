@@ -10,7 +10,8 @@ local tablePanel = grafana.tablePanel;
 local template = grafana.template;
 local timeSeries = grafana.timeSeries;
 
-local host_matcher = 'job=~"$job", instance=~"$instance", cluster=~"$cluster", namespace=~"$namespace", container=~"$container"';
+local job_instance_matcher = 'job=~"$job", instance=~"$instance"';
+local host_matcher = job_instance_matcher + ', cluster=~"$cluster", namespace=~"$namespace", container=~"$container"';
 
 // Templates
 local ds_template = {
@@ -32,7 +33,7 @@ local job_template = grafana.template.new(
   'job',
   '$datasource',
   'label_values(agent_build_info, job)',
-  label='Job',
+  label='job',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -44,7 +45,7 @@ local instance_template = grafana.template.new(
   'instance',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, instance)',
-  label='Instance',
+  label='instance',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -56,7 +57,7 @@ local cluster_template = grafana.template.new(
   'cluster',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, cluster)',
-  label='Cluster',
+  label='cluster',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -68,7 +69,7 @@ local namespace_template = grafana.template.new(
   'namespace',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, namespace)',
-  label='Namespace',
+  label='namespace',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -80,7 +81,7 @@ local container_template = grafana.template.new(
   'container',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, container)',
-  label='Container',
+  label='container',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -92,7 +93,7 @@ local pod_template = grafana.template.new(
   'pod',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, pod)',
-  label='Pod',
+  label='pod',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -141,7 +142,7 @@ local pod_template = grafana.template.new(
         g.row('Prometheus Discovery')
         .addPanel(
           g.panel('Target Sync') +
-          g.queryPanel('sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[5m])) by (pod, scrape_job) * 1e3', '{{pod}}/{{scrape_job}}') +
+          g.queryPanel('sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (pod, scrape_job) * 1e3', '{{pod}}/{{scrape_job}}') +
           { yaxes: g.yaxes('ms') }
         )
         .addPanel(
@@ -155,9 +156,9 @@ local pod_template = grafana.template.new(
         .addPanel(
           g.panel('Average Scrape Interval Duration') +
           g.queryPanel('
-            rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[5m])
+            rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[$__rate_interval])
             /
-            rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[5m])
+            rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[$__rate_interval])
             * 1e3
           ', '{{pod}} {{interval}} configured') +
           { yaxes: g.yaxes('ms') }
@@ -165,10 +166,10 @@ local pod_template = grafana.template.new(
         .addPanel(
           g.panel('Scrape failures') +
           g.queryPanel([
-            'sum by (job) (rate(prometheus_target_scrapes_exceeded_sample_limit_total{' + host_matcher + '}[1m]))',
-            'sum by (job) (rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{' + host_matcher + '}[1m]))',
-            'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_bounds_total{' + host_matcher + '}[1m]))',
-            'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_order_total{' + host_matcher + '}[1m]))',
+            'sum by (job) (rate(prometheus_target_scrapes_exceeded_sample_limit_total{' + host_matcher + '}[$__rate_interval]))',
+            'sum by (job) (rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{' + host_matcher + '}[$__rate_interval]))',
+            'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_bounds_total{' + host_matcher + '}[$__rate_interval]))',
+            'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_order_total{' + host_matcher + '}[$__rate_interval]))',
           ], [
             'exceeded sample limit: {{job}}',
             'duplicate timestamp: {{job}}',
@@ -179,7 +180,7 @@ local pod_template = grafana.template.new(
         )
         .addPanel(
           g.panel('Appended Samples') +
-          g.queryPanel('sum by (job, instance_group_name) (rate(agent_wal_samples_appended_total{' + host_matcher + '}[5m]))', '{{job}} {{instance_group_name}}') +
+          g.queryPanel('sum by (job, instance_group_name) (rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval]))', '{{job}} {{instance_group_name}}') +
           g.stack
         )
       ),
@@ -206,38 +207,38 @@ local pod_template = grafana.template.new(
 
       local remoteSendLatency =
         graphPanel.new(
-          'Latency [1m]',
+          'Latency [$__rate_interval]',
           datasource='$datasource',
           span=6,
         )
         .addTarget(prometheus.target(
-          'rate(prometheus_remote_storage_sent_batch_duration_seconds_sum{' + host_matcher + '}[1m]) / rate(prometheus_remote_storage_sent_batch_duration_seconds_count{' + host_matcher + '}[1m])',
+          'rate(prometheus_remote_storage_sent_batch_duration_seconds_sum{' + host_matcher + '}[$__rate_interval]) / rate(prometheus_remote_storage_sent_batch_duration_seconds_count{' + host_matcher + '}[$__rate_interval])',
           legendFormat='mean {{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
         ))
         .addTarget(prometheus.target(
-          'histogram_quantile(0.99, rate(prometheus_remote_storage_sent_batch_duration_seconds_bucket{' + host_matcher + '}[1m]))',
+          'histogram_quantile(0.99, rate(prometheus_remote_storage_sent_batch_duration_seconds_bucket{' + host_matcher + '}[$__rate_interval]))',
           legendFormat='p99 {{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
         ));
 
       local samplesInRate =
         graphPanel.new(
-          'Rate in [5m]',
+          'Rate in [$__rate_interval]',
           datasource='$datasource',
           span=6,
         )
         .addTarget(prometheus.target(
-          'rate(agent_wal_samples_appended_total{' + host_matcher + '}[5m])',
+          'rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
         ));
 
       local samplesOutRate =
         graphPanel.new(
-          'Rate succeeded [5m]',
+          'Rate succeeded [$__rate_interval]',
           datasource='$datasource',
           span=6,
         )
         .addTarget(prometheus.target(
-          'rate(prometheus_remote_storage_succeeded_samples_total{' + host_matcher + '}[5m]) or rate(prometheus_remote_storage_samples_total{' + host_matcher + '}[5m])',
+          'rate(prometheus_remote_storage_succeeded_samples_total{' + host_matcher + '}[$__rate_interval]) or rate(prometheus_remote_storage_samples_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
         ));
 
@@ -327,7 +328,7 @@ local pod_template = grafana.template.new(
           span=6,
         )
         .addTarget(prometheus.target(
-          'rate(prometheus_remote_storage_samples_dropped_total{' + host_matcher + '}[5m])',
+          'rate(prometheus_remote_storage_samples_dropped_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
         ));
 
@@ -338,7 +339,7 @@ local pod_template = grafana.template.new(
           span=6,
         )
         .addTarget(prometheus.target(
-          'rate(prometheus_remote_storage_samples_failed_total{' + host_matcher + '}[5m])',
+          'rate(prometheus_remote_storage_samples_failed_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
         ));
 
@@ -349,7 +350,7 @@ local pod_template = grafana.template.new(
           span=6,
         )
         .addTarget(prometheus.target(
-          'rate(prometheus_remote_storage_samples_retried_total{' + host_matcher + '}[5m])',
+          'rate(prometheus_remote_storage_samples_retried_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
         ));
 
@@ -360,7 +361,7 @@ local pod_template = grafana.template.new(
           span=6,
         )
         .addTarget(prometheus.target(
-          'rate(prometheus_remote_storage_enqueue_retries_total{' + host_matcher + '}[5m])',
+          'rate(prometheus_remote_storage_enqueue_retries_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
         ));
 
@@ -533,7 +534,7 @@ local pod_template = grafana.template.new(
         )
         .addTarget(prometheus.target(
           '
-            rate(traces_loadbalancer_backend_outcome{cluster=~"$cluster",namespace=~"$namespace",success="true",container=~"$container",pod=~"$pod"}[$__rate_interval])
+            rate(traces_loadbalancer_backend_outcome{' + job_instance_matcher + ', cluster=~"$cluster",namespace=~"$namespace",success="true",container=~"$container",pod=~"$pod"}[$__rate_interval])
           ',
           legendFormat='{{ pod }}',
         ));

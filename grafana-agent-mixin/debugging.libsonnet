@@ -2,7 +2,9 @@ local utils = import './utils.libsonnet';
 local g = import 'grafana-builder/grafana.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
 
-local host_matcher = 'job=~"$job", instance=~"$instance", cluster=~"$cluster", namespace=~"$namespace", container=~"$container"';
+local job_instance_matcher = 'job=~"$job", instance=~"$instance"';
+local host_matcher = job_instance_matcher + ', cluster=~"$cluster", namespace=~"$namespace", container=~"$container"';
+local host_pod_matcher = host_matcher + ', pod=~"$pod"';
 
 // Templates
 local ds_template = {
@@ -24,7 +26,7 @@ local job_template = grafana.template.new(
   'job',
   '$datasource',
   'label_values(agent_build_info, job)',
-  label='Job',
+  label='job',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -36,7 +38,7 @@ local instance_template = grafana.template.new(
   'instance',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, instance)',
-  label='Instance',
+  label='instance',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -48,7 +50,7 @@ local cluster_template = grafana.template.new(
   'cluster',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, cluster)',
-  label='Cluster',
+  label='cluster',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -60,7 +62,7 @@ local namespace_template = grafana.template.new(
   'namespace',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, namespace)',
-  label='Namespace',
+  label='namespace',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -72,7 +74,7 @@ local container_template = grafana.template.new(
   'container',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, container)',
-  label='Container',
+  label='container',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -84,7 +86,7 @@ local pod_template = grafana.template.new(
   'pod',
   '$datasource',
   'label_values(agent_build_info{job=~"$job"}, pod)',
-  label='Pod',
+  label='pod',
   refresh='load',
   multi=true,
   includeAll=true,
@@ -117,7 +119,7 @@ local pod_template = grafana.template.new(
         .addPanel(
           g.panel('GCs') +
           g.queryPanel(
-            'rate(go_gc_duration_seconds_count{' + host_matcher + ', pod=~"$pod"}[5m])',
+            'rate(go_gc_duration_seconds_count{' + host_pod_matcher + '}[$__rate_interval])',
             '{{pod}}',
           )
         )
@@ -125,35 +127,35 @@ local pod_template = grafana.template.new(
           g.panel('Go Heap') +
           { yaxes: g.yaxes('decbytes') } +
           g.queryPanel(
-            'go_memstats_heap_inuse_bytes{' + host_matcher + ', pod=~"$pod"}',
+            'go_memstats_heap_inuse_bytes{' + host_pod_matcher + '}',
             '{{pod}}',
           )
         )
         .addPanel(
           g.panel('Goroutines') +
           g.queryPanel(
-            'go_goroutines{' + host_matcher + ', pod=~"$pod"}',
+            'go_goroutines{' + host_pod_matcher + '}',
             '{{pod}}',
           )
         )
         .addPanel(
           g.panel('CPU') +
           g.queryPanel(
-            'rate(container_cpu_usage_seconds_total{' + host_matcher + ', pod=~"$pod"}[5m])',
+            'rate(container_cpu_usage_seconds_total{' + host_pod_matcher + '}[$__rate_interval])',
             '{{pod}}',
           )
         )
         .addPanel(
           g.panel('WSS') +
           g.queryPanel(
-            'container_memory_working_set_bytes{' + host_matcher + ', pod=~"$pod"}',
+            'container_memory_working_set_bytes{' + host_pod_matcher + '}',
             '{{pod}}',
           )
         )
         .addPanel(
           g.panel('Bad Words') +
           g.queryPanel(
-            'rate(promtail_custom_bad_words_total{cluster=~"$cluster", exported_namespace=~"$namespace", exported_job=~"$job"}[5m])',
+            'rate(promtail_custom_bad_words_total{' + job_instance_matcher + ', cluster=~"$cluster", exported_namespace=~"$namespace", exported_job=~"$job"}[$__rate_interval])',
             '{{job}}',
           )
         )
@@ -163,14 +165,14 @@ local pod_template = grafana.template.new(
         .addPanel(
           g.panel('RX by Pod') +
           g.queryPanel(
-            'sum by (pod) (rate(container_network_receive_bytes_total{cluster=~"$cluster", namespace=~"$namespace", pod=~"$pod"}[5m]))',
+            'sum by (pod) (rate(container_network_receive_bytes_total{' + job_instance_matcher + ', cluster=~"$cluster", namespace=~"$namespace", pod=~"$pod"}[$__rate_interval]))',
             '{{pod}}',
           )
         )
         .addPanel(
           g.panel('TX by Pod') +
           g.queryPanel(
-            'sum by (pod) (rate(container_network_transmit_bytes_total{cluster=~"$cluster", namespace=~"$namespace", pod=~"$pod"}[5m]))',
+            'sum by (pod) (rate(container_network_transmit_bytes_total{' + job_instance_matcher + ', cluster=~"$cluster", namespace=~"$namespace", pod=~"$pod"}[$__rate_interval]))',
             '{{pod}}',
           )
         )
@@ -182,9 +184,9 @@ local pod_template = grafana.template.new(
           { yaxes: g.yaxes('decbytes') } +
           g.queryPanel(
             '
-              (sum by (pod) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_matcher + ', pod=~"$pod"}[1m])))
+              (sum by (pod) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_pod_matcher + '}[$__rate_interval])))
               /
-              (sum by (pod) (agent_wal_storage_active_series{' + host_matcher + ', pod=~"$pod"}))
+              (sum by (pod) (agent_wal_storage_active_series{' + host_pod_matcher + '}))
             ',
             '{{pod}}',
           )
@@ -194,9 +196,9 @@ local pod_template = grafana.template.new(
           { yaxes: g.yaxes('decbytes') } +
           g.queryPanel(
             '
-              (sum by (container) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_matcher + ', pod=~"$pod"}[1m])))
+              (sum by (container) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_pod_matcher + '}[$__rate_interval])))
               /
-              (sum by (container) (agent_wal_storage_active_series{' + host_matcher + ', pod=~"$pod"}))
+              (sum by (container) (agent_wal_storage_active_series{' + host_pod_matcher + '}))
             ',
             '{{container}}',
           )
@@ -204,21 +206,21 @@ local pod_template = grafana.template.new(
         .addPanel(
           g.panel('Series/Pod') +
           g.queryPanel(
-            'sum by (pod) (agent_wal_storage_active_series{' + host_matcher + ', pod=~"$pod"})',
+            'sum by (pod) (agent_wal_storage_active_series{' + host_pod_matcher + '})',
             '{{pod}}',
           )
         )
         .addPanel(
           g.panel('Series/Config') +
           g.queryPanel(
-            'sum by (instance_group_name) (agent_wal_storage_active_series{' + host_matcher + ', pod=~"$pod"})',
+            'sum by (instance_group_name) (agent_wal_storage_active_series{' + host_pod_matcher + '})',
             '{{instance_group_name}}',
           )
         )
         .addPanel(
           g.panel('Series') +
           g.queryPanel(
-            'sum by (container) (agent_wal_storage_active_series{' + host_matcher + ', pod=~"$pod"})',
+            'sum by (container) (agent_wal_storage_active_series{' + host_pod_matcher + '})',
             '{{container}}',
           )
         )
