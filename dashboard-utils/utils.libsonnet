@@ -240,44 +240,44 @@ local utils = import 'mixin-utils/utils.libsonnet';
     { yaxes: $.yaxes('percentunit') },
 
   barGauge(queries, legends='', thresholds=[], unit='short', min=null, max=null)::
-          super.queryPanel(queries, legends) + {
-            type: 'bargauge',
-            targets: [
-              target {
-                // Reset defaults from queryPanel().
-                format: null,
-                intervalFactor: null,
-                step: null,
-              }
-              for target in super.targets
-            ],
-            fieldConfig: {
-              defaults: {
-                color: { mode: 'thresholds' },
-                mappings: [],
-                max: max,
-                min: min,
-                thresholds: {
-                  mode: 'absolute',
-                  steps: thresholds,
-                },
-                unit: unit,
-              },
-            },
-            options: {
-              displayMode: 'basic',
-              orientation: 'horizontal',
-              reduceOptions: {
-                calcs: ['lastNotNull'],
-                fields: '',
-                values: false,
-              },
-            },
+    super.queryPanel(queries, legends) + {
+      type: 'bargauge',
+      targets: [
+        target {
+          // Reset defaults from queryPanel().
+          format: null,
+          intervalFactor: null,
+          step: null,
+        }
+        for target in super.targets
+      ],
+      fieldConfig: {
+        defaults: {
+          color: { mode: 'thresholds' },
+          mappings: [],
+          max: max,
+          min: min,
+          thresholds: {
+            mode: 'absolute',
+            steps: thresholds,
           },
-
-        // Switches a panel from lines (default) to bars.
-        bars:: {
-          bars: true,
-          lines: false,
+          unit: unit,
         },
+      },
+      options: {
+        displayMode: 'basic',
+        orientation: 'horizontal',
+        reduceOptions: {
+          calcs: ['lastNotNull'],
+          fields: '',
+          values: false,
+        },
+      },
+    },
+
+  // Switches a panel from lines (default) to bars.
+  bars:: {
+    bars: true,
+    lines: false,
+  },
 }
