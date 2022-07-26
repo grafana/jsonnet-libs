@@ -166,4 +166,15 @@ local g = import 'grafana-builder/grafana.libsonnet';
       groups: std.map(overrideInGroup, super.groups),
     },
   },
+
+  removeAlerts(alerts):: {
+    local removeRule(rule) =
+      if 'alert' in rule && std.objectHas(alerts, rule.alert)
+      then {}
+      else rule,
+    local removeInGroup(group) = group { rules: std.map(removeRule, super.rules) },
+    prometheusAlerts+:: {
+      groups: std.prune(std.map(removeInGroup, super.groups)),
+    },
+  },
 }
