@@ -1,10 +1,13 @@
-local utils = import './utils.libsonnet';
 local g = import 'grafana-builder/grafana.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
+local utils = import './utils.libsonnet';
 
-local job_instance_matcher = 'job=~"$job", instance=~"$instance"';
-local host_matcher = job_instance_matcher + ', cluster=~"$cluster", namespace=~"$namespace", container=~"$container"';
-local host_pod_matcher = host_matcher + ', pod=~"$pod"';
+local dashboard = grafana.dashboard;
+local prometheus = grafana.prometheus;
+local graphPanel = grafana.graphPanel;
+local row = grafana.row;
+
+local host_matcher = 'job=~"$job", instance=~"$instance"';
 
 // Templates
 local ds_template = {
@@ -14,7 +17,7 @@ local ds_template = {
   },
   hide: 0,
   label: 'Data Source',
-  name: 'datasource',
+  name: 'prometheus_datasource',
   options: [],
   query: 'prometheus',
   refresh: 1,
@@ -24,88 +27,163 @@ local ds_template = {
 
 local job_template = grafana.template.new(
   'job',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(agent_build_info, job)',
   label='job',
   refresh='load',
   multi=true,
   includeAll=true,
-  allValues='.+',
   sort=1,
 );
 
 local instance_template = grafana.template.new(
   'instance',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(agent_build_info{job=~"$job"}, instance)',
   label='instance',
   refresh='load',
   multi=true,
   includeAll=true,
-  allValues='.+',
-  sort=1,
-);
-
-local cluster_template = grafana.template.new(
-  'cluster',
-  '$datasource',
-  'label_values(agent_build_info{job=~"$job"}, cluster)',
-  label='cluster',
-  refresh='load',
-  multi=true,
-  includeAll=true,
-  allValues='.+',
-  sort=1,
-);
-
-local namespace_template = grafana.template.new(
-  'namespace',
-  '$datasource',
-  'label_values(agent_build_info{job=~"$job"}, namespace)',
-  label='namespace',
-  refresh='load',
-  multi=true,
-  includeAll=true,
-  allValues='.+',
-  sort=1,
-);
-
-local container_template = grafana.template.new(
-  'container',
-  '$datasource',
-  'label_values(agent_build_info{job=~"$job"}, container)',
-  label='container',
-  refresh='load',
-  multi=true,
-  includeAll=true,
-  allValues='.+',
-  sort=1,
-);
-
-local pod_template = grafana.template.new(
-  'pod',
-  '$datasource',
-  'label_values(agent_build_info{job=~"$job"}, pod)',
-  label='pod',
-  refresh='load',
-  multi=true,
-  includeAll=true,
-  allValues='.+',
   sort=1,
 );
 
 {
   grafanaDashboards+:: {
     'agent-operational.json':
-      grafana.dashboard.new('Agent Operational', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-opr')
+      local garbageCollectionSeconds =
+        graphPanel.new(
+          'Garbage Collection Seconds',
+          description='A summary of the pause duration of garbage collection cycles.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'rate(go_gc_duration_seconds_count{' + host_matcher + '}[$__rate_interval])',
+          legendFormat='{{instance}}'
+        )) + 
+        utils.timeSeriesOverride(unit='s');
+
+      local goHeap = graphPanel.new(
+          'Go Heap',
+          description='Number of heap bytes that are in use.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'go_memstats_heap_inuse_bytes{' + host_matcher + '}',
+          legendFormat='{{instance}}'
+        )) + 
+        utils.timeSeriesOverride(unit='decbytes');
+
+      local goRoutines = graphPanel.new(
+          'Go Routines',
+          description='Number of goroutines that currently exist.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'go_goroutines{' + host_matcher + '}',
+          legendFormat='{{instance}}'
+        )) + 
+        utils.timeSeriesOverride(unit='short');
+
+      local cpuUsage = graphPanel.new(
+          'CPU Usage',
+          description='Total user and system CPU time spent in seconds.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'rate(process_cpu_seconds_total{' + host_matcher + '}[$__rate_interval])',
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='percent');
+
+      local TCPConnections = graphPanel.new(
+          'TCP Connections',
+          description='Number of accepted TCP connections.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'agent_tcp_connections{' + host_matcher + '}',
+          legendFormat='{{protocol}}'
+        )) + 
+        utils.timeSeriesOverride(unit='short');
+
+      local bytesSeriesPod = graphPanel.new(
+          'Bytes/Series/Instance',
+          description='Average bytes over number of active series being tracked by the WAL storage grouped by instance.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          '
+            (sum by (instance) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_matcher + '}[$__rate_interval])))
+            /
+            (sum by (instance) (agent_wal_storage_active_series{' + host_matcher + '}))
+          ',
+          legendFormat='{{instance}}'
+        )) + 
+        utils.timeSeriesOverride(unit='decbytes');
+
+      local bytesSeries = graphPanel.new(
+          'Bytes/Series/Job',
+          description='Average bytes over number of active series being tracked by the WAL storage by Job.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          '
+            (sum by (job) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_matcher + '}[$__rate_interval])))
+            /
+            (sum by (job) (agent_wal_storage_active_series{' + host_matcher + '}))
+          ',
+          legendFormat='{{job}}'
+        )) + 
+        utils.timeSeriesOverride(unit='decbytes');
+
+      local seriesPod = graphPanel.new(
+          'Series/Instance',
+          description='Number of active series being tracked by the WAL storage grouped by instance.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'sum by (instance) (agent_wal_storage_active_series{' + host_matcher + '})',
+          legendFormat='{{instance}}'
+        )) + 
+        utils.timeSeriesOverride(unit='short');
+
+      local seriesConfig = graphPanel.new(
+          'Series/Config/Instance',
+          description='Number of active series being tracked by the WAL storage grouped by instance.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'sum by (instance) (agent_wal_storage_active_series{' + host_matcher + '})',
+          legendFormat='{{instance}}'
+        )) + 
+        utils.timeSeriesOverride(unit='short');
+
+      local seriesTotal = graphPanel.new(
+          'Series/Config/Job',
+          description='Number of active series being tracked by the WAL storage grouped by job.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'sum by (job) (agent_wal_storage_active_series{' + host_matcher + '})',
+          legendFormat='{{job}}'
+        )) + 
+        utils.timeSeriesOverride(unit='short');
+
+      dashboard.new('Agent Operational', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-opr')
       .addTemplates([
         ds_template,
         job_template,
         instance_template,
-        cluster_template,
-        namespace_template,
-        container_template,
-        pod_template,
       ])
       .addLink(grafana.link.dashboards(
         asDropdown=false,
@@ -115,115 +193,23 @@ local pod_template = grafana.template.new(
         tags=($._config.dashboardTags),
       ))
       .addRow(
-        g.row('General')
-        .addPanel(
-          g.panel('GCs') +
-          g.queryPanel(
-            'rate(go_gc_duration_seconds_count{' + host_pod_matcher + '}[$__rate_interval])',
-            '{{pod}}',
-          )
-        )
-        .addPanel(
-          g.panel('Go Heap') +
-          { yaxes: g.yaxes('decbytes') } +
-          g.queryPanel(
-            'go_memstats_heap_inuse_bytes{' + host_pod_matcher + '}',
-            '{{pod}}',
-          )
-        )
-        .addPanel(
-          g.panel('Goroutines') +
-          g.queryPanel(
-            'go_goroutines{' + host_pod_matcher + '}',
-            '{{pod}}',
-          )
-        )
-        .addPanel(
-          g.panel('CPU') +
-          g.queryPanel(
-            'rate(container_cpu_usage_seconds_total{' + host_pod_matcher + '}[$__rate_interval])',
-            '{{pod}}',
-          )
-        )
-        .addPanel(
-          g.panel('WSS') +
-          g.queryPanel(
-            'container_memory_working_set_bytes{' + host_pod_matcher + '}',
-            '{{pod}}',
-          )
-        )
-        .addPanel(
-          g.panel('Bad Words') +
-          g.queryPanel(
-            'rate(promtail_custom_bad_words_total{' + job_instance_matcher + ', cluster=~"$cluster", exported_namespace=~"$namespace", exported_job=~"$job"}[$__rate_interval])',
-            '{{job}}',
-          )
-        )
+        row.new('General')
+        .addPanel(garbageCollectionSeconds)
+        .addPanel(goHeap)
+        .addPanel(goRoutines)
+        .addPanel(cpuUsage)
       )
       .addRow(
-        g.row('Network')
-        .addPanel(
-          g.panel('RX by Pod') +
-          g.queryPanel(
-            'sum by (pod) (rate(container_network_receive_bytes_total{' + job_instance_matcher + ', cluster=~"$cluster", namespace=~"$namespace", pod=~"$pod"}[$__rate_interval]))',
-            '{{pod}}',
-          )
-        )
-        .addPanel(
-          g.panel('TX by Pod') +
-          g.queryPanel(
-            'sum by (pod) (rate(container_network_transmit_bytes_total{' + job_instance_matcher + ', cluster=~"$cluster", namespace=~"$namespace", pod=~"$pod"}[$__rate_interval]))',
-            '{{pod}}',
-          )
-        )
+        row.new('Network')
+        .addPanel(TCPConnections)
       )
       .addRow(
-        g.row('Prometheus Read')
-        .addPanel(
-          g.panel('Bytes/Series/Pod') +
-          { yaxes: g.yaxes('decbytes') } +
-          g.queryPanel(
-            '
-              (sum by (pod) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_pod_matcher + '}[$__rate_interval])))
-              /
-              (sum by (pod) (agent_wal_storage_active_series{' + host_pod_matcher + '}))
-            ',
-            '{{pod}}',
-          )
-        )
-        .addPanel(
-          g.panel('Bytes/Series') +
-          { yaxes: g.yaxes('decbytes') } +
-          g.queryPanel(
-            '
-              (sum by (container) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_pod_matcher + '}[$__rate_interval])))
-              /
-              (sum by (container) (agent_wal_storage_active_series{' + host_pod_matcher + '}))
-            ',
-            '{{container}}',
-          )
-        )
-        .addPanel(
-          g.panel('Series/Pod') +
-          g.queryPanel(
-            'sum by (pod) (agent_wal_storage_active_series{' + host_pod_matcher + '})',
-            '{{pod}}',
-          )
-        )
-        .addPanel(
-          g.panel('Series/Config') +
-          g.queryPanel(
-            'sum by (instance_group_name) (agent_wal_storage_active_series{' + host_pod_matcher + '})',
-            '{{instance_group_name}}',
-          )
-        )
-        .addPanel(
-          g.panel('Series') +
-          g.queryPanel(
-            'sum by (container) (agent_wal_storage_active_series{' + host_pod_matcher + '})',
-            '{{container}}',
-          )
-        )
-      ),
+        row.new('Prometheus Read')
+        .addPanel(bytesSeriesPod)
+        .addPanel(bytesSeries)
+        .addPanel(seriesPod)
+        .addPanel(seriesConfig)
+        .addPanel(seriesTotal)
+      )
   },
 }

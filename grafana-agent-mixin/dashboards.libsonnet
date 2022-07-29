@@ -1,5 +1,6 @@
 local g = import 'grafana-builder/grafana.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
+local utils = import './utils.libsonnet';
 
 local dashboard = grafana.dashboard;
 local row = grafana.row;
@@ -10,8 +11,7 @@ local tablePanel = grafana.tablePanel;
 local template = grafana.template;
 local timeSeries = grafana.timeSeries;
 
-local job_instance_matcher = 'job=~"$job", instance=~"$instance"';
-local host_matcher = job_instance_matcher + ', cluster=~"$cluster", namespace=~"$namespace", container=~"$container"';
+local host_matcher = 'job=~"$job", instance=~"$instance"';
 
 // Templates
 local ds_template = {
@@ -21,7 +21,7 @@ local ds_template = {
   },
   hide: 0,
   label: 'Data Source',
-  name: 'datasource',
+  name: 'prometheus_datasource',
   options: [],
   query: 'prometheus',
   refresh: 1,
@@ -31,88 +31,138 @@ local ds_template = {
 
 local job_template = grafana.template.new(
   'job',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(agent_build_info, job)',
   label='job',
   refresh='load',
   multi=true,
   includeAll=true,
-  allValues='.+',
   sort=1,
 );
 
 local instance_template = grafana.template.new(
   'instance',
-  '$datasource',
+  '$prometheus_datasource',
   'label_values(agent_build_info{job=~"$job"}, instance)',
   label='instance',
   refresh='load',
   multi=true,
   includeAll=true,
-  allValues='.+',
-  sort=1,
-);
-
-local cluster_template = grafana.template.new(
-  'cluster',
-  '$datasource',
-  'label_values(agent_build_info{job=~"$job"}, cluster)',
-  label='cluster',
-  refresh='load',
-  multi=true,
-  includeAll=true,
-  allValues='.+',
-  sort=1,
-);
-
-local namespace_template = grafana.template.new(
-  'namespace',
-  '$datasource',
-  'label_values(agent_build_info{job=~"$job"}, namespace)',
-  label='namespace',
-  refresh='load',
-  multi=true,
-  includeAll=true,
-  allValues='.+',
-  sort=1,
-);
-
-local container_template = grafana.template.new(
-  'container',
-  '$datasource',
-  'label_values(agent_build_info{job=~"$job"}, container)',
-  label='container',
-  refresh='load',
-  multi=true,
-  includeAll=true,
-  allValues='.+',
-  sort=1,
-);
-
-local pod_template = grafana.template.new(
-  'pod',
-  '$datasource',
-  'label_values(agent_build_info{job=~"$job"}, pod)',
-  label='pod',
-  refresh='load',
-  multi=true,
-  includeAll=true,
-  allValues='.+',
   sort=1,
 );
 
 {
   grafanaDashboards+:: {
     'agent.json':
+      local agentStats = 
+        tablePanel.new(
+          'Running Instances',
+          description='General statistics of running grafana agent instances.',
+          datasource='$prometheus_datasource',
+          span=12,
+          styles=[
+            { alias: 'Container', pattern: 'container' },
+            { alias: 'Instance', pattern: 'instance' },
+            { alias: 'Pod', pattern: 'pod' },
+            { alias: 'Version', pattern: 'version' },
+            { alias: 'Uptime', pattern: 'Value #B', type: 'number', unit: 's' },
+          ],
+        )
+        .addTarget(prometheus.target(
+          'count by (instance, version) (agent_build_info{' + host_matcher + '})',
+          format='table',
+          instant=true,
+        ))
+        .addTarget(prometheus.target(
+          'max by (instance) (time() - process_start_time_seconds{' + host_matcher + '})',
+          format='table',
+          instant=true,
+        ))
+        .hideColumn('Time')
+        .hideColumn('Value #A');
+
+      local prometheusTargetSync =
+        graphPanel.new(
+          'Target Sync',
+          description='Actual interval to sync the scrape pool.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (instance, scrape_job) * 1e3', 
+          legendFormat='{{instance}}/{{scrape_job}}',
+        )) + 
+        utils.timeSeriesOverride(unit='s');
+      
+      local prometheusTargets =
+        graphPanel.new(
+          'Targets',
+          description='Discovered targets by prometheus service discovery.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'sum by (instance) (prometheus_sd_discovered_targets{' + host_matcher + '})',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
+
+      local averageScrapeIntervalDuration = 
+      graphPanel.new(
+          'Average Scrape Interval Duration',
+          description='Actual intervals between scrapes.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[$__rate_interval]) / rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[$__rate_interval]) * 1e3',
+          legendFormat='{{instance}} {{interval}} configured',
+        )) + 
+        utils.timeSeriesOverride(unit='s');
+
+      local scrapeFailures = 
+      graphPanel.new(
+          'Scrape failures',
+          description='Shows all scrape failures (sample limit exceeded, duplicate, out of bounds, out of order).',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'sum by (job) (rate(prometheus_target_scrapes_exceeded_sample_limit_total{' + host_matcher + '}[$__rate_interval]))',
+          legendFormat='exceeded sample limit: {{job}}'
+        ))
+        .addTarget(prometheus.target(
+          'sum by (job) (rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{' + host_matcher + '}[$__rate_interval]))',
+          legendFormat='duplicate timestamp: {{job}}'
+        ))
+        .addTarget(prometheus.target(
+          'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_bounds_total{' + host_matcher + '}[$__rate_interval]))',
+          legendFormat='out of bounds: {{job}}'
+        ))
+        .addTarget(prometheus.target(
+          'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_order_total{' + host_matcher + '}[$__rate_interval]))',
+          legendFormat='out of order: {{job}}'
+        )) + 
+        utils.timeSeriesOverride(unit='short');
+
+      local appendedSamples =
+        graphPanel.new(
+          'Appended Samples',
+          description='Total number of samples appended to the WAL.',
+          datasource='$prometheus_datasource',
+          span=6,
+        )
+        .addTarget(prometheus.target(
+          'sum by (job, instance_group_name) (rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval]))',
+          legendFormat='{{job}} {{instance_group_name}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
+      
+
       grafana.dashboard.new('Agent', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent')
       .addTemplates([
         ds_template,
         job_template,
         instance_template,
-        cluster_template,
-        namespace_template,
-        container_template,
-        pod_template,
       ])
       .addLink(grafana.link.dashboards(
         asDropdown=false,
@@ -122,67 +172,19 @@ local pod_template = grafana.template.new(
         tags=($._config.dashboardTags),
       ))
       .addRow(
-        g.row('Agent Stats')
-        .addPanel(
-          g.panel('Agent Stats') +
-          g.tablePanel([
-            'count by (pod, container, version) (agent_build_info{' + host_matcher + '})',
-            'max by (pod, container) (time() - process_start_time_seconds{' + host_matcher + '})',
-          ], {
-            pod: { alias: 'Pod' },
-            container: { alias: 'Container' },
-            version: { alias: 'Version' },
-            'Value #A': { alias: 'Count', type: 'hidden' },
-            'Value #B': { alias: 'Uptime' },
-            datasource:'$datasource',
-          })
-        )
+        row.new('Overview')
+        .addPanel(agentStats)
       )
       .addRow(
-        g.row('Prometheus Discovery')
-        .addPanel(
-          g.panel('Target Sync') +
-          g.queryPanel('sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (pod, scrape_job) * 1e3', '{{pod}}/{{scrape_job}}') +
-          { yaxes: g.yaxes('ms') }
-        )
-        .addPanel(
-          g.panel('Targets') +
-          g.queryPanel('sum by (pod) (prometheus_sd_discovered_targets{' + host_matcher + '})', '{{pod}}') +
-          g.stack
-        )
+        row.new('Prometheus Discovery')
+        .addPanel(prometheusTargetSync)
+        .addPanel(prometheusTargets)
       )
       .addRow(
-        g.row('Prometheus Retrieval')
-        .addPanel(
-          g.panel('Average Scrape Interval Duration') +
-          g.queryPanel('
-            rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[$__rate_interval])
-            /
-            rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[$__rate_interval])
-            * 1e3
-          ', '{{pod}} {{interval}} configured') +
-          { yaxes: g.yaxes('ms') }
-        )
-        .addPanel(
-          g.panel('Scrape failures') +
-          g.queryPanel([
-            'sum by (job) (rate(prometheus_target_scrapes_exceeded_sample_limit_total{' + host_matcher + '}[$__rate_interval]))',
-            'sum by (job) (rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{' + host_matcher + '}[$__rate_interval]))',
-            'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_bounds_total{' + host_matcher + '}[$__rate_interval]))',
-            'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_order_total{' + host_matcher + '}[$__rate_interval]))',
-          ], [
-            'exceeded sample limit: {{job}}',
-            'duplicate timestamp: {{job}}',
-            'out of bounds: {{job}}',
-            'out of order: {{job}}',
-          ]) +
-          g.stack
-        )
-        .addPanel(
-          g.panel('Appended Samples') +
-          g.queryPanel('sum by (job, instance_group_name) (rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval]))', '{{job}} {{instance_group_name}}') +
-          g.stack
-        )
+        row.new('Prometheus Retrieval')
+        .addPanel(averageScrapeIntervalDuration)
+        .addPanel(scrapeFailures)
+        .addPanel(appendedSamples)
       ),
 
     // Remote write specific dashboard.
@@ -190,7 +192,8 @@ local pod_template = grafana.template.new(
       local timestampComparison =
         graphPanel.new(
           'Highest Timestamp In vs. Highest Timestamp Sent',
-          datasource='$datasource',
+          description='Highest timestamp that has come into the remote storage via the Appender interface, in seconds since epoch.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
@@ -202,168 +205,197 @@ local pod_template = grafana.template.new(
               prometheus_remote_storage_queue_highest_sent_timestamp_seconds{' + host_matcher + '}
             )
           ',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        ))  + 
+        utils.timeSeriesOverride(unit='s');
 
       local remoteSendLatency =
         graphPanel.new(
-          'Latency [$__rate_interval]',
-          datasource='$datasource',
+          'Latency Over Rate Interval',
+          description='Rate of duration of send calls to the remote storage',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_sent_batch_duration_seconds_sum{' + host_matcher + '}[$__rate_interval]) / rate(prometheus_remote_storage_sent_batch_duration_seconds_count{' + host_matcher + '}[$__rate_interval])',
-          legendFormat='mean {{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
+          legendFormat='mean {{instance}}',
         ))
         .addTarget(prometheus.target(
           'histogram_quantile(0.99, rate(prometheus_remote_storage_sent_batch_duration_seconds_bucket{' + host_matcher + '}[$__rate_interval]))',
-          legendFormat='p99 {{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='p99 {{instance}}',
+        ))  + 
+        utils.timeSeriesOverride(unit='s');
 
       local samplesInRate =
         graphPanel.new(
-          'Rate in [$__rate_interval]',
-          datasource='$datasource',
+          'Samples In Rate Over Rate Interval',
+          description='Rate of total number of samples appended to the WAL.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval])',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        ))  + 
+        utils.timeSeriesOverride(unit='short');
 
       local samplesOutRate =
         graphPanel.new(
-          'Rate succeeded [$__rate_interval]',
-          datasource='$datasource',
+          'Samples Out Rate Over Rate Interval',
+          description='Rate of total number of samples sent to remote storage.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_succeeded_samples_total{' + host_matcher + '}[$__rate_interval]) or rate(prometheus_remote_storage_samples_total{' + host_matcher + '}[$__rate_interval])',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        ))  + 
+        utils.timeSeriesOverride(unit='short');
 
       local currentShards =
         graphPanel.new(
           'Current Shards',
-          datasource='$datasource',
+          description='The number of shards used for parallel sending to the remote storage.',
+          datasource='$prometheus_datasource',
           span=12,
           min_span=6,
         )
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shards{' + host_matcher + '}',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        ))  + 
+        utils.timeSeriesOverride(unit='short');
 
       local maxShards =
         graphPanel.new(
           'Max Shards',
-          datasource='$datasource',
+          description='The maximum number of shards that the queue is allowed to run.',
+          datasource='$prometheus_datasource',
           span=4,
         )
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shards_max{' + host_matcher + '}',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        ))  + 
+        utils.timeSeriesOverride(unit='short');
 
       local minShards =
         graphPanel.new(
           'Min Shards',
-          datasource='$datasource',
+          description='The minimum number of shards that the queue is allowed to run.',
+          datasource='$prometheus_datasource',
           span=4,
         )
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shards_min{' + host_matcher + '}',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local desiredShards =
         graphPanel.new(
           'Desired Shards',
-          datasource='$datasource',
+          description='The number of shards that the queues shard calculation wants to run based on the rate of samples in vs. samples out.',
+          datasource='$prometheus_datasource',
           span=4,
         )
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shards_desired{' + host_matcher + '}',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        ))  + 
+        utils.timeSeriesOverride(unit='short');
 
       local shardsCapacity =
         graphPanel.new(
           'Shard Capacity',
-          datasource='$datasource',
+          description='The capacity of each shard of the queue used for parallel sending to the remote storage.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shard_capacity{' + host_matcher + '}',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local pendingSamples =
         graphPanel.new(
           'Pending Samples',
-          datasource='$datasource',
+          description='The number of samples pending in the queues shards to be sent to the remote storage.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'prometheus_remote_storage_samples_pending{' + host_matcher + '}',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local queueSegment =
         graphPanel.new(
           'Remote Write Current Segment',
-          datasource='$datasource',
+          description='Current segment the WAL watcher is reading records from.',
+          datasource='$prometheus_datasource',
           span=6,
           formatY1='none',
         )
         .addTarget(prometheus.target(
           'prometheus_wal_watcher_current_segment{' + host_matcher + '}',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local droppedSamples =
         graphPanel.new(
           'Dropped Samples',
-          datasource='$datasource',
+          description='Total number of samples which were dropped after being read from the WAL before being sent via remote write, either via relabelling or unintentionally because of an unknown reference ID.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_samples_dropped_total{' + host_matcher + '}[$__rate_interval])',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local failedSamples =
         graphPanel.new(
           'Failed Samples',
-          datasource='$datasource',
+          description='Total number of samples which failed on send to remote storage, non-recoverable errors.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_samples_failed_total{' + host_matcher + '}[$__rate_interval])',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local retriedSamples =
         graphPanel.new(
           'Retried Samples',
-          datasource='$datasource',
+          description='Total number of samples which failed on send to remote storage but were retried because the send error was recoverable.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_samples_retried_total{' + host_matcher + '}[$__rate_interval])',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local enqueueRetries =
         graphPanel.new(
           'Enqueue Retries',
-          datasource='$datasource',
+          description='Total number of times enqueue has failed because a shards queue was full.',
+          datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_enqueue_retries_total{' + host_matcher + '}[$__rate_interval])',
-          legendFormat='{{cluster}}:{{pod}}-{{instance_group_name}}-{{url}}',
-        ));
+          legendFormat='{{instance}}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       grafana.dashboard.new('Agent Prometheus Remote Write', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-prom-rw')
       .addLink(grafana.link.dashboards(
@@ -377,10 +409,6 @@ local pod_template = grafana.template.new(
         ds_template,
         job_template,
         instance_template,
-        cluster_template,
-        namespace_template,
-        container_template,
-        pod_template,
       ])
       .addRow(
         row.new('Timestamps')
@@ -420,140 +448,136 @@ local pod_template = grafana.template.new(
       local acceptedSpans =
         graphPanel.new(
           'Accepted spans',
-          datasource='$datasource',
+          description='Number of spans successfully pushed into the pipeline.',
+          datasource='$prometheus_datasource',
           interval='1m',
           span=3,
           legend_show=false,
           fill=0,
         )
         .addTarget(prometheus.target(
-          '
-            rate(traces_receiver_accepted_spans{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])
-          ',
-          legendFormat='{{ pod }} - {{ receiver }}/{{ transport }}',
-        ));
+          'rate(traces_receiver_accepted_spans{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])',
+          legendFormat='{{ instance }} - {{ receiver }}/{{ transport }}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local refusedSpans =
         graphPanel.new(
           'Refused spans',
-          datasource='$datasource',
+          description='Number of spans that could not be pushed into the pipeline.',
+          datasource='$prometheus_datasource',
           interval='1m',
           span=3,
           legend_show=false,
           fill=0,
         )
         .addTarget(prometheus.target(
-          '
-            rate(traces_receiver_refused_spans{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])
-          ',
-          legendFormat='{{ pod }} - {{ receiver }}/{{ transport }}',
-        ));
+          'rate(traces_receiver_refused_spans{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])',
+          legendFormat='{{ instance }} - {{ receiver }}/{{ transport }}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local sentSpans =
         graphPanel.new(
           'Exported spans',
-          datasource='$datasource',
+          description='Number of spans successfully sent to destination.',
+          datasource='$prometheus_datasource',
           interval='1m',
           span=3,
           legend_show=false,
           fill=0,
         )
         .addTarget(prometheus.target(
-          '
-            rate(traces_exporter_sent_spans{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])
-          ',
-          legendFormat='{{ pod }} - {{ exporter }}',
-        ));
+          'rate(traces_exporter_sent_spans{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])',
+          legendFormat='{{ instance }} - {{ exporter }}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local exportedFailedSpans =
         graphPanel.new(
           'Exported failed spans',
-          datasource='$datasource',
+          description='Number of spans failed to send.',
+          datasource='$prometheus_datasource',
           interval='1m',
           span=3,
           legend_show=false,
           fill=0,
         )
         .addTarget(prometheus.target(
-          '
-            rate(traces_exporter_send_failed_spans{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])
-          ',
-          legendFormat='{{ pod }} - {{ exporter }}',
-        ));
+          'rate(traces_exporter_send_failed_spans{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])',
+          legendFormat='{{ instance }} - {{ exporter }}',
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local receivedSpans(receiverFilter, width) =
         graphPanel.new(
           'Received spans',
-          datasource='$datasource',
+          description='Number of spans successfully pushed into the pipeline.',
+          datasource='$prometheus_datasource',
           interval='1m',
           span=width,
           fill=1,
         )
         .addTarget(prometheus.target(
-          '
-            sum(rate(traces_receiver_accepted_spans{' + host_matcher + ',%s}[$__rate_interval]))
-          ' % receiverFilter,
+          'sum(rate(traces_receiver_accepted_spans{' + host_matcher + ',%s}[$__rate_interval]))' % receiverFilter,
           legendFormat='Accepted',
         ))
         .addTarget(prometheus.target(
-          '
-            sum(rate(traces_receiver_refused_spans{' + host_matcher + ',%s}[$__rate_interval]))
-          ' % receiverFilter,
+          'sum(rate(traces_receiver_refused_spans{' + host_matcher + ',%s}[$__rate_interval])) ' % receiverFilter,
           legendFormat='Refused',
-        ));
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local exportedSpans(exporterFilter, width) =
         graphPanel.new(
           'Exported spans',
-          datasource='$datasource',
+          description='Number of spans successfully sent to destination.',
+          datasource='$prometheus_datasource',
           interval='1m',
           span=width,
           fill=1,
         )
         .addTarget(prometheus.target(
-          '
-            sum(rate(traces_exporter_sent_spans{' + host_matcher + ',%s}[$__rate_interval]))
-          ' % exporterFilter,
+          'sum(rate(traces_exporter_sent_spans{' + host_matcher + ',%s}[$__rate_interval]))' % exporterFilter,
           legendFormat='Sent',
         ))
         .addTarget(prometheus.target(
-          '
-            sum(rate(traces_exporter_send_failed_spans{' + host_matcher + ',%s}[$__rate_interval]))
-          ' % exporterFilter,
+          'sum(rate(traces_exporter_send_failed_spans{' + host_matcher + ',%s}[$__rate_interval]))' % exporterFilter,
           legendFormat='Send failed',
-        ));
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local loadBalancedSpans =
         graphPanel.new(
           'Load-balanced spans',
-          datasource='$datasource',
+          description='Number of load balanced spans.',
+          datasource='$prometheus_datasource',
           interval='1m',
           span=3,
           fill=1,
           stack=true,
         )
         .addTarget(prometheus.target(
-          '
-            rate(traces_loadbalancer_backend_outcome{' + job_instance_matcher + ', cluster=~"$cluster",namespace=~"$namespace",success="true",container=~"$container",pod=~"$pod"}[$__rate_interval])
-          ',
+          'rate(traces_loadbalancer_backend_outcome{' + host_matcher + ', cluster=~"$cluster",namespace=~"$namespace",success="true",container=~"$container",pod=~"$pod"}[$__rate_interval])',
           legendFormat='{{ pod }}',
-        ));
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       local peersNum =
         graphPanel.new(
           'Number of peers',
-          datasource='$datasource',
+          description='Number of tracing peers.',
+          datasource='$prometheus_datasource',
           interval='1m',
           span=3,
           legend_show=false,
           fill=0,
         )
         .addTarget(prometheus.target(
-          '
-            traces_loadbalancer_num_backends{' + host_matcher + '}
-          ',
+          'traces_loadbalancer_num_backends{' + host_matcher + '}',
           legendFormat='{{ pod }}',
-        ));
+        )) + 
+        utils.timeSeriesOverride(unit='short');
 
       dashboard.new('Agent Tracing Pipeline', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-tracing-pl')
       .addLink(grafana.link.dashboards(
@@ -567,10 +591,6 @@ local pod_template = grafana.template.new(
         ds_template,
         job_template,
         instance_template,
-        cluster_template,
-        namespace_template,
-        container_template,
-        pod_template,
       ])
       .addRow(
         row.new('Write / Read')
