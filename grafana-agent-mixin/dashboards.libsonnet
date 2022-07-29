@@ -1,6 +1,6 @@
+local utils = import './utils.libsonnet';
 local g = import 'grafana-builder/grafana.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
-local utils = import './utils.libsonnet';
 
 local dashboard = grafana.dashboard;
 local row = grafana.row;
@@ -54,7 +54,7 @@ local instance_template = grafana.template.new(
 {
   grafanaDashboards+:: {
     'agent.json':
-      local agentStats = 
+      local agentStats =
         tablePanel.new(
           'Running Instances',
           description='General statistics of running grafana agent instances.',
@@ -89,11 +89,11 @@ local instance_template = grafana.template.new(
           span=6,
         )
         .addTarget(prometheus.target(
-          'sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (instance, scrape_job) * 1e3', 
+          'sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (instance, scrape_job) * 1e3',
           legendFormat='{{instance}}/{{scrape_job}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='s');
-      
+
       local prometheusTargets =
         graphPanel.new(
           'Targets',
@@ -103,11 +103,11 @@ local instance_template = grafana.template.new(
         )
         .addTarget(prometheus.target(
           'sum by (instance) (prometheus_sd_discovered_targets{' + host_matcher + '})',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
-      local averageScrapeIntervalDuration = 
-      graphPanel.new(
+      local averageScrapeIntervalDuration =
+        graphPanel.new(
           'Average Scrape Interval Duration',
           description='Actual intervals between scrapes.',
           datasource='$prometheus_datasource',
@@ -116,11 +116,11 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[$__rate_interval]) / rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[$__rate_interval]) * 1e3',
           legendFormat='{{instance}} {{interval}} configured',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='s');
 
-      local scrapeFailures = 
-      graphPanel.new(
+      local scrapeFailures =
+        graphPanel.new(
           'Scrape failures',
           description='Shows all scrape failures (sample limit exceeded, duplicate, out of bounds, out of order).',
           datasource='$prometheus_datasource',
@@ -141,7 +141,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_order_total{' + host_matcher + '}[$__rate_interval]))',
           legendFormat='out of order: {{job}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local appendedSamples =
@@ -154,9 +154,9 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'sum by (job, instance_group_name) (rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval]))',
           legendFormat='{{job}} {{instance_group_name}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
-      
+
 
       grafana.dashboard.new('Agent', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent')
       .addTemplates([
@@ -197,16 +197,9 @@ local instance_template = grafana.template.new(
           span=6,
         )
         .addTarget(prometheus.target(
-          '
-            (
-              prometheus_remote_storage_highest_timestamp_in_seconds{' + host_matcher + '}
-              -
-              ignoring(url, remote_name) group_right(pod)
-              prometheus_remote_storage_queue_highest_sent_timestamp_seconds{' + host_matcher + '}
-            )
-          ',
+          '\n            (\n              prometheus_remote_storage_highest_timestamp_in_seconds{' + host_matcher + '}\n              -\n              ignoring(url, remote_name) group_right(pod)\n              prometheus_remote_storage_queue_highest_sent_timestamp_seconds{' + host_matcher + '}\n            )\n          ',
           legendFormat='{{instance}}',
-        ))  + 
+        )) +
         utils.timeSeriesOverride(unit='s');
 
       local remoteSendLatency =
@@ -223,7 +216,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'histogram_quantile(0.99, rate(prometheus_remote_storage_sent_batch_duration_seconds_bucket{' + host_matcher + '}[$__rate_interval]))',
           legendFormat='p99 {{instance}}',
-        ))  + 
+        )) +
         utils.timeSeriesOverride(unit='s');
 
       local samplesInRate =
@@ -236,7 +229,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}',
-        ))  + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local samplesOutRate =
@@ -249,7 +242,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_succeeded_samples_total{' + host_matcher + '}[$__rate_interval]) or rate(prometheus_remote_storage_samples_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}',
-        ))  + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local currentShards =
@@ -263,7 +256,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shards{' + host_matcher + '}',
           legendFormat='{{instance}}',
-        ))  + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local maxShards =
@@ -276,7 +269,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shards_max{' + host_matcher + '}',
           legendFormat='{{instance}}',
-        ))  + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local minShards =
@@ -289,7 +282,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shards_min{' + host_matcher + '}',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local desiredShards =
@@ -302,7 +295,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shards_desired{' + host_matcher + '}',
           legendFormat='{{instance}}',
-        ))  + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local shardsCapacity =
@@ -315,7 +308,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'prometheus_remote_storage_shard_capacity{' + host_matcher + '}',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local pendingSamples =
@@ -328,7 +321,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'prometheus_remote_storage_samples_pending{' + host_matcher + '}',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local queueSegment =
@@ -342,7 +335,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'prometheus_wal_watcher_current_segment{' + host_matcher + '}',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local droppedSamples =
@@ -355,7 +348,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_samples_dropped_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local failedSamples =
@@ -368,7 +361,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_samples_failed_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local retriedSamples =
@@ -381,7 +374,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_samples_retried_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local enqueueRetries =
@@ -394,7 +387,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(prometheus_remote_storage_enqueue_retries_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       grafana.dashboard.new('Agent Prometheus Remote Write', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-prom-rw')
@@ -458,7 +451,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(traces_receiver_accepted_spans{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])',
           legendFormat='{{ instance }} - {{ receiver }}/{{ transport }}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local refusedSpans =
@@ -474,7 +467,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(traces_receiver_refused_spans{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])',
           legendFormat='{{ instance }} - {{ receiver }}/{{ transport }}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local sentSpans =
@@ -490,7 +483,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(traces_exporter_sent_spans{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])',
           legendFormat='{{ instance }} - {{ exporter }}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local exportedFailedSpans =
@@ -506,7 +499,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(traces_exporter_send_failed_spans{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])',
           legendFormat='{{ instance }} - {{ exporter }}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local receivedSpans(receiverFilter, width) =
@@ -525,7 +518,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'sum(rate(traces_receiver_refused_spans{' + host_matcher + ',%s}[$__rate_interval])) ' % receiverFilter,
           legendFormat='Refused',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local exportedSpans(exporterFilter, width) =
@@ -544,7 +537,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'sum(rate(traces_exporter_send_failed_spans{' + host_matcher + ',%s}[$__rate_interval]))' % exporterFilter,
           legendFormat='Send failed',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local loadBalancedSpans =
@@ -560,7 +553,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(traces_loadbalancer_backend_outcome{' + host_matcher + ', cluster=~"$cluster",namespace=~"$namespace",success="true",container=~"$container",pod=~"$pod"}[$__rate_interval])',
           legendFormat='{{ pod }}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       local peersNum =
@@ -576,7 +569,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'traces_loadbalancer_num_backends{' + host_matcher + '}',
           legendFormat='{{ pod }}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       dashboard.new('Agent Tracing Pipeline', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-tracing-pl')

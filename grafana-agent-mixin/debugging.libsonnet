@@ -1,6 +1,6 @@
+local utils = import './utils.libsonnet';
 local g = import 'grafana-builder/grafana.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
-local utils = import './utils.libsonnet';
 
 local dashboard = grafana.dashboard;
 local prometheus = grafana.prometheus;
@@ -60,10 +60,11 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(go_gc_duration_seconds_count{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='s');
 
-      local goHeap = graphPanel.new(
+      local goHeap =
+        graphPanel.new(
           'Go Heap',
           description='Number of heap bytes that are in use.',
           datasource='$prometheus_datasource',
@@ -72,10 +73,11 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'go_memstats_heap_inuse_bytes{' + host_matcher + '}',
           legendFormat='{{instance}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='decbytes');
 
-      local goRoutines = graphPanel.new(
+      local goRoutines =
+        graphPanel.new(
           'Go Routines',
           description='Number of goroutines that currently exist.',
           datasource='$prometheus_datasource',
@@ -84,10 +86,11 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'go_goroutines{' + host_matcher + '}',
           legendFormat='{{instance}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
-      local cpuUsage = graphPanel.new(
+      local cpuUsage =
+        graphPanel.new(
           'CPU Usage',
           description='Total user and system CPU time spent in seconds.',
           datasource='$prometheus_datasource',
@@ -96,10 +99,11 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'rate(process_cpu_seconds_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}',
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='percent');
 
-      local TCPConnections = graphPanel.new(
+      local TCPConnections =
+        graphPanel.new(
           'TCP Connections',
           description='Number of accepted TCP connections.',
           datasource='$prometheus_datasource',
@@ -108,42 +112,37 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'agent_tcp_connections{' + host_matcher + '}',
           legendFormat='{{protocol}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
-      local bytesSeriesPod = graphPanel.new(
+      local bytesSeriesPod =
+        graphPanel.new(
           'Bytes/Series/Instance',
           description='Average bytes over number of active series being tracked by the WAL storage grouped by instance.',
           datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
-          '
-            (sum by (instance) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_matcher + '}[$__rate_interval])))
-            /
-            (sum by (instance) (agent_wal_storage_active_series{' + host_matcher + '}))
-          ',
+          '\n            (sum by (instance) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_matcher + '}[$__rate_interval])))\n            /\n            (sum by (instance) (agent_wal_storage_active_series{' + host_matcher + '}))\n          ',
           legendFormat='{{instance}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='decbytes');
 
-      local bytesSeries = graphPanel.new(
+      local bytesSeries =
+        graphPanel.new(
           'Bytes/Series/Job',
           description='Average bytes over number of active series being tracked by the WAL storage by Job.',
           datasource='$prometheus_datasource',
           span=6,
         )
         .addTarget(prometheus.target(
-          '
-            (sum by (job) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_matcher + '}[$__rate_interval])))
-            /
-            (sum by (job) (agent_wal_storage_active_series{' + host_matcher + '}))
-          ',
+          '\n            (sum by (job) (avg_over_time(go_memstats_heap_inuse_bytes{' + host_matcher + '}[$__rate_interval])))\n            /\n            (sum by (job) (agent_wal_storage_active_series{' + host_matcher + '}))\n          ',
           legendFormat='{{job}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='decbytes');
 
-      local seriesPod = graphPanel.new(
+      local seriesPod =
+        graphPanel.new(
           'Series/Instance',
           description='Number of active series being tracked by the WAL storage grouped by instance.',
           datasource='$prometheus_datasource',
@@ -152,10 +151,11 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'sum by (instance) (agent_wal_storage_active_series{' + host_matcher + '})',
           legendFormat='{{instance}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
-      local seriesConfig = graphPanel.new(
+      local seriesConfig =
+        graphPanel.new(
           'Series/Config/Instance',
           description='Number of active series being tracked by the WAL storage grouped by instance.',
           datasource='$prometheus_datasource',
@@ -164,10 +164,11 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'sum by (instance) (agent_wal_storage_active_series{' + host_matcher + '})',
           legendFormat='{{instance}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
-      local seriesTotal = graphPanel.new(
+      local seriesTotal =
+        graphPanel.new(
           'Series/Config/Job',
           description='Number of active series being tracked by the WAL storage grouped by job.',
           datasource='$prometheus_datasource',
@@ -176,7 +177,7 @@ local instance_template = grafana.template.new(
         .addTarget(prometheus.target(
           'sum by (job) (agent_wal_storage_active_series{' + host_matcher + '})',
           legendFormat='{{job}}'
-        )) + 
+        )) +
         utils.timeSeriesOverride(unit='short');
 
       dashboard.new('Agent Operational', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-opr')
@@ -210,6 +211,6 @@ local instance_template = grafana.template.new(
         .addPanel(seriesPod)
         .addPanel(seriesConfig)
         .addPanel(seriesTotal)
-      )
+      ),
   },
 }
