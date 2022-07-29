@@ -53,7 +53,7 @@ local instance_template = grafana.template.new(
 
 {
   grafanaDashboards+:: {
-    'agent.json':
+    'agent-overview.json':
       local agentStats =
         tablePanel.new(
           'Running Instances',
@@ -158,7 +158,7 @@ local instance_template = grafana.template.new(
         utils.timeSeriesOverride(unit='short');
 
 
-      grafana.dashboard.new('Agent', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent')
+      grafana.dashboard.new('Agent Overview', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent')
       .addTemplates([
         ds_template,
         job_template,
