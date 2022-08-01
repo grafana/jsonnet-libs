@@ -13,7 +13,7 @@
       rows+: [row { panels: panels }],
     },
 
-    addTemplate(name, metric_name, label_name, hide=0, allValue=null):: self {
+    addTemplate(name, metric_name, label_name, hide=0, allValue=null, includeAll=false):: self {
       templating+: {
         list+: [{
           allValue: allValue,
@@ -23,7 +23,7 @@
           },
           datasource: '$datasource',
           hide: hide,
-          includeAll: false,
+          includeAll: includeAll,
           label: name,
           multi: false,
           name: name,
