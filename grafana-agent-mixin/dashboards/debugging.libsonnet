@@ -1,4 +1,4 @@
-local utils = import './utils.libsonnet';
+local utils = import '../lib/utils.libsonnet';
 local g = import 'grafana-builder/grafana.libsonnet';
 local grafana = import 'grafonnet/grafana.libsonnet';
 
