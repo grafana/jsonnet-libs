@@ -223,7 +223,7 @@ local log_full_panel =
 
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Docker Dashboards',
+        title='Grafana Agent Dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
