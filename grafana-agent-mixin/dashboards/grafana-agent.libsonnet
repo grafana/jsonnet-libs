@@ -53,7 +53,7 @@ local instance_template = grafana.template.new(
 
 {
   grafanaDashboards+:: {
-    'agent-overview.json':
+    'grafana-agent-overview.json':
       local agentStats =
         tablePanel.new(
           'Running Instances',
@@ -158,7 +158,7 @@ local instance_template = grafana.template.new(
         utils.timeSeriesOverride(unit='short');
 
 
-      grafana.dashboard.new('Agent Overview', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent')
+      grafana.dashboard.new('Grafana Agent Overview', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent')
       .addTemplates([
         ds_template,
         job_template,
@@ -166,7 +166,7 @@ local instance_template = grafana.template.new(
       ])
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Agent Dashboards',
+        title='Grafana Agent Dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
@@ -188,7 +188,7 @@ local instance_template = grafana.template.new(
       ),
 
     // Remote write specific dashboard.
-    'agent-remote-write.json':
+    'grafana-agent-remote-write.json':
       local timestampComparison =
         graphPanel.new(
           'Highest Timestamp In vs. Highest Timestamp Sent',
@@ -390,10 +390,10 @@ local instance_template = grafana.template.new(
         )) +
         utils.timeSeriesOverride(unit='short');
 
-      grafana.dashboard.new('Agent Prometheus Remote Write', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-prom-rw')
+      grafana.dashboard.new('Grafana Agent Remote Write', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-prom-rw')
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Agent Dashboards',
+        title='Grafana Agent Dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
@@ -437,7 +437,7 @@ local instance_template = grafana.template.new(
         .addPanel(enqueueRetries)
       ),
 
-    'agent-tracing-pipeline.json':
+    'grafana-agent-tracing-pipeline.json':
       local acceptedSpans =
         graphPanel.new(
           'Accepted spans',
@@ -572,10 +572,10 @@ local instance_template = grafana.template.new(
         )) +
         utils.timeSeriesOverride(unit='short');
 
-      dashboard.new('Agent Tracing Pipeline', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-tracing-pl')
+      dashboard.new('Grafana Agent Tracing Pipeline', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-tracing-pl')
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Agent Dashboards',
+        title='Grafana Agent Dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),

@@ -49,7 +49,7 @@ local instance_template = grafana.template.new(
 
 {
   grafanaDashboards+:: {
-    'agent-operational.json':
+    'grafana-agent-operational.json':
       local garbageCollectionSeconds =
         graphPanel.new(
           'Garbage Collection Seconds',
@@ -180,7 +180,7 @@ local instance_template = grafana.template.new(
         )) +
         utils.timeSeriesOverride(unit='short');
 
-      dashboard.new('Agent Operational', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-opr')
+      dashboard.new('Grafana Agent Operational', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent-opr')
       .addTemplates([
         ds_template,
         job_template,
@@ -188,7 +188,7 @@ local instance_template = grafana.template.new(
       ])
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Agent Dashboards',
+        title='Grafana Agent Dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),

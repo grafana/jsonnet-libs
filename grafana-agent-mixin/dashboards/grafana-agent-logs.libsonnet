@@ -203,15 +203,15 @@ local log_full_panel =
 // Manifested stuff starts here
 {
   grafanaDashboards+:: {
-    'agent-logs.json':
+    'grafana-agent-logs.json':
       grafana.dashboard.new(
-        'Agent Logs',
+        'Grafana Agent Logs',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,
-        uid='integration-agent-logs'
+        uid='integration-grafana-agent-logs'
       )
 
       .addTemplates([
