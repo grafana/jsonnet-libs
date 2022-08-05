@@ -2,16 +2,17 @@ local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local custom_barchart_grafonnet = import '../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
 
-local host_matcher = 'job=~"$job", instance=~"$instance"';
+local host_matcher = 'job=~"$job", instance=~"$instance", unit=~"grafana-agent.service"';
 
 local queries = {
   total_log_lines: 'sum(count_over_time({' + host_matcher + '}[$__interval]))',
-  total_log_warnings: 'sum(count_over_time({' + host_matcher + '} |= "Warning" [$__interval]))',
-  total_log_errors: 'sum(count_over_time({' + host_matcher + '} |= "Error" [$__interval]))',
-  error_percentage: 'sum( count_over_time({' + host_matcher + '} |= "Error" [$__interval]) ) / sum( count_over_time({' + host_matcher + '} [$__interval]) )',
+  total_log_warnings: 'sum(count_over_time({' + host_matcher + ', level="warn"} [$__interval]))',
+  total_log_errors: 'sum(count_over_time({' + host_matcher + ', level="error"} [$__interval]))',
+  error_percentage: 'sum( count_over_time({' + host_matcher + ', level="error"} [$__interval]) ) / sum( count_over_time({' + host_matcher + '} [$__interval]) )',
   total_bytes: 'sum(bytes_over_time({' + host_matcher + '} [$__interval]))',
-  error_log_lines: '{' + host_matcher + '} |= "Error"',
-  warning_log_lines: '{' + host_matcher + '} |= "Warning"',
+  info_log_lines: '{' + host_matcher + ', level="info"}',
+  error_log_lines: '{' + host_matcher + ', level="error"}',
+  warning_log_lines: '{' + host_matcher + ', level="warn"}',
   log_full_lines: '{' + host_matcher + '}',
 };
 
@@ -158,6 +159,15 @@ local historical_logs_errors_warnings_panel =
     q3=queries.total_log_errors,
   );
 
+local log_info_panel =
+  grafana.logPanel.new(
+    'Info',
+    datasource='$loki_datasource',
+  )
+  .addTarget(
+    grafana.loki.target(queries.info_log_lines)
+  );
+
 local log_errors_panel =
   grafana.logPanel.new(
     'Errors',
@@ -229,20 +239,27 @@ local log_full_panel =
       // Historical Logs / Warnings / Errors
       .addPanel(historical_logs_errors_warnings_panel, gridPos={ x: 0, y: 6, w: 24, h: 6 })
 
+      // Info Row
+      .addPanel(
+        grafana.row.new(title='Info', collapse=true)
+        // Info
+        .addPanel(log_info_panel, gridPos={ x: 0, y: 12, w: 24, h: 8 }),
+        gridPos={ x: 0, y: 12, w: 0, h: 0 }
+      )
+
       // Errors Row
       .addPanel(
         grafana.row.new(title='Errors', collapse=true)
         // Errors
-        .addPanel(log_errors_panel, gridPos={ x: 0, y: 12, w: 24, h: 8 }),
+        .addPanel(log_errors_panel, gridPos={ x: 0, y: 20, w: 24, h: 8 }),
         gridPos={ x: 0, y: 12, w: 0, h: 0 }
       )
-
 
       // Warnings Row
       .addPanel(
         grafana.row.new(title='Warnings', collapse=true)
         // Warnings
-        .addPanel(log_warnings_panel, gridPos={ x: 0, y: 20, w: 24, h: 8 }),
+        .addPanel(log_warnings_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
         gridPos={ x: 0, y: 20, w: 0, h: 0 }
       )
 
@@ -250,7 +267,7 @@ local log_full_panel =
       .addPanel(
         grafana.row.new(title='Complete Log File', collapse=true)
         // Full Log File
-        .addPanel(log_full_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
+        .addPanel(log_full_panel, gridPos={ x: 0, y: 36, w: 24, h: 8 }),
         gridPos={ x: 0, y: 28, w: 0, h: 0 }
       ),
   },
