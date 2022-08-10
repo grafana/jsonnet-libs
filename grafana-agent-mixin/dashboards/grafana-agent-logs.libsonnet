@@ -3,17 +3,18 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local custom_barchart_grafonnet = import '../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
 
 local host_matcher = 'job=~"$job", instance=~"$instance", unit=~"grafana-agent.service"';
+local text_filter = ' |= "$text_filter"';
 
 local queries = {
-  total_log_lines: 'sum(count_over_time({' + host_matcher + '}[$__interval]))',
-  total_log_warnings: 'sum(count_over_time({' + host_matcher + ', level="warn"} [$__interval]))',
-  total_log_errors: 'sum(count_over_time({' + host_matcher + ', level="error"} [$__interval]))',
-  error_percentage: 'sum( count_over_time({' + host_matcher + ', level="error"} [$__interval]) ) / sum( count_over_time({' + host_matcher + '} [$__interval]) )',
-  total_bytes: 'sum(bytes_over_time({' + host_matcher + '} [$__interval]))',
-  info_log_lines: '{' + host_matcher + ', level="info"}',
-  error_log_lines: '{' + host_matcher + ', level="error"}',
-  warning_log_lines: '{' + host_matcher + ', level="warn"}',
-  log_full_lines: '{' + host_matcher + '}',
+  total_log_lines: 'sum(count_over_time({' + host_matcher + '}' + text_filter + ' [$__interval]))',
+  total_log_warnings: 'sum(count_over_time({' + host_matcher + ', level="warn"}' + text_filter + ' [$__interval]))',
+  total_log_errors: 'sum(count_over_time({' + host_matcher + ', level="error"}' + text_filter + ' [$__interval]))',
+  error_percentage: 'sum( count_over_time({' + host_matcher + ', level="error"}' + text_filter + ' [$__interval]) ) / sum( count_over_time({' + host_matcher + '} [$__interval]) )',
+  total_bytes: 'sum(bytes_over_time({' + host_matcher + '}' + text_filter + ' [$__interval]))',
+  info_log_lines: '{' + host_matcher + ', level="info"}' + text_filter,
+  error_log_lines: '{' + host_matcher + ', level="error"}' + text_filter,
+  warning_log_lines: '{' + host_matcher + ', level="warn"}' + text_filter,
+  log_full_lines: '{' + host_matcher + '}' + text_filter,
 };
 
 local stackstyle = {
@@ -75,6 +76,11 @@ local instance_template = grafana.template.new(
   includeAll=true,
   sort=1,
   regex=''
+);
+
+local text_filter_template = grafana.template.text(
+  'text_filter',
+  label='Text Filter',
 );
 
 // Panels
@@ -219,6 +225,7 @@ local log_full_panel =
         loki_template,
         job_template,
         instance_template,
+        text_filter_template,
       ])
 
       .addLink(grafana.link.dashboards(
