@@ -13,5 +13,3 @@ exclusions:
     - panel: "Running Instances"
   target-promql-rule:
     reason: "Linter does not support LogQL queries."
-    entries:
-    - panel: "Bytes Used"
