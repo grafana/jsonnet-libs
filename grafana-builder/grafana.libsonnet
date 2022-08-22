@@ -259,8 +259,8 @@
         showLegend: true,
       },
       tooltip: {
-        mode: 'multi',
-        sort: 'desc',
+        mode: 'single',
+        sort: 'none',
       },
     },
     links: [],
