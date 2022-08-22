@@ -10,7 +10,6 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
       {
         expr: expr(selectorErr),
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: 'error',
         refId: 'A',
         step: 10,
@@ -18,7 +17,6 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
       {
         expr: expr(selectorTotal) + ' - ' + expr(selectorErr),
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: 'success',
         refId: 'B',
         step: 10,
