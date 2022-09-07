@@ -89,7 +89,7 @@ local instance_template = grafana.template.new(
           span=6,
         )
         .addTarget(prometheus.target(
-          'sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (instance, scrape_job) * 1e3',
+          'sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (instance, scrape_job)',
           legendFormat='{{instance}}/{{scrape_job}}',
         )) +
         utils.timeSeriesOverride(unit='s');
@@ -114,7 +114,7 @@ local instance_template = grafana.template.new(
           span=6,
         )
         .addTarget(prometheus.target(
-          'rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[$__rate_interval]) / rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[$__rate_interval]) * 1e3',
+          'rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[$__rate_interval]) / rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}} {{interval}} configured',
         )) +
         utils.timeSeriesOverride(unit='s');
