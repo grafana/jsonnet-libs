@@ -222,16 +222,16 @@ local hostname_template = grafana.template.new(
     .hideColumn('volume')
     .addThreshold('C:\\ free %', [
       {
-        color: 'dark-green',
-        value: 80,
+        color: 'dark-red',
+        value: null,
       },
       {
         color: 'dark-yellow',
         value: 20,
       },
       {
-        color: 'dark-red',
-        value: 0,
+        color: 'dark-green',
+        value: 80,
       },
     ], 'absolute'),
 
