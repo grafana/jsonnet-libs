@@ -7,16 +7,16 @@ local snmp_target_matcher = host_matcher + ', snmp_target=~"$snmp_target"';
 local interface_matcher = snmp_target_matcher + ', ifDescr=~"$interface"';
 
 local queries = {
-    up_time: 'sysUpTime{' + snmp_target_matcher + '} * 10',
-    max_out_current: 'max(irate(ifHCOutOctets{' + interface_matcher + '}[$__rate_interval]))',
-    max_in_current: 'max(irate(ifHCInOctets{' + interface_matcher + '}[$__rate_interval]))',
-    total_out: 'max(delta(ifHCOutOctets{' + interface_matcher + '}[$__range]))',
-    total_in: 'max(delta(ifHCInOctets{' + interface_matcher + '}[$__range]))',
-    oper_status: 'ifOperStatus{' + interface_matcher + '}',
-    interface_out: 'irate(ifHCOutOctets{' + interface_matcher + '}[$__rate_interval])',
-    interface_in: '-irate(ifHCInOctets{' + interface_matcher + '}[$__rate_interval])',
-    interface_out_errors: 'ifOutErrors{' + interface_matcher + '}',
-    interface_in_errors: 'ifInErrors{' + interface_matcher + '}',
+  up_time: 'sysUpTime{' + snmp_target_matcher + '} * 10',
+  max_out_current: 'max(irate(ifHCOutOctets{' + interface_matcher + '}[$__rate_interval]))',
+  max_in_current: 'max(irate(ifHCInOctets{' + interface_matcher + '}[$__rate_interval]))',
+  total_out: 'max(delta(ifHCOutOctets{' + interface_matcher + '}[$__range]))',
+  total_in: 'max(delta(ifHCInOctets{' + interface_matcher + '}[$__range]))',
+  oper_status: 'ifOperStatus{' + interface_matcher + '}',
+  interface_out: 'irate(ifHCOutOctets{' + interface_matcher + '}[$__rate_interval])',
+  interface_in: '-irate(ifHCInOctets{' + interface_matcher + '}[$__rate_interval])',
+  interface_out_errors: 'ifOutErrors{' + interface_matcher + '}',
+  interface_in_errors: 'ifInErrors{' + interface_matcher + '}',
 };
 
 // Templates
@@ -83,7 +83,9 @@ local interface_template = grafana.template.new(
 local integration_status_panel =
   grafana.statPanel.new(
     'Integration Status',
+    description='Shows the status of the integration.',
     datasource='$prometheus_datasource',
+    unit='string',
     colorMode='background',
     graphMode='none',
     noValue='No Data',
@@ -124,7 +126,9 @@ local integration_status_panel =
 local latest_metric_panel =
   grafana.statPanel.new(
     'Latest Metric Received',
+    description='Shows the latest timestamp at which the metrics were received for this integration.',
     datasource='$prometheus_datasource',
+    unit='dateTimeAsIso',
     colorMode='background',
     fields='Time',
     graphMode='none',
@@ -201,7 +205,9 @@ local total_in_panel =
 local oper_status_panel =
   grafana.statPanel.new(
     'Interface Operational Status',
+    description='Shows the current operational state of the interface.',
     datasource='$prometheus_datasource',
+    unit='string',
     colorMode='value',
     graphMode='none',
     noValue='Unknown',
@@ -214,7 +220,7 @@ local oper_status_panel =
     [
       {
         options: {
-          "1": {
+          '1': {
             color: 'green',
             index: 1,
             text: 'Up',
@@ -224,7 +230,7 @@ local oper_status_panel =
       },
       {
         options: {
-          "2": {
+          '2': {
             color: 'red',
             index: 1,
             text: 'Down',
@@ -234,7 +240,7 @@ local oper_status_panel =
       },
       {
         options: {
-          "3": {
+          '3': {
             color: 'blue',
             index: 1,
             text: 'Test',
@@ -244,7 +250,7 @@ local oper_status_panel =
       },
       {
         options: {
-          "4": {
+          '4': {
             color: 'white',
             index: 1,
             text: 'Unknown',
@@ -260,23 +266,23 @@ local oper_status_panel =
 
 local interface_traffic_panel =
   grafana.graphPanel.new(
-      'Per Interface Traffic (Current)',
-      description='Current traffic per interface (In values are represented as negative).',
-      datasource='$prometheus_datasource',
-      span=6,
-    )
-    .addTarget(
-      grafana.prometheus.target(queries.interface_out, legendFormat='{{ifDescr}} Out')
-    )
-    .addTarget(
-      grafana.prometheus.target(queries.interface_in, legendFormat='{{ifDescr}} In')
-    ) +
-    utils.timeSeriesOverride(
-      unit='decbytes',
-      fillOpacity=10,
-      lineInterpolation='smooth',
-      showPoints='never',
-    );
+    'Per Interface Traffic (Current)',
+    description='Current traffic per interface (In values are represented as negative).',
+    datasource='$prometheus_datasource',
+    span=6,
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.interface_out, legendFormat='{{ifDescr}} Out')
+  )
+  .addTarget(
+    grafana.prometheus.target(queries.interface_in, legendFormat='{{ifDescr}} In')
+  ) +
+  utils.timeSeriesOverride(
+    unit='decbytes',
+    fillOpacity=10,
+    lineInterpolation='smooth',
+    showPoints='never',
+  );
 
 local interface_out_errors_panel =
   grafana.statPanel.new(
@@ -312,11 +318,11 @@ local interface_info_panel =
     datasource='$prometheus_datasource',
     span=12,
     styles=[
-      { alias: 'Interface', pattern: 'ifDescr'},
-      { alias: 'Type', pattern: 'ifType'},
-      { alias: 'Speed', pattern: 'Value #B', type: 'number', unit: 'bps'},
-      { alias: 'MAC Address', pattern: 'ifPhysAddress'},
-      { alias: 'MTU', pattern: 'Value #D', type: 'number', unit: 'none'},
+      { alias: 'Interface', pattern: 'ifDescr' },
+      { alias: 'Type', pattern: 'ifType' },
+      { alias: 'Speed', pattern: 'Value #B', type: 'number', unit: 'bps' },
+      { alias: 'MAC Address', pattern: 'ifPhysAddress' },
+      { alias: 'MTU', pattern: 'Value #D', type: 'number', unit: 'none' },
     ],
   )
   .addTarget(grafana.prometheus.target(
@@ -342,7 +348,6 @@ local interface_info_panel =
   .hideColumn('Time')
   .hideColumn('Value #A')
   .hideColumn('Value #C');
-
 
 
 // Manifested stuff starts here
@@ -412,6 +417,6 @@ local interface_info_panel =
       // Interface Operational Statuses
       .addPanel(interface_out_errors_panel, gridPos={ x: 0, y: 20, w: 12, h: 4 })
       // Interface Traffic
-      .addPanel(interface_in_errors_panel, gridPos={ x: 12, y: 20, w: 12, h: 4 })
+      .addPanel(interface_in_errors_panel, gridPos={ x: 12, y: 20, w: 12, h: 4 }),
   },
 }
