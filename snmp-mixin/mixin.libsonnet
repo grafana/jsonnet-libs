@@ -1,3 +1,3 @@
-{ grafanaDashboardFolder: 'SNMP Generic' }
+{ grafanaDashboardFolder: 'SNMP' }
 + (import 'dashboards/dashboards.libsonnet')
 + (import 'config.libsonnet')
