@@ -67,9 +67,10 @@ k {
       ], []) +
       statefulSet.spec.withServiceName(self.name) +
       if self.use_topology_spread then
+        local pod_name = self.name;
         statefulSet.spec.template.spec.withTopologySpreadConstraints(
           // Evenly spread pods among available nodes.
-          topologySpreadConstraints.labelSelector.withMatchLabels({ name: 'memcached' }) +
+          topologySpreadConstraints.labelSelector.withMatchLabels({ name: pod_name }) +
           topologySpreadConstraints.withTopologyKey('kubernetes.io/hostname') +
           topologySpreadConstraints.withWhenUnsatisfiable('ScheduleAnyway') +
           topologySpreadConstraints.withMaxSkew(self.topology_spread_max_skew),
