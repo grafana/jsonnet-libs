@@ -11,8 +11,8 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'SNMP target {{$labels.snmp_target}} on instance {{$labels.instance}} from job {{$labels.job}} is down.',
-              description: 'SNMP Target {{$labels.snmp_target}} is down.',
+              summary: 'SNMP Target is down.',
+              description: 'SNMP target {{$labels.snmp_target}} on instance {{$labels.instance}} from job {{$labels.job}} is down.',
             },
             'for': '5m',
           },
@@ -23,8 +23,8 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'SNMP interface {{$labels.ifDescr}} on target {{$labels.snmp_target}} on instance {{$labels.instance}} from job {{$labels.job}} is down.',
-              description: 'SNMP interface {{$labels.ifDescr}} on target {{$labels.snmp_target}} is down.',
+              summary: 'Network interface on SNMP target is down.',
+              description: 'SNMP interface {{$labels.ifDescr}} on target {{$labels.snmp_target}} on instance {{$labels.instance}} from job {{$labels.job}} is down.',
             },
             'for': '5m',
           },
