@@ -18,7 +18,7 @@
           },
           {
             alert: 'SNMPTargetInterfaceDown',
-            expr: 'ifOperStatus{job_snmp=~"integrations/snmp.*"} == 0',
+            expr: 'ifOperStatus{job_snmp=~"integrations/snmp.*"} == 2',
             labels: {
               severity: 'warning',
             },
