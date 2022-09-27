@@ -81,7 +81,7 @@ prometheus {
 We sometimes specify config options in a `_config` dict; there are two situations
 under which we do this:
 
-- When you must provide a value for the parameter (such as `namesapce`).
+- When you must provide a value for the parameter (such as `namespace`).
 - When the parameter get referenced in multiple places, and overriding it using
   the technique above would be cumbersome and error prone (such as with `cluster_dns_suffix`).
 
