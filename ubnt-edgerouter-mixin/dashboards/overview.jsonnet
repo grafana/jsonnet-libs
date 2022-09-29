@@ -10,6 +10,26 @@ local sharedMatcher = 'job=~"$job", instance=~"$instance"';
 local ipversionlabelmatcher(label, version) = '%s="%d", %s' % [label, version, sharedMatcher];
 local ratequery(metric, matcher) = 'rate(' + metric + '{' + matcher + '}[$__rate_interval])';
 
+local legendDecoration(right=true, max=true, current=true, min=false) = {
+  legend: {
+    alignAsTable: true,
+    avg: false,
+    current: current,
+    max: max,
+    min: min,
+    rightSide: right,
+    show: true,
+    total: false,
+    values: true,
+  },
+};
+
+local stackstyle = {
+  line: 1,
+  fill: 5,
+  fillGradient: 10,
+};
+
 {
   queries:: {
     sysName: 'sysName{' + sharedMatcher + '}',
@@ -277,7 +297,7 @@ local ratequery(metric, matcher) = 'rate(' + metric + '{' + matcher + '}[$__rate
         grafana.prometheus.target($.queries.cpuKernel, legendFormat='Kernel'),
         grafana.prometheus.target($.queries.cpuInterrupt, legendFormat='Interrupt'),
         grafana.prometheus.target($.queries.cpuSoftIRQ, legendFormat='Soft IRQ'),
-      ]) + gBuilder.stack,
+      ]) + gBuilder.stack + stackstyle,
     processorLoad:
       grafana.graphPanel.new('Processor Load (1 Min Average)', datasource='$datasource')
       .addTarget(
@@ -581,56 +601,58 @@ local ratequery(metric, matcher) = 'rate(' + metric + '{' + matcher + '}[$__rate
       )
       .addRow(
         row.new('CPU')
-        .addPanel($.panels.cpuLoadAverage)
-        .addPanel($.panels.interruptsAndContexts)
-        .addPanel($.panels.blockIO)
-        .addPanel($.panels.cpuTime { span: 12 })
-        .addPanel($.panels.processorLoad { span: 12 }),
+        .addPanel($.panels.cpuLoadAverage + legendDecoration(right=false))
+        .addPanel($.panels.interruptsAndContexts + legendDecoration(right=false))
+        .addPanel($.panels.blockIO + legendDecoration(right=false))
+        .addPanel($.panels.cpuTime { span: 6 } + legendDecoration())
+        .addPanel($.panels.processorLoad { span: 6 } + legendDecoration()),
       )
       .addRow(
         row.new('Memory')
-        .addPanel($.panels.memDistribution { span: 12 })
-        .addPanel($.panels.memAvail { span: 6 })
-        .addPanel($.panels.memUtilized { span: 6 }),
+        .addPanel($.panels.memDistribution { span: 12 } + legendDecoration())
+        .addPanel($.panels.memAvail { span: 6 } + legendDecoration(right=false))
+        .addPanel($.panels.memUtilized { span: 6 } + legendDecoration(right=false)),
       )
       .addRow(
         row.new('Interface')
-        .addPanel($.panels.ifTraffic { span: 12 })
-        .addPanel($.panels.ifTrafficDist { span: 12 })
-        .addPanel($.panels.ifTrafficErrsDrops { span: 12 }),
+        .addPanel($.panels.ifTraffic { span: 12 } + legendDecoration())
+        .addPanel($.panels.ifTrafficDist { span: 12 } + legendDecoration())
+        .addPanel($.panels.ifTrafficErrsDrops { span: 12 } + legendDecoration()),
       )
       .addRow(
         row.new('IP')
-        .addPanel($.panels.ipDistribution { span: 12 })
-        .addPanel($.panels.ipFrag { span: 12 })
-        .addPanel($.panels.ipForward { span: 12 })
-        .addPanel($.panels.ipForwardDropErr { span: 12 })
-        .addPanel($.panels.ipNonForward { span: 6 })
-        .addPanel($.panels.ipNonForwardDropErr { span: 6 }),
+        .addPanel($.panels.ipDistribution { span: 12 } + legendDecoration())
+        .addPanel($.panels.ipFrag { span: 12 } + legendDecoration())
+        .addPanel($.panels.ipForward { span: 6 } + legendDecoration())
+        .addPanel($.panels.ipForwardDropErr { span: 6 } + legendDecoration())
+        .addPanel($.panels.ipNonForward { span: 6 } + legendDecoration())
+        .addPanel($.panels.ipNonForwardDropErr { span: 6 } + legendDecoration()),
       )
       .addRow(
         row.new('TCP')
-        .addPanel($.panels.tcpStateTransitions { span: 6 })
-        .addPanel($.panels.tcpSessions { span: 6 })
-        .addPanel($.panels.tcpNonForwardSegs { span: 12 }),
+        .addPanel($.panels.tcpStateTransitions { span: 6 } + legendDecoration())
+        .addPanel($.panels.tcpSessions { span: 6 } + legendDecoration(right=false))
+        .addPanel($.panels.tcpNonForwardSegs { span: 12 } + legendDecoration()),
       )
       .addRow(
         row.new('UDP')
-        .addPanel($.panels.udpNonForwardDgrams { span: 12 }),
+        .addPanel($.panels.udpNonForwardDgrams { span: 12 } + legendDecoration()),
       )
       .addRow(
         row.new('ICMP')
-        .addPanel($.panels.icmpSummary { span: 12 })
-        .addPanel($.panels.icmpMsgTypes { span: 12 }),
+        .addPanel($.panels.icmpSummary { span: 12 } + legendDecoration())
+        .addPanel($.panels.icmpMsgTypes { span: 12 } + legendDecoration()),
       )
       .addRow(
         row.new('Routing/Forwarding')
-        .addPanel($.panels.routingForwarding { span: 12 }),
+        .addPanel($.panels.routingForwarding { span: 12 } + legendDecoration(right=false)),
       )
       .addRow(
         row.new('SNMP')
-        .addPanel($.panels.snmpMessages { span: 6 })
-        .addPanel($.panels.snmpTotalObjects { span: 6 }),
-      ),
+        .addPanel($.panels.snmpMessages { span: 6 } + legendDecoration())
+        .addPanel($.panels.snmpTotalObjects { span: 6 } + legendDecoration(right=false)),
+      ) + {
+        graphTooltip: 1,
+      },
   },
 }
