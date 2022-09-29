@@ -1,6 +1,6 @@
 (import 'dashboards/overview.jsonnet') +
 {
   grafanaDashboards+:: {
-    'influxubntdash.json': import 'dashboards/influxdash.json',
+    'influxubntdash.json': import 'dashboards/overview.jsonnet',
   },
 }
