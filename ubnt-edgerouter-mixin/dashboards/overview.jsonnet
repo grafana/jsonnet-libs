@@ -5,7 +5,7 @@ local prometheus = grafana.prometheus;
 
 local gBuilder = import 'grafana-builder/grafana.libsonnet';
 
-local sharedMatcher = 'job=~"$job", instance=~"$instance"';
+local sharedMatcher = 'job=~"$job", instance=~"$instance", snmp_target=~"$snmp_target"';
 
 local ipversionlabelmatcher(label, version) = '%s="%d", %s' % [label, version, sharedMatcher];
 local ratequery(metric, matcher) = 'rate(' + metric + '{' + matcher + '}[$__rate_interval])';
@@ -589,6 +589,18 @@ local stackstyle = {
           allValues='.+',
           sort=1,
         ),
+        // SNMP Target
+        grafana.template.new(
+          'snmp_target',
+          '$datasource',
+          'label_values(up{snmp_target!="", job=~"$job", instance=~"$instance"}, snmp_target)',
+          label='snmp_target',
+          refresh='load',
+          multi=true,
+          includeAll=true,
+          allValues='.+',
+          sort=1,
+        ),        
       ])
       .addRow(
         row.new('System Identification')
