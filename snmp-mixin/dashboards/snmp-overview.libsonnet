@@ -80,65 +80,6 @@ local interface_template = grafana.template.new(
 );
 
 // Panels
-local integration_status_panel =
-  grafana.statPanel.new(
-    'Integration Status',
-    description='Shows the status of the integration.',
-    datasource='$prometheus_datasource',
-    unit='string',
-    colorMode='background',
-    graphMode='none',
-    noValue='No Data',
-    reducerFunction='lastNotNull'
-  )
-  .addMappings(
-    [
-      {
-        options: {
-          from: 1,
-          result: {
-            color: 'green',
-            index: 0,
-            text: 'Agent Configured - Sending Metrics',
-          },
-          to: 10000000000000,
-        },
-        type: 'range',
-      },
-      {
-        options: {
-          from: 0,
-          result: {
-            color: 'red',
-            index: 1,
-            text: 'No Data',
-          },
-          to: 0,
-        },
-        type: 'range',
-      },
-    ]
-  )
-  .addTarget(
-    grafana.prometheus.target(queries.up_time)
-  );
-
-local latest_metric_panel =
-  grafana.statPanel.new(
-    'Latest Metric Received',
-    description='Shows the latest timestamp at which the metrics were received for this integration.',
-    datasource='$prometheus_datasource',
-    unit='dateTimeAsIso',
-    colorMode='background',
-    fields='Time',
-    graphMode='none',
-    noValue='No Data',
-    reducerFunction='lastNotNull'
-  )
-  .addTarget(
-    grafana.prometheus.target(queries.up_time)
-  );
-
 local up_time_panel =
   grafana.statPanel.new(
     'System Uptime',
@@ -379,13 +320,6 @@ local interface_info_panel =
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
-
-      // Status Row
-      .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
-      // Integration status
-      .addPanel(integration_status_panel, gridPos={ x: 0, y: 0, w: 8, h: 2 })
-      // Latest metric received
-      .addPanel(latest_metric_panel, gridPos={ x: 8, y: 0, w: 8, h: 2 })
 
       // Overview Row
       .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
