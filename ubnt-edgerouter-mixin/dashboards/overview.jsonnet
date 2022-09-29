@@ -548,6 +548,7 @@ local stackstyle = {
       dashboard.new(
         'UBNT EdgeRouter X Overview',
         time_from='now-1h',
+        uid=std.md5('ubnt-edgrouterx-overview.json'),
       ).addTemplates([
         // Data Source
         {
