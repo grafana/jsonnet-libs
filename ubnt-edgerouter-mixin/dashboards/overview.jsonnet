@@ -5,29 +5,73 @@ local prometheus = grafana.prometheus;
 
 local gBuilder = import 'grafana-builder/grafana.libsonnet';
 
+local utils = import 'snmp-mixin/lib/utils.libsonnet';
+
 local sharedMatcher = 'job=~"$job", instance=~"$instance", snmp_target=~"$snmp_target"';
 
 local ipversionlabelmatcher(label, version) = '%s="%d", %s' % [label, version, sharedMatcher];
 local ratequery(metric, matcher) = 'rate(' + metric + '{' + matcher + '}[$__rate_interval])';
 
-local legendDecoration(right=true, max=true, current=true, min=false) = {
-  legend: {
-    alignAsTable: true,
-    avg: false,
-    current: current,
-    max: max,
-    min: min,
-    rightSide: right,
-    show: true,
-    total: false,
-    values: true,
+local legendDecoration(right=true) = {
+  options+: {
+    legend: {
+      showLegend: true,
+      displayMode: 'table',
+      placement: if right then 'right' else 'bottom',
+      calcs: ['max', 'last'],
+    },
   },
 };
 
-local stackstyle = {
-  line: 1,
-  fill: 5,
-  fillGradient: 10,
+local onefieldnegativey(field) = {
+  fieldConfig+: {
+    overrides+: [
+      {
+        matcher: {
+          id: 'byName',
+          options: field,
+        },
+        properties: [
+          {
+            id: 'custom.transform',
+            value: 'negative-Y',
+          },
+        ],
+      },
+    ],
+  },
+};
+
+local outnegativey = {
+  fieldConfig+: {
+    overrides+: [
+      {
+        matcher: {
+          id: 'byRegexp',
+          options: '.*Out',
+        },
+        properties: [
+          {
+            id: 'custom.transform',
+            value: 'negative-Y',
+          },
+        ],
+      },
+    ],
+  },
+};
+
+local stack = {
+  fieldConfig+: {
+    defaults+: {
+      custom+: {
+        stacking: {
+          mode: 'normal',
+          group: 'A',
+        },
+      },
+    },
+  },
 };
 
 {
@@ -257,6 +301,13 @@ local stackstyle = {
       ) +
       {
         datasource: '$datasource',
+        title: 'System Information',
+        description: 'System details for each discovered edgerouter device',
+        fieldConfig+: {
+          defaults+: {
+            unit: 'string',
+          },
+        },
         transformations: [
           {
             id: 'joinByField',
@@ -292,6 +343,7 @@ local stackstyle = {
     sysUptime:
       grafana.statPanel.new(
         'Uptime',
+        description='The time since the network management portion of the system was last re-initialized.',
         datasource='$datasource',
         colorMode='background',
         graphMode='none',
@@ -305,10 +357,12 @@ local stackstyle = {
     users:
       grafana.statPanel.new(
         'Users',
+        description='The number of user sessions for which this host is storing state information. A session is a collection of processes requiring a single act of user authentication and possibly subject to collective job control.',
         datasource='$datasource',
         colorMode='background',
         noValue='No Data',
         reducerFunction='last',
+        unit='short',
       )
       .addTarget(
         grafana.prometheus.target($.queries.sysUsers),
@@ -316,35 +370,63 @@ local stackstyle = {
     processes:
       grafana.statPanel.new(
         'Processes',
+        description='The number of process contexts currently loaded or running on this system.',
         datasource='$datasource',
         colorMode='background',
         noValue='No Data',
         reducerFunction='last',
+        unit='short',
       )
       .addTarget(
         grafana.prometheus.target($.queries.sysProcesses),
       ) + $.fixedColorMode('light-blue'),
     cpuLoadAverage:
-      grafana.graphPanel.new('CPU Load Average', datasource='$datasource')
+      grafana.graphPanel.new(
+        'CPU Load Average',
+        description='The 1,5 and 15 minute load averages.',
+        datasource='$datasource',
+      )
       .addTarget(
         grafana.prometheus.target($.queries.cpuLoadAverage, legendFormat='{{laNames}}')
+      ) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
       ),
     interruptsAndContexts:
-      grafana.graphPanel.new('Interrupts / Ctx-Switches (/sec)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'Interrupts / Ctx-Switches (/sec)',
+        description='Number of context switches, and interrupts processed.',
+        datasource='$datasource',
+      )
       .addTargets([
         grafana.prometheus.target($.queries.contextRate, legendFormat='Context Switches'),
         grafana.prometheus.target($.queries.interruptRate, legendFormat='Interrupts'),
-      ]),
+      ]) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
+      ),
     blockIO:
-      grafana.graphPanel.new('Block I/O (/sec)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'Block I/O (/sec)',
+        description='Number of blocks sent to, or received from, a block device.',
+        datasource='$datasource',
+      )
       .addTargets([
         grafana.prometheus.target($.queries.blockIOReceivedRate, legendFormat='Blocks Received'),
         grafana.prometheus.target($.queries.blockIOSentRate, legendFormat='Blocks Sent'),
-      ]) + {
-        seriesOverrides: [{ alias: 'Blocks Sent', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
+      ) + onefieldnegativey('Blocks Sent'),
     cpuTime:
-      grafana.graphPanel.new('CPU Time', datasource='$datasource', format='percentunit')
+      grafana.graphPanel.new(
+        'CPU Time',
+        description='Percentage of CPU time spent by state.',
+        datasource='$datasource',
+      )
       .addTargets([
         grafana.prometheus.target($.queries.cpuUser, legendFormat='User'),
         grafana.prometheus.target($.queries.cpuNice, legendFormat='Nice'),
@@ -354,40 +436,86 @@ local stackstyle = {
         grafana.prometheus.target($.queries.cpuKernel, legendFormat='Kernel'),
         grafana.prometheus.target($.queries.cpuInterrupt, legendFormat='Interrupt'),
         grafana.prometheus.target($.queries.cpuSoftIRQ, legendFormat='Soft IRQ'),
-      ]) + gBuilder.stack + stackstyle,
+      ]) + stack + utils.timeSeriesOverride(
+        unit='percentunit',
+        fillOpacity=10,
+        showPoints='never',
+      ),
     processorLoad:
-      grafana.graphPanel.new('Processor Load (1 Min Average)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'Processor Load (1 Min Average)',
+        description='The average, over the last minute, of the percentage of time that this processor was not idle.',
+        datasource='$datasource'
+      )
       .addTarget(
         grafana.prometheus.target($.queries.processorLoad, legendFormat='Device ID: {{hrDeviceIndex}}')
+      ) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
       ),
     memDistribution:
-      grafana.graphPanel.new('Memory Distribution', datasource='$datasource', format='deckbytes')
+      grafana.graphPanel.new(
+        'Memory Distribution',
+        description='The total amount of real or virtual memory currently allocated, by type.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.memBuffer, legendFormat='Buffer'),
         grafana.prometheus.target($.queries.memCached, legendFormat='Cached'),
         grafana.prometheus.target($.queries.memFree, legendFormat='Free'),
         grafana.prometheus.target($.queries.memShared, legendFormat='Shared'),
-      ]),
+      ]) + utils.timeSeriesOverride(
+        unit='deckbytes',
+        fillOpacity=10,
+        showPoints='never',
+      ),
     memAvail:
-      grafana.graphPanel.new('Memory Available', datasource='$datasource', format='deckbytes')
+      grafana.graphPanel.new(
+        'Memory Available',
+        description='The amount of real/physical memory currently unused or available.',
+        datasource='$datasource'
+      )
       .addTarget(
         grafana.prometheus.target($.queries.memAvailReal, legendFormat='Real')
+      ) + utils.timeSeriesOverride(
+        unit='deckbytes',
+        fillOpacity=10,
+        showPoints='never',
       ),
     memUtilized:
-      grafana.graphPanel.new('Memory Utilized', datasource='$datasource', format='percentunit')
+      grafana.graphPanel.new(
+        'Memory Utilized',
+        description='The amount of physical memory which is currently allocated.',
+        datasource='$datasource'
+      )
       .addTarget(
         grafana.prometheus.target($.queries.memUtilized, legendFormat='{{hrStorageDescr}}')
+      ) + utils.timeSeriesOverride(
+        unit='percentunit',
+        fillOpacity=10,
+        showPoints='never',
       ),
     ifTraffic:
-      grafana.graphPanel.new('Interface Traffic', datasource='$datasource', format='bps')
+      grafana.graphPanel.new(
+        'Interface Traffic',
+        description='Total throughput per interface, by direction.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ifInOctets, legendFormat='{{ifName}}:In'),
         grafana.prometheus.target($.queries.ifOutOctets, legendFormat='{{ifName}}:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='bps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     ifTrafficDist:
-      grafana.graphPanel.new('Interface Traffic Distribution', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'Interface Traffic Distribution',
+        description='Packet throughput per interface, by type and direction.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ifInBroadcast, legendFormat='{{ifName}}:Bcast:In'),
         grafana.prometheus.target($.queries.ifOutBroadcast, legendFormat='{{ifName}}:Bcast:Out'),
@@ -395,22 +523,34 @@ local stackstyle = {
         grafana.prometheus.target($.queries.ifOutMulticast, legendFormat='{{ifName}}:Mcast:Out'),
         grafana.prometheus.target($.queries.ifInUcast, legendFormat='{{ifName}}:Ucast:In'),
         grafana.prometheus.target($.queries.ifOutUcast, legendFormat='{{ifName}}:Ucast:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     ifTrafficErrsDrops:
-      grafana.graphPanel.new('Interface Drops/Errors', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'Interface Drops/Errors',
+        description='Number of packets dropped, in error, or unknown, by interface.',
+        datasource='$datasource',
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ifInDiscards, legendFormat='{{ifName}}:Drop:In'),
         grafana.prometheus.target($.queries.ifOutDiscards, legendFormat='{{ifName}}:Drop:Out'),
         grafana.prometheus.target($.queries.ifInErrors, legendFormat='{{ifName}}:Err:In'),
         grafana.prometheus.target($.queries.ifOutErrors, legendFormat='{{ifName}}:Err:Out'),
         grafana.prometheus.target($.queries.ifInUnknownProtos, legendFormat='{{ifName}}:Unkwn:In'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     ipDistribution:
-      grafana.graphPanel.new('IP Distribution', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'IP Distribution',
+        description='Datagram packet throughput by direction and IP version.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ipv4SystemStatsHCInBcastPkts, legendFormat='IPv4:Bcast:In'),
         grafana.prometheus.target($.queries.ipv4SystemStatsHCOutBcastPkts, legendFormat='IPv4:Bcast:Out'),
@@ -425,11 +565,17 @@ local stackstyle = {
         grafana.prometheus.target($.queries.ipv6SystemStatsHCOutMcastPkts, legendFormat='IPv6:Mcast:Out'),
         grafana.prometheus.target($.queries.ipv6SystemStatsHCInReceives, legendFormat='IPv6:Total:In'),
         grafana.prometheus.target($.queries.ipv6SystemStatsHCOutTransmits, legendFormat='IPv6:Total:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     ipFrag:
-      grafana.graphPanel.new('IP Fragmentation (/sec)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'IP Fragmentation (/sec)',
+        description='Number of fragements by action, direction and IP version.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ipv4SystemStatsReasmReqds, legendFormat='IPv4:ReasmReqd:In'),
         grafana.prometheus.target($.queries.ipv4SystemStatsReasmOKs, legendFormat='IPv4:ReasmOK:In'),
@@ -447,21 +593,33 @@ local stackstyle = {
         grafana.prometheus.target($.queries.ipv6SystemStatsOutFragFails, legendFormat='IPv6:FragFail:Out'),
         grafana.prometheus.target($.queries.ipv6SystemStatsOutFragOKs, legendFormat='IPv6:FragOK:Out'),
         grafana.prometheus.target($.queries.ipv6SystemStatsOutFragReqds, legendFormat='IPv6:FragReqd:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     ipForward:
-      grafana.graphPanel.new('IP Forwarding', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'IP Forwarding',
+        description='Number of IP datagrams forwarded by direction and IP version.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ipv4SystemStatsHCInForwDatagrams, legendFormat='IPv4:In'),
         grafana.prometheus.target($.queries.ipv4SystemStatsHCOutForwDatagrams, legendFormat='IPv4:Out'),
         grafana.prometheus.target($.queries.ipv6SystemStatsHCInForwDatagrams, legendFormat='IPv6:In'),
         grafana.prometheus.target($.queries.ipv6SystemStatsHCOutForwDatagrams, legendFormat='IPv6:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     ipForwardDropErr:
-      grafana.graphPanel.new('IP Forwarding Drops/Errors', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'IP Forwarding Drops/Errors',
+        description='Number of IP forwarding datagrams dropped, or in error, by reason, direction, and IP version.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ipv4SystemStatsInAddrErrors, legendFormat='IPv4:AddrError:In'),
         grafana.prometheus.target($.queries.ipv4SystemStatsInHdrErrors, legendFormat='IPv4:HdrError:In'),
@@ -476,67 +634,109 @@ local stackstyle = {
         grafana.prometheus.target($.queries.ipv6SystemStatsInTruncatedPkts, legendFormat='IPv6:Truncated:In'),
         grafana.prometheus.target($.queries.ipv6SystemStatsInDiscards, legendFormat='IPv6:Drop:In'),
         grafana.prometheus.target($.queries.ipv6SystemStatsOutDiscards, legendFormat='IPv6:Drop:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     ipNonForward:
-      grafana.graphPanel.new('IP Non-Forwarding', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'IP Non-Forwarding',
+        description='Number of IP datagrams by direction and IP version.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ipv4SystemStatsHCInDelivers, legendFormat='IPv4:In'),
         grafana.prometheus.target($.queries.ipv4SystemStatsHCOutRequests, legendFormat='IPv4:Out'),
 
         grafana.prometheus.target($.queries.ipv6SystemStatsHCInDelivers, legendFormat='IPv6:In'),
         grafana.prometheus.target($.queries.ipv6SystemStatsHCOutRequests, legendFormat='IPv6:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     ipNonForwardDropErr:
-      grafana.graphPanel.new('IP Non-Forwarding Drops/Errors', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'IP Non-Forwarding Drops/Errors',
+        description='Number of IP datagrams dropped, or in error, by reason, direction, and IP version.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ipv4SystemStatsInUnknownProtos, legendFormat='IPv4:UnkwnProto:In'),
         grafana.prometheus.target($.queries.ipv4SystemStatsOutNoRoutes, legendFormat='IPv4:NoRoute:Out'),
 
         grafana.prometheus.target($.queries.ipv6SystemStatsInUnknownProtos, legendFormat='IPv6:UnknwnProto:In'),
         grafana.prometheus.target($.queries.ipv6SystemStatsOutNoRoutes, legendFormat='IPv6:NoRoute:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     tcpStateTransitions:
-      grafana.graphPanel.new('TCP State Transitions (/sec)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'TCP State Transitions (/sec)',
+        description='Number of TCP connections by type.',
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.tcpActiveOpens, legendFormat='ActiveOpen'),
         grafana.prometheus.target($.queries.tcpPassiveOpens, legendFormat='PassiveOpen'),
         grafana.prometheus.target($.queries.tcpAttemptFails, legendFormat='Fail'),
         grafana.prometheus.target($.queries.tcpEstabResets, legendFormat='Reset'),
-      ]),
+      ]) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
+      ),
     tcpSessions:
-      grafana.graphPanel.new('TCP Sessions', datasource='$datasource')
+      grafana.graphPanel.new(
+        'TCP Sessions',
+        description='The number of TCP connections for which the current state is either ESTABLISHED or CLOSE-WAIT.',
+        datasource='$datasource')
       .addTarget(
         grafana.prometheus.target($.queries.tcpCurrEstab, legendFormat='Connections'),
+      ) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
       ),
     tcpNonForwardSegs:
-      grafana.graphPanel.new('TCP Traffic, Non-Forward (seg/sec)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'TCP Traffic, Non-Forward (seg/sec)',
+        description='Total number of TCP segments by type and direction.',
+        datasource='$datasource')
       .addTargets([
         grafana.prometheus.target($.queries.tcpInSegs, legendFormat='In'),
         grafana.prometheus.target($.queries.tcpOutSegs, legendFormat='Out'),
         grafana.prometheus.target($.queries.tcpRetransSegs, legendFormat='Retrans:Out'),
         grafana.prometheus.target($.queries.tcpInErrs, legendFormat='Error:In'),
         grafana.prometheus.target($.queries.tcpOutRsts, legendFormat='Reset:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     udpNonForwardDgrams:
-      grafana.graphPanel.new('UDP Traffic, Non-Forward (dgram/sec)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'UDP Traffic, Non-Forward (dgram/sec)',
+        description='Number of UDP datagrams sent and recieved, in error, or without destination application on port.',
+        datasource='$datasource')
       .addTargets([
         grafana.prometheus.target($.queries.udpInDatagrams, legendFormat='In'),
         grafana.prometheus.target($.queries.udpOutDatagrams, legendFormat='Out'),
         grafana.prometheus.target($.queries.udpInErrors, legendFormat='Error'),
         grafana.prometheus.target($.queries.udpNoPorts, legendFormat='NoPort'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     icmpSummary:
-      grafana.graphPanel.new('ICMP Summary', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'ICMP Summary',
+        description='Number of ICMP messages and errors by direction and IP version.',
+        datasource='$datasource')
       .addTargets([
         grafana.prometheus.target($.queries.icmpIpv4StatsInMsgs, legendFormat='IPv4:Msg:In'),
         grafana.prometheus.target($.queries.icmpIpv4StatsOutMsgs, legendFormat='IPv4:Msg:Out'),
@@ -547,29 +747,46 @@ local stackstyle = {
         grafana.prometheus.target($.queries.icmpIpv6StatsOutMsgs, legendFormat='IPv6:Msg:Out'),
         grafana.prometheus.target($.queries.icmpIpv6StatsInErrors, legendFormat='IPv6:Error:In'),
         grafana.prometheus.target($.queries.icmpIpv6StatsOutErrors, legendFormat='IPv6:Error:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     icmpMsgTypes:
-      grafana.graphPanel.new('ICMP Message Type', datasource='$datasource', format='pps')
+      grafana.graphPanel.new(
+        'ICMP Message Type',
+        description='Number of ICMP messages by type, direction, and IP version.',
+        datasource='$datasource')
       .addTargets([
         grafana.prometheus.target($.queries.icmpIpv4MsgStatsInPkts, legendFormat='IPv4:{{icmpMsgStatsType}}:In'),
         grafana.prometheus.target($.queries.icmpIpv4MsgStatsOutPkts, legendFormat='IPv4:{{icmpMsgStatsType}}:Out'),
 
         grafana.prometheus.target($.queries.icmpIpv6MsgStatsInPkts, legendFormat='IPv6:{{icmpMsgStatsType}}:In'),
         grafana.prometheus.target($.queries.icmpIpv6MsgStatsOutPkts, legendFormat='IPv6:{{icmpMsgStatsType}}:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     routingForwarding:
-      grafana.graphPanel.new('Routing/Forwarding', datasource='$datasource')
+      grafana.graphPanel.new(
+        'Routing/Forwarding',
+        description='Number of IP routing discards, total routes, and forward entries.',
+        datasource='$datasource')
       .addTargets([
         grafana.prometheus.target($.queries.ipRoutingDiscards, legendFormat='Routes Discarded'),
         grafana.prometheus.target($.queries.inetCidrRouteNumber, legendFormat='Route Entries'),
         grafana.prometheus.target($.queries.ipForwardNumber, legendFormat='Forward Entries'),
-      ]),
+      ])+ utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
+      ),
     snmpMessages:
-      grafana.graphPanel.new('SNMP Messages (/sec)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'SNMP Messages (/sec)',
+        description='Number of SNMP packets and requests by direction and type.',
+        datasource='$datasource')
       .addTargets([
         grafana.prometheus.target($.queries.snmpInPkts, legendFormat='Messages:In'),
         grafana.prometheus.target($.queries.snmpOutPkts, legendFormat='Messages:Out'),
@@ -579,13 +796,22 @@ local stackstyle = {
         grafana.prometheus.target($.queries.snmpOutGetNext, legendFormat='GetNext:Out'),
         grafana.prometheus.target($.queries.snmpOutGetRequests, legendFormat='GetReq:Out'),
         grafana.prometheus.target($.queries.snmpOutGetResponses, legendFormat='GetResp:Out'),
-      ]) + {
-        seriesOverrides: [{ alias: '/.*Out/', transform: 'negative-Y' }],
-      },
+      ]) + utils.timeSeriesOverride(
+        unit='pps',
+        fillOpacity=10,
+        showPoints='never',
+      ) + outnegativey,
     snmpTotalObjects:
-      grafana.graphPanel.new('SNMP Objects Fetched (/sec)', datasource='$datasource')
+      grafana.graphPanel.new(
+        'SNMP Objects Fetched (/sec)',
+        description='The total number of MIB objects which have been retrieved successfully by the SNMP protocol entity as the result of receiving valid SNMP Get-Request and Get-Next PDUs.',
+        datasource='$datasource')
       .addTarget(
         grafana.prometheus.target($.queries.snmpInTotalReqVars, legendFormat='Objects'),
+      ) + utils.timeSeriesOverride(
+        unit='short',
+        fillOpacity=10,
+        showPoints='never',
       ),
   },
 
