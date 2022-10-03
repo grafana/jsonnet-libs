@@ -8,9 +8,9 @@
     },
     {
       "type": "panel",
-      "id": "grafana-piechart-panel",
+      "id": "piechart",
       "name": "Pie Chart",
-      "version": "1.5.0"
+      "version": ""
     },
     {
       "type": "panel",
@@ -356,7 +356,7 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "Identity Entities Aliases by Method",
-      "type": "grafana-piechart-panel",
+      "type": "piechart",
       "valueName": "current"
     },
     {
