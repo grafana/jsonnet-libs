@@ -693,7 +693,8 @@ local stack = {
       grafana.graphPanel.new(
         'TCP Sessions',
         description='The number of TCP connections for which the current state is either ESTABLISHED or CLOSE-WAIT.',
-        datasource='$datasource')
+        datasource='$datasource'
+      )
       .addTarget(
         grafana.prometheus.target($.queries.tcpCurrEstab, legendFormat='Connections'),
       ) + utils.timeSeriesOverride(
@@ -705,7 +706,8 @@ local stack = {
       grafana.graphPanel.new(
         'TCP Traffic, Non-Forward (seg/sec)',
         description='Total number of TCP segments by type and direction.',
-        datasource='$datasource')
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.tcpInSegs, legendFormat='In'),
         grafana.prometheus.target($.queries.tcpOutSegs, legendFormat='Out'),
@@ -721,7 +723,8 @@ local stack = {
       grafana.graphPanel.new(
         'UDP Traffic, Non-Forward (dgram/sec)',
         description='Number of UDP datagrams sent and recieved, in error, or without destination application on port.',
-        datasource='$datasource')
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.udpInDatagrams, legendFormat='In'),
         grafana.prometheus.target($.queries.udpOutDatagrams, legendFormat='Out'),
@@ -736,7 +739,8 @@ local stack = {
       grafana.graphPanel.new(
         'ICMP Summary',
         description='Number of ICMP messages and errors by direction and IP version.',
-        datasource='$datasource')
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.icmpIpv4StatsInMsgs, legendFormat='IPv4:Msg:In'),
         grafana.prometheus.target($.queries.icmpIpv4StatsOutMsgs, legendFormat='IPv4:Msg:Out'),
@@ -756,7 +760,8 @@ local stack = {
       grafana.graphPanel.new(
         'ICMP Message Type',
         description='Number of ICMP messages by type, direction, and IP version.',
-        datasource='$datasource')
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.icmpIpv4MsgStatsInPkts, legendFormat='IPv4:{{icmpMsgStatsType}}:In'),
         grafana.prometheus.target($.queries.icmpIpv4MsgStatsOutPkts, legendFormat='IPv4:{{icmpMsgStatsType}}:Out'),
@@ -772,12 +777,13 @@ local stack = {
       grafana.graphPanel.new(
         'Routing/Forwarding',
         description='Number of IP routing discards, total routes, and forward entries.',
-        datasource='$datasource')
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.ipRoutingDiscards, legendFormat='Routes Discarded'),
         grafana.prometheus.target($.queries.inetCidrRouteNumber, legendFormat='Route Entries'),
         grafana.prometheus.target($.queries.ipForwardNumber, legendFormat='Forward Entries'),
-      ])+ utils.timeSeriesOverride(
+      ]) + utils.timeSeriesOverride(
         unit='short',
         fillOpacity=10,
         showPoints='never',
@@ -786,7 +792,8 @@ local stack = {
       grafana.graphPanel.new(
         'SNMP Messages (/sec)',
         description='Number of SNMP packets and requests by direction and type.',
-        datasource='$datasource')
+        datasource='$datasource'
+      )
       .addTargets([
         grafana.prometheus.target($.queries.snmpInPkts, legendFormat='Messages:In'),
         grafana.prometheus.target($.queries.snmpOutPkts, legendFormat='Messages:Out'),
@@ -805,7 +812,8 @@ local stack = {
       grafana.graphPanel.new(
         'SNMP Objects Fetched (/sec)',
         description='The total number of MIB objects which have been retrieved successfully by the SNMP protocol entity as the result of receiving valid SNMP Get-Request and Get-Next PDUs.',
-        datasource='$datasource')
+        datasource='$datasource'
+      )
       .addTarget(
         grafana.prometheus.target($.queries.snmpInTotalReqVars, legendFormat='Objects'),
       ) + utils.timeSeriesOverride(
