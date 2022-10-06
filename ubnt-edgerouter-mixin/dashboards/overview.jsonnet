@@ -233,63 +233,6 @@ local stack = {
   },
 
   panels:: {
-    integrationStatus:
-      grafana.statPanel.new(
-        'Integration Status',
-        description='Shows the status of the integration.',
-        datasource='$datasource',
-        unit='string',
-        colorMode='background',
-        graphMode='none',
-        noValue='No Data',
-        reducerFunction='lastNotNull'
-      )
-      .addMappings(
-        [
-          {
-            options: {
-              from: 1,
-              result: {
-                color: 'green',
-                index: 0,
-                text: 'Agent Configured - Sending Metrics',
-              },
-              to: 10000000000000,
-            },
-            type: 'range',
-          },
-          {
-            options: {
-              from: 0,
-              result: {
-                color: 'red',
-                index: 1,
-                text: 'No Data',
-              },
-              to: 0,
-            },
-            type: 'range',
-          },
-        ]
-      )
-      .addTarget(
-        grafana.prometheus.target($.queries.sysUptime)
-      ),
-    lastMetric:
-      grafana.statPanel.new(
-        'Latest Metric Received',
-        description='Shows the latest timestamp at which the metrics were received for this integration.',
-        datasource='$datasource',
-        unit='dateTimeAsIso',
-        colorMode='background',
-        fields='Time',
-        graphMode='none',
-        noValue='No Data',
-        reducerFunction='lastNotNull'
-      )
-      .addTarget(
-        grafana.prometheus.target($.queries.sysUptime)
-      ),
     infoTable:
       gBuilder.tablePanel(
         [$.queries.sysName, $.queries.sysDescr, $.queries.sysContact, $.queries.sysLocation],
@@ -908,11 +851,6 @@ local stack = {
           regex='/ifIndex=\\"(?<value>[0-9]+)\\".*nicename=\\"(?<text>[\\w:\\s0-9\\.]+)\\"/',
         ),
       ])
-      .addRow(
-        row.new('Status', height=2)
-        .addPanel($.panels.integrationStatus { span: 6, height: 2 })
-        .addPanel($.panels.lastMetric { span: 6, height: 2 })
-      )
       .addRow(
         row.new('System Identification')
         .addPanel($.panels.infoTable { span: 12, height: 3 })
