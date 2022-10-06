@@ -9,6 +9,8 @@ local utils = import 'snmp-mixin/lib/utils.libsonnet';
 
 local sharedMatcher = 'job=~"$job", instance=~"$instance", snmp_target=~"$snmp_target"';
 
+local ifMatcher = 'ifIndex=~"$interface", ' + sharedMatcher;
+
 local ipversionlabelmatcher(label, version) = '%s="%d", %s' % [label, version, sharedMatcher];
 local ratequery(metric, matcher) = 'rate(' + metric + '{' + matcher + '}[$__rate_interval])';
 
@@ -105,19 +107,19 @@ local stack = {
     memAvailReal: 'memAvailReal{' + sharedMatcher + '}',
     // TODO: This is ugly because it filters on the hrStorageDescr label, which could be unreliable. Should either merge labels with the hrStorageType entry, or change the SNMP scraping.
     memUtilized: 'hrStorageUsed{hrStorageDescr="Physical memory",' + sharedMatcher + '} / hrStorageSize{hrStorageDescr="Physical memory",' + sharedMatcher + '}',
-    ifInOctets: ratequery('ifHCInOctets', sharedMatcher) + ' * 8',
-    ifOutOctets: ratequery('ifHCOutOctets', sharedMatcher) + ' * 8',
-    ifInBroadcast: ratequery('ifHCInBroadcastPkts', sharedMatcher),
-    ifOutBroadcast: ratequery('ifHCOutBroadcastPkts', sharedMatcher),
-    ifInMulticast: ratequery('ifHCInMulticastPkts', sharedMatcher),
-    ifOutMulticast: ratequery('ifHCOutMulticastPkts', sharedMatcher),
-    ifInUcast: ratequery('ifHCInUcastPkts', sharedMatcher),
-    ifOutUcast: ratequery('ifHCOutUcastPkts', sharedMatcher),
-    ifInDiscards: ratequery('ifInDiscards', sharedMatcher),
-    ifOutDiscards: ratequery('ifOutDiscards', sharedMatcher),
-    ifInErrors: ratequery('ifInErrors', sharedMatcher),
-    ifOutErrors: ratequery('ifOutErrors', sharedMatcher),
-    ifInUnknownProtos: ratequery('ifInUnknownProtos', sharedMatcher),
+    ifInOctets: ratequery('ifHCInOctets', ifMatcher) + ' * 8',
+    ifOutOctets: ratequery('ifHCOutOctets', ifMatcher) + ' * 8',
+    ifInBroadcast: ratequery('ifHCInBroadcastPkts', ifMatcher),
+    ifOutBroadcast: ratequery('ifHCOutBroadcastPkts', ifMatcher),
+    ifInMulticast: ratequery('ifHCInMulticastPkts', ifMatcher),
+    ifOutMulticast: ratequery('ifHCOutMulticastPkts', ifMatcher),
+    ifInUcast: ratequery('ifHCInUcastPkts', ifMatcher),
+    ifOutUcast: ratequery('ifHCOutUcastPkts', ifMatcher),
+    ifInDiscards: ratequery('ifInDiscards', ifMatcher),
+    ifOutDiscards: ratequery('ifOutDiscards', ifMatcher),
+    ifInErrors: ratequery('ifInErrors', ifMatcher),
+    ifOutErrors: ratequery('ifOutErrors', ifMatcher),
+    ifInUnknownProtos: ratequery('ifInUnknownProtos', ifMatcher),
     ipv4SystemStatsHCInBcastPkts: ratequery('ipSystemStatsHCInBcastPkts', ipversionlabelmatcher('ipSystemStatsIPVersion', 1)),
     ipv4SystemStatsHCOutBcastPkts: ratequery('ipSystemStatsHCOutBcastPkts', ipversionlabelmatcher('ipSystemStatsIPVersion', 1)),
     ipv4SystemStatsHCInMcastPkts: ratequery('ipSystemStatsHCInMcastPkts', ipversionlabelmatcher('ipSystemStatsIPVersion', 1)),
@@ -891,6 +893,19 @@ local stack = {
           includeAll=true,
           allValues='.+',
           sort=1,
+        ),
+        // Interface
+        grafana.template.new(
+          'interface',
+          '$datasource',
+          'ifNiceName{job=~"$job", instance=~"$instance", snmp_target=~"$snmp_target"}',
+          label='interface',
+          refresh='load',
+          multi=true,
+          includeAll=true,
+          allValues='.+',
+          sort=1,
+          regex='/ifIndex=\\"(?<value>[0-9]+)\\".*nicename=\\"(?<text>[\\w:\\s0-9\\.]+)\\"/',
         ),
       ])
       .addRow(

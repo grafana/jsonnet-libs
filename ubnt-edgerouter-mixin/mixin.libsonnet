@@ -1,1 +1,2 @@
-(import 'dashboards/overview.jsonnet')
+(import 'dashboards/overview.jsonnet') +
+(import 'rules.libsonnet')
