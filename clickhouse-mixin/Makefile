@@ -29,10 +29,6 @@ dashboards_out: mixin.libsonnet config.libsonnet $(wildcard dashboards/*)
 prometheus_alerts.yaml: mixin.libsonnet alerts/*.libsonnet
 	mixtool generate alerts mixin.libsonnet -a prometheus_alerts.yaml
 
-
-.PHONY: deploy deploy_rules deploy_dashboards
-deploy: deploy_rules deploy_dashboards
-
 .PHONY: clean
 clean:
 	rm -rf dashboards_out prometheus_alerts.yaml
