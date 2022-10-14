@@ -1,0 +1,63 @@
+{
+  prometheusAlerts+:: {
+    groups+: [
+      {
+        name: 'ClickhouseAlerts',
+        rules: [
+          {
+            alert: 'ClickhouseReplicationQueueBackingUp',
+            expr: |||
+              ClickHouseAsyncMetrics_ReplicasMaxQueueSize > %(alertsReplicasMaxQueueSize)s
+            ||| % $._config,
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'Clickhouse replica max queue size backing up.',
+              description: |||
+                Clickhouse replication tasks are processing slower than expected causing replication queue size to back up over %(alertsReplicasMaxQueueSize)s at\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}
+              ||| % $._config,
+            },
+            'for': '0',
+          },
+          {
+            alert: 'ClickhouseRejectedInserts',
+            expr: 'ClickHouseProfileEvents_RejectedInserts > 1',
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'Clickhouse has too many rejected inserts.',
+              description: 'Clickhouse inserts are being rejected at\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}\n  as items are being inserted faster than Clickhouse is able to merge them',
+            },
+            'for': '0',
+          },
+          {
+            alert: 'ClickhouseZookeeperSessions',
+            expr: 'ClickHouseMetrics_ZooKeeperSession > 1',
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'Clickhouse too many Zookeeper sessions.',
+              description: 'Clickhouse has more than one connection to a Zookeeper at\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}\n  which can lead to bugs due to stale reads in Zookeepers consistency model',
+            },
+            'for': '0',
+          },
+          {
+            alert: 'ClickhouseReplicasInReadOnly',
+            expr: 'ClickHouseMetrics_ReadonlyReplica > 0',
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'Clickhouse has too many replicas in read only state.',
+              description: 'Clickhouse has\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}\n  replicas in a read only state after losing connection to Zookeeper or at startup',
+            },
+            'for': '0',
+          },
+        ],
+      },
+    ],
+  },
+}

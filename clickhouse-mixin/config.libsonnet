@@ -5,6 +5,9 @@
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
 
+    // for alerts
+    alertsReplicasMaxQueueSize: '99',
+
     // enable Loki logs
     enableLokiLogs: true,
   },
