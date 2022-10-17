@@ -150,7 +150,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\",type!=\"command\", mongodb_cluster=\"$cluster\"}[$__rate_interval]) or irate(mongodb_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[$__rate_interval]))",
+          "expr": "sum(irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\",type!=\"command\", mongodb_cluster=\"$cluster\"}[$__rate_interval]) or irate(mongodb_op_counters_total{service_name=~\"$service_name\",type!=\"command\", mongodb_cluster=\"$cluster\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -275,7 +275,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\", mongodb_cluster=\"$cluster\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$__rate_interval]) > 0))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\", mongodb_cluster=\"$cluster\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\", mongodb_cluster=\"$cluster\"}[$__rate_interval]) > 0))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"

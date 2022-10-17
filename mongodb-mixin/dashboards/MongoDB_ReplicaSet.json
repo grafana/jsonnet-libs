@@ -898,7 +898,7 @@
             "uid": "${datasource}"
           },
           "exemplar": true,
-          "expr": "time() - avg by (service_name) (max(mongodb_mongod_replset_member_last_heartbeat{service_name=~\"$service_name\", mongodb_cluster=~\"$cluster\"}) by (name)) * on (name) group_right avg by (service_name) (mongodb_mongod_replset_my_name{service_name=~\"$service_name\"})",
+          "expr": "time() - avg by (service_name) (max(mongodb_mongod_replset_member_last_heartbeat{service_name=~\"$service_name\", mongodb_cluster=~\"$cluster\"}) by (name)) * on (name) group_right avg by (service_name) (mongodb_mongod_replset_my_name{service_name=~\"$service_name\", mongodb_cluster=~\"$cluster\"})",
           "interval": "$__rate_interval",
           "legendFormat": "{{service_name}}",
           "refId": "A"
