@@ -7,11 +7,15 @@
         rules: [
           {
             alert: 'Cilium Agent Endpoint Failures',
-            expr: 'sum(cilium_endpoint_state{endpoint_state="invalid"}) by (pod, endpoint_state)',
+            expr: 'sum(cilium_endpoint_state{endpoint_state="invalid"}) by (pod)',
+            annotations:
+            {
+              summary: 'Cilium Agent {{$labels.pod}} has endpoints in the invalid state.'
+            },
             labels: {
               severity: 'info',
             },
-            'for': '2m',
+            'for': '5m',
           },
           {
             alert: 'Cilium Agent Endpoint Update Failure',
@@ -56,7 +60,7 @@
             alert: 'Cilium Operator Exhausted IPAM IPs',
             expr: 'sum(cilium_operator_ipam_ips{type="available"}) >= 1',
             annotations: {
-              summary: 'Cilium Operator has exhausted its IPAM IPs. This is a critical issue which may cause Pods to fail to be scheduled.'
+              summary: 'Cilium Operator {{$labels.pod}} has exhausted its IPAM IPs. This is a critical issue which may cause Pods to fail to be scheduled.\n\nThis may be caused by number of Pods being scheduled exceeding the you cloud platforms network limits or issues with Cilium rate limiting.'
             },
             labels: {
               severity: 'critical'
@@ -68,7 +72,7 @@
             alert: 'Cilium Operator Low Available IPAM IPs',
             expr: '(sum(cilium_operator_ipam_ips{type!="available"}) / sum(cilium_operator_ipam_ips)) > 0.9',
             annotations: {
-              summary: 'Cilium Operator has used up over 90% of its available IPs. If available IPs become exhausted then the operator may not be able to schedule Pods.'
+              summary: 'Cilium Operator {{$labels.pod}} has used up over 90% of its available IPs. If available IPs become exhausted then the operator may not be able to schedule Pods.\n\nThis may be caused by number of Pods being scheduled exceeding the you cloud platforms network limits or issues with Cilium rate limiting.'
             },
             labels: {
               severity: 'warning'
@@ -87,7 +91,7 @@
               severity: 'warning'
             },
             annotations: {
-              summary: 'Cilium Agent is experiencing errors updating BPF maps on Agent Pod {{$labels.pod}}, this could indicate various problems depending on the map type.'
+              summary: 'Cilium Agent is experiencing errors updating BPF maps on Agent Pod {{$labels.pod}}. Effects may vary depending on map type(s) being affected.'
             },
             'for': '5m',
           },
@@ -111,10 +115,10 @@
             alert: 'Cilium Agent NAT Table Full',
             expr: 'sum(rate(cilium_drop_count_total{reason="No mapping for NAT masquerade"}[1m])) by (pod)',
             annotations: {
-              summary: 'Cilium Agent Pod {{$labels.pod}} is dropping packets due to "No mapping for NAT masquerade" errors. This likely means that the Cilium agents NAT table is full.\nThis is a potentially critical issue that can lead to connection issues for packets leaving the cluster.\n\nSee: https://docs.cilium.io/en/v1.9/concepts/networking/masquerading/ for more info.',
+              summary: 'Cilium Agent Pod {{$labels.pod}} is dropping packets due to "No mapping for NAT masquerade" errors. This likely means that the Cilium agents NAT table is full.\nThis is a potentially critical issue that can lead to connection issues for packets leaving the cluster network.\n\nSee: https://docs.cilium.io/en/v1.9/concepts/networking/masquerading/ for more info.'
             },
             labels: {
-              severity: 'error'
+              severity: 'critical'
             },
             'for': '5m',
           },
@@ -194,7 +198,7 @@
             labels: {
               severity: 'warning'
             },
-            'for': '2m',
+            'for': '5m',
           },
         ],
       },
@@ -229,18 +233,13 @@
         name: 'Cilium Nodes',
         rules: [
           {
-            alert: 'Cilium Node Connectivity Status Error',
-            expr: 'sum(cilium_node_connectivity_status{}) by (pod) != (sum(cilium_node_connectivity_status{}) / count(cilium_version))',
-            labels: {
-              severity: 'info',
-            },
-            'for': '5m',
-          },
-          {
             alert: 'Cilium Unreachable Nodes',
             expr: 'sum(cilium_unreachable_nodes{}) by (pod) > 0',
             labels: {
               severity: 'info',
+            },
+            annotations: {
+              summary: 'Cilium Agent {{$labels.pod}} is reporting unreachable Nodes in the cluster.'
             },
             'for': '15m',
           },
