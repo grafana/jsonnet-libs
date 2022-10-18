@@ -22,12 +22,41 @@
     ]
   },
   "description": "Dashboard for Cilium Enterprise v1.12 (https://cilium.io/) HA FQDN Proxy metrics",
-  "gnetId": 16611,
   "editable": true,
   "fiscalYearStartMonth": 0,
+  "gnetId": 16611,
   "graphTooltip": 1,
-  "id": 122,
-  "links": [{ "asDropdown": true, "icon": "external link", "includeVars": true, "keepTime": true, "tags": ["cilium-overview"], "targetBlank": false, "title": "Cilium Overviews", "tooltip": "", "type": "dashboards", "url": "" }, { "asDropdown": true, "icon": "external link", "includeVars": true, "keepTime": true, "tags": ["cilium-agent"], "targetBlank": false, "title": "Cilium Components", "tooltip": "", "type": "dashboards", "url": "" }],
+  "id": 133,
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "cilium-overview"
+      ],
+      "targetBlank": false,
+      "title": "Cilium Overviews",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "cilium-agent"
+      ],
+      "targetBlank": false,
+      "title": "Cilium Components",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -525,7 +554,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "topk($k, sum(isovalent_external_dns_proxy_processing_duration_seconds) by (pod))",
+          "expr": "topk($k, sum(isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"}) by (pod))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -947,7 +976,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "avg(isovalent_external_dns_proxy_processing_duration_seconds)",
+          "expr": "avg(isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"})",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1159,7 +1188,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "sum(rate(isovalent_external_dns_proxy_policy_l7_total[$__rate_interval])) by (rule)",
+          "expr": "sum(rate(isovalent_external_dns_proxy_policy_l7_total{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"}[$__rate_interval])) by (rule)",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1369,7 +1398,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "quantile(0.95, isovalent_external_dns_proxy_processing_duration_seconds)",
+          "expr": "quantile(0.95, isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"})",
           "hide": false,
           "legendFormat": "P95",
           "range": true,
@@ -1381,7 +1410,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "quantile(0.75, isovalent_external_dns_proxy_processing_duration_seconds)",
+          "expr": "quantile(0.75, isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"})",
           "hide": false,
           "legendFormat": "P75",
           "range": true,
@@ -1393,7 +1422,7 @@
             "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
-          "expr": "quantile(0.50, isovalent_external_dns_proxy_processing_duration_seconds)",
+          "expr": "quantile(0.50, isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"})",
           "hide": false,
           "legendFormat": "P50",
           "range": true,
@@ -1411,6 +1440,33 @@
   "templating": {
     "list": [
       {
+        "allValue": "",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "grafanacloud-prom"
+        },
+        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size, cluster)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(isovalent_external_dns_proxy_update_queue_size, cluster)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
         "allValue": "cilium.*",
         "current": {
           "selected": false,
@@ -1421,14 +1477,14 @@
           "type": "prometheus",
           "uid": "grafanacloud-prom"
         },
-        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size, pod)",
+        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, pod)",
         "hide": 0,
         "includeAll": true,
         "multi": false,
         "name": "pod",
         "options": [],
         "query": {
-          "query": "label_values(isovalent_external_dns_proxy_update_queue_size, pod)",
+          "query": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, pod)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -1461,33 +1517,7 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "alpo-1",
-          "value": "alpo-1"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "grafanacloud-prom"
-        },
-        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size, cluster)",
-        "hide": 0,
-        "includeAll": false,
-        "multi": false,
-        "name": "cluster",
-        "options": [],
-        "query": {
-          "query": "label_values(isovalent_external_dns_proxy_update_queue_size, cluster)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": false,
+          "selected": true,
           "text": "kube-system",
           "value": "kube-system"
         },
@@ -1495,14 +1525,14 @@
           "type": "prometheus",
           "uid": "grafanacloud-prom"
         },
-        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size, namespace)",
+        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, namespace)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "label_values(isovalent_external_dns_proxy_update_queue_size, namespace)",
+          "query": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, namespace)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1544,6 +1574,6 @@
   "timezone": "utc",
   "title": "External HA FQDN Proxy",
   "uid": "integrations_cilium_ent_ha_fqdn_proxy",
-  "version": 8,
+  "version": 3,
   "weekStart": ""
 }
