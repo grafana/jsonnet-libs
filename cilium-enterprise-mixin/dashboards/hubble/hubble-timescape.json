@@ -25,13 +25,42 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 125,
-  "links": [],
+  "links": [
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "cilium-overview"
+      ],
+      "targetBlank": false,
+      "title": "Cilium Overviews",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    },
+    {
+      "asDropdown": true,
+      "icon": "external link",
+      "includeVars": true,
+      "keepTime": true,
+      "tags": [
+        "hubble"
+      ],
+      "targetBlank": false,
+      "title": "Hubble",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -82,7 +111,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "count(timescape_ingestor_ingest_running{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}) by (cluster)",
@@ -97,7 +126,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -174,7 +203,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -185,7 +214,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.75, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -197,7 +226,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.50, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -213,7 +242,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -291,7 +320,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -302,7 +331,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.75, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -314,7 +343,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.50, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -330,7 +359,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -407,7 +436,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(timescape_ingestor_flows_ingested_total{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -422,7 +451,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -499,7 +528,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "avg(rate(timescape_clickhouse_queries_results_sum{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__interval]) / rate(timescape_clickhouse_queries_results_count{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__interval]))",
@@ -514,7 +543,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -592,7 +621,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(timescape_ingestor_ingestfilter_filtered_errors_total{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -607,7 +636,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -685,7 +714,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -696,7 +725,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.75, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -708,7 +737,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
@@ -724,7 +753,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -802,7 +831,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(timescape_ingestor_ingestfilter_filtered_total{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -817,7 +846,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -895,7 +924,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(timescape_ingestor_ingestfilter_filtered_skipped_total{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -910,7 +939,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -988,7 +1017,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(timescape_ingestor_ingestlog_getinfo_queries{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -1010,42 +1039,39 @@
       {
         "current": {
           "selected": false,
-          "text": "hubble-timescape-ingestor-78669d4b7-x5h4q",
-          "value": "hubble-timescape-ingestor-78669d4b7-x5h4q"
+          "text": "default",
+          "value": "default"
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "grafanacloud-prom"
-        },
-        "definition": "label_values(timescape_ingestor_ingest_running, pod)",
         "hide": 0,
         "includeAll": false,
+        "label": "Data Source",
         "multi": false,
-        "name": "pod",
+        "name": "prometheus_datasource",
         "options": [],
-        "query": {
-          "query": "label_values(timescape_ingestor_ingest_running, pod)",
-          "refId": "StandardVariableQuery"
-        },
+        "query": "prometheus",
+        "queryValue": "",
         "refresh": 1,
-        "regex": "",
+        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
         "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
+        "type": "datasource"
       },
       {
         "current": {
           "selected": false,
-          "text": "alpo-2",
-          "value": "alpo-2"
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "grafanacloud-prom"
+          "uid": "${prometheus_datasource}"
         },
         "definition": "label_values(timescape_ingestor_ingest_running, cluster)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "multi": false,
         "name": "cluster",
         "options": [],
@@ -1062,21 +1088,55 @@
       {
         "current": {
           "selected": false,
-          "text": "kube-system",
-          "value": "kube-system"
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "grafanacloud-prom"
+          "uid": "${prometheus_datasource}"
         },
-        "definition": "label_values(timescape_ingestor_ingest_running, namespace)",
+        "definition": "label_values(timescape_ingestor_ingest_running{cluster=~\"$cluster\"}, namespace)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "multi": false,
         "name": "namespace",
         "options": [],
         "query": {
-          "query": "label_values(timescape_ingestor_ingest_running, namespace)",
+          "query": "label_values(timescape_ingestor_ingest_running{cluster=~\"$cluster\"}, namespace)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${prometheus_datasource}"
+        },
+        "definition": "label_values(timescape_ingestor_ingest_running{cluster=~\"$cluster\", namespace=~\"$namespace\"}, pod)",
+        "hide": 0,
+        "includeAll": true,
+        "multi": false,
+        "name": "pod",
+        "options": [],
+        "query": {
+          "query": "label_values(timescape_ingestor_ingest_running{cluster=~\"$cluster\", namespace=~\"$namespace\"}, pod)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

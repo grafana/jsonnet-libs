@@ -5,7 +5,7 @@
     'cilium-cluster.json': (import 'dashboards/cilium-cluster.json'),
     'cilium-operator.json': (import 'dashboards/cilium-operator.json'),
     'hubble-overview.json': (import 'dashboards/hubble-overview.json'),
-    'hubble-timescape.json': (import 'dashboards/hubble-timescape.json'),
+    'hubble-timescape.json': (import 'dashboards/hubble/hubble-timescape.json'),
     'cilium-actionable.json': (import 'dashboards/cilium-agent/cilium-actionable.json'),
     'cilium-agent.json': (import 'dashboards/cilium-agent/cilium-agent.json'),
     'cilium-api.json': (import 'dashboards/cilium-agent/cilium-api.json'),
