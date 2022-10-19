@@ -1,4 +1,4 @@
-# GitLab mixin
+# GitLab Mixin
 
 The GitLab mixin is a set of configurable Grafana dashboards and alerts based on the [metrics available from an instance of GitLab EE](https://docs.gitlab.com/ee/administration/monitoring/prometheus/gitlab_metrics.html).
 
@@ -9,8 +9,9 @@ The GitLab mixin contains the following dashboards:
 
 The GitLab Overview dashboard provides details on request traffic, pipeline activity, and rails error logs. To get GitLab rails error logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default GitLab rails error log path is `/var/log/gitlab/gitlab-rails/exceptions_json.log`.
 
-![screenshot-0](images/)
-![screenshot-1](images/)
+![First screenshot of the overview dashboard](images/overview.01.png)
+![Second screenshot of the overview dashboard](images/overview.02.png)
+![Third screenshot of the overview dashboard](images/overview.03.png)
 
 GitLab rails error logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
