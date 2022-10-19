@@ -141,7 +141,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -266,11 +266,11 @@
   "templating": {
     "list": [
       {
-          "current": {
-            "selected": false,
-            "text": "default",
-            "value": "default"
-          },
+        "current": {
+          "selected": false,
+          "text": "default",
+          "value": "default"
+        },
         "hide": 0,
         "includeAll": false,
         "label": "Data Source",
@@ -423,7 +423,7 @@
       "30d"
     ]
   },
-  "timezone": "utc",
+  "timezone": "",
   "title": "Cilium / Components / Network",
   "uid": "integrations_cilium_ent_network",
   "version": 3,

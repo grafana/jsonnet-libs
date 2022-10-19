@@ -1572,7 +1572,7 @@
     ]
   },
   "timezone": "utc",
-  "title": "External HA FQDN Proxy",
+  "title": "Cilium / Components / External HA FQDN Proxy",
   "uid": "integrations_cilium_ent_ha_fqdn_proxy",
   "version": 3,
   "weekStart": ""

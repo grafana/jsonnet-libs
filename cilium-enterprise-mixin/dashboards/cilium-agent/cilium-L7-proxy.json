@@ -921,11 +921,11 @@
   "templating": {
     "list": [
       {
-          "current": {
-            "selected": false,
-            "text": "default",
-            "value": "default"
-          },
+        "current": {
+          "selected": false,
+          "text": "default",
+          "value": "default"
+        },
         "hide": 0,
         "includeAll": false,
         "label": "Data Source",
@@ -1078,7 +1078,7 @@
       "30d"
     ]
   },
-  "timezone": "utc",
+  "timezone": "",
   "title": "Cilium / Components / L7 Proxy",
   "uid": "integrations_cilium_ent_L7_proxy",
   "version": 3,

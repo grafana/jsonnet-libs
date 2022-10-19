@@ -907,7 +907,7 @@
       "30d"
     ]
   },
-  "timezone": "utc",
+  "timezone": "",
   "title": "Cilium / Components / Actionable",
   "uid": "integrations_cilium_ent_actionable",
   "version": 3,

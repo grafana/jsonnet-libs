@@ -1584,11 +1584,11 @@
   "templating": {
     "list": [
       {
-          "current": {
-            "selected": false,
-            "text": "default",
-            "value": "default",
-          },
+        "current": {
+          "selected": false,
+          "text": "default",
+          "value": "default"
+        },
         "hide": 0,
         "includeAll": false,
         "label": "Data Source",
@@ -1741,7 +1741,7 @@
       "30d"
     ]
   },
-  "timezone": "utc",
+  "timezone": "",
   "title": "Cilium / Overview",
   "uid": "integrations_cilium_ent_overview",
   "version": 3,

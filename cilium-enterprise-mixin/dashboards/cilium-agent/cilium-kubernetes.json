@@ -750,7 +750,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1148,7 +1148,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1466,7 +1466,7 @@
       "30d"
     ]
   },
-  "timezone": "utc",
+  "timezone": "",
   "title": "Cilium / Components / Kubernetes",
   "uid": "integrations_cilium_ent_k8s",
   "version": 3,

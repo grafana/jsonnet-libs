@@ -186,7 +186,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -330,7 +330,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "targets": [
         {
           "datasource": {
@@ -447,7 +447,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -543,7 +543,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -637,7 +637,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -731,7 +731,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -825,7 +825,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -919,7 +919,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1013,7 +1013,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "9.1.6",
+      "pluginVersion": "9.2.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1066,17 +1066,17 @@
     }
   ],
   "refresh": false,
-  "schemaVersion": 25,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-          "current": {
-            "selected": false,
-            "text": "default",
-            "value": "default",
-          },
+        "current": {
+          "selected": false,
+          "text": "default",
+          "value": "default"
+        },
         "hide": 0,
         "includeAll": false,
         "label": "Data Source",
