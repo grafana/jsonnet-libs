@@ -43,7 +43,7 @@
     {
       "asDropdown": true,
       "icon": "external link",
-      "includeVars": true,
+      "includeVars": false,
       "keepTime": true,
       "tags": [
         "hubble"
@@ -114,7 +114,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "count(timescape_ingestor_ingest_running{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}) by (cluster)",
+          "expr": "count(timescape_ingestor_ingest_running{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}) by (cluster)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -206,7 +206,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "legendFormat": "P95",
           "range": true,
           "refId": "A"
@@ -217,7 +217,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.75, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.75, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "hide": false,
           "legendFormat": "P75",
           "range": true,
@@ -229,7 +229,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.50, sum(rate(timescape_clickhouse_queries_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "hide": false,
           "legendFormat": "P50",
           "range": true,
@@ -323,7 +323,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "legendFormat": "P95",
           "range": true,
           "refId": "A"
@@ -334,7 +334,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.75, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.75, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "hide": false,
           "legendFormat": "P75",
           "range": true,
@@ -346,7 +346,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.50, sum(rate(timescape_ingestor_ingest_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "hide": false,
           "legendFormat": "P50",
           "range": true,
@@ -439,7 +439,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(timescape_ingestor_flows_ingested_total{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (pod)",
+          "expr": "sum(rate(timescape_ingestor_flows_ingested_total{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -531,7 +531,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(rate(timescape_clickhouse_queries_results_sum{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__interval]) / rate(timescape_clickhouse_queries_results_count{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__interval]))",
+          "expr": "avg(rate(timescape_clickhouse_queries_results_sum{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval]) / rate(timescape_clickhouse_queries_results_count{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -624,7 +624,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(timescape_ingestor_ingestfilter_filtered_errors_total{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (pod)",
+          "expr": "sum(rate(timescape_ingestor_ingestfilter_filtered_errors_total{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -717,7 +717,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "legendFormat": "P95",
           "range": true,
           "refId": "A"
@@ -728,7 +728,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.75, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.75, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "hide": false,
           "legendFormat": "P75",
           "range": true,
@@ -740,7 +740,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate(timescape_ingestor_ingestfilter_batch_duration_seconds_bucket{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
           "hide": false,
           "legendFormat": "P50",
           "range": true,
@@ -834,7 +834,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(timescape_ingestor_ingestfilter_filtered_total{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (pod)",
+          "expr": "sum(rate(timescape_ingestor_ingestfilter_filtered_total{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1020,7 +1020,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(timescape_ingestor_ingestlog_getinfo_queries{pod=\"$pod\", cluster=\"$cluster\", namespace=\"$namespace\"}[$__rate_interval])) by (pod)",
+          "expr": "sum(rate(timescape_ingestor_ingestlog_getinfo_queries{pod=~\"$pod\", cluster=~\"$cluster\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"

@@ -62,7 +62,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "description": "This contains HA FQDN Pods that have a high queue of backed up requests to process. Extended periods of non-zero queue size likely indicate problems with the HA FQDN Proxy or with Cilium Enterprise itself. ",
       "fieldConfig": {
@@ -127,7 +127,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(isovalent_external_dns_proxy_update_queue_size{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"}) by (pod) > 0",
@@ -146,7 +146,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -339,7 +339,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(isovalent_external_dns_proxy_update_errors_total{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"}[$__rate_interval])) by (error)",
@@ -358,7 +358,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -551,7 +551,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"}) by (pod))",
@@ -570,7 +570,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -761,7 +761,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(isovalent_external_dns_proxy_update_queue_size{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"}) by (pod))",
@@ -780,7 +780,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -973,7 +973,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "avg(isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"})",
@@ -992,7 +992,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -1185,7 +1185,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(isovalent_external_dns_proxy_policy_l7_total{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"}[$__rate_interval])) by (rule)",
@@ -1204,7 +1204,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "${prometheus_datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -1395,7 +1395,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.95, isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"})",
@@ -1407,7 +1407,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.75, isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"})",
@@ -1419,7 +1419,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.50, isovalent_external_dns_proxy_processing_duration_seconds{pod=~\"$pod\", namespace=~\"$namespace\", cluster=~\"$cluster\"})",
@@ -1440,6 +1440,24 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": false,
+          "text": "default",
+          "value": "default"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data Source",
+        "multi": false,
+        "name": "prometheus_datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
         "allValue": "",
         "current": {
           "selected": true,
@@ -1448,7 +1466,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "grafanacloud-prom"
+          "uid": "${prometheus_datasource}"
         },
         "definition": "label_values(isovalent_external_dns_proxy_update_queue_size, cluster)",
         "hide": 0,
@@ -1467,6 +1485,32 @@
         "type": "query"
       },
       {
+        "current": {
+          "selected": true,
+          "text": "kube-system",
+          "value": "kube-system"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${prometheus_datasource}"
+        },
+        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, namespace)",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "namespace",
+        "options": [],
+        "query": {
+          "query": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, namespace)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
         "allValue": "cilium.*",
         "current": {
           "selected": false,
@@ -1475,16 +1519,16 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "grafanacloud-prom"
+          "uid": "${prometheus_datasource}"
         },
-        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, pod)",
+        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\", namespace=~\"$namespace\"}, pod)",
         "hide": 0,
         "includeAll": true,
         "multi": false,
         "name": "pod",
         "options": [],
         "query": {
-          "query": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, pod)",
+          "query": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\", namespace=~\"$namespace\"}, pod)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -1514,32 +1558,6 @@
         "query": "10",
         "skipUrlSync": false,
         "type": "textbox"
-      },
-      {
-        "current": {
-          "selected": true,
-          "text": "kube-system",
-          "value": "kube-system"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "grafanacloud-prom"
-        },
-        "definition": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, namespace)",
-        "hide": 0,
-        "includeAll": false,
-        "multi": false,
-        "name": "namespace",
-        "options": [],
-        "query": {
-          "query": "label_values(isovalent_external_dns_proxy_update_queue_size{cluster=~\"$cluster\"}, namespace)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
       }
     ]
   },

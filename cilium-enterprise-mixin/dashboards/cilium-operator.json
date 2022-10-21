@@ -195,7 +195,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "min(irate(cilium_operator_process_cpu_seconds_total{name=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod) * 100",
+          "expr": "min(irate(cilium_operator_process_cpu_seconds_total{service=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod) * 100",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -209,7 +209,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(irate(cilium_operator_process_cpu_seconds_total{name=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod) * 100",
+          "expr": "avg(irate(cilium_operator_process_cpu_seconds_total{service=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod) * 100",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -223,7 +223,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "max(irate(cilium_operator_process_cpu_seconds_total{name=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod) * 100",
+          "expr": "max(irate(cilium_operator_process_cpu_seconds_total{service=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod) * 100",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -338,7 +338,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "avg(cilium_operator_process_resident_memory_bytes{name=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
+          "expr": "avg(cilium_operator_process_resident_memory_bytes{service=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -352,7 +352,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "max(cilium_operator_process_resident_memory_bytes{name=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
+          "expr": "max(cilium_operator_process_resident_memory_bytes{service=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -366,7 +366,7 @@
             "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
-          "expr": "min(cilium_operator_process_resident_memory_bytes{name=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
+          "expr": "min(cilium_operator_process_resident_memory_bytes{service=\"cilium-operator\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
