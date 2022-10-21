@@ -4,6 +4,7 @@
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
+    dashboardLogsRailsExceptionsFile: '/var/log/gitlab/gitlab-rails/exceptions_json.log'
 
     // for alerts
     alertsWarningRegistrationFailures: '10',  // %

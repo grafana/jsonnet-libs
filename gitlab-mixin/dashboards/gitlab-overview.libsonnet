@@ -365,7 +365,7 @@ local errorLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/gitlab/gitlab-rails/exceptions_json.log", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % matcher,
+      expr: '{filename="%s", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % [$._config.dashboardLogsRailsExceptionsFile, matcher],
       legendFormat: '',
       queryType: 'range',
       refId: 'A',
