@@ -42,7 +42,8 @@
           {
             alert: 'GitLabHigh5xxResponses',
             expr: |||
-              sum by (instance) (rate(http_requests_total{status=~"^5.*"}[5m])) > %(alertsCritical5xxResponses)s
+              100 * sum by (instance) (rate(http_requests_total{status=~"^5.*"}[5m])) / sum by (instance) (rate(http_requests_total{}[5m])) 
+              > %(alertsCritical5xxResponses)s
             ||| % $._config,
             'for': '0',
             labels: {
@@ -51,15 +52,16 @@
             annotations: {
               summary: 'Large rate of HTTP 5XX errors.',
               description:
-                ('{{ printf "%%.2f" $value }} req/s are 5XX HTTP responses, ' +
-                 'which is above the threshold %(alertsCritical5xxResponses)s req/s, ' +
+                ('{{ printf "%%.2f" $value }}%% of all requests returned 5XX HTTP responses, ' +
+                 'which is above the threshold %(alertsCritical5xxResponses)s%%, ' +
                  'indicating a system issue on {{$labels.instance}}.') % $._config,
             },
           },
           {
             alert: 'GitLabHigh4xxResponses',
             expr: |||
-              sum by (instance) (rate(http_requests_total{status=~"^4.*"}[5m])) > %(alertsWarning4xxResponses)s
+              100 * sum by (instance) (rate(http_requests_total{status=~"^4.*"}[5m])) / sum by (instance) (rate(http_requests_total{}[5m]))
+              > %(alertsWarning4xxResponses)s
             ||| % $._config,
             'for': '0',
             labels: {
@@ -68,9 +70,9 @@
             annotations: {
               summary: 'Large rate of HTTP 4XX errors.',
               description:
-                ('{{ printf "%%.2f" $value }} req/s are 4XX HTTP responses, ' +
-                 'which is above the threshold %(alertsCritical5xxResponses)s req/s, ' +
-                 'indicating several failed requests on {{$labels.instance}}.') % $._config,
+                ('{{ printf "%%.2f" $value }}%% of all requests returned 4XX HTTP responses, ' +
+                 'which is above the threshold %(alertsWarning4xxResponses)s%%, ' +
+                 'indicating many failed requests on {{$labels.instance}}.') % $._config,
             },
           },
         ],
