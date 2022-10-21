@@ -365,7 +365,7 @@ local errorLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="%s", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % [$._config.dashboardLogsRailsExceptionsFile, matcher],
+      expr: '{filename="%s", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % [$.dashboardRailsExceptionFilename, matcher],
       legendFormat: '',
       queryType: 'range',
       refId: 'A',
@@ -703,7 +703,7 @@ local buildTraceOperationsPanel = {
           ],
           if $._config.enableLokiLogs then [
             // Optional Row 3
-            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 19 } },
+            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 19 }, dashboardRailsExceptionFilename: $._config.dashboardRailsExceptionFilename},
           ] else [],
           [
             rowPipelineActivityPanel { gridPos: { h: 1, w: 24, x: 0, y: 27 } },
