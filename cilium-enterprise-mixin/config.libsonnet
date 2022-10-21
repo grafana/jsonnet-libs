@@ -6,5 +6,5 @@
     dashboardPeriod: 'now-15m',
     dashboardRefresh: '10s',
     dashboardTimezone: 'default',
-  }
+  },
 }
