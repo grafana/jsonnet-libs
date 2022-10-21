@@ -5,7 +5,6 @@ local prometheus = grafana.prometheus;
 
 local dashboardUid = 'gitlab-overview';
 local matcher = 'job=~"$job", instance=~"$instance"';
-local datasourceRegex = '(?!grafanacloud-usage|grafanacloud-ml-metrics).+';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
@@ -660,7 +659,6 @@ local buildTraceOperationsPanel = {
             'prometheus',
             null,
             label='Data Source',
-            regex=datasourceRegex,
             refresh='load'
           ),
           template.new(
@@ -688,7 +686,6 @@ local buildTraceOperationsPanel = {
             'loki',
             null,
             label='Loki Datasource',
-            regex=datasourceRegex,
             refresh='load'
           ),
         ] else [],
