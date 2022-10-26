@@ -250,7 +250,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "avg(rate(cilium_nodes_all_events_received_total{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (event_type, source)",
@@ -316,7 +316,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "sum(cilium_nodes_all_num{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
@@ -384,7 +384,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "sum(cilium_unreachable_nodes{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
@@ -485,7 +485,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "sum(cilium_ip_addresses{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (family)\n",
@@ -628,7 +628,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "exemplar": false,
@@ -728,7 +728,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_unreachable_health_endpoints{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
@@ -843,7 +843,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_process_resident_memory_bytes{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
@@ -1032,7 +1032,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_process_virtual_memory_bytes{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
@@ -1148,7 +1148,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_bpf_maps_virtual_memory_max_bytes{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"} + cilium_bpf_progs_virtual_memory_max_bytes{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
@@ -1265,7 +1265,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_process_open_fds{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
@@ -1381,7 +1381,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_bpf_progs_virtual_memory_max_bytes{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
@@ -1499,7 +1499,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${prometheus_datasource}"
+            "uid": "grafanacloud-prom"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_bpf_maps_virtual_memory_max_bytes{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
@@ -1681,7 +1681,7 @@
     ]
   },
   "timezone": "",
-  "title": "Cilium / Cluster Overview",
+  "title": "Cilium / Agent Overview",
   "uid": "integrations_cilium_ent_cluster",
   "version": 3,
   "weekStart": ""

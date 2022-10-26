@@ -1,8 +1,8 @@
 //(import 'alerts/ciliumAlerts.libsonnet') +
 {
   grafanaDashboards: {
+    'cilium-agent-overview.json': (import 'dashboards/cilium-agent-overview.json'),
     'cilium-overview.json': (import 'dashboards/cilium-overview.json'),
-    'cilium-cluster.json': (import 'dashboards/cilium-cluster.json'),
     'cilium-operator.json': (import 'dashboards/cilium-operator.json'),
     'hubble-overview.json': (import 'dashboards/hubble-overview.json'),
     'hubble-timescape.json': (import 'dashboards/hubble/hubble-timescape.json'),
