@@ -495,7 +495,7 @@ local zooKeeperWaitTimePanel =
             name='instance',
             label='instance',
             datasource='$prometheus_datasource',
-            query='label_values(up{job=~"$job"}, instance)',
+            query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~"$job"}, instance)',
             current='',
             refresh=2,
             includeAll=false,
