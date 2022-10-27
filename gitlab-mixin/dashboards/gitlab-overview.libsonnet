@@ -664,7 +664,7 @@ local buildTraceOperationsPanel = {
           template.new(
             'job',
             promDatasource,
-            'label_values(up{}, job)',
+            'label_values(gitlab_rails_boot_time_seconds{}, job)',
             label='Job',
             refresh='time',
             includeAll=true,
@@ -675,7 +675,7 @@ local buildTraceOperationsPanel = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(up{job=~"$job"}, instance)',
+            'label_values(gitlab_rails_boot_time_seconds{job=~"$job"}, instance)',
             label='Instance',
             refresh='time'
           ),
