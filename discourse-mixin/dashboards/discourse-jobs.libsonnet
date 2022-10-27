@@ -581,7 +581,7 @@ local sidekiqQueuedStat = {
             current='',
             refresh=2,
             includeAll=true,
-            multi=true,
+            multi=false,
             allValues='.+',
             sort=1
           ),
@@ -592,7 +592,7 @@ local sidekiqQueuedStat = {
             label='Job',
             refresh='time',
             includeAll=true,
-            multi=true,
+            multi=false,
             allValues='.+',
             sort=1
           ),

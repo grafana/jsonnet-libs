@@ -704,7 +704,7 @@ local ninetyNinthTopicShowPercentileRequestLatency = {
             current='',
             refresh=2,
             includeAll=true,
-            multi=true,
+            multi=false,
             allValues='.+',
             sort=1
           ),
@@ -715,7 +715,7 @@ local ninetyNinthTopicShowPercentileRequestLatency = {
             label='Job',
             refresh='time',
             includeAll=true,
-            multi=true,
+            multi=false,
             allValues='.+',
             sort=1
           ),
