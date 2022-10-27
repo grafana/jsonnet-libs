@@ -25,6 +25,13 @@ The Discourse Jobs Processing dashboard displays information about job duration 
 
 ![Screenshot of the jobs processing dashboard](images/discourse_jobs.01.png)
 
+## Alerts Overview
+
+| Alert                     | Description                                                                                                                                        |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DiscourseRequestsHigh5XXs | The Discourse environment is responding with a lot of 5XXs. Could be indicative that the instance is experiencing serious problems.                |
+| DiscourseRequestsHigh4XXs | The Discourse environment exceeded the percentage of requests that return 4XX response codes. Could be indicative of improper use of the Instance. |
+
 ## Generating dashboards and alerts
 
 ```bash
