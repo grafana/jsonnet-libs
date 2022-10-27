@@ -275,7 +275,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(cilium_operator_ec2_api_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -288,7 +288,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.75, sum(rate(cilium_operator_ec2_api_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -302,7 +302,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.50, sum(rate(cilium_operator_ec2_api_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -418,7 +418,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_ces_sync_errors_total{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -563,7 +563,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(cilium_operator_ces_queueing_delay_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -576,7 +576,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.75, sum(rate(cilium_operator_ces_queueing_delay_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -590,7 +590,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.50, sum(rate(cilium_operator_ces_queueing_delay_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -705,7 +705,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_ipam_k8s_sync_queued_total{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -878,7 +878,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_operator_ipam_ips{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}) by (type)",
@@ -993,7 +993,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_ces_sync_errors_total{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -1139,7 +1139,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(cilium_operator_ec2_api_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -1152,7 +1152,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.75, sum(rate(cilium_operator_ec2_api_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -1166,7 +1166,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.50, sum(rate(cilium_operator_ec2_api_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -1313,7 +1313,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_ipam_interface_creation_ops{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (status, subnet_id, pod)",
@@ -1529,7 +1529,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_operator_ipam_ips{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}) by (type)",
@@ -1702,7 +1702,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_operator_ipam_nodes{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"})",
@@ -1904,7 +1904,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_operator_ipam_ips{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}) by (type)",
@@ -2125,7 +2125,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_ipam_k8s_sync_queued_total{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -2354,7 +2354,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_ipam_resync_total{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -2575,7 +2575,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_identity_gc_runs{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod, outcome)",
@@ -2796,7 +2796,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "rate(cilium_operator_ipam_resync_queued_total{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])",
@@ -2969,7 +2969,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_ipam_allocation_ops{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
@@ -3198,7 +3198,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(cilium_operator_ipam_deficit_resolver_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -3211,7 +3211,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.75, sum(rate(cilium_operator_ipam_deficit_resolver_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -3225,7 +3225,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.5, sum(rate(cilium_operator_ipam_deficit_resolver_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -3455,7 +3455,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(cilium_operator_ipam_deficit_resolver_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -3468,7 +3468,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.75, sum(rate(cilium_operator_ipam_deficit_resolver_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -3482,7 +3482,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.5, sum(rate(cilium_operator_ipam_deficit_resolver_duration_seconds_bucket{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (le))",
@@ -3656,7 +3656,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_operator_identity_gc_entries{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}) by (pod)",
@@ -3829,7 +3829,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_operator_ipam_interface_creation_ops{cluster=~\"$cluster\", pod=~\"$pod\", namespace=~\"$namespace\"}[$__rate_interval])) by (pod)",
