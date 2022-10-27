@@ -2,7 +2,6 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local dashboardUid = 'discourse-overview';
-local matcher = 'instance=~"$instance"';
 
 local prometheus = grafana.prometheus;
 local promDatasourceName = 'prometheus_datasource';
@@ -247,7 +246,7 @@ local queuedRequestsPanel = {
   },
   targets: [
     prometheus.target(
-      'rate(discourse_queued_app_reqs{instance=~"$instance",job=~"$job"}[$__rate_interval])',
+      'discourse_queued_app_reqs{instance=~"$instance",job=~"$job"}',
       datasource=promDatasource,
     ),
   ],
@@ -701,7 +700,7 @@ local ninetyNinthTopicShowPercentileRequestLatency = {
             name='instance',
             label='instance',
             datasource='$prometheus_datasource',
-            query='label_values(discourse_page_views, instance)',
+            query='label_values(discourse_page_views{}, instance)',
             current='',
             refresh=2,
             includeAll=true,
@@ -710,9 +709,9 @@ local ninetyNinthTopicShowPercentileRequestLatency = {
             sort=1
           ),
           template.new(
-            'job',
-            promDatasource,
-            'label_values(up{}, job)',
+            name='job',
+            datasource=promDatasource,
+            query='label_values(discourse_page_views{}, job)',
             label='Job',
             refresh='time',
             includeAll=true,

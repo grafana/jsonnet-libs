@@ -2,7 +2,6 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local dashboardUid = 'discourse-jobs';
-local matcher = 'instance=~"$instance"';
 
 local prometheus = grafana.prometheus;
 local promDatasourceName = 'prometheus_datasource';
@@ -589,7 +588,7 @@ local sidekiqQueuedStat = {
           template.new(
             'job',
             promDatasource,
-            'label_values(up{}, job)',
+            query='label_values(discourse_page_views{}, job)',
             label='Job',
             refresh='time',
             includeAll=true,

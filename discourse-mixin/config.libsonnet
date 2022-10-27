@@ -7,6 +7,6 @@
 
     // for alerts
     alertsCritical5xxResponses: '10',  // %
-    alertsError4xxResponses: '30',  // %
+    alertsWarning4xxResponses: '30',  // %
   },
 }
