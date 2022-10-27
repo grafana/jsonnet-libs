@@ -1,4 +1,4 @@
-//(import 'alerts/ciliumAlerts.libsonnet') +
+(import 'alerts/ciliumAlerts.libsonnet') +
 {
   grafanaDashboards: {
     'cilium-overview.json': (import 'dashboards/cilium-overview.json'),
