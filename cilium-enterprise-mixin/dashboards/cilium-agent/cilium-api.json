@@ -255,7 +255,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.95, rate(cilium_proxy_upstream_reply_seconds_sum{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_proxy_upstream_reply_seconds_count{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (scope)",
@@ -466,7 +466,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "avg(rate(cilium_proxy_upstream_reply_seconds_sum{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_proxy_upstream_reply_seconds_count{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (scope)",

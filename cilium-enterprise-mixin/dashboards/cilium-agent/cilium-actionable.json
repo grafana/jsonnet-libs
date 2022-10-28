@@ -143,7 +143,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(irate(cilium_kubernetes_events_received_total[$__rate_interval])) by (scope, action))",
@@ -240,7 +240,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_endpoint_state{}) by (endpoint_state)",
@@ -338,7 +338,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_endpoint_state{endpoint_state=\"invalid\"}) by (pod, endpoint_state)",
@@ -436,7 +436,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_operator_ipam_ips{type=\"available\"}) ",
@@ -533,7 +533,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_drop_count_total{}[$__rate_interval])) by (reason)\n",
@@ -631,7 +631,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_drop_count_total{}[$__rate_interval])) by (reason) > 0\n",
@@ -729,7 +729,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_drop_count_total{reason=\"Policy denied\"}[$__rate_interval])) by (reason) > 0\n",

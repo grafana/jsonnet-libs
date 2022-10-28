@@ -263,7 +263,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "avg(rate(cilium_nodes_all_events_received_total{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (event_type, source)",
@@ -329,7 +329,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_nodes_all_num{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",
@@ -397,7 +397,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_unreachable_nodes{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"})",

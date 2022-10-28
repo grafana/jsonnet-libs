@@ -143,7 +143,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_identity{pod=~\"$pod\"}) by (type)",
@@ -217,7 +217,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_identity{pod=~\"$pod\"}) by (type)",
@@ -229,7 +229,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_identity{pod=~\"$pod\"})",

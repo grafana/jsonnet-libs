@@ -144,7 +144,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_bpf_map_ops_total{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (map_name)",
@@ -242,7 +242,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_bpf_map_ops_total{k8s_app=\"cilium\", pod=~\"$pod\", operation=\"delete\"}[$__rate_interval])) by (map_name)",
@@ -340,7 +340,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_bpf_map_ops_total{k8s_app=\"cilium\", pod=~\"$pod\", operation=\"update\"}[$__rate_interval])) by (map_name)",
@@ -409,7 +409,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_bpf_map_ops_total{k8s_app=\"cilium\", outcome=\"fail\",pod=~\"$pod\"}[$__rate_interval])) * 60",
@@ -506,7 +506,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(rate(cilium_bpf_map_ops_total{k8s_app=\"cilium\", outcome=\"fail\",pod=~\"$pod\"}[$__rate_interval])) by (endpoint, pod, operation))",
@@ -604,7 +604,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_bpf_map_ops_total{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (operation, outcome)",

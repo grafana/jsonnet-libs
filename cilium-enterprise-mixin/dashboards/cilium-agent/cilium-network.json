@@ -146,7 +146,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_ip_addresses{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (family)",
@@ -244,7 +244,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_unreachable_health_endpoints{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",

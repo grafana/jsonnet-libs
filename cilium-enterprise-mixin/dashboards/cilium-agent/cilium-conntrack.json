@@ -144,7 +144,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_datapath_conntrack_gc_runs_total{pod=~\"$pod\"}[$__rate_interval])) by (status)",
@@ -242,7 +242,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_datapath_conntrack_gc_entries{pod=~\"$pod\"}) by (pod, status))",
@@ -340,7 +340,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_datapath_conntrack_gc_entries{pod=~\"$pod\"}) by (status)",
@@ -438,7 +438,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.95, sum(rate(cilium_datapath_conntrack_gc_duration_seconds_sum{pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_datapath_conntrack_gc_duration_seconds_count{pod=~\"$pod\"}[$__rate_interval])) by (pod))",
@@ -450,7 +450,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.5, sum(rate(cilium_datapath_conntrack_gc_duration_seconds_sum{pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_datapath_conntrack_gc_duration_seconds_count{pod=~\"$pod\"}[$__rate_interval])) by (pod))",
@@ -462,7 +462,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.25, sum(rate(cilium_datapath_conntrack_gc_duration_seconds_sum{pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_datapath_conntrack_gc_duration_seconds_count{pod=~\"$pod\"}[$__rate_interval])) by (pod))",
@@ -560,7 +560,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(rate(cilium_datapath_conntrack_gc_key_fallbacks_total{pod=~\"$pod\"}[$__rate_interval])) by (family, protocol)",
@@ -658,7 +658,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(rate(cilium_datapath_conntrack_gc_duration_seconds_sum{pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_datapath_conntrack_gc_duration_seconds_count{pod=~\"$pod\"}[$__rate_interval])) by (pod))",
@@ -1039,7 +1039,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_datapath_conntrack_gc_entries{k8s_app=\"cilium\", family=\"ipv4\", protocol=\"TCP\", pod=~\"$pod\"}) by (status, family)",

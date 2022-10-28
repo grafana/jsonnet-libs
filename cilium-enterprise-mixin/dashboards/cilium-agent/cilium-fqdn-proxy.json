@@ -255,7 +255,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.95, rate(cilium_proxy_upstream_reply_seconds_sum{pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_proxy_upstream_reply_seconds_count{pod=~\"$pod\"}[$__rate_interval])) by (scope)",
@@ -467,7 +467,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.95, rate(cilium_proxy_upstream_reply_seconds_sum[$__rate_interval]) / rate(cilium_proxy_upstream_reply_seconds_count[$__rate_interval])) by (scope)",
@@ -679,7 +679,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.95, rate(cilium_proxy_upstream_reply_seconds_sum{pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_proxy_upstream_reply_seconds_count{pod=~\"$pod\"}[$__rate_interval]))",
@@ -891,7 +891,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.5, rate(cilium_proxy_upstream_reply_seconds_sum{pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_proxy_upstream_reply_seconds_count{pod=~\"$pod\"}[$__rate_interval]))",

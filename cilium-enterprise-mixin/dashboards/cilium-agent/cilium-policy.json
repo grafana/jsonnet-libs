@@ -219,7 +219,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(cilium_policy{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) by (pod))",
@@ -393,7 +393,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(rate(cilium_policy_import_errors_total{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}[$__rate_interval])) by (pod))",
@@ -475,7 +475,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "sum(cilium_policy{k8s_app=\"cilium\", cluster=~\"$cluster\", namespace=~\"$namespace\", pod=~\"$pod\"}) / count(cilium_version)",
@@ -649,7 +649,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(rate(cilium_policy_regeneration_total[$__rate_interval])) by (pod))",
@@ -823,7 +823,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, quantile(0.95, rate(cilium_policy_regeneration_time_stats_seconds_sum{pod=~\"$pod\"}[$__rate_interval]) / rate(cilium_policy_regeneration_time_stats_seconds_count{pod=~\"$pod\"}[$__rate_interval])) by (pod))",
@@ -997,7 +997,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, avg(cilium_policy_max_revision{pod=~\"$pod\"}) by (pod))",
@@ -1097,7 +1097,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "bottomk($k, avg(cilium_policy_max_revision{pod=~\"$pod\"}) by (pod))",
@@ -1326,7 +1326,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "topk($k, sum(rate(cilium_triggers_policy_update_total[$__rate_interval])) by (pod))",
@@ -1537,7 +1537,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.95, rate(cilium_triggers_policy_update_call_duration_seconds_sum{k8s_app=\"cilium\", pod=~\"$pod\", type=\"latency\"}[$__rate_interval]) / rate(cilium_triggers_policy_update_call_duration_seconds_count{k8s_app=\"cilium\", pod=~\"$pod\", type=\"latency\"}[$__rate_interval]))",
@@ -1551,7 +1551,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.5, rate(cilium_triggers_policy_update_call_duration_seconds_sum{k8s_app=\"cilium\", pod=~\"$pod\", type=\"latency\"}[$__rate_interval]) / rate(cilium_triggers_policy_update_call_duration_seconds_count{k8s_app=\"cilium\", pod=~\"$pod\", type=\"latency\"}[$__rate_interval]))",
@@ -1563,7 +1563,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "${prometheus_datasource}"
           },
           "editorMode": "code",
           "expr": "quantile(0.25, rate(cilium_triggers_policy_update_call_duration_seconds_sum{k8s_app=\"cilium\", pod=~\"$pod\", type=\"latency\"}[$__rate_interval]) / rate(cilium_triggers_policy_update_call_duration_seconds_count{k8s_app=\"cilium\", pod=~\"$pod\", type=\"latency\"}[$__rate_interval]))",
