@@ -24,8 +24,8 @@
           {
             alert: 'GitLabHighRunnerAuthFailure',
             expr: |||
-              100 * rate(gitlab_ci_runner_authentication_failure_total{}[5m]) / 
-              (rate(gitlab_ci_runner_authentication_success_total{}[5m]) + rate(gitlab_ci_runner_authentication_failure_total{}[5m])) 
+              100 * sum by (instance) (rate(gitlab_ci_runner_authentication_failure_total{}[5m]))  / 
+              (sum by (instance) (rate(gitlab_ci_runner_authentication_success_total{}[5m]))  + sum by (instance) (rate(gitlab_ci_runner_authentication_failure_total{}[5m])))
               > %(alertsWarningRunnerAuthFailures)s
             ||| % $._config,
             'for': '0',
