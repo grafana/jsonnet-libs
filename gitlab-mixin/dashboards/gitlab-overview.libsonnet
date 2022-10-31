@@ -1,4 +1,5 @@
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local g = (import 'grafana-builder/grafana.libsonnet');
+local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
@@ -664,7 +665,7 @@ local buildTraceOperationsPanel = {
           template.new(
             'job',
             promDatasource,
-            'label_values(up{}, job)',
+            'label_values(gitlab_rails_boot_time_seconds{}, job)',
             label='Job',
             refresh='time',
             includeAll=true,
@@ -675,7 +676,7 @@ local buildTraceOperationsPanel = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(up{job=~"$job"}, instance)',
+            'label_values(gitlab_rails_boot_time_seconds{job=~"$job"}, instance)',
             label='Instance',
             refresh='time'
           ),
