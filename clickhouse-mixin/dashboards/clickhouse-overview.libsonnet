@@ -1,4 +1,5 @@
-local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libsonnet';
+local g = (import 'grafana-builder/grafana.libsonnet');
+local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local dashboardUid = 'clickhouse-overview';
@@ -814,7 +815,7 @@ local errorLogsPanel =
           uid: '${loki_datasource}',
         },
         editorMode: 'builder',
-        expr: "{filename='/var/log/clickhouse-server/clickhouse-server.err.log'}{' + matcher + '}",
+        expr: '{filename="/var/log/clickhouse-server/clickhouse-server.err.log", %s}' % matcher,
         legendFormat: '',
         queryType: 'range',
         refId: 'A',
@@ -879,7 +880,7 @@ local errorLogsPanel =
             name='instance',
             label='instance',
             datasource='$prometheus_datasource',
-            query='label_values(up{job=~"$job"}, instance)',
+            query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
             current='',
             refresh=2,
             includeAll=false,
