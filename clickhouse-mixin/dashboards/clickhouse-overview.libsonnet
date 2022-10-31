@@ -815,7 +815,7 @@ local errorLogsPanel =
           uid: '${loki_datasource}',
         },
         editorMode: 'builder',
-        expr: "{filename='/var/log/clickhouse-server/clickhouse-server.err.log'}{' + matcher + '}",
+        expr: '{filename="/var/log/clickhouse-server/clickhouse-server.err.log", %s}' % matcher,
         legendFormat: '',
         queryType: 'range',
         refId: 'A',
