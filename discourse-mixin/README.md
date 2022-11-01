@@ -16,14 +16,9 @@ The Discourse mixin contains the following alerts:
 
 The Discourse Overview dashboard highlights web traffic, underlying rails controller metrics, request activity, and pageviews. It also outlines some useful statistics surrounding latest median request latency for all the controllers that publish these.
 
-![First screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/discourse/screenshots/discourse_overview_1.png)
-![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/discourse/screenshots/discourse_overview_2.png)
-
 ## Discourse Jobs Processing
 
 The Discourse Jobs Processing dashboard displays information about job duration and browser based memory usage. It also displays information about worker processes like `Sidekiq` and `Web` workers.
-
-![Screenshot of the jobs processing dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/discourse/screenshots/discourse_jobs_1.png)
 
 ## Alerts Overview
 
