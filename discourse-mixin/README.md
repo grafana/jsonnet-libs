@@ -9,8 +9,8 @@ The Discourse mixin contains the following dashboards:
 
 The Discourse mixin contains the following alerts:
 
-- DiscourseRequestsHigh5XXs
-- DiscourseRequestsHigh4XXs
+- DiscourseRequestsHigh5xxErrors
+- DiscourseRequestsHigh4xxErrors
 
 ## Discourse Overview
 
@@ -29,8 +29,8 @@ The Discourse Jobs Processing dashboard displays information about job duration 
 
 | Alert                     | Description                                                                                                                                        |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| DiscourseRequestsHigh5XXs | The Discourse environment is responding with a lot of 5XXs. Could be indicative that the instance is experiencing serious problems.                |
-| DiscourseRequestsHigh4XXs | The Discourse environment exceeded the percentage of requests that return 4XX response codes. Could be indicative of improper use of the Instance. |
+| DiscourseRequestsHigh5xxErrors | The Discourse environment is responding with a lot of 5XXs. Could be indicative that the instance is experiencing serious problems.                |
+| DiscourseRequestsHigh4xxErrors | The Discourse environment exceeded the percentage of requests that return 4XX response codes. Could be indicative of improper use of the Instance. |
 
 ## Generating dashboards and alerts
 

@@ -5,7 +5,7 @@
         name: 'DiscourseAlerts',
         rules: [
           {
-            alert: 'DiscourseRequestsHigh5XXs',
+            alert: 'DiscourseRequestsHigh5xxErrors',
             expr: |||
               100 * rate(discourse_http_requests{status="500"}[5m]) / on() group_left() (sum(rate(discourse_http_requests[5m])) by (instance)) > %(alertsCritical5xxResponses)s
             ||| % $._config,
@@ -22,7 +22,7 @@
             },
           },
           {
-            alert: 'DiscourseRequestsHigh4XXs',
+            alert: 'DiscourseRequestsHigh4xxErrors',
             expr: |||
               100 * rate(discourse_http_requests{status=~"^4.*"}[5m]) / on() group_left() (sum(rate(discourse_http_requests[5m])) by (instance)) > %(alertsWarning4xxResponses)s
             ||| % $._config,

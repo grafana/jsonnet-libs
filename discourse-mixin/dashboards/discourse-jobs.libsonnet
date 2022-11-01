@@ -10,7 +10,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local sidkiqJobDurationPanel = {
+local skJobDurationPanel = {
   datasource: promDatasource,
   description: 'Time spent in Sidekiq jobs broken out by job name.',
   fieldConfig: {
@@ -332,7 +332,7 @@ local v8HeapSizePanel = {
   type: 'timeseries',
 };
 
-local sidekiqWorkerScore = {
+local skWorkerScore = {
   datasource: promDatasource,
   description: 'Current number of Sidekiq Workers.',
   fieldConfig: {
@@ -474,7 +474,7 @@ local webWorkersStat = {
   type: 'stat',
 };
 
-local sidekiqQueuedStat = {
+local skQueuedStat = {
   datasource: promDatasource,
   description: 'Current number of jobs in Sidekiq queue.',
   fieldConfig: {
@@ -601,7 +601,7 @@ local sidekiqQueuedStat = {
       .addPanels(
         std.flattenArrays([
           [
-            sidkiqJobDurationPanel { gridPos: { h: 7, w: 12, x: 0, y: 0 } },
+            skJobDurationPanel { gridPos: { h: 7, w: 12, x: 0, y: 0 } },
             sheduledJobDurationPanel { gridPos: { h: 7, w: 12, x: 12, y: 0 } },
           ],
           //next row
@@ -611,9 +611,9 @@ local sidekiqQueuedStat = {
           ],
           //next row
           [
-            sidekiqWorkerScore { gridPos: { h: 6, w: 7, x: 0, y: 15 } },
+            skWorkerScore { gridPos: { h: 6, w: 7, x: 0, y: 15 } },
             webWorkersStat { gridPos: { h: 6, w: 8, x: 7, y: 15 } },
-            sidekiqQueuedStat { gridPos: { h: 6, w: 9, x: 15, y: 15 } },
+            skQueuedStat { gridPos: { h: 6, w: 9, x: 15, y: 15 } },
           ],
         ])
       ),
