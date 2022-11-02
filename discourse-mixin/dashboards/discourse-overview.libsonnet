@@ -12,7 +12,6 @@ local promDatasource = {
 
 local overviewRow = {
   collapsed: false,
-  id: 4,
   title: 'Overview',
   type: 'row',
 };
@@ -73,7 +72,6 @@ local trafficPanel = {
     },
     overrides: [],
   },
-  id: 2,
   options: {
     legend: {
       calcs: [],
@@ -152,7 +150,6 @@ local activeRequests = {
     },
     overrides: [],
   },
-  id: 6,
   options: {
     legend: {
       calcs: [],
@@ -231,7 +228,6 @@ local queuedRequestsPanel = {
     },
     overrides: [],
   },
-  id: 8,
   options: {
     legend: {
       calcs: [],
@@ -320,7 +316,6 @@ local pageviewsPanel = {
     },
     overrides: [],
   },
-  id: 10,
   options: {
     legend: {
       calcs: [],
@@ -344,7 +339,6 @@ local pageviewsPanel = {
 };
 local latencyRow = {
   collapsed: false,
-  id: 12,
   title: 'Latency',
   type: 'row',
 };
@@ -404,7 +398,6 @@ local medianLatencyPanel = {
     },
     overrides: [],
   },
-  id: 14,
   options: {
     legend: {
       calcs: [],
@@ -483,7 +476,6 @@ local topicMedianPanel = {
     },
     overrides: [],
   },
-  id: 16,
   options: {
     legend: {
       calcs: [],
@@ -561,7 +553,6 @@ local ninetyNinthPercentileRequestLatency = {
     },
     overrides: [],
   },
-  id: 18,
   options: {
     legend: {
       calcs: [],
@@ -643,7 +634,6 @@ local ninetyNinthTopicShowPercentileRequestLatency = {
     },
     overrides: [],
   },
-  id: 20,
   options: {
     legend: {
       calcs: [],

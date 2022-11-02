@@ -66,7 +66,6 @@ local skJobDurationPanel = {
     },
     overrides: [],
   },
-  id: 19,
   links: [],
   options: {
     legend: {
@@ -148,7 +147,6 @@ local sheduledJobDurationPanel = {
     },
     overrides: [],
   },
-  id: 20,
   links: [],
   options: {
     legend: {
@@ -176,7 +174,7 @@ local sheduledJobDurationPanel = {
 
 local usedRSSMemoryPanel = {
   datasource: promDatasource,
-  description: 'Total RSS Memory used by process. Broken up by process type.',
+  description: 'Total RSS Memory used by process. Broken up by pid.',
   fieldConfig: {
     defaults: {
       color: {
@@ -230,7 +228,6 @@ local usedRSSMemoryPanel = {
     },
     overrides: [],
   },
-  id: 24,
   options: {
     legend: {
       calcs: [],
@@ -309,7 +306,6 @@ local v8HeapSizePanel = {
     },
     overrides: [],
   },
-  id: 26,
   options: {
     legend: {
       calcs: [],
@@ -367,7 +363,6 @@ local skWorkerScore = {
     },
     overrides: [],
   },
-  id: 15,
   links: [],
   maxDataPoints: 100,
   options: {
@@ -438,7 +433,6 @@ local webWorkersStat = {
     },
     overrides: [],
   },
-  id: 16,
   links: [],
   maxDataPoints: 100,
   options: {
@@ -509,7 +503,6 @@ local skQueuedStat = {
     },
     overrides: [],
   },
-  id: 17,
   links: [],
   maxDataPoints: 100,
   options: {
