@@ -9,9 +9,9 @@ The GitLab mixin contains the following dashboards:
 
 The GitLab Overview dashboard provides details on request traffic, pipeline activity, and rails error logs. To get GitLab rails error logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default GitLab rails error log path is `/var/log/gitlab/gitlab-rails/exceptions_json.log`.
 
-![First screenshot of the overview dashboard](images/overview.01.png)
-![Second screenshot of the overview dashboard](images/overview.02.png)
-![Third screenshot of the overview dashboard](images/overview.03.png)
+![First screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/gitlab/screenshots/gitlab_overview_1.png)
+![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/gitlab/screenshots/gitlab_overview_2.png)
+![Third screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/gitlab/screenshots/gitlab_overview_3.png)
 
 GitLab rails error logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
