@@ -7,7 +7,6 @@ This integration includes the following dashboards.
 - Cilium / Overview
 - Cilium / Operator
 - Cilium / Agent Overview
-- Cilium / Components / Actionable
 - Cilium / Components / Agent
 - Cilium / Components / API
 - Cilium / Components / BPF
