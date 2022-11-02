@@ -24,7 +24,7 @@
                    },
                    annotations: {
                      summary: 'Apache restart.',
-                     description: 'Apache has just been restarted.',
+                     description: 'Apache has just been restarted on {{ $labels.instance }}.',
                    },
                    'for': '0',
                  },

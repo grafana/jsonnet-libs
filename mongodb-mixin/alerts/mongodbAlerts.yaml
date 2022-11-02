@@ -7,7 +7,7 @@ groups:
     labels:
       severity: critical
     annotations:
-      summary: MongoDB Down (instance {{ $labels.instance }})
+      summary: MongoDB Instance is Down.
       description: "MongoDB instance is down\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: MongodbReplicationLag
@@ -16,7 +16,7 @@ groups:
     labels:
       severity: critical
     annotations:
-      summary: MongoDB replication lag (instance {{ $labels.instance }})
+      summary: MongoDB replication lag is exceeding the threshold.
       description: "Mongodb replication lag is more than 10s\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: MongodbReplicationHeadroom
@@ -25,7 +25,7 @@ groups:
     labels:
       severity: critical
     annotations:
-      summary: MongoDB replication headroom (instance {{ $labels.instance }})
+      summary: MongoDB replication headroom is exceeding the threshold.
       description: "MongoDB replication headroom is <= 0\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: MongodbNumberCursorsOpen
@@ -34,7 +34,7 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: MongoDB number cursors open (instance {{ $labels.instance }})
+      summary: MongoDB number cursors open too high.
       description: "Too many cursors opened by MongoDB for clients (> 10k)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: MongodbCursorsTimeouts
@@ -43,7 +43,7 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: MongoDB cursors timeouts (instance {{ $labels.instance }})
+      summary: MongoDB cursors timeouts is exceeding the threshold.
       description: "Too many cursors are timing out\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: MongodbTooManyConnections
@@ -52,7 +52,7 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: MongoDB too many connections (instance {{ $labels.instance }})
+      summary: MongoDB too many connections.
       description: "Too many connections (> 80%)\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: MongodbVirtualMemoryUsage
@@ -61,5 +61,5 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: MongoDB virtual memory usage (instance {{ $labels.instance }})
+      summary: MongoDB virtual memory usage is too high.
       description: "High memory usage\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

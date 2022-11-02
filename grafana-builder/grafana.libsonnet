@@ -13,7 +13,7 @@
       rows+: [row { panels: panels }],
     },
 
-    addTemplate(name, metric_name, label_name, hide=0, allValue=null):: self {
+    addTemplate(name, metric_name, label_name, hide=0, allValue=null, includeAll=false):: self {
       templating+: {
         list+: [{
           allValue: allValue,
@@ -23,7 +23,7 @@
           },
           datasource: '$datasource',
           hide: hide,
-          includeAll: false,
+          includeAll: includeAll,
           label: name,
           multi: false,
           name: name,
@@ -178,6 +178,7 @@
     titleSize: 'h6',
   },
 
+  // "graph" type, now deprecated.
   panel(title):: {
     aliasColors: {},
     bars: false,
@@ -226,6 +227,46 @@
       values: [],
     },
     yaxes: $.yaxes('short'),
+  },
+
+  // "timeseries" panel, introduced with Grafana 7.4 and made standard in 8.0.
+  timeseriesPanel(title):: {
+    datasource: '$datasource',
+    fieldConfig: {
+      defaults: {
+        custom: {
+          drawStyle: 'line',
+          fillOpacity: 1,
+          lineWidth: 1,
+          pointSize: 5,
+          showPoints: 'never',
+          spanNulls: false,
+          stacking: {
+            group: 'A',
+            mode: 'none',
+          },
+        },
+        thresholds: {
+          mode: 'absolute',
+          steps: [],
+        },
+        unit: 's',
+      },
+      overrides: [],
+    },
+    options: {
+      legend: {
+        showLegend: true,
+      },
+      tooltip: {
+        mode: 'single',
+        sort: 'none',
+      },
+    },
+    links: [],
+    targets: [],
+    title: title,
+    type: 'timeseries',
   },
 
   queryPanel(queries, legends, legendLink=null):: {

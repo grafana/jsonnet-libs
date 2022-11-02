@@ -30,7 +30,7 @@ lint-mixins:
 			pushd "$$d" >/dev/null && jb install && popd >/dev/null; \
 		fi; \
 	done; \
-	for m in $$(find . -name 'mixin.libsonnet' -print); do \
+	for m in $$(find . -maxdepth 2 -name 'mixin.libsonnet' -print); do \
 			echo "Linting mixin $$m"; \
 			mixtool lint -J $$(dirname "$$m")/vendor "$$m"; \
 			if [ $$? -ne 0 ]; then \
