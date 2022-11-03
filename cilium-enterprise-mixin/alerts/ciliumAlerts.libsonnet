@@ -70,7 +70,7 @@
             labels: {
               severity: 'critical',
             },
-            'for': '2m',
+            'for': '5m',
           },
           {
             // Should be relative time range of 600-0
@@ -163,7 +163,7 @@
             labels: {
               severity: 'critical',
             },
-            'for': '2m',
+            'for': '5m',
           },
           {
             // TODO: According to alert dump this should have two conditions/time ranges
