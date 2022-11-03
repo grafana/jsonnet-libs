@@ -10,7 +10,7 @@
               100 * rate(job_register_attempts_failed_total{}[5m]) / rate(job_register_attempts_total{}[5m]) 
               > %(alertsWarningRegistrationFailures)s
             ||| % $._config,
-            'for': '0',
+            'for': '5m',
             labels: {
               severity: 'warning',
             },
@@ -28,7 +28,7 @@
               (sum by (instance) (rate(gitlab_ci_runner_authentication_success_total{}[5m]))  + sum by (instance) (rate(gitlab_ci_runner_authentication_failure_total{}[5m])))
               > %(alertsWarningRunnerAuthFailures)s
             ||| % $._config,
-            'for': '0',
+            'for': '5m',
             labels: {
               severity: 'warning',
             },
@@ -45,7 +45,7 @@
               100 * sum by (instance) (rate(http_requests_total{status=~"^5.*"}[5m])) / sum by (instance) (rate(http_requests_total{}[5m])) 
               > %(alertsCritical5xxResponses)s
             ||| % $._config,
-            'for': '0',
+            'for': '5m',
             labels: {
               severity: 'critical',
             },
@@ -63,7 +63,7 @@
               100 * sum by (instance) (rate(http_requests_total{status=~"^4.*"}[5m])) / sum by (instance) (rate(http_requests_total{}[5m]))
               > %(alertsWarning4xxResponses)s
             ||| % $._config,
-            'for': '0',
+            'for': '5m',
             labels: {
               severity: 'warning',
             },
