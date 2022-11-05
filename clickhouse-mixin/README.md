@@ -11,8 +11,9 @@ The Clickhouse mixin includes the following dashboards:
 
 The Clickhouse Overview dashboard provides details on queries, memory usage, networking and error logs. To get Clickhouse error logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Clickhouse error log path is `/var/log/clickhouse-server/clickhouse-server.err.log`.
 
-![screenshot-0](/clickhouse-mixin/images/clickhouse-overview.01.png)
-![screenshot-1](/clickhouse-mixin/images/clickhouse-overview.02.png)
+![First screenshot of Clickhouse Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/clickhouse/screenshots/clickhouse-overview.01.png)
+![Second screenshot of Clickhouse Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/clickhouse/screenshots/clickhouse-overview.02.png)
+
 
 Clickhouse error logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -27,12 +28,12 @@ Clickhouse error logs are enabled by default in the `config.libsonnet` and can b
 ## Clickhouse Latency:
 
 The Clickhouse Latency dashboard provides details on latency metrics.
-![screenshot-2](/clickhouse-mixin/images/clickhouse-latency.01.png)
+![Third screenshot of Clickhouse Latency Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/clickhouse/screenshots/clickhouse-latency.01.png)
 
 ## Clickhouse Replica:
 
 The Clickhouse Latency dashboard provides details on replica metrics.
-![screenshot-3](/clickhouse-mixin/images/clickhouse-replica.01.png)
+![Fourth screenshot of Clickhouse Replica Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/clickhouse/screenshots/clickhouse-replica.01.png)
 
 ## Install tools
 
