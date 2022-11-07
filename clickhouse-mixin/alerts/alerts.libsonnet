@@ -18,7 +18,7 @@
                 Clickhouse replication tasks are processing slower than expected on {{ $labels.instance }} causing replication queue size to back up at {{ $value }} exceeding the threshold value of %(alertsReplicasMaxQueueSize)s.
               ||| % $._config,
             },
-            'for': '0',
+            'for': '5m',
           },
           {
             alert: 'ClickhouseRejectedInserts',
@@ -30,7 +30,7 @@
               summary: 'Clickhouse has too many rejected inserts.',
               description: 'Clickhouse inserts are being rejected on {{ $labels.instance }} as items are being inserted faster than Clickhouse is able to merge them.',
             },
-            'for': '0',
+            'for': '5m',
           },
           {
             alert: 'ClickhouseZookeeperSessions',
@@ -44,7 +44,7 @@
                 Clickhouse has more than one connection to a Zookeeper on {{ $labels.instance }} which can lead to bugs due to stale reads in Zookeepers consistency model.
               |||,
             },
-            'for': '0',
+            'for': '5m',
           },
           {
             alert: 'ClickhouseReplicasInReadOnly',
@@ -58,7 +58,7 @@
                 Clickhouse has replicas in a read only state on {{ $labels.instance }} after losing connection to Zookeeper or at startup.
               |||,
             },
-            'for': '0',
+            'for': '5m',
           },
         ],
       },
