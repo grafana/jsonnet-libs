@@ -7,3 +7,10 @@ exclusions:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-instance-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+    - panel: "Successful Queries"
+    - panel: "Failed Queries"
+    - panel: "Rejected Inserts"
+    - panel: "Active Connections"
