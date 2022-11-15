@@ -11,3 +11,7 @@ exclusions:
     reason: "Custom units are used for better user experience in some panels"
     entries:
     - panel: "Batch Queue Throughput"
+  target-job-rule:
+    reason: "Log panel may only require instance selector"
+    entries:
+    - panel: "Container Logs"

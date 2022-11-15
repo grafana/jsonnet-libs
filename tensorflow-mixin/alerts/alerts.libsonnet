@@ -24,7 +24,7 @@
           {
             alert: 'TensorFlowHighBatchQueuingLatency',
             expr: |||
-              increase(:tensorflow:serving:batching_session:queuing_latency_sum{job=~"$job",instance=~"$instance"}[2m])/increase(:tensorflow:serving:batching_session:queuing_latency_count{job=~"$job",instance=~"$instance"}[2m]) > %(alertsBatchQueuingLatency)s
+              increase(:tensorflow:serving:batching_session:queuing_latency_sum[2m]) / increase(:tensorflow:serving:batching_session:queuing_latency_count[2m]) > %(alertsBatchQueuingLatency)s
             ||| % $._config,
             'for': '1m',
             labels: {

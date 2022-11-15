@@ -5,7 +5,6 @@ local template = grafana.template;
 local prometheus = grafana.prometheus;
 
 local dashboardUid = 'tensorflow-overview';
-local matcher = 'job=~"$job",instance=~"$instance",model_name=~"$model_name"';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
@@ -83,6 +82,7 @@ local modelRequestRatePanel = {
     prometheus.target(
       'rate(:tensorflow:serving:request_count{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='model_name="{{model_name}}",status="{{status}}"',
     ),
   ],
   title: 'Model Request Rate',
@@ -149,6 +149,7 @@ local modelPredictRequestLatencyPanel = {
     prometheus.target(
       'increase(:tensorflow:serving:request_latency_sum{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])/increase(:tensorflow:serving:request_latency_count{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='model_name="{{model_name}}"',
     ),
   ],
   title: 'Model Predict Request Latency',
@@ -215,9 +216,10 @@ local modelPredictRuntimeLatencyPanel = {
     prometheus.target(
       'increase(:tensorflow:serving:runtime_latency_sum{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])/increase(:tensorflow:serving:runtime_latency_count{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='model_name="{{model_name}}"',
     ),
   ],
-  title: 'Model Predict Request Latency',
+  title: 'Model Predict Runtime Latency',
   transformations: [],
   type: 'timeseries',
 };
@@ -270,7 +272,7 @@ local graphBuildCallsPanel = {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
-      showLegend: true,
+      showLegend: false,
     },
     tooltip: {
       mode: 'single',
@@ -336,7 +338,7 @@ local graphRunsPanel = {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
-      showLegend: true,
+      showLegend: false,
     },
     tooltip: {
       mode: 'single',
@@ -402,7 +404,7 @@ local graphBuildTimePanel = {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
-      showLegend: true,
+      showLegend: false,
     },
     tooltip: {
       mode: 'single',
@@ -468,7 +470,7 @@ local graphRunTimePanel = {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
-      showLegend: true,
+      showLegend: false,
     },
     tooltip: {
       mode: 'single',
@@ -534,7 +536,7 @@ local batchQueuingLatencyPanel = {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
-      showLegend: true,
+      showLegend: false,
     },
     tooltip: {
       mode: 'single',
@@ -600,7 +602,7 @@ local batchQueueThroughputPanel = {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
-      showLegend: true,
+      showLegend: false,
     },
     tooltip: {
       mode: 'single',
@@ -635,7 +637,7 @@ local containerLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{instance=~"$instance", job=~"$job"}',
+      expr: '{instance=~"$instance"}',
       legendFormat: '',
       queryType: 'range',
       refId: 'A',
@@ -685,7 +687,7 @@ local containerLogsPanel = {
             'label_values(:tensorflow:serving:request_count{job=~"$job"}, instance)',
             label='Instance',
             refresh='time',
-            includeAll=true,
+            includeAll=false,
             multi=false,
             allValues='.+',
             sort=1,

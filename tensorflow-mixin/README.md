@@ -12,7 +12,7 @@ The TensorFlow mixin contains the following alerts:
 
 ## TensorFlow Overview
 
-The TensorFlow Overview dashboard provides details on model runs, graph builds, graph runs, batch queue, and container logs. To get TensorFlow docker container logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and [provisioned for logs with your Grafana instance](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#docker_sd_config). Labels should be created in the Promtail config that match the Prometheus `instance` and `job` labels.
+The TensorFlow Overview dashboard provides details on model runs, graph builds, graph runs, batch queue, and container logs. To get TensorFlow docker container logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and [provisioned for logs with your Grafana instance](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#docker_sd_config). In addition, a label needs to be created in the Promtail config to match the Prometheus `instance` label.
 
 ![First screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/tensorflow/screenshots/tensorflow_overview_1.png)
 ![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/tensorflow/screenshots/tensorflow_overview_2.png)
