@@ -26,7 +26,7 @@
             expr: |||
               increase(:tensorflow:serving:batching_session:queuing_latency_sum[2m]) / increase(:tensorflow:serving:batching_session:queuing_latency_count[2m]) > %(alertsBatchQueuingLatency)s
             ||| % $._config,
-            'for': '1m',
+            'for': '5m',
             labels: {
               severity: 'warning',
             },

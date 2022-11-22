@@ -40,7 +40,7 @@ TensorFlow container logs are enabled by default in the `config.libsonnet` and c
 make
 ```
 
-Creates a generated `dashboards_out` directory and `prometheus_alerts.yaml` that can be imported into Grafana.
+Creates a generated `dashboards_out` directory and `prometheus_alerts.yaml` that can be imported into Grafana and Prometheus, respectively.
 
 For more advanced uses of mixins, see [mixin documentation.](
 https://github.com/monitoring-mixins/docs)
