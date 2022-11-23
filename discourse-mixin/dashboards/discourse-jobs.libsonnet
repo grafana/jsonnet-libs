@@ -244,6 +244,7 @@ local usedRSSMemoryPanel = {
     prometheus.target(
       'sum(discourse_rss{instance=~"$instance",job=~"$job"}) by (pid)',
       datasource=promDatasource,
+      legendFormat='pid: {{pid}}',
     ),
   ],
   title: 'Used RSS Memory',
@@ -322,6 +323,7 @@ local v8HeapSizePanel = {
     prometheus.target(
       'sum(discourse_v8_used_heap_size{instance=~"$instance",job=~"$job"}) by (type)',
       datasource=promDatasource,
+      legendFormat='{{type}}',
     ),
   ],
   title: 'V8 Heap Size',
