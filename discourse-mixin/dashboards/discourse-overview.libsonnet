@@ -86,8 +86,9 @@ local trafficPanel = {
   },
   targets: [
     prometheus.target(
-      'sum(rate(discourse_http_requests{instance=~"$instance",job=~"$job"}[$__rate_interval])) by (api,status,verb)',
+      'sum(rate(discourse_http_requests{instance=~"$instance",job=~"$job"}[$__rate_interval])) by (status)',
       datasource=promDatasource,
+      legendFormat='{{status}}'
     ),
   ],
   title: 'Traffic by Response Code',
@@ -414,6 +415,7 @@ local medianLatencyPanel = {
     prometheus.target(
       'sum(discourse_http_duration_seconds{quantile="0.5",action="latest",instance=~"$instance",job=~"$job"}) by (controller)',
       datasource=promDatasource,
+      legendFormat='{{controller}}',
     ),
   ],
   title: 'Latest Median Request Time',
@@ -491,7 +493,8 @@ local topicMedianPanel = {
   targets: [
     prometheus.target(
       'sum(discourse_http_duration_seconds{quantile="0.5",controller="topics",instance=~"$instance",job=~"$job"}) by (controller)',
-      datasource=promDatasource
+      datasource=promDatasource,
+      legendFormat='{{controller}}',
     ),
   ],
   title: 'Topic Show Median Request Time',
@@ -566,14 +569,11 @@ local ninetyNinthPercentileRequestLatency = {
     },
   },
   targets: [
-    {
-      datasource: promDatasource,
-      editorMode: 'code',
-      expr: 'sum(discourse_http_duration_seconds{quantile="0.99",action="latest",instance=~"$instance",job=~"$job"}) by (controller)',
-      legendFormat: '__auto',
-      range: true,
-      refId: 'A',
-    },
+    prometheus.target(
+      'sum(discourse_http_duration_seconds{quantile="0.99",action="latest",instance=~"$instance",job=~"$job"}) by (controller)',
+      datasource=promDatasource,
+      legendFormat='{{controller}}',
+    ),
   ],
   title: 'Latest 99th percentile Request Time',
   type: 'timeseries',
@@ -650,6 +650,7 @@ local ninetyNinthTopicShowPercentileRequestLatency = {
     prometheus.target(
       'discourse_http_duration_seconds{quantile="0.99",controller="topics",instance=~"$instance",job=~"$job"}',
       datasource=promDatasource,
+      legendFormat='{{controller}}',
     ),
   ],
   title: 'Topic Show 99th percentile Request Time',
