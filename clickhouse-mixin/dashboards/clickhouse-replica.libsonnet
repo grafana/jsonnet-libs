@@ -235,6 +235,7 @@ local replicaOperationsPanel =
             },
           ],
         },
+        unit: '/ sec',
       },
       overrides: [],
     },
