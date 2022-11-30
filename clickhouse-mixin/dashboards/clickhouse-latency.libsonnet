@@ -84,13 +84,13 @@ local diskReadLatencyPanel =
           uid: '${prometheus_datasource}',
         },
         editorMode: 'builder',
-        expr: 'rate(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'Disk Read Elapsed Microseconds',
+        expr: 'increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
+        legendFormat: 'Disk read elapsed microseconds',
         range: true,
         refId: 'A',
       },
     ],
-    title: 'Disk Read Latency',
+    title: 'Disk read latency',
     type: 'timeseries',
   };
 
@@ -173,13 +173,13 @@ local diskWriteLatencyPanel =
           uid: '${prometheus_datasource}',
         },
         editorMode: 'builder',
-        expr: 'rate(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'Disk Write Elapsed Microseconds',
+        expr: 'increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
+        legendFormat: 'Disk write elapsed microseconds',
         range: true,
         refId: 'A',
       },
     ],
-    title: 'Disk Write Latency',
+    title: 'Disk write latency',
     type: 'timeseries',
   };
 
@@ -262,13 +262,13 @@ local networkTransmitLatencyPanel =
           uid: '${prometheus_datasource}',
         },
         editorMode: 'builder',
-        expr: 'rate(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'Network Receive Elapsed Microseconds',
+        expr: 'increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
+        legendFormat: 'Network receive elapsed microseconds',
         range: true,
         refId: 'A',
       },
     ],
-    title: 'Network Receive Latency',
+    title: 'Network receive latency',
     type: 'timeseries',
   };
 
@@ -351,13 +351,13 @@ local networkTransmitLatencyPanel =
           uid: '${prometheus_datasource}',
         },
         editorMode: 'builder',
-        expr: 'rate(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'Network Send Elapsed Microseconds',
+        expr: 'increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
+        legendFormat: 'Network send elapsed microseconds',
         range: true,
         refId: 'A',
       },
     ],
-    title: 'Network Transmit Latency',
+    title: 'Network transmit latency',
     type: 'timeseries',
   };
 
@@ -440,13 +440,13 @@ local zooKeeperWaitTimePanel =
           uid: '${prometheus_datasource}',
         },
         editorMode: 'builder',
-        expr: 'rate(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{' + matcher + '}[$__rate_interval])',
-        legendFormat: 'ZooKeeper Wait Microseconds',
+        expr: 'increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{' + matcher + '}[$__rate_interval])',
+        legendFormat: 'ZooKeeper wait microseconds',
         range: true,
         refId: 'A',
       },
     ],
-    title: 'ZooKeeper Wait Time',
+    title: 'ZooKeeper wait time',
     type: 'timeseries',
   };
 {
@@ -454,7 +454,7 @@ local zooKeeperWaitTimePanel =
 
     'clickhouse-latency.json':
       dashboard.new(
-        'Clickhouse Latency',
+        'Clickhouse latency',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -484,7 +484,7 @@ local zooKeeperWaitTimePanel =
             name='job',
             label='job',
             datasource='$prometheus_datasource',
-            query='label_values(job)',
+            query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
             current='',
             refresh=2,
             includeAll=true,
