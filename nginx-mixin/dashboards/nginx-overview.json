@@ -1466,6 +1466,7 @@
           "expr": "topk(300, sum by (request_uri) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\"} !~ `\\.ico|\\.svg|\\.css|\\.png|\\.txt|\\.js|\\.xml` | json | status = 200 and request_uri != \"/\" | __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{request_uri}}",
+          "queryType": "instant",
           "range": false,
           "refId": "A"
         }
