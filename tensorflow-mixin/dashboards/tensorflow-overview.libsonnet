@@ -19,7 +19,7 @@ local lokiDatasource = {
 
 local servingOverviewRow = {
   collapsed: false,
-  title: 'Overview',
+  title: 'Serving overview',
   type: 'row',
 };
 
@@ -85,7 +85,7 @@ local modelRequestRatePanel = {
       legendFormat='model_name="{{model_name}}",status="{{status}}"',
     ),
   ],
-  title: 'Model Request Rate',
+  title: 'Model request rate',
   transformations: [],
   type: 'timeseries',
 };
@@ -152,7 +152,7 @@ local modelPredictRequestLatencyPanel = {
       legendFormat='model_name="{{model_name}}"',
     ),
   ],
-  title: 'Model Predict Request Latency',
+  title: 'Model predict request latency',
   transformations: [],
   type: 'timeseries',
 };
@@ -219,7 +219,7 @@ local modelPredictRuntimeLatencyPanel = {
       legendFormat='model_name="{{model_name}}"',
     ),
   ],
-  title: 'Model Predict Runtime Latency',
+  title: 'Model predict runtime latency',
   transformations: [],
   type: 'timeseries',
 };
@@ -263,7 +263,7 @@ local graphBuildCallsPanel = {
         },
       },
       mappings: [],
-      unit: 'none',
+      unit: 'calls',
     },
     overrides: [],
   },
@@ -285,7 +285,7 @@ local graphBuildCallsPanel = {
       datasource=promDatasource,
     ),
   ],
-  title: 'Graph Build Calls',
+  title: 'Graph build calls',
   transformations: [],
   type: 'timeseries',
 };
@@ -329,7 +329,7 @@ local graphRunsPanel = {
         },
       },
       mappings: [],
-      unit: 'none',
+      unit: 'runs',
     },
     overrides: [],
   },
@@ -351,7 +351,7 @@ local graphRunsPanel = {
       datasource=promDatasource,
     ),
   ],
-  title: 'Graph Runs',
+  title: 'Graph runs',
   transformations: [],
   type: 'timeseries',
 };
@@ -417,7 +417,7 @@ local graphBuildTimePanel = {
       datasource=promDatasource,
     ),
   ],
-  title: 'Graph Build Time',
+  title: 'Graph build time',
   transformations: [],
   type: 'timeseries',
 };
@@ -483,7 +483,7 @@ local graphRunTimePanel = {
       datasource=promDatasource,
     ),
   ],
-  title: 'Graph Run Time',
+  title: 'Graph run time',
   transformations: [],
   type: 'timeseries',
 };
@@ -549,7 +549,7 @@ local batchQueuingLatencyPanel = {
       datasource=promDatasource,
     ),
   ],
-  title: 'Batch Queuing Latency',
+  title: 'Batch queuing latency',
   transformations: [],
   type: 'timeseries',
 };
@@ -615,14 +615,14 @@ local batchQueueThroughputPanel = {
       datasource=promDatasource,
     ),
   ],
-  title: 'Batch Queue Throughput',
+  title: 'Batch queue throughput',
   transformations: [],
   type: 'timeseries',
 };
 
 local containerLogsPanel = {
   datasource: lokiDatasource,
-  description: 'Logs from the TensorGlow Docker container.',
+  description: 'Logs from the TensorFlow Docker container.',
   options: {
     dedupStrategy: 'none',
     enableLogDetails: true,
@@ -643,7 +643,7 @@ local containerLogsPanel = {
       refId: 'A',
     },
   ],
-  title: 'Container Logs',
+  title: 'Container logs',
   transformations: [],
   type: 'logs',
 };
@@ -652,7 +652,7 @@ local containerLogsPanel = {
   grafanaDashboards+:: {
     'tensorflow-overview.json':
       dashboard.new(
-        'TensorFlow Overview',
+        'TensorFlow overview',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -667,7 +667,7 @@ local containerLogsPanel = {
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Data source',
             refresh='load',
           ),
           template.new(
@@ -696,7 +696,7 @@ local containerLogsPanel = {
             'model_name',
             promDatasource,
             'label_values(:tensorflow:serving:request_count{job=~"$job",instance=~"$instance"}, model_name)',
-            label='Model Name',
+            label='Model name',
             refresh='time',
             includeAll=true,
             multi=false,
@@ -709,7 +709,7 @@ local containerLogsPanel = {
             lokiDatasourceName,
             'loki',
             null,
-            label='Loki Datasource',
+            label='Loki datasource',
             refresh='load'
           ),
         ] else [],
@@ -722,7 +722,7 @@ local containerLogsPanel = {
             modelPredictRequestLatencyPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
             modelPredictRuntimeLatencyPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           ],
-          // Serving Row
+          // Serving Overview Row
           [
             servingOverviewRow { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
             graphBuildCallsPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
