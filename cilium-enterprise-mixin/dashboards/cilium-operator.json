@@ -4248,7 +4248,9 @@
   "refresh": "30s",
   "schemaVersion": 37,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "cilium-overview"
+  ],
   "templating": {
     "list": [
       {

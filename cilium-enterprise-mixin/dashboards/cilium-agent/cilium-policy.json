@@ -1580,7 +1580,9 @@
   "refresh": "30s",
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "cilium-agent"
+  ],
   "templating": {
     "list": [
       {

@@ -1033,7 +1033,9 @@
   "refresh": false,
   "schemaVersion": 37,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "hubble"
+  ],
   "templating": {
     "list": [
       {

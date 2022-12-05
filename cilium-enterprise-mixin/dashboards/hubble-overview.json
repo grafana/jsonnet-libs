@@ -3227,8 +3227,8 @@
   "schemaVersion": 37,
   "style": "dark",
   "tags": [
-    "cilium-enterprise-integration",
-    "cilium-overview"
+    "cilium-overview",
+    "hubble"
   ],
   "templating": {
     "list": [
