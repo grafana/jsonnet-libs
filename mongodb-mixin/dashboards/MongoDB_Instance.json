@@ -285,12 +285,23 @@
       "type": "stat"
     },
     {
-      "datasource": "${datasource}",
+      "id": 12,
+      "gridPos": {
+        "h": 2,
+        "w": 5,
+        "x": 19,
+        "y": 1
+      },
+      "type": "stat",
+      "title": "Current ReplSet State",
+      "transformations": [],
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "9.1.6",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "mappings": [
             {
               "options": {
@@ -351,53 +362,43 @@
               }
             ]
           },
+          "color": {
+            "mode": "thresholds"
+          },
           "unit": "none"
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 2,
-        "w": 5,
-        "x": 19,
-        "y": 1
-      },
-      "id": 12,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
         "reduceOptions": {
+          "values": false,
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^Value$/",
-          "values": false
+          "fields": "/^Value$/"
         },
-        "text": {},
-        "textMode": "auto"
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "text": {}
       },
-      "pluginVersion": "8.0.4",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
           "exemplar": true,
           "expr": "mongodb_mongod_replset_my_state{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\"}",
+          "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{label_name}}",
           "refId": "A"
         }
-      ],
-      "title": "Current ReplSet State",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {
-            "valueLabel": "__name__"
-          }
-        }
-      ],
-      "type": "stat"
+      ]
     },
     {
       "collapsed": false,
