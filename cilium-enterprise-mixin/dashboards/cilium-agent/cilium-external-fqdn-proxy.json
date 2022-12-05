@@ -1436,7 +1436,9 @@
   "refresh": false,
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "cilium-agent"
+  ],
   "templating": {
     "list": [
       {
