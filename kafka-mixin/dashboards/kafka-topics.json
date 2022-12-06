@@ -69,7 +69,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_messagesinpersec{job=\"integrations/kafka\",topic=~\"$topic\"}[$__rate_interval]))",
+          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_messagesinpersec{job=~\"$job\",topic=~\"$topic\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -165,7 +165,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesinpersec{job=\"integrations/kafka\",topic=~\"$topic\"}[$__rate_interval]))",
+          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesinpersec{job=~\"$job\",topic=~\"$topic\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -262,7 +262,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=\"integrations/kafka\",topic=~\"$topic\"}[$__rate_interval]))",
+          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=~\"$job\",topic=~\"$topic\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -379,7 +379,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "kafka_log_log_logstartoffset{job=\"integrations/kafka\",topic=~\"$topic\"}",
+          "expr": "kafka_log_log_logstartoffset{job=~\"$job\",topic=~\"$topic\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -489,7 +489,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "kafka_log_log_logendoffset{job=\"integrations/kafka\",topic=~\"$topic\"}",
+          "expr": "kafka_log_log_logendoffset{job=~\"$job\",topic=~\"$topic\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -537,11 +537,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
+        "current": {},
         "description": null,
         "error": null,
         "hide": 0,
@@ -558,17 +554,36 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values(kafka_server_kafkaserver_brokerstate, job)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Job",
+        "multi": false,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(kafka_server_kafkaserver_brokerstate, job)",
+          "refId": "StandardVariableQuery"
         },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(kafka_log_log_size,topic)",
+        "definition": "label_values(kafka_log_log_size{job=~\"$job\"},topic)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -578,8 +593,8 @@
         "name": "topic",
         "options": [],
         "query": {
-          "query": "label_values(kafka_log_log_size,topic)",
-          "refId": "Cortex-topic-Variable-Query"
+          "query": "label_values(kafka_log_log_size{job=~\"$job\"},topic)",
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",

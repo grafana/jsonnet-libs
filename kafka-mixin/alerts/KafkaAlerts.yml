@@ -35,7 +35,7 @@ groups:
         severity: critical
       annotations:
         description: 'Kafka {{ $labels.instance }}: {{ $value }} unclean leader elections'
-        summary: '{{ $value }} unclean partition leader elections in the cluster reported in the last 1 minute interval. When unclean leader election is held among out-of-sync replicas, there is a possibility of data loss if any messages were not synced prior to the loss of the former leader. So if the number of unclean elections is greater than 0, investigate broker logs to determine why leaders were re-elected, and look for WARN or ERROR messages. Consider setting the broker configuration parameter unclean.leader.election.enable to false so that a replica outside of the set of in-sync replicas is never elected leader.'
+        summary: 'There is unclean partition leader elections in the cluster reported in the last 1 minute interval. When unclean leader election is held among out-of-sync replicas, there is a possibility of data loss if any messages were not synced prior to the loss of the former leader. So if the number of unclean elections is greater than 0, investigate broker logs to determine why leaders were re-elected, and look for WARN or ERROR messages. Consider setting the broker configuration parameter unclean.leader.election.enable to false so that a replica outside of the set of in-sync replicas is never elected leader.'
 
     - alert: ISRExpandRate
       expr: sum(rate(kafka_server_ReplicaManager_IsrExpandsPerSec[5m])) by (instance) != 0
@@ -62,7 +62,7 @@ groups:
         severity: critical
       annotations:
         description: 'Kafka {{ $labels.instance }}: No Brokers online!'
-        summary: 'Broker count is 0'
+        summary: 'Broker count is 0.'
 
     - alert: ZookeeperSyncConnect
       expr: avg(kafka_server_SessionExpireListener_ZooKeeperSyncConnectsPerSec{job="integrations/kafka"}) by (instance) < 1

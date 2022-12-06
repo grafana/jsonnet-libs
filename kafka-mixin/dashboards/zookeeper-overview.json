@@ -100,7 +100,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(zookeeper_status_quorumsize{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"})",
+          "expr": "count(zookeeper_status_quorumsize{instance=~\"$instance\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -190,7 +190,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(zookeeper_numaliveconnections{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"})",
+          "expr": "sum(zookeeper_numaliveconnections{instance=~\"$instance\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -264,7 +264,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "zookeeper_outstandingrequests{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"}",
+          "expr": "zookeeper_outstandingrequests{instance=~\"$instance\",job=~\"$job\"}",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -390,7 +390,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg(zookeeper_inmemorydatatree_nodecount{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"})",
+          "expr": "avg(zookeeper_inmemorydatatree_nodecount{instance=~\"$instance\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -480,7 +480,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(zookeeper_inmemorydatatree_watchcount{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"})",
+          "expr": "sum(zookeeper_inmemorydatatree_watchcount{instance=~\"$instance\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -564,7 +564,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(process_cpu_seconds_total{job=\"integrations/kafka-zookeeper\"}[$__rate_interval])*100",
+          "expr": "irate(process_cpu_seconds_total{job=~\"$job\"}[$__rate_interval])*100",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -662,14 +662,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"integrations/kafka-zookeeper\"})",
+          "expr": "sum without(area)(jvm_memory_bytes_used{job=~\"$job\"})",
           "interval": "",
           "legendFormat": "Used:{{instance}}",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "jvm_memory_bytes_max{job=\"integrations/kafka-zookeeper\",area=\"heap\"}",
+          "expr": "jvm_memory_bytes_max{job=~\"$job\",area=\"heap\"}",
           "interval": "",
           "legendFormat": "Max:{{instance}}",
           "refId": "B"
@@ -767,7 +767,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/kafka-zookeeper\"}[$__rate_interval]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -877,7 +877,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "zookeeper_minrequestlatency{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"} * zookeeper_ticktime",
+          "expr": "zookeeper_minrequestlatency{instance=~\"$instance\",job=~\"$job\"} * zookeeper_ticktime",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -975,7 +975,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "zookeeper_avgrequestlatency{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"} * zookeeper_ticktime{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"}",
+          "expr": "zookeeper_avgrequestlatency{instance=~\"$instance\",job=~\"$job\"} * zookeeper_ticktime{instance=~\"$instance\",job=~\"$job\"}",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -1082,7 +1082,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "zookeeper_maxrequestlatency{server_id=~\"$serverid\",job=\"integrations/kafka-zookeeper\"} * zookeeper_ticktime",
+          "expr": "zookeeper_maxrequestlatency{instance=~\"$instance\",job=~\"$job\"} * zookeeper_ticktime",
           "interval": "",
           "legendFormat": "{{server_id}}:{{member_type}} ({{instance}})",
           "refId": "A"
@@ -1159,49 +1159,46 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": true,
-          "tags": [],
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values(kafka_schema_registry_registered_count, job)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Job",
+        "multi": false,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(kafka_schema_registry_registered_count, job)",
+          "refId": "StandardVariableQuery"
         },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(zookeeper_status_quorumsize,server_id)",
+        "definition": "label_values(zookeeper_status_quorumsize{job=~\"$job\"},instance)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "serverId",
+        "label": "Instance",
         "multi": true,
-        "name": "serverid",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "1",
-            "value": "1"
-          },
-          {
-            "selected": false,
-            "text": "2",
-            "value": "2"
-          },
-          {
-            "selected": false,
-            "text": "3",
-            "value": "3"
-          }
-        ],
+        "name": "instance",
+        "options": [],
         "query": {
-          "query": "label_values(zookeeper_status_quorumsize,server_id)",
+          "query": "label_values(zookeeper_status_quorumsize{job=~\"$job\"},server_id)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 0,

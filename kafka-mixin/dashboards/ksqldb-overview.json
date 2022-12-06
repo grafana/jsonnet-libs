@@ -97,7 +97,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "avg(ksql_ksql_engine_query_stats_num_active_queries{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
+          "expr": "avg(ksql_ksql_engine_query_stats_num_active_queries{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -173,7 +173,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "avg(ksql_ksql_engine_query_stats_running_queries{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
+          "expr": "avg(ksql_ksql_engine_query_stats_running_queries{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -248,7 +248,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "avg(ksql_ksql_engine_query_stats_num_persistent_queries{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
+          "expr": "avg(ksql_ksql_engine_query_stats_num_persistent_queries{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -323,7 +323,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(ksql_ksql_engine_query_stats_rebalancing_queries{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
+          "expr": "sum(ksql_ksql_engine_query_stats_rebalancing_queries{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -398,7 +398,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "avg(ksql_ksql_engine_query_stats_error_queries{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
+          "expr": "avg(ksql_ksql_engine_query_stats_error_queries{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -473,7 +473,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(ksql_ksql_engine_query_stats_num_idle_queries{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
+          "expr": "sum(ksql_ksql_engine_query_stats_num_idle_queries{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -549,7 +549,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "ksql_ksql_metrics_ksql_queries_query_status{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"}",
+          "expr": "ksql_ksql_metrics_ksql_queries_query_status{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -649,7 +649,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(ksql_ksql_engine_query_stats_not_running_queries{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
+          "expr": "sum(ksql_ksql_engine_query_stats_not_running_queries{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -724,7 +724,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(ksql_ksql_engine_query_stats_pending_shutdown_queries{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
+          "expr": "sum(ksql_ksql_engine_query_stats_pending_shutdown_queries{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -789,7 +789,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "ksql_ksql_engine_query_stats_liveness_indicator{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"}",
+          "expr": "ksql_ksql_engine_query_stats_liveness_indicator{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -886,7 +886,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "ksql_ksql_engine_query_stats_messages_consumed_per_sec{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"}",
+          "expr": "ksql_ksql_engine_query_stats_messages_consumed_per_sec{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -983,7 +983,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(ksql_ksql_engine_query_stats_messages_produced_per_sec{job=\"integrations/kafka-ksqldb\",  ksql_cluster=\"$clusterid\", instance=~\"$instance\"}[$__rate_interval])",
+          "expr": "irate(ksql_ksql_engine_query_stats_messages_produced_per_sec{job=~\"$job\",ksql_cluster=\"$clusterid\", instance=~\"$instance\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1095,7 +1095,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(process_cpu_seconds_total{job=\"integrations/kafka-ksqldb\",  instance=~\"$instance\"}[$__rate_interval])",
+          "expr": "irate(process_cpu_seconds_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1193,13 +1193,13 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"integrations/kafka-ksqldb\", instance=~\"$instance\"})",
+          "expr": "sum without(area)(jvm_memory_bytes_used{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "Used:{{instance}}",
           "refId": "A"
         },
         {
-          "expr": "jvm_memory_bytes_max{job=\"integrations/kafka-ksqldb\",area=\"heap\"}",
+          "expr": "jvm_memory_bytes_max{job=~\"$job\",area=\"heap\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "Max:{{instance}}",
           "refId": "B"
@@ -1297,7 +1297,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/kafka-ksqldb\",  instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1410,7 +1410,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_thread_metrics_poll_latency_avg{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_thread_metrics_poll_latency_avg{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -1511,7 +1511,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_thread_metrics_poll_latency_max{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_thread_metrics_poll_latency_max{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}_max",
           "refId": "B"
@@ -1609,7 +1609,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_thread_metrics_process_latency_avg{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_thread_metrics_process_latency_avg{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1709,7 +1709,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_thread_metrics_process_latency_max{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_thread_metrics_process_latency_max{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}_max",
           "refId": "B"
@@ -1807,7 +1807,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_thread_metrics_commit_latency_avg{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_thread_metrics_commit_latency_avg{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1907,7 +1907,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_thread_metrics_commit_latency_max{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_thread_metrics_commit_latency_max{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -2007,7 +2007,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_thread_metrics_punctuate_latency_avg{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_thread_metrics_punctuate_latency_avg{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -2114,7 +2114,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_thread_metrics_punctuate_latency_max{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_thread_metrics_punctuate_latency_max{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}_max",
           "refId": "B"
@@ -2227,7 +2227,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_put_rate{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_state_metrics_put_rate{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -2326,7 +2326,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_put_latency_avg{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_put_latency_avg{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -2425,7 +2425,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_put_latency_max{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_put_latency_max{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -2524,7 +2524,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_put_if_absent_rate_rate{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_state_metrics_put_if_absent_rate_rate{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -2623,7 +2623,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_put_if_absent_latency_avg{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_put_if_absent_latency_avg{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -2722,7 +2722,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_put_if_absent_latency_max{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_put_if_absent_latency_max{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -2821,7 +2821,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_fetch_rate{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_state_metrics_fetch_rate{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -2920,7 +2920,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_fetch_latency_avg{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_fetch_latency_avg{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -3019,7 +3019,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_put_latency_max{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_put_latency_max{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -3118,7 +3118,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_delete_rate{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_state_metrics_delete_rate{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -3217,7 +3217,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_delete_latency_avg{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_delete_latency_avg{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -3316,7 +3316,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_delete_latency_max{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_delete_latency_max{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -3415,7 +3415,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_restore_rate{job=\"integrations/kafka-ksqldb\",  thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
+          "expr": "kafka_streams_stream_state_metrics_restore_rate{job=~\"$job\",thread_id=~\".+$clusterid.+\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -3514,7 +3514,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_restore_latency_avg{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_restore_latency_avg{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -3613,7 +3613,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_streams_stream_state_metrics_restore_latency_max{thread_id=~\".+$clusterid.+\"}",
+          "expr": "kafka_streams_stream_state_metrics_restore_latency_max{job=~\"$job\",instance=~\"$instance\",thread_id=~\".+$clusterid.+\"}",
           "interval": "",
           "legendFormat": "{{thread_id}}",
           "refId": "B"
@@ -3669,11 +3669,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
+        "current": {},
         "description": null,
         "error": null,
         "hide": 0,
@@ -3691,18 +3687,36 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": true,
-          "tags": [],
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values(ksql_ksql_engine_query_stats_liveness_indicator, job)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "Job",
+        "multi": false,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(ksql_ksql_engine_query_stats_liveness_indicator, job)",
+          "refId": "StandardVariableQuery"
         },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(ksql_ksql_engine_query_stats_liveness_indicator,ksql_cluster)",
+        "definition": "label_values(ksql_ksql_engine_query_stats_liveness_indicator{job=~\"$job\"},ksql_cluster)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -3712,7 +3726,7 @@
         "name": "clusterid",
         "options": [],
         "query": {
-          "query": "label_values(ksql_ksql_engine_query_stats_liveness_indicator,ksql_cluster)",
+          "query": "label_values(ksql_ksql_engine_query_stats_liveness_indicator{job=~\"$job\"},ksql_cluster)",
           "refId": "Cortex-clusterid-Variable-Query"
         },
         "refresh": 2,
@@ -3727,18 +3741,9 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": true,
-          "tags": [],
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(ksql_ksql_engine_query_stats_liveness_indicator,instance)",
+        "definition": "label_values(ksql_ksql_engine_query_stats_liveness_indicator{job=~\"$job\"},instance)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -3748,7 +3753,7 @@
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(ksql_ksql_engine_query_stats_liveness_indicator,instance)",
+          "query": "label_values(ksql_ksql_engine_query_stats_liveness_indicator{job=~\"$job\"},instance)",
           "refId": "Cortex-instance-Variable-Query"
         },
         "refresh": 1,
