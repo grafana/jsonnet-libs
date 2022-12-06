@@ -322,21 +322,61 @@
       "type": "table"
     },
     {
+      "id": 10,
+      "gridPos": {
+        "h": 8,
+        "w": 15,
+        "x": 0,
+        "y": 3
+      },
+      "type": "state-timeline",
+      "title": "ReplSet States",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "valueLabel": "service_name",
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "__name__": true,
+              "agent_hostname": true,
+              "cluster": true,
+              "instance": true,
+              "job": true,
+              "mongodb_cluster": true,
+              "set": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
       "datasource": {
-        "uid": "${datasource}"
+        "uid": "${datasource}",
+        "type": "prometheus"
       },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "lineWidth": 0,
+            "fillOpacity": 70,
+            "spanNulls": false
+          },
           "color": {
             "mode": "palette-classic"
           },
-          "custom": {
-            "fillOpacity": 70,
-            "lineWidth": 0,
-            "spanNulls": false
-          },
           "mappings": [
             {
+              "type": "value",
               "options": {
                 "0": {
                   "color": "blue",
@@ -351,7 +391,7 @@
                 "2": {
                   "color": "yellow",
                   "index": 1,
-                  "text": "SECUNDARY"
+                  "text": "SECONDARY"
                 },
                 "3": {
                   "color": "red",
@@ -388,10 +428,10 @@
                   "index": 9,
                   "text": "REMOVED"
                 }
-              },
-              "type": "value"
+              }
             },
             {
+              "type": "special",
               "options": {
                 "match": "empty",
                 "result": {
@@ -399,10 +439,10 @@
                   "index": 10,
                   "text": "NULL"
                 }
-              },
-              "type": "special"
+              }
             },
             {
+              "type": "special",
               "options": {
                 "match": "null+nan",
                 "result": {
@@ -410,8 +450,7 @@
                   "index": 11,
                   "text": "NULL"
                 }
-              },
-              "type": "special"
+              }
             }
           ],
           "thresholds": {
@@ -427,22 +466,16 @@
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 15,
-        "x": 0,
-        "y": 3
-      },
-      "id": 10,
       "options": {
+        "mergeValues": true,
+        "showValue": "auto",
         "alignValue": "left",
+        "rowHeight": 0.9,
         "legend": {
-          "displayMode": "hidden",
+          "showLegend": false,
+          "displayMode": "list",
           "placement": "bottom"
         },
-        "mergeValues": true,
-        "rowHeight": 0.9,
-        "showValue": "auto",
         "tooltip": {
           "mode": "single",
           "sort": "none"
@@ -454,45 +487,16 @@
             "uid": "${datasource}"
           },
           "exemplar": true,
-          "expr": "mongodb_mongod_replset_my_state{set=~\"$replset\",service_name=~\"$service_name\", mongodb_cluster=~\"$cluster\"}",
+          "expr": "max by (set, mongodb_cluter, service_name) (mongodb_mongod_replset_my_state{set=~\"$replset\",service_name=~\"$service_name\", mongodb_cluster=~\"$cluster\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "editorMode": "code"
         }
-      ],
-      "title": "ReplSet States",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {
-            "valueLabel": "service_name"
-          }
-        },
-        {
-          "id": "merge",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "__name__": true,
-              "agent_hostname": true,
-              "cluster": true,
-              "instance": true,
-              "job": true,
-              "mongodb_cluster": true,
-              "set": true
-            },
-            "indexByName": {},
-            "renameByName": {}
-          }
-        }
-      ],
-      "type": "state-timeline"
+      ]
     },
     {
       "collapsed": false,
