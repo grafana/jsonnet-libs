@@ -8,7 +8,7 @@
           expr: 'rate(haproxy_process_dropped_logs_total[5m]) != 0',
           'for': '5s',
           labels: {
-            severity: 'error',
+            severity: 'critical',
           },
           annotations: {
             description: 'HAProxy {{$labels.job}} on {{$labels.instance}} is dropping logs.',
@@ -20,7 +20,7 @@
           expr: 'rate(haproxy_backend_check_up_down_total[5m]) != 0',
           'for': '1m',
           labels: {
-            severity: 'error',
+            severity: 'critical',
           },
           annotations: {
             description: 'HAProxy {{$labels.job}} backend {{$labels.proxy}} on {{$labels.instance}} has flapping checks.',
@@ -32,7 +32,7 @@
           expr: 'rate(haproxy_server_check_up_down_total[5m]) != 0',
           'for': '1m',
           labels: {
-            severity: 'error',
+            severity: 'critical',
           },
           annotations: {
             description: 'HAProxy {{$labels.job}} server {{$labels.server}} on {{$labels.instance}} has flapping checks.',

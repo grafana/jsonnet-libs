@@ -12,7 +12,7 @@
                "expr": "rate(haproxy_process_dropped_logs_total[5m]) != 0",
                "for": "5s",
                "labels": {
-                  "severity": "error"
+                  "severity": "critical"
                }
             },
             {
@@ -24,7 +24,7 @@
                "expr": "rate(haproxy_backend_check_up_down_total[5m]) != 0",
                "for": "1m",
                "labels": {
-                  "severity": "error"
+                  "severity": "critical"
                }
             },
             {
@@ -36,7 +36,7 @@
                "expr": "rate(haproxy_server_check_up_down_total[5m]) != 0",
                "for": "1m",
                "labels": {
-                  "severity": "error"
+                  "severity": "critical"
                }
             }
          ]
