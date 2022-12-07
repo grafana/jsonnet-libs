@@ -5436,7 +5436,7 @@
         "type": "datasource"
       },      
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
         "definition": "label_values(kafka_connect_app_info, job)",
@@ -5444,7 +5444,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "Job",
+        "label": "job",
         "multi": true,
         "name": "job",
         "options": [],
@@ -5490,7 +5490,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_connect_app_info{job=~\"$job\", cluster=~\"$cluster\"},instance)",
@@ -5498,8 +5498,8 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "",
-        "multi": false,
+        "label": "instance",
+        "multi": true,
         "name": "instance",
         "options": [],
         "query": {
@@ -5517,7 +5517,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_connect_connector_task_metrics_pause_ratio{job=~\"$job\", cluster=~\"$cluster\"},connector)",

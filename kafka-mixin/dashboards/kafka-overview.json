@@ -6794,7 +6794,7 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
         "definition": "label_values(kafka_server_kafkaserver_brokerstate, job)",
@@ -6802,7 +6802,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Job",
+        "label": "job",
         "multi": false,
         "name": "job",
         "options": [],
@@ -6821,7 +6821,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_server_kafkaserver_brokerstate{job=~\"$job\"}, instance)",
@@ -6829,7 +6829,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
@@ -6848,7 +6848,7 @@
         "useTags": false
       },
       {
-        "allValue": "",
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_network_requestmetrics_requestqueuetimems{job=~\"$job\",instance=~\"$instance\"}, quantile)",
@@ -6875,7 +6875,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_log_log_size{job=~\"$job\",instance=~\"$instance\"},topic)",

@@ -71,4 +71,4 @@ groups:
         severity: warning
       annotations:
         description: 'Kafka {{ $labels.instance }}: Zookeeper Sync Disconected'
-        summary: 'Zookeeper Sync Disconected'
+        summary: 'Zookeeper Sync Disconected.'

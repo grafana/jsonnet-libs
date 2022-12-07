@@ -711,7 +711,7 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
         "definition": "label_values(kafka_consumergroup_current_offset, job)",
@@ -719,7 +719,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Job",
+        "label": "job",
         "multi": false,
         "name": "job",
         "options": [],
@@ -738,7 +738,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_consumergroup_current_offset{job=~\"$job\"}, instance)",
@@ -746,7 +746,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
@@ -765,7 +765,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\", topic!='__consumer_offsets',topic!='--kafka'}, topic)",

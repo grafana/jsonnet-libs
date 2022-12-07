@@ -952,7 +952,7 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
         "definition": "label_values(kafka_schema_registry_registered_count, job)",
@@ -960,7 +960,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Job",
+        "label": "job",
         "multi": false,
         "name": "job",
         "options": [],
@@ -979,7 +979,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_schema_registry_registered_count{job=~\"$job\"},instance)",
@@ -987,7 +987,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": null,
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],

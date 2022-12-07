@@ -69,7 +69,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_messagesinpersec{job=~\"$job\",topic=~\"$topic\"}[$__rate_interval]))",
+          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_messagesinpersec{job=~\"$job\",instance=~\"$instance\",topic=~\"$topic\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -165,7 +165,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesinpersec{job=~\"$job\",topic=~\"$topic\"}[$__rate_interval]))",
+          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesinpersec{job=~\"$job\",instance=~\"$instance\",topic=~\"$topic\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -262,7 +262,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=~\"$job\",topic=~\"$topic\"}[$__rate_interval]))",
+          "expr": "sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesoutpersec{job=~\"$job\",instance=~\"$instance\",topic=~\"$topic\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{topic}}",
           "refId": "A"
@@ -379,7 +379,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "kafka_log_log_logstartoffset{job=~\"$job\",topic=~\"$topic\"}",
+          "expr": "kafka_log_log_logstartoffset{job=~\"$job\",instance=~\"$instance\",topic=~\"$topic\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -489,7 +489,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "kafka_log_log_logendoffset{job=~\"$job\",topic=~\"$topic\"}",
+          "expr": "kafka_log_log_logendoffset{job=~\"$job\",instance=~\"$instance\",topic=~\"$topic\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -553,20 +553,20 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(kafka_server_kafkaserver_brokerstate, job)",
+        "definition": "label_values(kafka_log_log_size, job)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Job",
+        "label": "job",
         "multi": false,
         "name": "job",
         "options": [],
         "query": {
-          "query": "label_values(kafka_server_kafkaserver_brokerstate, job)",
+          "query": "label_values(kafka_log_log_size, job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -580,7 +580,34 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
+        "current": {},
+        "datasource": "${datasource}",
+        "definition": "label_values(kafka_log_log_size{job=~\"$job\"},instance)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(kafka_log_log_size{job=~\"$job\"},instance)",
+          "refId": "Cortex-instance-Variable-Query"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(kafka_log_log_size{job=~\"$job\"},topic)",

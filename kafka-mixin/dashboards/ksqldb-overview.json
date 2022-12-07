@@ -3686,7 +3686,7 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
         "definition": "label_values(ksql_ksql_engine_query_stats_liveness_indicator, job)",
@@ -3694,7 +3694,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Job",
+        "label": "job",
         "multi": false,
         "name": "job",
         "options": [],
@@ -3713,7 +3713,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(ksql_ksql_engine_query_stats_liveness_indicator{job=~\"$job\"},ksql_cluster)",
@@ -3721,7 +3721,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": null,
+        "label": "KSQL Cluster",
         "multi": true,
         "name": "clusterid",
         "options": [],
@@ -3740,7 +3740,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
         "definition": "label_values(ksql_ksql_engine_query_stats_liveness_indicator{job=~\"$job\"},instance)",
@@ -3748,7 +3748,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": null,
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
