@@ -1,0 +1,5 @@
+exclusions:
+  target-instance-rule:
+    reason: "This integration is designed to work with 2 specific labels, service_name and mongodb_cluster, instead of instance."
+  template-instance-rule:
+    reason: "This integration is designed to work with 2 specific labels, service_name and mongodb_cluster, instead of instance."
