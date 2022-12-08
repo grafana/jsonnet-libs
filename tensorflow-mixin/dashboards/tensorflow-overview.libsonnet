@@ -637,7 +637,7 @@ local containerLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job",instance=~"$instance"}',
+      expr: '{name="tensorflow",job=~"$job",instance=~"$instance"}',
       legendFormat: '',
       queryType: 'range',
       refId: 'A',
