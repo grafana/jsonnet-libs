@@ -73,7 +73,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(delta(kafka_topic_partition_current_offset{instance=~'$instance', topic=~\"$topic\"}[1m])/60) by (topic)",
+          "expr": "sum(delta(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\",  topic=~\"$topic\"}[1m])/60) by (topic)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -175,7 +175,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(delta(kafka_topic_partition_current_offset{instance=~'$instance', topic=~\"$topic\"}[5m])/5) by (topic)",
+          "expr": "sum(delta(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\",  topic=~\"$topic\"}[5m])/5) by (topic)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -273,7 +273,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(kafka_consumergroup_current_offset{instance=~'$instance',topic=~\"$topic\"}[$__rate_interval])) by (consumergroup, topic)",
+          "expr": "sum(rate(kafka_consumergroup_current_offset{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"}[$__rate_interval])) by (consumergroup, topic)",
           "interval": "",
           "legendFormat": "{{consumergroup}} (topic: {{topic}})",
           "refId": "A"
@@ -375,7 +375,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(delta(kafka_consumergroup_current_offset{instance=~'$instance',topic=~\"$topic\"}[5m])/5) by (consumergroup, topic)",
+          "expr": "sum(delta(kafka_consumergroup_current_offset{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"}[5m])/5) by (consumergroup, topic)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -474,7 +474,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg(kafka_consumer_lag_millis{instance=~'$instance',topic=~\"$topic\"}/1000) by (consumergroup, topic)",
+          "expr": "avg(kafka_consumer_lag_millis{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"}/1000) by (consumergroup, topic)",
           "interval": "",
           "legendFormat": "{{consumergroup}} (topic: {{topic}})",
           "refId": "A"
@@ -575,7 +575,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg(kafka_consumergroup_uncommitted_offsets{instance=~'$instance',topic=~\"$topic\"}) by (consumergroup, topic)",
+          "expr": "avg(kafka_consumergroup_uncommitted_offsets{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"}) by (consumergroup, topic)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -670,7 +670,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by(topic) (kafka_topic_partitions{instance=~'$instance',topic=~\"$topic\"})",
+          "expr": "sum by(topic) (kafka_topic_partitions{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -694,11 +694,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
+        "current": {},
         "description": null,
         "error": null,
         "hide": 0,
@@ -715,39 +711,47 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": false,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+        "allValue": ".+",
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values(kafka_consumergroup_current_offset, job)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "job",
+        "multi": false,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(kafka_consumergroup_current_offset, job)",
+          "refId": "StandardVariableQuery"
         },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(kafka_consumergroup_current_offset, instance)",
+        "definition": "label_values(kafka_consumergroup_current_offset{job=~\"$job\"}, instance)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "Exporter Instance",
+        "label": "instance",
         "multi": true,
         "name": "instance",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          },
-          {
-            "selected": false,
-            "text": "192.168.99.103:9308",
-            "value": "192.168.99.103:9308"
-          }
-        ],
+        "options": [],
         "query": {
-          "query": "label_values(kafka_consumergroup_current_offset, instance)",
+          "query": "label_values(kafka_consumergroup_current_offset{job=~\"$job\"}, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 0,
@@ -761,18 +765,10 @@
         "useTags": false
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": false,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(kafka_topic_partition_current_offset{topic!='__consumer_offsets',topic!='--kafka'}, topic)",
+        "definition": "label_values(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\", topic!='__consumer_offsets',topic!='--kafka'}, topic)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -782,7 +778,7 @@
         "name": "topic",
         "options": [],
         "query": {
-          "query": "label_values(kafka_topic_partition_current_offset{topic!='__consumer_offsets',topic!='--kafka'}, topic)",
+          "query": "label_values(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\", topic!='__consumer_offsets',topic!='--kafka'}, topic)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
