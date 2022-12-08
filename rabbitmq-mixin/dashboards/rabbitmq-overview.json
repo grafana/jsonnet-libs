@@ -92,7 +92,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rabbitmq_queue_messages_ready * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rabbitmq_queue_messages_ready{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -174,7 +174,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_published_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rate(rabbitmq_channel_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -255,7 +255,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rabbitmq_channels * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) - sum(rabbitmq_channel_consumers * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) - sum(rabbitmq_channel_consumers{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -335,7 +335,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rabbitmq_connections * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rabbitmq_connections{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -416,7 +416,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rabbitmq_queues * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rabbitmq_queues{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -496,7 +496,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rabbitmq_queue_messages_unacked * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rabbitmq_queue_messages_unacked{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -577,7 +577,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_redelivered_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) + sum(rate(rabbitmq_channel_messages_delivered_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) + sum(rate(rabbitmq_channel_messages_delivered_ack_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) + sum(rate(rabbitmq_channel_get_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) + sum(rate(rabbitmq_channel_get_ack_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rate(rabbitmq_channel_messages_redelivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + sum(rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + sum(rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + sum(rate(rabbitmq_channel_get_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) + sum(rate(rabbitmq_channel_get_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -658,7 +658,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rabbitmq_channel_consumers * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rabbitmq_channel_consumers{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -738,7 +738,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rabbitmq_channels * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -818,7 +818,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(rabbitmq_build_info * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "sum(rabbitmq_build_info{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1161,7 +1161,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rabbitmq_build_info * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}",
+          "expr": "rabbitmq_build_info{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1302,7 +1302,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(rabbitmq_resident_memory_limit_bytes * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) - (rabbitmq_process_resident_memory_bytes * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "(rabbitmq_resident_memory_limit_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) - (rabbitmq_process_resident_memory_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1462,7 +1462,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rabbitmq_disk_space_available_bytes * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}",
+          "expr": "rabbitmq_disk_space_available_bytes{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1623,7 +1623,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(rabbitmq_process_max_fds * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) - (rabbitmq_process_open_fds * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "(rabbitmq_process_max_fds{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) - (rabbitmq_process_open_fds{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1783,7 +1783,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(rabbitmq_process_max_tcp_sockets * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) - (rabbitmq_process_open_tcp_sockets * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"})",
+          "expr": "(rabbitmq_process_max_tcp_sockets{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) - (rabbitmq_process_open_tcp_sockets{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -1958,7 +1958,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rabbitmq_queue_messages_ready * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rabbitmq_queue_messages_ready{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2102,7 +2102,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rabbitmq_queue_messages_unacked * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rabbitmq_queue_messages_unacked{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2260,7 +2260,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_published_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2404,7 +2404,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_confirmed_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_confirmed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2548,7 +2548,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_queue_messages_published_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_queue_messages_published_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2692,7 +2692,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_unconfirmed[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_unconfirmed{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2800,7 +2800,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_unroutable_dropped_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_unroutable_dropped_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -2917,7 +2917,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_unroutable_returned_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_unroutable_returned_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3084,7 +3084,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(   (rate(rabbitmq_channel_messages_delivered_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) +   (rate(rabbitmq_channel_messages_delivered_ack_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) ) by(rabbitmq_node)",
+          "expr": "sum(   (rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) +   (rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) ) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3228,7 +3228,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_redelivered_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_redelivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3389,7 +3389,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_delivered_ack_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_delivered_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3533,7 +3533,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_delivered_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_delivered_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3677,7 +3677,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_messages_acked_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_messages_acked_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3785,7 +3785,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_get_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_get_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -3903,7 +3903,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_get_empty_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_get_empty_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4020,7 +4020,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channel_get_ack_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channel_get_ack_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4187,7 +4187,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rabbitmq_queues * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}",
+          "expr": "rabbitmq_queues{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -4332,7 +4332,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_queues_declared_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_queues_declared_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4493,7 +4493,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_queues_created_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_queues_created_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4654,7 +4654,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_queues_deleted_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_queues_deleted_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4829,7 +4829,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rabbitmq_channels * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}",
+          "expr": "rabbitmq_channels{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -4973,7 +4973,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channels_opened_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channels_opened_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5134,7 +5134,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_channels_closed_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_channels_closed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5309,7 +5309,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rabbitmq_connections * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}",
+          "expr": "rabbitmq_connections{job=~\"$job\"} * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5453,7 +5453,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_connections_opened_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_connections_opened_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -5615,7 +5615,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(rabbitmq_connections_closed_total[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\"}) by(rabbitmq_node)",
+          "expr": "sum(rate(rabbitmq_connections_closed_total{job=~\"$job\"}[$__rate_interval]) * on(instance) group_left(rabbitmq_cluster, rabbitmq_node) rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\", rabbitmq_node=~\"$rabbitmq_node\",job=~\"$job\"}) by(rabbitmq_node)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -5713,18 +5713,37 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(rabbitmq_identity_info, rabbitmq_cluster)",
+        "definition": "label_values(rabbitmq_identity_info, job)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(rabbitmq_identity_info, job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values(rabbitmq_identity_info{job=~\"$job\"}, rabbitmq_cluster)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -5734,8 +5753,8 @@
         "name": "rabbitmq_cluster",
         "options": [],
         "query": {
-          "query": "label_values(rabbitmq_identity_info, rabbitmq_cluster)",
-          "refId": "Cortex-rabbitmq_cluster-Variable-Query"
+          "query": "label_values(rabbitmq_identity_info{job=~\"$job\"}, rabbitmq_cluster)",
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
@@ -5748,19 +5767,10 @@
         "useTags": false
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": true,
-          "tags": [],
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
+        "definition": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -5768,16 +5778,10 @@
         "label": "RabbitMQ Node",
         "multi": true,
         "name": "rabbitmq_node",
-        "options": [
-          {
-            "selected": true,
-            "text": "All",
-            "value": "$__all"
-          }
-        ],
+        "options": [],
         "query": {
-          "query": "label_values(rabbitmq_identity_info{rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
-          "refId": "Cortex-rabbitmq_node-Variable-Query"
+          "query": "label_values(rabbitmq_identity_info{job=~\"$job\",rabbitmq_cluster=~\"$rabbitmq_cluster\"}, rabbitmq_node)",
+          "refId": "StandardVariableQuery"
         },
         "refresh": 0,
         "regex": "",
