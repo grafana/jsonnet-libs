@@ -716,18 +716,18 @@ local ninetyNinthTopicShowPercentileRequestLatency = {
         std.flattenArrays([
           [
             overviewRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
-            trafficPanel { gridPos: { h: 8, w: 24, x: 0, y: 1 } },
-            activeRequests { gridPos: { h: 8, w: 12, x: 0, y: 9 } },
-            queuedRequestsPanel { gridPos: { h: 8, w: 12, x: 12, y: 9 } },
-            pageviewsPanel { gridPos: { h: 9, w: 24, x: 0, y: 18 } },
+            trafficPanel { gridPos: { h: 6, w: 12, x: 0, y: 1 } },
+            activeRequests { gridPos: { h: 6, w: 12, x: 12, y: 1 } },
+            queuedRequestsPanel { gridPos: { h: 6, w: 12, x: 0, y: 7 } },
+            pageviewsPanel { gridPos: { h: 6, w: 12, x: 12, y: 7 } },
           ],
           // next row
           [
-            latencyRow { gridPos: { h: 1, w: 24, x: 0, y: 25 } },
-            medianLatencyPanel { gridPos: { h: 8, w: 12, x: 0, y: 26 } },
-            topicMedianPanel { gridPos: { h: 8, w: 12, x: 12, y: 26 } },
-            ninetyNinthPercentileRequestLatency { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
-            ninetyNinthTopicShowPercentileRequestLatency { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
+            latencyRow { gridPos: { h: 1, w: 24, x: 0, y: 12 } },
+            medianLatencyPanel { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
+            topicMedianPanel { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
+            ninetyNinthPercentileRequestLatency { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
+            ninetyNinthTopicShowPercentileRequestLatency { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
           ],
         ])
       ),
