@@ -18,7 +18,7 @@
                 Memcached Instance {{ $labels.job }} / {{ $labels.instance }} is down for more than 15mins.
               |||,
               description: 'Memcached Instance {{ $labels.job }} / {{ $labels.instance }} is down for more than 15mins.',
-              summary: 'Memcached instance is down.'
+              summary: 'Memcached instance is down.',
             },
           },
           {
@@ -35,7 +35,7 @@
                 Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15m.
               |||,
               description: 'Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15m.',
-              summary: 'Memcached max connection limit is approaching.'
+              summary: 'Memcached max connection limit is approaching.',
             },
           },
           {
@@ -52,7 +52,7 @@
                 Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15m.
               |||,
               description: 'Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15m.',
-              summary: 'Memcached connections at critical level.'
+              summary: 'Memcached connections at critical level.',
             },
           },
         ],
