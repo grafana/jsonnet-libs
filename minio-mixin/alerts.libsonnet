@@ -14,6 +14,8 @@
           },
           annotations: {
             message: "MinIO '{{ $labels.instance }}' has disks offline",
+            description: "MinIO '{{ $labels.instance }}' has disks offline",
+            summary: "MinIO disks offline."
           },
         },
         {
@@ -27,6 +29,8 @@
           },
           annotations: {
             message: "MinIO disk '{{ $labels.disk }}' has more than 80% storaged used",
+            description: "MinIO disk '{{ $labels.disk }}' has more than 80% storaged used",
+            summary: "MinIO disks high storage used percentage."
           },
         },
       ],

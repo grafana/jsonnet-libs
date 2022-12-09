@@ -12,14 +12,14 @@ local panel_settings_qps = {
 local f(s) = s % 'instance=~"$instance", job=~"$job"';
 
 g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
-.addTemplate('job', 'minio_version_info', 'job')
+.addMultiTemplate('job', 'minio_version_info', 'job')
 .addMultiTemplate('instance', 'minio_version_info{job="$job"}', 'instance')
 .addMultiTemplate('disk', 'disk_storage_available{job="$job"}', 'disk')
 .addRow(
   g.row('Overview')
   .addPanel(
     g.panel('Storage Used') +
-    g.statPanel('sum(disk_storage_used{disk=~"$disk", job=~"$job"}) by (disk) / sum(disk_storage_total{disk=~"$disk", job=~"$job"}) by (disk)') +
+    g.statPanel('sum(disk_storage_used{disk=~"$disk", job=~"$job", instance=~"$instance"}) by (disk) / sum(disk_storage_total{disk=~"$disk", job=~"$job", instance=~"$instance}) by (disk)') +
     {
       type: 'gauge',
       targets: [super.targets[0] {
