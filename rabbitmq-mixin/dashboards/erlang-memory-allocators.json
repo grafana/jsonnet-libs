@@ -2309,11 +2309,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "default",
-          "value": "default"
-        },
+        "current": {},
         "datasource": "${datasource}",
         "description": null,
         "error": null,

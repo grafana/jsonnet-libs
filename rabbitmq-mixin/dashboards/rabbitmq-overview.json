@@ -5692,11 +5692,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
-        },
+        "current": {},
         "description": null,
         "error": null,
         "hide": 0,
