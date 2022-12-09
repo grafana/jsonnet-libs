@@ -3,9 +3,3 @@ exclusions:
     reason: "The dashboard already has units but it is using older panel versions for which this rule does not work correctly"
   alert-name-camelcase:
     reason: "Rule incorrectly giving warning while alert names are already in camelCase"
-  # target-instance-rule:
-  #   reason: "Instance selector not required in denominator"
-  #   entries:
-  #   - panel: "Hit Rate"
-  # panel-title-description-rule:
-  #   reason: "Not all panels require descriptions - skipping this lint rule for now"
