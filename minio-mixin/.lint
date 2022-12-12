@@ -1,5 +1,3 @@
 exclusions:
   panel-units-rule:
     reason: "The dashboard already has units but it is using older panel versions for which this rule does not work correctly"
-  alert-name-camelcase:
-    reason: "Rule incorrectly giving warning while alert names are already in camelCase"
