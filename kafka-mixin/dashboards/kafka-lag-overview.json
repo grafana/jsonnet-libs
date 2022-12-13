@@ -73,7 +73,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(delta(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\",  topic=~\"$topic\"}[1m])/60) by (topic)",
+          "expr": "sum(increase(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\",  topic=~\"$topic\"}[1m])/60) by (topic)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -175,7 +175,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(delta(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\",  topic=~\"$topic\"}[5m])/5) by (topic)",
+          "expr": "sum(increase(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\",  topic=~\"$topic\"}[5m])/5) by (topic)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -375,7 +375,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(delta(kafka_consumergroup_current_offset{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"}[5m])/5) by (consumergroup, topic)",
+          "expr": "sum(increase(kafka_consumergroup_current_offset{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"}[5m])/5) by (consumergroup, topic)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
