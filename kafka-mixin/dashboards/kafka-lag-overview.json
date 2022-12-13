@@ -73,7 +73,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(increase(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\",  topic=~\"$topic\"}[1m])/60) by (topic)",
+          "expr": "sum(rate(kafka_topic_partition_current_offset{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"}[$__rate_interval])) by (topic)",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
