@@ -1,0 +1,9 @@
+exclusions:
+  panel-units-rule:
+    reason: "The dashboard already has units but it is using older panel versions for which this rule does not work correctly"
+  target-instance-rule:
+    reason: "Instance selector not required in denominator"
+    entries:
+    - panel: "Hit Rate"
+  panel-title-description-rule:
+    reason: "Not all panels require descriptions - skipping this lint rule for now"

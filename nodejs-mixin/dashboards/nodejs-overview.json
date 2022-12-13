@@ -115,7 +115,7 @@
       "tableColumn": "version",
       "targets": [
         {
-          "expr": "nodejs_version_info",
+          "expr": "nodejs_version_info{job=~\"$job\", instance=~\"$instance\"}",
           "format": "table",
           "instant": true,
           "legendFormat": "",
@@ -1377,7 +1377,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "nodejs_heap_space_size_used_bytes{instance=~\"$instance\"}",
+          "expr": "nodejs_heap_space_size_used_bytes{job=~\"$job\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "{{space}} - {{instance}}",
           "refId": "A"
@@ -1455,7 +1455,7 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -1470,7 +1470,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "Job",
+        "label": "job",
         "multi": true,
         "name": "job",
         "options": [],
@@ -1486,7 +1486,7 @@
         "useTags": false
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -1501,7 +1501,7 @@
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],

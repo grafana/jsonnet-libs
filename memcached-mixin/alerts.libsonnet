@@ -15,8 +15,10 @@
             },
             annotations: {
               message: |||
-                Memcached Instance {{ $labels.job }} / {{ $labels.instance }} is down for more than 15mins.
+                Memcached Instance {{ $labels.job }} / {{ $labels.instance }} is down for more than 15 minutes.
               |||,
+              description: 'Memcached Instance {{ $labels.job }} / {{ $labels.instance }} is down for more than 15 minutes.',
+              summary: 'Memcached instance is down.',
             },
           },
           {
@@ -30,8 +32,10 @@
             },
             annotations: {
               message: |||
-                Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15m.
+                Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15 minutes.
               |||,
+              description: 'Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15 minutes.',
+              summary: 'Memcached max connection limit is approaching.',
             },
           },
           {
@@ -45,8 +49,10 @@
             },
             annotations: {
               message: |||
-                Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15m.
+                Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15 minutes.
               |||,
+              description: 'Memcached Instance {{ $labels.job }} / {{ $labels.instance }} connection usage is at {{ printf "%0.0f" $value }}% for at least 15 minutes.',
+              summary: 'Memcached connections at critical level.',
             },
           },
         ],

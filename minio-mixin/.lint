@@ -1,0 +1,3 @@
+exclusions:
+  panel-units-rule:
+    reason: "The dashboard already has units but it is using older panel versions for which this rule does not work correctly"
