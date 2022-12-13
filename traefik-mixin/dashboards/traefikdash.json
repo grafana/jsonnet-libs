@@ -1583,8 +1583,8 @@
         "definition": "label_values(traefik_service_requests_total,job)",
         "hide": 0,
         "includeAll": true,
-        "label": "Job",
-        "multi": false,
+        "label": "job",
+        "multi": true,
         "name": "job",
         "options": [],
         "query": {
@@ -1611,8 +1611,8 @@
         "definition": "label_values(traefik_service_requests_total{job=~\"$job\"},instance)",
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
-        "multi": false,
+        "label": "instance",
+        "multi": true,
         "name": "instance",
         "options": [],
         "query": {
