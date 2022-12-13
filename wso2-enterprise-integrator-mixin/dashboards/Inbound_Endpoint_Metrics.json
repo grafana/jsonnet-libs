@@ -107,7 +107,7 @@
       "pluginVersion": "8.2.2-39068",
       "targets": [
         {
-          "expr": "time() - max(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\"})",
+          "expr": "time() - max(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"})",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -182,7 +182,7 @@
       "pluginVersion": "8.2.2-39068",
       "targets": [
         {
-          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
+          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -250,7 +250,7 @@
       "pluginVersion": "8.2.2-39068",
       "targets": [
         {
-          "expr": "(sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))-(sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])))",
+          "expr": "(sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])))-(sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])))",
           "interval": "1m",
           "legendFormat": "",
           "refId": "A"
@@ -320,7 +320,7 @@
       "pluginVersion": "8.2.2-39068",
       "targets": [
         {
-          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
+          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -393,7 +393,7 @@
       "pluginVersion": "8.2.2-39068",
       "targets": [
         {
-          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))/sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range])-min_over_time(wso2_integration_proxy_inbound_endpoint_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__range]))",
+          "expr": "sum(max_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range]))/sum(max_over_time(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_proxy_inbound_endpoint_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range]))",
           "interval": "30s",
           "legendFormat": "Current",
           "refId": "A"
@@ -449,7 +449,7 @@
       "pluginVersion": "8.2.2-39068",
       "targets": [
         {
-          "expr": "count(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\"})",
+          "expr": "count(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -512,7 +512,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum(rate(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum(rate(wso2_integration_inbound_endpoint_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__rate_interval]))",
           "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -612,7 +612,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum(rate(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum(rate(wso2_integration_inbound_endpoint_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__rate_interval]))",
           "interval": "1m",
           "legendFormat": "{{kubernetes_pod_name}}",
           "refId": "A"
@@ -695,7 +695,7 @@
       "targets": [
         {
           "exemplar": false,
-          "expr": "sum by (le)(increase(wso2_integration_inbound_endpoint_latency_seconds{service_name=~\"$service\", instance=~\"$instance\", le=~\".+\"}[$__rate_interval]))",
+          "expr": "sum by (le)(increase(wso2_integration_inbound_endpoint_latency_seconds{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\", le=~\".+\"}[$__rate_interval]))",
           "format": "heatmap",
           "hide": false,
           "interval": "1m",
@@ -737,11 +737,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
-        },
+        "current": {},
         "description": null,
         "error": null,
         "hide": 0,
@@ -757,25 +753,21 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\"}, service_name)",
+        "definition": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\"}, job)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "Service Name",
+        "label": "job",
         "multi": true,
-        "name": "service",
+        "name": "job",
         "options": [],
         "query": {
-          "query": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\"}, service_name)",
-          "refId": "Cortex-service-Variable-Query"
+          "query": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\"}, job)",
+          "refId": "StandardVariableQuery"
         },
         "refresh": 2,
         "regex": "",
@@ -787,28 +779,46 @@
         "useTags": false
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": "${datasource}",
-        "definition": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\", service_name=~\"$service\"}, instance)",
+        "allValue": ".+",
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\", job=~\"$job\"}, service_name)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "label": "service",
+        "multi": true,
+        "name": "service",
+        "options": [],
+        "query": {
+          "query": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\", job=~\"$job\"}, service_name)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {},
+        "datasource": "${datasource}",
+        "definition": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\", job=~\"$job\", service_name=~\"$service\"}, instance)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\", service_name=~\"$service\"}, instance)",
+          "query": "label_values(wso2_integration_service_up{service_type=\"inbound-endpoint\", job=~\"$job\", service_name=~\"$service\"}, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
