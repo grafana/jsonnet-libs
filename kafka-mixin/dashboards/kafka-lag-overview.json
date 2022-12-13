@@ -12,7 +12,7 @@
       }
     ]
   },
-  "description": "Kafka Lag overview",
+  "description": "Kafka lag overview",
   "editable": true,
   "gnetId": 7589,
   "graphTooltip": 0,
@@ -628,15 +628,42 @@
       }
     },
     {
-      "datasource": "$datasource",
+      "id": 8,
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "type": "barchart",
+      "title": "Partitions per topic",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "pluginVersion": "9.2.7",
+      "links": [],
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "custom": {
-            "align": null,
-            "filterable": false
+            "lineWidth": 1,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "axisPlacement": "auto",
+            "axisLabel": "",
+            "axisColorMode": "text",
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "axisCenteredZero": false,
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            }
+          },
+          "color": {
+            "mode": "palette-classic"
           },
           "mappings": [],
           "thresholds": {
@@ -645,32 +672,39 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 7,
-        "w": 20,
-        "x": 0,
-        "y": 30
-      },
-      "id": 8,
-      "links": [],
       "options": {
-        "showHeader": true
+        "orientation": "auto",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0,
+        "showValue": "auto",
+        "stacking": "none",
+        "groupWidth": 0.7,
+        "barWidth": 0.85,
+        "barRadius": 0,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "legend": {
+          "showLegend": false,
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        }
       },
-      "pluginVersion": "7.5.6",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": true,
-          "expr": "sum by(topic) (kafka_topic_partitions{instance=~\"$instance\", job=~\"$job\", topic=~\"$topic\"})",
+          "expr": "sum by(topic) (kafka_topic_partitions{job=~\"$job\", instance=~\"$instance\", topic=~\"$topic\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -678,11 +712,7 @@
           "legendFormat": "{{topic}}",
           "refId": "A"
         }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Partitions per Topic",
-      "type": "table"
+      ]
     }
   ],
   "refresh": "30s",
