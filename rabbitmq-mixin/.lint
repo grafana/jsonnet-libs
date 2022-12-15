@@ -11,3 +11,4 @@ exclusions:
     - alert: RabbitMQUnroutableMessages
     - alert: RabbitMQNodeNotDistributed
     - alert: RabbitMQNodeDown
+    

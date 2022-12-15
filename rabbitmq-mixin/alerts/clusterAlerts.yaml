@@ -8,7 +8,7 @@ groups:
       severity: 'warning'
     annotations:
       title: 'Instance {{ $labels.instance }} using too much RAM Memory'
-      summary: 'RabbitMQ memory high usage is high.'
+      summary: 'RabbitMQ memory usage is high.'
       description: "A node is using more than 90% of allocated RAM\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: RabbitMQFileDescriptorsUsage
