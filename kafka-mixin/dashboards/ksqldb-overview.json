@@ -3693,9 +3693,9 @@
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "job",
-        "multi": false,
+        "multi": true,
         "name": "job",
         "options": [],
         "query": {
