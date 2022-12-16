@@ -12,7 +12,7 @@
       }
     ]
   },
-  "description": "A new RabbitMQ Management Overview",
+  "description": "A new RabbitMQ management overview",
   "editable": true,
   "gnetId": 10991,
   "graphTooltip": 1,
@@ -842,7 +842,7 @@
       },
       "id": 4,
       "panels": [],
-      "title": "NODES",
+      "title": "Nodes",
       "type": "row"
     },
     {
@@ -1861,7 +1861,7 @@
       },
       "id": 27,
       "panels": [],
-      "title": "QUEUED MESSAGES",
+      "title": "Queued messages",
       "type": "row"
     },
     {
@@ -2163,7 +2163,7 @@
       },
       "id": 11,
       "panels": [],
-      "title": "INCOMING MESSAGES",
+      "title": "Incoming messages",
       "type": "row"
     },
     {
@@ -2987,7 +2987,7 @@
       },
       "id": 29,
       "panels": [],
-      "title": "OUTGOING MESSAGES",
+      "title": "Outgoing messages",
       "type": "row"
     },
     {
@@ -4090,7 +4090,7 @@
       },
       "id": 53,
       "panels": [],
-      "title": "QUEUES",
+      "title": "Queues",
       "type": "row"
     },
     {
@@ -4732,7 +4732,7 @@
       },
       "id": 51,
       "panels": [],
-      "title": "CHANNELS",
+      "title": "Channels",
       "type": "row"
     },
     {
@@ -5212,7 +5212,7 @@
       },
       "id": 46,
       "panels": [],
-      "title": "CONNECTIONS",
+      "title": "Connections",
       "type": "row"
     },
     {
