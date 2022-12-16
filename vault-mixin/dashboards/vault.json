@@ -2753,7 +2753,7 @@
         "definition": "label_values(vault_secret_kv_count{job=~\"$job\",instance=~\"$instance\"}, mount_point)",
         "hide": 0,
         "includeAll": true,
-        "label": "",
+        "label": "mountpoint",
         "multi": true,
         "name": "mountpoint",
         "options": [],
