@@ -62,7 +62,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'Windows service is not healthy',
+              summary: 'Windows service is not healthy.',
               description: |||
                 Windows service {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.
               ||| % $._config,

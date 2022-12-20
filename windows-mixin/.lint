@@ -1,4 +1,8 @@
 exclusions:
+  alert-name-camelcase:
+    reason: CPU can be kept as CPU.
+    entries:
+    - alert: WindowsCPUHigh
   template-job-rule:
     reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
   panel-datasource-rule:
