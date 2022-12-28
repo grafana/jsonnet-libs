@@ -197,7 +197,7 @@
         rules: [
           {
             alert: 'CiliumAgentHighDeniedRate',
-            expr: 'sum(rate(cilium_drop_count_total{reason="Policy denied"}[1m])) by (reason, pod)',
+            expr: 'sum(rate(cilium_drop_count_total{reason="Policy denied"}[1m])) by (reason, pod) > 0',
             annotations: {
               summary: 'Cilium Agent is experiencing a high drop rate due to policy rule denies.',
               description: 'Cilium Agent Pod {{$labels.pod}} is experiencing a high drop rate due to policy rule denies. This could mean that a network policy is not configured correctly, or that a Pod is sending unexpected network traffic',
@@ -205,7 +205,7 @@
             labels: {
               severity: 'info',
             },
-            'for': '5m',
+            'for': '10m',
           },
         ],
       },
