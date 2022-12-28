@@ -62,7 +62,7 @@
         rules: [
           {
             alert: 'CiliumOperatorExhaustedIpamIps',
-            expr: 'sum(cilium_operator_ipam_ips{type="available"}) >= 1',
+            expr: 'sum(cilium_operator_ipam_ips{type="available"}) <= 0',
             annotations: {
               summary: 'Cilium Operator has exhausted its IPAM IPs.',
               description: 'Cilium Operator {{$labels.pod}} has exhausted its IPAM IPs. This is a critical issue which may cause Pods to fail to be scheduled.\n\nThis may be caused by number of Pods being scheduled exceeding the you cloud platforms network limits or issues with Cilium rate limiting.',
@@ -85,6 +85,18 @@
             },
             'for': '5m',
           },
+          {
+            alert: 'CiliumOperatorEniIpamErrors',
+            expr: 'sum(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) / count(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) > 0.0',
+            annotations: {
+              summary: 'Cilium Operator has high error rate while trying to create/attach ENIs for IPAM.',
+              description: 'Cilium Operator {{$labels.pod}} has high error rate while trying to create/attach ENIs for IPAM.\n\nThis may be caused by exceeding Node instance ENI/Address limts, as well as errors with Cilium Operators cloud configuration.'
+            },
+            labels: {
+              severity: 'critical',
+            },
+            'for': '10m',
+          }
         ],
       },
       {
