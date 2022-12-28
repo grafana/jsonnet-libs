@@ -133,7 +133,7 @@
         rules: [
           {
             alert: 'CiliumAgentNatTableFull',
-            expr: 'sum(rate(cilium_drop_count_total{reason="No mapping for NAT masquerade"}[1m])) by (pod)',
+            expr: 'sum(rate(cilium_drop_count_total{reason="No mapping for NAT masquerade"}[1m])) by (pod) > 0',
             annotations: {
               summary: 'Cilium Agent Pod is dropping packets due to "No mapping for NAT masquerade" errors.',
               description: 'Cilium Agent Pod {{$labels.pod}} is dropping packets due to "No mapping for NAT masquerade" errors. This likely means that the Cilium agents NAT table is full.\nThis is a potentially critical issue that can lead to connection issues for packets leaving the cluster network.\n\nSee: https://docs.cilium.io/en/v1.9/concepts/networking/masquerading/ for more info.',
