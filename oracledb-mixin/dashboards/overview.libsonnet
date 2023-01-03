@@ -1410,9 +1410,9 @@ local tablespaceSizePanel = {
             sessionsPanel { gridPos: { h: 6, w: 8, x: 8, y: 4 } },
             processPanel { gridPos: { h: 6, w: 8, x: 16, y: 4 } },
           ],
-          [
+          if $._config.enableLokiLogs then [
             alertLogPanel { gridPos: { h: 7, w: 24, x: 0, y: 10 } },
-          ],
+          ] else [],
           [
             waitTimerow { gridPos: { h: 1, w: 24, x: 0, y: 17 } },
           ],
