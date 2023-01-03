@@ -564,6 +564,12 @@ local alertLogPanel = {
   type: 'table',
 };
 
+local waitTimerow = {
+  collapsed: false,
+  title: 'Wait Time',
+  type: 'row',
+};
+
 local applicationWaitTimePanel = {
   datasource: promDatasource,
   description: 'Application wait time, in seconds, waiting for wait events.',
@@ -1212,6 +1218,12 @@ local userIOWaitTime = {
   type: 'timeseries',
 };
 
+local tablespaceRow = {
+  collapsed: false,
+  title: 'Tablespace',
+  type: 'row',
+};
+
 local tablespaceSizePanel = {
   datasource: promDatasource,
   description: 'Shows the size overtime for the tablespace.',
@@ -1374,10 +1386,10 @@ local tablespaceSizePanel = {
             sort=1
           ),
           template.new(
-            'job',
+            'tablespace',
             promDatasource,
             query='label_values(oracledb_tablespace_bytes, tablespace)',
-            label='Job',
+            label='Tablespace',
             refresh='time',
             includeAll=true,
             multi=true,
@@ -1402,19 +1414,25 @@ local tablespaceSizePanel = {
             alertLogPanel { gridPos: { h: 7, w: 24, x: 0, y: 10 } },
           ],
           [
-            applicationWaitTimePanel { gridPos: { h: 6, w: 6, x: 0, y: 12 } },
-            commitTimePanel { gridPos: { h: 6, w: 6, x: 6, y: 12 } },
-            concurrencyWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 12 } },
-            configurationWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 12 } },
+            waitTimerow { gridPos: { h: 1, w: 24, x: 0, y: 17 } },
           ],
           [
-            networkWaitTime { gridPos: { h: 6, w: 6, x: 0, y: 18 } },
-            schedulerWaitTime { gridPos: { h: 6, w: 6, x: 6, y: 18 } },
-            systemIOWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 18 } },
-            userIOWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 18 } },
+            applicationWaitTimePanel { gridPos: { h: 6, w: 6, x: 0, y: 18 } },
+            commitTimePanel { gridPos: { h: 6, w: 6, x: 6, y: 18 } },
+            concurrencyWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 18 } },
+            configurationWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 18 } },
           ],
           [
-            tablespaceSizePanel { gridPos: { h: 6, w: 24, x: 0, y: 25 } },
+            networkWaitTime { gridPos: { h: 6, w: 6, x: 0, y: 24 } },
+            schedulerWaitTime { gridPos: { h: 6, w: 6, x: 6, y: 24 } },
+            systemIOWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 24 } },
+            userIOWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 24 } },
+          ],
+          [
+            tablespaceRow { gridPos: { h: 1, w: 24, x: 0, y: 30 } },
+          ],
+          [
+            tablespaceSizePanel { gridPos: { h: 6, w: 24, x: 0, y: 31 } },
           ],
         ])
       ),
