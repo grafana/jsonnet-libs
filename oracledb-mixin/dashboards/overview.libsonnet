@@ -71,7 +71,7 @@ local databaseStatusPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_up{job=~"$job", instance=~"$instance"}',
+      expr: 'oracledb_up{' + matcher + '}',
       legendFormat: '__auto',
       range: true,
       refId: 'A',
@@ -151,7 +151,7 @@ local cpuSecondsPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'increase(process_cpu_seconds_total{instance=~"$instance",job=~"$job"}[$__rate_interval])',
+      expr: 'increase(process_cpu_seconds_total{' + matcher + '}[$__rate_interval])',
       legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
@@ -232,7 +232,7 @@ local virtualMemoryPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'process_virtual_memory_bytes{instance=~"$instance",job=~"$job"}',
+      expr: 'process_virtual_memory_bytes{' + matcher + '}',
       legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
@@ -312,7 +312,7 @@ local openFdsPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'process_open_fds{instance=~"$instance",job=~"$job"}',
+      expr: 'process_open_fds{' + matcher + '}',
       legendFormat: '{{instance}} - open',
       range: true,
       refId: 'OPEN',
@@ -320,7 +320,7 @@ local openFdsPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'process_max_fds{instance=~"$instance",job=~"$job"}',
+      expr: 'process_max_fds{' + matcher + '}',
       hide: false,
       legendFormat: '{{instance}} - limit',
       range: true,
@@ -403,7 +403,7 @@ local sessionsPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_resource_current_utilization{instance=~"$instance",job=~"$job",resource_name="sessions"}',
+      expr: 'oracledb_resource_current_utilization{' + matcher + ',resource_name="sessions"}',
       legendFormat: '{{instance}} - open',
       range: true,
       refId: 'Open',
@@ -411,7 +411,7 @@ local sessionsPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_resource_limit_value{instance=~"$instance",job=~"$job",resource_name="sessions"}',
+      expr: 'oracledb_resource_limit_value{' + matcher + ',resource_name="sessions"}',
       hide: false,
       legendFormat: '{{instance}} - limit',
       range: true,
@@ -494,7 +494,7 @@ local processPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_resource_current_utilization{instance=~"$instance",job=~"$job",resource_name="processes"}',
+      expr: 'oracledb_resource_current_utilization{' + matcher + ',resource_name="processes"}',
       legendFormat: '{{instance}} - current',
       range: true,
       refId: 'Current',
@@ -502,7 +502,7 @@ local processPanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_resource_limit_value{instance=~"$instance",job=~"$job",resource_name="processes"}',
+      expr: 'oracledb_resource_limit_value{' + matcher + ',resource_name="processes"}',
       hide: false,
       legendFormat: '{{instance}} - limit',
       range: true,
@@ -555,7 +555,7 @@ local alertLogPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'builder',
-      expr: '{filename=~"/u01/base/diag/rdbms/*/*/trace/alert_*.log", instance=~"$instance", job=~"$job"}',
+      expr: '{filename=~"/u01/base/diag/rdbms/.*/.*/trace/alert_.*log",' + matcher + '}',
       queryType: 'range',
       refId: 'A',
     },
@@ -641,8 +641,8 @@ local applicationWaitTimePanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_wait_time_application{job=~"$job", instance=~"$instance"}',
-      legendFormat: '__auto',
+      expr: 'oracledb_wait_time_application{' + matcher + '}',
+      legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
     },
@@ -722,8 +722,8 @@ local commitTimePanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_wait_time_commit{instance=~"$instance",job=~"$job"}',
-      legendFormat: '__auto',
+      expr: 'oracledb_wait_time_commit{' + matcher + '}',
+      legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
     },
@@ -803,8 +803,8 @@ local concurrencyWaitTime = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_wait_time_concurrency{instance=~"$instance",job=~"$job"}',
-      legendFormat: '__auto',
+      expr: 'oracledb_wait_time_concurrency{' + matcher + '}',
+      legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
     },
@@ -884,8 +884,8 @@ local configurationWaitTime = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_wait_time_configuration{instance=~"$instance",job=~"$job"}',
-      legendFormat: '__auto',
+      expr: 'oracledb_wait_time_configuration{' + matcher + '}',
+      legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
     },
@@ -965,8 +965,8 @@ local networkWaitTime = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_wait_time_network{instance=~"$instance",job=~"$job"}',
-      legendFormat: '__auto',
+      expr: 'oracledb_wait_time_network{' + matcher + '}',
+      legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
     },
@@ -1046,8 +1046,8 @@ local schedulerWaitTime = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_wait_time_scheduler{instance=~"$instance",job=~"$job"}',
-      legendFormat: '__auto',
+      expr: 'oracledb_wait_time_scheduler{' + matcher + '}',
+      legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
     },
@@ -1127,8 +1127,8 @@ local systemIOWaitTime = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_wait_time_system_io{instance=~"$instance",job=~"$job"}',
-      legendFormat: '__auto',
+      expr: 'oracledb_wait_time_system_io{' + matcher + '}',
+      legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
     },
@@ -1208,8 +1208,8 @@ local userIOWaitTime = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_wait_time_user_io{instance=~"$instance",job=~"$job"}',
-      legendFormat: '__auto',
+      expr: 'oracledb_wait_time_user_io{' + matcher + '}',
+      legendFormat: '{{instance}}',
       range: true,
       refId: 'A',
     },
@@ -1295,7 +1295,7 @@ local tablespaceSizePanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_tablespace_bytes{instance=~"$instance",job=~"$job",tablespace=~"$tablespace"}',
+      expr: 'oracledb_tablespace_bytes{' + matcher + ',tablespace=~"$tablespace"}',
       legendFormat: '{{instance}} - {{tablespace}} - used',
       range: true,
       refId: 'Used Bytes',
@@ -1303,7 +1303,7 @@ local tablespaceSizePanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_tablespace_free{instance=~"$instance",job=~"$job",tablespace=~"$tablespace"}',
+      expr: 'oracledb_tablespace_free{' + matcher + ',tablespace=~"$tablespace"}',
       hide: false,
       legendFormat: '{{instance}} - {{tablespace}} - free',
       range: true,
@@ -1312,7 +1312,7 @@ local tablespaceSizePanel = {
     {
       datasource: promDatasource,
       editorMode: 'code',
-      expr: 'oracledb_tablespace_max_bytes{instance=~"$instance",job=~"$job",tablespace=~"$tablespace"}',
+      expr: 'oracledb_tablespace_max_bytes{' + matcher + ',tablespace=~"$tablespace"}',
       hide: false,
       legendFormat: '{{instance}} - {{tablespace}} - max',
       range: true,
@@ -1336,12 +1336,6 @@ local tablespaceSizePanel = {
         graphTooltip='shared_crosshair',
         uid=dashboardUid,
       )
-      .addLink(grafana.link.dashboards(
-        title='Other OracleDB dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
       .addTemplates(
         [
           {

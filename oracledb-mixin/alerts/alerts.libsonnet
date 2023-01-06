@@ -47,7 +47,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'A Tablespace is exceeding more than %(alertsTablespaceThreshold)s%% of its maximum allotted space.' % $._config,
+              summary: 'A tablespace is exceeding more than %(alertsTablespaceThreshold)s%% of its maximum allotted space.' % $._config,
               description:
                 ('{{ printf "%%.2f" $value }}%% of bytes are being utilized by the tablespace {{$labels.tablespace}} on the instance {{$labels.instance}}, ' +
                  'which is above the threshold %(alertsTablespaceThreshold)s%%.') % $._config,
