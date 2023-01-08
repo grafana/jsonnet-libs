@@ -157,7 +157,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
       .addTemplate(
         {
           hide: 0,
-          label: null,
+          label: 'instance',
           name: 'instance',
           includeAll: true,
           multi: true,
@@ -167,6 +167,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
           regex: '',
           type: 'query',
           datasource: '$datasource',
+          allValue: '.+'
         },
       )
       .addTemplate(
