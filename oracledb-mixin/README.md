@@ -40,6 +40,9 @@ OracleDB alert logs are enabled by default in the `config.libsonnet` and can be 
 
 Alert logs are generally located at `$ORACLE_HOME/diag/rdbms/*/*/trace/alert_*.log` but please follow [the official documentation](http://www.dba-oracle.com/t_alert_log_location.htm) to determine the location specific to respective installs.
 
+![First screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/oracledb/screenshots/oracledb_overview_1.png)
+![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/oracledb/screenshots/oracledb_overview_2.png)
+
 ## Install tools
 
 ```bash

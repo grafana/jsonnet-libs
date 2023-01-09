@@ -77,7 +77,7 @@ local databaseStatusPanel = {
       refId: 'A',
     },
   ],
-  title: 'Database Status',
+  title: 'Database status',
   type: 'stat',
 };
 
@@ -157,7 +157,7 @@ local cpuSecondsPanel = {
       refId: 'A',
     },
   ],
-  title: 'CPU Seconds',
+  title: 'CPU seconds',
   type: 'timeseries',
 };
 
@@ -238,7 +238,7 @@ local virtualMemoryPanel = {
       refId: 'A',
     },
   ],
-  title: 'Virtual Memory',
+  title: 'Virtual memory',
   type: 'timeseries',
 };
 
@@ -327,7 +327,7 @@ local openFdsPanel = {
       refId: 'MAX',
     },
   ],
-  title: 'Open File Descriptors',
+  title: 'Open file descriptors',
   type: 'timeseries',
 };
 
@@ -383,7 +383,6 @@ local sessionsPanel = {
           },
         ],
       },
-      unit: 'sessions',
     },
     overrides: [],
   },
@@ -474,7 +473,6 @@ local processPanel = {
           },
         ],
       },
-      unit: 'processes',
     },
     overrides: [],
   },
@@ -516,39 +514,15 @@ local processPanel = {
 local alertLogPanel = {
   datasource: lokiDatasource,
   description: 'Recent logs from alert log file',
-  fieldConfig: {
-    defaults: {
-      custom: {
-        align: 'auto',
-        displayMode: 'auto',
-        inspect: false,
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
   options: {
-    footer: {
-      fields: '',
-      reducer: [
-        'sum',
-      ],
-      show: false,
-    },
-    showHeader: true,
+    dedupStrategy: 'none',
+    enableLogDetails: true,
+    prettifyLogMessage: false,
+    showCommonLabels: false,
+    showLabels: false,
+    showTime: false,
+    sortOrder: 'Descending',
+    wrapLogMessage: false,
   },
   pluginVersion: '9.1.8',
   targets: [
@@ -560,13 +534,13 @@ local alertLogPanel = {
       refId: 'A',
     },
   ],
-  title: 'Alert Logs',
-  type: 'table',
+  title: 'Alert logs',
+  type: 'logs',
 };
 
 local waitTimerow = {
   collapsed: false,
-  title: 'Wait Time',
+  title: 'Wait time',
   type: 'row',
 };
 
@@ -647,7 +621,7 @@ local applicationWaitTimePanel = {
       refId: 'A',
     },
   ],
-  title: 'Application Wait Time',
+  title: 'Application wait time',
   type: 'timeseries',
 };
 
@@ -728,7 +702,7 @@ local commitTimePanel = {
       refId: 'A',
     },
   ],
-  title: 'Commit Wait Time',
+  title: 'Commit wait time',
   type: 'timeseries',
 };
 
@@ -809,7 +783,7 @@ local concurrencyWaitTime = {
       refId: 'A',
     },
   ],
-  title: 'Concurrency Wait Time',
+  title: 'Concurrency wait time',
   type: 'timeseries',
 };
 
@@ -890,7 +864,7 @@ local configurationWaitTime = {
       refId: 'A',
     },
   ],
-  title: 'Configuration Wait Time',
+  title: 'Configuration wait time',
   type: 'timeseries',
 };
 
@@ -971,7 +945,7 @@ local networkWaitTime = {
       refId: 'A',
     },
   ],
-  title: 'Network Wait Time',
+  title: 'Network wait time',
   type: 'timeseries',
 };
 
@@ -1052,13 +1026,13 @@ local schedulerWaitTime = {
       refId: 'A',
     },
   ],
-  title: 'Scheduler Wait Time',
+  title: 'Scheduler wait time',
   type: 'timeseries',
 };
 
 local systemIOWaitTime = {
   datasource: promDatasource,
-  description: 'System IO wait time, in seconds, waiting for wait events.',
+  description: 'System I/O wait time, in seconds, waiting for wait events.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1133,13 +1107,13 @@ local systemIOWaitTime = {
       refId: 'A',
     },
   ],
-  title: 'System IO Wait TIme',
+  title: 'System I/O wait time',
   type: 'timeseries',
 };
 
 local userIOWaitTime = {
   datasource: promDatasource,
-  description: 'User IO wait time, in seconds, waiting for wait events.',
+  description: 'User I/O wait time, in seconds, waiting for wait events.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1214,7 +1188,7 @@ local userIOWaitTime = {
       refId: 'A',
     },
   ],
-  title: 'User IO Wait TIme',
+  title: 'User I/O wait time',
   type: 'timeseries',
 };
 
@@ -1319,7 +1293,7 @@ local tablespaceSizePanel = {
       refId: 'Max',
     },
   ],
-  title: 'Tablespace Size',
+  title: 'Tablespace size',
   type: 'timeseries',
 };
 
@@ -1357,23 +1331,23 @@ local tablespaceSizePanel = {
             type: 'datasource',
           },
           template.new(
-            name='instance',
-            label='Instance',
-            datasource='$prometheus_datasource',
-            query='label_values(oracledb_up, instance)',
-            current='',
-            refresh=2,
+            'job',
+            promDatasource,
+            query='label_values(oracledb_up, job)',
+            label='Job',
+            refresh='time',
             includeAll=true,
             multi=true,
             allValues='.+',
             sort=1
           ),
           template.new(
-            'job',
-            promDatasource,
-            query='label_values(oracledb_up, job)',
-            label='Job',
-            refresh='time',
+            name='instance',
+            label='Instance',
+            datasource='$prometheus_datasource',
+            query='label_values(oracledb_up, instance)',
+            current='',
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='.+',
