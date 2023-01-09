@@ -1356,7 +1356,7 @@ local tablespaceSizePanel = {
           template.new(
             'tablespace',
             promDatasource,
-            query='label_values(oracledb_tablespace_bytes, tablespace)',
+            query='label_values(oracledb_tablespace_bytes{' + matcher + '}, tablespace)',
             label='Tablespace',
             refresh='time',
             includeAll=true,
