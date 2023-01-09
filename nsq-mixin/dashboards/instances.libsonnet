@@ -167,7 +167,7 @@ local nsqgrafonnet = import '../lib/nsqgrafonnet/nsqgrafonnet.libsonnet';
           regex: '',
           type: 'query',
           datasource: '$datasource',
-          allValue: '.+'
+          allValue: '.+',
         },
       )
       .addTemplate(
