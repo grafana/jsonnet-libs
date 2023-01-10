@@ -33,8 +33,8 @@ local queries = {
   bytes_transferred_total: 'sum(rclone_bytes_transferred_total{' + matcher + '})',
   bytes_transferred_rate_ts: 'sum(irate(rclone_bytes_transferred_total{' + matcher + '}[$__rate_interval])) by (instance)',
 
-  starttime: 'min_over_time(timestamp(rclone_speed{job=~"$job"})[48h:]) * 1000',
-  endtime: 'max_over_time(timestamp(rclone_speed{job=~"$job"})[48h:]) * 1000',
+  starttime: 'min_over_time(timestamp(rclone_speed{' + matcher + '})[48h:]) * 1000',
+  endtime: 'max_over_time(timestamp(rclone_speed{' + matcher + '})[48h:]) * 1000',
 };
 
 // Templates
@@ -71,6 +71,7 @@ local instance_template =
     'instance',
     '$datasource',
     'label_values(rclone_speed{job=~"$job"}, instance)',
+    label='instance',
     refresh='load',
     multi=true,
     includeAll=true,

@@ -6,26 +6,35 @@
           list: [
             {
               builtIn: 1,
-              datasource: '-- Grafana --',
+              datasource: {
+                type: 'datasource',
+                uid: 'grafana',
+              },
               enable: true,
               hide: true,
               iconColor: 'rgba(0, 211, 255, 1)',
               name: 'Annotations & Alerts',
+              target: {
+                limit: 100,
+                matchAny: false,
+                tags: [],
+                type: 'dashboard',
+              },
               type: 'dashboard',
             },
           ],
         },
         editable: true,
+        fiscalYearStartMonth: 0,
         graphTooltip: 1,
-        id: null,
-        iteration: 1624304303697,
+        id: 8,
         links: [],
+        liveNow: false,
         panels: [
           {
-            datasource: null,
-            fieldConfig: {
-              defaults: {},
-              overrides: [],
+            datasource: {
+              type: 'prometheus',
+              uid: 'grafanacloud-prom',
             },
             gridPos: {
               h: 1,
@@ -34,12 +43,23 @@
               y: 0,
             },
             id: 24,
+            targets: [
+              {
+                datasource: {
+                  type: 'prometheus',
+                  uid: 'grafanacloud-prom',
+                },
+                refId: 'A',
+              },
+            ],
             title: 'Allocations',
             type: 'row',
           },
           {
-            cacheTimeout: null,
-            datasource: '$datasource',
+            datasource: {
+              uid: '$datasource',
+            },
+            description: 'CPU allocated on $instance',
             fieldConfig: {
               defaults: {
                 color: {
@@ -76,7 +96,6 @@
               y: 1,
             },
             id: 33,
-            interval: null,
             links: [],
             maxDataPoints: 100,
             options: {
@@ -92,12 +111,15 @@
               showThresholdMarkers: true,
               text: {},
             },
-            pluginVersion: '8.0.2',
+            pluginVersion: '9.3.2',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
               {
-                expr: 'nomad_client_allocated_cpu{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_cpu{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_cpu{datacenter="$datacenter", instance="$instance"})*100',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'nomad_client_allocated_cpu{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}/(nomad_client_unallocated_cpu{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}+nomad_client_allocated_cpu{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})*100',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -106,12 +128,13 @@
               },
             ],
             title: 'CPU allocated',
-            description: 'CPU allocated on $instance',
             type: 'gauge',
           },
           {
-            cacheTimeout: null,
-            datasource: '$datasource',
+            datasource: {
+              uid: '$datasource',
+            },
+            description: 'Memory allocated on $instance',
             fieldConfig: {
               defaults: {
                 color: {
@@ -148,7 +171,6 @@
               y: 1,
             },
             id: 40,
-            interval: null,
             links: [],
             maxDataPoints: 100,
             options: {
@@ -164,12 +186,15 @@
               showThresholdMarkers: true,
               text: {},
             },
-            pluginVersion: '8.0.2',
+            pluginVersion: '9.3.2',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
               {
-                expr: 'nomad_client_allocated_memory{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_memory{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_memory{datacenter="$datacenter", instance="$instance"})*100',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'nomad_client_allocated_memory{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}/(nomad_client_unallocated_memory{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}+nomad_client_allocated_memory{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})*100',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -178,12 +203,13 @@
               },
             ],
             title: 'Memory allocated',
-            description: 'Memory allocated on $instance',
             type: 'gauge',
           },
           {
-            cacheTimeout: null,
-            datasource: '$datasource',
+            datasource: {
+              uid: '$datasource',
+            },
+            description: 'Disk allocated on $instance',
             fieldConfig: {
               defaults: {
                 color: {
@@ -221,7 +247,6 @@
               y: 1,
             },
             id: 48,
-            interval: null,
             links: [],
             maxDataPoints: 100,
             options: {
@@ -237,12 +262,15 @@
               showThresholdMarkers: true,
               text: {},
             },
-            pluginVersion: '8.0.2',
+            pluginVersion: '9.3.2',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
               {
-                expr: 'nomad_client_allocated_disk{datacenter="$datacenter", instance="$instance"}/(nomad_client_unallocated_disk{datacenter="$datacenter", instance="$instance"}+nomad_client_allocated_disk{datacenter="$datacenter", instance="$instance"})*100',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'nomad_client_allocated_disk{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}/(nomad_client_unallocated_disk{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}+nomad_client_allocated_disk{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})*100',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -251,35 +279,22 @@
               },
             ],
             title: 'Disk allocated',
-            description: 'Disk allocated on $instance',
             type: 'gauge',
           },
           {
-            id: 58,
-            gridPos: {
-              h: 5,
-              w: 9,
-              x: 15,
-              y: 1,
-            },
-            type: 'state-timeline',
-            title: 'Summary',
-            repeat: 'instance',
-            repeatDirection: 'v',
             datasource: {
-              uid: '${datasource}',
               type: 'prometheus',
+              uid: '${datasource}',
             },
-            links: [],
             fieldConfig: {
               defaults: {
-                custom: {
-                  lineWidth: 1,
-                  fillOpacity: 70,
-                  spanNulls: false,
-                },
                 color: {
                   mode: 'continuous-GrYlRd',
+                },
+                custom: {
+                  fillOpacity: 70,
+                  lineWidth: 1,
+                  spanNulls: false,
                 },
                 mappings: [],
                 thresholds: {
@@ -295,58 +310,69 @@
               },
               overrides: [],
             },
+            gridPos: {
+              h: 5,
+              w: 9,
+              x: 15,
+              y: 1,
+            },
+            id: 58,
+            links: [],
             options: {
-              mergeValues: true,
-              showValue: 'auto',
               alignValue: 'left',
-              rowHeight: 0.95,
               legend: {
-                displayMode: 'hidden',
+                displayMode: 'list',
                 placement: 'bottom',
+                showLegend: false,
               },
+              mergeValues: true,
+              rowHeight: 0.95,
+              showValue: 'auto',
               tooltip: {
                 mode: 'single',
                 sort: 'none',
               },
             },
+            repeat: 'instance',
+            repeatDirection: 'v',
             targets: [
               {
-                expr: 'sum by (datacenter) (nomad_client_allocations_migrating{datacenter=~"$datacenter", instance="$instance"})',
-                legendFormat: 'Migrating',
-                interval: '',
-                exemplar: true,
                 datasource: {
                   type: 'prometheus',
                   uid: '${datasource}',
                 },
+                exemplar: true,
+                expr: 'sum by (datacenter) (nomad_client_allocations_migrating{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
                 format: 'time_series',
+                interval: '',
                 intervalFactor: 1,
+                legendFormat: 'Migrating',
                 refId: 'A',
               },
               {
-                expr: 'sum by (datacenter) (nomad_client_allocations_blocked{datacenter=~"$datacenter", instance="$instance"})',
-                legendFormat: 'Blocked',
-                interval: '',
-                exemplar: true,
                 datasource: {
                   type: 'prometheus',
                   uid: '${datasource}',
                 },
+                exemplar: true,
+                expr: 'sum by (datacenter) (nomad_client_allocations_blocked{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
                 format: 'time_series',
+                interval: '',
                 intervalFactor: 1,
+                legendFormat: 'Blocked',
                 refId: 'B',
               },
               {
-                expr: 'sum by (datacenter) (nomad_client_allocations_pending{datacenter=~"$datacenter", instance="$instance"})',
-                legendFormat: 'Pending',
-                interval: '',
-                exemplar: true,
                 datasource: {
                   type: 'prometheus',
                   uid: '${datasource}',
                 },
+                exemplar: true,
+                expr: 'sum by (datacenter) (nomad_client_allocations_pending{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
                 format: 'time_series',
+                interval: '',
                 intervalFactor: 1,
+                legendFormat: 'Pending',
                 refId: 'C',
               },
               {
@@ -355,7 +381,7 @@
                   uid: '${datasource}',
                 },
                 exemplar: true,
-                expr: 'sum by (datacenter)  (nomad_client_allocations_running{datacenter=~"$datacenter", instance=~"$instance"})',
+                expr: 'sum by (datacenter)  (nomad_client_allocations_running{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -368,7 +394,7 @@
                   uid: '${datasource}',
                 },
                 exemplar: true,
-                expr: 'sum by (datacenter)  (nomad_client_allocations_terminal{datacenter=~"$datacenter", instance=~"$instance"})',
+                expr: 'sum by (datacenter)  (nomad_client_allocations_terminal{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -376,13 +402,13 @@
                 refId: 'E',
               },
             ],
-            interval: null,
+            title: 'Summary',
+            type: 'state-timeline',
           },
           {
-            datasource: null,
-            fieldConfig: {
-              defaults: {},
-              overrides: [],
+            datasource: {
+              type: 'prometheus',
+              uid: 'grafanacloud-prom',
             },
             gridPos: {
               h: 1,
@@ -391,12 +417,22 @@
               y: 6,
             },
             id: 2,
+            targets: [
+              {
+                datasource: {
+                  type: 'prometheus',
+                  uid: 'grafanacloud-prom',
+                },
+                refId: 'A',
+              },
+            ],
             title: 'Nomad clients',
             type: 'row',
           },
           {
-            cacheTimeout: null,
-            datasource: '$datasource',
+            datasource: {
+              uid: '$datasource',
+            },
             fieldConfig: {
               defaults: {
                 color: {
@@ -428,7 +464,6 @@
               y: 7,
             },
             id: 4,
-            interval: null,
             links: [],
             maxDataPoints: 100,
             options: {
@@ -446,12 +481,15 @@
               text: {},
               textMode: 'auto',
             },
-            pluginVersion: '8.0.2',
+            pluginVersion: '9.3.2',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
               {
-                expr: 'nomad_client_uptime{datacenter="$datacenter", instance="$instance"}',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'nomad_client_uptime{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -463,8 +501,9 @@
             type: 'stat',
           },
           {
-            cacheTimeout: null,
-            datasource: '$datasource',
+            datasource: {
+              uid: '$datasource',
+            },
             fieldConfig: {
               defaults: {
                 color: {
@@ -501,7 +540,6 @@
               y: 7,
             },
             id: 7,
-            interval: null,
             links: [],
             maxDataPoints: 100,
             options: {
@@ -517,12 +555,15 @@
               showThresholdMarkers: true,
               text: {},
             },
-            pluginVersion: '8.0.2',
+            pluginVersion: '9.3.2',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
               {
-                expr: '100-sum(nomad_client_host_cpu_idle{datacenter="$datacenter", instance="$instance"}) / count(nomad_client_host_cpu_idle{datacenter="$datacenter", instance="$instance"})',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: '100-sum(nomad_client_host_cpu_idle{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}) / count(nomad_client_host_cpu_idle{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -538,7 +579,9 @@
             bars: false,
             dashLength: 10,
             dashes: false,
-            datasource: '$datasource',
+            datasource: {
+              uid: '$datasource',
+            },
             fieldConfig: {
               defaults: {
                 links: [],
@@ -572,7 +615,7 @@
               alertThreshold: true,
             },
             percentage: false,
-            pluginVersion: '8.0.2',
+            pluginVersion: '9.3.2',
             pointradius: 5,
             points: false,
             renderer: 'flot',
@@ -584,7 +627,10 @@
             steppedLine: false,
             targets: [
               {
-                expr: 'nomad_client_host_memory_total{datacenter="$datacenter", instance="$instance"}',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'nomad_client_host_memory_total{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -592,7 +638,10 @@
                 refId: 'B',
               },
               {
-                expr: 'nomad_client_host_memory_free{datacenter="$datacenter", instance="$instance"}',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'nomad_client_host_memory_free{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
                 format: 'time_series',
                 instant: false,
                 interval: '',
@@ -601,7 +650,10 @@
                 refId: 'A',
               },
               {
-                expr: 'nomad_client_host_memory_used{datacenter="$datacenter", instance="$instance"}',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'nomad_client_host_memory_used{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -609,7 +661,10 @@
                 refId: 'C',
               },
               {
-                expr: 'nomad_client_host_memory_available{datacenter="$datacenter", instance="$instance"}',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'nomad_client_host_memory_available{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -618,9 +673,7 @@
               },
             ],
             thresholds: [],
-            timeFrom: null,
             timeRegions: [],
-            timeShift: null,
             title: 'Memory',
             tooltip: {
               shared: true,
@@ -629,33 +682,24 @@
             },
             type: 'graph',
             xaxis: {
-              buckets: null,
               mode: 'time',
-              name: null,
               show: true,
               values: [],
             },
             yaxes: [
               {
                 format: 'decbytes',
-                label: null,
                 logBase: 1,
-                max: null,
-                min: null,
                 show: true,
               },
               {
                 format: 'short',
-                label: null,
                 logBase: 1,
-                max: null,
-                min: null,
                 show: true,
               },
             ],
             yaxis: {
               align: false,
-              alignLevel: null,
             },
           },
           {
@@ -663,7 +707,9 @@
             bars: false,
             dashLength: 10,
             dashes: false,
-            datasource: '$datasource',
+            datasource: {
+              uid: '$datasource',
+            },
             fieldConfig: {
               defaults: {
                 links: [],
@@ -697,7 +743,7 @@
               alertThreshold: true,
             },
             percentage: false,
-            pluginVersion: '8.0.2',
+            pluginVersion: '9.3.2',
             pointradius: 5,
             points: false,
             renderer: 'flot',
@@ -709,7 +755,10 @@
             steppedLine: false,
             targets: [
               {
-                expr: 'max(nomad_client_host_disk_size{datacenter="$datacenter", instance="$instance"}) by (disk)',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'max(nomad_client_host_disk_size{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}) by (disk)',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -717,7 +766,10 @@
                 refId: 'B',
               },
               {
-                expr: 'avg(nomad_client_host_disk_available{datacenter="$datacenter", instance="$instance"}) by (disk)',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'avg(nomad_client_host_disk_available{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}) by (disk)',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -726,9 +778,7 @@
               },
             ],
             thresholds: [],
-            timeFrom: null,
             timeRegions: [],
-            timeShift: null,
             title: 'Disk usage',
             tooltip: {
               shared: true,
@@ -737,9 +787,7 @@
             },
             type: 'graph',
             xaxis: {
-              buckets: null,
               mode: 'time',
-              name: null,
               show: true,
               values: [],
             },
@@ -747,24 +795,17 @@
               {
                 decimals: 0,
                 format: 'decbytes',
-                label: null,
                 logBase: 1,
-                max: null,
-                min: null,
                 show: true,
               },
               {
                 format: 'decbytes',
-                label: null,
                 logBase: 1,
-                max: null,
-                min: null,
                 show: false,
               },
             ],
             yaxis: {
               align: false,
-              alignLevel: null,
             },
           },
           {
@@ -772,7 +813,9 @@
             bars: false,
             dashLength: 10,
             dashes: false,
-            datasource: '$datasource',
+            datasource: {
+              uid: '$datasource',
+            },
             fieldConfig: {
               defaults: {
                 links: [],
@@ -806,7 +849,7 @@
               alertThreshold: true,
             },
             percentage: false,
-            pluginVersion: '8.0.2',
+            pluginVersion: '9.3.2',
             pointradius: 5,
             points: false,
             renderer: 'flot',
@@ -818,7 +861,10 @@
             steppedLine: false,
             targets: [
               {
-                expr: 'avg(nomad_client_host_disk_inodes_percent{datacenter="$datacenter", instance="$instance"}) by (disk)',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'avg(nomad_client_host_disk_inodes_percent{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}) by (disk)',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -827,9 +873,7 @@
               },
             ],
             thresholds: [],
-            timeFrom: null,
             timeRegions: [],
-            timeShift: null,
             title: 'Disk inodes',
             tooltip: {
               shared: true,
@@ -838,47 +882,41 @@
             },
             type: 'graph',
             xaxis: {
-              buckets: null,
               mode: 'time',
-              name: null,
               show: true,
               values: [],
             },
             yaxes: [
               {
-                decimals: null,
                 format: 'percent',
-                label: null,
                 logBase: 1,
-                max: null,
-                min: null,
                 show: true,
               },
               {
                 format: 'short',
-                label: null,
                 logBase: 1,
-                max: null,
-                min: null,
                 show: true,
               },
             ],
             yaxis: {
               align: false,
-              alignLevel: null,
             },
           },
         ],
-        refresh: '1m',
-        schemaVersion: 30,
+        refresh: '30s',
+        schemaVersion: 37,
         style: 'dark',
-        tags: $._config.dashboardTags,
+        tags: [
+          'nomad-integration',
+        ],
         templating: {
           list: [
             {
-              current: {},
-              description: null,
-              'error': null,
+              current: {
+                selected: false,
+                text: 'grafanacloud-k3d-prom',
+                value: 'grafanacloud-k3d-prom',
+              },
               hide: 0,
               includeAll: false,
               label: 'Data Source',
@@ -887,20 +925,50 @@
               options: [],
               query: 'prometheus',
               refresh: 1,
-              regex: '',
+              regex: '(?!grafanacloud-usage|grafanacloud-ml-metrics).+',
               skipUrlSync: false,
               type: 'datasource',
             },
             {
-              allValue: null,
-              current: {},
+              current: {
+                selected: false,
+                text: 'All',
+                value: '$__all',
+              },
               datasource: {
                 type: 'prometheus',
                 uid: '${datasource}',
               },
-              definition: '',
-              description: null,
-              'error': null,
+              definition: 'label_values(nomad_client_uptime, job)',
+              hide: 0,
+              includeAll: true,
+              allValue: '.+',
+              label: 'job',
+              multi: true,
+              name: 'job',
+              options: [],
+              query: {
+                query: 'label_values(nomad_client_uptime, job)',
+                refId: 'StandardVariableQuery',
+              },
+              refresh: 1,
+              regex: '',
+              skipUrlSync: false,
+              sort: 0,
+              type: 'query',
+            },
+            {
+              current: {
+                isNone: true,
+                selected: false,
+                text: 'None',
+                value: '',
+              },
+              datasource: {
+                type: 'prometheus',
+                uid: '${datasource}',
+              },
+              definition: 'label_values(nomad_client_uptime, datacenter)',
               hide: 0,
               includeAll: false,
               label: 'DC',
@@ -909,7 +977,7 @@
               options: [],
               query: {
                 query: 'label_values(nomad_client_uptime, datacenter)',
-                refId: 'prometheus-datacenter-Variable-Query',
+                refId: 'StandardVariableQuery',
               },
               refresh: 1,
               regex: '',
@@ -921,18 +989,20 @@
               useTags: false,
             },
             {
-              allValue: null,
-              current: {},
+              current: {
+                selected: false,
+                text: 'All',
+                value: '$__all',
+              },
               datasource: {
                 type: 'prometheus',
                 uid: '${datasource}',
               },
               definition: 'label_values(nomad_client_uptime{datacenter="$datacenter"}, instance)',
-              description: null,
-              'error': null,
               hide: 0,
               includeAll: true,
-              label: 'Nomad client',
+              allValue: '.+',
+              label: 'instance',
               multi: true,
               name: 'instance',
               options: [],
@@ -952,7 +1022,7 @@
           ],
         },
         time: {
-          from: 'now-15m',
+          from: 'now-30m',
           to: 'now',
         },
         timepicker: {
@@ -983,8 +1053,8 @@
         timezone: '',
         title: 'Nomad cluster',
         uid: 'CiP3mZVik',
-        version: 1,
+        version: 4,
+        weekStart: '',
       },
-
   },
 }

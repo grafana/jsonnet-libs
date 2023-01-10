@@ -90,13 +90,13 @@
             expr: 'sum(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) / count(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) > 0.0',
             annotations: {
               summary: 'Cilium Operator has high error rate while trying to create/attach ENIs for IPAM.',
-              description: 'Cilium Operator {{$labels.pod}} has high error rate while trying to create/attach ENIs for IPAM.\n\nThis may be caused by exceeding Node instance ENI/Address limts, as well as errors with Cilium Operators cloud configuration.'
+              description: 'Cilium Operator {{$labels.pod}} has high error rate while trying to create/attach ENIs for IPAM.\n\nThis may be caused by exceeding Node instance ENI/Address limts, as well as errors with Cilium Operators cloud configuration.',
             },
             labels: {
               severity: 'critical',
             },
             'for': '10m',
-          }
+          },
         ],
       },
       {

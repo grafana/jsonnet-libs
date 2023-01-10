@@ -1,13 +1,15 @@
 {
   grafanaDashboards+:: {
     'nomad-jobs.json':
-
       {
         annotations: {
           list: [
             {
               builtIn: 1,
-              datasource: '-- Grafana --',
+              datasource: {
+                type: 'datasource',
+                uid: 'grafana',
+              },
               enable: true,
               hide: true,
               iconColor: 'rgba(0, 211, 255, 1)',
@@ -27,13 +29,16 @@
         fiscalYearStartMonth: 0,
         gnetId: 6281,
         graphTooltip: 0,
-        id: 111,
-        iteration: 1651176094947,
+        id: 10,
         links: [],
         liveNow: false,
         panels: [
           {
             collapsed: false,
+            datasource: {
+              type: 'prometheus',
+              uid: 'grafanacloud-prom',
+            },
             gridPos: {
               h: 1,
               w: 24,
@@ -43,6 +48,15 @@
             id: 9,
             panels: [],
             repeat: 'instance',
+            targets: [
+              {
+                datasource: {
+                  type: 'prometheus',
+                  uid: 'grafanacloud-prom',
+                },
+                refId: 'A',
+              },
+            ],
             title: '$instance',
             type: 'row',
           },
@@ -56,6 +70,8 @@
                   mode: 'palette-classic',
                 },
                 custom: {
+                  axisCenteredZero: false,
+                  axisColorMode: 'text',
                   axisLabel: '',
                   axisPlacement: 'auto',
                   barAlignment: 0,
@@ -114,6 +130,7 @@
                 calcs: [],
                 displayMode: 'list',
                 placement: 'bottom',
+                showLegend: true,
               },
               tooltip: {
                 mode: 'multi',
@@ -123,7 +140,10 @@
             pluginVersion: '8.4.7',
             targets: [
               {
-                expr: 'avg(nomad_client_allocs_cpu_total_percent{instance=~"$instance"}) by(exported_job, task)',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'avg(nomad_client_allocs_cpu_total_percent{job=~"$job", instance=~"$instance"}) by(exported_job, task)',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -145,6 +165,8 @@
                   mode: 'palette-classic',
                 },
                 custom: {
+                  axisCenteredZero: false,
+                  axisColorMode: 'text',
                   axisLabel: '',
                   axisPlacement: 'auto',
                   barAlignment: 0,
@@ -203,6 +225,7 @@
                 calcs: [],
                 displayMode: 'list',
                 placement: 'bottom',
+                showLegend: true,
               },
               tooltip: {
                 mode: 'multi',
@@ -217,7 +240,7 @@
                   uid: '1_UFfQJGk',
                 },
                 exemplar: true,
-                expr: 'avg(nomad_client_allocs_cpu_total_ticks{instance=~"$instance"}) by (exported_job, task)',
+                expr: 'avg(nomad_client_allocs_cpu_total_ticks{job=~"$job", instance=~"$instance"}) by (exported_job, task)',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -238,6 +261,8 @@
                   mode: 'palette-classic',
                 },
                 custom: {
+                  axisCenteredZero: false,
+                  axisColorMode: 'text',
                   axisLabel: '',
                   axisPlacement: 'auto',
                   barAlignment: 0,
@@ -296,6 +321,7 @@
                 calcs: [],
                 displayMode: 'list',
                 placement: 'bottom',
+                showLegend: true,
               },
               tooltip: {
                 mode: 'multi',
@@ -305,7 +331,10 @@
             pluginVersion: '8.4.7',
             targets: [
               {
-                expr: 'avg(nomad_client_allocs_memory_rss{instance=~"$instance"}) by(exported_job, task)',
+                datasource: {
+                  uid: '$datasource',
+                },
+                expr: 'avg(nomad_client_allocs_memory_rss{job=~"$job", instance=~"$instance"}) by(exported_job, task)',
                 format: 'time_series',
                 interval: '',
                 intervalFactor: 1,
@@ -317,91 +346,56 @@
             type: 'timeseries',
           },
           {
-            id: 7,
-            gridPos: {
-              h: 6,
-              w: 12,
-              x: 12,
-              y: 7,
-            },
-            type: 'timeseries',
-            title: 'Memory cache',
             datasource: {
               type: 'prometheus',
               uid: '$datasource',
             },
-            pluginVersion: '8.4.7',
-            links: [],
-            options: {
-              tooltip: {
-                mode: 'multi',
-                sort: 'desc',
-              },
-              legend: {
-                displayMode: 'list',
-                placement: 'bottom',
-                calcs: [],
-              },
-            },
-            targets: [
-              {
-                datasource: {
-                  type: 'prometheus',
-                  uid: '1_UFfQJGk',
-                },
-                exemplar: true,
-                expr: 'avg(nomad_client_allocs_memory_cache{instance=~"$instance"}) by (exported_job, task)',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: '{{task}}',
-                refId: 'A',
-              },
-            ],
             fieldConfig: {
               defaults: {
+                color: {
+                  mode: 'palette-classic',
+                },
                 custom: {
-                  drawStyle: 'line',
-                  lineInterpolation: 'linear',
+                  axisCenteredZero: false,
+                  axisColorMode: 'text',
+                  axisLabel: '',
+                  axisPlacement: 'auto',
                   barAlignment: 0,
-                  lineWidth: 1,
+                  drawStyle: 'line',
                   fillOpacity: 10,
                   gradientMode: 'none',
-                  spanNulls: true,
-                  showPoints: 'never',
-                  pointSize: 5,
-                  stacking: {
-                    mode: 'none',
-                    group: 'A',
+                  hideFrom: {
+                    legend: false,
+                    tooltip: false,
+                    viz: false,
                   },
-                  axisPlacement: 'auto',
-                  axisLabel: '',
+                  lineInterpolation: 'linear',
+                  lineWidth: 1,
+                  pointSize: 5,
                   scaleDistribution: {
                     type: 'linear',
                   },
-                  hideFrom: {
-                    tooltip: false,
-                    viz: false,
-                    legend: false,
+                  showPoints: 'never',
+                  spanNulls: true,
+                  stacking: {
+                    group: 'A',
+                    mode: 'none',
                   },
                   thresholdsStyle: {
                     mode: 'off',
                   },
-                },
-                color: {
-                  mode: 'palette-classic',
                 },
                 mappings: [],
                 thresholds: {
                   mode: 'absolute',
                   steps: [
                     {
-                      value: null,
                       color: 'green',
+                      value: null,
                     },
                     {
-                      value: 80,
                       color: 'red',
+                      value: 80,
                     },
                   ],
                 },
@@ -409,20 +403,87 @@
               },
               overrides: [],
             },
-            timeFrom: null,
-            timeShift: null,
+            gridPos: {
+              h: 6,
+              w: 12,
+              x: 12,
+              y: 7,
+            },
+            id: 7,
+            links: [],
+            options: {
+              legend: {
+                calcs: [],
+                displayMode: 'list',
+                placement: 'bottom',
+                showLegend: true,
+              },
+              tooltip: {
+                mode: 'multi',
+                sort: 'desc',
+              },
+            },
+            pluginVersion: '8.4.7',
+            targets: [
+              {
+                datasource: {
+                  type: 'prometheus',
+                  uid: '1_UFfQJGk',
+                },
+                exemplar: true,
+                expr: 'avg(nomad_client_allocs_memory_cache{job=~"$job", instance=~"$instance"}) by (exported_job, task)',
+                format: 'time_series',
+                interval: '',
+                intervalFactor: 1,
+                legendFormat: '{{task}}',
+                refId: 'A',
+              },
+            ],
+            title: 'Memory cache',
+            type: 'timeseries',
           },
         ],
-        schemaVersion: 35,
+        refresh: '30s',
+        schemaVersion: 37,
         style: 'dark',
-        tags: $._config.dashboardTags,
+        tags: [
+          'nomad-integration',
+        ],
         templating: {
           list: [
             {
+              allValue: '.+',
               current: {
                 selected: false,
-                text: 'Prometheus',
-                value: 'Prometheus',
+                text: 'All',
+                value: '$__all',
+              },
+              datasource: {
+                type: 'prometheus',
+                uid: '${datasource}',
+              },
+              definition: 'label_values(nomad_client_uptime, job)',
+              hide: 0,
+              includeAll: true,
+              label: 'job',
+              multi: true,
+              name: 'job',
+              options: [],
+              query: {
+                query: 'label_values(nomad_client_uptime, job)',
+                refId: 'StandardVariableQuery',
+              },
+              refresh: 1,
+              regex: '',
+              skipUrlSync: false,
+              sort: 0,
+              type: 'query',
+            },
+            {
+              current: {
+                selected: false,
+                text: 'grafanacloud-k3d-prom',
+                value: 'grafanacloud-k3d-prom',
               },
               hide: 0,
               includeAll: false,
@@ -432,20 +493,21 @@
               options: [],
               query: 'prometheus',
               refresh: 1,
-              regex: '',
+              regex: '(?!grafanacloud-usage|grafanacloud-ml-metrics).+',
               skipUrlSync: false,
               type: 'datasource',
             },
             {
               current: {
+                isNone: true,
                 selected: false,
-                text: 'dc1',
-                value: 'dc1',
+                text: 'None',
+                value: '',
               },
               datasource: {
                 uid: '$datasource',
               },
-              definition: '',
+              definition: 'label_values(nomad_client_uptime, datacenter)',
               hide: 0,
               includeAll: false,
               label: 'DC',
@@ -454,7 +516,7 @@
               options: [],
               query: {
                 query: 'label_values(nomad_client_uptime, datacenter)',
-                refId: 'prometheus-datacenter-Variable-Query',
+                refId: 'StandardVariableQuery',
               },
               refresh: 1,
               regex: '',
@@ -466,6 +528,7 @@
               useTags: false,
             },
             {
+              allValue: '.+',
               current: {
                 selected: true,
                 text: [
@@ -481,7 +544,7 @@
               definition: '',
               hide: 0,
               includeAll: true,
-              label: 'Nomad cilent',
+              label: 'instance',
               multi: true,
               name: 'instance',
               options: [],
@@ -501,7 +564,7 @@
           ],
         },
         time: {
-          from: 'now-5m',
+          from: 'now-30m',
           to: 'now',
         },
         timepicker: {
@@ -532,7 +595,7 @@
         timezone: '',
         title: 'Nomad jobs',
         uid: 'TvqbbhViz',
-        version: 56,
+        version: 2,
         weekStart: '',
       },
   },
