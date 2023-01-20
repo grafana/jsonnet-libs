@@ -103,7 +103,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_total_reads{app=~\"$app\", type=~\"file|cdc|kafka|http\"}) ",
+          "expr": "sum(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=~\"file|cdc|kafka|http\"}) ",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -239,14 +239,14 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum by (app) (rate(siddhi_total_reads{app=~\"$app\"}[$__interval]))",
+          "expr": "sum by (app) (rate(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval]))",
           "instant": false,
           "intervalFactor": 1,
           "legendFormat": "Inputs",
           "refId": "B"
         },
         {
-          "expr": "rate(siddhi_total_reads{app=~\"$app\", type=\"file\"}[$__interval])",
+          "expr": "rate(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=\"file\"}[$__rate_interval])",
           "hide": true,
           "instant": false,
           "intervalFactor": 1,
@@ -254,14 +254,14 @@
           "refId": "A"
         },
         {
-          "expr": "sum by (app) (rate(siddhi_total_writes{app=~\"$app\"}[$__interval]))",
+          "expr": "sum by (app) (rate(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval]))",
           "instant": false,
           "intervalFactor": 1,
           "legendFormat": "Output",
           "refId": "C"
         },
         {
-          "expr": "rate(siddhi_total_writes{app=~\"$app\", type=~\"rdbms\"}[$__interval])",
+          "expr": "rate(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=~\"rdbms\"}[$__rate_interval])",
           "hide": true,
           "instant": false,
           "intervalFactor": 1,
@@ -336,7 +336,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(rate(siddhi_total_reads{app=~\"$app\"}[$__interval]))",
+          "expr": "sum(rate(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -411,7 +411,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_total_writes{app=~\"$app\", type=~\"file|rdbms|kafka|http\"})",
+          "expr": "sum(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=~\"file|rdbms|kafka|http\"})",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -485,7 +485,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(rate(siddhi_total_writes{app=~\"$app\"}[$__interval]))",
+          "expr": "sum(rate(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -559,7 +559,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "(sum(siddhi_store_rdbms_total_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_file_source_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_listening_mode_total_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_polling_mode_total_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_file_sink_total_error_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_source_error_count_per_stream{app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_sink_error_count{app=~\"$app\"}) or vector(0))",
+          "expr": "(sum(siddhi_store_rdbms_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_file_source_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_listening_mode_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_polling_mode_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_file_sink_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_source_error_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_sink_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0))",
           "format": "time_series",
           "hide": false,
           "instant": true,
@@ -633,7 +633,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "(sum(siddhi_total_reads{app=~\"$app\", type=~\"file|cdc|kafka\"}) or vector(0)) - ((sum(siddhi_file_source_total_valid_events_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_listening_mode_total_valid_events_count{app=~\"$app\"}) or vector(0)) +(sum(siddhi_cdc_source_polling_mode_total_valid_events_count{app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_source_per_topic_total_valid_events_count{app=~\"$app\"}) or vector(0))) ",
+          "expr": "(sum(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=~\"file|cdc|kafka\"}) or vector(0)) - ((sum(siddhi_file_source_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_listening_mode_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) +(sum(siddhi_cdc_source_polling_mode_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_source_per_topic_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0))) ",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -912,7 +912,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_source_event_count{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -923,7 +923,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(rate(siddhi_http_source_event_count{app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
+          "expr": "sum(rate(siddhi_http_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -934,7 +934,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_source_error_count{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_source_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -944,7 +944,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_source_status{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_source_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -954,7 +954,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_source_request_size{app=~\"$app\"}) by (url, stream_name) / sum(siddhi_http_source_event_count{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_source_request_size{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name) / sum(siddhi_http_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1395,31 +1395,31 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(siddhi_kafka_source_read_count_per_stream{app=~\"$app\"}) by (stream_id)",
+          "expr": "sum(siddhi_kafka_source_read_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "refId": "A"
         },
         {
-          "expr": "sum(rate(siddhi_kafka_source_read_count_per_stream{app=~\"$app\"}[$__rate_interval])) by (stream_id)",
+          "expr": "sum(rate(siddhi_kafka_source_read_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (stream_id)",
           "format": "table",
           "instant": true,
           "refId": "D"
         },
         {
-          "expr": "sum(siddhi_kafka_source_per_stream_last_message_consumed_at{app=~\"$app\"}) by (stream_id)",
+          "expr": "sum(siddhi_kafka_source_per_stream_last_message_consumed_at{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "refId": "C"
         },
         {
-          "expr": "sum(siddhi_kafka_source_per_stream_with_partition_consumer_lag{app=~\"$app\"}) by (stream_id) / 1000",
+          "expr": "sum(siddhi_kafka_source_per_stream_with_partition_consumer_lag{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id) / 1000",
           "format": "table",
           "instant": true,
           "refId": "G"
         },
         {
-          "expr": "sum(siddhi_kafka_source_error_count_per_stream{app=~\"$app\"}) by (stream_id)",
+          "expr": "sum(siddhi_kafka_source_error_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "refId": "F"
@@ -1869,7 +1869,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_source_event_count{app=~\"$app\"}) by (file_name, mode, stream_name, file_path, app)",
+          "expr": "sum(siddhi_file_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_name, mode, stream_name, file_path, app)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1880,7 +1880,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_source_file_size{app=~\"$app\"}) by (file_path)",
+          "expr": "sum(siddhi_file_source_file_size{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1891,7 +1891,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_source_file_status{app=~\"$app\"}) by (file_path)",
+          "expr": "sum(siddhi_file_source_file_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1902,7 +1902,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_source_elapse_time{app=~\"$app\"}) by (file_path)",
+          "expr": "sum(siddhi_file_source_elapse_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1913,7 +1913,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_source_started_time{app=~\"$app\"}) by (file_path)",
+          "expr": "sum(siddhi_file_source_started_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1924,7 +1924,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum((siddhi_file_source_event_count{app=~\"$app\"} - ignoring(file_name, mode, stream_name)siddhi_file_source_total_valid_events_count{app=~\"$app\"}) + siddhi_file_source_error_count{app=~\"$app\"}) by (file_path)",
+          "expr": "sum((siddhi_file_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} - ignoring(file_name, mode, stream_name)siddhi_file_source_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) + siddhi_file_source_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2339,7 +2339,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_listening_mode_event_count{app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_host, app)",
+          "expr": "sum(siddhi_cdc_source_listening_mode_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_host, app)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2350,7 +2350,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(rate(siddhi_cdc_source_listening_mode_events_per_table{app=~\"$app\"}[$__rate_interval])) by (db_url)",
+          "expr": "sum(rate(siddhi_cdc_source_listening_mode_events_per_table{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2361,7 +2361,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_listening_mode_db_status{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_listening_mode_db_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2372,7 +2372,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_listening_mode_idle_time{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_listening_mode_idle_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2383,7 +2383,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_listening_mode_last_receive_time{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_listening_mode_last_receive_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2394,7 +2394,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_listening_mode_events_per_table{app=~\"$app\"} - ignoring(tablename)siddhi_cdc_source_listening_mode_total_valid_events_count{app=~\"$app\"} + siddhi_cdc_source_listening_mode_total_error_count{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_listening_mode_events_per_table{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} - ignoring(tablename)siddhi_cdc_source_listening_mode_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} + siddhi_cdc_source_listening_mode_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2792,7 +2792,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_polling_mode_event_count{app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_host, app)",
+          "expr": "sum(siddhi_cdc_source_polling_mode_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_host, app)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2803,7 +2803,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_polling_mode_events_in_last_polling_interval{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_polling_mode_events_in_last_polling_interval{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2814,7 +2814,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_polling_mode_db_status{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_polling_mode_db_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2825,7 +2825,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_polling_mode_idle_time{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_polling_mode_idle_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2836,7 +2836,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_polling_mode_last_receive_time{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_polling_mode_last_receive_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2847,7 +2847,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_cdc_source_polling_mode_event_count{app=~\"$app\"} - ignoring(A_db_type, B_host, C_database, D_tablename)siddhi_cdc_source_polling_mode_total_valid_events_count{app=~\"$app\"} + siddhi_cdc_source_polling_mode_total_error_count{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_cdc_source_polling_mode_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} - ignoring(A_db_type, B_host, C_database, D_tablename)siddhi_cdc_source_polling_mode_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} + siddhi_cdc_source_polling_mode_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3212,7 +3212,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_sink_event_count{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_sink_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3223,7 +3223,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_sink_error_count{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_sink_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3234,7 +3234,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(rate(siddhi_http_sink_event_count{app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
+          "expr": "sum(rate(siddhi_http_sink_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3245,7 +3245,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_sink_status{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_sink_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3255,7 +3255,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_sink_request_size{app=~\"$app\"}) by (url, stream_name) / sum(siddhi_http_sink_event_count{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_sink_request_size{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name) / sum(siddhi_http_sink_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3265,7 +3265,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_http_sink_average_latency{app=~\"$app\"}) by (url, stream_name)",
+          "expr": "sum(siddhi_http_sink_average_latency{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3620,7 +3620,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_kafka_sink_current_offset{app=~\"$app\"}) by (stream_id)",
+          "expr": "sum(siddhi_kafka_sink_current_offset{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3630,7 +3630,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_kafka_sink_write_count_per_stream{app=~\"$app\"}) by (stream_id)",
+          "expr": "sum(siddhi_kafka_sink_write_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3640,7 +3640,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(rate(siddhi_kafka_sink_write_count_per_stream{app=~\"$app\"}[$__rate_interval])) by (stream_id)",
+          "expr": "sum(rate(siddhi_kafka_sink_write_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (stream_id)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3650,7 +3650,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "avg(siddhi_kafka_sink_per_stream_last_message_size_in_bytes{app=~\"$app\"}) by (stream_id)",
+          "expr": "avg(siddhi_kafka_sink_per_stream_last_message_size_in_bytes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3660,7 +3660,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "avg(siddhi_kafka_sink_per_stream_last_message_latency_in_millis{app=~\"$app\"}) by (stream_id)",
+          "expr": "avg(siddhi_kafka_sink_per_stream_last_message_latency_in_millis{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3670,7 +3670,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_kafka_sink_error_count_per_stream{app=~\"$app\"}) by (stream_id) ",
+          "expr": "sum(siddhi_kafka_sink_error_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id) ",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3680,7 +3680,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "(sum(siddhi_kafka_sink_error_count_per_stream{app=~\"$app\"}) by (stream_id) / sum(siddhi_kafka_sink_write_count_per_stream{app=~\"$app\"}) by (stream_id)) ",
+          "expr": "(sum(siddhi_kafka_sink_error_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id) / sum(siddhi_kafka_sink_write_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)) ",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3690,7 +3690,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_kafka_sink_per_stream_last_message_published_at{app=~\"$app\"}) by (stream_id)",
+          "expr": "sum(siddhi_kafka_sink_per_stream_last_message_published_at{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -4152,7 +4152,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_sink_event_count{app=~\"$app\"}) by (file_name, mode, stream_name, file_path,app)",
+          "expr": "sum(siddhi_file_sink_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_name, mode, stream_name, file_path,app)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -4163,7 +4163,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_sink_file_size{app=~\"$app\"}) by (file_path)",
+          "expr": "sum(siddhi_file_sink_file_size{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -4174,7 +4174,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_sink_file_status{app=~\"$app\"}) by (file_path)",
+          "expr": "sum(siddhi_file_sink_file_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -4185,7 +4185,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_sink_lines_count{app=~\"$app\"}) by (file_path)",
+          "expr": "sum(siddhi_file_sink_lines_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -4195,7 +4195,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_sink_elapsed_time{app=~\"$app\"}) by (file_path)",
+          "expr": "sum(siddhi_file_sink_elapsed_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -4205,7 +4205,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_file_sink_total_error_count{app=~\"$app\"} + siddhi_file_sink_dropped_events{app=~\"$app\"} ) by (file_path)",
+          "expr": "sum(siddhi_file_sink_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} + siddhi_file_sink_dropped_events{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} ) by (file_path)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -4514,41 +4514,41 @@
       ],
       "targets": [
         {
-          "expr": "sum(siddhi_store_rdbms_total_writes{app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_shortenUrl, app)",
+          "expr": "sum(siddhi_store_rdbms_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_shortenUrl, app)",
           "format": "table",
           "hide": false,
           "instant": true,
           "refId": "A"
         },
         {
-          "expr": "sum(siddhi_store_rdbms_db_status{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_store_rdbms_db_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
           "refId": "B"
         },
         {
-          "expr": "sum(siddhi_store_rdbms_idle_time{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_store_rdbms_idle_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
           "refId": "C"
         },
         {
-          "expr": "sum(siddhi_store_rdbms_processing_time{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_store_rdbms_processing_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "instant": true,
           "refId": "D"
         },
         {
-          "expr": "sum(siddhi_store_rdbms_last_change_time{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_store_rdbms_last_change_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
           "refId": "E"
         },
         {
-          "expr": "sum(siddhi_store_rdbms_total_error_count{app=~\"$app\"}) by (db_url)",
+          "expr": "sum(siddhi_store_rdbms_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -4595,15 +4595,80 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total, app)",
+        "definition": "label_values(siddhi_stream_throughput_total,job)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total,job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
+        "label": "instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"}, app)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
         "label": "App Name",
         "multi": true,
         "name": "app",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total, app)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"}, app)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
