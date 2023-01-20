@@ -3487,7 +3487,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "Last commited offset"
+                "value": "Last committed offset"
               },
               {
                 "id": "unit",
