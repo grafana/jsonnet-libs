@@ -427,7 +427,7 @@ local memoryUsageGaugePanel =
       type: 'prometheus',
       uid: '${prometheus_datasource}',
     },
-    description: 'Percentage of memory allocated by Clickhouse compared to OS total',
+    description: 'Percentage of memory allocated by ClickHouse compared to OS total',
     fieldConfig: {
       defaults: {
         color: {
@@ -495,7 +495,7 @@ local activeConnectionsPanel =
       type: 'prometheus',
       uid: '${prometheus_datasource}',
     },
-    description: 'Current number of connections to Clickhouse',
+    description: 'Current number of connections to ClickHouse',
     fieldConfig: {
       defaults: {
         color: {
@@ -829,7 +829,7 @@ local errorLogsPanel =
 
     'clickhouse-overview.json':
       dashboard.new(
-        'Clickhouse overview',
+        'ClickHouse overview',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -840,7 +840,7 @@ local errorLogsPanel =
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other clickhouse dashboards',
+        title='Other ClickHouse dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
