@@ -79,68 +79,7 @@
           },
           "unit": "short"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "localhost:9005"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "localhost:9005 - PrometheusReporter"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "localhost:9090"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "localhost:9990"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -162,9 +101,9 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "up{job=~\"$job\", instance=~\"$instance\"}",
+          "expr": "up{job=~\"integrations/wso2-streaming-integrator\", instance=~\"$instance\"}",
           "instant": false,
-          "legendFormat": "{{instance}} - {{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -359,30 +298,7 @@
                 }
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "job"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Job"
-              },
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": 2
-              },
-              {
-                "id": "custom.align"
-              }
-            ]
-          },
+          },          
           {
             "matcher": {
               "id": "byName",
@@ -1245,7 +1161,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1260,7 +1176,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_physical_memory_free_size{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_os_physical_memory_free_size{jinstance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1275,7 +1191,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_physical_memory_total_size{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_os_physical_memory_total_size{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1438,7 +1354,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1453,7 +1369,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_threads_count{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_threads_count{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1468,7 +1384,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_threads_daemon_count{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_threads_daemon_count{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1616,7 +1532,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_class_loading_loaded_current{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_class_loading_loaded_current{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1631,7 +1547,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_class_loading_loaded_total{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_class_loading_loaded_total{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1646,7 +1562,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_class_loading_unloaded_total{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_class_loading_unloaded_total{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1661,7 +1577,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1874,7 +1790,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1889,7 +1805,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_swap_space_free_size{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_os_swap_space_free_size{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1904,7 +1820,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_swap_space_total_size{job=~\"$job\",instance=\"$instance\"}"
+              "options": "jvm_os_swap_space_total_size{instance=\"$instance\"}"
             },
             "properties": [
               {

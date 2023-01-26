@@ -44,12 +44,7 @@
       "type": "text"
     },
     {
-      "aliasColors": {
-        "localhost:9005": "light-red",
-        "localhost:9005 - PrometheusReporter": "semi-dark-green",
-        "localhost:9090": "semi-dark-green",
-        "localhost:9990": "semi-dark-blue"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -97,9 +92,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "up{job=~\"$job\", instance=~\"$instance\"}",
+          "expr": "up{job=~\"integrations/wso2-streaming-integrator\", instance=~\"$instance\"}",
           "instant": false,
-          "legendFormat": "{{instance}} - {{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -570,12 +565,7 @@
       "type": "table"
     },
     {
-      "aliasColors": {
-        "jvm_os_cpu_load_system{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "light-red",
-        "overall throughput{instance=\"instance\" }": "semi-dark-green",
-        "overall throughput{instance=\"localhost:9005\" }": "semi-dark-green",
-        "sum(siddhi_source_throughput_total{type=\"source\",operation!=\"inMemory\"})": "semi-dark-green"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -659,10 +649,7 @@
       }
     },
     {
-      "aliasColors": {
-        "jvm_os_system_load_average{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "light-red",
-        "system load average{instance=\"localhost:9005\" }": "light-red"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -745,10 +732,7 @@
       }
     },
     {
-      "aliasColors": {
-        "cpu process load{instance=\"localhost:9005\" }": "semi-dark-blue",
-        "jvm_os_cpu_load_process{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "semi-dark-blue"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -834,11 +818,7 @@
       }
     },
     {
-      "aliasColors": {
-        "jvm_memory_heap_usage{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "semi-dark-yellow",
-        "memory heap usage{instance=\"localhost:9005\" }": "semi-dark-yellow",
-        "memory heap usage{instance=\"localhost:9990\" }": "semi-dark-green"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
