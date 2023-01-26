@@ -656,7 +656,7 @@ local zooKeeperRequestsPanel =
 
     'clickhouse-replica.json':
       dashboard.new(
-        'Clickhouse replica',
+        'ClickHouse replica',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -667,7 +667,7 @@ local zooKeeperRequestsPanel =
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other clickhouse dashboards',
+        title='Other ClickHouse dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),

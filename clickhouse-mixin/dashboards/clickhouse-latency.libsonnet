@@ -454,7 +454,7 @@ local zooKeeperWaitTimePanel =
 
     'clickhouse-latency.json':
       dashboard.new(
-        'Clickhouse latency',
+        'ClickHouse latency',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -465,7 +465,7 @@ local zooKeeperWaitTimePanel =
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other clickhouse dashboards',
+        title='Other ClickHouse dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
