@@ -3,3 +3,7 @@ exclusions:
     reason: Stat panels have no unit, and some panels use custom unit or text
   panel-title-description-rule:
     reason: Suppress noisy linting rule until we can address minor tech debt like this
+  target-job-rule:
+    reason: there are many platforms that generate "up" metrics, so for this panel this query has to be especific for the wso2 job
+    entries:
+    - panel: Servers Up/Down
