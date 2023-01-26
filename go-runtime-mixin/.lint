@@ -1,0 +1,3 @@
+exclusions:  
+  panel-units-rule:
+    reason: Stat panels have no unit, and some panels use custom unit or text

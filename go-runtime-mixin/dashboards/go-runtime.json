@@ -89,7 +89,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by(job)(go_memstats_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by(job)(go_memstats_sys_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}} (avg)",
           "refId": "A"
@@ -185,7 +185,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (job) (go_memstats_stack_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job) (go_memstats_stack_sys_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: stack inuse (avg)",
           "refId": "A"
@@ -281,25 +281,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (job)(go_memstats_mspan_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_memstats_mspan_sys_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: mspan (avg)",
           "refId": "B"
         },
         {
-          "expr": "avg by (job)(go_memstats_mcache_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_memstats_mcache_sys_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: mcache (avg)",
           "refId": "D"
         },
         {
-          "expr": "avg by (job)(go_memstats_buck_hash_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_memstats_buck_hash_sys_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: buck hash (avg)",
           "refId": "E"
         },
         {
-          "expr": "avg by (job)(go_memstats_gc_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_memstats_gc_sys_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: gc (avg)",
           "refId": "F"
@@ -395,13 +395,13 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (job)(go_memstats_heap_sys_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_memstats_heap_sys_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: heap reserved (avg)",
           "refId": "B"
         },
         {
-          "expr": "avg by (job)(go_memstats_heap_inuse_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_memstats_heap_inuse_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: heap in use (avg)",
           "refId": "A"
@@ -497,7 +497,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (job)(rate(go_memstats_alloc_bytes_total{job=\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "avg by (job)(rate(go_memstats_alloc_bytes_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{job}}: bytes malloced/s (avg)",
           "refId": "A"
@@ -593,7 +593,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(go_memstats_mallocs_total{job=\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+          "expr": "rate(go_memstats_mallocs_total{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{job}}: obj mallocs/s (avg)",
           "refId": "A"
@@ -691,7 +691,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by(job)(go_memstats_mallocs_total{job=\"$job\", instance=~\"$instance\"} - go_memstats_frees_total{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by(job)(go_memstats_mallocs_total{job=~\"$job\", instance=~\"$instance\"} - go_memstats_frees_total{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: object count (avg)",
           "refId": "A"
@@ -787,7 +787,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (job)(go_goroutines{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_goroutines{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: goroutine count (avg)",
           "refId": "A"
@@ -884,13 +884,13 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (job)(go_gc_duration_seconds{quantile=\"0\", job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_gc_duration_seconds{quantile=\"0\", job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: min gc time (avg)",
           "refId": "A"
         },
         {
-          "expr": "avg by (job)(go_gc_duration_seconds{quantile=\"1\", job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_gc_duration_seconds{quantile=\"1\", job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: max gc time (avg)",
           "refId": "B"
@@ -901,6 +901,7 @@
       "timeRegions": [],
       "timeShift": null,
       "title": "GC min & max duration",
+      "description": "The min and max Garbage Collector duration in seconds.",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -986,7 +987,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by (job)(go_memstats_next_gc_bytes{job=\"$job\", instance=~\"$instance\"})",
+          "expr": "avg by (job)(go_memstats_next_gc_bytes{job=~\"$job\", instance=~\"$instance\"})",
           "interval": "",
           "legendFormat": "{{job}}: next gc bytes (avg)",
           "refId": "A"
@@ -1063,14 +1064,14 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
+        "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
         "definition": "label_values(go_info, job)",
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "job",
-        "multi": false,
+        "multi": true,
         "name": "job",
         "options": [],
         "query": "label_values(go_info, job)",
@@ -1085,17 +1086,17 @@
         "useTags": false
       },
       {
-        "allValue": "",
+        "allValue": ".+",
         "current": {},
         "datasource": "$datasource",
-        "definition": "label_values(go_info{job=\"$job\"}, instance)",
+        "definition": "label_values(go_info{job=~\"$job\"}, instance)",
         "hide": 0,
         "includeAll": true,
         "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
-        "query": "label_values(go_info{job=\"$job\"}, instance)",
+        "query": "label_values(go_info{job=~\"$job\"}, instance)",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
