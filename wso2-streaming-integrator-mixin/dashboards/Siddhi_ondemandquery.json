@@ -171,7 +171,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_ondemandquery_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",quantile=~\"$quantile\"}) by (instance,app,element,quantile)",
+          "expr": "sum(siddhi_ondemandquery_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=~\"$element\",quantile=~\"$quantile\"}) by (instance,app,element,quantile)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -308,7 +308,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "siddhi_ondemandquery_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",quantile=~\"$quantile\"}",
+          "expr": "siddhi_ondemandquery_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=~\"$element\",quantile=~\"$quantile\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -358,10 +358,43 @@
           ]
         },
         "datasource": "$datasource",
+        "definition": "label_values(siddhi_ondemandquery_latency,job)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_ondemandquery_latency,job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_ondemandquery_latency,instance)",
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "allValue":".+",
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
@@ -389,15 +422,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_ondemandquery_latency{instance=~\"$instance\"},app)",
+        "definition": "label_values(siddhi_ondemandquery_latency{job=~\"$job\", instance=~\"$instance\"},app)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Application",
         "multi": true,
         "name": "application",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_ondemandquery_latency{instance=~\"$instance\"},app)",
+          "query": "label_values(siddhi_ondemandquery_latency{job=~\"$job\", instance=~\"$instance\"},app)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -420,15 +454,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_ondemandquery_latency{instance=~\"$instance\",app=~\"$application\"},element)",
+        "definition": "label_values(siddhi_ondemandquery_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"},element)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Element",
         "multi": true,
         "name": "element",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_ondemandquery_latency{instance=~\"$instance\",app=~\"$application\"},element)",
+          "query": "label_values(siddhi_ondemandquery_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"},element)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -451,6 +486,7 @@
         "definition": "label_values(siddhi_ondemandquery_latency,quantile)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Quantile",
         "multi": true,
         "name": "quantile",

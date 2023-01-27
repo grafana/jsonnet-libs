@@ -79,68 +79,7 @@
           },
           "unit": "short"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "localhost:9005"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-red",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "localhost:9005 - PrometheusReporter"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "localhost:9090"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-green",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "localhost:9990"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "semi-dark-blue",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -162,9 +101,9 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "up{instance=~\"$instance\"}",
+          "expr": "up{job=~\"integrations/wso2-streaming-integrator\", instance=~\"$instance\"}",
           "instant": false,
-          "legendFormat": "{{instance}} - {{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -263,7 +202,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(count by (app) (siddhi_stream_throughput_total{instance=~\"$instance\"})))",
+          "expr": "sum(count(count by (app) (siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"})))",
           "instant": true,
           "refId": "A"
         }
@@ -359,30 +298,7 @@
                 }
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "job"
-            },
-            "properties": [
-              {
-                "id": "displayName",
-                "value": "Job"
-              },
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": 2
-              },
-              {
-                "id": "custom.align"
-              }
-            ]
-          },
+          },          
           {
             "matcher": {
               "id": "byName",
@@ -548,7 +464,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_source_throughput_total{instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"}) by (instance)",
+          "expr": "sum(siddhi_source_throughput_total{job=~\"$job\",instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -558,7 +474,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(jvm_os_system_load_average{instance=~\"$instance\"}) by (instance)",
+          "expr": "sum(jvm_os_system_load_average{job=~\"$job\", instance=~\"$instance\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -568,7 +484,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(jvm_os_cpu_load_system{instance=~\"$instance\"}) by (instance)",
+          "expr": "sum(jvm_os_cpu_load_system{job=~\"$job\", instance=~\"$instance\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -578,7 +494,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(jvm_memory_heap_usage{instance=~\"$instance\"}) by (instance)",
+          "expr": "sum(jvm_memory_heap_usage{job=~\"$job\", instance=~\"$instance\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -663,7 +579,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_memory_heap_usage{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_memory_heap_usage{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -678,7 +594,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "overall throughput{instance=\"localhost:9005\" }"
+              "options": "overall throughput{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -693,7 +609,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "overall_throughput{instance=\"localhost:9005\" }"
+              "options": "overall_throughput{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -745,7 +661,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "sum by (instance)(siddhi_source_throughput_total{instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"})",
+          "expr": "sum by (instance)(siddhi_source_throughput_total{job=~\"$job\",instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -812,7 +728,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_system_load_average{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_system_load_average{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -827,7 +743,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "system load average{instance=\"localhost:9005\" }"
+              "options": "system load average{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -863,7 +779,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "jvm_os_system_load_average{instance=~\"$instance\"}",
+          "expr": "jvm_os_system_load_average{job=~\"$job\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "Instance=\"{{instance}}\" ",
           "refId": "A"
@@ -928,7 +844,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_process{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_cpu_load_process{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -943,7 +859,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -958,7 +874,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "process cpu usage{instance=\"localhost:9005\" }"
+              "options": "process cpu usage{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -973,7 +889,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "system cpu usage{instance=\"localhost:9005\" }"
+              "options": "system cpu usage{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1009,7 +925,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "jvm_os_cpu_load_system{instance=~\"$instance\"}",
+          "expr": "jvm_os_cpu_load_system{job=~\"$job\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "cpu system load{Instance=\"{{instance}}\"}",
           "refId": "A"
@@ -1017,7 +933,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "jvm_os_cpu_load_process{instance=~\"$instance\"}",
+          "expr": "jvm_os_cpu_load_process{job=~\"$job\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "cpu process load{Instance=\"{{instance}}\"}",
           "refId": "B"
@@ -1082,7 +998,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_memory_heap_max{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_memory_heap_max{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1097,7 +1013,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_memory_heap_usage{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_memory_heap_usage{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1112,7 +1028,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "total memory{instance=\"localhost:9005\" }"
+              "options": "total memory{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1127,7 +1043,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "used memory{instance=\"localhost:9005\" }"
+              "options": "used memory{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1161,12 +1077,12 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "jvm_memory_heap_usage{instance=~\"$instance\"}",
+          "expr": "jvm_memory_heap_usage{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "used memory{instance=\"{{instance}}\" }",
           "refId": "A"
         },
         {
-          "expr": "jvm_memory_heap_max{instance=~\"$instance\"}",
+          "expr": "jvm_memory_heap_max{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "total memory{instance=\"{{instance}}\" }",
           "refId": "B"
         }
@@ -1230,7 +1146,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "free physical memory - instance=localhost:9005"
+              "options": "free physical memory - instance=\"$instance\""
             },
             "properties": [
               {
@@ -1245,7 +1161,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1260,7 +1176,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_physical_memory_free_size{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_physical_memory_free_size{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1275,7 +1191,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_physical_memory_total_size{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_physical_memory_total_size{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1290,7 +1206,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "physical memory free{instance=\"localhost:9005\" }"
+              "options": "physical memory free{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1305,7 +1221,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "physical memory total{instance=\"localhost:9005\" }"
+              "options": "physical memory total{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1320,7 +1236,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "total physical memory - instance=localhost:9005"
+              "options": "total physical memory - instance=\"$instance\""
             },
             "properties": [
               {
@@ -1354,12 +1270,12 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "jvm_os_physical_memory_total_size{instance=~\"$instance\"}",
+          "expr": "jvm_os_physical_memory_total_size{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "physical memory total{instance=\"{{instance}}\" }",
           "refId": "A"
         },
         {
-          "expr": "jvm_os_physical_memory_free_size{instance=~\"$instance\"}",
+          "expr": "jvm_os_physical_memory_free_size{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "physical memory free{instance=\"{{instance}}\" }",
           "refId": "B"
         }
@@ -1423,7 +1339,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "daemon threads count{instance=\"localhost:9005\" }"
+              "options": "daemon threads count{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1438,7 +1354,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1453,7 +1369,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_threads_count{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_threads_count{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1468,7 +1384,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_threads_daemon_count{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_threads_daemon_count{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1483,7 +1399,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "threads count - instance=localhost:9005"
+              "options": "threads count - instance=\"$instance\""
             },
             "properties": [
               {
@@ -1498,7 +1414,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "threads count{instance=\"localhost:9005\" }"
+              "options": "threads count{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1513,7 +1429,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "threads daemon - instance=localhost:9005"
+              "options": "threads daemon - instance=\"$instance\""
             },
             "properties": [
               {
@@ -1547,12 +1463,12 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "jvm_threads_count{instance=~\"$instance\"}",
+          "expr": "jvm_threads_count{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "threads count{instance=\"{{instance}}\" }",
           "refId": "A"
         },
         {
-          "expr": "jvm_threads_daemon_count{instance=~\"$instance\"}",
+          "expr": "jvm_threads_daemon_count{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "daemon threads count{instance=\"{{instance}}\" }",
           "refId": "B"
         }
@@ -1616,7 +1532,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_class_loading_loaded_current{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_class_loading_loaded_current{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1631,7 +1547,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_class_loading_loaded_total{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_class_loading_loaded_total{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1646,7 +1562,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_class_loading_unloaded_total{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_class_loading_unloaded_total{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1661,7 +1577,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1676,7 +1592,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "loaded current - instance=localhost:9005"
+              "options": "loaded current - instance=\"$instance\""
             },
             "properties": [
               {
@@ -1691,7 +1607,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "loaded current{instance=\"localhost:9005\" }"
+              "options": "loaded current{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1706,7 +1622,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "loaded total - instance=localhost:9005"
+              "options": "loaded total - instance=\"$instance\""
             },
             "properties": [
               {
@@ -1721,7 +1637,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "loaded total{instance=\"localhost:9005\" }"
+              "options": "loaded total{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1736,7 +1652,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "unloaded total - instance=localhost:9005"
+              "options": "unloaded total - instance=\"$instance\""
             },
             "properties": [
               {
@@ -1751,7 +1667,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "unloaded total{instance=\"localhost:9005\" }"
+              "options": "unloaded total{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1785,17 +1701,17 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "jvm_class_loading_unloaded_total{instance=~\"$instance\"}",
+          "expr": "jvm_class_loading_unloaded_total{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "unloaded total{instance=\"{{instance}}\" }",
           "refId": "A"
         },
         {
-          "expr": "jvm_class_loading_loaded_current{instance=~\"$instance\"}",
+          "expr": "jvm_class_loading_loaded_current{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "loaded current{instance=\"{{instance}}\" }",
           "refId": "B"
         },
         {
-          "expr": "jvm_class_loading_loaded_total{instance=~\"$instance\"}",
+          "expr": "jvm_class_loading_loaded_total{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "loaded total{instance=\"{{instance}}\" }",
           "refId": "C"
         }
@@ -1859,7 +1775,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "free swap size{instance=\"localhost:9005\" }"
+              "options": "free swap size{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1874,7 +1790,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_cpu_load_system{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_cpu_load_system{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1889,7 +1805,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_swap_space_free_size{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_swap_space_free_size{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1904,7 +1820,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_swap_space_total_size{instance=\"localhost:9005\",job=\"PrometheusReporter\"}"
+              "options": "jvm_os_swap_space_total_size{instance=\"$instance\"}"
             },
             "properties": [
               {
@@ -1919,7 +1835,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "total swap size{instance=\"localhost:9005\" }"
+              "options": "total swap size{instance=\"$instance\" }"
             },
             "properties": [
               {
@@ -1953,12 +1869,12 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "jvm_os_swap_space_total_size{instance=~\"$instance\"}",
+          "expr": "jvm_os_swap_space_total_size{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "total swap size{instance=\"{{instance}}\" }",
           "refId": "A"
         },
         {
-          "expr": "jvm_os_swap_space_free_size{instance=~\"$instance\"}",
+          "expr": "jvm_os_swap_space_free_size{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "free swap size{instance=\"{{instance}}\" }",
           "refId": "B"
         }
@@ -2005,15 +1921,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(jvm_memory_heap_max,instance)",
+        "definition": "label_values(siddhi_stream_throughput_total,job)",
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "allValue":".+",
+        "label": "job",
         "multi": true,
-        "name": "instance",
+        "name": "job",
         "options": [],
         "query": {
-          "query": "label_values(jvm_memory_heap_max,instance)",
+          "query": "label_values(siddhi_stream_throughput_total,job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -2036,15 +1953,48 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total,app)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
+        "label": "instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"},app)",
         "hide": 2,
         "includeAll": true,
+        "allValue":".+",
         "label": "Application",
         "multi": true,
         "name": "application",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total,app)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"},app)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -2067,15 +2017,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total{app=\"$application\"},element)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=\"$application\"},element)",
         "hide": 2,
         "includeAll": true,
+        "allValue":".+",
         "label": "Element",
         "multi": true,
         "name": "element",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total{app=\"$application\"},element)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=\"$application\"},element)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -2098,15 +2049,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(type)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=\"$application\"},type)",
         "hide": 2,
         "includeAll": true,
+        "allValue":".+",
         "label": "Type",
         "multi": true,
         "name": "type",
         "options": [],
         "query": {
-          "query": "label_values(type)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=\"$application\"},type)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
