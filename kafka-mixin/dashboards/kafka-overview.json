@@ -6849,7 +6849,15 @@
       },
       {
         "allValue": ".+",
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": [
+            "0.99"
+          ],
+          "value": [
+            "0.99"
+          ]
+        },
         "datasource": "${datasource}",
         "definition": "label_values(kafka_network_requestmetrics_requestqueuetimems{job=~\"$job\",instance=~\"$instance\"}, quantile)",
         "description": null,
