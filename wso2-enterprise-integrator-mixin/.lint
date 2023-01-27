@@ -1,0 +1,9 @@
+exclusions:
+  target-instance-rule:
+    reason: "This dashboard is supposed to work only with the cluster label."
+    entries:
+    - dashboard: "WSO2 Integration Cluster Metrics"
+  template-instance-rule:
+    reason: "This dashboard is supposed to work only with the cluster label."
+    entries:
+    - dashboard: "WSO2 Integration Cluster Metrics"
