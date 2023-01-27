@@ -24,7 +24,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
               max by (%s, job, instance) (
                 memcached_current_connections{%s=~"$cluster", job=~"$job", instance=~"$instance"} / memcached_max_connections{%s=~"$cluster", job=~"$job", instance=~"$instance"}
             ))
-          ||| % [$._config.clusterLabel, $._config.clusterLabel, $._config.clusterLabel] , '{{ ' + $._config.clusterLabel + ' }} / {{ job }} / {{ instance }}') +
+          ||| % [$._config.clusterLabel, $._config.clusterLabel, $._config.clusterLabel], '{{ ' + $._config.clusterLabel + ' }} / {{ job }} / {{ instance }}') +
           { yaxes: g.yaxes('percentunit') },
         )
       )
