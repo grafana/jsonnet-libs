@@ -1176,7 +1176,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "jvm_os_physical_memory_free_size{jinstance=\"$instance\"}"
+              "options": "jvm_os_physical_memory_free_size{instance=\"$instance\"}"
             },
             "properties": [
               {
