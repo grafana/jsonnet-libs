@@ -1,5 +1,5 @@
 {
   _config+:: {
-    clusterLabel: 'cluster'
+    clusterLabel: 'cluster',
   },
 }

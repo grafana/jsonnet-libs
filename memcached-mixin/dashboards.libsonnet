@@ -8,7 +8,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         { uid: '124d5222454213f748dbfaf69b77ec48' }
       )
       .addMultiTemplate('cluster', 'memcached_commands_total', $._config.clusterLabel)
-      .addMultiTemplate('job', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster"}', 'job') 
+      .addMultiTemplate('job', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster"}', 'job')
       .addMultiTemplate('instance', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster",job=~"$job"}', 'instance')
       .addRow(
         g.row('Hits')
@@ -24,7 +24,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
               max by (%s, job, instance) (
                 memcached_current_connections{%s=~"$cluster", job=~"$job", instance=~"$instance"} / memcached_max_connections{%s=~"$cluster", job=~"$job", instance=~"$instance"}
             ))
-          ||| % [$._config.clusterLabel,$._config.clusterLabel,$._config.clusterLabel] , '{{ ' + $._config.clusterLabel + ' }} / {{ job }} / {{ instance }}') +
+          ||| % [$._config.clusterLabel, $._config.clusterLabel, $._config.clusterLabel] , '{{ ' + $._config.clusterLabel + ' }} / {{ job }} / {{ instance }}') +
           { yaxes: g.yaxes('percentunit') },
         )
       )
