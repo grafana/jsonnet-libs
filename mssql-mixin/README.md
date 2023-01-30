@@ -1,6 +1,6 @@
 # Microsoft SQL server mixin
 
-The Microsoft SQL Server mixin is a set of configurable Grafana dashboards and alerts based on the Grafana Agent MSSQL integration.
+The Microsoft SQL Server mixin is a set of configurable Grafana dashboards and alerts based on the Grafana Agent `mssql` integration.
 
 The Microsoft SQL Server mixin contains the following dashboards:
 - MSSQL overview
