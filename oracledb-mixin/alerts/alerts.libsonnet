@@ -14,7 +14,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'The number of processess being utilized exceeded %(alertsSessionThreshold)s%%.' % $._config,
+              summary: 'The number of sessions being utilized exceeded %(alertsSessionThreshold)s%%.' % $._config,
               description:
                 ('{{ printf "%%.2f" $value }}%% of sessions are being utilized which is above the ' +
                  'threshold %(alertsSessionThreshold)s%%. This could mean that {{$labels.instance}} is being overutilized.') % $._config,
@@ -51,22 +51,6 @@
               description:
                 ('{{ printf "%%.2f" $value }}%% of bytes are being utilized by the tablespace {{$labels.tablespace}} on the instance {{$labels.instance}}, ' +
                  'which is above the threshold %(alertsTablespaceThreshold)s%%.') % $._config,
-            },
-          },
-          {
-            alert: 'OracledbFileDescriptorLimit',
-            expr: |||
-              process_open_fds / process_max_fds * 100 > %(alertsFileDescriptorThreshold)s
-            ||| % $._config,
-            'for': '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'File descriptors usage is reaching its threshold of %(alertsFileDescriptorThreshold)s%%.' % $._config,
-              description:
-                ('{{ printf "%%.2f" $value }}%% of file descriptors are open on {{$labels.instance}}, which is above the ' +
-                 'threshold %(alertsFileDescriptorThreshold)s%%.') % $._config,
             },
           },
         ],

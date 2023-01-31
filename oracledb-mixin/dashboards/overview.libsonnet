@@ -81,256 +81,6 @@ local databaseStatusPanel = {
   type: 'stat',
 };
 
-local cpuSecondsPanel = {
-  datasource: promDatasource,
-  description: 'Amount of CPU time, in seconds, used by OracleDB over a window.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'single',
-      sort: 'none',
-    },
-  },
-  targets: [
-    {
-      datasource: promDatasource,
-      editorMode: 'code',
-      expr: 'increase(process_cpu_seconds_total{' + matcher + '}[$__rate_interval])',
-      legendFormat: '{{instance}}',
-      range: true,
-      refId: 'A',
-    },
-  ],
-  title: 'CPU seconds',
-  type: 'timeseries',
-};
-
-local virtualMemoryPanel = {
-  datasource: promDatasource,
-  description: 'Used virtual memory overtime.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'bytes',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'single',
-      sort: 'none',
-    },
-  },
-  targets: [
-    {
-      datasource: promDatasource,
-      editorMode: 'code',
-      expr: 'process_virtual_memory_bytes{' + matcher + '}',
-      legendFormat: '{{instance}}',
-      range: true,
-      refId: 'A',
-    },
-  ],
-  title: 'Virtual memory',
-  type: 'timeseries',
-};
-
-local openFdsPanel = {
-  datasource: promDatasource,
-  description: 'Number of open file descriptors and the limit overtime.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'single',
-      sort: 'none',
-    },
-  },
-  targets: [
-    {
-      datasource: promDatasource,
-      editorMode: 'code',
-      expr: 'process_open_fds{' + matcher + '}',
-      legendFormat: '{{instance}} - open',
-      range: true,
-      refId: 'OPEN',
-    },
-    {
-      datasource: promDatasource,
-      editorMode: 'code',
-      expr: 'process_max_fds{' + matcher + '}',
-      hide: false,
-      legendFormat: '{{instance}} - limit',
-      range: true,
-      refId: 'MAX',
-    },
-  ],
-  title: 'Open file descriptors',
-  type: 'timeseries',
-};
-
 local sessionsPanel = {
   datasource: promDatasource,
   description: 'Number of sessions and the limit overtime.',
@@ -1369,38 +1119,33 @@ local tablespaceSizePanel = {
       .addPanels(
         std.flattenArrays([
           [
-            databaseStatusPanel { gridPos: { h: 4, w: 4, x: 0, y: 0 } },
-            cpuSecondsPanel { gridPos: { h: 4, w: 12, x: 4, y: 0 } },
-            virtualMemoryPanel { gridPos: { h: 4, w: 8, x: 16, y: 0 } },
-          ],
-          [
-            openFdsPanel { gridPos: { h: 6, w: 8, x: 0, y: 4 } },
-            sessionsPanel { gridPos: { h: 6, w: 8, x: 8, y: 4 } },
-            processPanel { gridPos: { h: 6, w: 8, x: 16, y: 4 } },
+            databaseStatusPanel { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
+            sessionsPanel { gridPos: { h: 6, w: 10, x: 4, y: 0 } },
+            processPanel { gridPos: { h: 6, w: 10, x: 14, y: 0 } },
           ],
           if $._config.enableLokiLogs then [
-            alertLogPanel { gridPos: { h: 7, w: 24, x: 0, y: 10 } },
+            alertLogPanel { gridPos: { h: 7, w: 24, x: 0, y: 6 } },
           ] else [],
           [
-            waitTimerow { gridPos: { h: 1, w: 24, x: 0, y: 17 } },
+            waitTimerow { gridPos: { h: 1, w: 24, x: 0, y: 13 } },
           ],
           [
-            applicationWaitTimePanel { gridPos: { h: 6, w: 6, x: 0, y: 18 } },
-            commitTimePanel { gridPos: { h: 6, w: 6, x: 6, y: 18 } },
-            concurrencyWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 18 } },
-            configurationWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 18 } },
+            applicationWaitTimePanel { gridPos: { h: 6, w: 6, x: 0, y: 14 } },
+            commitTimePanel { gridPos: { h: 6, w: 6, x: 6, y: 14 } },
+            concurrencyWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 14 } },
+            configurationWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 14 } },
           ],
           [
-            networkWaitTime { gridPos: { h: 6, w: 6, x: 0, y: 24 } },
-            schedulerWaitTime { gridPos: { h: 6, w: 6, x: 6, y: 24 } },
-            systemIOWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 24 } },
-            userIOWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 24 } },
+            networkWaitTime { gridPos: { h: 6, w: 6, x: 0, y: 20 } },
+            schedulerWaitTime { gridPos: { h: 6, w: 6, x: 6, y: 20 } },
+            systemIOWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 20 } },
+            userIOWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 20 } },
           ],
           [
-            tablespaceRow { gridPos: { h: 1, w: 24, x: 0, y: 30 } },
+            tablespaceRow { gridPos: { h: 1, w: 24, x: 0, y: 26 } },
           ],
           [
-            tablespaceSizePanel { gridPos: { h: 6, w: 24, x: 0, y: 31 } },
+            tablespaceSizePanel { gridPos: { h: 6, w: 24, x: 0, y: 27 } },
           ],
         ])
       ),
