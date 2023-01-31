@@ -1,4 +1,4 @@
-# Microsoft SQL server mixin
+# Microsoft SQL Server mixin
 
 The Microsoft SQL Server mixin is a set of configurable Grafana dashboards and alerts based on the Grafana Agent `mssql` integration.
 
@@ -6,7 +6,7 @@ The Microsoft SQL Server mixin contains the following dashboards:
 - MSSQL overview
 - MSSQL pages
 
-## MSSQL overview
+## MSSQL Overview
 
 The MSSQL overview dashboard provides details on traffic, errors, memory usage, IO performance, and error logs. To get MSSQL error logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default MSSQL error log path is `/var/opt/mssql/log/errorlog` on Linux, and `C:\Program Files\Microsoft SQL Server\MSSQL.*\MSSQL\LOG\ERRORLOG` on Windows. In order to show up in the dashboard, the logs must have a `log_type` label of `mssql_error`.
 
@@ -24,7 +24,7 @@ MSSQL error logs are enabled by default in the `config.libsonnet` and can be rem
 }
 ```
 
-## MSSQL pages
+## MSSQL Pages
 
 The MSSQL pages dashboard provides details on page file usage and performance.
 

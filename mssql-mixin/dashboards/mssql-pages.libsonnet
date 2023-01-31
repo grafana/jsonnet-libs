@@ -330,7 +330,7 @@ local pageFaultsPanel = {
   grafanaDashboards+:: {
     'mssql-pages.json':
       dashboard.new(
-        'MSSQL pages',
+        'MSSQL Pages',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
