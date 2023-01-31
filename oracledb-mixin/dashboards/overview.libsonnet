@@ -1301,7 +1301,7 @@ local tablespaceSizePanel = {
   grafanaDashboards+:: {
     'oracledb-overview.json':
       dashboard.new(
-        'OracleDB Overview',
+        'OracleDB overview',
         time_from='%s' % $._config.dashboardPeriod,
         editable=true,
         tags=($._config.dashboardTags),
