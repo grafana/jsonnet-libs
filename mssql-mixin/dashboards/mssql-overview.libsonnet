@@ -734,7 +734,7 @@ local transactionLogExpansionsPanel = {
   grafanaDashboards+:: {
     'mssql-overview.json':
       dashboard.new(
-        'MSSQL Overview',
+        'MSSQL overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
