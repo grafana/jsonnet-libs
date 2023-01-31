@@ -2,7 +2,7 @@
   prometheusAlerts+:: {
     groups+: [
       {
-        name: 'TensorFlowAlerts',
+        name: 'TensorFlowServingAlerts',
         rules: [
           {
             alert: 'TensorFlowModelRequestHighErrorRate',
@@ -22,7 +22,7 @@
             },
           },
           {
-            alert: 'TensorFlowHighBatchQueuingLatency',
+            alert: 'TensorFlowServingHighBatchQueuingLatency',
             expr: |||
               increase(:tensorflow:serving:batching_session:queuing_latency_sum[2m]) / increase(:tensorflow:serving:batching_session:queuing_latency_count[2m]) > %(alertsBatchQueuingLatency)s
             ||| % $._config,
