@@ -16,7 +16,7 @@
             annotations: {
               summary: 'There are deadlocks ocurring in the database.',
               description:
-                ('{{ printf "%%.2f" $value }} deadlocks have ocurred over the last 5 minutes on {{$labels.instance}}, ' +
+                ('{{ printf "%%.2f" $value }} deadlocks have occurred over the last 5 minutes on {{$labels.instance}}, ' +
                  'which is above threshold of %(alertsWarningDeadlocks5m)s deadlocks.') % $._config,
             },
           },
@@ -32,7 +32,7 @@
             annotations: {
               summary: 'There is a moderate amount of IO stall for database reads.',
               description:
-                ('{{ printf "%%.2f" $value }}ms of IO read stall has ocurred on {{$labels.instance}}, ' +
+                ('{{ printf "%%.2f" $value }}ms of IO read stall has occurred on {{$labels.instance}}, ' +
                  'which is above threshold of %(alertsWarningModerateReadStallTimeMS)sms.') % $._config,
             },
           },
@@ -48,7 +48,7 @@
             annotations: {
               summary: 'There is a high amount of IO stall for database reads.',
               description:
-                ('{{ printf "%%.2f" $value }}ms of IO read stall has ocurred on {{$labels.instance}}, ' +
+                ('{{ printf "%%.2f" $value }}ms of IO read stall has occurred on {{$labels.instance}}, ' +
                  'which is above threshold of %(alertsCriticalHighReadStallTimeMS)sms.') % $._config,
             },
           },
@@ -64,7 +64,7 @@
             annotations: {
               summary: 'There is a moderate amount of IO stall for database writes.',
               description:
-                ('{{ printf "%%.2f" $value }}ms of IO write stall has ocurred on {{$labels.instance}}, ' +
+                ('{{ printf "%%.2f" $value }}ms of IO write stall has occurred on {{$labels.instance}}, ' +
                  'which is above threshold of %(alertsWarningModerateWriteStallTimeMS)sms.') % $._config,
             },
           },
@@ -80,7 +80,7 @@
             annotations: {
               summary: 'There is a high amount of IO stall for database writes.',
               description:
-                ('{{ printf "%%.2f" $value }}ms of IO write stall has ocurred on {{$labels.instance}}, ' +
+                ('{{ printf "%%.2f" $value }}ms of IO write stall has occurred on {{$labels.instance}}, ' +
                  'which is above threshold of %(alertsCriticalHighWriteStallTimeMS)sms.') % $._config,
             },
           },
