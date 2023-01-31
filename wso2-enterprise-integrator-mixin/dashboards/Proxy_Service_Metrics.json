@@ -278,7 +278,7 @@
             {
               "targetBlank": false,
               "title": "View Error logs",
-              "url": "explore?orgId=1&left=[\"${__from}\",\"${__to}\",\"Loki\",{\"expr\":\"{service=\\\"{proxy:FaultProxy}\\\",log_level=\\\"ERROR\\\"}\",\"datasource\":\"Loki\"},{\"mode\":\"Logs\"},{\"ui\":[true,true,true,\"none\"]}]"
+              "url": "explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"expr\":\"{service=\\\"{proxy:FaultProxy}\\\",log_level=\\\"ERROR\\\"}\",\"datasource\":\"Loki\",\"refId\":\"A\"}],\"range\":{\"from\":\"${__from}\",\"to\":\"${__to}\"}}"
             }
           ],
           "mappings": [
