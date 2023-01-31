@@ -226,7 +226,7 @@ local modelPredictRuntimeLatencyPanel = {
 
 local graphBuildCallsPanel = {
   datasource: promDatasource,
-  description: 'Number of times TensorFlow has created a new client graph.',
+  description: 'Number of times TensorFlow Serving has created a new client graph.',
   fieldConfig: {
     defaults: {
       color: {
@@ -622,7 +622,7 @@ local batchQueueThroughputPanel = {
 
 local containerLogsPanel = {
   datasource: lokiDatasource,
-  description: 'Logs from the TensorFlow Docker container.',
+  description: 'Logs from the TensorFlow Serving Docker container.',
   options: {
     dedupStrategy: 'none',
     enableLogDetails: true,
@@ -652,13 +652,13 @@ local containerLogsPanel = {
   grafanaDashboards+:: {
     'tensorflow-overview.json':
       dashboard.new(
-        'TensorFlow overview',
+        'TensorFlow Serving overview',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,
-        description='Overview of a TensorFlow instance.',
+        description='Overview of a TensorFlow Serving instance.',
         uid=dashboardUid,
       )
       .addTemplates(std.flattenArrays([
