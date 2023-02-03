@@ -1596,7 +1596,7 @@
           "query": "label_values(traefik_service_requests_total,job)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
