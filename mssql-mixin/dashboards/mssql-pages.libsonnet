@@ -136,6 +136,8 @@ local bufferCacheHitPercentagePanel = {
         },
       },
       mappings: [],
+      max: 100,
+      min: 0,
       thresholds: {
         mode: 'absolute',
         steps: [
