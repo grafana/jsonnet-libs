@@ -780,7 +780,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": -1,
+            "barAlignment": 1,
             "drawStyle": "bars",
             "fillOpacity": 100,
             "gradientMode": "none",
