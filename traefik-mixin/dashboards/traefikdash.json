@@ -210,7 +210,7 @@
       "links": [],
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
         "reduceOptions": {
@@ -331,7 +331,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval]))",
+          "expr": "sum(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval] offset -$__interval))",
           "format": "time_series",
           "instant": false,
           "legendFormat": "Errors",
@@ -345,7 +345,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval]))",
+          "expr": "sum(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval))",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -515,7 +515,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval]))> 0",
+          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval))> 0",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -530,7 +530,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval])) > 0",
+          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)) > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
@@ -573,7 +573,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -750,7 +750,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval]))/\nsum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval])>0)*100",
+          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval] offset -$__interval))/\nsum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset $__interval)>0)*100",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -966,7 +966,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (alias) (\nlabel_replace(\n(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code!=\"\"}[$__interval])) > 0,\n  \"alias\", \"HTTP ${1}00-${1}99\", \"code\", \"(.).+\"\n))",
+          "expr": "sum by (alias) (\nlabel_replace(\n(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code!=\"\"}[$__interval] offset -$__interval )) > 0,\n  \"alias\", \"HTTP ${1}00-${1}99\", \"code\", \"(.).+\"\n))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -981,7 +981,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval])) > 0",
+          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)) > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
@@ -1008,7 +1008,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": -1,
+            "barAlignment": 1,
             "drawStyle": "bars",
             "fillOpacity": 100,
             "gradientMode": "none",
@@ -1119,7 +1119,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "\nsum by (method) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code!=\"\"}[$__interval])) > 0",
+          "expr": "sum by (method) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code!=\"\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1134,7 +1134,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval])) > 0",
+          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)) > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
@@ -1186,7 +1186,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": -1,
+            "barAlignment": 1,
             "drawStyle": "bars",
             "fillOpacity": 100,
             "gradientMode": "none",
@@ -1266,7 +1266,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (method, code) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\",code=~\"2.+\"}[$__interval])) > 0",
+          "expr": "sum by (method, code) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\",code=~\"2.+\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{method}}: {{code}}",
@@ -1292,7 +1292,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": 0,
+            "barAlignment": 1,
             "drawStyle": "bars",
             "fillOpacity": 100,
             "gradientMode": "none",
@@ -1372,7 +1372,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (method, code) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\",code!~\"2.+\"}[$__interval])) > 0",
+          "expr": "sum by (method, code) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\",code!~\"2.+\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{ method }} : {{code}}",
@@ -1454,7 +1454,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval])) > 0",
+          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1538,7 +1538,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (protocol, entrypoint) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\"}[$agg_interval])) > 0",
+          "expr": "sum by (protocol, entrypoint) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1784,6 +1784,6 @@
   "timezone": "",
   "title": "Traefik",
   "uid": "qPdAviJmz",
-  "version": 3,
+  "version": 5,
   "weekStart": ""
 }
