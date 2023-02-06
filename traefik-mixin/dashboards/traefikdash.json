@@ -26,7 +26,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 4475,
   "graphTooltip": 0,
-  "id": 118,
+  "id": 120,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -93,7 +93,7 @@
       },
       "gridPos": {
         "h": 2,
-        "w": 4,
+        "w": 8,
         "x": 0,
         "y": 1
       },
@@ -104,10 +104,10 @@
         "colorMode": "value",
         "graphMode": "area",
         "justifyMode": "auto",
-        "orientation": "horizontal",
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "mean"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -115,7 +115,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -126,7 +126,7 @@
           "refId": "A"
         }
       ],
-      "title": "Average load",
+      "title": "Load",
       "transformations": [
         {
           "id": "filterFieldsByName",
@@ -135,86 +135,26 @@
               "pattern": "Total"
             }
           }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Dashboard --"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "purple",
-            "mode": "fixed"
-          },
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "short"
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 4,
-        "x": 4,
-        "y": 1
-      },
-      "id": 18,
-      "links": [],
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "sum"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.4",
-      "targets": [
         {
-          "datasource": {
-            "type": "datasource",
-            "uid": "-- Dashboard --"
-          },
-          "panelId": 15,
-          "refId": "A"
-        }
-      ],
-      "title": "Total load",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
+          "id": "reduce",
           "options": {
-            "include": {
-              "pattern": "Total"
+            "includeTimeField": false,
+            "mode": "seriesToRows",
+            "reducers": [
+              "mean",
+              "sum"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": {},
+            "renameByName": {
+              "Mean": "Average load",
+              "Total": "Total"
             }
           }
         }
@@ -270,7 +210,7 @@
       "links": [],
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
         "reduceOptions": {
@@ -283,7 +223,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
@@ -304,8 +244,8 @@
     },
     {
       "datasource": {
-        "type": "datasource",
-        "uid": "-- Dashboard --"
+        "type": "prometheus",
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -339,7 +279,24 @@
           },
           "unit": "percent"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 2,
@@ -348,15 +305,16 @@
         "y": 1
       },
       "id": 16,
+      "interval": "$agg_interval",
       "links": [],
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "horizontal",
+        "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "mean"
+            "sum"
           ],
           "fields": "",
           "values": false
@@ -364,22 +322,68 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.2.4",
+      "pluginVersion": "9.3.2",
       "targets": [
         {
           "datasource": {
-            "type": "datasource",
-            "uid": "-- Dashboard --"
+            "type": "prometheus",
+            "uid": "${datasource}"
           },
-          "panelId": 13,
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval] offset -$__interval))",
+          "format": "time_series",
+          "instant": false,
+          "legendFormat": "Errors",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval))",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "legendFormat": "Total",
+          "range": true,
+          "refId": "B"
         }
       ],
-      "title": "Errors rate",
+      "title": "Errors",
       "transformations": [
         {
-          "id": "merge",
-          "options": {}
+          "id": "calculateField",
+          "options": {
+            "alias": "Rate",
+            "binary": {
+              "left": "Errors",
+              "operator": "/",
+              "reducer": "sum",
+              "right": "Total"
+            },
+            "mode": "binary",
+            "reduce": {
+              "include": [],
+              "reducer": "sum"
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Total": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Errors": "Total"
+            }
+          }
         }
       ],
       "type": "stat"
@@ -511,7 +515,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval]))> 0",
+          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval))> 0",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -526,7 +530,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval])) > 0",
+          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)) > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
@@ -569,7 +573,7 @@
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
+            "showPoints": "never",
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -746,7 +750,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval]))/\nsum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval]))*100",
+          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval] offset -$__interval))/\nsum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset $__interval)>0)*100",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -776,7 +780,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": -1,
+            "barAlignment": 1,
             "drawStyle": "bars",
             "fillOpacity": 100,
             "gradientMode": "none",
@@ -808,7 +812,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -961,7 +966,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (alias) (\nlabel_replace(\n(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code!=\"\"}[$__interval])) > 0,\n  \"alias\", \"HTTP ${1}00-${1}99\", \"code\", \"(.).+\"\n))",
+          "expr": "sum by (alias) (\nlabel_replace(\n(increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code!=\"\"}[$__interval] offset -$__interval )) > 0,\n  \"alias\", \"HTTP ${1}00-${1}99\", \"code\", \"(.).+\"\n))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -976,7 +981,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval])) > 0",
+          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)) > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
@@ -1003,7 +1008,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": -1,
+            "barAlignment": 1,
             "drawStyle": "bars",
             "fillOpacity": 100,
             "gradientMode": "none",
@@ -1114,7 +1119,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "\nsum by (method) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code!=\"\"}[$__interval])) > 0",
+          "expr": "sum by (method) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code!=\"\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1129,7 +1134,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval])) > 0",
+          "expr": "sum by () (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)) > 0",
           "hide": false,
           "interval": "",
           "legendFormat": "Total",
@@ -1181,7 +1186,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": -1,
+            "barAlignment": 1,
             "drawStyle": "bars",
             "fillOpacity": 100,
             "gradientMode": "none",
@@ -1261,7 +1266,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (method, code) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\",code=~\"2.+\"}[$__interval])) > 0",
+          "expr": "sum by (method, code) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\",code=~\"2.+\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{method}}: {{code}}",
@@ -1287,7 +1292,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
-            "barAlignment": 0,
+            "barAlignment": 1,
             "drawStyle": "bars",
             "fillOpacity": 100,
             "gradientMode": "none",
@@ -1367,7 +1372,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (method, code) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\",code!~\"2.+\"}[$__interval])) > 0",
+          "expr": "sum by (method, code) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\",code!~\"2.+\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{ method }} : {{code}}",
@@ -1449,7 +1454,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\".*grafana@.*|prometheus.*|gitea.*\"}[$__interval])) > 0",
+          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1533,7 +1538,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (protocol, entrypoint) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\"}[$agg_interval])) > 0",
+          "expr": "sum by (protocol, entrypoint) (increase(traefik_entrypoint_requests_total{job=~\"$job\", instance=~\"$instance\", entrypoint=~\"$entrypoint\"}[$__interval] offset -$__interval)) > 0",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 2,
@@ -1572,7 +1577,7 @@
       {
         "allValue": ".+",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -1591,7 +1596,7 @@
           "query": "label_values(traefik_service_requests_total,job)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -1779,6 +1784,6 @@
   "timezone": "",
   "title": "Traefik",
   "uid": "qPdAviJmz",
-  "version": 7,
+  "version": 5,
   "weekStart": ""
 }
