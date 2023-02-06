@@ -1,0 +1,3 @@
+exclusions:
+  template-job-rule:
+    reason: "allValue '.+' cannot be used as queries such as 'process_uptime_seconds{job=~".+"}' will return timeseries unrelated to Spring boot applications."
