@@ -3903,11 +3903,6 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "grafanacloud-k3d-prom",
-          "value": "grafanacloud-k3d-prom"
-        },
         "hide": 0,
         "includeAll": false,
         "label": "Data Source",
@@ -3917,7 +3912,7 @@
         "query": "prometheus",
         "queryValue": "",
         "refresh": 1,
-        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+        "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
       },
