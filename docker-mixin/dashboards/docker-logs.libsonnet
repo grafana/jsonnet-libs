@@ -95,6 +95,7 @@ local container_template = grafana.template.new(
 local total_log_lines_panel =
   grafana.statPanel.new(
     'Total Log Lines',
+    description='Total number of log lines including errors and warnings.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='sum',
@@ -110,6 +111,7 @@ local total_log_lines_panel =
 local total_log_warnings_panel =
   grafana.statPanel.new(
     'Warnings',
+    description='Total number of log lines of level: warning.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='sum',
@@ -124,6 +126,7 @@ local total_log_warnings_panel =
 local total_log_errors_panel =
   grafana.statPanel.new(
     'Errors',
+    description='Total number of log lines of level: error.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='sum',
@@ -138,6 +141,7 @@ local total_log_errors_panel =
 local error_percentage_panel =
   grafana.statPanel.new(
     'Error Percentage',
+    description='Percentage of log lines with level: Error out of total log lines.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='lastNotNull',
@@ -154,6 +158,7 @@ local error_percentage_panel =
 local total_bytes_panel =
   grafana.statPanel.new(
     'Bytes Used',
+    description='Total number of bytes for log lines including errors and warnings.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='sum',
