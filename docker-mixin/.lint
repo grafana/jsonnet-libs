@@ -33,4 +33,3 @@ exclusions:
       panel: "TCP Sockets By State"
     - dashboard: "Docker Overview"
       panel: "" # Storage table panel has no name
-
