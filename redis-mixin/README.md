@@ -9,7 +9,7 @@ It only provides dashboards as part of the mixin itself, whereas alerts should b
 In order to use the mixin and import dashboards, you can simply import it and add to your other mixins:
 
 ```jsonnet
-local redis_mixin = import 'redis/mixin/mixin.libsonnet';
+local redis_mixin = import 'redis-mixin/mixin.libsonnet';
 
 {
   redis_mixin: redis_mixin {
@@ -32,7 +32,7 @@ Make sure you only add it to your default namespace, because dashboards do not s
 In order to use alerts you should add them to your application's mixin. It's also possible to adjust alert thresholds, evaluation windows and severity:
 
 ```jsonnet
-local redis = import 'redis/mixin/alerts.libsonnet';
+local redis = import 'redis-mixin/alerts.libsonnet';
 
 local namespace = 'my-app-namespace';
 
