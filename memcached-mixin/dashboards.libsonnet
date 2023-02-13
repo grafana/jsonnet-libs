@@ -80,12 +80,12 @@ local g = (import 'grafana-builder/grafana.libsonnet');
           ])
         )
         .addPanel(
-          g.panel('Reads') +
+          g.panel('Bytes received') +
           g.queryPanel('sum by(instance) (rate(memcached_read_bytes_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}') +
           { yaxes: g.yaxes('bps') },
         )
         .addPanel(
-          g.panel('Writes') +
+          g.panel('Bytes transmitted') +
           g.queryPanel('sum by(instance) (rate(memcached_written_bytes_total{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]))', '{{instance}}') +
           { yaxes: g.yaxes('bps') },
         )
