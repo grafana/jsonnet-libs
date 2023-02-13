@@ -91,14 +91,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       '-c',
       'redis-cli -p %(port)d ping' % $._config.redis,
     ]) +
-    container.mixin.resources.withLimitsMixin({
-      memory: '2Gi',
-      cpu: '500m',
-    }) +
-    container.mixin.resources.withRequestsMixin({
-      memory: '1Gi',
-      cpu: '100m',
-    }),
+    container.mixin.resources.withLimitsMixin($._config.redis.limits) +
+    container.mixin.resources.withRequestsMixin($._config.redis.requests),
 
   redis_sentinel_container::
     container.new('redis-sentinel', $._images.redis_sentinel) +

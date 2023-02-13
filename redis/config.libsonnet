@@ -8,6 +8,14 @@
       replicas: 3,
       down_after_milliseconds: 15000,
       diskSize: '50Gi',
+      requests: {
+        cpu: '100m',
+        memory: '512Mi',
+      },
+      limits: {
+        cpu: null,
+        memory: '2Gi',
+      },
       timeout: 0,
       clientOutputBufferLimits: {
         normal: {
