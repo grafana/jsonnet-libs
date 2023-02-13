@@ -101,7 +101,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     }),
 
   redis_sentinel_container::
-    container.new('redis-sentinel', $._images.redis_sentinel) +
+    container.new('redis-sentinel', $._images.redis) +
     container.withVolumeMounts(
       [
         mount.new('etcredis', '/etc/redis'),
@@ -119,7 +119,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     container.withEnvMixin([
       envVar.fromSecretRef('REDIS_PASSWORD', $.redis_secrets_name, $.redis_secrets_key),
     ]) +
-    container.withCommand(['redis-sentinel', '/etc/redis/sentinel.conf']) +
+    container.withCommand(['redis-server', '/etc/redis/sentinel.conf', '--sentinel']) +
     container.mixin.livenessProbe.exec.withCommand([
       '/bin/sh',
       '-c',

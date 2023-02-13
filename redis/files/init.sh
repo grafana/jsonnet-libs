@@ -193,6 +193,8 @@ get_pod_ip() {
 }
 
 install_kubectl() {
+  echo "Installing curl"
+  apt update && apt install -y curl
   echo "Installing kubectl"
   curl -L https://storage.googleapis.com/kubernetes-release/release/v"$KUBECTL_VERSION"/bin/linux/amd64/kubectl -o /k8s/kubectl
   chmod +x /k8s/kubectl

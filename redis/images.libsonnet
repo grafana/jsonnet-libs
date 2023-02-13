@@ -1,7 +1,8 @@
 {
   _images+:: {
-    redis: 'bitnami/redis:6.2',  // https://hub.docker.com/r/bitnami/redis/
-    redis_sentinel: 'bitnami/redis-sentinel:6.2',  // https://hub.docker.com/r/bitnami/redis-sentinel/
+    // We use a bullseye image so we can install a curl in init.sh.
+    // We use the same image for redis-sentinel by running `redis-server --sentinal`
+    redis: 'redis:6.2-bullseye',
     redis_exporter: 'oliver006/redis_exporter:latest',
   },
 }
