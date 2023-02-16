@@ -16,7 +16,7 @@
             annotations: {
               summary: 'Large percentage of requests are resulting in 5XX responses',
               description: |||
-               The percentage of error responses is {{ printf "%%.2f" $value * 100 }} which is higher than {{%(alertsErrorRequestErrorRate)s * 100}}.
+               The percentage of error responses is {{ printf "%%.2f" $value }} which is higher than {{%(alertsErrorRequestErrorRate)s }}.
               ||| % $._config,
             },
           },
