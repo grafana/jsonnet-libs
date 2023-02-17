@@ -1,7 +1,6 @@
 {
   _config+:: {
     local c = self,
-    dashboardNamePrefix: 'Wildfly',
     dashboardTags: ['wildfly'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
