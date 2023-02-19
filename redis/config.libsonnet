@@ -9,6 +9,7 @@
       down_after_milliseconds: 15000,
       diskSize: '50Gi',
       timeout: 0,
+      extra_config: '',
       clientOutputBufferLimits: {
         normal: {
           hardLimit: '0',
