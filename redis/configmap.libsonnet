@@ -33,6 +33,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
           clientOutputBufferLimitsNormal: formatBufferLimits(bufferLimits.normal),
           clientOutputBufferLimitsSlave: formatBufferLimits(bufferLimits.slave),
           clientOutputBufferLimitsPubsub: formatBufferLimits(bufferLimits.pubsub),
+          extraConfig: $._config.redis.extra_config,
         },
       ),
       'sentinel.conf': std.format(
