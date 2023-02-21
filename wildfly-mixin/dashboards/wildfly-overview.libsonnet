@@ -7,11 +7,16 @@ local prometheus = grafana.prometheus;
 local dashboardUid = 'wildfly-overview';
 
 local promDatasourceName = 'prometheus_datasource';
+local lokiDatasourceName = 'loki_datasource';
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
+local lokiDatasource = {
+  uid: '${%s}' % lokiDatasourceName,
+};
 
 local requestPanel = {
   datasource: promDatasource,
@@ -100,7 +105,7 @@ local requestErrorsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Request Errors',
+  title: 'Request errors',
   description: 'Rate of requests that result in 500 over time',
   fieldConfig: {
     defaults: {
@@ -178,7 +183,7 @@ local networkReceivedThroughputPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Network Received Throughput',
+  title: 'Network received throughput',
   description: 'Throughput rate of data received over time',
   fieldConfig: {
     defaults: {
@@ -256,7 +261,7 @@ local networkSentThroughputPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Network Sent Throughput',
+  title: 'Network sent throughput',
   description: 'Throughput rate of data sent over time',
   fieldConfig: {
     defaults: {
@@ -326,67 +331,28 @@ local networkSentThroughputPanel = {
 };
 
 local serverLogsPanel = {
-  datasource: promDatasource,
+  datasource: lokiDatasource,
   targets: [
-    prometheus.target(
-      '{job="integration/wildfly"} |= ``',
-      datasource=promDatasource,
-      legendFormat='',
-    ),
+    {
+      datasource: lokiDatasource,
+      editorMode: 'code',
+      expr: '{job="integration/wildfly"} |= ``',
+      queryType: 'range',
+      refId: 'A',
+    },
   ],
-  type: 'table',
+  type: 'logs',
   title: 'Server logs',
   description: 'Recent logs from server log file',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'thresholds',
-      },
-      custom: {
-        align: 'auto',
-        displayMode: 'auto',
-        inspect: false,
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-    },
-    overrides: [
-      {
-        matcher: {
-          id: 'byName',
-          options: 'labels',
-        },
-        properties: [
-          {
-            id: 'custom.width',
-            value: 339,
-          },
-        ],
-      },
-    ],
-  },
   options: {
-    footer: {
-      fields: '',
-      reducer: [
-        'sum',
-      ],
-      show: false,
-    },
-    showHeader: true,
-    sortBy: [],
+    dedupStrategy: 'none',
+    enableLogDetails: true,
+    prettifyLogMessage: false,
+    showCommonLabels: false,
+    showLabels: false,
+    showTime: false,
+    sortOrder: 'Descending',
+    wrapLogMessage: false,
   },
   pluginVersion: '9.1.7',
 };
@@ -408,7 +374,7 @@ local activeSessionsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Active Sessions',
+  title: 'Active sessions',
   description: 'Number of active sessions to deployment over time',
   fieldConfig: {
     defaults: {
@@ -485,7 +451,7 @@ local expiredSessionsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Expired Sessions',
+  title: 'Expired sessions',
   description: 'Number of sessions that have expired for a deployment over time',
   fieldConfig: {
     defaults: {
@@ -563,7 +529,7 @@ local rejectedSessionsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Rejected Sessions',
+  title: 'Rejected sessions',
   description: 'Number of sessions that have been rejected from a deployment over time',
   fieldConfig: {
     defaults: {
@@ -647,72 +613,91 @@ local rejectedSessionsPanel = {
       )
 
       .addTemplates(
-        [
-          template.datasource(
-            promDatasourceName,
-            'prometheus',
-            null,
-            label='Data Source',
-            refresh='load'
-          ),
-          template.new(
-            'job',
-            promDatasource,
-            'label_values(wildfly_batch_jberet_active_count{}, job)',
-            label='Job',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=1
-          ),
-          template.new(
-            'instance',
-            promDatasource,
-            'label_values(wildfly_batch_jberet_active_count{job=~"$job"}, instance)',
-            label='Instance',
-            refresh=2,
-            includeAll=false,
-            multi=false,
-            allValues='',
-            sort=0
-          ),
-          template.new(
-            'server',
-            promDatasource,
-            'label_values(wildfly_undertow_request_count_total{}, server)',
-            label='Server',
-            refresh=2,
-            includeAll=false,
-            multi=false,
-            allValues='',
-            sort=0
-          ),
-          template.new(
-            'deployment',
-            promDatasource,
-            'label_values(wildfly_undertow_active_sessions{}, deployment)',
-            label='Deployment',
-            refresh=2,
-            includeAll=false,
-            multi=false,
-            allValues='',
-            sort=0
-          ),
-        ]
+        std.flattenArrays([
+          [
+            template.datasource(
+              promDatasourceName,
+              'prometheus',
+              null,
+              label='Data Source',
+              refresh='load'
+            ),
+          ],
+          if $._config.enableLokiLogs then [
+            template.datasource(
+              lokiDatasourceName,
+              'loki',
+              null,
+              label='Loki Datasource',
+              refresh='load'
+            ),
+          ] else [],
+          [
+            template.new(
+              'job',
+              promDatasource,
+              'label_values(wildfly_batch_jberet_active_count{}, job)',
+              label='Job',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.+',
+              sort=1
+            ),
+            template.new(
+              'instance',
+              promDatasource,
+              'label_values(wildfly_batch_jberet_active_count{job=~"$job"}, instance)',
+              label='Instance',
+              refresh=2,
+              includeAll=false,
+              multi=false,
+              allValues='',
+              sort=0
+            ),
+            template.new(
+              'server',
+              promDatasource,
+              'label_values(wildfly_undertow_request_count_total{}, server)',
+              label='Server',
+              refresh=2,
+              includeAll=false,
+              multi=false,
+              allValues='',
+              sort=0
+            ),
+            template.new(
+              'deployment',
+              promDatasource,
+              'label_values(wildfly_undertow_active_sessions{}, deployment)',
+              label='Deployment',
+              refresh=2,
+              includeAll=false,
+              multi=false,
+              allValues='',
+              sort=0
+            ),
+          ],
+        ])
       )
       .addPanels(
-        [
-          requestPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-          requestErrorsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-          networkReceivedThroughputPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-          networkSentThroughputPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-          serverLogsPanel { gridPos: { h: 9, w: 24, x: 0, y: 16 } },
-          sessionsRow { gridPos: { h: 1, w: 24, x: 0, y: 25 } },
-          activeSessionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 26 } },
-          expiredSessionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
-          rejectedSessionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
-        ]
+        std.flattenArrays([
+          [
+            requestPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            requestErrorsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+            networkReceivedThroughputPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            networkSentThroughputPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+          ],
+          if $._config.enableLokiLogs then [
+            serverLogsPanel { gridPos: { h: 9, w: 24, x: 0, y: 16 } },
+          ] else [],
+          [
+            sessionsRow { gridPos: { h: 1, w: 24, x: 0, y: 25 } },
+            activeSessionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 26 } },
+            expiredSessionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
+            rejectedSessionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
+          ],
+        ])
       ),
 
   },

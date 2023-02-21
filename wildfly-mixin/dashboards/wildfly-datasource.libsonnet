@@ -131,7 +131,7 @@ local idleConnectionsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Idle Connections',
+  title: 'Idle connections',
   description: 'Connections to the datasource over time',
   fieldConfig: {
     defaults: {
@@ -208,7 +208,7 @@ local createdTransactionsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Created Transactions',
+  title: 'Created transactions',
   description: 'Number of transactions that were created over time',
   fieldConfig: {
     defaults: {
@@ -285,7 +285,7 @@ local inflightTransactionsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'In-flight Transactions',
+  title: 'In-flight transactions',
   description: 'Number of transactions that are in-flight over time',
   fieldConfig: {
     defaults: {
@@ -387,7 +387,7 @@ local abortedTransactionsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Aborted Transactions',
+  title: 'Aborted transactions',
   description: 'Number of transactions that have been aborted over time',
   fieldConfig: {
     defaults: {
