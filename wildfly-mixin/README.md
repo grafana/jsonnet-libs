@@ -7,9 +7,9 @@ This Wildfly mixin interesting features:
 Set of two dashboards:
 
 - Wildfly Overview - view metrics and logs grouped by jobs, instances, server, and deployments.
-  ![screenshot-0](https://storage.googleapis.com/grafanalabs-integration-assets/nsq/screenshots/screenshot0.png)
+  ![screenshot-0](tbd)
 - Wildfly Datasource - view metrics grouped by jobs, instances, and datasource.
-  ![screenshot-1](https://storage.googleapis.com/grafanalabs-integration-assets/nsq/screenshots/screenshot1.png)
+  ![screenshot-1](tbd)
 
 ## prometheus scraper/grafana agent configuration
 
