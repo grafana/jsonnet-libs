@@ -1,42 +1,41 @@
 # Wildfly Mixin
 
-Wildfly mixin is a set of configurable Grafana dashboards and alerts based on the metrics Grafana Agent Prometheus integration.
+Wildfly mixin is a set of configurable Grafana dashboards and alerts based on the metrics exported by [Wildfly](https://docs.wildfly.org/22/Admin_Guide.html#MicroProfile_Metrics_SmallRye).
 
-This Wildfly mixin interesting features:
+This Wildfly mixin contains the following dashboards:
 
 Set of two dashboards:
 
-- Wildfly Overview - view metrics and logs grouped by jobs, instances, server, and deployments.
-  ![screenshot-0](tbd)
-- Wildfly Datasource - view metrics grouped by jobs, instances, and datasource.
-  ![screenshot-1](tbd)
+- Wildfly overview
+- Wildfly datasource
 
-## prometheus scraper/grafana agent configuration
+## Wildfly Overview
 
-In the Grafana agent configuration file, the agent's prometheus scraper should configured the following way:
+The Wildfly overview dashboard provides details on traffic, sessions, and server logs[Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Wildfly server log path is `/opt/wildfly/standalone/log/server.log.` To enable session metrics you must run the following command in the Wildfly CLI:
 
-```yaml
-metrics:
-  configs:
-    - host_filter: false
-      name: agent
-      remote_write:
-        - url: http://cortex.default.svc.cluster.local:9009/api/prom/push
-      scrape_configs:
-        - job_name: integrations/wildfly
-          metrics_path: /metrics
-          scrape_interval: 10s
-          basic_auth:
-            username: admin
-            password: password
-          static_configs:
-            - targets: ["wildfly.sample-apps.svc.cluster.local:9990"]
-              # Basic authentication may be required if enabled in Wildfly
+```
+/subsystem=undertow:write-attribute(name=statistics-enabled,value=true)
 ```
 
-## Generate config files
+Wildfly logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
-You can manually generate dashboards, but first you should install some tools:
+```
+{
+  _config+:: {
+    enableLokiLogs: false,
+  },
+}
+```
+
+## Wildfly Datasource
+
+The Wildfly datasource dashboard provides details on connections and transactions to the specified datasource. To enable transaction metrics you must run the following command in th Wildfly CLI:
+
+```
+/subsystem=transactions:write-attribute(name=statistics-enabled, value=true)
+```
+
+## Install Tools
 
 ```bash
 go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest

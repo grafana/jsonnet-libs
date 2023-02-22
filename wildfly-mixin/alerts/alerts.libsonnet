@@ -7,7 +7,7 @@
           {
             alert: 'HighPercentageOfErrorResponses',
             expr: |||
-              wildfly_undertow_error_count_total / wildfly_undertow_request_count_total * 100 > %(alertsErrorRequestErrorRate)s
+              increase(wildfly_undertow_error_count_total{}[5m]) / increase(wildfly_undertow_request_count_total{}[5m]) * 100 > %(alertsErrorRequestErrorRate)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -23,7 +23,7 @@
           {
             alert: 'HighNumberOfRejectedSessionsForDeployment',
             expr: |||
-              wildfly_undertow_rejected_sessions_total > %(alertsErrorRejectedSessions)s
+              increase(wildfly_undertow_rejected_sessions_total{}[5m]) > %(alertsErrorRejectedSessions)s
             ||| % $._config,
             'for': '5m',
             labels: {
