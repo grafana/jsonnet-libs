@@ -7,7 +7,7 @@
     dashboardRefresh: '1m',
 
     // alerts thresholds
-    alertsErrorRequestErrorRate: '.3',
+    alertsErrorRequestErrorRate: '30',
     alertsErrorRejectedSessions: '20',
   },
 }

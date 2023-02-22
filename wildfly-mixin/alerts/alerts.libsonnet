@@ -7,7 +7,7 @@
           {
             alert: 'HighPercentageOfErrorResponses',
             expr: |||
-              wildfly_undertow_error_count_total / wildfly_undertow_request_count_total > %(alertsErrorRequestErrorRate)s
+              wildfly_undertow_error_count_total / wildfly_undertow_request_count_total * 100 > %(alertsErrorRequestErrorRate)s
             ||| % $._config,
             'for': '5m',
             labels: {
