@@ -24,6 +24,7 @@ local requestPanel = {
     prometheus.target(
       'rate(wildfly_undertow_request_count_total{server="$server", job="$job", instance="$instance"}[$__interval])',
       datasource=promDatasource,
+      legendFormat='{{server}} - {{http_listener}}{{https_listener}}',
     ),
   ],
   type: 'timeseries',
@@ -102,6 +103,7 @@ local requestErrorsPanel = {
     prometheus.target(
       'rate(wildfly_undertow_error_count_total{server="$server", job="$job", instance="$instance"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='{{server}} - {{http_listener}}{{https_listener}}',
     ),
   ],
   type: 'timeseries',
@@ -180,6 +182,7 @@ local networkReceivedThroughputPanel = {
     prometheus.target(
       'rate(wildfly_undertow_bytes_received_total_bytes{server="$server", job="$job", instance="$instance"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='{{server}} - {{http_listener}}{{https_listener}}',
     ),
   ],
   type: 'timeseries',
@@ -258,6 +261,7 @@ local networkSentThroughputPanel = {
     prometheus.target(
       'rate(wildfly_undertow_bytes_sent_total_bytes{server="$server", job="$job", instance="$instance"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='{{server}} - {{http_listener}}{{https_listener}}',
     ),
   ],
   type: 'timeseries',
@@ -371,10 +375,11 @@ local activeSessionsPanel = {
     prometheus.target(
       'wildfly_undertow_active_sessions{deployment="$deployment", job="$job", instance="$instance"}',
       datasource=promDatasource,
+      legendFormat='{{deployment}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Active sessions',
+  title: 'Active Sessions',
   description: 'Number of active sessions to deployment over time',
   fieldConfig: {
     defaults: {
@@ -448,10 +453,11 @@ local expiredSessionsPanel = {
     prometheus.target(
       'increase(wildfly_undertow_expired_sessions_total{deployment="$deployment", job="$job", instance="$instance"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='{{deployment}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Expired sessions',
+  title: 'Expired Sessions',
   description: 'Number of sessions that have expired for a deployment over time',
   fieldConfig: {
     defaults: {
@@ -526,10 +532,11 @@ local rejectedSessionsPanel = {
     prometheus.target(
       'increase(wildfly_undertow_rejected_sessions_total{deployment="$deployment", job="$job", instance="$instance"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='{{deployment}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Rejected sessions',
+  title: 'Rejected Sessions',
   description: 'Number of sessions that have been rejected from a deployment over time',
   fieldConfig: {
     defaults: {

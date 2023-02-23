@@ -26,6 +26,7 @@ local connectionsPanel = {
     prometheus.target(
       'wildfly_datasources_pool_in_use_count{job="$job", instance="$instance", data_source="$datasource"}',
       datasource=promDatasource,
+      legendFormat='{{data_source}}',
     ),
   ],
   type: 'timeseries',
@@ -128,6 +129,7 @@ local idleConnectionsPanel = {
     prometheus.target(
       'wildfly_datasources_pool_idle_count{job="$job", instance="$instance", data_source="$datasource"}',
       datasource=promDatasource,
+      legendFormat='{{data_source}}',
     ),
   ],
   type: 'timeseries',
@@ -205,6 +207,7 @@ local createdTransactionsPanel = {
     prometheus.target(
       'increase(wildfly_transactions_number_of_transactions_total{job="$job", instance="$instance"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -282,6 +285,7 @@ local inflightTransactionsPanel = {
     prometheus.target(
       'wildfly_transactions_number_of_inflight_transactions{job="$job", instance="$instance"}',
       datasource=promDatasource,
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -384,6 +388,7 @@ local abortedTransactionsPanel = {
     prometheus.target(
       'increase(wildfly_transactions_number_of_aborted_transactions_total{job="$job", instance="$instance"}[$__rate_interval])',
       datasource=promDatasource,
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -504,7 +509,7 @@ local abortedTransactionsPanel = {
             'datasource',
             promDatasource,
             'label_values(wildfly_datasources_pool_idle_count{}, data_source)',
-            label='DataSource',
+            label='Wildfly Datasource',
             refresh=2,
             includeAll=false,
             multi=true,
