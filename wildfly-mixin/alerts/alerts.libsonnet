@@ -11,12 +11,12 @@
             ||| % $._config,
             'for': '5m',
             labels: {
-              severity: 'error',
+              severity: 'critical',
             },
             annotations: {
-              summary: 'Large percentage of requests are resulting in 5XX responses',
+              summary: 'Large percentage of requests are resulting in 5XX responses.',
               description: |||
-               The percentage of error responses is {{ printf "%%.2f" $value }} which is higher than {{%(alertsErrorRequestErrorRate)s }}.
+                The percentage of error responses is {{ printf "%%.2f" $value }} which is higher than {{%(alertsErrorRequestErrorRate)s }}.
               ||| % $._config,
             },
           },
@@ -27,7 +27,7 @@
             ||| % $._config,
             'for': '5m',
             labels: {
-              severity: 'error',
+              severity: 'critical',
             },
             annotations: {
               summary: 'Large number of sessions are being rejected for a deployment.',

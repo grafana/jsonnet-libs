@@ -12,19 +12,11 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
-local rowTitleRow = {
-  datasource: promDatasource,
-  targets: [],
-  type: 'row',
-  title: 'Row title',
-};
-
 local connectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'wildfly_datasources_pool_in_use_count{job="$job", instance="$instance", data_source="$datasource"}',
+      'wildfly_datasources_pool_in_use_count{job=~"$job", instance=~"$instance", data_source=~"$datasource"}',
       datasource=promDatasource,
       legendFormat='{{data_source}}',
     ),
@@ -82,32 +74,7 @@ local connectionsPanel = {
         ],
       },
     },
-    overrides: [
-      {
-        __systemRef: 'hideSeriesFrom',
-        matcher: {
-          id: 'byNames',
-          options: {
-            mode: 'exclude',
-            names: [
-              '{__name__="wildfly_datasources_pool_in_use_count", cluster="my-cluster", data_source="KitchensinkQuickstartDS", instance="wildfly.sample-apps.svc.cluster.local:9990", job="integrations/wildfly"}',
-            ],
-            prefix: 'All except:',
-            readOnly: true,
-          },
-        },
-        properties: [
-          {
-            id: 'custom.hideFrom',
-            value: {
-              legend: false,
-              tooltip: false,
-              viz: true,
-            },
-          },
-        ],
-      },
-    ],
+    overrides: [],
   },
   options: {
     legend: {
@@ -127,7 +94,7 @@ local idleConnectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'wildfly_datasources_pool_idle_count{job="$job", instance="$instance", data_source="$datasource"}',
+      'wildfly_datasources_pool_idle_count{job=~"$job", instance=~"$instance", data_source=~"$datasource"}',
       datasource=promDatasource,
       legendFormat='{{data_source}}',
     ),
@@ -205,7 +172,7 @@ local createdTransactionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_transactions_number_of_transactions_total{job="$job", instance="$instance"}[$__rate_interval])',
+      'increase(wildfly_transactions_number_of_transactions_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -283,7 +250,7 @@ local inflightTransactionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'wildfly_transactions_number_of_inflight_transactions{job="$job", instance="$instance"}',
+      'wildfly_transactions_number_of_inflight_transactions{job=~"$job", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -342,30 +309,6 @@ local inflightTransactionsPanel = {
       },
     },
     overrides: [
-      {
-        __systemRef: 'hideSeriesFrom',
-        matcher: {
-          id: 'byNames',
-          options: {
-            mode: 'exclude',
-            names: [
-              '{__name__="wildfly_transactions_number_of_inflight_transactions", cluster="my-cluster", instance="wildfly.sample-apps.svc.cluster.local:9990", job="integrations/wildfly"}',
-            ],
-            prefix: 'All except:',
-            readOnly: true,
-          },
-        },
-        properties: [
-          {
-            id: 'custom.hideFrom',
-            value: {
-              legend: false,
-              tooltip: false,
-              viz: true,
-            },
-          },
-        ],
-      },
     ],
   },
   options: {
@@ -381,12 +324,11 @@ local inflightTransactionsPanel = {
     },
   },
 };
-
 local abortedTransactionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_transactions_number_of_aborted_transactions_total{job="$job", instance="$instance"}[$__rate_interval])',
+      'increase(wildfly_transactions_number_of_aborted_transactions_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -460,10 +402,9 @@ local abortedTransactionsPanel = {
   },
 };
 
-
 {
   grafanaDashboards+:: {
-    'wildfly-datasource.json':
+    'Wildfly datasource.json':
       dashboard.new(
         'wildfly-datasource',
         time_from='%s' % $._config.dashboardPeriod,
@@ -473,7 +414,6 @@ local abortedTransactionsPanel = {
         description='',
         uid=dashboardUid,
       )
-
       .addTemplates(
         [
           template.datasource(
@@ -520,7 +460,6 @@ local abortedTransactionsPanel = {
       )
       .addPanels(
         [
-          rowTitleRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
           connectionsPanel { gridPos: { h: 7, w: 12, x: 0, y: 1 } },
           idleConnectionsPanel { gridPos: { h: 7, w: 12, x: 12, y: 1 } },
           createdTransactionsPanel { gridPos: { h: 7, w: 12, x: 0, y: 8 } },
@@ -528,6 +467,5 @@ local abortedTransactionsPanel = {
           abortedTransactionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 15 } },
         ]
       ),
-
   },
 }
