@@ -27,6 +27,8 @@ Wildfly logs are enabled by default in the `config.libsonnet` and can be removed
 }
 ```
 
+#TODO screenshots
+
 ## Wildfly Datasource
 
 The Wildfly datasource dashboard provides details on connections and transactions to the specified datasource. To enable transaction metrics you must run the following command in th Wildfly CLI:
@@ -34,6 +36,8 @@ The Wildfly datasource dashboard provides details on connections and transaction
 ```
 /subsystem=transactions:write-attribute(name=statistics-enabled, value=true)
 ```
+
+#TODO screenshots
 
 ## Install Tools
 
