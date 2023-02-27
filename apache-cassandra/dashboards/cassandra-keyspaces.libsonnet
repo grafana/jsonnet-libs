@@ -712,7 +712,7 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
                 'label_values(cassandra_keyspace_caspreparelatency_seconds, job)',
                 label='Job',
                 refresh=1,
-                includeAll=false,
+                includeAll=true,
                 multi=true,
                 allValues='',
                 sort=0
@@ -723,7 +723,7 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
                 'label_values(cassandra_keyspace_caspreparelatency_seconds, instance)',
                 label='Instance',
                 refresh=1,
-                includeAll=false,
+                includeAll=true,
                 multi=true,
                 allValues='',
                 sort=0
@@ -734,7 +734,7 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
                 'label_values(cassandra_up_endpoint_count, cluster)',
                 label='Cluster',
                 refresh=1,
-                includeAll=false,
+                includeAll=true,
                 multi=true,
                 allValues='',
                 sort=0
