@@ -719,10 +719,11 @@ local writesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase((sum by (instance) (cassandra_keyspace_writelatency_seconds_count{' + matcher + '})[$__rate_interval:]))',
+      'increase((sum by (instance) (cassandra_keyspace_writelatency_seconds_count{' + matcher + '})[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{ instance }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -797,10 +798,11 @@ local readsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase((sum by (instance) (cassandra_keyspace_readlatency_seconds_count{' + matcher + '})[$__rate_interval:]))',
+      'increase((sum by (instance) (cassandra_keyspace_readlatency_seconds_count{' + matcher + '})[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{ instance }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1506,8 +1508,8 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
               'label_values(cassandra_cache_size, job)',
               label='Job',
               refresh=1,
-              includeAll=false,
-              multi=false,
+              includeAll=true,
+              multi=true,
               allValues='',
               sort=0
             ),
@@ -1517,8 +1519,8 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
               'label_values(cassandra_cache_size, instance)',
               label='Instance',
               refresh=1,
-              includeAll=false,
-              multi=false,
+              includeAll=true,
+              multi=true,
               allValues='',
               sort=0
             ),
@@ -1533,28 +1535,32 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
               allValues='',
               sort=0
             ),
-            template.new(
-              'datacenter',
-              promDatasource,
-              'label_values(cassandra_cache_size, datacenter)',
-              label='Datacenter',
-              refresh=1,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
-            template.new(
-              'rack',
-              promDatasource,
-              'label_values(cassandra_cache_size, rack)',
-              label='Rack',
-              refresh=1,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
+            if $._config.enableDatacenterLabel then [
+              template.new(
+                'datacenter',
+                promDatasource,
+                'label_values(cassandra_cache_size, datacenter)',
+                label='Datacenter',
+                refresh=1,
+                includeAll=true,
+                multi=true,
+                allValues='',
+                sort=0
+              ),
+            ] else [],
+            if $._config.enableRackLabel then [
+              template.new(
+                'rack',
+                promDatasource,
+                'label_values(cassandra_cache_size, rack)',
+                label='Rack',
+                refresh=1,
+                includeAll=true,
+                multi=true,
+                allValues='',
+                sort=0
+              ),
+            ] else [],
           ],
         ])
       )

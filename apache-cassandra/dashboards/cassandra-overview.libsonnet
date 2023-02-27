@@ -1200,7 +1200,7 @@ local writeRequestsUnavailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Write"}[$__interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
@@ -1281,7 +1281,7 @@ local writeRequestsTimedOutPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Write"}[$__interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
@@ -1362,7 +1362,7 @@ local writeRequestsUnavailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(cassandra_clientrequest_unavailables_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_unavailables_count{' + matcher + ', clientrequest="Write"}[$__interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
@@ -1524,7 +1524,7 @@ local readRequestsTimedOutPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Read"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Read"}[$__interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
@@ -1605,7 +1605,7 @@ local readRequestsUnavailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(cassandra_clientrequest_unavailables_count{' + matcher + ', clientrequest="Read"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_unavailables_count{' + matcher + ', clientrequest="Read"}[$__interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
