@@ -174,7 +174,7 @@ local connectionTimeoutsPanel(matcher) = {
     prometheus.target(
       'cassandra_connection_timeouts_count{' + matcher + '}',
       datasource=promDatasource,
-      legendFormat='{{ connection }} - {{ instance }} - {{ cluster }}',
+      legendFormat='{{ connection }} - {{ cluster }}',
       format='time_series',
     ),
   ],
@@ -441,7 +441,7 @@ local totalDiskUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'cassandra_storage_load_count{' + matcher + '}',
+      'sum(cassandra_storage_load_count{' + matcher + '}) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{cluster}}',
       format='time_series',
@@ -521,10 +521,11 @@ local writesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase((sum by (cluster) (cassandra_keyspace_writelatency_seconds_count{' + matcher + '})[$__rate_interval:]))',
+      'increase((sum by (cluster) (cassandra_keyspace_writelatency_seconds_count{' + matcher + '})[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -600,10 +601,11 @@ local readsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase((sum by (cluster) (cassandra_keyspace_readlatency_seconds_count{' + matcher + '})[$__rate_interval:]))',
+      'increase((sum by (cluster) (cassandra_keyspace_readlatency_seconds_count{' + matcher + '})[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1117,10 +1119,11 @@ local writeRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(cassandra_clientrequest_latency_seconds_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_latency_seconds_count{' + matcher + ', clientrequest="Write"}[$__interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{label_name}}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1197,10 +1200,11 @@ local writeRequestsUnavailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1277,10 +1281,11 @@ local writeRequestsTimedOutPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1357,10 +1362,11 @@ local writeRequestsUnavailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(changes(cassandra_clientrequest_unavailables_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_unavailables_count{' + matcher + ', clientrequest="Write"}[$__rate_interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1437,10 +1443,11 @@ local readRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(cassandra_clientrequest_latency_seconds_count{' + matcher + ', clientrequest="Read"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_latency_seconds_count{' + matcher + ', clientrequest="Read"}[$__interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1517,10 +1524,11 @@ local readRequestsTimedOutPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Read"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_timeouts_count{' + matcher + ', clientrequest="Read"}[$__rate_interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1597,10 +1605,11 @@ local readRequestsUnavailablePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(cassandra_clientrequest_unavailables_count{' + matcher + ', clientrequest="Read"}[$__rate_interval:])) by (cluster)',
+      'sum(increase(cassandra_clientrequest_unavailables_count{' + matcher + ', clientrequest="Read"}[$__rate_interval:])) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
