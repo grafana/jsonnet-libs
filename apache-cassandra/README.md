@@ -47,6 +47,20 @@ The Apache Cassandra keyspaces dashboard provides details on number and latency 
 
 #TODO screenshots
 
+
+## Extendable Configuration
+
+The configuration for this mixin also supports adding expected `rack` and `datacenter` labels. These selectors are not enabled by default but are easy to change by modifying the `config.libsonnet`.
+
+```
+{
+  _config+:: {
+    enableDatacenterLabel: true,
+    enableRackLabel: true,
+  },
+}
+```
+
 ## Alerts Overview
 
 HighReadLatency: There is a high level of read latency within the node.
