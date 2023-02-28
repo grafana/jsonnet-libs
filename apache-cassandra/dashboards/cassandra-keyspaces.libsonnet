@@ -255,9 +255,10 @@ local writesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(cassandra_keyspace_writelatency_seconds_count{' + matcher + '}[$__rate_interval:])',
+      'increase(cassandra_keyspace_writelatency_seconds_count{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{keyspace}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -333,9 +334,10 @@ local readsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(cassandra_keyspace_readlatency_seconds_count{' + matcher + '}[$__rate_interval:])',
+      'increase(cassandra_keyspace_readlatency_seconds_count{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{keyspace}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -420,19 +422,22 @@ local keyspaceWriteLatencyPanel(matcher) = {
       'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.75"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p75',
+      format='time_series',
     ),
     prometheus.target(
       'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.95"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p95',
+      format='time_series',
     ),
     prometheus.target(
       'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.99"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p99',
+      format='time_series',
     ),
   ],
-  type: 'histogram',
+  type: 'barchart',
   title: 'Keyspace write latency',
   description: 'Average local write latency for keyspaces',
   fieldConfig: {
@@ -441,14 +446,24 @@ local keyspaceWriteLatencyPanel(matcher) = {
         mode: 'thresholds',
       },
       custom: {
-        fillOpacity: 50,
-        gradientMode: 'opacity',
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        fillOpacity: 15,
+        gradientMode: 'none',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
         lineWidth: 1,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
       },
       mappings: [],
       thresholds: {
@@ -457,10 +472,6 @@ local keyspaceWriteLatencyPanel(matcher) = {
           {
             color: 'green',
             value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
           },
         ],
       },
@@ -530,13 +541,24 @@ local keyspaceWriteLatencyPanel(matcher) = {
     ],
   },
   options: {
-    bucketOffset: 0,
+    barRadius: 0,
+    barWidth: 0.2,
+    groupWidth: 0.7,
     legend: {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
       showLegend: true,
     },
+    orientation: 'auto',
+    showValue: 'always',
+    stacking: 'normal',
+    tooltip: {
+      mode: 'multi',
+      sort: 'asc',
+    },
+    xTickLabelRotation: 0,
+    xTickLabelSpacing: -100,
   },
 };
 
@@ -547,25 +569,28 @@ local keyspaceReadLatencyPanel(matcher) = {
       'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.50"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p50',
-      format='time_series',
+      format='heatmap',
     ),
     prometheus.target(
       'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.75"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p75',
+      format='heatmap',
     ),
     prometheus.target(
       'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.95"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p95',
+      format='heatmap',
     ),
     prometheus.target(
       'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.99"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p99',
+      format='heatmap',
     ),
   ],
-  type: 'histogram',
+  type: 'barchart',
   title: 'Keyspace read latency',
   description: 'Average local read latency for keyspaces',
   fieldConfig: {
@@ -574,14 +599,24 @@ local keyspaceReadLatencyPanel(matcher) = {
         mode: 'thresholds',
       },
       custom: {
-        fillOpacity: 50,
-        gradientMode: 'opacity',
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        fillOpacity: 15,
+        gradientMode: 'none',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
         lineWidth: 1,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
       },
       mappings: [],
       thresholds: {
@@ -663,13 +698,24 @@ local keyspaceReadLatencyPanel(matcher) = {
     ],
   },
   options: {
-    bucketOffset: 0,
+    barRadius: 0,
+    barWidth: 0.2,
+    groupWidth: 0.7,
     legend: {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
       showLegend: true,
     },
+    orientation: 'auto',
+    showValue: 'always',
+    stacking: 'normal',
+    tooltip: {
+      mode: 'multi',
+      sort: 'asc',
+    },
+    xTickLabelRotation: 0,
+    xTickLabelSpacing: -100,
   },
 };
 

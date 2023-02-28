@@ -1036,28 +1036,31 @@ local writeLatencyPanel(matcher) = {
   targets: [
     // multiple timeseries to distinguish color
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.50"}) by (instance, quantile)',
+      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.50"}) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - p50',
       format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.75"}) by (instance, quantile)',
+      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.75"}) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - p75',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.95"}) by (instance, quantile)',
+      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.95"}) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - p{{quantile}}',
+      legendFormat='{{instance}} - p95',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.99"}) by (instance, quantile)',
+      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.99"}) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - p{{quantile}}',
+      legendFormat='{{instance}} - p99',
+      format='time_series',
     ),
   ],
-  type: 'histogram',
+  type: 'barchart',
   title: 'Write latency',
   description: 'The average local write latency for this node',
   fieldConfig: {
@@ -1066,6 +1069,10 @@ local writeLatencyPanel(matcher) = {
         mode: 'thresholds',
       },
       custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
         fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
@@ -1074,6 +1081,12 @@ local writeLatencyPanel(matcher) = {
           viz: false,
         },
         lineWidth: 1,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
       },
       mappings: [],
       thresholds: {
@@ -1155,15 +1168,24 @@ local writeLatencyPanel(matcher) = {
     ],
   },
   options: {
-    bucketOffset: 0,
-    bucketSize: 0,
-    combine: false,
+    barRadius: 0,
+    barWidth: 0.1,
+    groupWidth: 0.11,
     legend: {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
       showLegend: true,
     },
+    orientation: 'auto',
+    showValue: 'always',
+    stacking: 'normal',
+    tooltip: {
+      mode: 'single',
+      sort: 'none',
+    },
+    xTickLabelRotation: 0,
+    xTickLabelSpacing: -100,
   },
 };
 
@@ -1172,35 +1194,43 @@ local readLatencyPanel(matcher) = {
   targets: [
     // multiple timeseries to distinguish color
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.50"}) by (instance, quantile)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.50"}) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{quantile}}',
+      legendFormat='{{instance}} - p50',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.75"}) by (instance, quantile)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.75"}) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{quantile}}',
+      legendFormat='{{instance}} - p75',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.95"}) by (instance, quantile)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.95"}) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{quantile}}',
+      legendFormat='{{instance}} - p95',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.99"}) by (instance, quantile)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.99"}) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{quantile}}',
+      legendFormat='{{instance}} - p99',
+      format='time_series',
     ),
   ],
-  type: 'histogram',
+  type: 'barchart',
   title: 'Read latency',
-  description: 'The average local read latency for this node',
+  description: 'The local read latency for this node',
   fieldConfig: {
     defaults: {
       color: {
         mode: 'thresholds',
       },
       custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
         fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
@@ -1209,6 +1239,12 @@ local readLatencyPanel(matcher) = {
           viz: false,
         },
         lineWidth: 1,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
       },
       mappings: [],
       thresholds: {
@@ -1290,13 +1326,24 @@ local readLatencyPanel(matcher) = {
     ],
   },
   options: {
-    bucketOffset: 0,
+    barRadius: 0,
+    barWidth: 0.1,
+    groupWidth: 0.11,
     legend: {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
       showLegend: true,
     },
+    orientation: 'auto',
+    showValue: 'always',
+    stacking: 'normal',
+    tooltip: {
+      mode: 'single',
+      sort: 'none',
+    },
+    xTickLabelRotation: 0,
+    xTickLabelSpacing: -100,
   },
 };
 
@@ -1305,35 +1352,43 @@ local crossnodeLatencyPanel(matcher) = {
   targets: [
     // multiple timeseries to distinguish color
     prometheus.target(
-      'cassandra_messaging_crossnodelatency_seconds{' + matcher + ', quantile="0.50"}',
+      'sum(cassandra_messaging_crossnodelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.50"}) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - p50',
+      format='time_series',
     ),
     prometheus.target(
-      'cassandra_messaging_crossnodelatency_seconds{' + matcher + ', quantile="0.75"}',
+      'sum(cassandra_messaging_crossnodelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.75"}) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - p75',
+      format='time_series',
     ),
     prometheus.target(
-      'cassandra_messaging_crossnodelatency_seconds{' + matcher + ', quantile="0.95"}',
+      'sum(cassandra_messaging_crossnodelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.95"}) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - p95',
+      format='time_series',
     ),
     prometheus.target(
-      'cassandra_messaging_crossnodelatency_seconds{' + matcher + ', quantile="0.99"}',
+      'sum(cassandra_messaging_crossnodelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.99"}) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - p99',
+      format='time_series',
     ),
   ],
-  type: 'histogram',
+  type: 'barchart',
   title: 'Cross-node latency',
-  description: 'The cross-node latency across the node',
+  description: 'The cross-node latency across the node.',
   fieldConfig: {
     defaults: {
       color: {
         mode: 'thresholds',
       },
       custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
         fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
@@ -1342,6 +1397,12 @@ local crossnodeLatencyPanel(matcher) = {
           viz: false,
         },
         lineWidth: 1,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
       },
       mappings: [],
       thresholds: {
@@ -1423,13 +1484,24 @@ local crossnodeLatencyPanel(matcher) = {
     ],
   },
   options: {
-    bucketOffset: 0,
+    barRadius: 0,
+    barWidth: 0.1,
+    groupWidth: 0.3,
     legend: {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
       showLegend: true,
     },
+    orientation: 'auto',
+    showValue: 'auto',
+    stacking: 'normal',
+    tooltip: {
+      mode: 'multi',
+      sort: 'asc',
+    },
+    xTickLabelRotation: 0,
+    xTickLabelSpacing: -100,
   },
 };
 

@@ -16,7 +16,7 @@ local numberOfClustersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count by (job) (cassandra_up_endpoint_count{' + matcher + '}))',
+      'count(count by (cluster) (cassandra_up_endpoint_count{' + matcher + '}))',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
@@ -172,7 +172,7 @@ local connectionTimeoutsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(cassandra_connection_timeouts_count{' + matcher + '}[$__rate_interval])',
+      'sum(increase(cassandra_connection_timeouts_count{' + matcher + '}[$__interval])) by (cluster, connection)',
       datasource=promDatasource,
       legendFormat='{{ connection }} - {{ cluster }}',
       format='time_series',
@@ -333,37 +333,37 @@ local tasksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'cassandra_connection_largemessagedroppedtasks{' + matcher + '}',
+      'sum(cassandra_connection_largemessagedroppedtasks{' + matcher + '}) by (cluster, connection)',
       datasource=promDatasource,
       legendFormat='{{connection}} -  {{ cluster }}  -  large dropped',
       format='time_series',
     ),
     prometheus.target(
-      'cassandra_connection_largemessageactivetasks{' + matcher + '}',
+      'sum(cassandra_connection_largemessageactivetasks{' + matcher + '}) by (cluster, connection)',
       datasource=promDatasource,
       legendFormat='{{connection}} - {{ cluster }} -  large active',
       format='time_series',
     ),
     prometheus.target(
-      'cassandra_connection_largemessagependingtasks{' + matcher + '}',
+      'sum(cassandra_connection_largemessagependingtasks{' + matcher + '}) by (cluster, connection)',
       datasource=promDatasource,
       legendFormat='{{connection}} - {{ cluster }} - large pending',
       format='time_series',
     ),
     prometheus.target(
-      'cassandra_connection_smallmessagedroppedtasks{' + matcher + '}',
+      'sum(cassandra_connection_smallmessagedroppedtasks{' + matcher + '}) by (cluster, connection)',
       datasource=promDatasource,
       legendFormat='{{connection}} - {{ cluster }} - small dropped',
       format='time_series',
     ),
     prometheus.target(
-      'cassandra_connection_smallmessageactivetasks{' + matcher + '}',
+      'sum(cassandra_connection_smallmessageactivetasks{' + matcher + '}) by (cluster, connection)',
       datasource=promDatasource,
       legendFormat='{{connection}} - {{ cluster }} - small active',
       format='time_series',
     ),
     prometheus.target(
-      'cassandra_connection_smallmessagependingtasks{' + matcher + '}',
+      'sum(cassandra_connection_smallmessagependingtasks{' + matcher + '}) by (cluster, connection)',
       datasource=promDatasource,
       legendFormat='{{connection}} - {{ cluster }} - small pending',
       format='time_series',
@@ -448,9 +448,58 @@ local totalDiskUsagePanel(matcher) = {
       format='time_series',
     ),
   ],
-  type: 'timeseries',
+  type: 'stat',
   title: 'Total disk usage',
   description: 'The total number of bytes being used by Apache Cassandra for storage.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'bytes',
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '9.4.1-30f3f63',
+};
+
+local diskUsagePanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum(cassandra_storage_load_count{' + matcher + '}) by (cluster, instance)',
+      datasource=promDatasource,
+      legendFormat='{{ cluster }} - {{ instance }}',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Disk usage',
+  description: 'The number of bytes used by each node of the cluster',
   fieldConfig: {
     defaults: {
       color: {
@@ -840,27 +889,31 @@ local readLatencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.50"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.50"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p50',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.75"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.75"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p75',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.95"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p95',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.95"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p99',
+      format='time_series',
     ),
   ],
-  type: 'histogram',
+  type: 'barchart',
   title: 'Read latency',
   description: 'Average local read latency for this cluster',
   fieldConfig: {
@@ -869,7 +922,11 @@ local readLatencyPanel(matcher) = {
         mode: 'thresholds',
       },
       custom: {
-        fillOpacity: 5,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -877,6 +934,12 @@ local readLatencyPanel(matcher) = {
           viz: false,
         },
         lineWidth: 1,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
       },
       mappings: [],
       thresholds: {
@@ -958,14 +1021,24 @@ local readLatencyPanel(matcher) = {
     ],
   },
   options: {
-    bucketOffset: 0,
-    combine: false,
+    barRadius: 0,
+    barWidth: 0.2,
+    groupWidth: 0.1,
     legend: {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
       showLegend: true,
     },
+    orientation: 'auto',
+    showValue: 'auto',
+    stacking: 'normal',
+    tooltip: {
+      mode: 'multi',
+      sort: 'asc',
+    },
+    xTickLabelRotation: 0,
+    xTickLabelSpacing: -100,
   },
 };
 
@@ -973,27 +1046,31 @@ local writeLatencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.50"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.50"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p50',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.75"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.75"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p75',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.95"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p95',
+      format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.95"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p99',
+      format='time_series',
     ),
   ],
-  type: 'histogram',
+  type: 'barchart',
   title: 'Write latency',
   description: 'Average local write latency for this cluster',
   fieldConfig: {
@@ -1002,6 +1079,10 @@ local writeLatencyPanel(matcher) = {
         mode: 'thresholds',
       },
       custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
         fillOpacity: 5,
         gradientMode: 'none',
         hideFrom: {
@@ -1010,6 +1091,12 @@ local writeLatencyPanel(matcher) = {
           viz: false,
         },
         lineWidth: 1,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
       },
       mappings: [],
       thresholds: {
@@ -1091,14 +1178,24 @@ local writeLatencyPanel(matcher) = {
     ],
   },
   options: {
-    bucketOffset: 0,
-    combine: false,
+    barRadius: 0,
+    barWidth: 0.2,
+    groupWidth: 0.7,
     legend: {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
       showLegend: true,
     },
+    orientation: 'auto',
+    showValue: 'always',
+    stacking: 'normal',
+    tooltip: {
+      mode: 'multi',
+      sort: 'asc',
+    },
+    xTickLabelRotation: 0,
+    xTickLabelSpacing: -100,
   },
 };
 
@@ -1772,7 +1869,8 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster"' +
           connectionTimeoutsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
           averageKeyCacheHitRatioPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
           tasksPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
-          totalDiskUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+          totalDiskUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 12 } },
+          diskUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 12 } },
           writesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
           readsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
           writeAverageLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 24 } },
