@@ -1535,33 +1535,33 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
               allValues='',
               sort=0
             ),
-            if $._config.enableDatacenterLabel then [
-              template.new(
-                'datacenter',
-                promDatasource,
-                'label_values(cassandra_cache_size, datacenter)',
-                label='Datacenter',
-                refresh=1,
-                includeAll=true,
-                multi=true,
-                allValues='',
-                sort=0
-              ),
-            ] else [],
-            if $._config.enableRackLabel then [
-              template.new(
-                'rack',
-                promDatasource,
-                'label_values(cassandra_cache_size, rack)',
-                label='Rack',
-                refresh=1,
-                includeAll=true,
-                multi=true,
-                allValues='',
-                sort=0
-              ),
-            ] else [],
           ],
+          if $._config.enableDatacenterLabel then [
+            template.new(
+              'datacenter',
+              promDatasource,
+              'label_values(cassandra_cache_size, datacenter)',
+              label='Datacenter',
+              refresh=1,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              sort=0
+            ),
+          ] else [],
+          if $._config.enableRackLabel then [
+            template.new(
+              'rack',
+              promDatasource,
+              'label_values(cassandra_cache_size, rack)',
+              label='Rack',
+              refresh=1,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              sort=0
+            ),
+          ] else [],
         ])
       )
       .addPanels(

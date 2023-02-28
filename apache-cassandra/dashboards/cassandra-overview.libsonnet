@@ -172,10 +172,11 @@ local connectionTimeoutsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'cassandra_connection_timeouts_count{' + matcher + '}',
+      'increase(cassandra_connection_timeouts_count{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{ connection }} - {{ cluster }}',
       format='time_series',
+      interval='5m',
     ),
   ],
   type: 'timeseries',

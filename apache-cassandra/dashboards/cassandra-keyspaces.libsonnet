@@ -709,7 +709,7 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
               template.new(
                 'job',
                 promDatasource,
-                'label_values(cassandra_keyspace_caspreparelatency_seconds, job)',
+                'label_values(cassandra_up_endpoint_count, job)',
                 label='Job',
                 refresh=1,
                 includeAll=true,
@@ -720,7 +720,7 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
               template.new(
                 'instance',
                 promDatasource,
-                'label_values(cassandra_keyspace_caspreparelatency_seconds, instance)',
+                'label_values(cassandra_up_endpoint_count, instance)',
                 label='Instance',
                 refresh=1,
                 includeAll=true,
