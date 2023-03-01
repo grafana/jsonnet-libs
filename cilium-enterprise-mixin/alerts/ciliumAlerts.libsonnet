@@ -167,7 +167,7 @@
         rules: [
           {
             alert: 'CiliumAgentConntrackTableFull',
-            expr: 'sum(rate(cilium_drop_count_total{reason="CT: Map insertion failed"}[5m])) by (pod)',
+            expr: 'sum(rate(cilium_drop_count_total{reason="CT: Map insertion failed"}[5m])) by (pod) > 0',
             annotations: {
               summary: 'Ciliums conntrack map is failing on new insertions on Agent Pod.',
               description: 'Ciliums conntrack map is failing on new insertions on agent Pod {{$labels.pod}}, this likely means that the conntrack BPF map is full. This is a potentially critical issue and may result in unexpected packet drops.\n\nIf this is firing, it is recommend to look at both CPU/memory resource utilization dashboards. As well as conntrack GC run dashboards for more details on what the issue is.',
