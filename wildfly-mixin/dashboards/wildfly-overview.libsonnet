@@ -608,7 +608,7 @@ local rejectedSessionsPanel = {
   grafanaDashboards+:: {
     'wildfly-overview.json':
       dashboard.new(
-        'wildfly-overview',
+        'Wildfly Overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
