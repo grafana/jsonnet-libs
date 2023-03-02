@@ -24,6 +24,7 @@ local diskUsagePanel(matcher) = {
       'cassandra_storage_load_count{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -37,6 +38,7 @@ local diskUsagePanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -102,6 +104,7 @@ local memoryUsagePanel(matcher) = {
       'jvm_memory_usage_used_bytes{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{area}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -115,6 +118,7 @@ local memoryUsagePanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -180,6 +184,7 @@ local cpuUsagePanel(matcher) = {
       'jvm_process_cpu_load{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -193,6 +198,7 @@ local cpuUsagePanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -258,6 +264,7 @@ local garbageCollectionDurationPanel(matcher) = {
       'jvm_gc_duration_seconds{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -271,6 +278,7 @@ local garbageCollectionDurationPanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -336,6 +344,7 @@ local garbageCollectionsPanel(matcher) = {
       'jvm_gc_collection_count{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{name}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -349,6 +358,7 @@ local garbageCollectionsPanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -413,6 +423,7 @@ local keycacheHitRatePanel(matcher) = {
       'cassandra_cache_hitrate{' + matcher + ', cache="KeyCache"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -426,6 +437,7 @@ local keycacheHitRatePanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -491,6 +503,7 @@ local hintMessagesPanel(matcher) = {
       'cassandra_storage_totalhints_count{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -504,6 +517,7 @@ local hintMessagesPanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -568,6 +582,7 @@ local pendingCompactionTasksPanel(matcher) = {
       'cassandra_compaction_pendingtasks{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -581,6 +596,7 @@ local pendingCompactionTasksPanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -645,6 +661,7 @@ local blockedCompactionTasksPanel(matcher) = {
       'cassandra_threadpools_currentlyblockedtasks_count{' + matcher + ', threadpools="CompactionExecutor", path="internal"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -658,6 +675,7 @@ local blockedCompactionTasksPanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -737,6 +755,7 @@ local writesPanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -816,6 +835,7 @@ local readsPanel(matcher) = {
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
+        axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
@@ -880,6 +900,7 @@ local writeAverageLatencyPanel(matcher) = {
       'avg(cassandra_keyspace_writelatency_seconds_average{' + matcher + '} >= 0) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -959,6 +980,7 @@ local readAverageLatencyPanel(matcher) = {
       'avg(cassandra_keyspace_readlatency_seconds_average{' + matcher + '} >= 0) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -1031,58 +1053,55 @@ local readAverageLatencyPanel(matcher) = {
   },
 };
 
-local writeLatencyPanel(matcher) = {
+local writeLatencyQuartilesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
-    // multiple timeseries to distinguish color
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.50"}) by (instance)',
+      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.95"}) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - p50',
+      legendFormat='{{ instance }} - p95',
       format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.75"}) by (instance)',
+      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - p75',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.95"}) by (instance)',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - p95',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.99"}) by (instance)',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - p99',
+      legendFormat='{{ instance }} - p99',
       format='time_series',
     ),
   ],
-  type: 'barchart',
-  title: 'Write latency',
-  description: 'The average local write latency for this node',
+  type: 'timeseries',
+  title: 'Write latency quartiles',
+  description: 'Local write latency quartiles for the nodes',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'palette-classic',
       },
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
         axisLabel: '',
-        axisPlacement: 'auto',
-        fillOpacity: 15,
+        axisPlacement: 'left',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
+        lineInterpolation: 'linear',
         lineWidth: 1,
+        pointSize: 5,
         scaleDistribution: {
           type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1104,143 +1123,72 @@ local writeLatencyPanel(matcher) = {
       },
       unit: 's',
     },
-    overrides: [
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'A',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'red',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'B',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'blue',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'C',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'green',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'D',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'purple',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-    ],
+    overrides: [],
   },
   options: {
-    barRadius: 0,
-    barWidth: 0.1,
-    groupWidth: 0.11,
     legend: {
       calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
-    orientation: 'auto',
-    showValue: 'always',
-    stacking: 'normal',
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
-    xTickLabelRotation: 0,
-    xTickLabelSpacing: -100,
   },
+  pluginVersion: '9.4.1',
 };
 
-local readLatencyPanel(matcher) = {
+local readLatencyQuartilesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
-    // multiple timeseries to distinguish color
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.50"}) by (instance)',
+      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - p50',
+      legendFormat='{{ instance }} - p95',
       format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.75"}) by (instance)',
+      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (instance)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - p75',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.95"}) by (instance)',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - p95',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.99"}) by (instance)',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - p99',
+      legendFormat='{{ instance }} - p99',
       format='time_series',
     ),
   ],
-  type: 'barchart',
-  title: 'Read latency',
-  description: 'The local read latency for this node',
+  type: 'timeseries',
+  title: 'Read latency quartiles',
+  description: 'Local read latency quartiles for the nodes',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'palette-classic',
       },
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
-        fillOpacity: 15,
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
+        lineInterpolation: 'linear',
         lineWidth: 1,
+        pointSize: 5,
         scaleDistribution: {
           type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1262,143 +1210,71 @@ local readLatencyPanel(matcher) = {
       },
       unit: 's',
     },
-    overrides: [
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'A',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'red',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'B',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'blue',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'C',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'green',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'D',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'purple',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-    ],
+    overrides: [],
   },
   options: {
-    barRadius: 0,
-    barWidth: 0.1,
-    groupWidth: 0.11,
     legend: {
       calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
-    orientation: 'auto',
-    showValue: 'always',
-    stacking: 'normal',
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
-    xTickLabelRotation: 0,
-    xTickLabelSpacing: -100,
   },
 };
 
 local crossnodeLatencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
-    // multiple timeseries to distinguish color
     prometheus.target(
-      'sum(cassandra_messaging_crossnodelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.50"}) by (instance)',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - p50',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_messaging_crossnodelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.75"}) by (instance)',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - p75',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_messaging_crossnodelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.95"}) by (instance)',
+      'sum(cassandra_messaging_crossnodelatency_seconds{' + matcher + ', quantile="0.95"}) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - p95',
       format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_messaging_crossnodelatency_seconds{job=~"$job", cluster=~"$cluster", instance=~"$instance", quantile="0.99"}) by (instance)',
+      'sum(cassandra_messaging_crossnodelatency_seconds{' + matcher + ', quantile="0.99"}) by (instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - p99',
       format='time_series',
     ),
   ],
-  type: 'barchart',
+  type: 'timeseries',
   title: 'Cross-node latency',
-  description: 'The cross-node latency across the node.',
+  description: "The cross-node latency from the node's perspective.",
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'palette-classic',
       },
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
-        fillOpacity: 15,
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
+        lineInterpolation: 'linear',
         lineWidth: 1,
+        pointSize: 5,
         scaleDistribution: {
           type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1420,88 +1296,19 @@ local crossnodeLatencyPanel(matcher) = {
       },
       unit: 's',
     },
-    overrides: [
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'A',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'red',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'B',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'blue',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'C',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'green',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'D',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'purple',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-    ],
+    overrides: [],
   },
   options: {
-    barRadius: 0,
-    barWidth: 0.1,
-    groupWidth: 0.3,
     legend: {
       calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
-    orientation: 'auto',
-    showValue: 'auto',
-    stacking: 'normal',
     tooltip: {
       mode: 'multi',
-      sort: 'asc',
+      sort: 'none',
     },
-    xTickLabelRotation: 0,
-    xTickLabelSpacing: -100,
   },
 };
 
@@ -1511,7 +1318,7 @@ local systemLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/cassandra/system.log"} |= ``',
+      expr: '{filename="/var/log/cassandra/system.log", job=~"$job"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -1586,10 +1393,10 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
               sort=0
             ),
             template.new(
-              'instance',
+              'cluster',
               promDatasource,
-              'label_values(cassandra_cache_size, instance)',
-              label='Instance',
+              'label_values(cassandra_cache_size, cluster)',
+              label='Cluster',
               refresh=1,
               includeAll=true,
               multi=true,
@@ -1597,10 +1404,10 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
               sort=0
             ),
             template.new(
-              'cluster',
+              'instance',
               promDatasource,
-              'label_values(cassandra_cache_size, cluster)',
-              label='Cluster',
+              'label_values(cassandra_cache_size, instance)',
+              label='Instance',
               refresh=1,
               includeAll=true,
               multi=true,
@@ -1639,28 +1446,27 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
       .addPanels(
         std.flattenArrays([
           [
-            diskUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 0 } },
-            memoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 8, y: 0 } },
-            cpuUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 0 } },
-            garbageCollectionDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            garbageCollectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-            keycacheHitRatePanel(getMatcher($._config)) { gridPos: { h: 8, w: 6, x: 0, y: 16 } },
-            hintMessagesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 6, x: 6, y: 16 } },
-            pendingCompactionTasksPanel(getMatcher($._config)) { gridPos: { h: 8, w: 6, x: 12, y: 16 } },
-            blockedCompactionTasksPanel(getMatcher($._config)) { gridPos: { h: 8, w: 6, x: 18, y: 16 } },
-            writesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
-            readsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
-            writeAverageLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
-            readAverageLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
-            writeLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 40 } },
-            readLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 8, y: 40 } },
-            crossnodeLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 40 } },
+            diskUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 0, y: 0 } },
+            memoryUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 8, y: 0 } },
+            cpuUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 16, y: 0 } },
+            garbageCollectionDurationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+            garbageCollectionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+            keycacheHitRatePanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 12 } },
+            hintMessagesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 12 } },
+            pendingCompactionTasksPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 12 } },
+            blockedCompactionTasksPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 12 } },
+            writesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
+            readsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
+            writeAverageLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 24 } },
+            readAverageLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 24 } },
+            writeLatencyQuartilesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 0, y: 30 } },
+            readLatencyQuartilesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 8, y: 30 } },
+            crossnodeLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 16, y: 30 } },
           ],
           if $._config.enableLokiLogs then [
-            systemLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 48 } },
+            systemLogsPanel { gridPos: { h: 6, w: 24, x: 0, y: 36 } },
           ] else [],
         ])
       ),
-
   },
 }

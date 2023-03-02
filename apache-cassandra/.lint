@@ -26,3 +26,6 @@ exclusions:
     - panel: "Hint messages"
     - panel: "Pending compaction tasks"
     - panel: "Blocked compaction tasks"
+    - panel: "Keyspaces count"
+    - panel: "Repair jobs started"
+    - panel: "Repair jobs completed"

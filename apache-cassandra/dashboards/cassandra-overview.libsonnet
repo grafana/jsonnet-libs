@@ -885,214 +885,194 @@ local readAverageLatencyPanel(matcher) = {
   },
 };
 
-local readLatencyPanel(matcher) = {
+local writeLatencyHeatmapPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.50"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + '}) by (quantile)',
       datasource=promDatasource,
-      legendFormat='{{ cluster }} - p50',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.75"} >= 0) by (cluster)',
-      datasource=promDatasource,
-      legendFormat='{{ cluster }} - p75',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.95"} >= 0) by (cluster)',
-      datasource=promDatasource,
-      legendFormat='{{ cluster }} - p95',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.95"} >= 0) by (cluster)',
-      datasource=promDatasource,
-      legendFormat='{{ cluster }} - p99',
       format='time_series',
     ),
   ],
-  type: 'barchart',
-  title: 'Read latency',
-  description: 'Average local read latency for this cluster',
+  type: 'heatmap',
+  title: 'Write latency heatmap',
+  description: 'Local write latency heatmap for this cluster',
   fieldConfig: {
     defaults: {
-      color: {
-        mode: 'thresholds',
-      },
       custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        fillOpacity: 15,
-        gradientMode: 'none',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
-        lineWidth: 1,
         scaleDistribution: {
           type: 'linear',
         },
-        thresholdsStyle: {
-          mode: 'off',
-        },
       },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 's',
     },
-    overrides: [
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'A',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'red',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'B',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'blue',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'C',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'green',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'D',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'purple',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-    ],
+    overrides: [],
   },
   options: {
-    barRadius: 0,
-    barWidth: 0.2,
-    groupWidth: 0.1,
+    calculate: true,
+    cellGap: 1,
+    cellValues: {
+      unit: 'short',
+    },
+    color: {
+      exponent: 0.5,
+      fill: 'dark-orange',
+      mode: 'scheme',
+      reverse: false,
+      scale: 'exponential',
+      scheme: 'Oranges',
+      steps: 64,
+    },
+    exemplars: {
+      color: 'rgba(255,0,255,0.7)',
+    },
+    filterValues: {
+      le: 1e-9,
+    },
     legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
+      show: true,
     },
-    orientation: 'auto',
-    showValue: 'auto',
-    stacking: 'normal',
+    rowsFrame: {
+      layout: 'auto',
+    },
     tooltip: {
-      mode: 'multi',
-      sort: 'asc',
+      show: true,
+      yHistogram: false,
     },
-    xTickLabelRotation: 0,
-    xTickLabelSpacing: -100,
+    yAxis: {
+      axisPlacement: 'left',
+      reverse: false,
+      unit: 's',
+    },
   },
+  pluginVersion: '9.4.1',
 };
 
-local writeLatencyPanel(matcher) = {
+local readLatencyHeatmapPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.50"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster"}) by (quantile)',
       datasource=promDatasource,
-      legendFormat='{{ cluster }} - p50',
       format='time_series',
     ),
+  ],
+  type: 'heatmap',
+  title: 'Read latency heatmap',
+  description: 'Local read latency heatmap for this cluster',
+  fieldConfig: {
+    defaults: {
+      custom: {
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        scaleDistribution: {
+          type: 'linear',
+        },
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    calculate: true,
+    calculation: {
+      xBuckets: {
+        mode: 'size',
+      },
+      yBuckets: {
+        mode: 'size',
+      },
+    },
+    cellGap: 1,
+    color: {
+      exponent: 0.5,
+      fill: 'dark-orange',
+      mode: 'scheme',
+      reverse: false,
+      scale: 'exponential',
+      scheme: 'Oranges',
+      steps: 64,
+    },
+    exemplars: {
+      color: 'rgba(255,0,255,0.7)',
+    },
+    filterValues: {
+      le: 1e-9,
+    },
+    legend: {
+      show: true,
+    },
+    rowsFrame: {
+      layout: 'auto',
+    },
+    tooltip: {
+      show: true,
+      yHistogram: false,
+    },
+    yAxis: {
+      axisPlacement: 'left',
+      reverse: false,
+      unit: 's',
+    },
+  },
+  pluginVersion: '9.4.1',
+};
+
+local writeLatencyQuartilesPanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.75"} >= 0) by (cluster)',
-      datasource=promDatasource,
-      legendFormat='{{ cluster }} - p75',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.95"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p95',
       format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", cluster=~"$cluster", quantile="0.95"} >= 0) by (cluster)',
+      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (cluster)',
       datasource=promDatasource,
       legendFormat='{{ cluster }} - p99',
       format='time_series',
     ),
   ],
-  type: 'barchart',
-  title: 'Write latency',
-  description: 'Average local write latency for this cluster',
+  type: 'timeseries',
+  title: 'Write latency quartiles',
+  description: 'Local write latency quartiles for this cluster',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'palette-classic',
       },
       custom: {
         axisCenteredZero: false,
         axisColorMode: 'text',
         axisLabel: '',
-        axisPlacement: 'auto',
-        fillOpacity: 5,
+        axisPlacement: 'left',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
+        lineInterpolation: 'linear',
         lineWidth: 1,
+        pointSize: 5,
         scaleDistribution: {
           type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1114,88 +1094,106 @@ local writeLatencyPanel(matcher) = {
       },
       unit: 's',
     },
-    overrides: [
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'A',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'red',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'B',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'blue',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'C',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'green',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'D',
-        },
-        properties: [
-          {
-            id: 'color',
-            value: {
-              fixedColor: 'purple',
-              mode: 'fixed',
-            },
-          },
-        ],
-      },
-    ],
+    overrides: [],
   },
   options: {
-    barRadius: 0,
-    barWidth: 0.2,
-    groupWidth: 0.7,
     legend: {
       calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
-    orientation: 'auto',
-    showValue: 'always',
-    stacking: 'normal',
     tooltip: {
       mode: 'multi',
-      sort: 'asc',
+      sort: 'none',
     },
-    xTickLabelRotation: 0,
-    xTickLabelSpacing: -100,
+  },
+  pluginVersion: '9.4.1',
+};
+
+local readLatencyQuartilesPanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (cluster)',
+      datasource=promDatasource,
+      legendFormat='{{ cluster }} - p95',
+      format='time_series',
+    ),
+    prometheus.target(
+      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (cluster)',
+      datasource=promDatasource,
+      legendFormat='{{ cluster }} - p99',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Read latency quartiles',
+  description: 'Local read latency quartiles for this cluster',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 's',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'table',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'none',
+    },
   },
 };
 
@@ -1875,15 +1873,17 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster"' +
           readsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
           writeAverageLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 24 } },
           readAverageLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 24 } },
-          writeLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 30 } },
-          readLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 30 } },
-          clientRequestsRow { gridPos: { h: 1, w: 24, x: 0, y: 36 } },
-          writeRequestsPanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 0, y: 37 } },
-          writeRequestsTimedOutPanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 8, y: 37 } },
-          writeRequestsUnavailablePanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 16, y: 37 } },
-          readRequestsPanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 0, y: 42 } },
-          readRequestsTimedOutPanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 8, y: 42 } },
-          readRequestsUnavailablePanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 16, y: 42 } },
+          writeLatencyHeatmapPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 30 } },
+          readLatencyHeatmapPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 30 } },
+          writeLatencyQuartilesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 36 } },
+          readLatencyQuartilesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 36 } },
+          clientRequestsRow { gridPos: { h: 1, w: 24, x: 0, y: 42 } },
+          writeRequestsPanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 0, y: 43 } },
+          writeRequestsTimedOutPanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 8, y: 43 } },
+          writeRequestsUnavailablePanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 16, y: 43 } },
+          readRequestsPanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 0, y: 48 } },
+          readRequestsTimedOutPanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 8, y: 48 } },
+          readRequestsUnavailablePanel(getMatcher($._config)) { gridPos: { h: 5, w: 8, x: 16, y: 48 } },
         ]
       ),
   },
