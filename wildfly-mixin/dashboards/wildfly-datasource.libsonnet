@@ -406,7 +406,7 @@ local abortedTransactionsPanel = {
   grafanaDashboards+:: {
     'wildfly-datasource.json':
       dashboard.new(
-        'wildfly-datasource',
+        'Wildfly Datasource',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
