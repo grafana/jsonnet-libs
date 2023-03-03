@@ -339,7 +339,7 @@ local serverLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/opt/wildfly/standalone/log/server.log", job=~"$job",instance~="$instance"}',
+      expr: '{filename="/opt/wildfly/standalone/log/server.log", job=~"$job",instance=~"$instance"}',
       queryType: 'range',
       refId: 'A',
     },
@@ -685,6 +685,15 @@ local rejectedSessionsPanel = {
           ],
         ])
       )
+
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Wildfly Dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
+      
       .addPanels(
         std.flattenArrays([
           [

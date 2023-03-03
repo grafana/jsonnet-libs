@@ -458,6 +458,15 @@ local abortedTransactionsPanel = {
           ),
         ]
       )
+
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Wildfly Dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
+
       .addPanels(
         [
           connectionsPanel { gridPos: { h: 7, w: 12, x: 0, y: 1 } },
