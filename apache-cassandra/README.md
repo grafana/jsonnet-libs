@@ -23,13 +23,15 @@ and the following alerts:
 
 The Apache Cassandra overview dashboard provides details on number of clusters, nodes and down nodes per cluster, timeouts, disk usage, and read/write requests for a Cassandra cluster.
 
-#TODO screenshots
+![First screenshot of the Apache Cassandra overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_1.png)
+![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_2.png)
 
 ## Apache Cassandra Nodes
 
 The Apache Cassandra nodes dashboard provides details on disk/memory/cpu usage, garbage collections, number of pending/blocked compaction tasks, number and latency of reads/writes, and logs for a specific node in the cluster. To get Cassandra system logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Cassandra system log path is `/var/log/cassandra/system.log` on Linux.
 
-#TODO screenshots
+![First screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_1.png)
+![Second screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_2.png)
 
 Cassandra system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -45,7 +47,7 @@ Cassandra system logs are enabled by default in the `config.libsonnet` and can b
 
 The Apache Cassandra keyspaces dashboard provides details on number and latency of Writes/Reads, Disk space used, number of pending compactions, and size of the largest table partition for a selected keyspace.
 
-#TODO screenshots
+![Screenshot of the Apache Cassandra keyspaces dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/keyspaces_1.png)
 
 
 ## Extendable Configuration
