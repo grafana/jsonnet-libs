@@ -3,33 +3,45 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "description": "Http metrics for Rack applications",
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1612525054826,
+  "id": 268,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Http requests throughput by path.",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "unit": "short"
         },
         "overrides": []
       },
@@ -59,7 +71,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.6",
+      "pluginVersion": "9.4.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -69,16 +81,19 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(path) (rate(http_server_request_duration_seconds_count[$__rate_interval]))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum by(path) (rate(http_server_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{path}}",
+          "range": true,
           "refId": "A"
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Request rate",
       "tooltip": {
         "shared": true,
@@ -87,33 +102,25 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": "0",
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -121,11 +128,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Http requests duration percentiles and average.",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -155,7 +165,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.6",
+      "pluginVersion": "9.4.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -165,33 +175,46 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "histogram_quantile(\n  0.99, \n  sum (\n    rate(http_server_request_duration_seconds_bucket{method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n  ) by (le) \n) * 1e3",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(\n  0.99, \n  sum (\n    rate(http_server_request_duration_seconds_bucket{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n  ) by (le) \n) * 1e3",
           "hide": false,
           "interval": "",
           "intervalFactor": 2,
           "legendFormat": "99th Percentile",
+          "range": true,
           "refId": "A"
         },
         {
-          "expr": "histogram_quantile(\n  0.5, \n  sum (\n    rate(http_server_request_duration_seconds_bucket{method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n  ) by (le) \n) * 1e3",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(\n  0.5, \n  sum (\n    rate(http_server_request_duration_seconds_bucket{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n  ) by (le) \n) * 1e3",
           "hide": false,
           "interval": "",
           "intervalFactor": 2,
           "legendFormat": "50th Percentile",
+          "range": true,
           "refId": "B"
         },
         {
-          "expr": "sum(rate(http_server_request_duration_seconds_sum{method=~\"$method\", path=~\"$path\"}[$__rate_interval])) * 1e3 \n/\nsum(rate(http_server_request_duration_seconds_count{method=~\"$method\", path=~\"$path\"}[$__rate_interval]))",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(http_server_request_duration_seconds_sum{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval])) * 1e3 \n/\nsum(rate(http_server_request_duration_seconds_count{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval]))",
           "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Average",
+          "range": true,
           "refId": "C"
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Request latency",
       "tooltip": {
         "shared": true,
@@ -200,33 +223,25 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "ms",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": "0",
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -234,11 +249,14 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
       "description": "Http requests error rate (5xx) by path.",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "unit": "short"
         },
         "overrides": []
       },
@@ -268,7 +286,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.3.6",
+      "pluginVersion": "9.4.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -278,17 +296,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by(path) (\n  rate(http_server_requests_total{method=~\"$method\", path=~\"$path\", code=~\"5.+\"}[$__rate_interval])\n)\n/\nsum by(path) (\n  rate(http_server_requests_total{method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n)",
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum by(path) (\n  rate(http_server_requests_total{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\", code=~\"5.+\"}[$__rate_interval])\n)\n/\nsum by(path) (\n  rate(http_server_requests_total{job=~\"$job\", instance=~\"$instance\", method=~\"$method\", path=~\"$path\"}[$__rate_interval])\n)",
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "{{path}}",
+          "range": true,
           "refId": "A"
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Error rate",
       "tooltip": {
         "shared": true,
@@ -297,50 +318,107 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": null,
           "format": "percentunit",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": "0",
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     }
   ],
-  "refresh": "1m",
-  "schemaVersion": 26,
+  "refresh": "30s",
+  "revision": 1,
+  "schemaVersion": 38,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "ruby-rack-integration"
+  ],
   "templating": {
     "list": [
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": true,
+          "text": [
+            "integrations/ruby-rack"
+          ],
+          "value": [
+            "integrations/ruby-rack"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(http_server_requests_total, job)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(http_server_requests_total, job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".+",
+        "current": {
+          "selected": true,
+          "text": [
+            "localhost:9292"
+          ],
+          "value": [
+            "localhost:9292"
+          ]
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(http_server_requests_total, instance)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(http_server_requests_total, instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
       {
         "current": {
           "selected": false,
           "text": "default",
           "value": "default"
         },
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Data Source",
@@ -350,7 +428,7 @@
         "query": "prometheus",
         "queryValue": "",
         "refresh": 1,
-        "regex": "",
+        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
         "skipUrlSync": false,
         "type": "datasource"
       },
@@ -365,22 +443,25 @@
             "$__all"
           ]
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
         "definition": "label_values(http_server_requests_total, path)",
-        "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": null,
         "multi": true,
         "name": "path",
         "options": [],
-        "query": "label_values(http_server_requests_total, path)",
-        "refresh": 1,
+        "query": {
+          "query": "label_values(http_server_requests_total, path)",
+          "refId": "grafanacloud-muhammadshahzeb-prom-path-Variable-Query"
+        },
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -396,22 +477,25 @@
             "$__all"
           ]
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
         "definition": "label_values(http_server_requests_total, method)",
-        "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": null,
         "multi": true,
         "name": "method",
         "options": [],
-        "query": "label_values(http_server_requests_total, method)",
-        "refresh": 1,
+        "query": {
+          "query": "label_values(http_server_requests_total, method)",
+          "refId": "grafanacloud-muhammadshahzeb-prom-method-Variable-Query"
+        },
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
         "tagValuesQuery": "",
-        "tags": [],
         "tagsQuery": "",
         "type": "query",
         "useTags": false
@@ -425,5 +509,7 @@
   "timepicker": {},
   "timezone": "",
   "title": "Ruby Rack application overview",
-  "uid": "k17ofEYMz"
+  "uid": "k17ofEYMz",
+  "version": 14,
+  "weekStart": ""
 }
