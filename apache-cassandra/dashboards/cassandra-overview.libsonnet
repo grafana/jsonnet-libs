@@ -956,7 +956,7 @@ local readLatencyHeatmapPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", cluster=~"$cluster"}) by (quantile)',
+      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + '}) by (quantile)',
       datasource=promDatasource,
       format='time_series',
     ),

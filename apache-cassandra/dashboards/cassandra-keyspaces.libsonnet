@@ -385,7 +385,7 @@ local readsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(sum(cassandra_keyspace_readlatency_seconds_count{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster"}) by (keyspace)[$__interval:])',
+      'increase(sum(cassandra_keyspace_readlatency_seconds_count{' + matcher + '}) by (keyspace)[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{keyspace}}',
       format='time_series',
@@ -465,7 +465,7 @@ local repairJobsStartedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(sum(cassandra_keyspace_repairjobsstarted_count{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster"} >= 0) by (keyspace)[$__interval:])',
+      'increase(sum(cassandra_keyspace_repairjobsstarted_count{' + matcher + '} >= 0) by (keyspace)[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{keyspace}} ',
       interval='1m',
@@ -544,7 +544,7 @@ local repairJobsCompletedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(sum(cassandra_keyspace_repairjobscompleted_count{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster"}) by (keyspace)[$__interval:])',
+      'increase(sum(cassandra_keyspace_repairjobscompleted_count{' + matcher + '}) by (keyspace)[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{keyspace}} ',
       interval='1m',
@@ -623,13 +623,13 @@ local keyspaceWriteLatencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.95"} >= 0) by (keyspace)',
+      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p95',
       format='time_series',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.99"} >= 0) by (keyspace)',
+      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p99',
       format='time_series',
@@ -705,13 +705,13 @@ local keyspaceReadLatencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.95"} >= 0) by (keyspace)',
+      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p95',
       format='heatmap',
     ),
     prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster", quantile="0.99"} >= 0) by (keyspace)',
+      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p99',
       format='heatmap',
