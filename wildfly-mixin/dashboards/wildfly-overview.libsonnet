@@ -693,7 +693,7 @@ local rejectedSessionsPanel = {
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
-      
+
       .addPanels(
         std.flattenArrays([
           [
