@@ -1312,13 +1312,13 @@ local crossnodeLatencyPanel(matcher) = {
   },
 };
 
-local systemLogsPanel = {
+local systemLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/cassandra/system.log", job=~"$job"} |= ``',
+      expr: '{filename="/var/log/cassandra/system.log", ' + matcher + '} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -1464,7 +1464,7 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
             crossnodeLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 16, y: 30 } },
           ],
           if $._config.enableLokiLogs then [
-            systemLogsPanel { gridPos: { h: 6, w: 24, x: 0, y: 36 } },
+            systemLogsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 36 } },
           ] else [],
         ])
       ),
