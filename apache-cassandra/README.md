@@ -43,12 +43,25 @@ Cassandra system logs are enabled by default in the `config.libsonnet` and can b
 }
 ```
 
+In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance`, `job`, and `cluster` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+
+```yaml
+scrape_configs:
+  - job_name: integrations/apache-cassandra
+    static_configs:
+      - targets: [localhost]
+        labels:
+          job: integrations/apache-cassandra
+          instance: '<your-instance-name>'
+          cluster: '<your-cluster-name>'
+          __path__: /var/log/cassandra/system.log
+```
+
 ## Apache Cassandra Keyspaces
 
 The Apache Cassandra keyspaces dashboard provides details on number and latency of Writes/Reads, Disk space used, number of pending compactions, and size of the largest table partition for a selected keyspace.
 
 ![Screenshot of the Apache Cassandra keyspaces dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/keyspaces_1.png)
-
 
 ## Extendable Configuration
 
@@ -65,14 +78,14 @@ The configuration for this mixin also supports adding expected `rack` and `datac
 
 ## Alerts Overview
 
-HighReadLatency: There is a high level of read latency within the node.
-HighWriteLatency: There is a high level of write latency within the node.
-HighPendingCompactionTasks: Compaction task queue is filling up.
-BlockedCompactionTasksFound: Compaction task queue is full.
-HintsStoredOnNode: Hints have been recently written to this node.
-UnavailableWriteRequestsFound: Unavailable exceptions have been encountered while performing writes in this cluster.
-HighCpuUsage: A node has a CPU usage higher than the configured threshold.
-HighMemoryUsage: A node has a higher memory utilization than the configured threshold.
+- HighReadLatency: There is a high level of read latency within the node.
+- HighWriteLatency: There is a high level of write latency within the node.
+- HighPendingCompactionTasks: Compaction task queue is filling up.
+- BlockedCompactionTasksFound: Compaction task queue is full.
+- HintsStoredOnNode: Hints have been recently written to this node.
+- UnavailableWriteRequestsFound: Unavailable exceptions have been encountered while performing writes in this cluster.
+- HighCpuUsage: A node has a CPU usage higher than the configured threshold.
+- HighMemoryUsage: A node has a higher memory utilization than the configured threshold.
 
 ## Install tools
 
