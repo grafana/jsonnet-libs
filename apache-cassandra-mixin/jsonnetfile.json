@@ -9,7 +9,16 @@
         }
       },
       "version": "master"
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "grafana-builder"
+        }
+      },
+      "version": "master"
     }
   ],
-  "legacyImports": false
+  "legacyImports": true
 }
