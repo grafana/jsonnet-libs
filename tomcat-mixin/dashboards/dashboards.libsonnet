@@ -1,3 +1,2 @@
-(import 'cassandra-overview.libsonnet') +
-(import 'cassandra-nodes.libsonnet') +
-(import 'cassandra-keyspaces.libsonnet')
+(import 'tomcat-overview.libsonnet') +
+(import 'tomcat-hosts.libsonnet')

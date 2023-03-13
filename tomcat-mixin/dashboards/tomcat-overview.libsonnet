@@ -4,77 +4,32 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'cassandra-keyspaces';
+local dashboardUid = 'overview';
 
 local promDatasourceName = 'prometheus_datasource';
+local lokiDatasourceName = 'loki_datasource';
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local keyspacesCountPanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'count(count by (keyspace) (cassandra_keyspace_writelatency_seconds{' + matcher + '}))',
-      datasource=promDatasource,
-    ),
-  ],
-  type: 'stat',
-  title: 'Keyspaces count',
-  description: 'The total count of the amount of keyspaces being reported.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'thresholds',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'area',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'auto',
-  },
-  pluginVersion: '9.3.6',
+
+local lokiDatasource = {
+  uid: '${%s}' % lokiDatasourceName,
 };
 
-local keyspaceTotalDiskSpaceUsedPanel(matcher) = {
+local memoryUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_totaldiskspaceused{' + matcher + '}) by (keyspace)',
+      'jvm_memory_usage_used_bytes{job=~"$job", instance=~"$instance"}',
       datasource=promDatasource,
-      legendFormat='{{keyspace}}',
-      format='time_series',
+      legendFormat='{{instance}} - {{area}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Keyspace total disk space used',
-  description: 'Total amount of disk space used by keyspaces.',
+  title: 'Memory usage',
+  description: 'The memory usage of the JVM of the instance',
   fieldConfig: {
     defaults: {
       color: {
@@ -87,7 +42,7 @@ local keyspaceTotalDiskSpaceUsedPanel(matcher) = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 20,
+        fillOpacity: 0,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -95,6 +50,9 @@ local keyspaceTotalDiskSpaceUsedPanel(matcher) = {
           viz: false,
         },
         lineInterpolation: 'linear',
+        lineStyle: {
+          fill: 'solid',
+        },
         lineWidth: 1,
         pointSize: 5,
         scaleDistribution: {
@@ -142,19 +100,18 @@ local keyspaceTotalDiskSpaceUsedPanel(matcher) = {
   },
 };
 
-local keyspacePendingCompactionsPanel(matcher) = {
+local cpuUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(cassandra_keyspace_pendingcompactions{' + matcher + '}) by (keyspace)',
+      'jvm_process_cpu_load{job=~"$job", instance=~"$instance"}',
       datasource=promDatasource,
-      legendFormat='{{keyspace}}',
-      format='time_series',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Keyspace pending compactions',
-  description: 'The number of compaction operations a keyspace is pending to perform.',
+  title: 'CPU usage',
+  description: 'The CPU usage of the JVM process',
   fieldConfig: {
     defaults: {
       color: {
@@ -167,7 +124,7 @@ local keyspacePendingCompactionsPanel(matcher) = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 20,
+        fillOpacity: 0,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -187,7 +144,7 @@ local keyspacePendingCompactionsPanel(matcher) = {
           mode: 'none',
         },
         thresholdsStyle: {
-          mode: 'off',
+          mode: 'line',
         },
       },
       mappings: [],
@@ -204,6 +161,7 @@ local keyspacePendingCompactionsPanel(matcher) = {
           },
         ],
       },
+      unit: 'percent',
     },
     overrides: [],
   },
@@ -221,19 +179,23 @@ local keyspacePendingCompactionsPanel(matcher) = {
   },
 };
 
-local keyspaceMaxPartitionSizePanel(matcher) = {
+local trafficSentPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max(cassandra_table_maxpartitionsize{' + matcher + '}) by (keyspace)',
+      'sum(increase(tomcat_bytessent_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
-      legendFormat='{{keyspace}}',
-      format='time_series',
+      legendFormat='{{job}} - {{instance}} - total',
+    ),
+    prometheus.target(
+      'increase(tomcat_bytessent_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Keyspace max partition size',
-  description: 'Max partition size for keyspaces.',
+  title: 'Traffic sent',
+  description: 'The sent traffic for a Tomcat connector',
   fieldConfig: {
     defaults: {
       color: {
@@ -283,7 +245,7 @@ local keyspaceMaxPartitionSizePanel(matcher) = {
           },
         ],
       },
-      unit: 'decbytes',
+      unit: 'Bps',
     },
     overrides: [],
   },
@@ -301,20 +263,23 @@ local keyspaceMaxPartitionSizePanel(matcher) = {
   },
 };
 
-local writesPanel(matcher) = {
+local trafficReceivedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(sum(cassandra_keyspace_writelatency_seconds_count{' + matcher + '}) by (keyspace)[$__interval:])',
+      'sum(increase(tomcat_bytesreceived_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
-      legendFormat='{{keyspace}}',
-      format='time_series',
-      interval='1m',
+      legendFormat='{{job}} - {{instance}} - total',
+    ),
+    prometheus.target(
+      'increase(tomcat_bytesreceived_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Writes',
-  description: 'The number of writes performed on the keyspace.',
+  title: 'Traffic received',
+  description: 'The received traffic for a Tomcat connector',
   fieldConfig: {
     defaults: {
       color: {
@@ -364,6 +329,7 @@ local writesPanel(matcher) = {
           },
         ],
       },
+      unit: 'Bps',
     },
     overrides: [],
   },
@@ -381,20 +347,33 @@ local writesPanel(matcher) = {
   },
 };
 
-local readsPanel(matcher) = {
+local requestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(sum(cassandra_keyspace_readlatency_seconds_count{' + matcher + '}) by (keyspace)[$__interval:])',
+      'sum(increase(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
-      legendFormat='{{keyspace}}',
-      format='time_series',
-      interval='1m',
+      legendFormat='{{job}} - {{instance}} - total requests',
+    ),
+    prometheus.target(
+      'sum(increase(tomcat_errorcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - total errors',
+    ),
+    prometheus.target(
+      'increase(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}} - requests',
+    ),
+    prometheus.target(
+      'increase(tomcat_errorcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}} - errors',
     ),
   ],
   type: 'timeseries',
-  title: 'Reads',
-  description: 'The number of reads performed on the keyspace.',
+  title: 'Requests',
+  description: 'The total requests and errors for a Tomcat connector',
   fieldConfig: {
     defaults: {
       color: {
@@ -444,6 +423,7 @@ local readsPanel(matcher) = {
           },
         ],
       },
+      unit: 'r/s',
     },
     overrides: [],
   },
@@ -461,19 +441,23 @@ local readsPanel(matcher) = {
   },
 };
 
-local repairJobsStartedPanel(matcher) = {
+local processingTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(sum(cassandra_keyspace_repairjobsstarted_count{' + matcher + '} >= 0) by (keyspace)[$__interval:])',
+      'sum(increase(tomcat_processingtime_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:]) / clamp_min(increase(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:]), 1)) by (job, instance)',
       datasource=promDatasource,
-      legendFormat='{{keyspace}} ',
-      interval='1m',
+      legendFormat='{{job}} - {{instance}} - total',
+    ),
+    prometheus.target(
+      'increase(tomcat_processingtime_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:]) / clamp_min(increase(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:]), 1)',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Repair jobs started',
-  description: 'The number of repair jobs started per keyspace.',
+  title: 'Processing time',
+  description: 'The average time taken to process recent requests for a Tomcat connector',
   fieldConfig: {
     defaults: {
       color: {
@@ -484,6 +468,7 @@ local repairJobsStartedPanel(matcher) = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisSoftMin: 0,
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 0,
@@ -506,7 +491,7 @@ local repairJobsStartedPanel(matcher) = {
           mode: 'none',
         },
         thresholdsStyle: {
-          mode: 'off',
+          mode: 'line',
         },
       },
       mappings: [],
@@ -519,10 +504,11 @@ local repairJobsStartedPanel(matcher) = {
           },
           {
             color: 'red',
-            value: 80,
+            value: 300,
           },
         ],
       },
+      unit: 'ms',
     },
     overrides: [],
   },
@@ -540,19 +526,53 @@ local repairJobsStartedPanel(matcher) = {
   },
 };
 
-local repairJobsCompletedPanel(matcher) = {
+local threadsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(sum(cassandra_keyspace_repairjobscompleted_count{' + matcher + '}) by (keyspace)[$__interval:])',
+      'sum(tomcat_threadpool_connectioncount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}) by (job, instance)',
       datasource=promDatasource,
-      legendFormat='{{keyspace}} ',
-      interval='1m',
+      legendFormat='{{job}} - {{instance}} - total connections',
+    ),
+    prometheus.target(
+      'sum(tomcat_threadpool_pollerthreadcount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}) by (job, instance)',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - poller total',
+    ),
+    prometheus.target(
+      'sum(tomcat_threadpool_keepalivecount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}) by (job, instance)',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - idle total',
+    ),
+    prometheus.target(
+      'sum(tomcat_threadpool_currentthreadcount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}) by (job, instance)',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - active total',
+    ),
+    prometheus.target(
+      'tomcat_threadpool_connectioncount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}} - connections',
+    ),
+    prometheus.target(
+      'tomcat_threadpool_pollerthreadcount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}} - poller',
+    ),
+    prometheus.target(
+      'tomcat_threadpool_keepalivecount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}} - idle',
+    ),
+    prometheus.target(
+      'tomcat_threadpool_currentthreadcount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}} - active',
     ),
   ],
   type: 'timeseries',
-  title: 'Repair jobs completed',
-  description: 'The number of repair jobs that were completed.',
+  title: 'Threads',
+  description: 'The number of various threads being used by a Tomcat connector',
   fieldConfig: {
     defaults: {
       color: {
@@ -594,7 +614,6 @@ local repairJobsCompletedPanel(matcher) = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -602,88 +621,6 @@ local repairJobsCompletedPanel(matcher) = {
           },
         ],
       },
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'single',
-      sort: 'none',
-    },
-  },
-};
-
-local keyspaceWriteLatencyPanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (keyspace)',
-      datasource=promDatasource,
-      legendFormat='{{ keyspace }} - p95',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_writelatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (keyspace)',
-      datasource=promDatasource,
-      legendFormat='{{ keyspace }} - p99',
-      format='time_series',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Keyspace write latency',
-  description: 'The 95th and 99th percentils of local write latency for keyspaces',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 's',
     },
     overrides: [],
   },
@@ -695,106 +632,44 @@ local keyspaceWriteLatencyPanel(matcher) = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'multi',
+      mode: 'single',
       sort: 'none',
     },
   },
 };
 
-local keyspaceReadLatencyPanel(matcher) = {
-  datasource: promDatasource,
+local logsPanel = {
+  datasource: lokiDatasource,
   targets: [
-    prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (keyspace)',
-      datasource=promDatasource,
-      legendFormat='{{ keyspace }} - p95',
-      format='heatmap',
-    ),
-    prometheus.target(
-      'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (keyspace)',
-      datasource=promDatasource,
-      legendFormat='{{ keyspace }} - p99',
-      format='heatmap',
-    ),
+    {
+      datasource: lokiDatasource,
+      editorMode: 'code',
+      expr: '{filename="/var/log/tomcat9/catalina.out", job=~"$job", instance=~"$instance"} |= ``',
+      queryType: 'range',
+      refId: 'A',
+    },
   ],
-  type: 'timeseries',
-  title: 'Keyspace read latency',
-  description: 'Average local read latency for keyspaces',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 's',
-    },
-    overrides: [],
-  },
+  type: 'logs',
+  title: 'Logs',
+  description: 'Recent logs from the Catalina.out logs file\n',
   options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'none',
-    },
+    dedupStrategy: 'none',
+    enableLogDetails: true,
+    prettifyLogMessage: false,
+    showCommonLabels: false,
+    showLabels: false,
+    showTime: false,
+    sortOrder: 'Descending',
+    wrapLogMessage: false,
   },
 };
 
-local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster"' +
-                        if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
 
 {
   grafanaDashboards+:: {
-    'cassandra-keyspaces.json':
+    'overview.json':
       dashboard.new(
-        'Apache Cassandra keyspaces',
+        'Overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -802,17 +677,10 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
         description='',
         uid=dashboardUid,
       )
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Other Apache Cassandra dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
+
       .addTemplates(
         std.flattenArrays([
           [
-
             template.datasource(
               promDatasourceName,
               'prometheus',
@@ -820,33 +688,44 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
               label='Data Source',
               refresh='load'
             ),
+          ],
+          if $._config.enableLokiLogs then [
+            template.datasource(
+              lokiDatasourceName,
+              'loki',
+              null,
+              label='Loki Datasource',
+              refresh='load'
+            ),
+          ] else [],
+          [
             template.new(
               'job',
               promDatasource,
-              'label_values(cassandra_up_endpoint_count, job)',
+              'label_values(tomcat_bytesreceived_total, job)',
               label='Job',
               refresh=1,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
-            template.new(
-              'cluster',
-              promDatasource,
-              'label_values(cassandra_up_endpoint_count, cluster)',
-              label='Cluster',
-              refresh=1,
-              includeAll=true,
-              multi=true,
+              includeAll=false,
+              multi=false,
               allValues='',
               sort=0
             ),
             template.new(
               'instance',
               promDatasource,
-              'label_values(cassandra_up_endpoint_count, instance)',
+              'label_values(tomcat_bytesreceived_total, instance)',
               label='Instance',
+              refresh=1,
+              includeAll=false,
+              multi=false,
+              allValues='',
+              sort=0
+            ),
+            template.new(
+              'protocol',
+              promDatasource,
+              'label_values(tomcat_bytesreceived_total, protocol)',
+              label='Protocol',
               refresh=1,
               includeAll=true,
               multi=true,
@@ -854,10 +733,10 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
               sort=0
             ),
             template.new(
-              'keyspace',
+              'port',
               promDatasource,
-              'label_values(cassandra_keyspace_caspreparelatency_seconds, keyspace)',
-              label='Keyspace',
+              'label_values(tomcat_bytesreceived_total, port)',
+              label='Port',
               refresh=1,
               includeAll=true,
               multi=true,
@@ -865,47 +744,26 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
               sort=0
             ),
           ],
-          if $._config.enableDatacenterLabel then [
-            template.new(
-              'datacenter',
-              promDatasource,
-              'label_values(cassandra_cache_size, datacenter)',
-              label='Datacenter',
-              refresh=1,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
-          ] else [],
-          if $._config.enableRackLabel then [
-            template.new(
-              'rack',
-              promDatasource,
-              'label_values(cassandra_cache_size, rack)',
-              label='Rack',
-              refresh=1,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
-          ] else [],
         ])
       )
       .addPanels(
-        [
-          keyspacesCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
-          keyspaceTotalDiskSpaceUsedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
-          keyspacePendingCompactionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-          keyspaceMaxPartitionSizePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-          writesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
-          readsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
-          repairJobsStartedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
-          repairJobsCompletedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
-          keyspaceWriteLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 24 } },
-          keyspaceReadLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 24 } },
-        ]
+        std.flattenArrays([
+          [
+            memoryUsagePanel { gridPos: { h: 9, w: 12, x: 0, y: 0 } },
+            cpuUsagePanel { gridPos: { h: 9, w: 12, x: 12, y: 0 } },
+            trafficSentPanel { gridPos: { h: 9, w: 12, x: 0, y: 9 } },
+            trafficReceivedPanel { gridPos: { h: 9, w: 12, x: 12, y: 9 } },
+            requestsPanel { gridPos: { h: 9, w: 12, x: 0, y: 18 } },
+            processingTimePanel { gridPos: { h: 9, w: 12, x: 12, y: 18 } },
+            threadsPanel { gridPos: { h: 9, w: 24, x: 0, y: 27 } },
+          ],
+          if $._config.enableLokiLogs then [
+            logsPanel { gridPos: { h: 9, w: 24, x: 0, y: 36 } },
+          ] else [],
+          [
+          ],
+        ])
       ),
+
   },
 }

@@ -1,39 +1,28 @@
-# Apache Cassandra Mixin
+# Apache Tomcat Mixin
 
-The Apache Cassandra mixin is a set of configurable Grafana dashboards and alerts.
+The Apache Tomcat mixin is a set of configurable Grafana dashboards and alerts.
 
-The Apache Cassandra mixin contains the following dashboards:
+The Apache Tomcat mixin contains the following dashboards:
 
-- Apache Cassandra overview
-- Apache Cassandra nodes
-- Apache Cassandra keyspaces
+- Apache Tomcat overview
+- Apache Tomcat hosts
 
 and the following alerts:
 
-- HighReadLatency
-- HighWriteLatency
-- HighPendingCompactionTasks
-- BlockedCompactionTasksFound
-- HintsStoredOnNode
-- UnavailableWriteRequestsFound
 - HighCpuUsage
 - HighMemoryUsage
+- HighRequestErrorPercent
+- ModeratelyHighProcessingTime
 
-## Apache Cassandra Overview
+## Apache Tomcat Overview
 
-The Apache Cassandra overview dashboard provides details on number of clusters, nodes and down nodes per cluster, timeouts, disk usage, and read/write requests for a Cassandra cluster.
+The Apache Tomcat overview provides details on memory/cpu usage, traffic sent/received, request processing time, number of threads, and output logs for a Tomcat instance.
+To get Tomcat output logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Tomcat output log path is `/var/log/tomcat*/catalina.out` on Linux and `C:\Program Files\Apache Software Foundation\Tomcat *.*\logs\catalina.out` on Windows.
 
-![First screenshot of the Apache Cassandra overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_1.png)
-![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_2.png)
+<!-- ![First screenshot of the Apache Cassandra overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_1.png)
+![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_2.png) -->
 
-## Apache Cassandra Nodes
-
-The Apache Cassandra nodes dashboard provides details on disk/memory/cpu usage, garbage collections, number of pending/blocked compaction tasks, number and latency of reads/writes, and logs for a specific node in the cluster. To get Cassandra system logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Cassandra system log path is `/var/log/cassandra/system.log` on Linux.
-
-![First screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_1.png)
-![Second screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_2.png)
-
-Cassandra system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+Tomcat output logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -43,36 +32,19 @@ Cassandra system logs are enabled by default in the `config.libsonnet` and can b
 }
 ```
 
-## Apache Cassandra Keyspaces
+## Apache Tomcat hosts
 
-The Apache Cassandra keyspaces dashboard provides details on number and latency of Writes/Reads, Disk space used, number of pending compactions, and size of the largest table partition for a selected keyspace.
+The Apache Tomcat hosts dashboard provides details on number of sessions, session processing time, number of servlet requests, and servlet processing time. 
 
-![Screenshot of the Apache Cassandra keyspaces dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/keyspaces_1.png)
-
-
-## Extendable Configuration
-
-The configuration for this mixin also supports adding expected `rack` and `datacenter` labels. These selectors are not enabled by default but are easy to change by modifying the `config.libsonnet`.
-
-```
-{
-  _config+:: {
-    enableDatacenterLabel: true,
-    enableRackLabel: true,
-  },
-}
-```
+<!-- ![First screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_1.png)
+![Second screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_2.png) -->
 
 ## Alerts Overview
 
-HighReadLatency: There is a high level of read latency within the node.
-HighWriteLatency: There is a high level of write latency within the node.
-HighPendingCompactionTasks: Compaction task queue is filling up.
-BlockedCompactionTasksFound: Compaction task queue is full.
-HintsStoredOnNode: Hints have been recently written to this node.
-UnavailableWriteRequestsFound: Unavailable exceptions have been encountered while performing writes in this cluster.
-HighCpuUsage: A node has a CPU usage higher than the configured threshold.
-HighMemoryUsage: A node has a higher memory utilization than the configured threshold.
+HighCpuUsage: The instance has a CPU usage higher than the configured threshold.
+HighMemoryUsage: The instance has a higher memory usage than the configured threshold.
+HighRequestErrorPercent: There are a high number of request errors.
+ModeratelyHighProcessingTime: The processing time has been moderately high.
 
 ## Install tools
 

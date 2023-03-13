@@ -25,7 +25,7 @@
           {
             alert: 'HighMemoryUsage',
             expr: |||
-              sum(jvm_memory_usage_used_bytes) by (instance) / sum(jvm_physical_memory_bytes) by (instance) * 100 > %(alertsCriticalMemoryUsage)s
+              sum(jvm_memory_usage_used_bytes) by (job, instance) / sum(jvm_physical_memory_bytes) by (job, instance) * 100 > %(alertsCriticalMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -43,7 +43,7 @@
           {
             alert: 'HighRequestErrorPercent',
             expr: |||
-              increase(tomcat_errorcount_total[$__interval:]) / increase(tomcat_requestcount_total[$__interval:]) * 100 > %(alertsCriticalRequestErrorPercentage)s
+              increase(tomcat_errorcount_total[5m]) / increase(tomcat_requestcount_total[5m]) * 100 > %(alertsCriticalRequestErrorPercentage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -61,7 +61,7 @@
           {
             alert: 'ModeratelyHighProcessingTime',
             expr: |||
-              increase(tomcat_processingtime_total[$__interval:]) / increase(tomcat_requestcount_total[$__interval:]) > %(alertsWarningProcessingTime)s
+              increase(tomcat_processingtime_total[5m]) / increase(tomcat_requestcount_total[5m]) > %(alertsWarningProcessingTime)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -76,7 +76,6 @@
                 ) % $._config,
             },
           },
-
         ],
       },
     ],
