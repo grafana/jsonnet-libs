@@ -9,15 +9,15 @@ The Apache CouchDB mixin contains the following dashboards:
 
 and the following alerts:
 
-- CouchDbHigh4xxResponseCodes
-- CouchDbHigh5xxResponseCodes
-- CouchDbModerateRequestLatency
-- CouchDbHighRequestLatency
-- CouchDbManyReplicatorJobsPending
-- CouchDbReplicatorJobsCrashing
-- CouchDbReplicatorChangesQueuesDying
-- CouchDbReplicatorConnectionOwnersCrashing
-- CouchDbReplicatorConnectionWorkersCrashing
+- CouchDBHigh4xxResponseCodes
+- CouchDBHigh5xxResponseCodes
+- CouchDBModerateRequestLatency
+- CouchDBHighRequestLatency
+- CouchDBManyReplicatorJobsPending
+- CouchDBReplicatorJobsCrashing
+- CouchDBReplicatorChangesQueuesDying
+- CouchDBReplicatorConnectionOwnersCrashing
+- CouchDBReplicatorConnectionWorkersCrashing
 
 ## Apache CouchDB Overview
 
@@ -60,15 +60,15 @@ scrape_configs:
 
 ## Alerts Overview
 
-- CouchDbHigh4xxResponseCodes: There are a high number of 4xx responses for incoming requests to a node.
-- CouchDbHigh5xxResponseCodes: There are a high number of 5xx responses for incoming requests to a node.
-- CouchDbModerateRequestLatency: There is a moderate level of request latency for a node.
-- CouchDbHighRequestLatency: There is a high level of request latency for a node.
-- CouchDbManyReplicatorJobsPending: There is a high number of replicator jobs pending for a node.
-- CouchDbReplicatorJobsCrashing: There are replicator jobs crashing for a node.
-- CouchDbReplicatorChangesQueuesDying: There are replicator changes queue process deaths for a node.
-- CouchDbReplicatorConnectionOwnersCrashing: There are replicator connection owner process crashes for a node.
-- CouchDbReplicatorConnectionWorkersCrashing: There are replicator connection worker process crashes for a node.
+- CouchDBHigh4xxResponseCodes: There are a high number of 4xx responses for incoming requests to a node.
+- CouchDBHigh5xxResponseCodes: There are a high number of 5xx responses for incoming requests to a node.
+- CouchDBModerateRequestLatency: There is a moderate level of request latency for a node.
+- CouchDBHighRequestLatency: There is a high level of request latency for a node.
+- CouchDBManyReplicatorJobsPending: There is a high number of replicator jobs pending for a node.
+- CouchDBReplicatorJobsCrashing: There are replicator jobs crashing for a node.
+- CouchDBReplicatorChangesQueuesDying: There are replicator changes queue process deaths for a node.
+- CouchDBReplicatorConnectionOwnersCrashing: There are replicator connection owner process crashes for a node.
+- CouchDBReplicatorConnectionWorkersCrashing: There are replicator connection worker process crashes for a node.
 
 ## Install tools
 

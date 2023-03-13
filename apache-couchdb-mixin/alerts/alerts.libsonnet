@@ -2,10 +2,10 @@
   prometheusAlerts+:: {
     groups+: [
       {
-        name: 'ApacheCouchDbAlerts',
+        name: 'ApacheCouchDBAlerts',
         rules: [
           {
-            alert: 'CouchDbHigh4xxResponseCodes',
+            alert: 'CouchDBHigh4xxResponseCodes',
             expr: |||
               sum by(job, instance) (increase(couchdb_httpd_status_codes{code=~"4.*"}[5m])) > %(alertsWarning4xxResponseCodes5m)s
             ||| % $._config,
@@ -23,7 +23,7 @@
             },
           },
           {
-            alert: 'CouchDbHigh5xxResponseCodes',
+            alert: 'CouchDBHigh5xxResponseCodes',
             expr: |||
               sum by(job, instance) (increase(couchdb_httpd_status_codes{code=~"5.*"}[5m])) > %(alertsCritical5xxResponseCodes5m)s
             ||| % $._config,
@@ -41,7 +41,7 @@
             },
           },
           {
-            alert: 'CouchDbModerateRequestLatency',
+            alert: 'CouchDBModerateRequestLatency',
             expr: |||
               sum by(job, instance) (increase(couchdb_request_time_seconds_sum[5m]) / increase(couchdb_request_time_seconds_count[5m])) * 1000 > %(alertsWarningRequestLatency5m)s
             ||| % $._config,
@@ -59,7 +59,7 @@
             },
           },
           {
-            alert: 'CouchDbHighRequestLatency',
+            alert: 'CouchDBHighRequestLatency',
             expr: |||
               sum by(job, instance) (increase(couchdb_request_time_seconds_sum[5m]) / increase(couchdb_request_time_seconds_count[5m])) * 1000 > %(alertsCriticalRequestLatency5m)s
             ||| % $._config,
@@ -77,7 +77,7 @@
             },
           },
           {
-            alert: 'CouchDbManyReplicatorJobsPending',
+            alert: 'CouchDBManyReplicatorJobsPending',
             expr: |||
               sum by(job, instance) (couchdb_couch_replicator_jobs_pending) > %(alertsWarningPendingReplicatorJobs5m)s
             ||| % $._config,
@@ -95,7 +95,7 @@
             },
           },
           {
-            alert: 'CouchDbReplicatorJobsCrashing',
+            alert: 'CouchDBReplicatorJobsCrashing',
             expr: |||
               sum by(job, instance) (increase(couchdb_couch_replicator_jobs_crashes_total[5m])) > %(alertsCriticalCrashingReplicatorJobs5m)s
             ||| % $._config,
@@ -113,7 +113,7 @@
             },
           },
           {
-            alert: 'CouchDbReplicatorChangesQueuesDying',
+            alert: 'CouchDBReplicatorChangesQueuesDying',
             expr: |||
               sum by(job, instance) (increase(couchdb_couch_replicator_changes_queue_deaths_total[5m])) > %(alertsWarningDyingReplicatorChangesQueues5m)s
             ||| % $._config,
@@ -131,7 +131,7 @@
             },
           },
           {
-            alert: 'CouchDbReplicatorConnectionOwnersCrashing',
+            alert: 'CouchDBReplicatorConnectionOwnersCrashing',
             expr: |||
               sum by(job, instance) (increase(couchdb_couch_replicator_connection_owner_crashes_total[5m])) > %(alertsWarningCrashingReplicatorConnectionOwners5m)s
             ||| % $._config,
@@ -149,7 +149,7 @@
             },
           },
           {
-            alert: 'CouchDbReplicatorConnectionWorkersCrashing',
+            alert: 'CouchDBReplicatorConnectionWorkersCrashing',
             expr: |||
               sum by(job, instance) (increase(couchdb_couch_replicator_connection_worker_crashes_total[5m])) > %(alertsWarningCrashingReplicatorConnectionWorkers5m)s
             ||| % $._config,
