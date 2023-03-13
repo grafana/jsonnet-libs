@@ -1141,7 +1141,7 @@ local systemLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + ', filename=~"/var/log/couchdb/couchdb\\.log"} |= ""',
+      expr: '{' + matcher + ', filename="/var/log/couchdb/couchdb.log"} |= ""',
       queryType: 'range',
       refId: 'A',
     },
