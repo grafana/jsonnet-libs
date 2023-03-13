@@ -11,3 +11,19 @@ exclusions:
     reason: "The dashboard is a 'cluster' dashboard where the instance refers to nodes, this dashboard focuses only on the cluster view."
     entries:
     - dashboard: "Apache CouchDB overview"
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+    - panel: "Number of clusters"
+    - panel: "Number of nodes"
+    - panel: "Cluster health"
+    - panel: "Open OS files"
+    - panel: "Open databases"
+    - panel: "Replicator changes manager deaths"
+    - panel: "Replicator changes queue deaths"
+    - panel: "Replicator changes reader deaths"
+    - panel: "Replicator connection owner crashes"
+    - panel: "Replicator connection worker crashes"
+    - panel: "Replicator job crashes"
+    - panel: "Replicator jobs pending"
+    - panel: "Log types"

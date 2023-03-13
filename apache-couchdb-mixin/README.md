@@ -1,4 +1,4 @@
-# Apache Cassandra Mixin
+# Apache CouchDB Mixin
 
 The Apache CouchDB mixin is a set of configurable Grafana dashboards and alerts.
 
@@ -29,7 +29,7 @@ The Apache CouchDB overview dashboard provides details on number of clusters and
 
 ## Apache CouchDB Nodes
 
-The Apache CouchDB nodes dashboard provides details on memory usage, open OS files, open databases, database reads and writes, view info, request info (rate, latency, status code info), log type breakdown, and logs for a specific node in the cluster. To get CouchDB system logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Cassandra system log path is `/var/log/couchdb/couchdb.log` on Linux.
+The Apache CouchDB nodes dashboard provides details on memory usage, open OS files, open databases, database reads and writes, view info, request info (rate, latency, status code info), log type breakdown, and logs for a specific node in the cluster. To get CouchDB system logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default CouchDB system log path is `/var/log/couchdb/couchdb.log` on Linux.
 
 ![First screenshot of the Apache CouchDB nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/nodes_1.png)
 ![Second screenshot of the Apache CouchDB nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/nodes_2.png)
