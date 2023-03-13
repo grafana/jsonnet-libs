@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local sessionsPanel = {
   datasource: promDatasource,
   targets: [
@@ -387,7 +386,6 @@ local servletProcessingTimePanel = {
     },
   },
 };
-
 
 {
   grafanaDashboards+:: {
