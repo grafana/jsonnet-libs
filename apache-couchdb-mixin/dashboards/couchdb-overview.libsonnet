@@ -19,7 +19,7 @@ local numberOfClustersPanel = {
     prometheus.target(
       'count(count by(cluster, job) (couchdb_request_time_seconds_count{' + matcher + '}))',
       datasource=promDatasource,
-      legendFormat='cluster="{{ cluster }}"',
+      legendFormat='{{ cluster }}',
       format='time_series',
     ),
   ],
@@ -75,7 +75,7 @@ local numberOfNodesPanel = {
     prometheus.target(
       'sum(count by(cluster, job) (couchdb_request_time_seconds_count{' + matcher + '}))',
       datasource=promDatasource,
-      legendFormat='cluster="{{ cluster }}"',
+      legendFormat='{{ cluster }}',
       format='time_series',
     ),
   ],
@@ -131,7 +131,7 @@ local clusterHealthPanel = {
     prometheus.target(
       'min(min by(cluster, job) (couchdb_couch_replicator_cluster_is_stable{' + matcher + '}))',
       datasource=promDatasource,
-      legendFormat='cluster="{{ cluster }}"',
+      legendFormat='{{ cluster }}',
       format='time_series',
     ),
   ],
@@ -195,9 +195,9 @@ local openOSFilesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(cluster, job) (increase(couchdb_open_os_files_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(cluster, job) (increase(couchdb_open_os_files_total{' + matcher + '}[$__interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -301,7 +301,7 @@ local openDatabasesPanel = {
     prometheus.target(
       'sum by(job, cluster) (couchdb_open_databases_total{' + matcher + '})',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -380,7 +380,7 @@ local databaseWritesPanel = {
     prometheus.target(
       'sum by(job, cluster) (rate(couchdb_database_writes_total{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -459,7 +459,7 @@ local databaseReadsPanel = {
     prometheus.target(
       'sum by(job, cluster) (rate(couchdb_database_reads_total{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -538,7 +538,7 @@ local viewReadsPanel = {
     prometheus.target(
       'sum by(job, cluster) (rate(couchdb_httpd_view_reads_total{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -617,7 +617,7 @@ local viewTimeoutsPanel = {
     prometheus.target(
       'sum by(job, cluster) (rate(couchdb_httpd_view_timeouts_total{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -696,7 +696,7 @@ local temporaryViewReadsPanel = {
     prometheus.target(
       'sum by(job, cluster) (rate(couchdb_httpd_temporary_view_reads_total{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -781,9 +781,9 @@ local requestMethodsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster, method) (rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, cluster, method) (rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval])) != 0',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",method="{{method}}"',
+      legendFormat='{{cluster}} - {{method}}',
     ),
   ],
   type: 'timeseries',
@@ -845,12 +845,12 @@ local requestMethodsPanel = {
   options: {
     legend: {
       calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -862,22 +862,22 @@ local averageRequestLatencyPanel = {
     prometheus.target(
       'avg by(job, cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.5"})',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",quantile="{{quantile}}"',
+      legendFormat='{{cluster}} - 0.5',
     ),
     prometheus.target(
       'avg by(job, cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.75"})',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",quantile="{{quantile}}"',
+      legendFormat='{{cluster}} - 0.75',
     ),
     prometheus.target(
       'avg by(job, cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.95"})',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",quantile="{{quantile}}"',
+      legendFormat='{{cluster}} - 0.95',
     ),
     prometheus.target(
       'avg by(job, cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.99"})',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",quantile="{{quantile}}"',
+      legendFormat='{{cluster}} - 0.99',
     ),
   ],
   type: 'timeseries',
@@ -939,12 +939,12 @@ local averageRequestLatencyPanel = {
   options: {
     legend: {
       calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -957,7 +957,7 @@ local bulkRequestsPanel = {
     prometheus.target(
       'sum by(job, cluster) (rate(couchdb_httpd_bulk_requests_total{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -1034,24 +1034,24 @@ local responseStatusOverviewPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__interval])) != 0',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",status="2xx"',
+      legendFormat='{{cluster}} - 2xx',
     ),
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__interval])) != 0',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",status="3xx"',
+      legendFormat='{{cluster}} - 3xx',
     ),
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__interval])) != 0',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",status="4xx"',
+      legendFormat='{{cluster}} - 4xx',
     ),
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"5.*"}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"5.*"}[$__interval])) != 0',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",status="5xx"',
+      legendFormat='{{cluster}} - 5xx',
     ),
   ],
   type: 'piechart',
@@ -1075,8 +1075,8 @@ local responseStatusOverviewPanel = {
   },
   options: {
     legend: {
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     pieType: 'pie',
@@ -1098,9 +1098,9 @@ local responseStatusesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster, code) (rate(couchdb_httpd_status_codes{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, cluster, code) (rate(couchdb_httpd_status_codes{' + matcher + '}[$__rate_interval])) != 0',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}",status="{{code}}"',
+      legendFormat='{{cluster}} - {{code}}',
     ),
   ],
   type: 'timeseries',
@@ -1162,12 +1162,12 @@ local responseStatusesPanel = {
   options: {
     legend: {
       calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -1185,9 +1185,9 @@ local replicatorChangesManagerDeathsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{' + matcher + '}[$__interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -1264,9 +1264,9 @@ local replicatorChangesQueueDeathsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_couch_replicator_changes_queue_deaths_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_couch_replicator_changes_queue_deaths_total{' + matcher + '}[$__interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -1343,9 +1343,9 @@ local replicatorChangesReaderDeathsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_couch_replicator_changes_reader_deaths_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_couch_replicator_changes_reader_deaths_total{' + matcher + '}[$__interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -1422,9 +1422,9 @@ local replicatorConnectionOwnerCrashesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_couch_replicator_connection_owner_crashes_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_couch_replicator_connection_owner_crashes_total{' + matcher + '}[$__interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -1501,9 +1501,9 @@ local replicatorConnectionWorkerCrashesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_couch_replicator_connection_worker_crashes_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_couch_replicator_connection_worker_crashes_total{' + matcher + '}[$__interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -1580,9 +1580,9 @@ local replicatorJobCrashesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_couch_replicator_jobs_crashes_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, cluster) (increase(couchdb_couch_replicator_jobs_crashes_total{' + matcher + '}[$__interval]))',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -1661,7 +1661,7 @@ local replicatorJobsPendingPanel = {
     prometheus.target(
       'sum by(job, cluster) (couchdb_couch_replicator_jobs_pending{' + matcher + '})',
       datasource=promDatasource,
-      legendFormat='cluster="{{cluster}}"',
+      legendFormat='{{cluster}}',
     ),
   ],
   type: 'timeseries',
@@ -1787,30 +1787,30 @@ local replicatorJobsPendingPanel = {
       )
       .addPanels(
         [
-          numberOfClustersPanel { gridPos: { h: 8, w: 8, x: 0, y: 0 } },
-          numberOfNodesPanel { gridPos: { h: 8, w: 8, x: 8, y: 0 } },
-          clusterHealthPanel { gridPos: { h: 8, w: 8, x: 16, y: 0 } },
-          openOSFilesPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-          openDatabasesPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-          databaseWritesPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          databaseReadsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-          viewReadsPanel { gridPos: { h: 8, w: 8, x: 0, y: 24 } },
-          viewTimeoutsPanel { gridPos: { h: 8, w: 8, x: 8, y: 24 } },
-          temporaryViewReadsPanel { gridPos: { h: 8, w: 8, x: 16, y: 24 } },
-          requestsRow { gridPos: { h: 1, w: 24, x: 0, y: 32 } },
-          requestMethodsPanel { gridPos: { h: 8, w: 8, x: 0, y: 33 } },
-          averageRequestLatencyPanel { gridPos: { h: 8, w: 8, x: 8, y: 33 } },
-          bulkRequestsPanel { gridPos: { h: 8, w: 8, x: 16, y: 33 } },
-          responseStatusOverviewPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
-          responseStatusesPanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
-          replicationRow { gridPos: { h: 1, w: 24, x: 0, y: 49 } },
-          replicatorChangesManagerDeathsPanel { gridPos: { h: 8, w: 8, x: 0, y: 50 } },
-          replicatorChangesQueueDeathsPanel { gridPos: { h: 8, w: 8, x: 8, y: 50 } },
-          replicatorChangesReaderDeathsPanel { gridPos: { h: 8, w: 8, x: 16, y: 50 } },
-          replicatorConnectionOwnerCrashesPanel { gridPos: { h: 8, w: 12, x: 0, y: 58 } },
-          replicatorConnectionWorkerCrashesPanel { gridPos: { h: 8, w: 12, x: 12, y: 58 } },
-          replicatorJobCrashesPanel { gridPos: { h: 8, w: 12, x: 0, y: 66 } },
-          replicatorJobsPendingPanel { gridPos: { h: 8, w: 12, x: 12, y: 66 } },
+          numberOfClustersPanel { gridPos: { h: 6, w: 8, x: 0, y: 0 } },
+          numberOfNodesPanel { gridPos: { h: 6, w: 8, x: 8, y: 0 } },
+          clusterHealthPanel { gridPos: { h: 6, w: 8, x: 16, y: 0 } },
+          openOSFilesPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+          openDatabasesPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+          databaseWritesPanel { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
+          databaseReadsPanel { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+          viewReadsPanel { gridPos: { h: 6, w: 8, x: 0, y: 18 } },
+          viewTimeoutsPanel { gridPos: { h: 6, w: 8, x: 8, y: 18 } },
+          temporaryViewReadsPanel { gridPos: { h: 6, w: 8, x: 16, y: 18 } },
+          requestsRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
+          bulkRequestsPanel { gridPos: { h: 6, w: 8, x: 0, y: 25 } },
+          averageRequestLatencyPanel { gridPos: { h: 6, w: 8, x: 8, y: 25 } },
+          responseStatusOverviewPanel { gridPos: { h: 6, w: 8, x: 16, y: 25 } },
+          requestMethodsPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
+          responseStatusesPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
+          replicationRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
+          replicatorChangesManagerDeathsPanel { gridPos: { h: 6, w: 8, x: 0, y: 38 } },
+          replicatorChangesQueueDeathsPanel { gridPos: { h: 6, w: 8, x: 8, y: 38 } },
+          replicatorChangesReaderDeathsPanel { gridPos: { h: 6, w: 8, x: 16, y: 38 } },
+          replicatorConnectionOwnerCrashesPanel { gridPos: { h: 6, w: 12, x: 0, y: 44 } },
+          replicatorConnectionWorkerCrashesPanel { gridPos: { h: 6, w: 12, x: 12, y: 44 } },
+          replicatorJobCrashesPanel { gridPos: { h: 6, w: 12, x: 0, y: 50 } },
+          replicatorJobsPendingPanel { gridPos: { h: 6, w: 12, x: 12, y: 50 } },
         ]
       ),
   },
