@@ -862,27 +862,27 @@ local averageRequestLatencyPanel = {
     prometheus.target(
       'avg by(job, cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.5"})',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - 0.5',
+      legendFormat='{{cluster}} - p50',
     ),
     prometheus.target(
       'avg by(job, cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.75"})',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - 0.75',
+      legendFormat='{{cluster}} - p75',
     ),
     prometheus.target(
       'avg by(job, cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.95"})',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - 0.95',
+      legendFormat='{{cluster}} - p95',
     ),
     prometheus.target(
       'avg by(job, cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.99"})',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - 0.99',
+      legendFormat='{{cluster}} - p99',
     ),
   ],
   type: 'timeseries',
-  title: 'Average request latency',
-  description: 'The average request latency aggregated across all nodes.',
+  title: 'Request latency quantiles',
+  description: 'The average request latency quantiles aggregated across all nodes.',
   fieldConfig: {
     defaults: {
       color: {
