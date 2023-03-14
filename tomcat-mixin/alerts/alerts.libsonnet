@@ -5,9 +5,9 @@
         name: 'ApacheTomcatAlerts',
         rules: [
           {
-            alert: 'HighCpuUsage',
+            alert: 'ApacheTomcatAlertsHighCpuUsage',
             expr: |||
-              jvm_process_cpu_load > %(alertsCriticalCpuUsage)s
+              sum by (job, instance) (jvm_process_cpu_load) > %(ApacheTomcatAlertsCriticalCpuUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -18,14 +18,14 @@
               description:
                 (
                   'The CPU usage has been at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(alertsCriticalCpuUsage)s percent.'
+                  'which is above the threshold of %(ApacheTomcatAlertsCriticalCpuUsage)s percent.'
                 ) % $._config,
             },
           },
           {
-            alert: 'HighMemoryUsage',
+            alert: 'ApacheTomcatAlertsHighMemoryUsage',
             expr: |||
-              sum(jvm_memory_usage_used_bytes) by (job, instance) / sum(jvm_physical_memory_bytes) by (job, instance) * 100 > %(alertsCriticalMemoryUsage)s
+              sum(jvm_memory_usage_used_bytes) by (job, instance) / sum(jvm_physical_memory_bytes) by (job, instance) * 100 > %(ApacheTomcatAlertsCriticalMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -36,14 +36,14 @@
               description:
                 (
                   'The memory usage has been at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(alertsCriticalMemoryUsage)s percent.'
+                  'which is above the threshold of %(ApacheTomcatAlertsCriticalMemoryUsage)s percent.'
                 ) % $._config,
             },
           },
           {
-            alert: 'HighRequestErrorPercent',
+            alert: 'ApacheTomcatAlertsHighRequestErrorPercent',
             expr: |||
-              increase(tomcat_errorcount_total[5m]) / increase(tomcat_requestcount_total[5m]) * 100 > %(alertsCriticalRequestErrorPercentage)s
+              sum by (job, instance) (increase(tomcat_errorcount_total[5m]) / increase(tomcat_requestcount_total[5m]) * 100) > %(ApacheTomcatAlertsCriticalRequestErrorPercentage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -54,14 +54,14 @@
               description:
                 (
                   'The percentage of request errors has been at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(alertsCriticalRequestErrorPercentage)s percent.'
+                  'which is above the threshold of %(ApacheTomcatAlertsCriticalRequestErrorPercentage)s percent.'
                 ) % $._config,
             },
           },
           {
-            alert: 'ModeratelyHighProcessingTime',
+            alert: 'ApacheTomcatAlertsModeratelyHighProcessingTime',
             expr: |||
-              increase(tomcat_processingtime_total[5m]) / increase(tomcat_requestcount_total[5m]) > %(alertsWarningProcessingTime)s
+              sum by (job, instance) (increase(tomcat_processingtime_total[5m]) / increase(tomcat_requestcount_total[5m])) > %(ApacheTomcatAlertsWarningProcessingTime)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -72,7 +72,7 @@
               description:
                 (
                   'The processing time has been at {{ printf "%%.0f" $value }}ms over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(alertsWarningProcessingTime)sms.'
+                  'which is above the threshold of %(ApacheTomcatAlertsWarningProcessingTime)sms.'
                 ) % $._config,
             },
           },

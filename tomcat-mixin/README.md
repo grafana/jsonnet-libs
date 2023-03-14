@@ -9,10 +9,23 @@ The Apache Tomcat mixin contains the following dashboards:
 
 and the following alerts:
 
-- HighCpuUsage
-- HighMemoryUsage
-- HighRequestErrorPercent
-- ModeratelyHighProcessingTime
+- ApacheTomcatAlertsHighCpuUsage
+- ApacheTomcatAlertsHighMemoryUsage
+- ApacheTomcatAlertsHighRequestErrorPercent
+- ApacheTomcatAlertsModeratelyHighProcessingTime
+
+Default thresholds can be configured in `config.libsonnet`.
+
+```js
+{
+  _config+:: {
+    ApacheTomcatAlertsCriticalCpuUsage: 80,  //%
+    ApacheTomcatAlertsCriticalMemoryUsage: 80,  //%
+    ApacheTomcatAlertsCriticalRequestErrorPercentage: 5,  //%
+    ApacheTomcatAlertsWarningProcessingTime: 300,  //ms
+  },
+}
+```
 
 ## Apache Tomcat Overview
 
@@ -41,10 +54,10 @@ The Apache Tomcat hosts dashboard provides details on number of sessions, sessio
 
 ## Alerts Overview
 
-HighCpuUsage: The instance has a CPU usage higher than the configured threshold.
-HighMemoryUsage: The instance has a higher memory usage than the configured threshold.
-HighRequestErrorPercent: There are a high number of request errors.
-ModeratelyHighProcessingTime: The processing time has been moderately high.
+ApacheTomcatAlertsHighCpuUsage: The instance has a CPU usage higher than the configured threshold.
+ApacheTomcatAlertsHighMemoryUsage: The instance has a higher memory usage than the configured threshold.
+ApacheTomcatAlertsHighRequestErrorPercent: There are a high number of request errors.
+ApacheTomcatAlertsModeratelyHighProcessingTime: The processing time has been moderately high.
 
 ## Install tools
 

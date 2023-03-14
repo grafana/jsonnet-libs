@@ -17,4 +17,5 @@ exclusions:
     - panel: "Requests"
     - panel: "Processing time"
     - panel: "Session processing time"
+    - panel: "Servlet requests"
     - panel: "Servlet processing time"

@@ -6,10 +6,10 @@
     dashboardRefresh: '1m',
 
     //alert thresholds
-    alertsCriticalCpuUsage: 80,  //%
-    alertsCriticalMemoryUsage: 80,  //%
-    alertsCriticalRequestErrorPercentage: 5,  //%
-    alertsWarningProcessingTime: 300,  //ms
+    ApacheTomcatAlertsCriticalCpuUsage: 80,  //%
+    ApacheTomcatAlertsCriticalMemoryUsage: 80,  //%
+    ApacheTomcatAlertsCriticalRequestErrorPercentage: 5,  //%
+    ApacheTomcatAlertsWarningProcessingTime: 300,  //ms
 
     enableLokiLogs: true,
   },

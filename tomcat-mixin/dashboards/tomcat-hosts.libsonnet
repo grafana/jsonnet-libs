@@ -214,22 +214,22 @@ local servletRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:])) by (job, instance)',
+      'sum(rate(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - total requests',
     ),
     prometheus.target(
-      'sum(increase(tomcat_servlet_errorcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:])) by (job, instance)',
+      'sum(rate(tomcat_servlet_errorcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - total errors',
     ),
     prometheus.target(
-      'increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:])',
+      'rate(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - {{module}} - {{servlet}} - requests',
     ),
     prometheus.target(
-      'increase(tomcat_servlet_errorcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:])',
+      'rate(tomcat_servlet_errorcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - {{module}} - {{servlet}} - errors',
     ),
@@ -400,6 +400,14 @@ local servletProcessingTimePanel = {
         uid=dashboardUid,
       )
 
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache Tomcat dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
+
       .addTemplates(
         [
           template.datasource(
@@ -456,7 +464,7 @@ local servletProcessingTimePanel = {
           template.new(
             'servlet',
             promDatasource,
-            'label_values(tomcat_servlet_requestcount_total{servlet=~"$servlet"}, servlet)',
+            'label_values(tomcat_servlet_requestcount_total{context=~"$context"}, servlet)',
             label='Servlet',
             refresh=1,
             includeAll=true,

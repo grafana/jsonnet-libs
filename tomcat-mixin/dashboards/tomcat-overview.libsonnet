@@ -182,12 +182,12 @@ local trafficSentPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_bytessent_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
+      'sum(rate(tomcat_bytessent_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - total',
     ),
     prometheus.target(
-      'increase(tomcat_bytessent_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
+      'rate(tomcat_bytessent_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}}',
     ),
@@ -266,12 +266,12 @@ local trafficReceivedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_bytesreceived_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
+      'sum(rate(tomcat_bytesreceived_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - total',
     ),
     prometheus.target(
-      'increase(tomcat_bytesreceived_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
+      'rate(tomcat_bytesreceived_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}}',
     ),
@@ -350,22 +350,22 @@ local requestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
+      'sum(rate(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - total requests',
     ),
     prometheus.target(
-      'sum(increase(tomcat_errorcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
+      'sum(rate(tomcat_errorcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - total errors',
     ),
     prometheus.target(
-      'increase(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
+      'rate(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}} - requests',
     ),
     prometheus.target(
-      'increase(tomcat_errorcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
+      'rate(tomcat_errorcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}} - {{protocol}}-{{port}} - errors',
     ),
@@ -675,6 +675,14 @@ local logsPanel = {
         description='',
         uid=dashboardUid,
       )
+
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache Tomcat dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
 
       .addTemplates(
         std.flattenArrays([
