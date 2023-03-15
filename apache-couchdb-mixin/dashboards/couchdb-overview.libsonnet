@@ -129,7 +129,7 @@ local clusterHealthPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'min(min by(cluster, job) (couchdb_couch_replicator_cluster_is_stable{' + matcher + '}))',
+      'min by(cluster, job) (couchdb_couch_replicator_cluster_is_stable{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
@@ -137,37 +137,27 @@ local clusterHealthPanel = {
   ],
   type: 'stat',
   title: 'Cluster health',
-  description: 'Either Healthy or Unhealthy based on whether all nodes are reported as healthy within the cluster.',
+  description: 'Each cluster shows green for healthy or red for unhealthy if all nodes in cluster are reporting healthy.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'continuous-GrYlRd',
       },
-      mappings: [
-        {
-          options: {
-            '0': {
-              color: 'red',
-              index: 0,
-              text: 'Unhealthy',
-            },
-            '1': {
-              color: 'green',
-              index: 1,
-              text: 'Healthy',
-            },
-          },
-          type: 'value',
-        },
-      ],
-      max: 1,
-      min: 0,
+      mappings: [],
       thresholds: {
         mode: 'absolute',
         steps: [
           {
+            color: 'green',
+            value: 1,
+          },
+          {
             color: 'yellow',
             value: null,
+          },
+          {
+            color: 'red',
+            value: 0,
           },
         ],
       },
@@ -175,7 +165,7 @@ local clusterHealthPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'background',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -186,7 +176,8 @@ local clusterHealthPanel = {
       fields: '',
       values: false,
     },
-    textMode: 'auto',
+    text: {},
+    textMode: 'name',
   },
   pluginVersion: '9.2.3',
 };
