@@ -41,7 +41,7 @@
     },
 
     deployment+: {
-      new(name, replicas, containers, podLabels={})::
+      new(name, replicas, containers, podLabels={}, capacityScheduler=true)::
         super.new(name, replicas, containers, podLabels) +
 
         // We want to specify a minReadySeconds on every deployment, so we get some
@@ -50,13 +50,36 @@
 
         // We want to add a sensible default for the number of old deployments
         // handing around.
-        super.mixin.spec.withRevisionHistoryLimit(10),
+        super.mixin.spec.withRevisionHistoryLimit(10) +
+
+        /*
+          Capacity Scheduler
+
+          To OPT OUT, set the `withSchedulerName` field in your deployment or statefulSet
+        */
+        (
+        if (capacityScheduler)
+          then std.trace('capacity scheduler used', super.spec.template.spec.withSchedulerName('custom-scheduler'))
+          else std.trace('default scheduler used', super.spec.template.spec.withSchedulerName('default-scheduler'))
+        ),
+        
     },
 
     statefulSet+: {
-      new(name, replicas, containers, volumeClaims=[], podLabels={})::
+      new(name, replicas, containers, volumeClaims=[], podLabels={}, capacityScheduler=true)::
         super.new(name, replicas, containers, volumeClaims, podLabels) +
-        super.mixin.spec.updateStrategy.withType('RollingUpdate'),
+        super.mixin.spec.updateStrategy.withType('RollingUpdate') +
+
+        /*
+          Capacity Scheduler
+
+          To OPT OUT, set the `withSchedulerName` field in your deployment or statefulSet
+        */
+        (
+        if (capacityScheduler)
+          then std.trace('capacity scheduler used', super.spec.template.spec.withSchedulerName('custom-scheduler'))
+          else std.trace('default scheduler used', super.spec.template.spec.withSchedulerName('default-scheduler'))
+        ),
     },
   },
 
