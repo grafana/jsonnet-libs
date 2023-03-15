@@ -1030,19 +1030,9 @@ local bulkRequestsPanel = {
   },
 };
 
-local responseStatusOverviewPanel = {
+local responseStatusErrorOverviewPanel = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__interval])) != 0',
-      datasource=promDatasource,
-      legendFormat='{{cluster}} - 2xx',
-    ),
-    prometheus.target(
-      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__interval])) != 0',
-      datasource=promDatasource,
-      legendFormat='{{cluster}} - 3xx',
-    ),
     prometheus.target(
       'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__interval])) != 0',
       datasource=promDatasource,
@@ -1055,8 +1045,8 @@ local responseStatusOverviewPanel = {
     ),
   ],
   type: 'piechart',
-  title: 'Response status overview',
-  description: 'The responses grouped by HTTP status type (2xx, 3xx, 4xx, 5xx) aggregated across all nodes.',
+  title: 'Response status error overview',
+  description: 'The responses grouped by HTTP error status type (4xx and 5xx) aggregated across all nodes.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1800,7 +1790,7 @@ local replicatorJobsPendingPanel = {
           requestsRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
           bulkRequestsPanel { gridPos: { h: 6, w: 8, x: 0, y: 25 } },
           averageRequestLatencyPanel { gridPos: { h: 6, w: 8, x: 8, y: 25 } },
-          responseStatusOverviewPanel { gridPos: { h: 6, w: 8, x: 16, y: 25 } },
+          responseStatusErrorOverviewPanel { gridPos: { h: 6, w: 8, x: 16, y: 25 } },
           requestMethodsPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
           responseStatusesPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
           replicationRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
