@@ -32,8 +32,7 @@ Default thresholds can be configured in `config.libsonnet`.
 The Apache Tomcat overview provides details on memory/cpu usage, traffic sent/received, request processing time, number of threads, and output logs for a Tomcat instance.
 To get Tomcat output logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Tomcat output log path is `/var/log/tomcat*/catalina.out` on Linux and `C:\Program Files\Apache Software Foundation\Tomcat *.*\logs\catalina.out` on Windows.
 
-<!-- ![First screenshot of the Apache Cassandra overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_1.png)
-![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_2.png) -->
+<!-- TODO add screenshots of Overview Dashboard -->
 
 Tomcat output logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -49,9 +48,7 @@ Tomcat output logs are enabled by default in the `config.libsonnet` and can be r
 
 The Apache Tomcat hosts dashboard provides details on number of sessions, session processing time, number of servlet requests, and servlet processing time. 
 
-<!-- ![First screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_1.png)
-![Second screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_2.png) -->
-
+<!-- #TODO add screenshots of Hosts dashboard -->
 ## Alerts Overview
 
 ApacheTomcatAlertsHighCpuUsage: The instance has a CPU usage higher than the configured threshold.

@@ -226,12 +226,12 @@ local servletRequestsPanel = {
     prometheus.target(
       'rate(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:])',
       datasource=promDatasource,
-      legendFormat='{{job}} - {{instance}} - {{module}} - {{servlet}} - requests',
+      legendFormat='{{job}} - {{instance}} - {{module}}{{servlet}} - requests',
     ),
     prometheus.target(
       'rate(tomcat_servlet_errorcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:])',
       datasource=promDatasource,
-      legendFormat='{{job}} - {{instance}} - {{module}} - {{servlet}} - errors',
+      legendFormat='{{job}} - {{instance}} - {{module}}{{servlet}} - errors',
     ),
   ],
   type: 'timeseries',
@@ -286,6 +286,7 @@ local servletRequestsPanel = {
           },
         ],
       },
+      unit: 'r/s',
     },
     overrides: [],
   },
@@ -314,7 +315,7 @@ local servletProcessingTimePanel = {
     prometheus.target(
       'increase(tomcat_servlet_processingtime_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:]) / clamp_min(increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:]), 1)',
       datasource=promDatasource,
-      legendFormat='{{job}} - {{instance}} - {{module}} - {{servlet}}',
+      legendFormat='{{job}} - {{instance}} - {{module}}{{servlet}}',
     ),
   ],
   type: 'timeseries',
@@ -464,7 +465,7 @@ local servletProcessingTimePanel = {
           template.new(
             'servlet',
             promDatasource,
-            'label_values(tomcat_servlet_requestcount_total{context=~"$context"}, servlet)',
+            'label_values(tomcat_servlet_requestcount_total{module=~"$host$context"}, servlet)',
             label='Servlet',
             refresh=1,
             includeAll=true,
