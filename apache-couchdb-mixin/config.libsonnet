@@ -6,6 +6,7 @@
     dashboardRefresh: '1m',
 
     //alert thresholds
+    alertsCriticalClusterIsUnstable5m: 1,  //1 is stable
     alertsWarning4xxResponseCodes5m: 5,
     alertsCritical5xxResponseCodes5m: 0,
     alertsWarningRequestLatency5m: 500,  //ms

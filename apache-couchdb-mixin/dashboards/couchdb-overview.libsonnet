@@ -129,28 +129,24 @@ local clusterHealthPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'min by(cluster, job) (couchdb_couch_replicator_cluster_is_stable{' + matcher + '})',
+      'sum(min by(job, cluster) (couchdb_couch_replicator_cluster_is_stable{' + matcher + '})) / count(count by(job, cluster) (couchdb_couch_replicator_cluster_is_stable{' + matcher + '})) * 100',
       datasource=promDatasource,
       legendFormat='{{ cluster }}',
       format='time_series',
     ),
   ],
   type: 'stat',
-  title: 'Cluster health',
-  description: 'Each cluster shows green for healthy or red for unhealthy if all nodes in cluster are reporting healthy.',
+  title: 'Clusters healthy',
+  description: 'Percentage of clusters that have all nodes that are currently reporting healthy.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'continuous-GrYlRd',
+        mode: 'thresholds',
       },
       mappings: [],
       thresholds: {
         mode: 'absolute',
         steps: [
-          {
-            color: 'green',
-            value: 1,
-          },
           {
             color: 'yellow',
             value: null,
@@ -159,13 +155,22 @@ local clusterHealthPanel = {
             color: 'red',
             value: 0,
           },
+          {
+            color: 'yellow',
+            value: 1,
+          },
+          {
+            color: 'green',
+            value: 100,
+          },
         ],
       },
+      unit: 'percent',
     },
     overrides: [],
   },
   options: {
-    colorMode: 'background',
+    colorMode: 'value',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -177,7 +182,7 @@ local clusterHealthPanel = {
       values: false,
     },
     text: {},
-    textMode: 'name',
+    textMode: 'auto',
   },
   pluginVersion: '9.2.3',
 };
@@ -1021,9 +1026,19 @@ local bulkRequestsPanel = {
   },
 };
 
-local responseStatusErrorOverviewPanel = {
+local responseStatusOverviewPanel = {
   datasource: promDatasource,
   targets: [
+    prometheus.target(
+      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__interval])) != 0',
+      datasource=promDatasource,
+      legendFormat='{{cluster}} - 2xx',
+    ),
+    prometheus.target(
+      'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__interval])) != 0',
+      datasource=promDatasource,
+      legendFormat='{{cluster}} - 3xx',
+    ),
     prometheus.target(
       'sum by(job, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__interval])) != 0',
       datasource=promDatasource,
@@ -1036,8 +1051,8 @@ local responseStatusErrorOverviewPanel = {
     ),
   ],
   type: 'piechart',
-  title: 'Response status error overview',
-  description: 'The responses grouped by HTTP error status type (4xx and 5xx) aggregated across all nodes.',
+  title: 'Response status overview',
+  description: 'The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) aggregated across all nodes.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1069,7 +1084,7 @@ local responseStatusErrorOverviewPanel = {
       values: false,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -1781,7 +1796,7 @@ local replicatorJobsPendingPanel = {
           requestsRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
           bulkRequestsPanel { gridPos: { h: 6, w: 8, x: 0, y: 25 } },
           averageRequestLatencyPanel { gridPos: { h: 6, w: 8, x: 8, y: 25 } },
-          responseStatusErrorOverviewPanel { gridPos: { h: 6, w: 8, x: 16, y: 25 } },
+          responseStatusOverviewPanel { gridPos: { h: 6, w: 8, x: 16, y: 25 } },
           requestMethodsPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
           responseStatusesPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
           replicationRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },

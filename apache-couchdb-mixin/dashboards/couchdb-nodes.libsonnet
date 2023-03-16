@@ -24,7 +24,7 @@ local erlangMemoryUsagePanel = {
     prometheus.target(
       'couchdb_erlang_memory_bytes{' + matcher + ', memory_type="total"}',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -103,7 +103,7 @@ local openOSFilesPanel = {
     prometheus.target(
       'increase(couchdb_open_os_files_total{' + matcher + '}[$__interval])',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -178,7 +178,7 @@ local openDatabasesPanel = {
     prometheus.target(
       'couchdb_open_databases_total{' + matcher + '}',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -256,7 +256,7 @@ local databaseWritesPanel = {
     prometheus.target(
       'rate(couchdb_database_writes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -335,7 +335,7 @@ local databaseReadsPanel = {
     prometheus.target(
       'rate(couchdb_database_reads_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -414,7 +414,7 @@ local viewReadsPanel = {
     prometheus.target(
       'rate(couchdb_httpd_view_reads_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -493,7 +493,7 @@ local viewTimeoutsPanel = {
     prometheus.target(
       'rate(couchdb_httpd_view_timeouts_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -572,7 +572,7 @@ local temporaryViewReadsPanel = {
     prometheus.target(
       'rate(couchdb_httpd_temporary_view_reads_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -659,7 +659,7 @@ local requestMethodsPanel = {
     prometheus.target(
       'rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval]) != 0',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - {{method}}',
+      legendFormat='{{instance}} - {{method}}',
     ),
   ],
   type: 'timeseries',
@@ -738,22 +738,22 @@ local requestLatencyPanel = {
     prometheus.target(
       'couchdb_request_time_seconds{' + matcher + ', quantile="0.5"}',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - p50',
+      legendFormat='{{instance}} - p50',
     ),
     prometheus.target(
       'couchdb_request_time_seconds{' + matcher + ', quantile="0.75"}',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - p75',
+      legendFormat='{{instance}} - p75',
     ),
     prometheus.target(
       'couchdb_request_time_seconds{' + matcher + ', quantile="0.95"}',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - p95',
+      legendFormat='{{instance}} - p95',
     ),
     prometheus.target(
       'couchdb_request_time_seconds{' + matcher + ', quantile="0.99"}',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - p99',
+      legendFormat='{{instance}} - p99',
     ),
   ],
   type: 'timeseries',
@@ -832,7 +832,7 @@ local bulkRequestsPanel = {
     prometheus.target(
       'rate(couchdb_httpd_bulk_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}}',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -905,23 +905,33 @@ local bulkRequestsPanel = {
   },
 };
 
-local responseStatusErrorOverviewPanel = {
+local responseStatusOverviewPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
+      'sum by(instance, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__interval])) != 0',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - 2xx',
+    ),
+    prometheus.target(
+      'sum by(instance, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__interval])) != 0',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - 3xx',
+    ),
+    prometheus.target(
       'sum by(instance, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__interval])) != 0',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - 4xx',
+      legendFormat='{{instance}} - 4xx',
     ),
     prometheus.target(
       'sum by(instance, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"5.*"}[$__interval])) != 0',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - 5xx',
+      legendFormat='{{instance}} - 5xx',
     ),
   ],
   type: 'piechart',
-  title: 'Response status error overview',
-  description: 'The responses grouped by HTTP error status type (4xx and 5xx) for a node.',
+  title: 'Response status overview',
+  description: 'The responses grouped by HTTP status type (2xx, 3xx, 4xx, and 5xx) for a node.',
   fieldConfig: {
     defaults: {
       color: {
@@ -953,7 +963,7 @@ local responseStatusErrorOverviewPanel = {
       values: false,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -965,7 +975,7 @@ local goodResponseStatusesPanel = {
     prometheus.target(
       'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[23].*"}[$__rate_interval]) != 0',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - {{code}}',
+      legendFormat='{{instance}} - {{code}}',
     ),
   ],
   type: 'timeseries',
@@ -1044,7 +1054,7 @@ local errorResponseStatusesPanel = {
     prometheus.target(
       'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[45].*"}[$__rate_interval]) != 0',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - {{code}}',
+      legendFormat='{{instance}} - {{code}}',
     ),
   ],
   type: 'timeseries',
@@ -1131,7 +1141,7 @@ local logTypesPanel = {
     prometheus.target(
       'increase(couchdb_couch_log_requests_total{' + matcher + ', level=~"$log_level"}[$__interval]) != 0',
       datasource=promDatasource,
-      legendFormat='{{cluster}} - {{instance}} - {{level}}',
+      legendFormat='{{instance}} - {{level}}',
     ),
   ],
   type: 'timeseries',
@@ -1332,7 +1342,7 @@ local systemLogsPanel = {
             bulkRequestsPanel { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
             requestLatencyPanel { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
             requestMethodsPanel { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
-            responseStatusErrorOverviewPanel { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+            responseStatusOverviewPanel { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
             goodResponseStatusesPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
             errorResponseStatusesPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },

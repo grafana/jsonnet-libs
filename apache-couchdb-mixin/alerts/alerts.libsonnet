@@ -5,6 +5,24 @@
         name: 'ApacheCouchDBAlerts',
         rules: [
           {
+            alert: 'CouchDBUnhealthyCluster',
+            expr: |||
+              min by(job, cluster) (couchdb_couch_replicator_cluster_is_stable) < %(alertsCriticalClusterIsUnstable5m)s
+            ||| % $._config,
+            'for': '5m',
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'At least one of the nodes in a cluster is reporting the cluster as being unstable.',
+              description:
+                (
+                  '{{$labels.cluster}} has reported a value of {{ printf "%%.0f" $value }} for its stability over the last 5 minutes, ' +
+                  'which is below the threshold of %(alertsCriticalClusterIsUnstable5m)s.'
+                ) % $._config,
+            },
+          },
+          {
             alert: 'CouchDBHigh4xxResponseCodes',
             expr: |||
               sum by(job, instance) (increase(couchdb_httpd_status_codes{code=~"4.*"}[5m])) > %(alertsWarning4xxResponseCodes5m)s

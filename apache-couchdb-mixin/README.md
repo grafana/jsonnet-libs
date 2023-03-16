@@ -9,6 +9,7 @@ The Apache CouchDB mixin contains the following dashboards:
 
 and the following alerts:
 
+- CouchDBUnhealthyCluster
 - CouchDBHigh4xxResponseCodes
 - CouchDBHigh5xxResponseCodes
 - CouchDBModerateRequestLatency
@@ -60,6 +61,7 @@ scrape_configs:
 
 ## Alerts Overview
 
+- CouchDBUnhealthyCluster: At least one of the nodes in a cluster is reporting the cluster as being unstable.
 - CouchDBHigh4xxResponseCodes: There are a high number of 4xx responses for incoming requests to a node.
 - CouchDBHigh5xxResponseCodes: There are a high number of 5xx responses for incoming requests to a node.
 - CouchDBModerateRequestLatency: There is a moderate level of request latency for a node.
