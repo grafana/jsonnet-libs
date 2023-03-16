@@ -27,7 +27,8 @@ Wildfly logs are enabled by default in the `config.libsonnet` and can be removed
 }
 ```
 
-#TODO screenshots
+![Screenshot1 of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/wildfly/screenshots/Overview1.png)
+![Screenshot2 of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/wildfly/screenshots/Overview2.png)
 
 ## Wildfly Datasource
 
@@ -37,7 +38,7 @@ The Wildfly datasource dashboard provides details on connections and transaction
 /subsystem=transactions:write-attribute(name=statistics-enabled, value=true)
 ```
 
-#TODO screenshots
+![Screenshot of the datasource dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/wildfly/screenshots/Datasource.png)
 
 ## Install Tools
 

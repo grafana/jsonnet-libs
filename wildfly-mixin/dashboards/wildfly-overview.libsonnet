@@ -17,7 +17,7 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local requestPanel = {
+local requestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -27,7 +27,7 @@ local requestPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Request',
+  title: 'Requests',
   description: 'Requests rate over time',
   fieldConfig: {
     defaults: {
@@ -697,7 +697,7 @@ local rejectedSessionsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            requestPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
             requestErrorsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
             networkReceivedThroughputPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
             networkSentThroughputPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
