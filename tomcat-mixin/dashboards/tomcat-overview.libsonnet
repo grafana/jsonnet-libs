@@ -613,6 +613,7 @@ local threadsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -769,16 +770,16 @@ local logsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            memoryUsagePanel { gridPos: { h: 9, w: 12, x: 0, y: 0 } },
-            cpuUsagePanel { gridPos: { h: 9, w: 12, x: 12, y: 0 } },
-            trafficSentPanel { gridPos: { h: 9, w: 12, x: 0, y: 9 } },
-            trafficReceivedPanel { gridPos: { h: 9, w: 12, x: 12, y: 9 } },
-            requestsPanel { gridPos: { h: 9, w: 12, x: 0, y: 18 } },
-            processingTimePanel { gridPos: { h: 9, w: 12, x: 12, y: 18 } },
-            threadsPanel { gridPos: { h: 9, w: 24, x: 0, y: 27 } },
+            memoryUsagePanel { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
+            cpuUsagePanel { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
+            trafficSentPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+            trafficReceivedPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+            requestsPanel { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
+            processingTimePanel { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+            threadsPanel { gridPos: { h: 6, w: 24, x: 0, y: 18 } },
           ],
           if $._config.enableLokiLogs then [
-            logsPanel { gridPos: { h: 9, w: 24, x: 0, y: 36 } },
+            logsPanel { gridPos: { h: 6, w: 24, x: 0, y: 24 } },
           ] else [],
           [
           ],

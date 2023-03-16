@@ -477,11 +477,11 @@ local servletProcessingTimePanel = {
       )
       .addPanels(
         [
-          sessionsPanel { gridPos: { h: 9, w: 12, x: 0, y: 0 } },
-          sessionProcessingTimePanel { gridPos: { h: 9, w: 12, x: 12, y: 0 } },
-          servletRowRow { gridPos: { h: 1, w: 24, x: 0, y: 9 } },
-          servletRequestsPanel { gridPos: { h: 9, w: 12, x: 0, y: 10 } },
-          servletProcessingTimePanel { gridPos: { h: 9, w: 12, x: 12, y: 10 } },
+          sessionsPanel { gridPos: { h: 10, w: 12, x: 0, y: 0 } },
+          sessionProcessingTimePanel { gridPos: { h: 10, w: 12, x: 12, y: 0 } },
+          servletRowRow { gridPos: { h: 1, w: 24, x: 0, y: 10 } },
+          servletRequestsPanel { gridPos: { h: 10, w: 12, x: 0, y: 11 } },
+          servletProcessingTimePanel { gridPos: { h: 10, w: 12, x: 12, y: 11 } },
         ]
       ),
 
