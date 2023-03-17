@@ -1090,18 +1090,97 @@ local responseStatusOverviewPanel = {
   },
 };
 
-local responseStatusesPanel = {
+local goodResponseStatusesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, cluster, code) (rate(couchdb_httpd_status_codes{' + matcher + '}[$__rate_interval])) != 0',
+      'sum by(job, cluster, code) (rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[23].*"}[$__rate_interval])) != 0',
       datasource=promDatasource,
       legendFormat='{{cluster}} - {{code}}',
     ),
   ],
   type: 'timeseries',
   title: 'Response statuses',
-  description: 'The response rate split by HTTP statuses aggregated across all nodes.',
+  description: 'The response rate split by good HTTP statuses aggregated across all nodes.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'reqps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'table',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'none',
+    },
+  },
+};
+
+local errorResponseStatusesPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum by(job, cluster, code) (rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[45].*"}[$__rate_interval])) != 0',
+      datasource=promDatasource,
+      legendFormat='{{cluster}} - {{code}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Error response statuses',
+  description: 'The response rate split by error HTTP statuses aggregated across all nodes.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1794,19 +1873,20 @@ local replicatorJobsPendingPanel = {
           viewTimeoutsPanel { gridPos: { h: 6, w: 8, x: 8, y: 18 } },
           temporaryViewReadsPanel { gridPos: { h: 6, w: 8, x: 16, y: 18 } },
           requestsRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
-          bulkRequestsPanel { gridPos: { h: 6, w: 8, x: 0, y: 25 } },
-          averageRequestLatencyPanel { gridPos: { h: 6, w: 8, x: 8, y: 25 } },
-          responseStatusOverviewPanel { gridPos: { h: 6, w: 8, x: 16, y: 25 } },
+          bulkRequestsPanel { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+          averageRequestLatencyPanel { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
           requestMethodsPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
-          responseStatusesPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
-          replicationRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
-          replicatorChangesManagerDeathsPanel { gridPos: { h: 6, w: 8, x: 0, y: 38 } },
-          replicatorChangesQueueDeathsPanel { gridPos: { h: 6, w: 8, x: 8, y: 38 } },
-          replicatorChangesReaderDeathsPanel { gridPos: { h: 6, w: 8, x: 16, y: 38 } },
-          replicatorConnectionOwnerCrashesPanel { gridPos: { h: 6, w: 12, x: 0, y: 44 } },
-          replicatorConnectionWorkerCrashesPanel { gridPos: { h: 6, w: 12, x: 12, y: 44 } },
-          replicatorJobCrashesPanel { gridPos: { h: 6, w: 12, x: 0, y: 50 } },
-          replicatorJobsPendingPanel { gridPos: { h: 6, w: 12, x: 12, y: 50 } },
+          responseStatusOverviewPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
+          goodResponseStatusesPanel { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
+          errorResponseStatusesPanel { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
+          replicationRow { gridPos: { h: 1, w: 24, x: 0, y: 43 } },
+          replicatorChangesManagerDeathsPanel { gridPos: { h: 6, w: 8, x: 0, y: 44 } },
+          replicatorChangesQueueDeathsPanel { gridPos: { h: 6, w: 8, x: 8, y: 44 } },
+          replicatorChangesReaderDeathsPanel { gridPos: { h: 6, w: 8, x: 16, y: 44 } },
+          replicatorConnectionOwnerCrashesPanel { gridPos: { h: 6, w: 12, x: 0, y: 50 } },
+          replicatorConnectionWorkerCrashesPanel { gridPos: { h: 6, w: 12, x: 12, y: 50 } },
+          replicatorJobCrashesPanel { gridPos: { h: 6, w: 12, x: 0, y: 56 } },
+          replicatorJobsPendingPanel { gridPos: { h: 6, w: 12, x: 12, y: 56 } },
         ]
       ),
   },
