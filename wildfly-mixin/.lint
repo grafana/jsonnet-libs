@@ -13,7 +13,7 @@ exclusions:
       - panel: "Active sessions"
       - panel: "Expired sessions"
       - panel: "Rejected sessions"
-      - panel: "Connections"
+      - panel: "Active connections"
       - panel: "Idle connections"
       - panel: "Created transactions"
       - panel: "In-flight transactions"

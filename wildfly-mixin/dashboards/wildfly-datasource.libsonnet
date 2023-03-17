@@ -12,7 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local connectionsPanel = {
+local activeConnectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -22,7 +22,7 @@ local connectionsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Connections',
+  title: 'Active connections',
   description: 'Connections to the datasource over time',
   fieldConfig: {
     defaults: {
@@ -469,7 +469,7 @@ local abortedTransactionsPanel = {
 
       .addPanels(
         [
-          connectionsPanel { gridPos: { h: 7, w: 12, x: 0, y: 1 } },
+          activeConnectionsPanel { gridPos: { h: 7, w: 12, x: 0, y: 1 } },
           idleConnectionsPanel { gridPos: { h: 7, w: 12, x: 12, y: 1 } },
           createdTransactionsPanel { gridPos: { h: 7, w: 12, x: 0, y: 8 } },
           inflightTransactionsPanel { gridPos: { h: 7, w: 12, x: 12, y: 8 } },
