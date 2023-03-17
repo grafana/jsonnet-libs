@@ -24,16 +24,15 @@ and the following alerts:
 
 The Apache CouchDB overview dashboard provides details on number of clusters and nodes per cluster, open OS files, open databases, database reads and writes, view info, request info (rate, latency, status code info), and replicator failure info for a CouchDB cluster.
 
-![First screenshot of the Apache CouchDB overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/overview_1.png)
-![Second screenshot of the Apache CouchDB overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/overview_2.png)
-![Third screenshot of the Apache CouchDB overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/overview_3.png)
+![First screenshot of the Apache CouchDB overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/couchdb_overview_1.png)
+![Second screenshot of the Apache CouchDB overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/couchdb_overview_2.png)
 
 ## Apache CouchDB Nodes
 
 The Apache CouchDB nodes dashboard provides details on memory usage, open OS files, open databases, database reads and writes, view info, request info (rate, latency, status code info), log type breakdown, and logs for a specific node in the cluster. To get CouchDB system logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default CouchDB system log path is `/var/log/couchdb/couchdb.log` on Linux.
 
-![First screenshot of the Apache CouchDB nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/nodes_1.png)
-![Second screenshot of the Apache CouchDB nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/nodes_2.png)
+![First screenshot of the Apache CouchDB nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/couchdb_nodes_1.png)
+![Second screenshot of the Apache CouchDB nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchdb/screenshots/couchdb_nodes_2.png)
 
 CouchDB system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
