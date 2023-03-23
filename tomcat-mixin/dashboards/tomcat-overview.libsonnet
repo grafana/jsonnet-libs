@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'overview';
+local dashboardUid = 'apache-tomcat-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
@@ -680,9 +680,9 @@ local logsPanel = {
 
 {
   grafanaDashboards+:: {
-    'overview.json':
+    'apache-tomcat-overview.json':
       dashboard.new(
-        'Overview',
+        'Apache Tomcat Overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,

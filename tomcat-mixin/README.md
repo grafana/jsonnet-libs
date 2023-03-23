@@ -1,4 +1,4 @@
-# Apache Tomcat Mixin
+# Apache Tomcat mixin
 
 The Apache Tomcat mixin is a set of configurable Grafana dashboards and alerts.
 
@@ -27,7 +27,7 @@ Default thresholds can be configured in `config.libsonnet`.
 }
 ```
 
-## Apache Tomcat Overview
+## Apache Tomcat overview
 
 The Apache Tomcat overview provides details on memory/cpu usage, traffic sent/received, request processing time, number of threads, and output logs for a Tomcat instance.
 To get Tomcat output logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Tomcat output log path is `/var/log/tomcat*/catalina.out` on Linux and `C:\Program Files\Apache Software Foundation\Tomcat *.*\logs\catalina.out` on Windows.
@@ -49,7 +49,7 @@ Tomcat output logs are enabled by default in the `config.libsonnet` and can be r
 The Apache Tomcat hosts dashboard provides details on number of sessions, session processing time, number of servlet requests, and servlet processing time. 
 
 <!-- #TODO add screenshots of Hosts dashboard -->
-## Alerts Overview
+## Alerts overview
 
 ApacheTomcatAlertsHighCpuUsage: The instance has a CPU usage higher than the configured threshold.
 ApacheTomcatAlertsHighMemoryUsage: The instance has a higher memory usage than the configured threshold.

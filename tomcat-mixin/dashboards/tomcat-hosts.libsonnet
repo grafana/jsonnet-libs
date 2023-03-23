@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'hosts';
+local dashboardUid = 'apache-tomcat-hosts';
 
 local promDatasourceName = 'prometheus_datasource';
 
@@ -202,11 +202,11 @@ local sessionProcessingTimePanel = {
   },
 };
 
-local servletRowRow = {
+local servletRow = {
   datasource: promDatasource,
   targets: [],
   type: 'row',
-  title: 'Servlet row',
+  title: 'Servlet',
   collapsed: false,
 };
 
@@ -390,9 +390,9 @@ local servletProcessingTimePanel = {
 
 {
   grafanaDashboards+:: {
-    'hosts.json':
+    'apache-tomcat-hosts.json':
       dashboard.new(
-        'Hosts',
+        'Apache Tomcat Hosts',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -479,7 +479,7 @@ local servletProcessingTimePanel = {
         [
           sessionsPanel { gridPos: { h: 10, w: 12, x: 0, y: 0 } },
           sessionProcessingTimePanel { gridPos: { h: 10, w: 12, x: 12, y: 0 } },
-          servletRowRow { gridPos: { h: 1, w: 24, x: 0, y: 10 } },
+          servletRow { gridPos: { h: 1, w: 24, x: 0, y: 10 } },
           servletRequestsPanel { gridPos: { h: 10, w: 12, x: 0, y: 11 } },
           servletProcessingTimePanel { gridPos: { h: 10, w: 12, x: 12, y: 11 } },
         ]
