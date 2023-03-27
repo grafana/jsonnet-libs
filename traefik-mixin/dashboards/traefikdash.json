@@ -750,7 +750,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval] offset -$__interval))/\nsum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset $__interval)>0)*100",
+          "expr": "sum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\", code=~\"(4|5).+\"}[$__interval] offset -$__interval))/\nsum by (service) (increase(traefik_service_requests_total{job=~\"$job\", instance=~\"$instance\", service=~\"$service\"}[$__interval] offset -$__interval)>0)*100",
           "format": "time_series",
           "hide": false,
           "interval": "",
