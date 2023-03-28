@@ -7,7 +7,7 @@
           {
             alert: 'CouchDBUnhealthyCluster',
             expr: |||
-              min by(job, cluster) (couchdb_couch_replicator_cluster_is_stable) < %(alertsCriticalClusterIsUnstable5m)s
+              min by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable) < %(alertsCriticalClusterIsUnstable5m)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -17,7 +17,7 @@
               summary: 'At least one of the nodes in a cluster is reporting the cluster as being unstable.',
               description:
                 (
-                  '{{$labels.cluster}} has reported a value of {{ printf "%%.0f" $value }} for its stability over the last 5 minutes, ' +
+                  '{{$labels.couchdb_cluster}} has reported a value of {{ printf "%%.0f" $value }} for its stability over the last 5 minutes, ' +
                   'which is below the threshold of %(alertsCriticalClusterIsUnstable5m)s.'
                 ) % $._config,
             },
