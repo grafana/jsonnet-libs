@@ -1,2 +1,2 @@
-(import 'tomcat-overview.libsonnet') +
-(import 'tomcat-hosts.libsonnet')
+(import 'apache-tomcat-overview.libsonnet') +
+(import 'apache-tomcat-hosts.libsonnet')
