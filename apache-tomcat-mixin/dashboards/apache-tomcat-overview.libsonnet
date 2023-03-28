@@ -677,6 +677,14 @@ local logsPanel = {
         uid=dashboardUid,
       )
 
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache Tomcat dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
+
       .addTemplates(
         std.flattenArrays([
           [

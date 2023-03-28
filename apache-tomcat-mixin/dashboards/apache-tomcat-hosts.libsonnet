@@ -308,12 +308,12 @@ local servletProcessingTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_servlet_processingtime_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:]) / clamp_min(increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:]), 1)) by (job, instance)',
+      'sum(increase(tomcat_servlet_processingtime_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
     ),
     prometheus.target(
-      'increase(tomcat_servlet_processingtime_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:]) / clamp_min(increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__rate_interval:]), 1)',
+      'increase(tomcat_servlet_processingtime_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_servlet_requestcount_total{instance=~"$instance", job=~"$job", module=~"$host$context", servlet=~"$servlet"}[$__interval:] offset -$__interval), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{module}}{{servlet}}',
     ),
@@ -400,6 +400,14 @@ local servletProcessingTimePanel = {
         description='',
         uid=dashboardUid,
       )
+
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache Tomcat dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
 
       .addTemplates(
         [
