@@ -450,9 +450,11 @@ local expiredSessionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_undertow_expired_sessions_total{deployment=~"$deployment", job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'increase(wildfly_undertow_expired_sessions_total{deployment=~"$deployment", job=~"$job", instance=~"$instance"}[$__interval])',
       datasource=promDatasource,
       legendFormat='{{deployment}}',
+      interval='1m',
+      intervalFactor=2,
     ),
   ],
   type: 'timeseries',
@@ -529,9 +531,11 @@ local rejectedSessionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_undertow_rejected_sessions_total{deployment=~"$deployment", job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'increase(wildfly_undertow_rejected_sessions_total{deployment=~"$deployment", job=~"$job", instance=~"$instance"}[$__interval])',
       datasource=promDatasource,
       legendFormat='{{deployment}}',
+      interval='1m',
+      intervalFactor=2,
     ),
   ],
   type: 'timeseries',
@@ -608,7 +612,7 @@ local rejectedSessionsPanel = {
   grafanaDashboards+:: {
     'wildfly-overview.json':
       dashboard.new(
-        'Wildfly Overview',
+        'Wildfly overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,

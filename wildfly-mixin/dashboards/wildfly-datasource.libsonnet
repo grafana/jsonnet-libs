@@ -172,9 +172,11 @@ local createdTransactionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_transactions_number_of_transactions_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'increase(wildfly_transactions_number_of_transactions_total{job=~"$job", instance=~"$instance"}[$__interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      interval='1m',
+      intervalFactor=2,
     ),
   ],
   type: 'timeseries',
@@ -328,9 +330,11 @@ local abortedTransactionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_transactions_number_of_aborted_transactions_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'increase(wildfly_transactions_number_of_aborted_transactions_total{job=~"$job", instance=~"$instance"}[$__interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      interval='1m',
+      intervalFactor=2,
     ),
   ],
   type: 'timeseries',
@@ -406,7 +410,7 @@ local abortedTransactionsPanel = {
   grafanaDashboards+:: {
     'wildfly-datasource.json':
       dashboard.new(
-        'Wildfly Datasource',
+        'Wildfly datasource',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -427,7 +431,7 @@ local abortedTransactionsPanel = {
             'job',
             promDatasource,
             'label_values(wildfly_batch_jberet_active_count{}, job)',
-            label='job',
+            label='Job',
             refresh=2,
             includeAll=true,
             multi=true,
@@ -449,7 +453,7 @@ local abortedTransactionsPanel = {
             'datasource',
             promDatasource,
             'label_values(wildfly_datasources_pool_idle_count{}, data_source)',
-            label='Wildfly Datasource',
+            label='Wildfly datasource',
             refresh=2,
             includeAll=false,
             multi=true,
