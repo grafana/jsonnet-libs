@@ -392,7 +392,7 @@ local servletProcessingTimePanel = {
   grafanaDashboards+:: {
     'apache-tomcat-hosts.json':
       dashboard.new(
-        'Apache Tomcat Hosts',
+        'Apache Tomcat hosts',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
