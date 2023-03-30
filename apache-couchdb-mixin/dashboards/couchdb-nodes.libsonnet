@@ -8,7 +8,7 @@ local dashboardUid = 'couchdb-nodes';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
-local matcher = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"';
+local matcher = 'job=~"$job", couchdb_cluster=~"$couchdb_cluster", instance=~"$instance"';
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -101,7 +101,7 @@ local openOSFilesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(couchdb_open_os_files_total{' + matcher + '}[$__interval])',
+      'couchdb_open_os_files_total{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -254,7 +254,7 @@ local databaseWritesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_database_writes_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_database_writes_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -333,7 +333,7 @@ local databaseReadsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_database_reads_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_database_reads_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -412,7 +412,7 @@ local viewReadsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_view_reads_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_httpd_view_reads_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -491,7 +491,7 @@ local viewTimeoutsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_view_timeouts_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_httpd_view_timeouts_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -570,7 +570,7 @@ local temporaryViewReadsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_temporary_view_reads_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_httpd_temporary_view_reads_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -657,7 +657,7 @@ local requestMethodsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval]) != 0',
+      'rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval:]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{method}}',
     ),
@@ -830,7 +830,7 @@ local bulkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_bulk_requests_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_httpd_bulk_requests_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -909,22 +909,22 @@ local responseStatusOverviewPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__interval])) != 0',
+      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - 2xx',
     ),
     prometheus.target(
-      'sum by(instance, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__interval])) != 0',
+      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - 3xx',
     ),
     prometheus.target(
-      'sum by(instance, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__interval])) != 0',
+      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - 4xx',
     ),
     prometheus.target(
-      'sum by(instance, cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"5.*"}[$__interval])) != 0',
+      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"5.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - 5xx',
     ),
@@ -973,7 +973,7 @@ local goodResponseStatusesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[23].*"}[$__rate_interval]) != 0',
+      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[23].*"}[$__rate_interval:]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{code}}',
     ),
@@ -1052,7 +1052,7 @@ local errorResponseStatusesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[45].*"}[$__rate_interval]) != 0',
+      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[45].*"}[$__rate_interval:]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{code}}',
     ),
@@ -1139,9 +1139,10 @@ local logTypesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(couchdb_couch_log_requests_total{' + matcher + ', level=~"$log_level"}[$__interval]) != 0',
+      'increase(couchdb_couch_log_requests_total{' + matcher + ', level=~"$log_level"}[$__interval:]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{level}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1292,10 +1293,10 @@ local systemLogsPanel = {
               sort=0
             ),
             template.new(
-              'cluster',
+              'couchdb_cluster',
               promDatasource,
-              'label_values(couchdb_couch_replicator_cluster_is_stable{job=~"$job"}, cluster)',
-              label='Cluster',
+              'label_values(couchdb_couch_replicator_cluster_is_stable{job=~"$job"}, couchdb_cluster)',
+              label='CouchDB cluster',
               refresh=1,
               includeAll=true,
               multi=true,
@@ -1305,7 +1306,7 @@ local systemLogsPanel = {
             template.new(
               'instance',
               promDatasource,
-              'label_values(couchdb_couch_replicator_cluster_is_stable{cluster=~"$cluster"}, instance)',
+              'label_values(couchdb_couch_replicator_cluster_is_stable{couchdb_cluster=~"$couchdb_cluster"}, instance)',
               label='Instance',
               refresh=1,
               includeAll=true,
