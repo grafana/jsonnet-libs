@@ -1,0 +1,10 @@
+---
+exclusions:
+  target-instance-rule:
+    entries:
+    - dashboard: Consul Overview
+      panel: QPS
+      reason: Query is aggregated on instance
+    - dashboard: Consul Overview
+      panel: Latency
+      reason: Query is aggregated on instance
