@@ -644,7 +644,7 @@ local logsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out"} |= ``',
+      expr: '{filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out|/Program Files/Microsoft SQL Server/MSSQL..*/MSSQL/LOG/ERRORLOG"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
