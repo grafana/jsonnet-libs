@@ -39,14 +39,15 @@ local common_year_month_offset = [0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5];
 local leap_year_month_offset = [0, 3, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6];
 
 // month_offset looks up the month offset for day of week calculations based on weather the year is common or leap
-local month_offset(year, month) = if is_leap(year) then leap_year_month_offset[month-1] else common_year_month_offset[month-1];
+local month_offset(year, month) = if is_leap(year) then leap_year_month_offset[month - 1] else common_year_month_offset[month - 1];
 
 {
   // to_unix_timestamp transforms a date into a unix timestamp.
   to_unix_timestamp(year, month, day, hour, minute, second)::
     years_seconds(year) + months_seconds(year, month) + days_seconds(day) + hour * 3600 + minute * 60 + second,
-  
+
+
   // day_of_week calculates the day of the week for a given date using Gauss's algorithm (0=Sunday, 1=Monday, etc.)
   day_of_week(year, month, day)::
-    (day + month_offset(year, month) + 5*((year-1)%4) + 4*((year-1)%100) + 6*((year-1)%400))%7
+    (day + month_offset(year, month) + 5 * ((year - 1) % 4) + 4 * ((year - 1) % 100) + 6 * ((year - 1) % 400)) % 7,
 }
