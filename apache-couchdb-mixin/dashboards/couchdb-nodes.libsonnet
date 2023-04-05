@@ -1318,7 +1318,7 @@ local systemLogsPanel = {
               'log_level',
               promDatasource,
               'label_values(couchdb_couch_log_requests_total{instance=~"$instance"}, level)',
-              label='Log Level',
+              label='Log level',
               refresh=1,
               includeAll=true,
               multi=true,
