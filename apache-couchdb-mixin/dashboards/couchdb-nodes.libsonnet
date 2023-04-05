@@ -254,7 +254,7 @@ local databaseWritesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_database_writes_total{' + matcher + '}[$__rate_interval:])',
+      'rate(couchdb_database_writes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -333,7 +333,7 @@ local databaseReadsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_database_reads_total{' + matcher + '}[$__rate_interval:])',
+      'rate(couchdb_database_reads_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -412,7 +412,7 @@ local viewReadsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_view_reads_total{' + matcher + '}[$__rate_interval:])',
+      'rate(couchdb_httpd_view_reads_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -491,7 +491,7 @@ local viewTimeoutsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_view_timeouts_total{' + matcher + '}[$__rate_interval:])',
+      'rate(couchdb_httpd_view_timeouts_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -570,7 +570,7 @@ local temporaryViewReadsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_temporary_view_reads_total{' + matcher + '}[$__rate_interval:])',
+      'rate(couchdb_httpd_temporary_view_reads_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -657,7 +657,7 @@ local requestMethodsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval:]) != 0',
+      'rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{method}}',
     ),
@@ -830,7 +830,7 @@ local bulkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_bulk_requests_total{' + matcher + '}[$__rate_interval:])',
+      'rate(couchdb_httpd_bulk_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -973,7 +973,7 @@ local goodResponseStatusesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[23].*"}[$__rate_interval:]) != 0',
+      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[23].*"}[$__rate_interval]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{code}}',
     ),
@@ -1052,7 +1052,7 @@ local errorResponseStatusesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[45].*"}[$__rate_interval:]) != 0',
+      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[45].*"}[$__rate_interval]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{code}}',
     ),
