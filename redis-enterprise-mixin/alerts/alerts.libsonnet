@@ -14,7 +14,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'There is a high level of read latency within the node.',
+              summary: 'Cluster has run out of memory.',
               description:
                 (
                   'Memory usage is at {{ printf "%%.0f" $value }} percent on the cluster {{$labels.redis_cluster}}, ' +
@@ -57,7 +57,7 @@
             },
           },
           {
-            alert: 'DatabaseNotResponding',
+            alert: 'ShardNotResponding',
             expr: |||
               redis_up == 0
             ||| % $._config,
@@ -66,7 +66,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'A database in the Redis Enterprise cluster is offline or unreachable.',
+              summary: 'A shard in the Redis Enterprise cluster is offline or unreachable.',
               description:
                 (
                   'The shard {{$labels.redis}} on database {{$labels.bdb}} running on node {{$labels.node}} in the cluster {{$labels.redis_cluster}} is offline or unreachable.'
@@ -80,7 +80,7 @@
             ||| % $._config,
             'for': '5m',
             labels: {
-              severity: 'critical',
+              severity: 'warning',
             },
             annotations: {
               summary: 'Node CPU usage is above the configured threshold.',
@@ -98,28 +98,10 @@
             ||| % $._config,
             'for': '5m',
             labels: {
-              severity: 'critical',
+              severity: 'warning',
             },
             annotations: {
-              summary: 'Node CPU usage is above the configured threshold.',
-              description:
-                (
-                  'The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has a memory utiliztaion of ${{ printf "%%.0f" $value }}, which exceeds ' +
-                  'the threshold %(alertsDatabaseHighMemoryUtiliation)s%%.'
-                ) % $._config,
-            },
-          },
-          {
-            alert: 'NodeFreeMemoryIsLow',
-            expr: |||
-              sum(bdb_used_memory) by (bdb, redis_cluster) / sum(bdb_memory_limit) by (bdb, redis_cluster) * 100 > %(alertsDatabaseHighMemoryUtiliation)s
-            ||| % $._config,
-            'for': '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'The Redis Enterprise node has less than the configured threshold of its memory remaining.',
+              summary: 'Node memory utilization is above the configured threshold.',
               description:
                 (
                   'The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} has a memory utiliztaion of ${{ printf "%%.0f" $value }}, which exceeds ' +
@@ -148,14 +130,14 @@
           {
             alert: 'KeyEvictionsIncreasing',
             expr: |||
-              bdb_evicted_objects > %(alertsEvictedObjectsThreshold)s
+              bdb_evicted_objects >= %(alertsEvictedObjectsThreshold)s
             ||| % $._config,
             'for': '5m',
             labels: {
               severity: 'warning',
             },
             annotations: {
-              summary: 'Operation latency is above the configured threshold.',
+              summary: 'The number of evicted objects is greater than or equal to the configured threshold.',
               description:
                 (
                   'The database {{$labels.bdb}} in cluster {{$labels.redis_cluster}} is evicting ${{ printf "%%.0f" $value }} objects, which exceeds ' +
