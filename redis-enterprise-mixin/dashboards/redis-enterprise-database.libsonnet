@@ -1486,10 +1486,10 @@ local crdbIngressDecompressedPanel = {
             sort=0
           ),
           template.new(
-            'database',
+            'node',
             promDatasource,
-            'label_values(bdb_up, bdb)',
-            label='Database',
+            'label_values(redis_up, node)',
+            label='Node',
             refresh=1,
             includeAll=true,
             multi=true,
@@ -1497,10 +1497,10 @@ local crdbIngressDecompressedPanel = {
             sort=0
           ),
           template.new(
-            'node',
+            'database',
             promDatasource,
-            'label_values(redis_up, node)',
-            label='Node',
+            'label_values(bdb_up, bdb)',
+            label='Database',
             refresh=1,
             includeAll=true,
             multi=true,
