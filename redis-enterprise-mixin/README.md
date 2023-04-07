@@ -20,7 +20,7 @@ and the following alerts:
 
 ## Redis Enterprise overview
 
-The Redis Enterprise overview dashboard provides details on the overall status of the Redis Enterprise cluster. Includes visualizations for important KPIs such as , nodes up, databases up, average request latency, node cpu utilization, node memory utilization, and cluster cache hit ratio.
+The Redis Enterprise overview dashboard provides details on the overall status of the Redis Enterprise cluster. Includes visualizations for important KPIs such as nodes up, databases up, average request latency, node cpu utilization, node memory utilization, and cluster cache hit ratio.
 
 ### TODO dashboard screenshots
 
