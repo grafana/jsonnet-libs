@@ -33,8 +33,8 @@ The Redis Enterprise nodes dashboard provides details on memory/cpu usage, node 
 
 ### TODO dashboard screenshots
 
-![First screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/nodes_1.png)
-![Second screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/nodes_2.png)
+![First screenshot of the Redis Enterprise nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/nodes_1.png)
+![Second screenshot of the Redis Enterprise nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/nodes_2.png)
 
 ## Redis Enterprise databases
 
