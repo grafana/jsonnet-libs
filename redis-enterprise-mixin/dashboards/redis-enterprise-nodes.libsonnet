@@ -965,7 +965,13 @@ local redisLogsPanel = {
         description='',
         uid=dashboardUid,
       )
-
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Redis Enterprise dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addTemplates(
         std.flattenArrays([
           [
