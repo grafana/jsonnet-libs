@@ -25,7 +25,7 @@ The Redis Enterprise overview dashboard provides details on the overall status o
 ### TODO dashboard screenshots
 
 ![First screenshot of the Redis Enterprise overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/overview_1.png)
-![Second screenshot of the Redis Enterprise overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/overview_2.png)
+![Second screenshot of the Redis Enterprise overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/overview_2.png)
 
 ## Redis Enterprise nodes
 
@@ -38,7 +38,7 @@ The Redis Enterprise nodes dashboard provides details on memory/cpu usage, node 
 
 ## Redis Enterprise databases
 
-The Redis Enterprise databases dashboard provides details on key counts, operations,memory utilization, memory fragmentation ratio, LUA heap size, database evictions/expirations, and database ingress/egress.
+The Redis Enterprise databases dashboard provides details on key counts, operations, memory utilization, memory fragmentation ratio, LUA heap size, database evictions/expirations, and database ingress/egress.
 
 ### TODO dashboard screenshots
 
