@@ -61,7 +61,7 @@
           {
             alert: 'CouchDBModerateRequestLatency',
             expr: |||
-              sum by(job, instance) (increase(couchdb_request_time_seconds_sum[5m]) / increase(couchdb_request_time_seconds_count[5m])) * 1000 > %(alertsWarningRequestLatency5m)s
+              sum by(job, instance) (couchdb_request_time_seconds_sum / couchdb_request_time_seconds_count) > %(alertsWarningRequestLatency5m)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -79,7 +79,7 @@
           {
             alert: 'CouchDBHighRequestLatency',
             expr: |||
-              sum by(job, instance) (increase(couchdb_request_time_seconds_sum[5m]) / increase(couchdb_request_time_seconds_count[5m])) * 1000 > %(alertsCriticalRequestLatency5m)s
+              sum by(job, instance) (couchdb_request_time_seconds_sum / couchdb_request_time_seconds_count) > %(alertsCriticalRequestLatency5m)s
             ||| % $._config,
             'for': '5m',
             labels: {
