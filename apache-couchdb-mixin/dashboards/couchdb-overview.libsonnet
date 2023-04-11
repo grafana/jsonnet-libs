@@ -1079,7 +1079,7 @@ local goodResponseStatusesPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Response statuses',
+  title: 'Good response statuses',
   description: 'The response rate split by good HTTP statuses aggregated across all nodes.',
   fieldConfig: {
     defaults: {
