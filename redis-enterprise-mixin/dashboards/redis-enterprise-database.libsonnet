@@ -12,7 +12,8 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local matcher = 'redis_cluster=~"$redis_cluster", job=~"$job", bdb=~"$database"';
+local nodeMatcher = 'redis_cluster=~"$redis_cluster", job=~"$job"';
+local matcher = nodeMatcher + ', bdb=~"$database"';
 
 local databaseUpPanel = {
   datasource: promDatasource,
@@ -20,7 +21,7 @@ local databaseUpPanel = {
     prometheus.target(
       'bdb_up{' + matcher + '}',
       datasource=promDatasource,
-      legendFormat='{{ bdb }}',
+      legendFormat='node: {{ node }} - {{ bdb }}',
     ),
   ],
   type: 'timeseries',
@@ -154,7 +155,7 @@ local nodesUpPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'node_up{' + matcher + '}',
+      'node_up{' + nodeMatcher + ', node=~"$node"}',
       datasource=promDatasource,
       legendFormat='{{ node }}',
     ),
@@ -1125,7 +1126,7 @@ local syncStatusPanel = {
     prometheus.target(
       'bdb_crdt_syncer_status{' + matcher + '}',
       datasource=promDatasource,
-      legendFormat='{{ bdb }}',
+      legendFormat='{{ bdb }} - repl_id: {{ crdt_replica_id }}',
     ),
   ],
   type: 'timeseries',
