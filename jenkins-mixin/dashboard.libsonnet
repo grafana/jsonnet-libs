@@ -112,6 +112,7 @@ local prefix_template = {
 // Panels
 local ui_reqs_panel = grafana.graphPanel.new(
                         'Web Request Rate by Status',
+                        description='Total web requests group by different HTTP status codes.',
                         span=6,
                         datasource='$datasource',
                       ) +
@@ -122,6 +123,7 @@ local ui_reqs_panel = grafana.graphPanel.new(
 
 local http_duration_by_quantile_panel = grafana.barGaugePanel.new(
                                           'HTTP Request Duration by Quantile',
+                                          'Shows a distribution of HTTP request durations by quantile.',
                                           unit='s',
                                           datasource='$datasource',
                                           thresholds=[
@@ -147,8 +149,10 @@ local http_duration_by_quantile_panel = grafana.barGaugePanel.new(
 
 local executor_count_panel = grafana.singlestat.new(
   'Total Executors',
+  description='Total number of job executors',
   span=2,
   datasource='$datasource',
+  format='short',
 )
                              .addTarget(
   grafana.prometheus.target(queries.executor_count)
@@ -156,6 +160,7 @@ local executor_count_panel = grafana.singlestat.new(
 
 local executor_by_state_panel = grafana.pieChartPanel.new(
                                   'Executors By State',
+                                  'Shows distribution of executors by their current state',
                                   span=2,
                                   datasource='$datasource',
                                   showLegendPercentage=false,
@@ -173,6 +178,7 @@ local executor_by_state_panel = grafana.pieChartPanel.new(
 
 local job_success_rate_panel = grafana.statPanel.new(
                                  'Job Success Rate',
+                                 'Rate of jobs that are successful over the specified interval.',
                                  datasource='$datasource',
                                  colorMode='background',
                                )
@@ -186,6 +192,7 @@ local job_success_rate_panel = grafana.statPanel.new(
 
 local job_failure_rate_panel = grafana.statPanel.new(
                                  'Job Falure Rate',
+                                 'Rate of jobs failing over the specified interval.',
                                  datasource='$datasource',
                                  colorMode='background',
                                )
@@ -199,6 +206,7 @@ local job_failure_rate_panel = grafana.statPanel.new(
 
 local nodes_online_panel = grafana.singlestat.new(
   'Build Nodes Online',
+  description='Percentage of build nodes online',
   datasource='$datasource',
   span=2,
   gaugeShow=true,
@@ -213,6 +221,7 @@ local nodes_online_panel = grafana.singlestat.new(
 
 local plugins_by_state_panel = grafana.barGaugePanel.new(
                                  'Plugins by State',
+                                 'Plugins grouped by different states.',
                                  datasource='$datasource',
                                  thresholds=[{ color: 'purple', value: 0 }],
                                )
@@ -231,6 +240,7 @@ local plugins_by_state_panel = grafana.barGaugePanel.new(
 
 local job_queue_by_state_panel = grafana.graphPanel.new(
                                    'Job Queue by State',
+                                   description='Queued jobs grouped by state.',
                                    span=2,
                                    datasource='$datasource',
                                    min=0,
@@ -243,6 +253,7 @@ local job_queue_by_state_panel = grafana.graphPanel.new(
 
 local build_duration_by_job_panel = grafana.graphPanel.new(
                                       'Latest Build Duration by Job',
+                                      description='Latest duration of the jobs',
                                       span=4,
                                       datasource='$datasource',
                                     ) +
@@ -260,7 +271,7 @@ local top5_longest_jobs_panel = g.tablePanel(
     jenkins_job: { alias: 'Job Name' },
     Value: { alias: 'Duration', unit: 'ms' },
   },
-) + { span: 2, datasource: '$datasource', title: 'Top 5 Slowest Jobs' };
+) + { span: 2, datasource: '$datasource', title: 'Top 5 Slowest Jobs', description: 'List of the top 5 slowest jobs.' };
 
 local bottom5_healthiest_jobs_panel = g.tablePanel(
   [queries.bottom5_healthy_job_health, queries.bottom5_healthy_job_build_failed_total, queries.bottom5_healthy_job_build_success_total, queries.bottom5_healthy_job_build_total],
@@ -280,7 +291,7 @@ local bottom5_healthiest_jobs_panel = g.tablePanel(
     'Value #C': { alias: 'Successful' },
     'Value #D': { alias: 'Total' },
   },
-) + { span: 4, datasource: '$datasource', title: 'Least Healthy Jobs' };
+) + { span: 4, datasource: '$datasource', title: 'Least Healthy Jobs', description: 'Bottom 5 least healthiest jobs.' };
 
 // Manifested stuff starts here
 {
