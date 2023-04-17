@@ -5,7 +5,7 @@
         name: 'RedisEnterpriseAlerts',
         rules: [
           {
-            alert: 'ClusterOutOfMemory',
+            alert: 'RedisEnterpriseClusterOutOfMemory',
             expr: |||
               sum(redis_used_memory) by (redis_cluster, node) / sum(node_available_memory) by (redis_cluster, node) * 100 > %(alertsClusterOutOfMemoryThreshold)s
             ||| % $._config,
@@ -23,7 +23,7 @@
             },
           },
           {
-            alert: 'NodeNotResponding',
+            alert: 'RedisEnterpriseNodeNotResponding',
             expr: |||
               node_up == 0
             ||| % $._config,
@@ -40,7 +40,7 @@
             },
           },
           {
-            alert: 'DatabaseNotResponding',
+            alert: 'RedisEnterpriseDatabaseNotResponding',
             expr: |||
               bdb_up == 0
             ||| % $._config,
@@ -57,7 +57,7 @@
             },
           },
           {
-            alert: 'ShardNotResponding',
+            alert: 'RedisEnterpriseShardNotResponding',
             expr: |||
               redis_up == 0
             ||| % $._config,
@@ -74,7 +74,7 @@
             },
           },
           {
-            alert: 'NodeHighCPUUtilization',
+            alert: 'RedisEnterpriseNodeHighCPUUtilization',
             expr: |||
               (sum(node_cpu_user) by (node, redis_cluster, job) + sum(node_cpu_system) by (node, redis_cluster, job)) * 100 > %(alertsNodeCPUHighUtilizationThreshold)s
             ||| % $._config,
@@ -92,7 +92,7 @@
             },
           },
           {
-            alert: 'DatabaseHighMemoryUtilization',
+            alert: 'RedisEnterpriseDatabaseHighMemoryUtilization',
             expr: |||
               sum(bdb_used_memory) by (bdb, redis_cluster) / sum(bdb_memory_limit) by (bdb, redis_cluster) * 100 > %(alertsDatabaseHighMemoryUtiliation)s
             ||| % $._config,
@@ -110,7 +110,7 @@
             },
           },
           {
-            alert: 'AverageLatencyIncreasing',
+            alert: 'RedisEnterpriseAverageLatencyIncreasing',
             expr: |||
               bdb_avg_latency / 1000 > %(alertsDatabaseHighLatencyMs)s
             ||| % $._config,
@@ -128,7 +128,7 @@
             },
           },
           {
-            alert: 'KeyEvictionsIncreasing',
+            alert: 'RedisEnterpriseKeyEvictionsIncreasing',
             expr: |||
               bdb_evicted_objects >= %(alertsEvictedObjectsThreshold)s
             ||| % $._config,
