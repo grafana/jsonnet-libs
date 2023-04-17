@@ -38,7 +38,7 @@ groups:
       description: "Distribution link state is not 'up' on {{ $labels.instance }}."
   
   - alert: RabbitMQNodeDown
-    expr: sum by (rabbitmq_cluster) (rabbitmq_identity_info)
+    expr: sum by (rabbitmq_cluster) (rabbitmq_identity_info) < 3
     for: 0m
     labels:
       severity: critical
