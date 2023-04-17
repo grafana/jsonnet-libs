@@ -10,13 +10,13 @@ The mixin contains the following dashboards:
 
 and the following alerts:
 
-- ClusterOutOfMemory
-- NodeNotResponding
-- DatabaseNotResponding
-- ShardNotResponding
-- NodeHighCPUUtilization
-- AverageLatencyIncreasing
-- KeyEvictionsIncreasing
+- RedisEnterpriseClusterOutOfMemory
+- RedisEnterpriseNodeNotResponding
+- RedisEnterpriseDatabaseNotResponding
+- RedisEnterpriseShardNotResponding
+- RedisEnterpriseNodeHighCPUUtilization
+- RedisEnterpriseAverageLatencyIncreasing
+- RedisEnterpriseKeyEvictionsIncreasing
 
 ## Redis Enterprise overview
 
@@ -32,14 +32,14 @@ The Redis Enterprise databases dashboard provides details on key counts, operati
 
 ## Alerts Overview
 
-- ClusterOutOfMemory: Cluster has run out of memory.
-- NodeNotResponding: A node in the Redis Enterprise cluster is offline or unreachable.
-- DatabaseNotResponding: A database in the Redis Enterprise cluster is offline or unreachable.
-- ShardNotResponding: A shard in the Redis Enterprise cluster is offline or unreachable.
-- NodeHighCPUUtilization: Node CPU usage is above the configured threshold.
-- DatabaseHighMemoryUtilization: Node memory utilization is above the configured threshold.
-- AverageLatencyIncreasing: Operation latency is above the configured threshold.
-- KeyEvictionsIncreasing: A node has a higher memory utilization than the configured threshold.
+- RedisEnterpriseClusterOutOfMemory: Cluster has run out of memory.
+- RedisEnterpriseNodeNotResponding: A node in the Redis Enterprise cluster is offline or unreachable.
+- RedisEnterpriseDatabaseNotResponding: A database in the Redis Enterprise cluster is offline or unreachable.
+- RedisEnterpriseShardNotResponding: A shard in the Redis Enterprise cluster is offline or unreachable.
+- RedisEnterpriseNodeHighCPUUtilization: Node CPU usage is above the configured threshold.
+- RedisEnterpriseDatabaseHighMemoryUtilization: Node memory utilization is above the configured threshold.
+- RedisEnterpriseAverageLatencyIncreasing: Operation latency is above the configured threshold.
+- RedisEnterpriseKeyEvictionsIncreasing: A node has a higher memory utilization than the configured threshold.
 
 ## Install tools
 
