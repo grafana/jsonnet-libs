@@ -53,11 +53,11 @@ The Microsoft IIS applications dashboard provides details on worker requests, we
 
 ## Alerts overview
 
-HighNumberOfRejectedAsyncIORequests: There are a high number of rejected async I/O requests for a site.
-HighNumberOf5xxRequestErrors: There are a high number of 5xx request errors for an application.
-LowSuccessRateForWebsocketConnections: There is a low success rate for websocket connections for an application.
-ThreadpoolUtilizationNearingMax: The thread pool utilization is nearing max capacity.
-HighNumberOfWorkerProcessFailures: There are a high number of worker process failures for an application.
+MicrosoftIISHighNumberOfRejectedAsyncIORequests: There are a high number of rejected async I/O requests for a site.
+MicrosoftIISHighNumberOf5xxRequestErrors: There are a high number of 5xx request errors for an application.
+MicrosoftIISLowSuccessRateForWebsocketConnections: There is a low success rate for websocket connections for an application.
+MicrosoftIISThreadpoolUtilizationNearingMax: The thread pool utilization is nearing max capacity.
+MicrosoftIISHighNumberOfWorkerProcessFailures: There are a high number of worker process failures for an application.
 
 ## Install Tools
 
