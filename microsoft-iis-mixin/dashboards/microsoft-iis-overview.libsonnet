@@ -189,6 +189,7 @@ local blockedAsyncIORequestsPanel = {
       'increase(windows_iis_blocked_async_io_requests_total{job=~"$job", instance=~"$instance", site=~"$site"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{site}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -270,6 +271,7 @@ local rejectedAsyncIORequestsPanel = {
       'increase(windows_iis_rejected_async_io_requests_total{job=~"$job", instance=~"$instance", site=~"$site"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{site}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -748,6 +750,7 @@ local attemptedConnectionsPanel = {
       'increase(windows_iis_connection_attempts_all_instances_total{job=~"$job", instance=~"$instance", site=~"$site"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{site}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -860,6 +863,7 @@ local fileCacheHitRatioPanel = {
       'increase(windows_iis_server_file_cache_hits_total{job=~"$job", instance=~"$instance"}[$__interval:]) / clamp_min(increase(windows_iis_server_file_cache_queries_total{job=~"$job", instance=~"$instance"}[$__interval:]),1) * 100',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -940,6 +944,7 @@ local uriCacheHitRatioPanel = {
       'sum by(instance, job) (increase(windows_iis_server_uri_cache_hits_total{job=~"$job", instance=~"$instance"}[$__interval:]) / clamp_min(increase(windows_iis_server_uri_cache_queries_total{job=~"$job", instance=~"$instance"}[$__interval:]),1)) * 100',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1020,6 +1025,7 @@ local metadataCacheHitRatioPanel = {
       'increase(windows_iis_server_metadata_cache_hits_total{job=~"$job", instance=~"$instance"}[$__interval:]) / clamp_min(increase(windows_iis_server_metadata_cache_queries_total{job=~"$job", instance=~"$instance"}[$__interval:]),1) * 100',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1100,6 +1106,7 @@ local outputCacheHitRatioPanel = {
       'increase(windows_iis_server_output_cache_hits_total{job=~"$job", instance=~"$instance"}[$__interval:]) / clamp_min(increase(windows_iis_server_output_cache_queries_total{job=~"$job", instance=~"$instance"}[$__interval:]), 1) * 100',
       datasource=promDatasource,
       legendFormat='{{job}} - {{instance}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1184,7 +1191,13 @@ local outputCacheHitRatioPanel = {
         description='',
         uid=dashboardUid,
       )
-
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Microsoft IIS dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addTemplates(
         std.flattenArrays([
           [
