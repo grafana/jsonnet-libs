@@ -1,6 +1,6 @@
 # Cilium Mixin
 
-The Cilium Mixin is a set of configurable, reusable, and extensible alerts as well as dashboards based on the metrics exported by [Cilium's internal Prometheus exporter](https://docs.cilium.io/en/stable/operations/metrics/#installation). 
+The Cilium Mixin is a set of configurable, reusable, and extensible alerts as well as dashboards based on the metrics exported by [Cilium's internal Prometheus exporter](https://docs.cilium.io/en/stable/operations/metrics/#installation).
 
 This integration includes the following dashboards.
 
@@ -25,9 +25,9 @@ This integration includes the following dashboards.
 - Hubble / Overview
 - Hubble / Timescape
 
-
 ## Cilium Overview & Cilium Agent Overview
-These two dashboards give a general overview of the state of the Cilium deployment, as reported by the Cilium Agent. 
+
+These two dashboards give a general overview of the state of the Cilium deployment, as reported by the Cilium Agent.
 
 ***Cilium Overview***
 
@@ -45,8 +45,8 @@ These two dashboards give a general overview of the state of the Cilium deployme
 
 ![image](https://storage.googleapis.com/grafanalabs-integration-assets/cilium-enterprise/screenshots/cilium_agent_overview_2.png)
 
-
 ## Cilium Operator Overview
+
 This dashboard provides information on the state of the Cilium Operator; its resource utilization and IPAM status.
 
 ***Cilium Operator Overview***
@@ -69,28 +69,30 @@ The Hubble Overview and Hubble Timescape dashboards provide detailed insights in
 
 ![image](https://storage.googleapis.com/grafanalabs-integration-assets/cilium-enterprise/screenshots/hubble/hubble_timescape_1.png)
 
-
 ## Dashboard Links
 
 On the top right of dashboards, you will find dropdowns to quickly switch between the dashboards while keeping the time range and variable selection the same.
 
 ## How to use this mixin
-The mixin creates recording and alerting rules for Prometheus and suitable 
+
+The mixin creates recording and alerting rules for Prometheus and suitable
 dashboards for Grafana.
 
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you
 have a working Go development environment, it's easiest to run the following:
-```bash
-$ go get github.com/monitoring-mixins/mixtool/cmd/mixtool
-$ go get github.com/google/go-jsonnet/cmd/jsonnetfmt
+
+```shell
+go install -a github.com/monitoring-mixins/mixtool/cmd/mixtool@latest
+go install -a github.com/google/go-jsonnet/cmd/jsonnetfmt@latest
+go install -a github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
 ```
 
 You can then build the Prometheus rules files `alerts.yaml` and
 `rules.yaml` and a directory `dashboard_out` with the JSON dashboard files
 for Grafana:
+
 ```bash
-$ make build
+make build
 ```
 
-For more advanced uses of mixins, see
-https://github.com/monitoring-mixins/docs.
+For more advanced uses of mixins, see [docs](https://github.com/monitoring-mixins/docs)

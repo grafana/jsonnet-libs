@@ -272,6 +272,23 @@
           },
         ],
       },
+      {
+        name: 'Cilium Agent Scheduler Latency',
+        rules: [
+          {
+            alert: 'CiliumAgentSchedulerLatency',
+            expr: 'sum by (pod) (increase(go_sched_latencies_seconds_sum[5m]) / increase(go_sched_latencies_seconds_count[5m])) * 1000 >= 0.1',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'Cilium Agent GO runtime scheduler is reporting high goroutine latencies.',
+              description: 'Cilium Agent {{$labels.pod}} is reporting high goroutines latencies.',
+            },
+            'for': '5m',
+          },
+        ],
+      },
     ],
   },
 }

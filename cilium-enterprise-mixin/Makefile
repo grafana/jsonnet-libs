@@ -1,7 +1,7 @@
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 1 --string-style s --comment-style s
 
 .PHONY: all
-all: build dashboards_out
+all: build dashboards_out prometheus_alerts.yaml
 
 vendor: jsonnetfile.json
 	jb install
@@ -25,6 +25,9 @@ lint: build
 dashboards_out: mixin.libsonnet
 	@mkdir -p dashboards_out
 	jsonnet -J vendor -m dashboards_out -e "(import 'mixin.libsonnet').grafanaDashboards"
+
+prometheus_alerts.yaml: mixin.libsonnet alerts/*.libsonnet
+	mixtool generate alerts mixin.libsonnet -a prometheus_alerts.yaml
 
 .PHONY: clean
 clean:
