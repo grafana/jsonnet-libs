@@ -9,11 +9,11 @@ The Microsoft IIS mixin contains the following dashboards:
 
 and the following alerts:
 
-- HighNumberOfRejectedAsyncIORequests
-- HighNumberOf5xxRequestErrors
-- LowSuccessRateForWebsocketConnections
-- ThreadpoolUtilizationNearingMax
-- HighNumberOfWorkerProcessFailures
+- MicrosoftIISHighNumberOfRejectedAsyncIORequests
+- MicrosoftIISHighNumberOf5xxRequestErrors
+- MicrosoftIISLowSuccessRateForWebsocketConnections
+- MicrosoftIISThreadpoolUtilizationNearingMax
+- MicrosoftIISHighNumberOfWorkerProcessFailures
 
 Default thresholds can be configured in `config,libsonnet`
 
