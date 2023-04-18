@@ -31,7 +31,7 @@ Default thresholds can be configured in `config,libsonnet`
 
 ## Microsoft IIS overview
 
-The Microsoft IIS overview dashboard provides details on traffic, connections, files sent/received, and access logs. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. Microsoft IIS access logs are found under `C:\inetpub\logs\LogFiles\W3SVC*\u_ex*.txt`. There will typically be a folder `W3SVC[siteID]` for each site. Under that folder there will be a number of log files corresponding to each date (Example: u_ex230313.txt).
+The Microsoft IIS overview dashboard provides details on traffic, connections, files sent/received, and access logs. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. Microsoft IIS access logs can be found via this glob `C:\inetpub\logs\LogFiles\W3SVC*\u_ex*.txt`. There will typically be a folder `W3SVC[siteID]` for each site. Under that folder there will be a number of log files corresponding to each date (Example: u_ex230313.txt).
 
 Microsoft IIS logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
