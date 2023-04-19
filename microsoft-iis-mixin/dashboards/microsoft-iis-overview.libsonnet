@@ -63,7 +63,6 @@ local requestsPanel = {
           mode: 'off',
         },
       },
-      decimals: 0,
       mappings: [],
       thresholds: {
         mode: 'absolute',
