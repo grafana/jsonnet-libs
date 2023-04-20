@@ -932,7 +932,7 @@ local redisLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/opt/redislabs/log/redis.log", job=~"$job", redis_cluster=~"$redis_cluster"} |= ``',
+      expr: '{filename=~"/var/opt/redislabs/log/redis-.*.log", job=~"$job", redis_cluster=~"$redis_cluster"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
