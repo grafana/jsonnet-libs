@@ -37,7 +37,7 @@ The Redis Enterprise nodes dashboard provides details on memory/cpu usage, node 
 The Redis Enterprise databases dashboard provides details on key counts, operations, memory utilization, memory fragmentation ratio, LUA heap size, database evictions/expirations, and database ingress/egress.
 
 ![First screenshot of the database dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/database_1.png)
-![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/database_2.png)
+![Second screenshot of the database dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/database_2.png)
 
 ## Alerts Overview
 
