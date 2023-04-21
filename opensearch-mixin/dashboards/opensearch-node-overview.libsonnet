@@ -585,6 +585,7 @@ local circuitBreakersPanel = {
       'sum by(name, job, cluster) (increase(opensearch_circuitbreaker_tripped_count{cluster=~"$opensearch_cluster", job=~"$job", node=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{name}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1066,6 +1067,7 @@ local jvmGarbageCollectionsPanel = {
       'sum by (node, cluster, job) (increase(opensearch_jvm_gc_collection_count{cluster=~"$opensearch_cluster", job=~"$job", node=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{node}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1145,6 +1147,7 @@ local jvmGarbageCollectionTimePanel = {
       'sum by (node, cluster, job) (increase(opensearch_jvm_gc_collection_time_seconds{cluster=~"$opensearch_cluster", job=~"$job", node=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{node}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1494,7 +1497,13 @@ local errorLogsPanelPanel = {
         description='',
         uid=dashboardUid,
       )
-
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other OpenSearch dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addTemplates(
         std.flattenArrays([
           [

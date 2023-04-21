@@ -375,6 +375,7 @@ local breakersTrippedPanel = {
       'sum by(job, cluster, node) (increase(opensearch_circuitbreaker_tripped_count{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{node}}',
+      interval='1m',
     ),
   ],
   type: 'bargauge',
@@ -920,6 +921,7 @@ local topIndicesByRequestLatencyPanel = {
       'topk(10, sort_desc(sum by(index, job, cluster) ((increase(opensearch_index_search_fetch_time_seconds{job=~"$job", cluster=~"$opensearch_cluster", context="total"}[$__interval:])+increase(opensearch_index_search_query_time_seconds{job=~"$job", cluster=~"$opensearch_cluster", context="total"}[$__interval:])+increase(opensearch_index_search_scroll_time_seconds{job=~"$job", cluster=~"$opensearch_cluster", context="total"}[$__interval:])) / clamp_min(increase(opensearch_index_search_fetch_count{job=~"$job", cluster=~"$opensearch_cluster", context="total"}[$__interval:])+increase(opensearch_index_search_query_count{job=~"$job", cluster=~"$opensearch_cluster", context="total"}[$__interval:])+increase(opensearch_index_search_scroll_count{job=~"$job", cluster=~"$opensearch_cluster", context="total"}[$__interval:]), 1))))',
       datasource=promDatasource,
       legendFormat='{{index}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1153,6 +1155,7 @@ local topNodesByIngestLatencyPanel = {
       'topk(10, sum by(job, cluster, node) (increase(opensearch_ingest_total_time_seconds{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:]) / clamp_min(increase(opensearch_ingest_total_count{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:]), 1)))',
       datasource=promDatasource,
       legendFormat='{{node}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1232,6 +1235,7 @@ local topNodesByIngestErrorsPanel = {
       'topk(10, sum by(cluster, job, node) (increase(opensearch_ingest_total_failed_count{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:])))',
       datasource=promDatasource,
       legendFormat='{{node}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1382,6 +1386,7 @@ local topIndicesByIndexLatencyPanel = {
       'topk(10, sum by(job, cluster, index) (increase(opensearch_index_indexing_index_time_seconds{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:]) / clamp_min(increase(opensearch_index_indexing_index_count{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:]), 1)))',
       datasource=promDatasource,
       legendFormat='{{index}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1457,6 +1462,7 @@ local topIndicesByIndexFailuresPanel = {
       'topk(10, sum by(cluster, job, index) (increase(opensearch_index_indexing_index_failed_count{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:])))',
       datasource=promDatasource,
       legendFormat='{{index}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1537,7 +1543,13 @@ local topIndicesByIndexFailuresPanel = {
         description='',
         uid=dashboardUid,
       )
-
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other OpenSearch dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addTemplates(
         [
           template.datasource(
