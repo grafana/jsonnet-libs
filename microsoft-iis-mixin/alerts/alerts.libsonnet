@@ -7,7 +7,7 @@
           {
             alert: 'MicrosoftIISHighNumberOfRejectedAsyncIORequests',
             expr: |||
-              sum by (job, instance, site) (increase(windows_iis_rejected_async_io_requests_total[5m])) > %(alertsWarningHighRejectedAsyncIORequests)s
+              increase(windows_iis_rejected_async_io_requests_total[5m]) > %(alertsWarningHighRejectedAsyncIORequests)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -23,7 +23,7 @@
           {
             alert: 'MicrosoftIISHighNumberOf5xxRequestErrors',
             expr: |||
-              sum by (job, instance, app) (increase(windows_iis_worker_request_errors_total{status_code=~"5.*"}[5m])) > %(alertsCriticalHigh5xxRequests)s
+              sum without (pid, status_code)(increase(windows_iis_worker_request_errors_total{status_code=~"5.*"}[5m])) > %(alertsCriticalHigh5xxRequests)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -39,7 +39,7 @@
           {
             alert: 'MicrosoftIISLowSuccessRateForWebsocketConnections',
             expr: |||
-              sum by (job, instance, app) (increase(windows_iis_worker_websocket_connection_accepted_total[5m]) / clamp_min(increase(windows_iis_worker_websocket_connection_attempts_total[5m]),1)) * 100 > %(alertsCriticalLowWebsocketConnectionSuccessRate)s
+              sum without (pid)  (increase(windows_iis_worker_websocket_connection_accepted_total[5m]) / clamp_min(increase(windows_iis_worker_websocket_connection_attempts_total[5m]),1)) * 100 > %(alertsCriticalLowWebsocketConnectionSuccessRate)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -55,7 +55,7 @@
           {
             alert: 'MicrosoftIISThreadpoolUtilizationNearingMax',
             expr: |||
-              sum by (job, instance, app) (windows_iis_worker_threads / windows_iis_worker_max_threads) * 100 > %(alertsCriticalHighThreadPoolUtilization)s
+              sum without (pid, state)(windows_iis_worker_threads / windows_iis_worker_max_threads) * 100 > %(alertsCriticalHighThreadPoolUtilization)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -71,7 +71,7 @@
           {
             alert: 'MicrosoftIISHighNumberOfWorkerProcessFailures',
             expr: |||
-              sum by (job, instance, app) (increase(windows_iis_total_worker_process_failures[5m])) > %(alertsWarningHighWorkerProcessFailures)s
+              increase(windows_iis_total_worker_process_failures[5m]) > %(alertsWarningHighWorkerProcessFailures)s
             ||| % $._config,
             'for': '5m',
             labels: {
