@@ -20,7 +20,7 @@ local databaseUpPanel = {
     prometheus.target(
       'bdb_up{' + matcher + '}',
       datasource=promDatasource,
-      legendFormat='node: {{ node }} - {{ bdb }}',
+      legendFormat='{{ bdb }}',
     ),
   ],
   type: 'timeseries',
