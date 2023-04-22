@@ -632,7 +632,7 @@ local clusterEvictionsVsExpiredObjectsPanel = {
           },
         ],
       },
-      unit: 'percent',
+      unit: 'ops',
     },
     overrides: [],
   },

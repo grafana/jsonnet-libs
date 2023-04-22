@@ -22,13 +22,22 @@ and the following alerts:
 
 The Redis Enterprise overview dashboard provides details on the overall status of the Redis Enterprise cluster. Includes visualizations for important KPIs such as nodes up, databases up, average request latency, node cpu utilization, node memory utilization, and cluster cache hit ratio.
 
+![First screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/overview_1.png)
+![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/overview_2.png)
+
 ## Redis Enterprise nodes
 
 The Redis Enterprise nodes dashboard provides details on memory/cpu usage, node network ingress/egress, number of requests, storage utilization, connections, and optionally the redis logs panel.
 
+![First screenshot of the nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/nodes_1.png)
+![Second screenshot of the nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/nodes_2.png)
+
 ## Redis Enterprise databases
 
 The Redis Enterprise databases dashboard provides details on key counts, operations, memory utilization, memory fragmentation ratio, LUA heap size, database evictions/expirations, and database ingress/egress.
+
+![First screenshot of the database dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/database_1.png)
+![Second screenshot of the database dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/redis-enterprise/screenshots/database_2.png)
 
 ## Alerts Overview
 
