@@ -1383,7 +1383,7 @@ local topIndicesByIndexLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(10, sum by(job, cluster, index) (increase(opensearch_index_indexing_index_time_seconds{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:]) / clamp_min(increase(opensearch_index_indexing_index_count{job=~"$job", cluster=~"$opensearch_cluster"}[$__interval:]), 1)))',
+      'topk(10, sum by(job, cluster, index) (increase(opensearch_index_indexing_index_time_seconds{job=~"$job", cluster=~"$opensearch_cluster", context="total"}[$__interval:]) / clamp_min(increase(opensearch_index_indexing_index_count{job=~"$job", cluster=~"$opensearch_cluster", context="total"}[$__interval:]), 1)))',
       datasource=promDatasource,
       legendFormat='{{index}}',
       interval='1m',

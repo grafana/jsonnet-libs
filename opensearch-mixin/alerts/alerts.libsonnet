@@ -7,7 +7,7 @@
           {
             alert: 'OpenSearchYellowCluster',
             expr: |||
-              max by (job, cluster) (opensearch_cluster_status) == 1
+              opensearch_cluster_status == 1
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -24,7 +24,7 @@
           {
             alert: 'OpenSearchRedCluster',
             expr: |||
-              max by (job, cluster) (opensearch_cluster_status) == 2
+              opensearch_cluster_status == 2
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -41,7 +41,7 @@
           {
             alert: 'OpenSearchUnstableShardReallocation',
             expr: |||
-              sum by(job, cluster) (opensearch_cluster_shards_number{type="relocating"}) > %(alertsWarningShardReallocations)s
+              sum without(type) (opensearch_cluster_shards_number{type="relocating"}) > %(alertsWarningShardReallocations)s
             ||| % $._config,
             'for': '1m',
             labels: {
@@ -57,7 +57,7 @@
           {
             alert: 'OpenSearchUnstableShardUnassigned',
             expr: |||
-              sum by(job, cluster) (opensearch_cluster_shards_number{type="unassigned"}) > %(alertsWarningShardUnassigned)s
+              sum without(type) (opensearch_cluster_shards_number{type="unassigned"}) > %(alertsWarningShardUnassigned)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -73,7 +73,7 @@
           {
             alert: 'OpenSearchModerateNodeDiskUsage',
             expr: |||
-              100 * sum by(node, job, cluster) ((opensearch_fs_path_total_bytes - opensearch_fs_path_free_bytes) / opensearch_fs_path_total_bytes) > %(alertsWarningDiskUsage)s
+              100 * sum without(nodeid, path, mount, type) ((opensearch_fs_path_total_bytes - opensearch_fs_path_free_bytes) / opensearch_fs_path_total_bytes) > %(alertsWarningDiskUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -89,7 +89,7 @@
           {
             alert: 'OpenSearchHighNodeDiskUsage',
             expr: |||
-              100 * sum by(node, job, cluster) ((opensearch_fs_path_total_bytes - opensearch_fs_path_free_bytes) / opensearch_fs_path_total_bytes) > %(alertsCriticalDiskUsage)s
+              100 * sum without(nodeid, path, mount, type) ((opensearch_fs_path_total_bytes - opensearch_fs_path_free_bytes) / opensearch_fs_path_total_bytes) > %(alertsCriticalDiskUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -105,7 +105,7 @@
           {
             alert: 'OpenSearchModerateNodeCpuUsage',
             expr: |||
-              sum by(node, job, cluster) (opensearch_os_cpu_percent) > %(alertsWarningCPUUsage)s
+              sum without(nodeid) (opensearch_os_cpu_percent) > %(alertsWarningCPUUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -121,7 +121,7 @@
           {
             alert: 'OpenSearchHighNodeCpuUsage',
             expr: |||
-              sum by(node, job, cluster) (opensearch_os_cpu_percent) > %(alertsCriticalCPUUsage)s
+              sum without(nodeid) (opensearch_os_cpu_percent) > %(alertsCriticalCPUUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -137,7 +137,7 @@
           {
             alert: 'OpenSearchModerateNodeMemoryUsage',
             expr: |||
-              sum by(node, job, cluster) (opensearch_os_mem_used_percent) > %(alertsWarningMemoryUsage)s
+              sum without(nodeid) (opensearch_os_mem_used_percent) > %(alertsWarningMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -153,7 +153,7 @@
           {
             alert: 'OpenSearchHighNodeMemoryUsage',
             expr: |||
-              sum by(node, job, cluster) (opensearch_os_mem_used_percent) > %(alertsCriticalMemoryUsage)s
+              sum without(nodeid) (opensearch_os_mem_used_percent) > %(alertsCriticalMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -169,7 +169,7 @@
           {
             alert: 'OpenSearchModerateRequestLatency',
             expr: |||
-              sum by(index, job, cluster) ((increase(opensearch_index_search_fetch_time_seconds{context="total"}[5m])+increase(opensearch_index_search_query_time_seconds{context="total"}[5m])+increase(opensearch_index_search_scroll_time_seconds{context="total"}[5m])) / clamp_min(increase(opensearch_index_search_fetch_count{context="total"}[5m])+increase(opensearch_index_search_query_count{context="total"}[5m])+increase(opensearch_index_search_scroll_count{context="total"}[5m]), 1)) > %(alertsWarningRequestLatency)s
+              sum without(context) ((increase(opensearch_index_search_fetch_time_seconds{context="total"}[5m])+increase(opensearch_index_search_query_time_seconds{context="total"}[5m])+increase(opensearch_index_search_scroll_time_seconds{context="total"}[5m])) / clamp_min(increase(opensearch_index_search_fetch_count{context="total"}[5m])+increase(opensearch_index_search_query_count{context="total"}[5m])+increase(opensearch_index_search_scroll_count{context="total"}[5m]), 1)) > %(alertsWarningRequestLatency)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -185,7 +185,7 @@
           {
             alert: 'OpenSearchModerateIndexLatency',
             expr: |||
-              sum by(job, cluster, index) (increase(opensearch_index_indexing_index_time_seconds[5m]) / clamp_min(increase(opensearch_index_indexing_index_count[5m]), 1)) > %(alertsWarningIndexLatency)s
+              sum without(context) (increase(opensearch_index_indexing_index_time_seconds{context="total"}[5m]) / clamp_min(increase(opensearch_index_indexing_index_count{context="total"}[5m]), 1)) > %(alertsWarningIndexLatency)s
             ||| % $._config,
             'for': '5m',
             labels: {

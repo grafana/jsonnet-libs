@@ -7,7 +7,7 @@
 
     // alerts thresholds
     alertsWarningShardReallocations: 0,
-    alertsWarningShardUnassigned: 1,
+    alertsWarningShardUnassigned: 0,
     alertsWarningDiskUsage: 60,
     alertsCriticalDiskUsage: 80,
     alertsWarningCPUUsage: 70,
