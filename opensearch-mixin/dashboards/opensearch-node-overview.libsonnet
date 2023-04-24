@@ -1465,7 +1465,7 @@ local errorLogsPanelPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", cluster=~"$opensearch_cluster", instance=~"$instance", filename="/var/log/opensearch/opensearch.log"} |~ ""',
+      expr: '{job=~"$job", node=~"$node", filename="/var/log/opensearch/opensearch.log"} |~ ""',
       queryType: 'range',
       refId: 'A',
     },

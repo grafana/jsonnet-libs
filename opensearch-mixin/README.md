@@ -43,7 +43,7 @@ OpenSearch logs are enabled by default in the `config.libsonnet` and can be remo
 }
 ```
 
-In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `job` and `opensearch_cluster` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `job` and `node` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
 ```yaml
 scrape_configs:
@@ -52,7 +52,7 @@ scrape_configs:
       - targets: [localhost]
         labels:
           job: integrations/opensearch
-          cluster: '<your-cluster-name>'
+          node: '<your-node-name>'
           __path__: /var/log/opensearch/opensearch.log
 ```
 
