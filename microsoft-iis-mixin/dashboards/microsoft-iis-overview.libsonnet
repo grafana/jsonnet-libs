@@ -147,7 +147,6 @@ local requestErrorsPanel = {
           mode: 'off',
         },
       },
-      decimals: 0,
       mappings: [],
       thresholds: {
         mode: 'absolute',
@@ -228,7 +227,6 @@ local blockedAsyncIORequestsPanel = {
           mode: 'off',
         },
       },
-      decimals: 0,
       mappings: [],
       min: 0,
       thresholds: {
@@ -310,7 +308,6 @@ local rejectedAsyncIORequestsPanel = {
           mode: 'off',
         },
       },
-      decimals: 0,
       mappings: [],
       min: 0,
       thresholds: {
@@ -470,7 +467,6 @@ local trafficReceivedPanel = {
           mode: 'off',
         },
       },
-      decimals: 0,
       mappings: [],
       min: 0,
       thresholds: {

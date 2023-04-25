@@ -42,15 +42,19 @@ Microsoft IIS logs are enabled by default in the `config.libsonnet` and can be r
   },
 }
 ```
-
-![Screenshots TODO]()
+# screenshots
+![Screenshot1 of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/overview-1.png)
+![Screenshot2 of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/overview-2.png)
+![Screenshot3 of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/overview-3.png)
 
 ## Microsoft IIS applications
 
 The Microsoft IIS applications dashboard provides details on worker requests, websocket connections, thread utilization, and worker process failures. 
 
-![Screenshots TODO]()
-
+# screenshots
+![Screenshot1 of the applications dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/application-1.png)
+![Screenshot2 of the applications dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/application-2.png)
+![Screenshot3 of the applications dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/application-3.png)
 ## Alerts overview
 
 MicrosoftIISHighNumberOfRejectedAsyncIORequests: There are a high number of rejected async I/O requests for a site.
