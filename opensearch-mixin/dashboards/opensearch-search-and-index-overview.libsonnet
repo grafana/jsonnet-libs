@@ -1039,7 +1039,7 @@ local indexCapacityRow = {
   targets: [],
   type: 'row',
   title: 'Index capacity',
-  collapsed: true,
+  collapsed: false,
 };
 
 local documentsIndexedPanel = {

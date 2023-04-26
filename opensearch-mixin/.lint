@@ -41,4 +41,3 @@ exclusions:
     - panel: "Merge count"
     - panel: "Shard count"
     - panel: "Node open connections"
-

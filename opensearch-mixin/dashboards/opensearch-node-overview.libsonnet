@@ -22,7 +22,7 @@ local nodeHealthRow = {
   targets: [],
   type: 'row',
   title: 'Node health',
-  collapsed: true,
+  collapsed: false,
 };
 
 local nodeCPUUsagePanel = {
@@ -659,7 +659,7 @@ local nodeJVMRow = {
   targets: [],
   type: 'row',
   title: 'Node JVM',
-  collapsed: true,
+  collapsed: false,
 };
 
 local jvmHeapUsedVsCommittedPanel = {
