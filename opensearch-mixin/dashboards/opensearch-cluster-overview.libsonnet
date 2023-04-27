@@ -1563,11 +1563,11 @@ local topIndicesByIndexFailuresPanel = {
             'job',
             promDatasource,
             'label_values(opensearch_cluster_status,job)',
-            label='Job',
+            label='job',
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=1
           ),
           template.new(
