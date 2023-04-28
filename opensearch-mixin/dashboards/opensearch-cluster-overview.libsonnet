@@ -1556,14 +1556,14 @@ local topIndicesByIndexFailuresPanel = {
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Prometheus data source',
             refresh='load'
           ),
           template.new(
             'job',
             promDatasource,
             'label_values(opensearch_cluster_status,job)',
-            label='job',
+            label='Job',
             refresh=2,
             includeAll=true,
             multi=true,

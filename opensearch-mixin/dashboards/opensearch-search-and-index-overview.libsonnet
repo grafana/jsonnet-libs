@@ -1705,14 +1705,14 @@ local shardCountPanel = {
             promDatasourceName,
             'prometheus',
             null,
-            label='Prometheus Data Source',
+            label='Prometheus data source',
             refresh='load'
           ),
           template.new(
             'job',
             promDatasource,
             'label_values(opensearch_index_search_fetch_count, job)',
-            label='job',
+            label='Job',
             refresh=2,
             includeAll=true,
             multi=true,

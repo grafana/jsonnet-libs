@@ -1511,7 +1511,7 @@ local errorLogsPanelPanel = {
               promDatasourceName,
               'prometheus',
               null,
-              label='Prometheus Data Source',
+              label='Prometheus data source',
               refresh='load'
             ),
           ],
@@ -1520,7 +1520,7 @@ local errorLogsPanelPanel = {
               lokiDatasourceName,
               'loki',
               null,
-              label='Loki Data Source',
+              label='Loki data source',
               refresh='load'
             ),
           ] else [],
@@ -1529,7 +1529,7 @@ local errorLogsPanelPanel = {
               'job',
               promDatasource,
               'label_values(opensearch_cluster_status,job)',
-              label='job',
+              label='Job',
               refresh=2,
               includeAll=true,
               multi=true,
