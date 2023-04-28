@@ -304,7 +304,8 @@ local hostname_template = grafana.template.new(
         },
       ],
       '100 - (windows_logical_disk_free_bytes{' + host_matcher + '} / windows_logical_disk_size_bytes{' + host_matcher + '})*100',
-      '{{volume}}'),
+      '{{volume}}'
+    ),
 
   local diskIO =
     graphPanel.new(
