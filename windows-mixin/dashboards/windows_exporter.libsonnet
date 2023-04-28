@@ -286,22 +286,25 @@ local hostname_template = grafana.template.new(
     )),
 
   local diskUsage =
-    win.winbargauge('Usage of each partition',
-    'Disk usage % per partition.',
-    [
-      {
-        color: 'green',
-        value: null,
-      },
-      {
-        color: '#EAB839',
-        value: 80,
-      },
-      {
-        color: 'red',
-        value: 90,
-      },
-    ], '100 - (windows_logical_disk_free_bytes{' + host_matcher + '} / windows_logical_disk_size_bytes{' + host_matcher + '})*100', '{{volume}}'),
+    win.winbargauge(
+      'Usage of each partition',
+      'Disk usage % per partition.',
+      [
+        {
+          color: 'green',
+          value: null,
+        },
+        {
+          color: '#EAB839',
+          value: 80,
+        },
+        {
+          color: 'red',
+          value: 90,
+        },
+      ],
+      '100 - (windows_logical_disk_free_bytes{' + host_matcher + '} / windows_logical_disk_size_bytes{' + host_matcher + '})*100',
+      '{{volume}}'),
 
   local diskIO =
     graphPanel.new(

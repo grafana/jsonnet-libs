@@ -113,7 +113,7 @@ local integration_status_panel =
     graphMode='none',
     noValue='No Data',
     reducerFunction='lastNotNull',
-    description='Indicates if the agent is configured and sending metrics.',    
+    description='Indicates if the agent is configured and sending metrics.',
   )
   .addMappings(
     [
