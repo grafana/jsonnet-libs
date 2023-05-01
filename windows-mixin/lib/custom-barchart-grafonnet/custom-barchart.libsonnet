@@ -150,6 +150,7 @@ local grafana = import 'github.com/grafana/grafonnet-lib/grafonnet/grafana.libso
         },
       ],
       title: 'Historical Logs / Warnings / Errors',
+      description: 'Historical Logs / Warnings / Errors',
       type: 'barchart',
     },
 }

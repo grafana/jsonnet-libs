@@ -103,7 +103,8 @@ local hostname_template = grafana.template.new(
       colorMode='background',
       graphMode='none',
       noValue='No Data',
-      reducerFunction='lastNotNull'
+      reducerFunction='lastNotNull',
+      description='Indicates if the agent is configured and sending metrics.',
     )
     .addMappings(
       [
@@ -145,14 +146,15 @@ local hostname_template = grafana.template.new(
       fields='Time',
       graphMode='none',
       noValue='No Data',
-      reducerFunction='lastNotNull'
+      reducerFunction='lastNotNull',
+      description='Date and time of the latest metric received from the Windows host',
     )
     .addTarget(
       grafana.prometheus.target('sum(windows_cpu_time_total{' + host_matcher + ',mode="idle"})')
     ),
 
   local usageTable =
-    win.wintable('Usage', '$prometheus_datasource')
+    win.wintable('Usage', 'Shows overall CPU, memory and disk stats.', '$prometheus_datasource')
     .addQuery('windows_os_info{' + host_matcher + '} * on(instance) group_right(product) windows_cs_hostname', 'group', 'group')
     .addQuery('100 - (avg by (instance) (rate(windows_cpu_time_total{' + host_matcher + ',mode="idle"}[$__rate_interval])) * 100)', 'CPU Usage %', 'cpuusage')
     .addQuery('time() - windows_system_system_up_time{' + host_matcher + '}', 'Uptime', 'uptime')
@@ -238,6 +240,7 @@ local hostname_template = grafana.template.new(
   local perCpu =
     graphPanel.new(
       title='CPU usage % by host',
+      description='CPU usage % by host, measured by the percentage of time spent not idle over the last $__rate_interval.',
       datasource='$prometheus_datasource',
       span=6,
       min=0,
@@ -255,6 +258,7 @@ local hostname_template = grafana.template.new(
   local perMemory =
     graphPanel.new(
       title='Memory usage % by host',
+      description='Physical memory usage % by host.',
       datasource='$prometheus_datasource',
       span=6,
       min=0,
@@ -272,6 +276,7 @@ local hostname_template = grafana.template.new(
   local iisConnections =
     graphPanel.new(
       title='IIS connections',
+      description='The number of active IIS connections by host.',
       datasource='$prometheus_datasource',
       span=3,
     )
@@ -281,24 +286,31 @@ local hostname_template = grafana.template.new(
     )),
 
   local diskUsage =
-    win.winbargauge('Usage of each partition', [
-      {
-        color: 'green',
-        value: null,
-      },
-      {
-        color: '#EAB839',
-        value: 80,
-      },
-      {
-        color: 'red',
-        value: 90,
-      },
-    ], '100 - (windows_logical_disk_free_bytes{' + host_matcher + '} / windows_logical_disk_size_bytes{' + host_matcher + '})*100', '{{volume}}'),
+    win.winbargauge(
+      'Usage of each partition',
+      'Disk usage % per partition.',
+      [
+        {
+          color: 'green',
+          value: null,
+        },
+        {
+          color: '#EAB839',
+          value: 80,
+        },
+        {
+          color: 'red',
+          value: 90,
+        },
+      ],
+      '100 - (windows_logical_disk_free_bytes{' + host_matcher + '} / windows_logical_disk_size_bytes{' + host_matcher + '})*100',
+      '{{volume}}'
+    ),
 
   local diskIO =
     graphPanel.new(
       title='Disk read write',
+      description='Disk read and write rate by host.',
       datasource='$prometheus_datasource',
       legend_min=true,
       legend_max=true,
@@ -322,6 +334,7 @@ local hostname_template = grafana.template.new(
     win.winstat(
       span=1,
       title='Services in error',
+      description='Services in error by host.',
       datasource='$prometheus_datasource',
       unit='short',
       overrides=[
@@ -364,6 +377,7 @@ local hostname_template = grafana.template.new(
   local networkUsage =
     graphPanel.new(
       title='Network usage',
+      description='Network usage by host, excluding isatap and VPN interfaces.',
       datasource='$prometheus_datasource',
       legend_min=true,
       legend_max=true,
@@ -388,6 +402,7 @@ local hostname_template = grafana.template.new(
     win.winstat(
       span=1,
       title='Uptime',
+      description='Uptime by host.',
       datasource='$prometheus_datasource',
       format='s',
       overrides=[
