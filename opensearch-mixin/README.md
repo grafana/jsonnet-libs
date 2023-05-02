@@ -27,8 +27,9 @@ and the following alerts:
 
 The OpenSearch cluster overview dashboard provides details on cluster, node and shard status as well as cluster search and index summary details on a cluster level.
 
-![Screenshots TODO]()
-†
+![OpenSearch Cluster Overview Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/opensearch/screenshots/opensearch-cluster-1.png)
+![OpenSearch Cluster Overview Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/opensearch/screenshots/opensearch-cluster-2.png)
+
 ## OpenSearch Node Overview
 
 The OpenSearch node overview dashboard provides details on node health, node JVM usage, thread pools, and error logs. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default OpenSearch error log path is `/var/log/opensearch/opensearch.log` for each node on Linux.
@@ -56,28 +57,33 @@ scrape_configs:
           __path__: /var/log/opensearch/opensearch.log
 ```
 
-![Screenshots TODO]()
+![OpenSearch Node Overview Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/opensearch/screenshots/opensearch-nodes-1.png)
+![OpenSearch Node Overview Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/opensearch/screenshots/opensearch-nodes-2.png)
 
 ## OpenSearch Search And Index Overview
 
 The OpenSearch search and index overview dashboard provides details on request performance, index performance and index capacity. 
 
-![Screenshots TODO]()
+![OpenSearch Search and Index Overview Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/opensearch/screenshots/opensearch-search-index-1.png)
+![OpenSearch Search and Index Overview Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/opensearch/screenshots/opensearch-search-index-2.png)
 
 ## Alerts Overview
 
-OpenSearchYellowCluster: At least one of the clusters is reporting a yellow status.
-OpenSearchRedCluster: At least one of the clusters is reporting a red status.
-OpenSearchUnstableShardReallocation: A node has gone offline or has been disconnected triggering shard reallocation
-OpenSearchUnstableShardUnassigned: A node has gone offline or has been disconnected triggering shard unassigned
-OpenSearchModerateNodeDiskUsage: The node disk usage has exceeded the warning threshold.
-OpenSearchHighNodeDiskUsage: The node disk usage has exceeded the critical threshold.
-OpenSearchModerateNodeCPUUsage: The node CPU usage has exceeded the warning threshold.
-OpenSearchHighNodeCPUUsage: The node CPU usage has exceeded the critical threshold.
-OpenSearchModerateNodeMemoryUsage: The node memory usage has exceeded the warning threshold.
-OpenSearchHighNodeMemoryUsage: The node memory usage has exceeded the critical threshold.
-OpenSearchModerateRequestLatency: The request latency has exceeded the warning threshold.
-OpenSearchModerateIndexLatency: The index latency has exceeded the warning threshold.
+
+| Alert                               | Description                                                                     |
+|-------------------------------------|---------------------------------------------------------------------------------|
+| OpenSearchYellowCluster             | At least one of the clusters is reporting a yellow status.                      |
+| OpenSearchRedCluster                | At least one of the clusters is reporting a red status.                         |
+| OpenSearchUnstableShardReallocation | A node has gone offline or has been disconnected triggering shard reallocation. |
+| OpenSearchUnstableShardUnassigned   | There are shards that have been detected as unassigned.                         |
+| OpenSearchModerateNodeDiskUsage     | The node disk usage has exceeded the warning threshold.                         |
+| OpenSearchHighNodeDiskUsage         | The node disk usage has exceeded the critical threshold.                        |
+| OpenSearchModerateNodeCpuUsage      | The node CPU usage has exceeded the warning threshold.                          |
+| OpenSearchHighNodeCpuUsage          | The node CPU usage has exceeded the critical threshold.                         |
+| OpenSearchModerateNodeMemoryUsage   | The node memory usage has exceeded the warning threshold.                       |
+| OpenSearchHighNodeMemoryUsage       | The node memory usage has exceeded the critical threshold.                      |
+| OpenSearchModerateRequestLatency    | The request latency has exceeded the warning threshold.                         |
+| OpenSearchModerateIndexLatency      | The index latency has exceeded the warning threshold.                           |
 
 Default thresholds can be configured in `config.libsonnet`
 
