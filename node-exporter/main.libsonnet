@@ -28,8 +28,8 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
       'tracefs',
     ],
 
-    excluded_mount_points:: "^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)",
-    
+    excluded_mount_points:: '^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)',
+
     local container = k.core.v1.container,
     container::
       container.new('node-exporter', image)
