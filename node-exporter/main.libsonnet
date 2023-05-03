@@ -66,5 +66,9 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
     daemonset+: k.util.hostVolumeMount('root', '/', '/rootfs'),
   },
 
+  withExcludedMountPoints(mps):: {
+    excluded_mount_points:: mps,
+  },
+
   scrape_config: (import './scrape_config.libsonnet'),
 }
