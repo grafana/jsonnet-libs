@@ -28,6 +28,8 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
       'tracefs',
     ],
 
+    excluded_mount_points:: '^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)',
+
     local container = k.core.v1.container,
     container::
       container.new('node-exporter', image)
@@ -41,7 +43,7 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
         // Reduces cardinality by ignoring a few devices, fs-types and mount-points.
         '--collector.netdev.device-exclude=^veth.+$',
         '--collector.filesystem.fs-types-exclude=^(%s)$' % std.join('|', self.ignored_fs_types),
-        '--collector.filesystem.mount-points-exclude=^/(rootfs/)?(dev|proc|sys|var/lib/docker/.+)($|/)',
+        '--collector.filesystem.mount-points-exclude=%s' % self.excluded_mount_points,
       ])
       + container.mixin.securityContext.withPrivileged(true)
       + container.mixin.securityContext.withRunAsUser(0)
@@ -62,6 +64,10 @@ local k = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libsonnet'
 
   mountRoot():: {
     daemonset+: k.util.hostVolumeMount('root', '/', '/rootfs'),
+  },
+
+  withExcludedMountPoints(mps):: {
+    excluded_mount_points:: mps,
   },
 
   scrape_config: (import './scrape_config.libsonnet'),
