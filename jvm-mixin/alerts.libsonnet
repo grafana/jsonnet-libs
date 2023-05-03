@@ -14,7 +14,7 @@
           },
           annotations: {
             summary: 'JVM memory filling up.',
-            description: 'JVM memory usage is at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 80%.'
+            description: 'JVM memory usage is at {{ printf "%%.0f" $value }} percent over the last 5 minutes on {{$labels.instance}}, which is above the threshold of 80%.',
           },
         },
       ],
