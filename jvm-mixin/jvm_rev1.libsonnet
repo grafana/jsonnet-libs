@@ -491,12 +491,12 @@
   templating: {
     list: [
       {
-        allValue: '',
+        allValue: '.+',
         current: {},
         datasource: '${datasource}',
         hide: 0,
         includeAll: true,
-        label: 'Instance',
+        label: 'instance',
         multi: true,
         name: 'instance',
         options: [],
