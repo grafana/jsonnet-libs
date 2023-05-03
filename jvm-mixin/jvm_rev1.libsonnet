@@ -83,7 +83,7 @@
               expr: 'jvm_memory_bytes_used{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
               interval: '',
-              
+
               legendFormat: '{{area}} memory [{{instance}}]',
               metric: 'jvm_memory_bytes_used',
               refId: 'A',
@@ -172,7 +172,7 @@
             {
               expr: 'jvm_threads_current{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
-              
+
               legendFormat: 'current [{{instance}}]',
               metric: 'jvm_threads_current',
               refId: 'A',
@@ -181,7 +181,7 @@
             {
               expr: 'jvm_threads_daemon{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
-              
+
               legendFormat: 'daemon [{{instance}}]',
               metric: 'jvm_threads_daemon',
               refId: 'B',
@@ -260,7 +260,7 @@
               expr: 'jvm_classes_loaded{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
               interval: '',
-              
+
               legendFormat: 'loaded [{{instance}}]',
               metric: 'jvm_classes_loaded',
               refId: 'A',
@@ -351,7 +351,7 @@
               expr: 'rate(jvm_gc_collection_seconds_sum{job=~"$job", instance=~"$instance"}[$__rate_interval])',
               format: 'time_series',
               interval: '',
-              
+
               legendFormat: '{{gc}} [{{instance}}]',
               metric: 'jvm_gc_collection_seconds_sum',
               refId: 'A',
@@ -429,7 +429,7 @@
               expr: 'jvm_gc_collection_seconds_count{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
               interval: '',
-              
+
               legendFormat: '{{gc}} [{{instance}}]',
               metric: '',
               refId: 'A',
