@@ -19,7 +19,7 @@ g.dashboard('MinIO distributed cluster metrics', std.md5('minio_v1'))
   g.row('Overview')
   .addPanel(
     g.panel('Storage Used') +
-    g.statPanel('sum(disk_storage_used{disk=~"$disk", job=~"$job", instance=~"$instance"}) by (disk) / sum(disk_storage_total{disk=~"$disk", job=~"$job", instance=~"$instance}) by (disk)') +
+    g.statPanel('sum(disk_storage_used{disk=~"$disk", job=~"$job", instance=~"$instance"}) by (disk) / sum(disk_storage_total{disk=~"$disk", job=~"$job", instance=~"$instance"}) by (disk)') +
     {
       type: 'gauge',
       targets: [super.targets[0] {
