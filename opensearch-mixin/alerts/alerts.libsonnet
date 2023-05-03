@@ -17,7 +17,7 @@
               summary: 'At least one of the clusters is reporting a yellow status.',
               description:
                 (
-                  '{{$labels.opensearch_cluster}} health status is yellow over the last 5 minutes'
+                  '{{$labels.cluster}} health status is yellow over the last 5 minutes'
                 ) % $._config,
             },
           },
@@ -34,7 +34,7 @@
               summary: 'At least one of the clusters is reporting a red status.',
               description:
                 (
-                  '{{$labels.opensearch_cluster}} health status is red over the last 5 minutes'
+                  '{{$labels.cluster}} health status is red over the last 5 minutes'
                 ) % $._config,
             },
           },
@@ -50,7 +50,7 @@
             annotations: {
               summary: 'A node has gone offline or has been disconnected triggering shard reallocation.',
               description: |||
-                {{$labels.opensearch_cluster}} has had {{ printf "%%.0f" $value }} shard reallocation over the last 1m which is above the threshold of %(alertsWarningShardReallocations)s.
+                {{$labels.cluster}} has had {{ printf "%%.0f" $value }} shard reallocation over the last 1m which is above the threshold of %(alertsWarningShardReallocations)s.
               ||| % $._config,
             },
           },
@@ -66,7 +66,7 @@
             annotations: {
               summary: 'There are shards that have been detected as unassigned.',
               description: |||
-                {{$labels.opensearch_cluster}} has had {{ printf "%%.0f" $value }} shard unassigned over the last 5m which is above the threshold of %(alertsWarningShardUnassigned)s.
+                {{$labels.cluster}} has had {{ printf "%%.0f" $value }} shard unassigned over the last 5m which is above the threshold of %(alertsWarningShardUnassigned)s.
               ||| % $._config,
             },
           },
@@ -82,7 +82,7 @@
             annotations: {
               summary: 'The node disk usage has exceeded the warning threshold.',
               description: |||
-                {{$labels.opensearch_node}} has had {{ printf "%%.0f" $value }} disk usage over the last 5m which is above the threshold of %(alertsWarningDiskUsage)s.
+                {{$labels.node}} has had {{ printf "%%.0f" $value }} disk usage over the last 5m which is above the threshold of %(alertsWarningDiskUsage)s.
               ||| % $._config,
             },
           },
@@ -98,7 +98,7 @@
             annotations: {
               summary: 'The node disk usage has exceeded the critical threshold.',
               description: |||
-                {{$labels.opensearch_node}} has had {{ printf "%%.0f" $value }}%% disk usage over the last 5m which is above the threshold of %(alertsCriticalDiskUsage)s.
+                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% disk usage over the last 5m which is above the threshold of %(alertsCriticalDiskUsage)s.
               ||| % $._config,
             },
           },
@@ -114,7 +114,7 @@
             annotations: {
               summary: 'The node CPU usage has exceeded the warning threshold.',
               description: |||
-                {{$labels.opensearch_node}} has had {{ printf "%%.0f" $value }}%% CPU usage over the last 5m which is above the threshold of %(alertsWarningCPUUsage)s.
+                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% CPU usage over the last 5m which is above the threshold of %(alertsWarningCPUUsage)s.
               ||| % $._config,
             },
           },
@@ -130,7 +130,7 @@
             annotations: {
               summary: 'The node CPU usage has exceeded the critical threshold.',
               description: |||
-                {{$labels.opensearch_node}} has had {{ printf "%%.0f" $value }}%% CPU usage over the last 5m which is above the threshold of %(alertsCriticalCPUUsage)s.
+                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% CPU usage over the last 5m which is above the threshold of %(alertsCriticalCPUUsage)s.
               ||| % $._config,
             },
           },
@@ -146,7 +146,7 @@
             annotations: {
               summary: 'The node memory usage has exceeded the warning threshold.',
               description: |||
-                {{$labels.opensearch_node}} has had {{ printf "%%.0f" $value }}%% memory usage over the last 5m which is above the threshold of %(alertsWarningMemoryUsage)s.
+                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% memory usage over the last 5m which is above the threshold of %(alertsWarningMemoryUsage)s.
               ||| % $._config,
             },
           },
@@ -162,7 +162,7 @@
             annotations: {
               summary: 'The node memory usage has exceeded the critical threshold.',
               description: |||
-                {{$labels.opensearch_node}} has had {{ printf "%%.0f" $value }}%% memory usage over the last 5m which is above the threshold of %(alertsCriticalMemoryUsage)s.
+                {{$labels.node}} has had {{ printf "%%.0f" $value }}%% memory usage over the last 5m which is above the threshold of %(alertsCriticalMemoryUsage)s.
               ||| % $._config,
             },
           },
@@ -178,7 +178,7 @@
             annotations: {
               summary: 'The request latency has exceeded the warning threshold.',
               description: |||
-                {{$labels.opensearch_index}} has had {{ printf "%%.0f" $value }}s of request latency over the last 5m which is above the threshold of %(alertsWarningRequestLatency)s.
+                {{$labels.index}} has had {{ printf "%%.0f" $value }}s of request latency over the last 5m which is above the threshold of %(alertsWarningRequestLatency)s.
               ||| % $._config,
             },
           },
@@ -194,7 +194,7 @@
             annotations: {
               summary: 'The index latency has exceeded the warning threshold.',
               description: |||
-                {{$labels.opensearch_index}} has had {{ printf "%%.0f" $value }}s of index latency over the last 5m which is above the threshold of %(alertsWarningIndexLatency)s.
+                {{$labels.index}} has had {{ printf "%%.0f" $value }}s of index latency over the last 5m which is above the threshold of %(alertsWarningIndexLatency)s.
               ||| % $._config,
             },
           },
