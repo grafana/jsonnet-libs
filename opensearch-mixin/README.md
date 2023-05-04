@@ -70,7 +70,7 @@ The OpenSearch search and index overview dashboard provides details on request p
 ## Alerts Overview
 
 
-| Alert                               | Description                                                                     |
+| Alert                               | Summary                                                                         |
 |-------------------------------------|---------------------------------------------------------------------------------|
 | OpenSearchYellowCluster             | At least one of the clusters is reporting a yellow status.                      |
 | OpenSearchRedCluster                | At least one of the clusters is reporting a red status.                         |
