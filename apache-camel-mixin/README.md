@@ -1,11 +1,19 @@
-THis is a fork of the community dashboard that can be found here:
+This is a fork of the community dashboard that can be found here:
 
-- [Github]([https://link](https://github.com/alainpham/app-archetypes/blob/master/camel-monitoring/dashboards-for-import/apache-camel-micrometer.json))
+- [Github](https://github.com/alainpham/app-archetypes/blob/master/camel-monitoring/camel-dashboards-for-import/apache-camel-micrometer.json)
 - [Grafana Dashbord Portal](https://grafana.com/grafana/dashboards/16764-apache-camel-context-view/)
 
 # Apache Camel 3 - Statistics on Camel Context level
 
 Performance oriented monitoring on Apache Camel 3 deployments. Works ideally on Kubernetes deployments. Based on Prometheus datasource scraping metrics coming from the micrometer framework. Focuses on analyzing Camel Context, Route & Processor execution times and throughput.
+
+## Mixin install commands
+```
+jb init
+
+jb install https://github.com/alainpham/app-archetypes/camel-monitoring/camel-dashboards-for-import/
+
+```
 
 ## Application instrumentation
 
@@ -77,12 +85,80 @@ public class Configurator extends RouteBuilder {
 
 ## Prometheus scraping
 
+
+Dashboard is designed for metrics scraped from kubernetes deployment
+
+This is the scrape config to be used as an example
+
+```yaml
+# inspired by the prometheus kubernetes helm chart
+global:
+  scrape_interval: 15s
+  external_labels:
+    cluster: cloud
+scrape_configs:
+  - job_name: integrations/kubernetes/applications
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+    honor_labels: true
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          own_namespace: true
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+        action: keep
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape_slow]
+        action: drop
+        regex: true
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scheme]
+        action: replace
+        regex: (https?)
+        target_label: __scheme__
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+        action: replace
+        target_label: __metrics_path__
+        regex: (.+)
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port, __meta_kubernetes_pod_ip]
+        action: replace
+        regex: (\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})
+        replacement: '[$2]:$1'
+        target_label: __address__
+      - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_port, __meta_kubernetes_pod_ip]
+        action: replace
+        regex: (\d+);((([0-9]+?)(\.|$)){4})
+        replacement: $2:$1
+        target_label: __address__
+      - action: labelmap
+        regex: __meta_kubernetes_pod_annotation_prometheus_io_param_(.+)
+        replacement: __param_$1
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: namespace
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        action: replace
+        target_label: node
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: pod
+      - source_labels: [__meta_kubernetes_pod_phase]
+        regex: Pending|Succeeded|Failed|Completed
+        action: drop
+```
+
 To scrape instances that are not deployed in kubernetes you can simulate kubernetes labels with the following prometheus configs.
 
 Kubernetes specific labels that need to be simulated are
- * application
- * node_name
- * kubernetes_pod_name
+ * app_kubernetes_io_part_of
+ * app_kubernetes_io_name
+ * app_kubernetes_io_component
+ * app_kubernetes_io_instance
+ * app_kubernetes_io_version
+ * cluster
+ * node
+ * pod
  * namespace
 
 ```yaml
@@ -93,11 +169,21 @@ scrape_configs:
   - job_name: "camel-dev"
     metrics_path: /q/metrics
     relabel_configs:
-      - target_label: application
+      - target_label: app_kubernetes_io_part_of
         replacement: camel-app
-      - target_label: node_name
+      - target_label: app_kubernetes_io_name
+        replacement: camel-app
+      - target_label: app_kubernetes_io_component
+        replacement: camel-app
+      - target_label: app_kubernetes_io_instance
+        replacement: camel-app-master
+      - target_label: app_kubernetes_io_version
+        replacement: "1.0.0"
+      - target_label: cluster
+        replacement: cloud
+      - target_label: node
         replacement: worker-01
-      - target_label: kubernetes_pod_name
+      - target_label: pod
         replacement: camel-app-1
       - target_label: namespace
         replacement: camel-ns
