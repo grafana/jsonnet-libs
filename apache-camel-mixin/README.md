@@ -3,9 +3,9 @@ This is a fork of the community dashboard that can be found here:
 - [Github](https://github.com/alainpham/app-archetypes/blob/master/camel-monitoring/camel-dashboards-for-import/apache-camel-micrometer.json)
 - [Grafana Dashbord Portal](https://grafana.com/grafana/dashboards/16764-apache-camel-context-view/)
 
-# Apache Camel 3 - Statistics on Camel Context level
+# Apache Camel 3 & 4 - Statistics on Camel Context level
 
-Performance oriented monitoring on Apache Camel 3 deployments. Works ideally on Kubernetes deployments. Based on Prometheus datasource scraping metrics coming from the micrometer framework. Focuses on analyzing Camel Context, Route & Processor execution times and throughput.
+Performance oriented monitoring on Apache Camel 3 & 4 deployments. Works ideally on Kubernetes deployments. Based on Prometheus datasource scraping metrics coming from the micrometer framework. Focuses on analyzing Camel Context, Route & Processor execution times and throughput.
 
 ## Mixin install commands
 ```
