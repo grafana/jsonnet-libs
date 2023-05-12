@@ -13,7 +13,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
@@ -1310,14 +1309,14 @@ local cacheLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/squid/cache.log", job=~"$job"} |= ``',
+      expr: '{filename="/var/log/squid/cache.log", job=~"$job", instance=~"$instance"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
   ],
   type: 'logs',
   title: 'Cache logs',
-  description: 'The cache.log file that contains the debug and error messages that Squid generates.',
+  description: 'The log file that contains the debug and error messages that Squid generates.',
   options: {
     dedupStrategy: 'none',
     enableLogDetails: true,
@@ -1336,14 +1335,14 @@ local accessLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/squid/access.log", job=~"$job"} |= ``',
+      expr: '{filename="/var/log/squid/access.log", job=~"$job", instance=~"$instance"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
   ],
   type: 'logs',
   title: 'Access logs',
-  description: 'The access.log file contains a record of all HTTP requests and responses processed by the Squid proxy server.',
+  description: 'The log file that contains a record of all HTTP requests and responses processed by the Squid proxy server.',
   options: {
     dedupStrategy: 'none',
     enableLogDetails: true,
@@ -1355,7 +1354,6 @@ local accessLogsPanel = {
     wrapLogMessage: false,
   },
 };
-
 
 {
   grafanaDashboards+:: {

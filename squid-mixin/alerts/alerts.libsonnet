@@ -23,7 +23,7 @@
           {
             alert: 'SquidHighPercentageOfFTPServerRequestErrors',
             expr: |||
-             rate(squid_server_ftp_errors_total[5m]) / clamp_min(rate(squid_server_ftp_requests_total[5m]),1) * 100 > %(alertsCriticalHighPercentageRequestErrors)s
+              rate(squid_server_ftp_errors_total[5m]) / clamp_min(rate(squid_server_ftp_requests_total[5m]),1) * 100 > %(alertsCriticalHighPercentageRequestErrors)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -39,7 +39,7 @@
           {
             alert: 'SquidHighPercentageOfOtherServerRequestErrors',
             expr: |||
-             rate(squid_server_other_errors_total[5m]) / clamp_min(rate(squid_server_other_requests_total[5m]),1) * 100 > %(alertsCriticalHighPercentageRequestErrors)s
+              rate(squid_server_other_errors_total[5m]) / clamp_min(rate(squid_server_other_requests_total[5m]),1) * 100 > %(alertsCriticalHighPercentageRequestErrors)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -55,7 +55,7 @@
           {
             alert: 'SquidHighPercentageOfClientRequestErrors',
             expr: |||
-             rate(squid_client_http_errors_total[5m]) / clamp_min(rate(squid_client_http_requests_total[5m]),1) * 100 > %(alertsCriticalHighPercentageRequestErrors)s
+              rate(squid_client_http_errors_total[5m]) / clamp_min(rate(squid_client_http_requests_total[5m]),1) * 100 > %(alertsCriticalHighPercentageRequestErrors)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -71,14 +71,14 @@
           {
             alert: 'SquidLowCacheHitRatio',
             expr: |||
-             rate(squid_client_http_hits_total[10m]) / clamp_min(rate(Squid_client_http_requests_total[10m]),1) * 100 < %(alertsWarningLowCacheHitRatio)s
+              rate(squid_client_http_hits_total[10m]) / clamp_min(rate(Squid_client_http_requests_total[10m]),1) * 100 < %(alertsWarningLowCacheHitRatio)s
             ||| % $._config,
             'for': '10m',
             labels: {
               severity: 'warning',
             },
             annotations: {
-              summary: 'The cache hit ratio has fallen below 85%.',
+              summary: 'The cache hit ratio has fallen below the configured threshold (%).',
               description: |||
                 The cache hit ratio is {{ printf "%%.0f" $value }} over the last 10m on {{ $labels.instance }} which is below the threshold of %(alertsWarningLowCacheHitRatio)s.
               ||| % $._config,

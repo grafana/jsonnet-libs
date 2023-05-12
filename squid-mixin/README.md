@@ -1,6 +1,6 @@
 # Squid Mixin
 
-Squid mixin is a set of configurable Grafana dashboards and alerts.
+The Squid mixin is a set of configurable Grafana dashboards and alerts.
 
 The Squid mixin contains the following dashboards:
 
@@ -28,7 +28,7 @@ The Squid overview dashboard provides details on both server and client HTTP, FT
 }
 ```
 
-In order for the selectors to properly work for access and cache logs ingested into your logs datasource, please also include the matching `job` label onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+In order for the selectors to properly work for access and cache logs ingested into your logs datasource, please also include the matching `job` and `instance` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
 ```yaml
 scrape_configs:
@@ -55,7 +55,7 @@ scrape_configs:
 | SquidHighPercentageOfFTPServerRequestErrors                | There are a high number of FTP server request errors.                         |
 | SquidHighPercentageOfOtherServerRequestErrors | There are a high number of other server request errors. |
 | SquidHighPercentageOfClientRequestErrors   | There are a high number of HTTP client request errors.                         |
-| SquidLowCacheHitRatio     | The cache hit ratio has fallen below 85%.                         |
+| SquidLowCacheHitRatio     | The cache hit ratio has fallen below the configured threshold (%).                         |
 
 
 Default thresholds can be configured in `config.libsonnet`
