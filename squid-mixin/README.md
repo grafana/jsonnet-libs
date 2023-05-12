@@ -20,6 +20,8 @@ The Squid overview dashboard provides details on both server and client HTTP, FT
 
 ![TODO Dashboard screenshots]()
 
+Squid logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+
 ```
 {
   _config+:: {
