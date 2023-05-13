@@ -1019,7 +1019,6 @@ local schedulerLogsPanel = {
   },
 };
 
-
 {
   grafanaDashboards+:: {
     'apache-airflow-overview.json':
@@ -1114,6 +1113,17 @@ local schedulerLogsPanel = {
               promDatasource,
               'label_values(airflow_pool_open_slots{job=~"$job", instance=~"$instance"}, pool_name)',
               label='Pool',
+              refresh=1,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              sort=0
+            ),
+            template.new(
+              'dag_file',
+              lokiDatasource,
+              'label_values(dag_file)',
+              label='DAG file',
               refresh=1,
               includeAll=true,
               multi=true,

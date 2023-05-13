@@ -30,11 +30,11 @@ Apache Airflow system logs are enabled by default in the `config.libsonnet` and 
 }
 ```
 
-In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance` and `job` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics. It is also important to add matching `dag_id` and `task_id` for the task logs to match the labels for ingested metrics as well as add labels for `dag_file` for the scheduler logs to allow for filtering in the dashboard.
+In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance` and `job` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics. It is also important to add matching `dag_id` and `task_id` labels for the task logs to match the labels for ingested metrics as well as add labels for `dag_file` for the scheduler logs to allow for filtering in the dashboard.
 
 ```yaml
 scrape_configs:
-- job_name: system
+- job_name: integrations/apache-airflow
   static_configs:
   - targets:
     - localhost
