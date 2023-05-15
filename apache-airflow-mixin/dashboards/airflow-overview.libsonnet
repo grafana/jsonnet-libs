@@ -1058,10 +1058,10 @@ local schedulerLogsPanel = {
               promDatasource,
               'label_values(airflow_scheduler_tasks_executable,job)',
               label='Job',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
@@ -1069,10 +1069,10 @@ local schedulerLogsPanel = {
               promDatasource,
               'label_values(airflow_scheduler_tasks_executable{job=~"$job"}, instance)',
               label='Instance',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
@@ -1080,10 +1080,10 @@ local schedulerLogsPanel = {
               promDatasource,
               'label_values(airflow_task_start_total{job=~"$job", instance=~"$instance"}, dag_id)',
               label='DAG',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
@@ -1091,10 +1091,10 @@ local schedulerLogsPanel = {
               promDatasource,
               'label_values(airflow_task_start_total{job=~"$job", instance=~"$instance", dag_id=~"$dag_id"}, task_id)',
               label='Task',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
@@ -1102,10 +1102,10 @@ local schedulerLogsPanel = {
               promDatasource,
               'label_values(airflow_task_finish_total{job=~"$job", instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id"}, state)',
               label='Task state',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
@@ -1113,10 +1113,10 @@ local schedulerLogsPanel = {
               promDatasource,
               'label_values(airflow_pool_open_slots{job=~"$job", instance=~"$instance"}, pool_name)',
               label='Pool',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
@@ -1124,10 +1124,10 @@ local schedulerLogsPanel = {
               lokiDatasource,
               'label_values(dag_file)',
               label='DAG file',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
           ],
