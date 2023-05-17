@@ -17,8 +17,8 @@ and the following alerts:
 
 The Apache Airflow overview dashboard provides details on DAG failures, DAG durations, task failures, task durations, scheduler details, executor tasks, and pool task slots for an Apache Airflow system.
 
-![Apache Airflow overview dashboard (1/2)](TBD)
-![Apache Airflow overview dashboard (2/2)](TBD)
+![Apache Airflow overview dashboard (1/2)](https://storage.googleapis.com/grafanalabs-integration-assets/apache-airflow/screenshots/apache_airflow_overview_1.png)
+![Apache Airflow overview dashboard (2/2)](https://storage.googleapis.com/grafanalabs-integration-assets/apache-airflow/screenshots/apache_airflow_overview_2.png)
 
 Apache Airflow system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
