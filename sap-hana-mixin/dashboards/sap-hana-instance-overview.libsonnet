@@ -1107,7 +1107,7 @@ local traceLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/opt/hana/shared/ID0/HDB00/hana-0/trace/.*.trc"} |=``',
+      expr: '{filename=~"/opt/hana/shared/.*/HDB.*/.*/trace/.*.trc"} |=``',
       queryType: 'range',
       refId: 'A',
     },
