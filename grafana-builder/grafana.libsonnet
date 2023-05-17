@@ -434,6 +434,7 @@
       '5xx': '#E24D42',
       success: '#7EB26D',
       'error': '#E24D42',
+      cancel: '#ECCD47',
     },
     targets: [
       {
