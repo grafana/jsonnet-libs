@@ -30,7 +30,7 @@ Apache Airflow system logs are enabled by default in the `config.libsonnet` and 
 }
 ```
 
-In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance` and `job` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics. It is also important to add matching `dag_id` and `task_id` labels for the task logs to match the labels for ingested metrics as well as add labels for `dag_file` for the scheduler logs to allow for filtering in the dashboard.
+In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance` and `job` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics. Please use the correct `$AIRFLOW_HOME` directory in the `__path__` labels as well. It is also necessary to add matching `dag_id` and `task_id` labels for the task logs to match the labels for ingested metrics as well as add labels for `dag_file` for the scheduler logs to allow for filtering in the dashboard. The correct `$AIRFLOW_HOME` will also need to be used in the `expression` regexes.
 
 ```yaml
 scrape_configs:
@@ -41,20 +41,20 @@ scrape_configs:
     labels:
       job: integrations/apache-airflow
       instance: <instance>
-      __path__: /var/log/airflow/logs/dag_id=*/**/*.log
+      __path__: <airflow_home>/logs/dag_id=*/**/*.log
   - targets:
     - localhost
     labels:
       job: integrations/apache-airflow
       instance: localhost:8125
-      __path__: /var/log/airflow/logs/scheduler/latest/*.py.log
+      __path__: <airflow_home>/logs/scheduler/latest/*.py.log
   pipeline_stages:
   - match:
       selector: '{job="integrations/apache-airflow",instance="<instance>"}'
       stages:
       - regex:
           source: filename
-          expression: "/var/log/airflow/logs/dag_id=(?P<dag_id>\\S+?)/.*/task_id=(?P<task_id>\\S+?)/.*log"
+          expression: "<airflow_home>/logs/dag_id=(?P<dag_id>\\S+?)/.*/task_id=(?P<task_id>\\S+?)/.*log"
       - labels:
           dag_id:
           task_id:
@@ -63,7 +63,7 @@ scrape_configs:
       stages:
       - regex:
           source: filename
-          expression: "/var/log/airflow/logs/scheduler/latest/(?P<dag_file>\\S+?)\\.log"
+          expression: "<airflow_home>/logs/scheduler/latest/(?P<dag_file>\\S+?)\\.log"
       - labels:
           dag_file:   
   - multiline:

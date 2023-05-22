@@ -611,7 +611,7 @@ local taskLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id"} |= ``',
+      expr: '{job=~"$job", instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id", filename=~".*/airflow/logs/dag_id.*"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -999,7 +999,7 @@ local schedulerLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", instance=~"$instance", dag_file=~"$dag_file"} |= ``',
+      expr: '{job=~"$job", instance=~"$instance", dag_file=~"$dag_file", filename=~".*/airflow/logs/scheduler/latest/.*"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
