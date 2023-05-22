@@ -1228,7 +1228,7 @@ local masterLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", mesos_master=~"$mesos_master"} |= ``',
+      expr: '{job=~"$job", filename=~"/var/log/mesos/master/.*", mesos_cluster=~"$mesos_cluster"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -1254,7 +1254,7 @@ local agentLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", mesos_agent=~"$mesos_agent"} |= ``',
+      expr: '{job=~"$job", filename=~"/var/log/mesos/agent/.*", mesos_cluster=~"$mesos_cluster"} |= ``',
       queryType: 'range',
       refId: 'A',
     },

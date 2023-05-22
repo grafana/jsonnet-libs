@@ -40,7 +40,7 @@ Apache Mesos logs are enabled by default in the `config.libsonnet` and can be re
 }
 ```
 
-In order for the selectors to properly work for master and agent logs ingested into your logs datasource, please also include the matching `job`, `mesos_master`, and `mesos_agent` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+In order for the selectors to properly work for master and agent logs ingested into your logs datasource, please also include the matching `job`, and `mesos_cluster` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
 ```yaml
 scrape_configs:
@@ -50,13 +50,13 @@ scrape_configs:
         - localhost
         labels:
           job: integrations/apache-mesos
-          mesos_master: mesos-master-0
+          mesos_cluster: '<your-cluster-name>'
           __path__: /var/log/mesos/master/*.log*
       - targets:
         - localhost
         labels:
           job: integrations/apache-mesos
-          mesos_agent: mesos-agent-0
+          mesos_cluster: '<your-cluster-name>'
           __path__: /var/log/mesos/agent/*.log*
 ```
 
