@@ -1365,7 +1365,11 @@ local agentLogsPanel = {
             agentsRow { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
             memoryUtilizationPanel { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
             diskUtilizationPanel { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
+          ],
+          if $._config.enableLokiLogs then [
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 38 } },
+          ] else [],
+          [
           ],
           if $._config.enableLokiLogs then [
             masterLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 39 } },
