@@ -330,7 +330,7 @@ local memoryUtilizationPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -406,7 +406,7 @@ local diskUtilizationPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -482,7 +482,7 @@ local eventsInQueuePanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -492,7 +492,7 @@ local messagesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster, type) (increase(mesos_master_messages{job=~"$job", instance=~"$instance"}[$__interval:]))',
+      'max by(mesos_cluster, type) (increase(mesos_master_messages{job=~"$job", instance=~"$instance"}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - {{type}}',
       format='time_series',
@@ -559,7 +559,7 @@ local messagesPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -641,7 +641,7 @@ local registrarStatePanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -796,7 +796,7 @@ local allocationRunsPanel = {
           },
         ],
       },
-      unit: 'allocations/sec',
+      unit: 'allocs/s',
     },
     overrides: [],
   },
@@ -808,7 +808,7 @@ local allocationRunsPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -884,7 +884,7 @@ local allocationDurationPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -960,7 +960,7 @@ local allocationLatencyPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -1036,7 +1036,7 @@ local eventQueueDispatchesPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -1056,7 +1056,7 @@ local agentsRow = {
   collapsed: false,
 };
 
-local memoryUtilizationPanel = {
+local agentMemoryUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -1126,13 +1126,13 @@ local memoryUtilizationPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
 };
 
-local diskUtilizationPanel = {
+local agentDiskUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -1202,7 +1202,7 @@ local diskUtilizationPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -1363,8 +1363,8 @@ local agentLogsPanel = {
             allocationLatencyPanel { gridPos: { h: 6, w: 6, x: 12, y: 25 } },
             eventQueueDispatchesPanel { gridPos: { h: 6, w: 6, x: 18, y: 25 } },
             agentsRow { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
-            memoryUtilizationPanel { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
-            diskUtilizationPanel { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
+            agentMemoryUtilizationPanel { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
+            agentDiskUtilizationPanel { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
           ],
           if $._config.enableLokiLogs then [
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 38 } },

@@ -87,16 +87,12 @@ Default thresholds can be configured in `config.libsonnet`
 
 ## Install Tools
 
-```bash
-go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
-go install github.com/monitoring-mixins/mixtool/cmd/mixtool@latest
-# or in brew: brew install go-jsonnet
-```
-
 For linting and formatting, you would also need `mixtool` and `jsonnetfmt` installed. If you
 have a working Go development environment, it's easiest to run the following:
 
 ```bash
+go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
+go install github.com/monitoring-mixins/mixtool/cmd/mixtool@latest
 go install github.com/google/go-jsonnet/cmd/jsonnetfmt@latest
 ```
 
