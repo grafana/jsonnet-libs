@@ -48,7 +48,6 @@ The SAP HANA instance overview dashboard provides details on memory/cpu/disk usa
 
 ![First screenshot of the SAP HANA instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/sap-hana/screenshots/sap-hana-instance-overview-1.png)
 ![Second screenshot of the SAP HANA instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/sap-hana/screenshots/sap-hana-instance-overview-2.png)
-![Third screenshot of the SAP HANA instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/sap-hana/screenshots/sap-hana-instance-overview-3.png)
 
 To get SAP HANA trace logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default directory for trace files is `/opt/hana/shared/<sid>/HDB<insnr>/<host>/trace/` e.g. `/opt/hana/shared/ID0/HDB00/hana-0/trace/*.trc`
 
