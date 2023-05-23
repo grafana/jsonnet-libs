@@ -1,5 +1,7 @@
 # SAP HANA mixin
 
+SAP HANA® is the trademark or registered trademark of SAP SE or its affiliates in Germany and in other countries.
+
 The SAP HANA mixin is a set of configurable Grafana dashboards and alerts.
 
 The SAP HANA mixin contains the following dashboards:
