@@ -1067,7 +1067,7 @@ local agentMemoryUtilizationPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Memory utilization',
+  title: 'Agent memory utilization',
   description: 'The percentage of allocated memory in use by the agent.',
   fieldConfig: {
     defaults: {
@@ -1143,7 +1143,7 @@ local agentDiskUtilizationPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Disk utilization',
+  title: 'Agent disk utilization',
   description: 'The percentage of allocated disk storage in use by the agent.',
   fieldConfig: {
     defaults: {
