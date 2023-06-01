@@ -60,8 +60,8 @@ scrape_configs:
           __path__: /var/log/mesos/agent/*.log*
 ```
 
-![First screenshot of the Apache Mesos overview 1](https://storage.googleapis.com/grafanalabs-integration-assets/apache-mesos/screenshots/apache_mesos_overview_1.png)
-![Second screenshot of the Apache Mesos overview 2](https://storage.googleapis.com/grafanalabs-integration-assets/apache-mesos/screenshots/apache_mesos_overview_2.png)
+![First screenshot of the Apache Mesos overview](https://storage.googleapis.com/grafanalabs-integration-assets/apache-mesos/screenshots/apache_mesos_overview_1.png)
+![Second screenshot of the Apache Mesos overview](https://storage.googleapis.com/grafanalabs-integration-assets/apache-mesos/screenshots/apache_mesos_overview_2.png)
 
 ## Alerts Overview
 
