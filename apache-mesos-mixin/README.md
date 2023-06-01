@@ -6,7 +6,7 @@ The Apache Mesos mixin contains the following dashboards:
 
 - Apache Mesos overview
 
-and the following alerts:
+The Apache Mesos mixin contains the following alerts:
 
 - ApacheMesosHighMemoryUsage
 - ApacheMesosHighDiskUsage
@@ -20,13 +20,13 @@ The Apache Mesos overview dashboard provides details on resource utilization, qu
 
 When running the Mesos master and agent process, specify the logs director using `--log_dir=/var/log/mesos/master/` and `--log_dir=/var/log/mesos/agent/` so logs can be found in the path `/var/log/mesos/master/*.log*` and `/var/log/mesos/agent/*.log*` when ingesting logs through the Promtail config..
 
-Logs from Apache Mesos are not enabled by default which will result in empty log panels if the following step is not performed. When running the Mesos master and agent process, specify the logs director using `--log_dir=` for both the master and agent. This path will differ depending on if you are running Linux or Windows but is required so that Promptail can ingest the logs.
+Logs from Apache Mesos are not enabled by default which will result in empty log panels if the following step is not performed. When running the Mesos master and agent process, specify the logs director using `--log_dir=` for both the master and agent. This path will differ depending on if you are running Linux or Windows but is required so that Promtail can ingest the logs.
 
-For master:
+When running the mesos master add the following flag:
 `--log_dir=/var/log/mesos/master/` on Linux masters
 `–-log_dir=C:\Program Files\mesos\master\` on Windows masters
 
-For agents:
+When running the mesos agent add the following flag:
 `--log_dir=/var/log/mesos/agent/` on Linux agents
 `–-log_dir=C:\Program Files\mesos\agent\` on Windows agents
 
@@ -60,8 +60,8 @@ scrape_configs:
           __path__: /var/log/mesos/agent/*.log*
 ```
 
-![Apache Mesos Overview Dashboard 1](TODO)
-![Apache Mesos Overview Dashboard 2](TODO)
+![First screenshot of the Apache Mesos overview 1](https://storage.googleapis.com/grafanalabs-integration-assets/apache-mesos/screenshots/apache_mesos_overview_1.png)
+![Second screenshot of the Apache Mesos overview 2](https://storage.googleapis.com/grafanalabs-integration-assets/apache-mesos/screenshots/apache_mesos_overview_2.png)
 
 ## Alerts Overview
 
