@@ -1,4 +1,3 @@
-local grafonnet = import 'grafonnet-base/main.libsonnet';
 local logs = import 'lib/logs/main.libsonnet';
 local utils = import 'utils.libsonnet';
 
