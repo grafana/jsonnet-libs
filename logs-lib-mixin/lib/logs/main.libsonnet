@@ -1,10 +1,30 @@
-local panels = import './panels.libsonnet';
+local p = import './panels.libsonnet';
 local queries = import './queries/loki.libsonnet';
 local g = import 'g.libsonnet';
 
 {
-  new(title): {
+  new(
+    title,
+    datasourceRegex,
+    filterSelector,
+    labels,
+    formatParser=null
+  ): {
     local this = self,
+    queries::
+      queries.new(
+        datasourceRegex,
+        filterSelector,
+        labels,
+        formatParser,
+      ),
+
+    panels:
+      p.new(
+        this.queries.logsVolumeTarget(),
+        this.queries.logsTarget(),
+      ),
+
     dashboard:
       local titleString = title + ' logs';
       g.dashboard.new(titleString)
@@ -14,28 +34,16 @@ local g = import 'g.libsonnet';
       + g.dashboard.withVariables(this.queries.variables.toArray)
       + g.dashboard.withPanels(
         //g.util.grid.makeGrid(
-        panels.new(
-          this.panels.logsVolumeTarget,
-          this.panels.logsTarget,
-        )
+        [
+          this.panels.logsVolume
+          + g.panel.timeSeries.gridPos.withH(6)
+          + g.panel.timeSeries.gridPos.withW(24),
+          this.panels.logs
+          + g.panel.logs.gridPos.withH(18)
+          + g.panel.logs.gridPos.withW(24),
+        ]
         //, panelWidth=24)
       ),
-  },
-  withQueries(datasourceRegex, filterSelector, labels, formatParser=null): {
-    queries::
-      queries.new(
-        datasourceRegex,
-        filterSelector,
-        labels,
-        formatParser,
-      ),
-  },
 
-  addPanels(): {
-    local this = self,
-    panels+:: {
-      logsVolumeTarget: this.queries.logsVolumeTarget(),
-      logsTarget: this.queries.logsTarget(),
-    },
   },
 }

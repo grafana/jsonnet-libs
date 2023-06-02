@@ -4,7 +4,7 @@
   labelsToURLvars(labels, prefix)::
     std.join('&', ['var-%s=${%s%s}' % [label, prefix, label] for label in labels]),
 
-  // For PromQL or LokiQL
+  // For PromQL or LogQL
   labelsToPromQLSelector(labels): std.join(',', ['%s=~"$%s"' % [label, label] for label in labels]),
   labelsToLogQLSelector: self.labelsToPromQLSelector,
 

@@ -1,19 +1,16 @@
 local g = import 'g.libsonnet';
 
 {
+  local this = self,
   new(
     logsVolumeTarget,
     logsTarget,
   ):
 
-    [
-      self.logsVolume(logsVolumeTarget)
-      + logsPanel.gridPos.withH(6)
-      + logsPanel.gridPos.withW(24),
-      self.logs(logsTarget)
-      + logsPanel.gridPos.withH(18)
-      + logsPanel.gridPos.withW(24),
-    ],
+    {
+      logsVolume: this.logsVolume(logsVolumeTarget),
+      logs: this.logs(logsTarget),
+    },
 
   local timeSeries = g.panel.timeSeries,
   local logsPanel = g.panel.logs,

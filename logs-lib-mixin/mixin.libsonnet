@@ -28,22 +28,27 @@ local utils = import 'utils.libsonnet';
   grafanaDashboards+:: {
 
     'kube.json': (
-      logs.new('Kubernetes apps')
-      // HERE
-      + logs.withQueries(datasourceRegex='', filterSelector=$._config.kubeFilterSelector, labels=$._config.kubeLabels, formatParser=$._config.formatParser)
-      + logs.addPanels()
+      logs.new('Kubernetes apps',
+               datasourceRegex='',
+               filterSelector=$._config.kubeFilterSelector,
+               labels=$._config.kubeLabels,
+               formatParser=$._config.formatParser)
     ).dashboard,
 
     'systemd.json': (
-      logs.new('Linux systemd')
-      + logs.withQueries(datasourceRegex='', filterSelector=$._config.linuxFilterSelector, labels=$._config.linuxLabels, formatParser='unpack')
-      + logs.addPanels()
+      logs.new('Linux systemd',
+               datasourceRegex='',
+               filterSelector=$._config.linuxFilterSelector,
+               labels=$._config.linuxLabels,
+               formatParser='unpack')
     ).dashboard,
 
     'docker.json': (
-      logs.new('Docker')
-      + logs.withQueries(datasourceRegex='', filterSelector=$._config.dockerFilterSelector, labels=$._config.dockerLabels, formatParser='logfmt')
-      + logs.addPanels()
+      logs.new('Docker',
+               datasourceRegex='',
+               filterSelector=$._config.dockerFilterSelector,
+               labels=$._config.dockerLabels,
+               formatParser='logfmt')
     ).dashboard,
   },
 }
