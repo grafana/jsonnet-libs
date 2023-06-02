@@ -6,10 +6,9 @@ local utils = import 'utils.libsonnet';
 
   _config+:: {
 
-    //selector to add to all variable queries, alerts(if any)
+    //Additional selector to add to all variable queries and alerts(if any)
     kubeFilterSelector: 'namespace!=""',
-
-    // Array of labels to compose chained grafana variables
+    // Array of labels to compose chained grafana variables (order matters)
     kubeLabels: ['cluster', 'namespace', 'app', 'pod', 'container'],
 
     // Array of labels to compose chained grafana variables
@@ -28,21 +27,21 @@ local utils = import 'utils.libsonnet';
   },
   grafanaDashboards+:: {
 
-    "kube.json": (
-      logs.new('Test Kube')
+    'kube.json': (
+      logs.new('Kubernetes apps')
       // HERE
       + logs.withQueries(datasourceRegex='', filterSelector=$._config.kubeFilterSelector, labels=$._config.kubeLabels, formatParser=$._config.formatParser)
       + logs.addPanels()
     ).dashboard,
 
-    "systemd.json": (
-      logs.new('Test Linux systemd')
+    'systemd.json': (
+      logs.new('Linux systemd')
       + logs.withQueries(datasourceRegex='', filterSelector=$._config.linuxFilterSelector, labels=$._config.linuxLabels, formatParser='unpack')
       + logs.addPanels()
     ).dashboard,
 
-    "docker.json": (
-      logs.new('Test Docker')
+    'docker.json': (
+      logs.new('Docker')
       + logs.withQueries(datasourceRegex='', filterSelector=$._config.dockerFilterSelector, labels=$._config.dockerLabels, formatParser='logfmt')
       + logs.addPanels()
     ).dashboard,
