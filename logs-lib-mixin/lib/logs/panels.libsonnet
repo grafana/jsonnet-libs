@@ -19,6 +19,7 @@ local g = import 'g.libsonnet';
   local logsPanel = g.panel.logs,
   local defaults = timeSeries.fieldConfig.defaults,
   local custom = timeSeries.fieldConfig.defaults.custom,
+  local options = timeSeries.options,
   local fieldConfig = timeSeries.fieldConfig,
 
   logsVolume(targets, title='Logs volume'):
@@ -28,6 +29,7 @@ local g = import 'g.libsonnet';
     + custom.stacking.withMode('normal')
     + custom.withFillOpacity(50)
     + timeSeries.withInterval('30s')  // must be set , otherwise interval is around 1ms
+    + options.tooltip.withMode('multi')
     + timeSeries.withTransformationsMixin(
       {
         id: 'renameByRegex',
