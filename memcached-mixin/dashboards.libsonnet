@@ -44,7 +44,17 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         )
       )
       .addRow(
-        g.row('Memory')
+        g.row('Resources')
+        .addPanel(
+          g.panel('CPU') +
+          g.queryPanel(|||
+            sum by (instance) (
+              rate(memcached_process_user_cpu_seconds_total{%(cluster)s=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval]) +
+              rate(memcached_process_system_cpu_seconds_total{%(cluster)s=~"$cluster", job=~"$job", instance=~"$instance"}[$__rate_interval])
+            )
+          ||| % { cluster: $._config.clusterLabel }, '{{instance}}') +
+          g.stack,
+        )
         .addPanel(
           g.panel('Memory') +
           g.queryPanel('sum by(instance) (memcached_current_bytes{' + $._config.clusterLabel + '=~"$cluster", job=~"$job", instance=~"$instance"})', '{{instance}}') +
