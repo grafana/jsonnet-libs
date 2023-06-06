@@ -358,7 +358,7 @@ local _config = config._config;
             },
             annotations: {
               message: |||
-                 Instance {{ $labels.instance }} failed to successfully reload the config.
+                Instance {{ $labels.instance }} failed to successfully reload the config.
               |||,
             },
           },
@@ -373,7 +373,7 @@ local _config = config._config;
             },
             annotations: {
               message: |||
-                 Instance {{ $labels.instance }} failed to successfully reload the config.
+                Instance {{ $labels.instance }} failed to successfully reload the config.
               |||,
             },
           },
@@ -388,7 +388,7 @@ local _config = config._config;
             },
             annotations: {
               message: |||
-                 Instance {{ $labels.instance }} fell back to empty configuration.
+                Instance {{ $labels.instance }} fell back to empty configuration.
               |||,
             },
           },
@@ -403,12 +403,12 @@ local _config = config._config;
             },
             annotations: {
               message: |||
-                 Instance {{ $labels.instance }} fell back to empty configuration.
+                Instance {{ $labels.instance }} fell back to empty configuration.
               |||,
             },
           },
         ],
-      },      
+      },
     ],
   },
 }
