@@ -18,7 +18,7 @@ local masterUptimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_uptime_seconds{job=~"$job", instance=~"$instance"})',
+      'max by(mesos_cluster) (mesos_master_uptime_seconds{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -67,7 +67,7 @@ local cpusAvailablePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_cpus{job=~"$job", instance=~"$instance", type="total"})',
+      'max by(mesos_cluster) (mesos_master_cpus{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="total"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -116,7 +116,7 @@ local memoryAvailablePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_mem{job=~"$job", instance=~"$instance", type="total"})',
+      'max by(mesos_cluster) (mesos_master_mem{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="total"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -165,7 +165,7 @@ local gpusAvailablePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_gpus{job=~"$job", instance=~"$instance", type="total"})',
+      'max by(mesos_cluster) (mesos_master_gpus{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="total"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -214,7 +214,7 @@ local diskAvailablePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_disk{job=~"$job", instance=~"$instance", type="total"})',
+      'max by(mesos_cluster) (mesos_master_disk{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="total"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -263,7 +263,7 @@ local memoryUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_mem{job=~"$job", instance=~"$instance", type="percent"})',
+      'max by(mesos_cluster) (mesos_master_mem{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="percent"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -339,7 +339,7 @@ local diskUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_disk{job=~"$job", instance=~"$instance", type="percent"})',
+      'max by(mesos_cluster) (mesos_master_disk{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="percent"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -415,7 +415,7 @@ local eventsInQueuePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster, type) (mesos_master_event_queue_length{job=~"$job", instance=~"$instance"})',
+      'max by(mesos_cluster, type) (mesos_master_event_queue_length{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - {{type}}',
       format='time_series',
@@ -491,7 +491,7 @@ local messagesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster, type) (increase(mesos_master_messages{job=~"$job", instance=~"$instance"}[$__interval:])) > 0',
+      'max by(mesos_cluster, type) (increase(mesos_master_messages{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - {{type}}',
       format='time_series',
@@ -568,13 +568,13 @@ local registrarStatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_registrar_state_store_ms{job=~"$job", instance=~"$instance", type="mean"})',
+      'max by(mesos_cluster) (mesos_registrar_state_store_ms{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster", type="mean"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - store',
       format='time_series',
     ),
     prometheus.target(
-      'max by(mesos_cluster) (mesos_registrar_state_fetch_ms{job=~"$job", instance=~"$instance"})',
+      'max by(mesos_cluster) (mesos_registrar_state_fetch_ms{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}} - fetch',
       format='time_series',
@@ -650,7 +650,7 @@ local registrarLogRecoveredPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_registrar_log_recovered{job=~"$job", instance=~"$instance"})',
+      'max by(mesos_cluster) (mesos_registrar_log_recovered{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -741,7 +741,7 @@ local allocationRunsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (rate(mesos_master_allocation_run_ms_count{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'max by(mesos_cluster) (rate(mesos_master_allocation_run_ms_count{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -817,7 +817,7 @@ local allocationDurationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_allocation_run_ms{job=~"$job", instance=~"$instance"})',
+      'max by(mesos_cluster) (mesos_master_allocation_run_ms{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -893,7 +893,7 @@ local allocationLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_allocation_run_latency_ms{job=~"$job", instance=~"$instance"})',
+      'max by(mesos_cluster) (mesos_master_allocation_run_latency_ms{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -969,7 +969,7 @@ local eventQueueDispatchesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (mesos_master_event_queue_dispatches{job=~"$job", instance=~"$instance"})',
+      'max by(mesos_cluster) (mesos_master_event_queue_dispatches{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"})',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -1059,7 +1059,7 @@ local agentMemoryUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (100 * mesos_slave_mem_used_bytes{job=~"$job", instance=~"$instance"} / clamp_min(mesos_slave_mem_bytes{job=~"$job", instance=~"$instance"},1))',
+      'max by(mesos_cluster) (100 * mesos_slave_mem_used_bytes{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"} / clamp_min(mesos_slave_mem_bytes{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"},1))',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
@@ -1135,7 +1135,7 @@ local agentDiskUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'max by(mesos_cluster) (100 * mesos_slave_disk_used_bytes{job=~"$job", instance=~"$instance"} / clamp_min(mesos_slave_disk_bytes{job=~"$job", instance=~"$instance"},1))',
+      'max by(mesos_cluster) (100 * mesos_slave_disk_used_bytes{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"} / clamp_min(mesos_slave_disk_bytes{job=~"$job", instance=~"$instance", mesos_cluster=~"$mesos_cluster"},1))',
       datasource=promDatasource,
       legendFormat='{{mesos_cluster}}',
       format='time_series',
