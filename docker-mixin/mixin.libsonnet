@@ -1,2 +1,7 @@
-(import 'dashboards/dashboards.libsonnet') +
-(import 'config.libsonnet')
+local package = import 'package.libsonnet';
+{
+  grafanaDashboards+:: {
+    ['%s.json' % dashboard.metadata.name]: dashboard.spec
+    for dashboard in package.dashboards
+  }
+}
