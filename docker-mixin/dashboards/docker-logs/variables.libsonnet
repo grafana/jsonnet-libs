@@ -1,6 +1,6 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
 
-function(queries) {
+{
   prometheus_template: {
     current: {
         text: 'default',

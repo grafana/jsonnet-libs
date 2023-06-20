@@ -7,7 +7,7 @@ local stackstyle = {
   fillGradient: 10,
 };
 
-function(queries) {
+function(targets) {
   total_containers_panel: grafana.statPanel.new(
     'Total Containers',
     description='Total number of running containers last seen by the exporter.',
@@ -16,9 +16,7 @@ function(queries) {
     reducerFunction='lastNotNull',
     unit='short',
   )
-  .addTarget(
-    grafana.prometheus.target(queries.total_containers)
-  ),
+  .addTarget(targets.total_containers.target),
 
   total_images_panel: grafana.statPanel.new(
     'Total Images',
@@ -28,9 +26,7 @@ function(queries) {
     reducerFunction='lastNotNull',
     unit='short'
   )
-  .addTarget(
-    grafana.prometheus.target(queries.total_images)
-  ),
+  .addTarget(targets.total_images.target),
 
   cpu_usage_panel: grafana.singlestat.new(
     'CPU Utilization by Containers',
@@ -42,9 +38,7 @@ function(queries) {
     datasource='$prometheus_datasource',
     gaugeMaxValue=1
   )
-  .addTarget(
-    grafana.prometheus.target(queries.cpu_usage)
-  ),
+  .addTarget(targets.cpu_usage.target),
 
   mem_reserved_panel: grafana.singlestat.new(
     'Memory Reserved by Containers',
@@ -56,9 +50,7 @@ function(queries) {
     datasource='$prometheus_datasource',
     gaugeMaxValue=1,
   )
-  .addTarget(
-    grafana.prometheus.target(queries.host_mem_reserved)
-  ),
+  .addTarget(targets.host_mem_reserved.target),
 
   mem_usage_panel: grafana.singlestat.new(
     'Memory Utilization by Containers',
@@ -70,9 +62,7 @@ function(queries) {
     datasource='$prometheus_datasource',
     gaugeMaxValue=1,
   )
-  .addTarget(
-    grafana.prometheus.target(queries.host_mem_consumed)
-  ),
+  .addTarget(targets.host_mem_consumed.target),
 
   cpu_by_container_panel: grafana.graphPanel.new(
     'CPU',
@@ -81,7 +71,7 @@ function(queries) {
     datasource='$prometheus_datasource',
   ) +
   g.queryPanel(
-    [queries.cpu_by_container],
+    [targets.cpu_by_container.target.expr],
     ['{{name}}'],
   ) +
   g.stack +
@@ -97,7 +87,7 @@ function(queries) {
     datasource='$prometheus_datasource',
   ) +
   g.queryPanel(
-    [queries.mem_by_container],
+    [targets.mem_by_container.target.expr],
     ['{{name}}'],
   ) +
   g.stack +
@@ -111,7 +101,7 @@ function(queries) {
     datasource='$prometheus_datasource',
   ) +
   g.queryPanel(
-    [queries.net_rx_by_container, queries.net_tx_by_container],
+    [targets.net_rx_by_container.target.expr, targets.net_tx_by_container.target.expr],
     ['{{name}} rx', '{{name}} tx'],
   ) +
   g.stack +
@@ -129,13 +119,13 @@ function(queries) {
     span=6,
   ) +
   g.queryPanel(
-    [queries.tcp_socket_by_state],
+    [targets.tcp_socket_by_state.target.expr],
     ['{{tcp_state}}'],
   ) +
   stackstyle,
 
   disk_usage_panel: g.tablePanel(
-    [queries.fs_usage_by_device, queries.fs_inode_usage_by_device],
+    [targets.fs_usage_by_device.target.expr, targets.fs_inode_usage_by_device.target.expr],
     {
       instance: { alias: 'Instance' },
       device: { alias: 'Device' },

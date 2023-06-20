@@ -2,7 +2,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local custom_barchart_grafonnet = import '../../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
 
-function(queries) {
+function(targets) {
   total_log_lines_panel: grafana.statPanel.new(
     'Total Log Lines',
     description='Total number of log lines including errors and warnings.',
@@ -14,9 +14,7 @@ function(queries) {
   .addThreshold(
     { color: 'rgb(192, 216, 255)', value: 0 }
   )
-  .addTarget(
-    grafana.loki.target(queries.total_log_lines)
-  ),
+  .addTarget(targets.total_log_lines.target),
 
   total_log_warnings_panel: grafana.statPanel.new(
     'Warnings',
@@ -28,9 +26,7 @@ function(queries) {
   ).addThreshold(
     { color: 'rgb(255, 152, 48)', value: 0 }
   )
-  .addTarget(
-    grafana.loki.target(queries.total_log_warnings)
-  ),
+  .addTarget(targets.total_log_warnings.target),
 
   total_log_errors_panel: grafana.statPanel.new(
     'Errors',
@@ -42,9 +38,7 @@ function(queries) {
   ).addThreshold(
     { color: 'rgb(242, 73, 92)', value: 0 }
   )
-  .addTarget(
-    grafana.loki.target(queries.total_log_errors)
-  ),
+  .addTarget(targets.total_log_errors.target),
 
   error_percentage_panel: grafana.statPanel.new(
     'Error Percentage',
@@ -58,9 +52,7 @@ function(queries) {
     { color: 'rgb(255, 115, 131)', value: 25 },
     { color: 'rgb(196, 22, 42)', value: 50 },
   ])
-  .addTarget(
-    grafana.loki.target(queries.error_percentage)
-  ),
+  .addTarget(targets.error_percentage.target),
 
   total_bytes_panel: grafana.statPanel.new(
     'Bytes Used',
@@ -73,37 +65,29 @@ function(queries) {
   .addThreshold(
     { color: 'rgb(184, 119, 217)', value: 0 }
   )
-  .addTarget(
-    grafana.loki.target(queries.total_bytes)
-  ),
+  .addTarget(targets.total_bytes.target),
 
   historical_logs_errors_warnings_panel: custom_barchart_grafonnet.new(
-    q1=queries.total_log_lines,
-    q2=queries.total_log_warnings,
-    q3=queries.total_log_errors,
+    q1=targets.total_log_lines.target.expr,
+    q2=targets.total_log_warnings.target.expr,
+    q3=targets.total_log_errors.target.expr,
   ),
 
   log_errors_panel: grafana.logPanel.new(
     'Errors',
     datasource='$loki_datasource',
   )
-  .addTarget(
-    grafana.loki.target(queries.error_log_lines)
-  ),
+  .addTarget(targets.error_log_lines.target),
 
   log_warnings_panel: grafana.logPanel.new(
     'Warnings',
     datasource='$loki_datasource',
   )
-  .addTarget(
-    grafana.loki.target(queries.warning_log_lines)
-  ),
+  .addTarget(targets.warning_log_lines.target),
 
   log_full_panel: grafana.logPanel.new(
     'Full Log File',
     datasource='$loki_datasource',
   )
-  .addTarget(
-    grafana.loki.target(queries.log_full_lines)
-  ),
+  .addTarget(targets.log_full_lines.target),
 }

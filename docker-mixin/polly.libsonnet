@@ -5,9 +5,12 @@ local dockerLogs = import 'dashboards/docker-logs/main.libsonnet';
     queries:
         docker.queries(config)
         + dockerLogs.queries(config),
-    templates:
-        docker.templates(config)
-        + dockerLogs.templates(config),
+    variables:
+        docker.variables(config)
+        + dockerLogs.variables(config),
+    targets:
+        docker.targets(config)
+        + dockerLogs.targets(config),
     panels:
         docker.panels(config)
         + dockerLogs.panels(config),

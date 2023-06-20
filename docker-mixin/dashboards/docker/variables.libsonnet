@@ -1,6 +1,6 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
 
-function(queries) {
+{
     ds_template: {
       current: {
         text: 'default',

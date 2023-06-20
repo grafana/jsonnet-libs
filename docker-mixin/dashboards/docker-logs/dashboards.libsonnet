@@ -1,6 +1,6 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
 
-function(config, templates, panels) {
+function(config, variables, panels) {
     'docker-logs': grafana.dashboard.new(
         'Docker Logs',
         time_from='%s' % config.dashboardPeriod,
@@ -12,11 +12,11 @@ function(config, templates, panels) {
       )
 
       .addTemplates([
-        templates.prometheus_template,
-        templates.loki_template,
-        templates.job_template,
-        templates.instance_template,
-        templates.container_template,
+        variables.prometheus_template,
+        variables.loki_template,
+        variables.job_template,
+        variables.instance_template,
+        variables.container_template,
       ])
 
       .addLink(grafana.link.dashboards(
