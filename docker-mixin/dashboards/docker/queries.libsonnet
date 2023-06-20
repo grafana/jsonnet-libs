@@ -5,7 +5,7 @@ local container_matcher = host_matcher + ', name=~"$container"';
 // although it could be generalised.
 local promql(q, docs, variables = ['job', 'instance', 'container']) = {
   lang: 'promql',
-  query: q,
+  spec: q,
   docs: docs,
   variables: variables,
 };

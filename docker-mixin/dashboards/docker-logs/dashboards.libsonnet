@@ -1,7 +1,9 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
 
 function(config, variables, panels) {
-    'docker-logs': grafana.dashboard.new(
+    'docker-logs': {
+      docs: 'Dashboard showing logs for Docker containers',
+      spec: grafana.dashboard.new(
         'Docker Logs',
         time_from='%s' % config.dashboardPeriod,
         editable=false,
@@ -12,11 +14,11 @@ function(config, variables, panels) {
       )
 
       .addTemplates([
-        variables.prometheus_template,
-        variables.loki_template,
-        variables.job_template,
-        variables.instance_template,
-        variables.container_template,
+        variables.prometheus.spec,
+        variables.loki.spec,
+        variables.job.spec,
+        variables.instance.spec,
+        variables.container.spec,
       ])
 
       .addLink(grafana.link.dashboards(
@@ -30,23 +32,23 @@ function(config, variables, panels) {
       // Overview Row
       .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
       // Total Log Lines
-      .addPanel(panels.total_log_lines_panel, gridPos={ x: 0, y: 2, w: 4, h: 4 })
+      .addPanel(panels.total_log_lines.spec, gridPos={ x: 0, y: 2, w: 4, h: 4 })
       // Warnings
-      .addPanel(panels.total_log_warnings_panel, gridPos={ x: 4, y: 2, w: 4, h: 4 })
+      .addPanel(panels.total_log_warnings.spec, gridPos={ x: 4, y: 2, w: 4, h: 4 })
       // Errors
-      .addPanel(panels.total_log_errors_panel, gridPos={ x: 8, y: 2, w: 4, h: 4 })
+      .addPanel(panels.total_log_errors.spec, gridPos={ x: 8, y: 2, w: 4, h: 4 })
       // Error Percentage
-      .addPanel(panels.error_percentage_panel, gridPos={ x: 12, y: 2, w: 4, h: 4 })
+      .addPanel(panels.error_percentage.spec, gridPos={ x: 12, y: 2, w: 4, h: 4 })
       // Bytes Used
-      .addPanel(panels.total_bytes_panel, gridPos={ x: 16, y: 2, w: 4, h: 4 })
+      .addPanel(panels.total_bytes.spec, gridPos={ x: 16, y: 2, w: 4, h: 4 })
       // Historical Logs / Warnings / Errors
-      .addPanel(panels.historical_logs_errors_warnings_panel, gridPos={ x: 0, y: 6, w: 24, h: 6 })
+      .addPanel(panels.historical_logs_errors_warnings.spec, gridPos={ x: 0, y: 6, w: 24, h: 6 })
 
       // Errors Row
       .addPanel(
         grafana.row.new(title='Errors', collapse=true)
         // Errors
-        .addPanel(panels.log_errors_panel, gridPos={ x: 0, y: 12, w: 24, h: 8 }),
+        .addPanel(panels.log_errors.spec, gridPos={ x: 0, y: 12, w: 24, h: 8 }),
         gridPos={ x: 0, y: 12, w: 0, h: 0 }
       )
 
@@ -54,7 +56,7 @@ function(config, variables, panels) {
       .addPanel(
         grafana.row.new(title='Warnings', collapse=true)
         // Warnings
-        .addPanel(panels.log_warnings_panel, gridPos={ x: 0, y: 20, w: 24, h: 8 }),
+        .addPanel(panels.log_warnings.spec, gridPos={ x: 0, y: 20, w: 24, h: 8 }),
         gridPos={ x: 0, y: 20, w: 0, h: 0 }
       )
 
@@ -62,7 +64,8 @@ function(config, variables, panels) {
       .addPanel(
         grafana.row.new(title='Complete Log File', collapse=true)
         // Full Log File
-        .addPanel(panels.log_full_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
+        .addPanel(panels.log_full.spec, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
         gridPos={ x: 0, y: 28, w: 0, h: 0 }
       )
+    },
 }

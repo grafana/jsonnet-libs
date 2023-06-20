@@ -5,7 +5,7 @@ local container_matcher = host_matcher + ', container=~"$container"';
 // although it could be generalised.
 local logql(q, docs) = {
   lang: 'logql',
-  query: q,
+  spec: q,
   docs: docs,
   variables: ['job', 'instance', 'container'],
 };

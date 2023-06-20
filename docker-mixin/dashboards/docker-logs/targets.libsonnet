@@ -1,7 +1,7 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
 
 local loki(q) = {
-  target: grafana.loki.target(q.query),
+  spec: grafana.loki.target(q.spec),
   docs: q.docs,
 };
 

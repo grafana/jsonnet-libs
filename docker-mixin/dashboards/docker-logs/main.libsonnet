@@ -5,16 +5,19 @@ local panels = import 'panels.libsonnet';
 local dashboards = import 'dashboards.libsonnet';
 
 local resourceSet = {
-  new(kind, list):: [
-    {
+  new(kind, list):: {
+    [key]: {
       kind: kind,
       metadata: {
         name: key,
       },
-      spec: list[key]
+      annotations: {
+        docs: list[key].docs,
+      },
+      spec: list[key].spec,
     }
     for key in std.objectFields(list)
-  ]
+  }
 };
 
 {

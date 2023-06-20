@@ -4,7 +4,7 @@ local host_matcher = 'job=~"$job", instance=~"$instance"';
 local container_matcher = host_matcher + ', name=~"$container"';
 
 local prom(q) = {
-  target: grafana.prometheus.target(q.query),
+  spec: grafana.prometheus.target(q.spec),
   docs: q.docs,
 };
 

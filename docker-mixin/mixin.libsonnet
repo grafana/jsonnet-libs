@@ -1,4 +1,4 @@
-local package = import 'package.libsonnet';
+local package = import 'polly.libsonnet';
 {
   grafanaDashboards+:: {
     ['%s.json' % dashboard.metadata.name]: dashboard.spec
