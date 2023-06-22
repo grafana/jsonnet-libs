@@ -100,7 +100,7 @@ local instance_template = grafana.template.new(
           'rate(process_cpu_seconds_total{' + host_matcher + '}[$__rate_interval])',
           legendFormat='{{instance}}',
         )) +
-        utils.timeSeriesOverride(unit='percent');
+        utils.timeSeriesOverride(unit='percentunit');
 
       local TCPConnections =
         graphPanel.new(
