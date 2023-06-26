@@ -1,3 +1,3 @@
-{ grafanaDashboardFolder: 'Grafana Agent' }
-+ (import 'dashboards/dashboards.libsonnet')
+(import 'dashboards/dashboards.libsonnet')
++ (import 'alerts/alerts.libsonnet')
 + (import 'config.libsonnet')
