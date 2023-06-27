@@ -1,4 +1,4 @@
-local g = import 'g.libsonnet';
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
 {
   local this = self,

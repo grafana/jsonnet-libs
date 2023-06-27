@@ -1,6 +1,6 @@
 local p = import './panels.libsonnet';
 local queries = import './queries/loki.libsonnet';
-local g = import 'g.libsonnet';
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
 {
   new(
