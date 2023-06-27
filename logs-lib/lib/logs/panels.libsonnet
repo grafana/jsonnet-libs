@@ -4,12 +4,14 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
   local this = self,
   new(
     logsVolumeTarget,
+    logsVolumePanelMixin,
     logsTarget,
+    logsPanelMixin,
   ):
 
     {
-      logsVolume: this.logsVolume(logsVolumeTarget),
-      logs: this.logs(logsTarget),
+      logsVolume: this.logsVolume(logsVolumeTarget) + logsVolumePanelMixin,
+      logs: this.logs(logsTarget) + logsPanelMixin,
     },
 
   local timeSeries = g.panel.timeSeries,
@@ -69,8 +71,10 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
     + logsPanel.withTargets(targets)
     + logsPanel.options.withDedupStrategy('signature')  //"none", "exact", "numbers", "signature"
     + logsPanel.options.withEnableLogDetails(true)
-    + logsPanel.options.withShowTime(true)
+    //+ logsPanel.options.withShowTime(true)
     + logsPanel.options.withWrapLogMessage(true)
     + logsPanel.options.withPrettifyLogMessage(true),
+  withShowTime(value):
+    logsPanel.options.withShowTime(value),
 
 }

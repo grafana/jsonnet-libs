@@ -1,5 +1,6 @@
 local logs = import 'lib/logs/main.libsonnet';
 local utils = import 'utils.libsonnet';
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
 {
 
@@ -39,7 +40,11 @@ local utils = import 'utils.libsonnet';
                datasourceRegex='',
                filterSelector=$._config.linuxFilterSelector,
                labels=$._config.linuxLabels,
-               formatParser='unpack')
+               formatParser='unpack',
+               logsPanelMixin=
+                g.panel.logs.options.withShowTime(false) +
+                g.panel.logs.options.withEnableLogDetails(false),
+              )
     ).dashboard,
 
     'docker.json': (

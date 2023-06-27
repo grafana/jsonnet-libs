@@ -8,7 +8,9 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
     datasourceRegex,
     filterSelector,
     labels,
-    formatParser=null
+    formatParser=null,
+    logsPanelMixin={},
+    logsVolumePanelMixin={},
   ): {
     local this = self,
     queries::
@@ -21,8 +23,8 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 
     panels:
       p.new(
-        this.queries.logsVolumeTarget(),
-        this.queries.logsTarget(),
+        this.queries.logsVolumeTarget(), logsVolumePanelMixin,
+        this.queries.logsTarget(), logsPanelMixin
       ),
 
     dashboard:
