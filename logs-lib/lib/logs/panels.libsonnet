@@ -1,27 +1,22 @@
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
+local timeSeries = g.panel.timeSeries;
+local logsPanel = g.panel.logs;
+local defaults = timeSeries.fieldConfig.defaults;
+local custom = timeSeries.fieldConfig.defaults.custom;
+local options = timeSeries.options;
+local fieldConfig = timeSeries.fieldConfig;
 {
-  local this = self,
+  
   new(
     logsVolumeTarget,
-    logsVolumePanelMixin,
     logsTarget,
-    logsPanelMixin,
   ):
-
-    {
-      logsVolume: this.logsVolume(logsVolumeTarget) + logsVolumePanelMixin,
-      logs: this.logs(logsTarget) + logsPanelMixin,
-    },
-
-  local timeSeries = g.panel.timeSeries,
-  local logsPanel = g.panel.logs,
-  local defaults = timeSeries.fieldConfig.defaults,
-  local custom = timeSeries.fieldConfig.defaults.custom,
-  local options = timeSeries.options,
-  local fieldConfig = timeSeries.fieldConfig,
-
-  logsVolume(targets, title='Logs volume'):
+  
+  {
+    local this = self,
+    
+    local logsVolumeInit(targets, title='Logs volume') =
     timeSeries.new(title)
     + timeSeries.withTargets(targets)
     + custom.withDrawStyle('bars')
@@ -66,15 +61,28 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
       ]
     ),
 
-  logs(targets, title='Logs'):
+  local logsInit(targets, title='Logs') = 
     logsPanel.new(title)
     + logsPanel.withTargets(targets)
     + logsPanel.options.withDedupStrategy('signature')  //"none", "exact", "numbers", "signature"
     + logsPanel.options.withEnableLogDetails(true)
-    //+ logsPanel.options.withShowTime(true)
+    + logsPanel.options.withShowTime(true)
     + logsPanel.options.withWrapLogMessage(true)
     + logsPanel.options.withPrettifyLogMessage(true),
-  withShowTime(value):
-    logsPanel.options.withShowTime(value),
+
+
+    logsVolume: logsVolumeInit(logsVolumeTarget),
+    logs: logsInit(logsTarget),    
+  },
+
+  withShowTime(value)::
+  {
+    logs+: logsPanel.options.withShowTime(value),
+  },
+  withEnableLogDetails(value)::
+  {
+    logs+: logsPanel.options.withEnableLogDetails(value),
+  },
+
 
 }

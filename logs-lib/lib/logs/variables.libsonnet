@@ -1,15 +1,12 @@
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local utils = import 'utils.libsonnet';
-{
-  new(
+local var = g.dashboard.variable;
+function(
     datasourceRegex,
     filterSelector,
     labels,
-    formatParser,
-  ): {
-    local var = g.dashboard.variable,
-
-    variables: {
+  ) 
+{
       local this = self,
       local chainVarProto(chainVar) =
         var.query.new(chainVar.label)
@@ -54,37 +51,4 @@ local utils = import 'utils.libsonnet';
           filterSelector,
           std.reverse(utils.chainLabels(labels))[0].chainSelector,
         ],
-    },
-
-    local lokiQuery = g.query.loki,
-
-    logsTarget()::
-      lokiQuery.new(
-        datasource='$' + self.variables.datasource.name,
-        expr=|||
-          {%s} 
-          |~ "$regex_search"
-          %s
-        ||| % [
-          self.variables.queriesSelector,
-          if formatParser != null then '| %s | __error__=``' % formatParser else '',
-        ]
-
-      ),
-
-    logsVolumeTarget()::
-      lokiQuery.new(
-        datasource='$' + self.variables.datasource.name,
-        expr=|||
-          sum by (level) (count_over_time({%s} 
-          |~ "$regex_search"
-          %s
-          [$__interval]))
-        ||| % [
-          self.variables.queriesSelector,
-          if formatParser != null then '| %s | __error__=``' % formatParser else '',
-        ]
-      )
-      + lokiQuery.withLegendFormat('{{ level }}'),
-  },
 }

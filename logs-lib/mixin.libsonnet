@@ -27,32 +27,42 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
   },
   grafanaDashboards+:: {
 
-    'kube.json': (
-      logs.new('Kubernetes apps',
-               datasourceRegex='',
-               filterSelector=$._config.kubeFilterSelector,
-               labels=$._config.kubeLabels,
-               formatParser=$._config.formatParser)
-    ).dashboard,
+    // 'kube.json': (
+    //   logs.new('Kubernetes apps',
+    //            datasourceRegex='',
+    //            filterSelector=$._config.kubeFilterSelector,
+    //            labels=$._config.kubeLabels,
+    //            formatParser=$._config.formatParser)
+    // ).dashboards.logs,
 
-    'systemd.json': (
+    // 'systemd.json': (
+    //   logs.new('Linux systemd',
+    //            datasourceRegex='',
+    //            filterSelector=$._config.linuxFilterSelector,
+    //            labels=$._config.linuxLabels,
+    //            formatParser='unpack',
+    //            showLogsVolume=true)
+    // ).dashboards.logs,
+
+    'systemd.json': 
+    (
       logs.new('Linux systemd',
                datasourceRegex='',
                filterSelector=$._config.linuxFilterSelector,
                labels=$._config.linuxLabels,
                formatParser='unpack',
-               logsPanelMixin=
-                g.panel.logs.options.withShowTime(false) +
-                g.panel.logs.options.withEnableLogDetails(false),
-              )
-    ).dashboard,
+               showLogsVolume=true)
+      + logs.withShowTime(true)
+      + logs.withEnableLogDetails(false)
+               
+               ).dashboards.logs,
 
-    'docker.json': (
-      logs.new('Docker',
-               datasourceRegex='',
-               filterSelector=$._config.dockerFilterSelector,
-               labels=$._config.dockerLabels,
-               formatParser='logfmt')
-    ).dashboard,
+    // 'docker.json': (
+    //   logs.new('Docker',
+    //            datasourceRegex='',
+    //            filterSelector=$._config.dockerFilterSelector,
+    //            labels=$._config.dockerLabels,
+    //            formatParser='logfmt')
+    // ).dashboards.logs,
   },
 }
