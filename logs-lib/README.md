@@ -14,7 +14,7 @@ jb install https://github.com/grafana/jsonnet-libs/logs-lib
 ### Generate kubernetes logs dashboard
 
 ```jsonnet
-local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
+local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 {
 
   _config+:: {
@@ -34,7 +34,7 @@ local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonne
 
     // 1. create and export kubernetes logs dashboard
     'kube.json': (
-      logs.new('Kubernetes apps',
+      logsDashboard.new('Kubernetes apps',
                datasourceRegex='',
                filterSelector=$._config.kubeFilterSelector,
                labels=$._config.kubeLabels,
@@ -57,7 +57,7 @@ Again, use [Grafonnet](https://grafana.github.io/grafonnet/API/panel/index.html)
 ```jsonnet
 
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
-local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
+local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 
 {
 
@@ -77,7 +77,7 @@ local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonne
 
     // 2. create and export systemd logs dashboard
     local systemdLogs =
-      logs.new('Linux systemd',
+      logsDashboard.new('Linux systemd',
                datasourceRegex='',
                filterSelector=$._config.linuxFilterSelector,
                labels=$._config.linuxLabels,
@@ -108,7 +108,7 @@ local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonne
 
 ```jsonnet
 
-local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
+local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 {
 
   _config+:: {
@@ -127,7 +127,7 @@ local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonne
 
     // 3. create and export kubernetes logs dashboard
     'docker.json': (
-      logs.new('Docker',
+      logsDashboard.new('Docker',
                datasourceRegex='',
                filterSelector=$._config.dockerFilterSelector,
                labels=$._config.dockerLabels,
