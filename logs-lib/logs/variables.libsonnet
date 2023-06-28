@@ -1,5 +1,5 @@
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local utils = import '../utils.libsonnet';
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local var = g.dashboard.variable;
 function(
   datasourceRegex,
