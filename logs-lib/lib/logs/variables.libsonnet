@@ -47,8 +47,8 @@ function(
       [self.regex_search],
 
     queriesSelector:
-      '%s, %s' % [
+      '%s,%s' % [
         filterSelector,
-        std.reverse(utils.chainLabels(labels))[0].chainSelector,
+        utils.labelsToPromQLSelector(labels),
       ],
   }
