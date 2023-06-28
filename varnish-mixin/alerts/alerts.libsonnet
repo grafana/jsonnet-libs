@@ -7,7 +7,7 @@
           {
             alert: 'VarnishCacheAlertsLowCacheHitRate',
             expr: |||
-             increase(varnish_main_cache_hit[10m]) / (clamp_min((increase(varnish_main_cache_hit[10m]) + increase(varnish_main_cache_miss[10m])), 1)) * 100 < %(VarnishCacheAlertsWarningCacheHitRate) and (increase(varnish_main_cache_hit[10m]) + increase(varnish_main_cache_miss[10m]) > 0)
+              increase(varnish_main_cache_hit[10m]) / (clamp_min((increase(varnish_main_cache_hit[10m]) + increase(varnish_main_cache_miss[10m])), 1)) * 100 < %(VarnishCacheAlertsWarningCacheHitRate)s and (increase(varnish_main_cache_hit[10m]) + increase(varnish_main_cache_miss[10m]) > 0)
             ||| % $._config,
             'for': '10m',
             labels: {
@@ -25,7 +25,7 @@
           {
             alert: 'VarnishCacheAlertsHighCacheEvictionRate',
             expr: |||
-              increase(varnish_main_n_lru_nuked[5m]) > %(VarnishCacheAlertsCriticalCacheEviction)
+              increase(varnish_main_n_lru_nuked[5m]) > %(VarnishCacheAlertsCriticalCacheEviction)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -43,7 +43,7 @@
           {
             alert: 'VarnishCacheAlertsHighSaturation',
             expr: |||
-               varnish_main_thread_queue_len > %(VarnishCacheAlertsCriticalSaturation)s
+              varnish_main_thread_queue_len > %(VarnishCacheAlertsCriticalSaturation)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -77,10 +77,10 @@
             },
           },
           {
-						alert: 'VarnishCacheAlertsBackendFailure',
+            alert: 'VarnishCacheAlertsBackendFailure',
             expr: |||
               increase(varnish_main_backend_fail[5m]) > %(VarnishCacheAlertsCriticalBackendFailure)s
-            ||| % $._config
+            ||| % $._config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -95,10 +95,10 @@
             },
           },
           {
-						alert: 'VarnishCacheAlertsBackendUnhealthy',
+            alert: 'VarnishCacheAlertsBackendUnhealthy',
             expr: |||
               increase(varnish_main_backend_unhealthy[5m]) > %(VarnishCacheAlertsCriticalBackendUnhealthy)s
-            ||| % $._config
+            ||| % $._config,
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -110,7 +110,7 @@
                   'Unhealthy backend is {{ printf "%.0f" $value }} over the last 5 minutes on {{$labels.instance}}, ' +
                   'which is above the threshold of %(VarnishCacheAlertsCriticalBackendUnhealthy)s.'
                 ) % $._config,
-					  },
+            },
           },
         ],
       },
