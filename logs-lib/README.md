@@ -88,12 +88,12 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
         panels+:
           {
             logs+:
-              g.panel.logs.options.withEnableLogDetails(true),
+              g.panel.logs.options.withEnableLogDetails(false),
           },
         variables+:
           {
             regex_search+:
-              g.dashboard.variable.textbox.new('regex_search', default=''),
+              g.dashboard.variable.textbox.new('regex_search', default='error'),
           },
       },
     // export logs dashboard
