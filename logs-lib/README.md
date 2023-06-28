@@ -1,13 +1,12 @@
 # Logs lib
 
-This logs lib can be used to generate logs dashboard using NEW [grafonnet](https://github.com/grafana/grafonnet).
+This logs lib can be used to generate logs dashboard using [grafonnet](https://github.com/grafana/grafonnet).
 
 ## Import
 
 ```sh
 jb init
 jb install https://github.com/grafana/jsonnet-libs/logs-lib
-jb install https://github.com/grafana/grafonnet/gen/grafonnet-latest@main
 ```
 
 ## Examples
