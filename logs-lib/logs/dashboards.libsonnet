@@ -1,11 +1,5 @@
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
-local timeSeries = g.panel.timeSeries;
-local logsPanel = g.panel.logs;
-local defaults = timeSeries.fieldConfig.defaults;
-local custom = timeSeries.fieldConfig.defaults.custom;
-local options = timeSeries.options;
-local fieldConfig = timeSeries.fieldConfig;
 function(
   title,
   showLogsVolume,
