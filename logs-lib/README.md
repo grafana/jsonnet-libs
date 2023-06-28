@@ -40,7 +40,7 @@ local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonne
                labels=$._config.kubeLabels,
                formatParser=$._config.formatParser)
     ).dashboards.logs,
-
+  },
 }
 ```
 
