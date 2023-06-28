@@ -1,7 +1,6 @@
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local logs = import 'lib/logs/main.libsonnet';
 local utils = import 'utils.libsonnet';
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
-
 {
 
   _config+:: {
@@ -27,42 +26,46 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
   },
   grafanaDashboards+:: {
 
-    // 'kube.json': (
-    //   logs.new('Kubernetes apps',
-    //            datasourceRegex='',
-    //            filterSelector=$._config.kubeFilterSelector,
-    //            labels=$._config.kubeLabels,
-    //            formatParser=$._config.formatParser)
-    // ).dashboards.logs,
+    // 1. create and export kubernetes logs dashboard
+    'kube.json': (
+      logs.new('Kubernetes apps',
+               datasourceRegex='',
+               filterSelector=$._config.kubeFilterSelector,
+               labels=$._config.kubeLabels,
+               formatParser=$._config.formatParser)
+    ).dashboards.logs,
 
-    // 'systemd.json': (
-    //   logs.new('Linux systemd',
-    //            datasourceRegex='',
-    //            filterSelector=$._config.linuxFilterSelector,
-    //            labels=$._config.linuxLabels,
-    //            formatParser='unpack',
-    //            showLogsVolume=true)
-    // ).dashboards.logs,
-
-    'systemd.json': 
-    (
+    // 2. create and export systemd logs dashboard
+    local systemdLogs =
       logs.new('Linux systemd',
                datasourceRegex='',
                filterSelector=$._config.linuxFilterSelector,
                labels=$._config.linuxLabels,
                formatParser='unpack',
                showLogsVolume=true)
-      + logs.withShowTime(true)
-      + logs.withEnableLogDetails(false)
-               
-               ).dashboards.logs,
+      // override panels or variables using grafonnet
+      {
+        panels+:
+          {
+            logs+:
+              g.panel.logs.options.withEnableLogDetails(true),
+          },
+        variables+:
+          {
+            regex_search+:
+              g.dashboard.variable.textbox.new('regex_search', default=''),
+          },
+      },
+    // export logs dashboard
+    'systemd.json': systemdLogs.dashboards.logs,
 
-    // 'docker.json': (
-    //   logs.new('Docker',
-    //            datasourceRegex='',
-    //            filterSelector=$._config.dockerFilterSelector,
-    //            labels=$._config.dockerLabels,
-    //            formatParser='logfmt')
-    // ).dashboards.logs,
+    // 3. create and export kubernetes logs dashboard
+    'docker.json': (
+      logs.new('Docker',
+               datasourceRegex='',
+               filterSelector=$._config.dockerFilterSelector,
+               labels=$._config.dockerLabels,
+               formatParser='logfmt')
+    ).dashboards.logs,
   },
 }
