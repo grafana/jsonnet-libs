@@ -22,7 +22,6 @@ function(
       + g.dashboard.graphTooltip.withSharedCrosshair()
       + g.dashboard.withVariables(variables.toArray)
       + g.dashboard.withPanels(
-        //g.util.grid.makeGrid(
         (
           if showLogsVolume then
             [panels.logsVolume
@@ -36,6 +35,5 @@ function(
           + g.panel.logs.gridPos.withH(18)
           + g.panel.logs.gridPos.withW(24),
         ]
-        //, panelWidth=24)
       ),
   }
