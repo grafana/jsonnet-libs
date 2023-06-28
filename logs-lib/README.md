@@ -45,6 +45,8 @@ local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonne
 }
 ```
 
+![image](https://github.com/grafana/jsonnet-libs/assets/14870891/7b246cc9-5de1-42f5-b3cd-bb9f89302405)
+
 ### Generate systemd logs dashboard and modify panels and variables
 
 This lib exposes `variables`, `targets`, `panels`, and `dashboards`.
@@ -101,6 +103,7 @@ local logs = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonne
 }
 ```
 
+![image](https://github.com/grafana/jsonnet-libs/assets/14870891/5e6313fd-9135-446a-b7bf-cf124b436970)
 
 ### Generate docker logs dashboard
 
