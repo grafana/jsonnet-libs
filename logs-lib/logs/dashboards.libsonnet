@@ -8,12 +8,9 @@ function(
 )
   {
     local this = self,
-    local titleString = title + ' logs',
     logs:
-      g.dashboard.new(titleString)
-      + g.dashboard.withUid(g.util.string.slugify(titleString))
-      + g.dashboard.withDescription('Logs dashboard for ' + title)
-      + g.dashboard.graphTooltip.withSharedCrosshair()
+      g.dashboard.new(title)
+      + g.dashboard.withUid(g.util.string.slugify(title))
       + g.dashboard.withVariables(variables.toArray)
       + g.dashboard.withPanels(
         (
