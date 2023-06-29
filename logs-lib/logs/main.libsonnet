@@ -10,7 +10,7 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
     filterSelector,
     labels,
     datasourceRegex,
-    datasourceName="datasource",
+    datasourceName='datasource',
     formatParser=null,
     showLogsVolume=true,
   ): {
