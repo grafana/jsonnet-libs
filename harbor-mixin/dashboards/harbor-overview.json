@@ -40,7 +40,7 @@
             "showLineNumbers": false,
             "showMiniMap": false
           },
-          "content": "# ![argoimage](https://cncf-branding.netlify.app/img/projects/harbor/horizontal/color/harbor-horizontal-color.png)",
+          "content": "# ![harborimage](https://cncf-branding.netlify.app/img/projects/harbor/horizontal/color/harbor-horizontal-color.png)",
           "mode": "markdown"
         },
         "pluginVersion": "10.0.1-cloud.3.f250259e",

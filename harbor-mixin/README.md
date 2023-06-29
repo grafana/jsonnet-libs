@@ -8,19 +8,17 @@ The Harbor mixin contains the following dashboards:
 
 and the following alerts:
 
-- ArgoAppOutOfSync
-- ArgoAppSyncFailed
-- ArgoAppMissing
+- HarborComponentStatus
+- HarborProjectQuataExceeded
 
-## ArgoCD Dashboard Overview
-ArgoCD dashbaord provides details on the overall status of the ArgoCD applications including the health status and sync status. The dashboard includes visualizations for git requests, K8s API activity and overall cluster stats. Th dashbaord also has visualization for individual components of ArgoCD like RepoServer and Server 
+## Harbor Dashboard Overview
+Harbor dashbaord provides details on the overall status of the Harbor repository including the details about each project and artifcats. The dashboard includes visualizations for Harbor's Components metrics, along with key visualiozation like number of project, images, pulled images etc. 
 
 #TODO screenshots
 
 ## Alerts Overview
-- ArgoAppOutOfSync: An ArgoCD application has status OutOfSync.
-- ArgoAppSyncFailed: Sync Operation has failed for an ArgoCD Application.
-- ArgoAppMissing: An ArgoCD application has status missing.
+- HarborComponentStatus: Status of Harbor components(Core, Registry, Database, JobService, Trivy, Notary and Redis )
+- HarborProjectQuataExceeded: Harbor Porject has exceeded the assigned project quota
 
 ## Tools
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
