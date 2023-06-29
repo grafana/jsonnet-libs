@@ -9,31 +9,30 @@ function(
 )
   {
     local this = self,
-    local chainVarProto(chainVar) =
-      var.query.new(chainVar.label)
-      + var.query.withDatasourceFromVariable(this.datasource)
-      +
-      (
-        if std.length(chainVar.chainSelector) > 0 then
-          var.query.queryTypes.withLabelValues(
-            chainVar.label,
-            '{%s, %s}' % [
-              filterSelector,
-              chainVar.chainSelector,
-            ]
-          ) else
-          // specific first variable case
-          var.query.queryTypes.withLabelValues(
-            chainVar.label,
-            '{%s}' % [
-              filterSelector,
-            ]
-          )
-      )
-
-      + var.query.selectionOptions.withIncludeAll(value=true, customAllValue='.*')
-      + var.query.selectionOptions.withMulti()
-      + var.query.withSort(i=1, type='alphabetical', asc=true, caseInsensitive=false),
+    local variablesFromLabels(labels, filterSelector) =
+      local chainVarProto(chainVar) =
+        var.query.new(chainVar.label)
+        + var.query.withDatasourceFromVariable(this.datasource)
+        + var.query.queryTypes.withLabelValues(
+          chainVar.label,
+          '{%s}' % chainVar.chainSelector,
+        )
+        + var.query.selectionOptions.withIncludeAll(
+          value=true,
+          customAllValue='.*'
+        )
+        + var.query.selectionOptions.withMulti()
+        + var.query.withSort(
+          i=1,
+          type='alphabetical',
+          asc=true,
+          caseInsensitive=false
+        )
+      ;
+      [
+        chainVarProto(chainVar)
+        for chainVar in utils.chainLabels(labels, [filterSelector])
+      ],
 
     datasource:
       var.datasource.new(datasourceName, 'loki')
@@ -43,9 +42,9 @@ function(
       var.textbox.new('regex_search', default=''),
 
     toArray:
-      [self.datasource] +
-      [chainVarProto(chainVar) for chainVar in utils.chainLabels(labels)] +
-      [self.regex_search],
+      [self.datasource]
+      + variablesFromLabels(labels, filterSelector)
+      + [self.regex_search],
 
     queriesSelector:
       '%s,%s' % [
