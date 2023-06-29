@@ -14,7 +14,7 @@ function(
   {
     local this = self,
 
-    local logsVolumeInit(targets, title='Logs volume') =
+    logsVolumeInit(targets, title='Logs volume')::
       timeSeries.new(title)
       + timeSeries.withTargets(targets)
       + custom.withDrawStyle('bars')
@@ -62,7 +62,7 @@ function(
         ]
       ),
 
-    local logsInit(targets, title='Logs') =
+    logsInit(targets, title='Logs')::
       logsPanel.new(title)
       + logsPanel.withTargets(targets)
       + logsPanel.options.withDedupStrategy('exact')  //"none", "exact", "numbers", "signature"
@@ -71,7 +71,7 @@ function(
       + logsPanel.options.withWrapLogMessage(true)
       + logsPanel.options.withPrettifyLogMessage(true),
 
-    logsVolume: logsVolumeInit(logsVolumeTarget),
-    logs: logsInit(logsTarget),
+    logsVolume: self.logsVolumeInit(logsVolumeTarget),
+    logs: self.logsInit(logsTarget),
 
   }
