@@ -34,7 +34,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
 
     // 1. create and export kubernetes logs dashboard
     'kube.json': (
-      logsDashboard.new('Kubernetes apps',
+      logsDashboard.new('Kubernetes apps logs',
                datasourceRegex='',
                filterSelector=$._config.kubeFilterSelector,
                labels=$._config.kubeLabels,
@@ -77,7 +77,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
 
     // 2. create and export systemd logs dashboard
     local systemdLogs =
-      logsDashboard.new('Linux systemd',
+      logsDashboard.new('Linux systemd logs',
                datasourceRegex='',
                filterSelector=$._config.linuxFilterSelector,
                labels=$._config.linuxLabels,
@@ -127,7 +127,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
 
     // 3. create and export kubernetes logs dashboard
     'docker.json': (
-      logsDashboard.new('Docker',
+      logsDashboard.new('Docker logs',
                datasourceRegex='',
                filterSelector=$._config.dockerFilterSelector,
                labels=$._config.dockerLabels,

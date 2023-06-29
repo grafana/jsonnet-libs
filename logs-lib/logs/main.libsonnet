@@ -7,15 +7,17 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 {
   new(
     title,
-    datasourceRegex,
     filterSelector,
     labels,
+    datasourceRegex,
+    datasourceName="datasource",
     formatParser=null,
     showLogsVolume=true,
   ): {
 
     local this = self,
     variables: variables(
+      datasourceName,
       datasourceRegex,
       filterSelector,
       labels,

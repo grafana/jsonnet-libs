@@ -2,6 +2,7 @@ local utils = import '../utils.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local var = g.dashboard.variable;
 function(
+  datasourceName,
   datasourceRegex,
   filterSelector,
   labels,
@@ -35,7 +36,7 @@ function(
       + var.query.withSort(i=1, type='alphabetical', asc=true, caseInsensitive=false),
 
     datasource:
-      var.datasource.new('datasource', 'loki')
+      var.datasource.new(datasourceName, 'loki')
       + var.datasource.withRegex(datasourceRegex),
 
     regex_search:
