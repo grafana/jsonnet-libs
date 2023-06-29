@@ -1,0 +1,21 @@
+groups:
+  - name: Harbor
+    rules:
+      - alert: HarborComponentStatus
+        expr: |
+          harbor_up == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          description: 'Harbor {{ $labels.component }} has been down for more than 5 minutes'
+          summary: 'Harbor {{ $labels.component }} is Down'
+      - alert: HarborProjectQuataExceeded
+        expr: |
+          harbor_project_quota_usage_byte > harbor_project_quota_byte and on(harbor_project_quota_usage_byte) harbor_project_quota_byte != -1
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          description: '{{ $labels.project_name }} Harbor project has exceeded the configured disk usage quota for the past 15 minutes'
+          summary: '{{ $labels.project_name }} Harbor project exceeds disk usage quota'
