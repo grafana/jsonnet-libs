@@ -6,6 +6,7 @@ function(
   formatParser,
 ) {
 
+  formatParser:: if formatParser != null then '| %s | __error__=``' % formatParser else '',
   logsTarget::
     lokiQuery.new(
       datasource='$' + variables.datasource.name,
@@ -15,9 +16,8 @@ function(
         %s
       ||| % [
         variables.queriesSelector,
-        if formatParser != null then '| %s | __error__=``' % formatParser else '',
+        self.formatParser,
       ]
-
     ),
 
   logsVolumeTarget::
@@ -30,7 +30,7 @@ function(
         [$__interval]))
       ||| % [
         variables.queriesSelector,
-        if formatParser != null then '| %s | __error__=``' % formatParser else '',
+        self.formatParser,
       ]
     )
     + lokiQuery.withLegendFormat('{{ level }}'),
