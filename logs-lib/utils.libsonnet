@@ -16,8 +16,9 @@
     local chainSelector(chain) =
       std.join(
         ',',
-        additionalFilters
-        + [this.labelsToPromQLSelector(chain)]
+        if std.length(chain) > 0
+        then additionalFilters + [this.labelsToPromQLSelector(chain)]
+        else additionalFilters
       );
     std.foldl(
       function(prev, label)
