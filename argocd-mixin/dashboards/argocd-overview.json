@@ -364,7 +364,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -729,7 +730,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -864,7 +866,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -934,7 +937,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -1060,7 +1064,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "string"
         },
         "overrides": [
           {
@@ -1330,7 +1335,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -2154,7 +2160,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -2723,7 +2730,7 @@
           "query": "label_values(kube_pod_info, namespace)",
           "refId": "Prometheus-namespace-Variable-Query"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": ".*argocd.*",
         "skipUrlSync": false,
         "sort": 0,
@@ -2786,7 +2793,7 @@
           "query": "label_values(argocd_cluster_info,cluster)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
@@ -2920,6 +2927,6 @@
   "timezone": "",
   "title": "ArgoCD",
   "uid": "a74ac6d7-fe6a-4d83-a393-a5c32652714d",
-  "version": 7,
+  "version": 8,
   "weekStart": ""
 }
