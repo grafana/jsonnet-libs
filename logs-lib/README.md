@@ -70,7 +70,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
     // pick one of Loki's parsers to use: i.e. logfmt, json.
     // | __error__=`` is appended automatically
     // https://grafana.com/docs/loki/latest/logql/log_queries/#parser-expression
-    formatParser: 'logfmt',
+    formatParser: 'unpack',
 
   },
   grafanaDashboards+:: {
@@ -81,7 +81,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
                datasourceRegex='',
                filterSelector=$._config.linuxFilterSelector,
                labels=$._config.linuxLabels,
-               formatParser='unpack',
+               formatParser=$._config.formatParser,
                showLogsVolume=true)
       // override panels or variables using grafonnet
       {
@@ -131,7 +131,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
                datasourceRegex='',
                filterSelector=$._config.dockerFilterSelector,
                labels=$._config.dockerLabels,
-               formatParser='logfmt')
+               formatParser=$._config.formatParser)
     ).dashboards.logs,
   },
 }
