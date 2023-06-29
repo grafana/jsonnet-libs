@@ -1,6 +1,6 @@
 {
   grafanaDashboards: {
-    'argocd-overview.json': (import 'dashboards/argocd-overview.json')
+    'argocd-overview.json': (import 'dashboards/argocd-overview.json'),
   },
 
   // Helper function to ensure that we don't override other rules, by forcing
