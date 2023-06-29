@@ -65,7 +65,7 @@ function(
     local logsInit(targets, title='Logs') =
       logsPanel.new(title)
       + logsPanel.withTargets(targets)
-      + logsPanel.options.withDedupStrategy('signature')  //"none", "exact", "numbers", "signature"
+      + logsPanel.options.withDedupStrategy('exact')  //"none", "exact", "numbers", "signature"
       + logsPanel.options.withEnableLogDetails(true)
       + logsPanel.options.withShowTime(true)
       + logsPanel.options.withWrapLogMessage(true)
