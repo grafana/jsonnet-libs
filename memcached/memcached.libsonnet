@@ -80,7 +80,7 @@ k {
           topologySpreadConstraints.withMaxSkew(self.topology_spread_max_skew),
         )
       else
-        $.util.antiAffinity,
+        $.util.antiAffinityStatefulSet,
 
     local service = $.core.v1.service,
 
