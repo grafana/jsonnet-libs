@@ -6,6 +6,8 @@ JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 1 --string-style s --comment-st
 all: build dashboards_out
 
 vendor:
+	mkdir -p dashboards || true
+	rm -rf dashboards/nginx-overview.json
 	curl https://grafana.com/api/dashboards/12559/revisions/$(DASHBOARD_REV)/download -o dashboards/nginx-overview.json	
 
 .PHONY: build
