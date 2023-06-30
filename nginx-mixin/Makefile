@@ -32,4 +32,4 @@ dashboards_out: mixin.libsonnet config.libsonnet $(wildcard dashboards/*)
 
 .PHONY: clean
 clean:
-	rm -rf dashboards_out prometheus_alerts.yaml
+	rm -rf dashboards_out
