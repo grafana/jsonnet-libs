@@ -1,10 +1,12 @@
+# Change this to fetch a different revision of the dashboard from the library.
+DASHBOARD_REV := 14
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 1 --string-style s --comment-style s
 
 .PHONY: all
-all: build dashboards_out prometheus_alerts.yaml
+all: build dashboards_out
 
-vendor: jsonnetfile.json
-	jb install
+vendor:
+	curl https://grafana.com/api/dashboards/12559/revisions/$(DASHBOARD_REV)/download -o dashboards/nginx-overview.json	
 
 .PHONY: build
 build: vendor
@@ -26,12 +28,6 @@ dashboards_out: mixin.libsonnet config.libsonnet $(wildcard dashboards/*)
 	@mkdir -p dashboards_out
 	mixtool generate dashboards mixin.libsonnet -d dashboards_out
 
-prometheus_alerts.yaml: mixin.libsonnet alerts/*.libsonnet
-	mixtool generate alerts mixin.libsonnet -a prometheus_alerts.yaml
-
 .PHONY: clean
 clean:
 	rm -rf dashboards_out prometheus_alerts.yaml
-
-dashboard_download:
-	curl https://grafana.com/api/dashboards/12559/revisions/14/download -o dashboards/nginx-overview.json
