@@ -1,5 +1,5 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
-local resource = import 'resource.libsonnet';
+local resource = import '../../lib/resource.libsonnet';
 
 local host_matcher = 'job=~"$job", instance=~"$instance"';
 local container_matcher = host_matcher + ', name=~"$container"';

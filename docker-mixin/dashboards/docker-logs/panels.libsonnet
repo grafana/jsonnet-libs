@@ -1,7 +1,7 @@
 local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local custom_barchart_grafonnet = import '../../lib/custom-barchart-grafonnet/custom-barchart.libsonnet';
-local resource = import 'resource.libsonnet';
+local resource = import '../../lib/resource.libsonnet';
 local kind = 'Panel';
 
 function(targets) {

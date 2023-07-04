@@ -1,6 +1,6 @@
 local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
-local resource = import 'resource.libsonnet';
+local resource = import '../../lib/resource.libsonnet';
 
 local stackstyle = {
   line: 1,

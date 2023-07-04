@@ -1,5 +1,5 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
-local resource = import 'resource.libsonnet';
+local resource = import '../../lib/resource.libsonnet';
 local kind = 'Dashboard';
 
 function(config, variables, panels) {
