@@ -1,16 +1,16 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
+local resource = import 'resource.libsonnet';
 
 local host_matcher = 'job=~"$job", instance=~"$instance"';
 local container_matcher = host_matcher + ', name=~"$container"';
 
 // This function is specific to this file. It just simplifies this single file,
 // although it could be generalised.
-local promql(q, docs, variables = ['job', 'instance', 'container']) = {
-  lang: 'promql',
-  spec: grafana.prometheus.target(q),
-  docs: docs,
-  variables: variables,
-};
+local promql(q, docs, variables = ['job', 'instance', 'container']) = 
+  resource.new('Target', std.md5(q))
+  + resource.withDocs(docs)
+  + resource.withSpec(grafana.prometheus.target(q))
+  + resource.withAnnotation('polly.grafana.com/variables', variables);
 
 {
   total_containers: promql(

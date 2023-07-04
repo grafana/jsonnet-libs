@@ -1,13 +1,14 @@
 local grafana = import 'grafonnet/grafana.libsonnet';
+local resource = import 'resource.libsonnet';
+local kind = 'Target';
 
 local host_matcher = 'job=~"$job", instance=~"$instance"';
 local container_matcher = host_matcher + ', container=~"$container"';
 
-local logql(q, docs) = {
-  spec: grafana.loki.target(q),
-  docs: docs,
-  variables: ['job', 'instance', 'container'],
-};
+local logql(q, docs) = resource.new(kind, std.md5(q))
+  + resource.withDocs(docs)
+  + resource.withSpec(grafana.loki.target(q))
+  + resource.withAnnotation('polly.grafana.com/variables', ['job', 'instance', 'container']);
 
 {
   total_log_lines: logql(

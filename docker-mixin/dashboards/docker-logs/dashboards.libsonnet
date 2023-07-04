@@ -1,9 +1,10 @@
 local grafana = (import 'grafonnet/grafana.libsonnet');
+local resource = import 'resource.libsonnet';
+local kind = 'Dashboard';
 
 function(config, variables, panels) {
-    'docker-logs': {
-      docs: 'Dashboard showing logs for Docker containers',
-      spec: grafana.dashboard.new(
+
+  dockerLogsDashboardSpec:: grafana.dashboard.new(
         'Docker Logs',
         time_from='%s' % config.dashboardPeriod,
         editable=false,
@@ -66,6 +67,9 @@ function(config, variables, panels) {
         // Full Log File
         .addPanel(panels.log_full.spec, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
         gridPos={ x: 0, y: 28, w: 0, h: 0 }
-      )
-    },
+      ),
+
+  'docker-logs': resource.new(kind, 'docker-logs')
+    + resource.withDocs('Dashboard showing logs for Docker containers')
+    + resource.withSpec(self.dockerLogsDashboardSpec),
 }
