@@ -1,4 +1,3 @@
-local queries = import 'queries.libsonnet';
 local variables = import 'variables.libsonnet';
 local targets = import 'targets.libsonnet';
 local panels = import 'panels.libsonnet';
@@ -23,9 +22,8 @@ local resourceSet = {
 {
   // note, some of these functions don't use their `config` parameter. However,
   // we still provide it so as to have a consistent interface.
-  queries(config): resourceSet.new('Query', queries),
   variables(config): resourceSet.new('Variable', variables),
-  targets(config): resourceSet.new('Target', targets(queries)),
-  panels(config): resourceSet.new('Panel', panels(targets(queries))),
-  dashboards(config): resourceSet.new('Dashboard', dashboards(config, variables, panels(targets(queries)))),
+  targets(config): resourceSet.new('Target', targets),
+  panels(config): resourceSet.new('Panel', panels(targets)),
+  dashboards(config): resourceSet.new('Dashboard', dashboards(config, variables, panels(targets))),
 }
