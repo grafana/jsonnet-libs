@@ -11,7 +11,7 @@
           $.patch_loki_ds(t) +
           $.patch_label_value(t)
           for t in dashboard.templating.list
-        ]
+        ],
       },
     },
 
@@ -34,5 +34,5 @@
 
   // Updates the label_value variable to have an all value of .+, which avoids errors when
   // first loading the dashboard, or when there are not log lines matching the selected variables.
-  patch_label_value(t): if t.name == 'label_value' then { allValue: '.+'} else {},
+  patch_label_value(t): if t.name == 'label_value' then { allValue: '.+' } else {},
 }
