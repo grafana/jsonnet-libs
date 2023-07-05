@@ -10,7 +10,7 @@ The ClickHouse mixin includes the following dashboards:
 
 ## ClickHouse overview:
 
-The ClickHouse overview dashboard provides details on queries, memory usage, networking and error logs. To get ClickHouse error logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default ClickHouse error log path is `/var/log/clickhouse-server/clickhouse-server.err.log`.
+The ClickHouse overview dashboard provides details on queries, memory usage, networking and logs. To get ClickHouse logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default ClickHouse log path is `/var/log/clickhouse-server/clickhouse-server.log`.
 
 ![First screenshot of ClickHouse overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/clickhouse/screenshots/clickhouse-overview.01.png)
 ![Second screenshot of ClickHouse overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/clickhouse/screenshots/clickhouse-overview.02.png)
