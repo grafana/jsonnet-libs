@@ -5,7 +5,7 @@
       "source": {
         "git": {
           "remote": "https://github.com/alainpham/app-archetypes.git",
-          "subdir": "camel-monitoring/camel-dashboards-for-import/"
+          "subdir": "camel-monitoring/camel-dashboards/"
         }
       },
       "version": "master"
