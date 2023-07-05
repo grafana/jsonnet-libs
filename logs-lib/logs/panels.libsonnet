@@ -51,12 +51,12 @@ function(
           // https://grafana.com/docs/grafana/latest/explore/logs-integration/#log-level
           for o in
             [
-              { regex: 'emerg|fatal|alert|crit.*', color: 'purple' },
-              { regex: 'err.*|ERR.*', color: 'red' },
-              { regex: 'warn.*|WARN.*|wrn|WRN', color: 'yellow' },
-              { regex: 'notice|inf.*|INF.*', color: 'green' },
-              { regex: 'dbg.*|DBG.*|DEBUG|debug', color: 'blue' },
-              { regex: 'trace|TRACE', color: 'light-blue' },
+              { regex: '(E|e)merg|(F|f)atal|(A|a)lert|(C|c)rit.*', color: 'purple' },
+              { regex: '(E|e)(rr.*|RR.*)', color: 'red' },
+              { regex: '(W|w)(arn.*|ARN.*|rn|RN)', color: 'orange' },
+              { regex: '(N|n)(otice|ote)|(I|i)(nf.*|NF.*)', color: 'green' },
+              { regex: 'dbg.*|DBG.*|(D|d)(EBUG|ebug)', color: 'blue' },
+              { regex: '(T|t)(race|RACE)', color: 'light-blue' },
               { regex: 'unknown', color: 'text' },
             ]
         ]
