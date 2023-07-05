@@ -791,39 +791,6 @@ local networkTransmittedPanel =
     type: 'timeseries',
   };
 
-local errorLogsPanel =
-  {
-    datasource: {
-      type: 'loki',
-      uid: '${loki_datasource}',
-    },
-    description: 'Recent logs from the error log file',
-    options: {
-      dedupStrategy: 'none',
-      enableLogDetails: true,
-      prettifyLogMessage: false,
-      showCommonLabels: false,
-      showLabels: false,
-      showTime: false,
-      sortOrder: 'Descending',
-      wrapLogMessage: false,
-    },
-    targets: [
-      {
-        datasource: {
-          type: 'loki',
-          uid: '${loki_datasource}',
-        },
-        editorMode: 'builder',
-        expr: '{filename="/var/log/clickhouse-server/clickhouse-server.err.log", %s}' % matcher,
-        legendFormat: '',
-        queryType: 'range',
-        refId: 'A',
-      },
-    ],
-    title: 'Error logs',
-    type: 'logs',
-  };
 {
   grafanaDashboards+:: {
 
@@ -851,15 +818,6 @@ local errorLogsPanel =
             label: 'Data source',
             name: 'prometheus_datasource',
             query: 'prometheus',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
-          {
-            hide: 0,
-            label: 'Loki datasource',
-            name: 'loki_datasource',
-            query: 'loki',
             refresh: 1,
             regex: '',
             type: 'datasource',
@@ -912,10 +870,6 @@ local errorLogsPanel =
             networkReceivedPanel { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
             networkTransmittedPanel { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
           ],
-          //next row
-          if $._config.enableLokiLogs then [
-            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 40 } },
-          ] else [],
         ])
       ),
   },

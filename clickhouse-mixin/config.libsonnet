@@ -10,5 +10,9 @@
 
     // enable Loki logs
     enableLokiLogs: true,
+    // filter all logs results by this
+    filterSelector: 'filename=~".*clickhouse.*"',
+    //
+    logLabels: ['job', 'instance'],
   },
 }
