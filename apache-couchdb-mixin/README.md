@@ -53,23 +53,17 @@ scrape_configs:
       - targets: [localhost]
         labels:
           job: integrations/apache-couchdb
-          instance: '<your-instance-name>'
-          cluster: '<your-cluster-name>'
+          instance: "<your-instance-name>"
+          cluster: "<your-cluster-name>"
           __path__: /var/log/couchdb/couchdb.log
 ```
 
 ## Alerts Overview
 
-- CouchDBUnhealthyCluster: At least one of the nodes in a cluster is reporting the cluster as being unstable.
-- CouchDBHigh4xxResponseCodes: There are a high number of 4xx responses for incoming requests to a node.
-- CouchDBHigh5xxResponseCodes: There are a high number of 5xx responses for incoming requests to a node.
-- CouchDBModerateRequestLatency: There is a moderate level of request latency for a node.
-- CouchDBHighRequestLatency: There is a high level of request latency for a node.
-- CouchDBManyReplicatorJobsPending: There is a high number of replicator jobs pending for a node.
-- CouchDBReplicatorJobsCrashing: There are replicator jobs crashing for a node.
-- CouchDBReplicatorChangesQueuesDying: There are replicator changes queue process deaths for a node.
-- CouchDBReplicatorConnectionOwnersCrashing: There are replicator connection owner process crashes for a node.
-- CouchDBReplicatorConnectionWorkersCrashing: There are replicator connection worker process crashes for a node.
+- ApacheCouchbaseHighCPUUsage: There is high cpu usage for a node.
+- ApacheCouchbaseHighMemoryUsage: There is a limited amount of memory available for a node.
+- ApacheCouchbaseMemoryEvictionRate: There is a spike in evictions in a bucket, which indicates high memory pressure.
+- ApacheCouchbaseInvalidRequestVolume: There is a high volume of incoming invalid requests, which may indicate a DOS or injection attack.
 
 ## Install tools
 
