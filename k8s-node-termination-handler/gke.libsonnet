@@ -3,7 +3,7 @@ local k = import 'k.libsonnet';
 {
   namespace:: 'kube-system',
   slack_webhook:: '',
-  image:: 'k8s.gcr.io/gke-node-termination-handler@sha256:aca12d17b222dfed755e28a44d92721e477915fb73211d0a0f8925a1fa847cca',
+  image:: 'registry.k8s.io/gke-node-termination-handler@sha256:aca12d17b222dfed755e28a44d92721e477915fb73211d0a0f8925a1fa847cca',
 
   local container = k.core.v1.container,
   local envVar = k.core.v1.envVar,

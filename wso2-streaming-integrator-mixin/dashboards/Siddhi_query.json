@@ -197,7 +197,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_query_memory{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}) by (instance,app,element)",
+          "expr": "sum(siddhi_query_memory{job=~\"$job\",instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}) by (instance,app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -207,7 +207,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_query_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",quantile=~\"$quantile\"}) by (instance,app,element,quantile)",
+          "expr": "sum(siddhi_query_latency{job=~\"$job\",instance=~\"$instance\",app=~\"$application\",element=~\"$element\",quantile=~\"$quantile\"}) by (instance,app,element,quantile)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -331,7 +331,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_query_memory{instance=~\"$instance\",app=~\"$application\"}))",
+          "expr": "sum(count(siddhi_query_memory{job=~\"$job\",instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -415,7 +415,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "siddhi_query_memory{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}",
+          "expr": "siddhi_query_memory{job=~\"$job\",instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -502,7 +502,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "siddhi_query_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}",
+          "expr": "siddhi_query_latency{job=~\"$job\",instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -552,15 +552,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_query_latency,instance)",
+        "definition": "label_values(siddhi_query_latency,job)",
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "allValue":".+",
+        "label": "job",
         "multi": true,
-        "name": "instance",
+        "name": "job",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_query_latency,instance)",
+          "query": "label_values(siddhi_query_latency,job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -583,15 +584,48 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_query_latency{instance=~\"$instance\"},app)",
+        "definition": "label_values(siddhi_query_latency{job=~\"$job\"},instance)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
+        "label": "instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_query_latency{job=~\"$job\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(siddhi_query_latency{job=~\"$job\",instance=~\"$instance\"},app)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
         "label": "Application",
         "multi": true,
         "name": "application",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_query_latency{instance=~\"$instance\"},app)",
+          "query": "label_values(siddhi_query_latency{job=~\"$job\",instance=~\"$instance\"},app)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -614,15 +648,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_query_latency{instance=~\"$instance\",app=~\"$application\"},element)",
+        "definition": "label_values(siddhi_query_latency{job=~\"$job\",instance=~\"$instance\",app=~\"$application\"},element)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Element",
         "multi": true,
         "name": "element",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_query_latency{instance=~\"$instance\",app=~\"$application\"},element)",
+          "query": "label_values(siddhi_query_latency{job=~\"$job\",instance=~\"$instance\",app=~\"$application\"},element)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -644,15 +679,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_query_latency,quantile)",
+        "definition": "label_values(siddhi_query_latency{job=~\"$job\",instance=~\"$instance\",app=~\"$application\"},quantile)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Quantile",
         "multi": true,
         "name": "quantile",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_query_latency,quantile)",
+          "query": "label_values(siddhi_query_latency{job=~\"$job\",instance=~\"$instance\",app=~\"$application\"},quantile)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

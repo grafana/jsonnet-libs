@@ -92,64 +92,10 @@ local container_template = grafana.template.new(
 );
 
 // Panels
-local integration_status_panel =
-  grafana.statPanel.new(
-    'Integration Status',
-    datasource='$loki_datasource',
-    colorMode='background',
-    graphMode='none',
-    noValue='No Data',
-    reducerFunction='lastNotNull'
-  )
-  .addMappings(
-    [
-      {
-        options: {
-          from: 1,
-          result: {
-            color: 'green',
-            index: 0,
-            text: 'Agent Configured - Sending Logs',
-          },
-          to: 10000000000000,
-        },
-        type: 'range',
-      },
-      {
-        options: {
-          from: 0,
-          result: {
-            color: 'red',
-            index: 1,
-            text: 'No Data',
-          },
-          to: 0,
-        },
-        type: 'range',
-      },
-    ]
-  )
-  .addTarget(
-    grafana.loki.target(queries.total_log_lines)
-  );
-
-local latest_metric_panel =
-  grafana.statPanel.new(
-    'Latest Metric Received',
-    datasource='$loki_datasource',
-    colorMode='background',
-    fields='Time',
-    graphMode='none',
-    noValue='No Data',
-    reducerFunction='lastNotNull'
-  )
-  .addTarget(
-    grafana.loki.target(queries.total_log_lines)
-  );
-
 local total_log_lines_panel =
   grafana.statPanel.new(
     'Total Log Lines',
+    description='Total number of log lines including errors and warnings.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='sum',
@@ -165,6 +111,7 @@ local total_log_lines_panel =
 local total_log_warnings_panel =
   grafana.statPanel.new(
     'Warnings',
+    description='Total number of log lines of level: warning.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='sum',
@@ -179,6 +126,7 @@ local total_log_warnings_panel =
 local total_log_errors_panel =
   grafana.statPanel.new(
     'Errors',
+    description='Total number of log lines of level: error.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='sum',
@@ -193,6 +141,7 @@ local total_log_errors_panel =
 local error_percentage_panel =
   grafana.statPanel.new(
     'Error Percentage',
+    description='Percentage of log lines with level: Error out of total log lines.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='lastNotNull',
@@ -209,6 +158,7 @@ local error_percentage_panel =
 local total_bytes_panel =
   grafana.statPanel.new(
     'Bytes Used',
+    description='Total number of bytes for log lines including errors and warnings.',
     datasource='$loki_datasource',
     graphMode='none',
     reducerFunction='sum',
@@ -284,13 +234,6 @@ local log_full_panel =
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
-
-      // Status Row
-      .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
-      // Integration status
-      .addPanel(integration_status_panel, gridPos={ x: 0, y: 0, w: 8, h: 2 })
-      // Latest metric received
-      .addPanel(latest_metric_panel, gridPos={ x: 8, y: 0, w: 8, h: 2 })
 
       // Overview Row
       .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })

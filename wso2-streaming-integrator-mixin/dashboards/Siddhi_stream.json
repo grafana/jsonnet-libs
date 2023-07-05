@@ -166,7 +166,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}) by (instance,app,element)",
+          "expr": "sum(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}) by (instance,app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -291,7 +291,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"}))",
+          "expr": "sum(count(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -375,7 +375,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}",
+          "expr": "siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -421,15 +421,44 @@
           "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total,instance)",
+        "definition": "label_values(siddhi_stream_throughput_total,job)",
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "allValue":".+",
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total,job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total,instance)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -452,15 +481,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total{instance=~\"$instance\"},app)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"},app)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Application",
         "multi": true,
         "name": "application",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total{instance=~\"$instance\"},app)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"},app)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -483,15 +513,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"},element)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=~\"$application\"},element)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Element",
         "multi": true,
         "name": "element",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"},element)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\",app=~\"$application\"},element)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

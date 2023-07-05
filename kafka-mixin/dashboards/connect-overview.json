@@ -78,7 +78,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_total_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_total_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -134,7 +134,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -194,7 +194,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -255,7 +255,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -316,7 +316,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -377,7 +377,7 @@
       "pluginVersion": "7.5.6",
       "targets": [
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -446,21 +446,21 @@
       "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_metrics{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"running\"})",
+          "expr": "sum (kafka_connect_connector_metrics{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",status=\"running\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "running",
           "refId": "B"
         },
         {
-          "expr": "sum (kafka_connect_connector_metrics{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"stopped\"})",
+          "expr": "sum (kafka_connect_connector_metrics{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",status=\"stopped\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "stopped",
           "refId": "A"
         },
         {
-          "expr": "sum (kafka_connect_connector_metrics{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status=\"paused\"})",
+          "expr": "sum (kafka_connect_connector_metrics{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",status=\"paused\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "paused",
@@ -528,35 +528,35 @@
       "pluginVersion": "7.0.5",
       "targets": [
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "running",
           "refId": "A"
         },
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "failed",
           "refId": "B"
         },
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "paused",
           "refId": "C"
         },
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "unassigned",
           "refId": "D"
         },
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "destroyed",
@@ -635,7 +635,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum (kafka_connect_connector_metrics{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}) by (status) ",
+          "expr": "sum (kafka_connect_connector_metrics{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}) by (status) ",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -746,7 +746,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_running_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -756,7 +756,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -766,7 +766,7 @@
           "refId": "B"
         },
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -776,7 +776,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -786,7 +786,7 @@
           "refId": "D"
         },
         {
-          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -901,7 +901,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "rate(process_cpu_seconds_total{job=\"integrations/kafka-connect\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval])",
+          "expr": "rate(process_cpu_seconds_total{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{cluster}}-{{instance}}",
           "refId": "A"
@@ -997,15 +997,15 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(area)(jvm_memory_bytes_used{job=\"integrations/kafka-connect\",cluster=~\"$cluster\",instance=~\"$instance\"})",
+          "expr": "sum without(area)(jvm_memory_bytes_used{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\"})",
           "interval": "",
           "legendFormat": "{{cluster}}-{{instance}}",
           "refId": "A"
         },
         {
-          "expr": "jvm_memory_bytes_max{job=\"integrations/kafka-connect\",cluster=~\"$cluster\",area=\"heap\"}",
+          "expr": "jvm_memory_bytes_max{instance=~\"$instance\", job=~\"$job\",cluster=~\"$cluster\",area=\"heap\"}",
           "interval": "",
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{cluster}}-{{instance}}",
           "refId": "B"
         }
       ],
@@ -1100,7 +1100,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{job=\"integrations/kafka-connect\",cluster=~\"$cluster\",instance=~\"$instance\"}[$__rate_interval]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{cluster}}-{{instance}}",
           "refId": "A"
@@ -1552,7 +1552,7 @@
       ],
       "targets": [
         {
-          "expr": "kafka_connect_app_info{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\",start_time_ms!=\"\"}",
+          "expr": "kafka_connect_app_info{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\",start_time_ms!=\"\"}",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -1561,7 +1561,7 @@
           "refId": "B"
         },
         {
-          "expr": "kafka_connect_app_info{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\",version!=\"\"}",
+          "expr": "kafka_connect_app_info{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\",version!=\"\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1569,7 +1569,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_connector_count{instance=~\"$instance\"})",
+          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_connector_count{instance=~\"$instance\", job=~\"$job\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1577,7 +1577,7 @@
           "refId": "C"
         },
         {
-          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_connector_startup_success_total{instance=~\"$instance\"})",
+          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_connector_startup_success_total{instance=~\"$instance\", job=~\"$job\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1585,7 +1585,7 @@
           "refId": "D"
         },
         {
-          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_connector_startup_failure_total{instance=~\"$instance\"})",
+          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_connector_startup_failure_total{instance=~\"$instance\", job=~\"$job\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1593,7 +1593,7 @@
           "refId": "E"
         },
         {
-          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_task_count{instance=~\"$instance\"})",
+          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_task_count{instance=~\"$instance\", job=~\"$job\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1601,7 +1601,7 @@
           "refId": "I"
         },
         {
-          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_task_startup_success_total{instance=~\"$instance\"})",
+          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_task_startup_success_total{instance=~\"$instance\", job=~\"$job\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1609,7 +1609,7 @@
           "refId": "J"
         },
         {
-          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_task_startup_failure_total{instance=~\"$instance\"})",
+          "expr": "sum by (instance) (kafka_connect_connect_worker_metrics_task_startup_failure_total{instance=~\"$instance\", job=~\"$job\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1674,7 +1674,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_network_io_rate{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_network_io_rate{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1774,7 +1774,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_incoming_byte_rate{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_incoming_byte_rate{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1873,7 +1873,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_outgoing_byte_rate{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_outgoing_byte_rate{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1972,7 +1972,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_connection_count{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_connection_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -2073,7 +2073,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_failed_authentication_total{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_failed_authentication_total{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -2174,7 +2174,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_successful_authentication_rate{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_successful_authentication_rate{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -2275,7 +2275,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_request_rate{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_request_rate{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2374,7 +2374,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_response_rate{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_response_rate{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2473,7 +2473,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_metrics_io_ratio{instance=~\"$instance\",cluster=~\"$cluster\",client_id!=\"\"}",
+          "expr": "kafka_connect_connect_metrics_io_ratio{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",client_id!=\"\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -2963,7 +2963,7 @@
       ],
       "targets": [
         {
-          "expr": "label_replace(label_replace(label_replace(kafka_connect_connector_info{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}, \"status\", \"1\", \"status\", \"running\"), \"status\", \"2\", \"status\", \"paused\"), \"status\", \"3\", \"status\", \"stopped\")",
+          "expr": "label_replace(label_replace(label_replace(kafka_connect_connector_info{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",status!=\"\"}, \"status\", \"1\", \"status\", \"running\"), \"status\", \"2\", \"status\", \"paused\"), \"status\", \"3\", \"status\", \"stopped\")",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2972,7 +2972,7 @@
           "refId": "I"
         },
         {
-          "expr": "kafka_connect_connector_info{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",connector_type!=\"\"}",
+          "expr": "kafka_connect_connector_info{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",connector_type!=\"\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2980,7 +2980,7 @@
           "refId": "A"
         },
         {
-          "expr": "kafka_connect_connector_info{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",connector_version!=\"\"}",
+          "expr": "kafka_connect_connector_info{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",connector_version!=\"\"}",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -2989,7 +2989,7 @@
           "refId": "C"
         },
         {
-          "expr": "kafka_connect_connector_info{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",connector_class!=\"\"}",
+          "expr": "kafka_connect_connector_info{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",connector_class!=\"\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2997,7 +2997,7 @@
           "refId": "D"
         },
         {
-          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_total_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_total_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -3006,7 +3006,7 @@
           "refId": "E"
         },
         {
-          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_running_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_running_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3014,7 +3014,7 @@
           "refId": "F"
         },
         {
-          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_failed_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_failed_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3022,7 +3022,7 @@
           "refId": "G"
         },
         {
-          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_paused_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_paused_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3030,7 +3030,7 @@
           "refId": "H"
         },
         {
-          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_destroyed_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_destroyed_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3038,7 +3038,7 @@
           "refId": "B"
         },
         {
-          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_unassigned_task_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"})",
+          "expr": "sum by (connector) (kafka_connect_connect_worker_metrics_connector_unassigned_task_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3120,7 +3120,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connect_worker_rebalance_metrics_rebalance_avg_time_ms{instance=~\"$instance\",cluster=~\"$cluster\"}",
+          "expr": "kafka_connect_connect_worker_rebalance_metrics_rebalance_avg_time_ms{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -3242,7 +3242,7 @@
       },
       "targets": [
         {
-          "expr": "kafka_connect_connect_worker_rebalance_metrics_time_since_last_rebalance_ms{instance=~\"$instance\",job=\"integrations/kafka-connect\",cluster=~\"$cluster\"} >= 0",
+          "expr": "kafka_connect_connect_worker_rebalance_metrics_time_since_last_rebalance_ms{instance=~\"$instance\", job=~\"$job\",cluster=~\"$cluster\"} >= 0",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -3318,7 +3318,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connector_task_metrics_batch_size_avg{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_connector_task_metrics_batch_size_avg{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3417,7 +3417,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connector_task_metrics_batch_size_max{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_connector_task_metrics_batch_size_max{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3516,7 +3516,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connector_task_metrics_offset_commit_success_percentage{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_connector_task_metrics_offset_commit_success_percentage{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3615,7 +3615,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connector_task_metrics_offset_commit_avg_time_ms{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_connector_task_metrics_offset_commit_avg_time_ms{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3714,7 +3714,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_connector_task_metrics_running_ratio{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_connector_task_metrics_running_ratio{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -3828,7 +3828,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_task_error_metrics_total_record_failures{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_task_error_metrics_total_record_failures{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -3928,7 +3928,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_task_error_metrics_total_record_errors{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_task_error_metrics_total_record_errors{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4028,7 +4028,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_task_error_metrics_total_records_skipped{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_task_error_metrics_total_records_skipped{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4128,7 +4128,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_task_error_metrics_total_errors_logged{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_task_error_metrics_total_errors_logged{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4228,7 +4228,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_task_error_metrics_total_retries{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_task_error_metrics_total_retries{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4328,7 +4328,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_task_error_metrics_deadletterqueue_produce_requests{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_task_error_metrics_deadletterqueue_produce_requests{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4429,7 +4429,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_task_error_metrics_deadletterqueue_produce_requests{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\"}",
+          "expr": "kafka_connect_task_error_metrics_deadletterqueue_produce_requests{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -4544,7 +4544,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_source_task_metrics_poll_batch_avg_time_ms{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_source_task_metrics_poll_batch_avg_time_ms{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -4644,7 +4644,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_source_task_metrics_poll_batch_max_time_ms{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_source_task_metrics_poll_batch_max_time_ms{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -4745,7 +4745,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_source_task_metrics_source_record_poll_rate{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_source_task_metrics_source_record_poll_rate{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -4845,7 +4845,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_source_task_metrics_source_record_write_rate{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_source_task_metrics_source_record_write_rate{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -4945,7 +4945,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_source_task_metrics_source_record_active_count_avg{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_source_task_metrics_source_record_active_count_avg{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -5045,7 +5045,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_source_task_metrics_source_record_active_count_max{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_source_task_metrics_source_record_active_count_max{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -5159,7 +5159,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_sink_task_metrics_partition_count{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_sink_task_metrics_partition_count{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -5260,7 +5260,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_sink_task_metrics_put_batch_avg_time_ms{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_sink_task_metrics_put_batch_avg_time_ms{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -5361,7 +5361,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_connect_sink_task_metrics_put_batch_max_time_ms{instance=~\"$instance\",cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
+          "expr": "kafka_connect_sink_task_metrics_put_batch_max_time_ms{instance=~\"$instance\", job=~\"$job\", cluster=~\"$cluster\",connector=~\"$connector\",task!=\"\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -5420,11 +5420,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
+        "current": {},
         "description": null,
         "error": null,
         "hide": 0,
@@ -5438,20 +5434,39 @@
         "regex": "",
         "skipUrlSync": false,
         "type": "datasource"
+      },      
+      {
+        "allValue": ".+",
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values(kafka_connect_app_info, job)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(kafka_connect_app_info, job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
       },
       {
         "allValue": ".+",
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(cluster)",
+        "definition": "label_values(kafka_connect_app_info{job=~\"$job\"}, cluster)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -5461,7 +5476,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(cluster)",
+          "query": "label_values(kafka_connect_app_info{job=~\"$job\"}, cluster)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -5475,24 +5490,20 @@
         "useTags": false
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(kafka_connect_app_info{cluster=~\"$cluster\"},instance)",
+        "definition": "label_values(kafka_connect_app_info{job=~\"$job\", cluster=~\"$cluster\"},instance)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "",
-        "multi": false,
+        "label": "instance",
+        "multi": true,
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(kafka_connect_app_info{cluster=~\"$cluster\"},instance)",
+          "query": "label_values(kafka_connect_app_info{job=~\"$job\", cluster=~\"$cluster\"},instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -5506,18 +5517,10 @@
         "useTags": false
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(kafka_connect_connector_task_metrics_pause_ratio{cluster=~\"$cluster\"},connector)",
+        "definition": "label_values(kafka_connect_connector_task_metrics_pause_ratio{job=~\"$job\", cluster=~\"$cluster\"},connector)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -5527,7 +5530,7 @@
         "name": "connector",
         "options": [],
         "query": {
-          "query": "label_values(kafka_connect_connector_task_metrics_pause_ratio{cluster=~\"$cluster\"},connector)",
+          "query": "label_values(kafka_connect_connector_task_metrics_pause_ratio{job=~\"$job\", cluster=~\"$cluster\"},connector)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

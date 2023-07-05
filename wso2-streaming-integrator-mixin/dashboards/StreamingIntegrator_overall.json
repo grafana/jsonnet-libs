@@ -97,7 +97,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(siddhi_total_reads{type=~\"cdc|file|kafka|http\"}) ",
+          "expr": "sum(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\",type=~\"cdc|file|kafka|http\"}) ",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -326,7 +326,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_total_reads{type=~\"cdc|file|kafka|http\"}) by (app)",
+          "expr": "sum(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\",type=~\"cdc|file|kafka|http\"}) by (app)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -337,7 +337,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum by(app) (rate(siddhi_total_reads{type=~\"cdc|file|kafka|http\"}[$__rate_interval]))",
+          "expr": "sum by(app) (rate(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\",type=~\"cdc|file|kafka|http\"}[$__rate_interval]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -348,7 +348,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_total_writes{type=~\"rdbms|file|kafka|http\"}) by (app)",
+          "expr": "sum(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\",type=~\"rdbms|file|kafka|http\"}) by (app)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -359,7 +359,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum (rate(siddhi_total_writes{type=~\"rdbms|file|kafka|http\"}[$__rate_interval]))",
+          "expr": "sum (rate(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\",type=~\"rdbms|file|kafka|http\"}[$__rate_interval]))",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -450,7 +450,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(siddhi_total_writes{type=~\"rdbms|file|kafka|http\"})",
+          "expr": "sum(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\",type=~\"rdbms|file|kafka|http\"})",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -586,7 +586,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(rate(siddhi_total_reads{type=~\"cdc|file|kafka|http\"}[$__interval]))",
+          "expr": "sum(rate(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\",type=~\"cdc|file|kafka|http\"}[$__rate_interval]))",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
@@ -594,7 +594,7 @@
           "refId": "A"
         },
         {
-          "expr": "sum(rate(siddhi_total_writes{type=~\"file|rdbms|kafka|http\"}[$__interval]))",
+          "expr": "sum(rate(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\",type=~\"file|rdbms|kafka|http\"}[$__rate_interval]))",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
@@ -637,20 +637,85 @@
       },
       {
         "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(siddhi_stream_throughput_total,job)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total,job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
+        "label": "instance",
+        "multi": true,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
           "selected": false,
           "text": "AggregateDataIncrementally",
           "value": "AggregateDataIncrementally"
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total, app)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"}, app)",
         "hide": 2,
-        "includeAll": false,
+        "includeAll": true,
+        "allValue":".+",
         "label": "Appname",
         "multi": false,
         "name": "app",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total, app)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"}, app)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

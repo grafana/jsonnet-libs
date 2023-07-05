@@ -1,0 +1,5 @@
+exclusions:
+  panel-units-rule:
+    reason: Linter does not detect units in older schema.
+    entries:
+      - dashboard: Jenkins

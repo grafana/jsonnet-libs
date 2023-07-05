@@ -226,7 +226,9 @@ local util(k) = {
 
   manifestYaml(value):: (
     local f = std.native('manifestYamlFromJson');
-    f(std.toString(value))
+    if f != null
+    then f(std.toString(value))
+    else std.manifestYamlDoc(value)
   ),
 
   resourcesRequests(cpu, memory)::
@@ -239,8 +241,28 @@ local util(k) = {
        else {})
     ),
 
+  resourcesRequestsMixin(cpu, memory)::
+    k.core.v1.container.mixin.resources.withRequestsMixin(
+      (if cpu != null
+       then { cpu: cpu }
+       else {}) +
+      (if memory != null
+       then { memory: memory }
+       else {})
+    ),
+
   resourcesLimits(cpu, memory)::
     k.core.v1.container.mixin.resources.withLimits(
+      (if cpu != null
+       then { cpu: cpu }
+       else {}) +
+      (if memory != null
+       then { memory: memory }
+       else {})
+    ),
+
+  resourcesLimitsMixin(cpu, memory)::
+    k.core.v1.container.mixin.resources.withLimitsMixin(
       (if cpu != null
        then { cpu: cpu }
        else {}) +

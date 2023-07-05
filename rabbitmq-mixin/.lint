@@ -1,0 +1,14 @@
+exclusions:
+  target-instance-rule:
+    reason: "This integration is designed to work with 2 specific labels, rabbitmq_node and rabbitmq_cluster, instead of instance."
+  template-instance-rule:
+    reason: "This integration is designed to work with 2 specific labels, rabbitmq_node and mongodb_cluster, instead of instance."
+  alert-name-camelcase:
+    reason: "These alerts are using the MQ acronym (Message Queue)"
+    entries:
+    - alert: RabbitMQMemoryHigh
+    - alert: RabbitMQFileDescriptorsUsage
+    - alert: RabbitMQUnroutableMessages
+    - alert: RabbitMQNodeNotDistributed
+    - alert: RabbitMQNodeDown
+    

@@ -5,3 +5,10 @@ exclusions:
     reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"
   template-datasource-rule:
     reason: "Based on new conveention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new conveention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  panel-units-rule:
+    reason: "Units not applicable on this panel"
+    entries:
+    - dashboard: "Asterisk - Overview"
+      panel: "Asterisk System Information"

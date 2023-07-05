@@ -112,7 +112,8 @@ local integration_status_panel =
     colorMode='background',
     graphMode='none',
     noValue='No Data',
-    reducerFunction='lastNotNull'
+    reducerFunction='lastNotNull',
+    description='Indicates if the agent is configured and sending metrics.',
   )
   .addMappings(
     [
@@ -154,7 +155,8 @@ local latest_metric_panel =
     fields='Time',
     graphMode='none',
     noValue='No Data',
-    reducerFunction='lastNotNull'
+    reducerFunction='lastNotNull',
+    description='Date and time of the latest metric received from the Windows host',
   )
   .addTarget(
     grafana.loki.target(queries.total_log_lines)
@@ -167,6 +169,7 @@ local total_log_lines_panel =
     graphMode='none',
     reducerFunction='sum',
     unit='short',
+    description='Total number of log lines received from the Windows host.',
   )
   .addThreshold(
     { color: 'rgb(192, 216, 255)', value: 0 }
@@ -182,6 +185,7 @@ local total_log_warnings_panel =
     graphMode='none',
     reducerFunction='sum',
     unit='short',
+    description='Total number of log lines with a severity of Warning.',
   ).addThreshold(
     { color: 'rgb(255, 152, 48)', value: 0 }
   )
@@ -196,6 +200,7 @@ local total_log_errors_panel =
     graphMode='none',
     reducerFunction='sum',
     unit='short',
+    description='Total number of log lines with a severity of Error.',
   ).addThreshold(
     { color: 'rgb(242, 73, 92)', value: 0 }
   )
@@ -210,6 +215,7 @@ local error_percentage_panel =
     graphMode='none',
     reducerFunction='lastNotNull',
     unit='percentunit',
+    description='Percentage of log lines with a severity of Error against the total number of log lines.',
   ).addThresholds([
     { color: 'rgb(255, 166, 176)', value: 0 },
     { color: 'rgb(255, 115, 131)', value: 25 },
@@ -226,6 +232,7 @@ local total_bytes_panel =
     graphMode='none',
     reducerFunction='sum',
     unit='bytes',
+    description='Total bytes of logs captured.',
   )
   .addThreshold(
     { color: 'rgb(184, 119, 217)', value: 0 }
@@ -248,7 +255,9 @@ local log_errors_panel =
   )
   .addTarget(
     grafana.loki.target(queries.error_log_lines)
-  );
+  ) + {
+    description: 'Log lines with a severity of Error',
+  };
 
 local log_warnings_panel =
   grafana.logPanel.new(
@@ -257,7 +266,9 @@ local log_warnings_panel =
   )
   .addTarget(
     grafana.loki.target(queries.warning_log_lines)
-  );
+  ) + {
+    description: 'Log lines with a severity of Warning',
+  };
 
 local log_full_panel =
   grafana.logPanel.new(
@@ -266,7 +277,9 @@ local log_full_panel =
   )
   .addTarget(
     grafana.loki.target(queries.log_full_lines)
-  );
+  ) + {
+    description: 'All log lines',
+  };
 
 // Manifested stuff starts here
 {

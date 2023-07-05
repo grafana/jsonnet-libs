@@ -1,9 +1,10 @@
 {
-  wintable(title, datasource):: {
+  wintable(title, description=null, datasource):: {
     local s = self,
     type: 'table',
     title: title,
     datasource: datasource,
+    description: description,
     _overrides:: [],
     _hiddenColumns:: [],
     _originalNames:: [],
@@ -256,7 +257,7 @@
         targets+: [target { refId: std.char(std.codepoint('A') + nextTarget) }],
       },
     },
-  winbargauge(title, thresholdSteps, expr, exprLegend, span=4)::
+  winbargauge(title, description=null, thresholdSteps, expr, exprLegend, span=4)::
     {
       [if span != null then 'span']: span,
 
@@ -301,6 +302,7 @@
         },
       ],
       title: title,
+      description: description,
       type: 'bargauge',
     },
 }

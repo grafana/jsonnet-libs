@@ -94,7 +94,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (mongodb_instance_uptime_seconds{service_name=~\"$service_name\"})",
+          "expr": "avg by (service_name) (mongodb_instance_uptime_seconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -150,7 +150,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[$__rate_interval]) or irate(mongodb_op_counters_total{service_name=~\"$service_name\",type!=\"command\"}[$__rate_interval]))",
+          "expr": "sum(irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\",type!=\"command\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_op_counters_total{service_name=~\"$service_name\",type!=\"command\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -210,7 +210,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "mongodb_mongod_replset_my_state{service_name=~\"$service_name\"}",
+          "expr": "mongodb_mongod_replset_my_state{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "{{set}}",
@@ -275,7 +275,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\"}[$__rate_interval]) > 0))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\",type=\"command\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\",type=\"command\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) > 0))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -285,12 +285,23 @@
       "type": "stat"
     },
     {
-      "datasource": "${datasource}",
+      "id": 12,
+      "gridPos": {
+        "h": 2,
+        "w": 5,
+        "x": 19,
+        "y": 1
+      },
+      "type": "stat",
+      "title": "Current ReplSet State",
+      "transformations": [],
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "9.1.6",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "mappings": [
             {
               "options": {
@@ -351,53 +362,43 @@
               }
             ]
           },
+          "color": {
+            "mode": "thresholds"
+          },
           "unit": "none"
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 2,
-        "w": 5,
-        "x": 19,
-        "y": 1
-      },
-      "id": 12,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
         "reduceOptions": {
+          "values": false,
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "/^Value$/",
-          "values": false
+          "fields": "/^Value$/"
         },
-        "text": {},
-        "textMode": "auto"
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "text": {}
       },
-      "pluginVersion": "8.0.4",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "mongodb_mongod_replset_my_state{service_name=~\"$service_name\"}",
+          "expr": "mongodb_mongod_replset_my_state{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}",
+          "format": "table",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{label_name}}",
           "refId": "A"
         }
-      ],
-      "title": "Current ReplSet State",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {
-            "valueLabel": "__name__"
-          }
-        }
-      ],
-      "type": "stat"
+      ]
     },
     {
       "collapsed": false,
@@ -490,14 +491,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]) or  irate(mongodb_mongos_op_counters_total{service_name=~\"$service_name\", type!=\"command\"}[$__rate_interval]))",
+          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_total{service_name=~\"$service_name\", type!=\"command\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or  irate(mongodb_mongos_op_counters_total{service_name=~\"$service_name\", type!=\"command\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{type}}",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval]) or irate(mongodb_mongos_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\"}[$__rate_interval]))",
+          "expr": "avg by (service_name, type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_mongos_op_counters_repl_total{service_name=~\"$service_name\", type!~\"(command|query|getmore)\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{type}}",
@@ -505,7 +506,7 @@
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_ttl_deleted_documents_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "ttl_delete",
@@ -592,7 +593,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\"} or mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\"} or mongodb_connections{service_name=~\"$service_name\", state=\"current\"})",
+          "expr": "avg by (service_name) (mongodb_mongod_connections{service_name=~\"$service_name\", state=\"current\", mongodb_cluster=\"$cluster\",job=~\"$job\"} or mongodb_mongos_connections{service_name=~\"$service_name\", state=\"current\", mongodb_cluster=\"$cluster\",job=~\"$job\"} or mongodb_connections{service_name=~\"$service_name\", state=\"current\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "Connections",
           "refId": "A"
@@ -678,7 +679,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{state}}",
           "refId": "A"
@@ -764,7 +765,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\"}[$__rate_interval]) > 0))",
+          "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_latencies_latency_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) / (irate(mongodb_mongod_op_latencies_ops_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) > 0))",
           "interval": "",
           "legendFormat": "{{type}}",
           "refId": "A"
@@ -850,7 +851,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\"})",
+          "expr": "avg by (service_name,type) (mongodb_mongod_global_lock_current_queue{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "{{type}}",
           "refId": "A"
@@ -936,7 +937,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,state) (mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\"} or mongodb_mongod_cursors{service_name=~\"$service_name\"} or mongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\"} or  mongodb_mongos_cursors{service_name=~\"$service_name\"})",
+          "expr": "avg by (service_name,state) (mongodb_mongod_metrics_cursor_open{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"} or mongodb_mongod_cursors{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"} or mongodb_mongos_metrics_cursor_open{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"} or  mongodb_mongos_cursors{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "{{state}}",
           "refId": "A"
@@ -1022,14 +1023,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,state) (irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{state}}",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_record_moves_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (rate(mongodb_mongod_metrics_record_moves_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "moved",
@@ -1117,7 +1118,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_mongod_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_asserts_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_mongod_asserts_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_mongos_asserts_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_asserts_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{type}}",
           "refId": "A"
@@ -1203,14 +1204,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_num_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "Total",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtimeouts_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Timeouts",
@@ -1297,14 +1298,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\"}[$__rate_interval]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$__rate_interval]))",
+          "expr": "sum(irate(mongodb_mongod_metrics_document_total{service_name=~\"$service_name\", state=\"returned\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "Document",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\"}[$__rate_interval]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\"}[$__rate_interval]))",
+          "expr": "sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))/ sum(irate(mongodb_mongod_metrics_query_executor_total{service_name=~\"$service_name\", state=\"scanned_objects\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Index",
@@ -1388,7 +1389,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_mongos_metrics_get_last_error_wtime_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "Write Wait Time",
           "refId": "A"
@@ -1474,7 +1475,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_mongos_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]) or irate(mongodb_extra_info_page_faults_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_extra_info_page_faults_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_mongos_extra_info_page_faults_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]) or irate(mongodb_extra_info_page_faults_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "Faults",
           "refId": "A"
@@ -1493,11 +1494,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
-        },
+        "current": {},
         "description": null,
         "error": null,
         "hide": 0,
@@ -1513,25 +1510,20 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
-        "current": {
-          "isNone": true,
-          "selected": false,
-          "text": "None",
-          "value": ""
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(mongodb_up,mongodb_cluster)",
+        "definition": "label_values(mongodb_up,job)",
         "description": null,
         "error": null,
-        "hide": 0,
+        "hide": 2,
         "includeAll": false,
-        "label": "Cluster",
-        "multi": false,
-        "name": "cluster",
+        "label": "job",
+        "multi": true,
+        "name": "job",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_up,mongodb_cluster)",
+          "query": "label_values(mongodb_up,job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1541,25 +1533,43 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {
-          "isNone": true,
-          "selected": false,
-          "text": "None",
-          "value": ""
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(mongodb_up{mongodb_cluster=~\"$cluster\"}, service_name)",
+        "definition": "label_values(mongodb_up{job=~\"$job\"},mongodb_cluster)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Service Name",
+        "label": "cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(mongodb_up{job=~\"$job\"},mongodb_cluster)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".+",
+        "current": {},
+        "datasource": "${datasource}",
+        "definition": "label_values(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$cluster\"}, service_name)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": false,
+        "label": "service name",
         "multi": false,
         "name": "service_name",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_up{mongodb_cluster=~\"$cluster\"}, service_name)",
+          "query": "label_values(mongodb_up{job=~\"$job\",mongodb_cluster=~\"$cluster\"}, service_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

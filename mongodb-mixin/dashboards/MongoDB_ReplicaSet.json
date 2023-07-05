@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -19,15 +22,19 @@
     ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 4,
-  "iteration": 1629145417397,
+  "id": 3,
+  "iteration": 1666035533543,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -36,11 +43,22 @@
       },
       "id": 2,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Overview",
       "type": "row"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -85,11 +103,14 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "9.0.2",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "count by (set) (mongodb_mongod_replset_number_of_members{set=~\"$replset\"} or mongodb_mongod_replset_my_state{set=~\"$replset\"})",
+          "expr": "count by (set) (mongodb_mongod_replset_number_of_members{set=~\"$replset\", mongodb_cluster=\"$cluster\",job=~\"$job\", service_name=~\"$service_name\"} or mongodb_mongod_replset_my_state{set=~\"$replset\", mongodb_cluster=\"$cluster\",job=~\"$job\", service_name=~\"$service_name\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -99,7 +120,9 @@
       "type": "stat"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -141,11 +164,14 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "9.0.2",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "time() - max(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\"})",
+          "expr": "time() - max(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -155,7 +181,9 @@
       "type": "stat"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -197,11 +225,14 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "9.0.2",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (set) (max_over_time(mongodb_mongod_replset_member_replication_lag{set=\"$replset\",service_name=~\"$service_name\"}[${__range}]))",
+          "expr": "avg by (set) (max_over_time(mongodb_mongod_replset_member_replication_lag{set=\"$replset\",service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[${__range}]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -211,7 +242,9 @@
       "type": "stat"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -219,7 +252,8 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "displayMode": "auto",
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -246,13 +280,23 @@
       },
       "id": 8,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.0.4",
+      "pluginVersion": "9.0.2",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name,mongodb) (mongodb_version_info{service_name=~\"$service_name\"})",
+          "expr": "avg by (service_name, mongodb_cluster, mongodb) (mongodb_version_info{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -268,7 +312,8 @@
             "include": {
               "names": [
                 "mongodb",
-                "service_name"
+                "service_name",
+                "mongodb_cluster"
               ]
             }
           }
@@ -277,18 +322,61 @@
       "type": "table"
     },
     {
-      "datasource": "${datasource}",
+      "id": 10,
+      "gridPos": {
+        "h": 8,
+        "w": 15,
+        "x": 0,
+        "y": 3
+      },
+      "type": "state-timeline",
+      "title": "ReplSet States",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {
+            "valueLabel": "service_name",
+            "mode": "columns"
+          }
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "__name__": true,
+              "agent_hostname": true,
+              "cluster": true,
+              "instance": true,
+              "job": true,
+              "mongodb_cluster": true,
+              "set": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        }
+      ],
+      "datasource": {
+        "uid": "${datasource}",
+        "type": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "lineWidth": 0,
+            "fillOpacity": 70,
+            "spanNulls": false
+          },
           "color": {
             "mode": "palette-classic"
           },
-          "custom": {
-            "fillOpacity": 70,
-            "lineWidth": 0
-          },
           "mappings": [
             {
+              "type": "value",
               "options": {
                 "0": {
                   "color": "blue",
@@ -303,7 +391,7 @@
                 "2": {
                   "color": "yellow",
                   "index": 1,
-                  "text": "SECUNDARY"
+                  "text": "SECONDARY"
                 },
                 "3": {
                   "color": "red",
@@ -340,10 +428,10 @@
                   "index": 9,
                   "text": "REMOVED"
                 }
-              },
-              "type": "value"
+              }
             },
             {
+              "type": "special",
               "options": {
                 "match": "empty",
                 "result": {
@@ -351,10 +439,10 @@
                   "index": 10,
                   "text": "NULL"
                 }
-              },
-              "type": "special"
+              }
             },
             {
+              "type": "special",
               "options": {
                 "match": "null+nan",
                 "result": {
@@ -362,8 +450,7 @@
                   "index": 11,
                   "text": "NULL"
                 }
-              },
-              "type": "special"
+              }
             }
           ],
           "thresholds": {
@@ -379,68 +466,44 @@
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 15,
-        "x": 0,
-        "y": 3
-      },
-      "id": 10,
       "options": {
+        "mergeValues": true,
+        "showValue": "auto",
         "alignValue": "left",
+        "rowHeight": 0.9,
         "legend": {
-          "displayMode": "hidden",
+          "showLegend": false,
+          "displayMode": "list",
           "placement": "bottom"
         },
-        "mergeValues": true,
-        "rowHeight": 0.9,
-        "showValue": "auto",
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "mongodb_mongod_replset_my_state{set=~\"$replset\",service_name=~\"$service_name\"}",
+          "expr": "max by (set, mongodb_cluter, service_name) (mongodb_mongod_replset_my_state{set=~\"$replset\",service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
           "interval": "",
           "legendFormat": "",
-          "refId": "A"
+          "refId": "A",
+          "editorMode": "code"
         }
-      ],
-      "title": "ReplSet States",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {
-            "valueLabel": "service_name"
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "__name__": true,
-              "agent_hostname": true,
-              "cluster": true,
-              "instance": true,
-              "job": true,
-              "mongodb_cluster": true,
-              "set": true
-            },
-            "indexByName": {},
-            "renameByName": {}
-          }
-        }
-      ],
-      "type": "state-timeline"
+      ]
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -449,43 +512,66 @@
       },
       "id": 12,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Performance",
       "type": "row"
     },
     {
-      "datasource": "${datasource}",
+      "id": 14,
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "type": "timeseries",
+      "title": "Replication Lag",
+      "datasource": {
+        "uid": "${datasource}",
+        "type": "prometheus"
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
             "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "barAlignment": 0,
+            "lineWidth": 1,
             "fillOpacity": 0,
             "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "spanNulls": false,
+            "showPoints": "auto",
             "pointSize": 5,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisPlacement": "auto",
+            "axisLabel": "",
+            "axisColorMode": "text",
             "scaleDistribution": {
               "type": "linear"
             },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
+            "axisCenteredZero": false,
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
             },
             "thresholdsStyle": {
               "mode": "off"
             }
+          },
+          "color": {
+            "mode": "palette-classic"
           },
           "mappings": [],
           "thresholds": {
@@ -501,41 +587,41 @@
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 12
-      },
-      "id": 14,
       "options": {
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
         "legend": {
+          "showLegend": true,
+          "displayMode": "table",
+          "placement": "right",
           "calcs": [
             "max",
             "min",
             "mean"
-          ],
-          "displayMode": "table",
-          "placement": "right"
-        },
-        "tooltip": {
-          "mode": "single"
+          ]
         }
       },
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (max(max_over_time(mongodb_mongod_replset_member_replication_lag{set=\"$replset\",service_name=~\"$secondary\"}[$__rate_interval]) > 0) by (service_name,set))",
+          "expr": "avg by (name) (max(max_over_time(mongodb_mongod_replset_member_replication_lag{set=\"$replset\",service_name=~\"$secondary\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval])) by (name, service_name,set,mongodb_cluster))",
           "interval": "",
-          "legendFormat": "{{service_name}}",
-          "refId": "A"
+          "legendFormat": "{{name}}",
+          "refId": "A",
+          "editorMode": "code",
+          "range": true
         }
-      ],
-      "title": "Replication Lag",
-      "type": "timeseries"
+      ]
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -589,7 +675,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 8,
+        "w": 12,
         "x": 0,
         "y": 20
       },
@@ -605,30 +691,40 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "repeat": "service_name",
       "repeatDirection": "h",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_op_counters_repl_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_op_counters_repl_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "repl - {{type}}",
           "refId": "A"
         },
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_mongod_op_counters_repl_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "repl - {{type}}",
           "refId": "B"
         },
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name,type) (irate(mongodb_op_counters_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name,type) (irate(mongodb_op_counters_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{type}}",
@@ -639,7 +735,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -708,13 +806,17 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "max by (service_name) (changes(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "max by (service_name) (changes(mongodb_mongod_replset_member_election_date{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{service_name}}",
           "refId": "A"
@@ -724,7 +826,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -794,13 +898,17 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "time() - avg by (service_name) (max(mongodb_mongod_replset_member_last_heartbeat{service_name=~\"$service_name\"}) by (name)) * on (name) group_right avg by (service_name) (mongodb_mongod_replset_my_name{service_name=~\"$service_name\"})",
+          "expr": "time() - avg by (service_name) (max(mongodb_mongod_replset_member_last_heartbeat{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}) by (name)) * on (name) group_right avg by (service_name) (mongodb_mongod_replset_my_name{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "interval": "$__rate_interval",
           "legendFormat": "{{service_name}}",
           "refId": "A"
@@ -810,7 +918,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -863,10 +973,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 38
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 29
       },
       "id": 20,
       "options": {
@@ -880,15 +990,19 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "repeat": "service_name",
       "repeatDirection": "h",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "max by (service_name,name,state) (mongodb_mongod_replset_member_ping_ms{set=~\"$replset\",service_name=~\"$service_name\"} or label_replace(label_replace(mongodb_rs_members_pingMs{service_name=~\"$service_name\", member_state!=\"\"},\"state\", \"$1\", \"member_state\", \"(.*)\"),\"name\", \"$1\", \"member_idx\", \"(.*)\"))",
+          "expr": "max by (service_name,name,state) (mongodb_mongod_replset_member_ping_ms{set=~\"$replset\",service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"} or label_replace(label_replace(mongodb_rs_members_pingMs{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\", member_state!=\"\"},\"state\", \"$1\", \"member_state\", \"(.*)\"),\"name\", \"$1\", \"member_idx\", \"(.*)\"))",
           "interval": "",
           "legendFormat": "{{service_name}} - {{name}} - {{state}}",
           "refId": "A"
@@ -899,20 +1013,34 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 38
       },
       "id": 32,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Oplog Details",
       "type": "row"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -968,7 +1096,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 47
+        "y": 39
       },
       "id": 33,
       "options": {
@@ -982,14 +1110,18 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "repeatDirection": "h",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (mongodb_mongod_metrics_repl_buffer_count{service_name=~\"$service_name\"})",
+          "expr": "avg by (service_name) (mongodb_mongod_metrics_repl_buffer_count{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "{{service_name}}",
@@ -1000,7 +1132,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1056,7 +1190,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 47
+        "y": 39
       },
       "id": 34,
       "options": {
@@ -1070,14 +1204,18 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "repeatDirection": "h",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_network_getmores_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_network_getmores_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{service_name}}",
@@ -1088,7 +1226,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1144,7 +1284,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 55
+        "y": 47
       },
       "id": 24,
       "options": {
@@ -1158,23 +1298,30 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "repeat": "service_name",
       "repeatDirection": "h",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "time()-avg by (service_name) (mongodb_mongod_replset_oplog_tail_timestamp{service_name=~\"$service_name\"})",
+          "expr": "time()-avg by (service_name) (mongodb_mongod_replset_oplog_tail_timestamp{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Now to End",
           "refId": "A"
         },
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (mongodb_mongod_replset_oplog_head_timestamp{service_name=~\"$service_name\"}-mongodb_mongod_replset_oplog_tail_timestamp{service_name=~\"$service_name\"})",
+          "expr": "avg by (service_name) (mongodb_mongod_replset_oplog_head_timestamp{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}-mongodb_mongod_replset_oplog_tail_timestamp{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "Oplog Range",
@@ -1185,7 +1332,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1240,8 +1389,8 @@
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 0,
-        "y": 63
+        "x": 8,
+        "y": 47
       },
       "id": 35,
       "options": {
@@ -1255,31 +1404,41 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "repeat": "service_name",
       "repeatDirection": "h",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Document Preload",
           "refId": "A"
         },
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Index Preload",
           "refId": "B"
         },
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_batches_total_milliseconds{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_batches_total_milliseconds{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Batch Apply",
@@ -1290,7 +1449,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "${datasource}",
+      "datasource": {
+        "uid": "${datasource}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1345,8 +1506,8 @@
       "gridPos": {
         "h": 8,
         "w": 8,
-        "x": 0,
-        "y": 71
+        "x": 16,
+        "y": 47
       },
       "id": 44,
       "options": {
@@ -1360,31 +1521,41 @@
           "placement": "bottom"
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "repeat": "service_name",
       "repeatDirection": "h",
       "targets": [
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_num_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_docs_num_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Document Preload",
           "refId": "A"
         },
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_num_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_preload_indexes_num_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Index Preload",
           "refId": "B"
         },
         {
+          "datasource": {
+            "uid": "${datasource}"
+          },
           "exemplar": true,
-          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_ops_total{service_name=~\"$service_name\"}[$__rate_interval]))",
+          "expr": "avg by (service_name) (irate(mongodb_mongod_metrics_repl_apply_ops_total{service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"}[$__rate_interval]))",
           "hide": false,
           "interval": "",
           "legendFormat": "Batch Apply",
@@ -1396,7 +1567,7 @@
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 30,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [
     "mongodb-integration"
@@ -1404,13 +1575,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
-        },
-        "description": null,
-        "error": null,
+        "current": {},
         "hide": 0,
         "includeAll": false,
         "label": "Data Source",
@@ -1425,25 +1590,43 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
-        "current": {
-          "isNone": true,
-          "selected": false,
-          "text": "None",
-          "value": ""
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(mongodb_up,mongodb_cluster)",
+        "definition": "label_values(mongodb_up,job)",
         "description": null,
         "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(mongodb_up,job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".+",
+        "current": {},
+        "datasource": {
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(mongodb_mongod_replset_my_state{job=~\"$job\"},mongodb_cluster)",
         "hide": 0,
         "includeAll": false,
-        "label": "Cluster",
+        "label": "cluster",
         "multi": false,
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_up,mongodb_cluster)",
+          "query": "label_values(mongodb_mongod_replset_my_state{job=~\"$job\"},mongodb_cluster)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1453,25 +1636,20 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {
-          "isNone": true,
-          "selected": false,
-          "text": "None",
-          "value": ""
+        "allValue": ".+",
+        "current": {},
+        "datasource": {
+          "uid": "${datasource}"
         },
-        "datasource": "${datasource}",
-        "definition": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\"}, set)",
-        "description": null,
-        "error": null,
+        "definition": "label_values(mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=\"$cluster\"}, set)",
         "hide": 0,
         "includeAll": false,
-        "label": "Replica Set",
+        "label": "replica set",
         "multi": false,
         "name": "replset",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\"}, set)",
+          "query": "label_values(mongodb_mongod_replset_my_state{job=~\"$job\",mongodb_cluster=\"$cluster\"}, set)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1481,24 +1659,24 @@
         "type": "query"
       },
       {
-        "allValue": "",
+        "allValue": ".+",
         "current": {
           "selected": false,
           "text": "All",
           "value": "$__all"
         },
-        "datasource": "${datasource}",
-        "definition": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\",set=\"$replset\"}, service_name)",
-        "description": null,
-        "error": null,
+        "datasource": {
+          "uid": "${datasource}"
+        },
+        "definition": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",job=~\"$job\",set=\"$replset\"}, service_name)",
         "hide": 2,
         "includeAll": true,
-        "label": null,
+        "label": "service name",
         "multi": false,
         "name": "service_name",
         "options": [],
         "query": {
-          "query": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\",set=\"$replset\"}, service_name)",
+          "query": "label_values(mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",job=~\"$job\",set=\"$replset\"}, service_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1508,24 +1686,19 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
+        "allValue": ".+",
+        "current": {},
+        "datasource": {
+          "uid": "${datasource}"
         },
-        "datasource": "${datasource}",
-        "definition": "query_result(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\",set=\"$replset\"}==2)",
-        "description": null,
-        "error": null,
+        "definition": "query_result(mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",job=~\"$job\",set=\"$replset\"}==2)",
         "hide": 2,
         "includeAll": true,
-        "label": null,
         "multi": false,
         "name": "secondary",
         "options": [],
         "query": {
-          "query": "query_result(mongodb_mongod_replset_my_state{mongodb_cluster=~\"$cluster\",set=\"$replset\"}==2)",
+          "query": "query_result(mongodb_mongod_replset_my_state{mongodb_cluster=\"$cluster\",job=~\"$job\",set=\"$replset\"}==2)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1544,5 +1717,6 @@
   "timezone": "",
   "title": "MongoDB ReplicaSet",
   "uid": "U5CBoam7z",
-  "version": 2
+  "version": 3,
+  "weekStart": ""
 }
