@@ -1,31 +1,57 @@
 groups:
-    - name: ArgoCD                                              
+    - name: ArgoCD
       rules:
-        - alert: ArgoAppOutOfSync                               
-          expr: argocd_app_info{sync_status="OutOfSync"} == 1   
-          for: 1m                                               
-          labels:                                               
+        - alert: ArgoAppOutOfSync
+          expr: argocd_app_info{sync_status="OutOfSync"} == 1
+          for: 1m
+          labels:
             severity: warning
-          annotations:                                          
-            summary: '{{ $labels.name }} is OutOfSync' 
+          annotations:
+            summary: '{{ $labels.name }} is OutOfSync'
             description: '{{ $labels.name }} Application has sync status as {{ $labels.sync_status }}'
-        
-        - alert: ArgoAppSyncFailed                              
-          expr: argocd_app_sync_total{phase!="Succeeded"} == 1  
-          for: 1m                                               
-          labels:                                               
+
+        - alert: ArgoAppSyncFailed
+          expr: argocd_app_sync_total{phase!="Succeeded"} == 1
+          for: 1m
+          labels:
             severity: warning
-          annotations:                                          
-            summary: '{{ $labels.name }} Sync Failed' 
+          annotations:
+            summary: '{{ $labels.name }} Sync Failed'
             description: '{{ $labels.name }} Application has sync phase as {{ $labels.phase }}'
-        
-        - alert: ArgoAppMissing                                 
-          expr: absent(argocd_app_info)                         
+
+        - alert: ArgoAppMissing
+          expr: absent(argocd_app_info)
           for: 15m
-          labels:                                               
+          labels:
             severity: critical
-          annotations:                                          
+          annotations:
             summary: "[ArgoCD] No reported applications"
             description: >
               ArgoCD has not reported any applications data for the past 15 minutes which
-              means that it must be down or not functioning properly.  
+              means that it must be down or not functioning properly.
+
+        - alert: ArgoSyncLatency
+          expr: |
+           sum(increase(argocd_git_request_duration_seconds_sum[15m])) /
+           sum(increase(argocd_git_request_duration_seconds_count[15m]))
+           > 0.2
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "[ArgoCD] Latency is increasing between Git and ArgoCD"
+            description: >
+             The latency is increasing between git and ArgoCD that
+             means that the git or network may experience some issue.
+             Syncing apps will be affected.
+
+        - alert: ArgoKubectlPendingOperations
+          expr:  argocd_kubectl_exec_pending > 20
+          for: 15m
+          labels:
+            severity: info
+          annotations:
+            summary: "[ArgoCD] Applying the changes is delayed"
+            description: >
+              ArgoCD queues the applying of the changes to the cluster that means
+              the cluster API or/and ArgoCD are under heavy load or not functioning properly.

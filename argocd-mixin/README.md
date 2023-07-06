@@ -11,9 +11,11 @@ and the following alerts:
 - ArgoAppOutOfSync
 - ArgoAppSyncFailed
 - ArgoAppMissing
+- ArgoSyncLatency
+- ArgoKubectlPendingOperations
 
 ## ArgoCD Dashboard Overview
-ArgoCD dashbaord provides details on the overall status of the ArgoCD applications including the health status and sync status. The dashboard includes visualizations for git requests, K8s API activity and overall cluster stats. Th dashbaord also has visualization for individual components of ArgoCD like RepoServer and Server 
+ArgoCD dashbaord provides details on the overall status of the ArgoCD applications including the health status and sync status. The dashboard includes visualizations for git requests, K8s API activity and overall cluster stats. Th dashbaord also has visualization for individual components of ArgoCD like RepoServer and Server
 
 #TODO screenshots
 
@@ -21,6 +23,8 @@ ArgoCD dashbaord provides details on the overall status of the ArgoCD applicatio
 - ArgoAppOutOfSync: An ArgoCD application has status OutOfSync.
 - ArgoAppSyncFailed: Sync Operation has failed for an ArgoCD Application.
 - ArgoAppMissing: An ArgoCD application has status missing.
+- ArgoSyncLatency: Latency is increasing between Git and ArgoCD
+- ArgoKubectlPendingOperations: Sync Operations are delayed
 
 ## Tools
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
