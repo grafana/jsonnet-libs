@@ -23,7 +23,7 @@ The Apache Couchbase cluster overview dashboard provides details on the top node
 
 ## Apache Couchbase Node Overview
 
-The Apache Couchbase node overview dashboard provides details on memory usage, open OS files, open databases, database reads and writes, view info, request info (rate, latency, status code info), log type breakdown, and logs for a specific node in the cluster. To get Couchbase system logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Couchbase system log path is `/var/log/Couchbase/Couchbase.log` on Linux.
+The Apache Couchbase node overview dashboard provides details on memory usage, cpu usage, network request info (request methods and response codes), query service request info (volume, type, and processing time), index service performance (request volume, cache hit ratio, and scan latency), and both error and couchdb logs. The default Couchbase system log path is `/opt/couchbase/var/lib/couchbase/logs` on Linux, or `C:\Program\Files\Couchbase\Server\var\lib\couchbase\logs` on Windows.
 
 ![First screenshot of the Apache Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-Couchbase/screenshots/Couchbase_nodes_1.png)
 
@@ -53,7 +53,7 @@ scrape_configs:
 
 ## Apache Couchbase Bucket Overview
 
-The Apache Bucket overview dashboard provides details on...
+The Apache Bucket overview dashboard provides details on the top buckets based on key resource usage, items, operations, operations failed, high priority requests, cache hit ratio, number of replica vBuckets, and vBucket queue memory usage.
 
 ![First screenshot of the Apache Couchbase bucket overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-Couchbase/screenshots/Couchbase_overview_1.png)
 

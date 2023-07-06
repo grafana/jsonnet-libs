@@ -10,5 +10,7 @@
     alertsCriticalMemoryUsage: 85,  // %
     alertsWarningMemoryEvictionRate: 10,  // count
     alertsWarningInvalidRequestVolume: 1000,  // count
+
+    enableLokiLogs: true,
   },
 }
