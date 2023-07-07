@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'apache-couchbase-bucket-overview';
+local dashboardUid = 'apache-couchbase-cluster-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 
@@ -13,19 +13,18 @@ local promDatasource = {
 };
 
 
-local topBucketsByMemoryUsedPanel = {
+local topNodesByMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, kv_mem_used_bytes{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"})',
+      'topk(5, sum by(job, couchbase_cluster, instance) (sys_mem_actual_used{job=~"$job", couchbase_cluster=~"$couchbase_cluster"})) / (sum by(job, couchbase_cluster, instance) (clamp_min(sys_mem_actual_free{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}, 1)) + sum by(couchbase_cluster, instance, job) (sys_mem_actual_used{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}}',
-      format='time_series',
+      legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Top buckets by memory used',
-  description: 'Memory used for the top buckets.',
+  title: 'Top nodes by memory usage',
+  description: 'Top nodes by memory usage across the Couchbase cluster.',
   fieldConfig: {
     defaults: {
       color: {
@@ -75,7 +74,7 @@ local topBucketsByMemoryUsedPanel = {
           },
         ],
       },
-      unit: 'Bps',
+      unit: 'percentunit',
     },
     overrides: [],
   },
@@ -93,310 +92,18 @@ local topBucketsByMemoryUsedPanel = {
   },
 };
 
-local topBucketsByDiskUsedPanel = {
+local topNodesByHTTPRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, couch_docs_actual_disk_size{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"})',
+      'topk(5, sum by(job, couchbase_cluster, instance) (rate(cm_http_requests_total{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}[$__rate_interval])))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}}',
-    ),
-  ],
-  type: 'bargauge',
-  title: 'Top buckets by disk used',
-  description: 'Total space on disk used for the top buckets.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        fixedColor: 'green',
-        mode: 'fixed',
-      },
-      mappings: [],
-      min: 1,
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'decbytes',
-    },
-    overrides: [],
-  },
-  options: {
-    displayMode: 'basic',
-    minVizHeight: 10,
-    minVizWidth: 0,
-    orientation: 'horizontal',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    showUnfilled: true,
-    valueMode: 'color',
-  },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
-};
-
-local topBucketsByCurrentItemsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'topk(5, kv_curr_items{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"})',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}}',
+      legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Top buckets by current items',
-  description: 'Number of active items for the largest buckets.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local topBucketsByOperationsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job, op) (rate(kv_ops{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval])))',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}} - {{op}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Top buckets by operations',
-  description: 'Rate of operations for the busiest buckets.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'ops',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local topBucketsByOperationsFailedPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (rate(kv_ops_failed{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval])))',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Top buckets by operations failed',
-  description: 'Rate of failed operations for the most problematic buckets.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'ops',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local topBucketsByHighPriorityRequestsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_high_pri_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}))',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Top buckets by high priority requests',
-  description: 'Rate of high priority requests processed by the KV engine for the top buckets.',
+  title: 'Top nodes by HTTP requests',
+  description: 'Rate of HTTP requests handled by the cluster manager for the top nodes.',
   fieldConfig: {
     defaults: {
       color: {
@@ -464,18 +171,18 @@ local topBucketsByHighPriorityRequestsPanel = {
   },
 };
 
-local bottomBucketsByCacheHitRatioPanel = {
+local topNodesByQueryServiceRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"})) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}), 1) + sum by(couchbase_cluster, job, instance, bucket) (index_cache_misses{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}))',
+      'topk(5, sum by(job, instance, couchbase_cluster) (rate(n1ql_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}[$__rate_interval])))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}}',
+      legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Bottom buckets by cache hit ratio',
-  description: 'Worst buckets by cache hit ratio.',
+  title: 'Top nodes by query service requests',
+  description: 'Rate of N1QL requests processed by the query service for the top nodes.',
   fieldConfig: {
     defaults: {
       color: {
@@ -512,7 +219,6 @@ local bottomBucketsByCacheHitRatioPanel = {
         },
       },
       mappings: [],
-      max: 1,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -526,7 +232,596 @@ local bottomBucketsByCacheHitRatioPanel = {
           },
         ],
       },
-      unit: 'percentunit',
+      unit: 'reqps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local topNodesByIndexAverageScanLatencyPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'topk(5, avg by(instance, couchbase_cluster, job) (index_avg_scan_latency{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}))',
+      datasource=promDatasource,
+      legendFormat='{{couchbase_cluster}} - {{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Top nodes by index average scan latency',
+  description: 'Average time to serve an index service scan request for the top nodes.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'ns',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local xdcrReplicationRatePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum by(couchbase_cluster, job) (rate(xdcr_data_replicated_bytes{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}[$__rate_interval]))',
+      datasource=promDatasource,
+      legendFormat='{{couchbase_cluster}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'XDCR replication rate',
+  description: 'Rate of replication through the Cross Data Center Replication feature.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'Bps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local xdcrDocsReceivedPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum by(job, couchbase_cluster) (rate(xdcr_docs_received_from_dcp_total{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}[$__rate_interval]))',
+      datasource=promDatasource,
+      legendFormat='{{couchbase_cluster}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'XDCR docs received',
+  description: 'The rate of mutations received by this cluster.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'mut/sec',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local localBackupSizePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum by(couchbase_cluster, job, instance) (backup_data_size{job=~"$job", couchbase_cluster=~"$couchbase_cluster"})',
+      datasource=promDatasource,
+      legendFormat='{{couchbase_cluster}} - {{instance}}',
+    ),
+  ],
+  type: 'bargauge',
+  title: 'Local backup size',
+  description: 'The size of the locally replicated data stored, per node.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        fixedColor: 'green',
+        mode: 'fixed',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'decbytes',
+    },
+    overrides: [],
+  },
+  options: {
+    displayMode: 'basic',
+    minVizHeight: 10,
+    minVizWidth: 0,
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    showUnfilled: true,
+    valueMode: 'color',
+  },
+  pluginVersion: '10.0.2-cloud.1.94a6f396',
+};
+
+local bucketsRow = {
+  datasource: promDatasource,
+  targets: [],
+  type: 'row',
+  title: 'Buckets',
+  collapsed: false,
+};
+
+local topBucketsByMemoryUsedPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'topk(5, sum by(bucket, couchbase_cluster, job) (kv_mem_used_bytes{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}))',
+      datasource=promDatasource,
+      legendFormat='{{couchbase_cluster}} - {{bucket}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Top buckets by memory used',
+  description: 'Memory used for the top buckets.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'decbytes',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local topBucketsByDiskUsedPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'topk(5, sum by(job, couchbase_cluster, bucket) (couch_docs_actual_disk_size{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}))',
+      datasource=promDatasource,
+      legendFormat='{{couchbase_cluster}} - {{bucket}}',
+    ),
+  ],
+  type: 'bargauge',
+  title: 'Top buckets by disk used',
+  description: 'Space on disk used for the top buckets.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        fixedColor: 'green',
+        mode: 'fixed',
+      },
+      mappings: [],
+      min: 1,
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'decbytes',
+    },
+    overrides: [],
+  },
+  options: {
+    displayMode: 'basic',
+    minVizHeight: 10,
+    minVizWidth: 0,
+    orientation: 'horizontal',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    showUnfilled: true,
+    valueMode: 'color',
+  },
+  pluginVersion: '10.0.2-cloud.1.94a6f396',
+};
+
+local topBucketsByOperationsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'topk(5, sum by(couchbase_cluster, job, bucket) (rate(kv_ops{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}[$__rate_interval])))',
+      datasource=promDatasource,
+      legendFormat='{{couchbase_cluster}} - {{bucket}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Top buckets by operations',
+  description: 'Rate of operations for the busiest buckets.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'ops',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local topBucketsByOperationsFailedPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'topk(5, sum by(couchbase_cluster, job, bucket) (rate(kv_ops_failed{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}[$__rate_interval])))',
+      datasource=promDatasource,
+      legendFormat='{{couchbase_cluster}} - {{bucket}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Top buckets by operations failed',
+  description: 'Rate of operations failed for the most problematic buckets.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 0,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'ops',
     },
     overrides: [],
   },
@@ -548,9 +843,9 @@ local topBucketsByVBucketsCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_vbuckets{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}))',
+      'topk(5, sum by(couchbase_cluster, job, bucket) (kv_num_vbuckets{job=~"$job", couchbase_cluster=~"$couchbase_cluster"}))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}}',
+      legendFormat='{{couchbase_cluster}} - {{bucket}}',
     ),
   ],
   type: 'bargauge',
@@ -598,90 +893,12 @@ local topBucketsByVBucketsCountPanel = {
   pluginVersion: '10.0.2-cloud.1.94a6f396',
 };
 
-local topBucketsByVBucketQueueMemoryPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_vb_queue_memory_bytes{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}))',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - {{bucket}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Top buckets by vBucket queue memory',
-  description: 'Memory occupied by the queue for a virtual bucket for the top buckets.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'decbytes',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
 
 {
   grafanaDashboards+:: {
-    'apache-couchbase-bucket-overview.json':
+    'apache-couchbase-cluster-overview.json':
       dashboard.new(
-        'Apache Couchbase bucket overview',
+        'Apache Couchbase cluster overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -708,7 +925,7 @@ local topBucketsByVBucketQueueMemoryPanel = {
           template.new(
             'job',
             promDatasource,
-            'label_values(kv_mem_used_bytes,job)',
+            'label_values(kv_num_vbuckets,job)',
             label='Job',
             refresh=2,
             includeAll=false,
@@ -719,30 +936,8 @@ local topBucketsByVBucketQueueMemoryPanel = {
           template.new(
             'couchbase_cluster',
             promDatasource,
-            'label_values(kv_mem_used_bytes,couchbase_cluster)',
+            'label_values(kv_num_vbuckets,couchbase_cluster)',
             label='Couchbase Cluster',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='',
-            sort=0
-          ),
-          template.new(
-            'instance',
-            promDatasource,
-            'label_values(kv_mem_used_bytes,instance)',
-            label='Instance',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='',
-            sort=0
-          ),
-          template.new(
-            'bucket',
-            promDatasource,
-            'label_values(kv_mem_used_bytes,bucket)',
-            label='Bucket',
             refresh=2,
             includeAll=true,
             multi=true,
@@ -753,15 +948,19 @@ local topBucketsByVBucketQueueMemoryPanel = {
       )
       .addPanels(
         [
-          topBucketsByMemoryUsedPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-          topBucketsByDiskUsedPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-          topBucketsByCurrentItemsPanel { gridPos: { h: 8, w: 8, x: 0, y: 8 } },
-          topBucketsByOperationsPanel { gridPos: { h: 8, w: 8, x: 8, y: 8 } },
-          topBucketsByOperationsFailedPanel { gridPos: { h: 8, w: 8, x: 16, y: 8 } },
-          topBucketsByHighPriorityRequestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          bottomBucketsByCacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-          topBucketsByVBucketsCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
-          topBucketsByVBucketQueueMemoryPanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
+          topNodesByMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+          topNodesByHTTPRequestsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+          topNodesByQueryServiceRequestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+          topNodesByIndexAverageScanLatencyPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+          xdcrReplicationRatePanel { gridPos: { h: 8, w: 8, x: 0, y: 16 } },
+          xdcrDocsReceivedPanel { gridPos: { h: 8, w: 8, x: 8, y: 16 } },
+          localBackupSizePanel { gridPos: { h: 8, w: 8, x: 16, y: 16 } },
+          bucketsRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
+          topBucketsByMemoryUsedPanel { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
+          topBucketsByDiskUsedPanel { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
+          topBucketsByOperationsPanel { gridPos: { h: 8, w: 8, x: 0, y: 33 } },
+          topBucketsByOperationsFailedPanel { gridPos: { h: 8, w: 8, x: 8, y: 33 } },
+          topBucketsByVBucketsCountPanel { gridPos: { h: 8, w: 8, x: 16, y: 33 } },
         ]
       ),
   },
