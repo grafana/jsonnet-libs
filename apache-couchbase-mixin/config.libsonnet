@@ -6,7 +6,7 @@
     dashboardRefresh: '1m',
 
     // alerts thresholds
-    alertsCriticalCPUUsage: 85, // %
+    alertsCriticalCPUUsage: 85,  // %
     alertsCriticalMemoryUsage: 85,  // %
     alertsWarningMemoryEvictionRate: 10,  // count
     alertsWarningInvalidRequestVolume: 1000,  // count

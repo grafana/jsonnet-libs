@@ -15,3 +15,5 @@ exclusions:
     reason: "Custom units are used for better user experience in these panels"
     entries:
       - panel: "XDCR docs received"
+      - panel: "Current connections"
+      - panel: "Top buckets by current items"
