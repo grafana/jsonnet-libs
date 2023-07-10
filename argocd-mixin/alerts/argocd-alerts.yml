@@ -7,8 +7,8 @@ groups:
           labels:                                               
             severity: warning
           annotations:                                          
-            summary: '{{ $labels.name }} is OutOfSync' 
-            description: '{{ $labels.name }} Application has sync status as {{ $labels.sync_status }}'
+            summary: 'Application is OutOfSync.' 
+            description: 'Application {{ $labels.name }} has sync status as {{ $labels.sync_status }}.'
         
         - alert: ArgoAppSyncFailed                              
           expr: argocd_app_sync_total{phase!="Succeeded"} == 1  
@@ -16,8 +16,8 @@ groups:
           labels:                                               
             severity: warning
           annotations:                                          
-            summary: '{{ $labels.name }} Sync Failed' 
-            description: '{{ $labels.name }} Application has sync phase as {{ $labels.phase }}'
+            summary: 'Application Sync Failed.' 
+            description: 'Application {{ $labels.name }} has sync phase as {{ $labels.phase }}.'
         
         - alert: ArgoAppMissing                                 
           expr: absent(argocd_app_info)                         
@@ -25,7 +25,7 @@ groups:
           labels:                                               
             severity: critical
           annotations:                                          
-            summary: "[ArgoCD] No reported applications"
+            summary: "No reported applications in ArgoCD."
             description: >
               ArgoCD has not reported any applications data for the past 15 minutes which
               means that it must be down or not functioning properly.  

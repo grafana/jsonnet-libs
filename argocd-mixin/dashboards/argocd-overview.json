@@ -3,10 +3,7 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": {
-          "type": "datasource",
-          "uid": "grafanacloud-prom"
-        },
+        "datasource": "-- Grafana --",
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -20,7 +17,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 14584,
   "graphTooltip": 1,
-  "id": 55,
+  "id": 73,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -45,7 +42,7 @@
         "content": "![argoimage](https://cncf-branding.netlify.app/img/projects/argo/stacked/color/argo-stacked-color.png)",
         "mode": "markdown"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -110,14 +107,14 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "time() - max(process_start_time_seconds{job=\"integrations/argocd/application-controller\"})",
+          "expr": "time() - max(process_start_time_seconds{job=\"integrations/argocd/application-controller\", cluster=~\"$cluster\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "range": true,
@@ -181,14 +178,14 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "count(count by (server) (argocd_cluster_info{job=\"integrations/argocd/application-controller\"}))",
+          "expr": "count(count by (server) (argocd_cluster_info{job=\"integrations/argocd/application-controller\", cluster=~\"$cluster\"}))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -201,6 +198,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Total number of repositories connected to ArgoCD",
@@ -251,13 +249,14 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "count(count by (repo) (argocd_app_info{namespace=~\"$namespace\"}))",
+          "editorMode": "code",
+          "expr": "count(count by (repo) (argocd_app_info{namespace=~\"$namespace\",cluster=~\"$cluster\"}))",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -321,7 +320,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "repeatDirection": "h",
       "targets": [
         {
@@ -329,7 +328,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(argocd_app_info{namespace=~\"$namespace\",cluster=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\"})",
+          "expr": "sum(argocd_app_info{namespace=~\"$namespace\",cluster=~\"$cluster\",health_status=~\"$health_status\",sync_status=~\"$sync_status\", cluster=~\"$cluster\"})",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -343,7 +342,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Total Number of Projects",
       "fieldConfig": {
@@ -390,15 +389,15 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "count(count by (project) (argocd_cluster_info{job=\"integrations/argocd/application-controller\"}))",
+          "expr": "count(count by (project) (argocd_cluster_info{job=\"integrations/argocd/application-controller\", cluster=~\"$cluster\"}))",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -461,7 +460,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -531,7 +530,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": false
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -600,7 +599,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -672,7 +671,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -693,7 +692,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "The k8s cluster current connection status",
       "fieldConfig": {
@@ -756,12 +755,12 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "argocd_cluster_connection_status{cluster=~\"$cluster\"}",
@@ -777,7 +776,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Cluster cache age in seconds",
       "fieldConfig": {
@@ -824,15 +823,15 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "argocd_cluster_cache_age_seconds",
+          "expr": "argocd_cluster_cache_age_seconds{job=\"integrations/argocd/application-controller\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -893,7 +892,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -964,7 +963,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -1010,7 +1009,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "ArgoCD applications status panel",
       "fieldConfig": {
@@ -1118,12 +1117,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": false,
@@ -1261,7 +1260,7 @@
           "reverse": false
         }
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -1284,7 +1283,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Number of kubectl executions",
       "fieldConfig": {
@@ -1327,8 +1326,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1363,7 +1361,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "idelta(argocd_kubectl_exec_total{cluster=~\"$cluster\"}[$__rate_interval])",
@@ -1396,8 +1394,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1429,7 +1426,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "10.0.1-cloud.3.f250259e",
+      "pluginVersion": "10.0.2-cloud.1.94a6f396",
       "targets": [
         {
           "datasource": {
@@ -1495,8 +1492,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1600,8 +1596,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1718,8 +1713,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1789,8 +1783,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1890,8 +1883,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1969,7 +1961,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Memory used by Repo Server",
       "fieldConfig": {
@@ -1983,8 +1975,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2038,7 +2029,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Goroutines used by Repo Server",
       "fieldConfig": {
@@ -2052,8 +2043,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2109,7 +2099,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Number of pending requests requiring repository lock",
       "fieldConfig": {
@@ -2152,8 +2142,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2188,7 +2177,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "argocd_repo_pending_request_total{cluster=~\"$cluster\"}",
@@ -2229,7 +2218,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Memory used by ArgoCD Server",
       "fieldConfig": {
@@ -2243,8 +2232,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2298,7 +2286,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Rate of completed RPCs",
       "fieldConfig": {
@@ -2341,8 +2329,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2377,7 +2364,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(rate(grpc_server_handled_total{job=\"integrations/argocd/argocd-server\"}[$__rate_interval])) by (grpc_code)",
@@ -2394,7 +2381,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Rate of gRPC stream messages sent by the server",
       "fieldConfig": {
@@ -2437,8 +2424,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2473,7 +2459,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(rate(grpc_server_msg_sent_total{job=\"integrations/argocd/argocd-server\"}[$__rate_interval])) by (grpc_service)",
@@ -2490,7 +2476,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "Goroutines by ArgoCD Server",
       "fieldConfig": {
@@ -2533,8 +2519,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2588,7 +2573,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$datasource"
       },
       "description": "GC Time Quantiles by ArgoCD Server",
       "fieldConfig": {
@@ -2631,8 +2616,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2700,6 +2684,7 @@
         },
         "hide": 0,
         "includeAll": false,
+        "label": "Data Source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -2927,6 +2912,6 @@
   "timezone": "",
   "title": "ArgoCD",
   "uid": "a74ac6d7-fe6a-4d83-a393-a5c32652714d",
-  "version": 8,
+  "version": 2,
   "weekStart": ""
 }
