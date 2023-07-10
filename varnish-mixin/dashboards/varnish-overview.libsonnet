@@ -13,6 +13,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
@@ -50,7 +51,7 @@ local cacheHitPassPanel = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -98,7 +99,7 @@ local sessionQueueLengthPanel = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -146,7 +147,7 @@ local poolsPanel = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -844,6 +845,7 @@ local backendLogsPanel = {
     wrapLogMessage: false,
   },
 };
+
 
 {
   grafanaDashboards+:: {

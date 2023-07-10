@@ -20,6 +20,9 @@ and the following alerts:
 
 The Varnish overview dashboard delivers a breakdown of metrics such as thread utilization, client and backend requests + connections, cache, network throughput, and client and backend log data, offering an in-depth perspective on connections and communication. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
 
+![First screenshot of the Varnish Cache overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/varnish-cache/screenshots/varnish_cache_overview_1.png)
+![Second screenshot of the Varnish Cache overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/varnish-cache/screenshots/varnish_cache_overview_2.png)
+
 In order to get logs, users must enable the `varnishncsa` process with the below commands after creating their varnish instance.
 
 ```bash
