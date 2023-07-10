@@ -986,7 +986,7 @@ local errorLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/opt/couchbase/var/lib/couchbase/logs/error\\.log", job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"} |= ``',
+      expr: '{filename=~"/opt/couchbase/var/lib/couchbase/logs/error\.log", job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -1012,7 +1012,7 @@ local couchbaseLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", filename=~"/opt/couchbase/var/lib/couchbase/logs/couchdb\\.log"} |= ``',
+      expr: '{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", filename=~"/opt/couchbase/var/lib/couchbase/logs/couchdb\.log"} |= ``',
       queryType: 'range',
       refId: 'A',
     },

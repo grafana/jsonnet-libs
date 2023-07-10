@@ -64,6 +64,19 @@ The Apache Bucket overview dashboard provides details on the top buckets based o
 - ApacheCouchbaseMemoryEvictionRate: There is a spike in evictions in a bucket, which indicates high memory pressure.
 - ApacheCouchbaseInvalidRequestVolume: There is a high volume of incoming invalid requests, which may indicate a DOS or injection attack.
 
+Default thresholds can be configured in `config.libsonnet`.
+
+```js
+{
+  _config+:: {
+    alertsCriticalCPUUsage: 85, // percent 0-100
+    alertsCriticalMemoryUsage: 85, // percent 0-100
+    alertsWarningMemoryEvictionRate: 10, // count
+    alertsWarningInvalidRequestVolume: 1000, // count
+  },
+}
+```
+
 ## Install tools
 
 ```bash
