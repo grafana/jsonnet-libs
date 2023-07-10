@@ -8,8 +8,8 @@ groups:
         labels:
           severity: critical
         annotations:
+          summary: 'Harbor Component is Down.'
           description: 'Harbor {{ $labels.component }} has been down for more than 5 minutes'
-          summary: 'Harbor {{ $labels.component }} is Down'
       - alert: HarborProjectQuataExceeded
         expr: |
           harbor_project_quota_usage_byte > harbor_project_quota_byte and on(harbor_project_quota_usage_byte) harbor_project_quota_byte != -1
@@ -17,5 +17,5 @@ groups:
         labels:
           severity: warning
         annotations:
-          description: '{{ $labels.project_name }} Harbor project has exceeded the configured disk usage quota for the past 15 minutes'
-          summary: '{{ $labels.project_name }} Harbor project exceeds disk usage quota'
+          summary: 'Harbor project exceeds disk usage quota.'
+          description: 'Harbor project {{ $labels.project_name }} has exceeded the configured disk usage quota for the past 15 minutes'
