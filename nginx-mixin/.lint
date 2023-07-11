@@ -1,0 +1,5 @@
+exclusions:
+  panel-units-rule:
+    reason: Units are undefined where panel description is clear, and the entity being graphed is not available in default set of available units.
+  panel-title-description-rule:
+    reason: All titles are present. Descriptions are absent only when title is sufficiently descriptive.
