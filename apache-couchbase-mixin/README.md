@@ -19,13 +19,16 @@ and the following alerts:
 
 The Apache Couchbase cluster overview dashboard provides details on the top nodes and buckets for a cluster, including memory and disk usage, network requests, key service metrics, rate of operations, along with replication metrics at all levels of a Couchbase cluster.
 
-![First screenshot of the Apache Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-Couchbase/screenshots/Couchbase_overview_1.png)
+![First screenshot of the Apache Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/cluster-overview-1.png)
+![Second screenshot of the Apache Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/cluster-overview-2.png)
 
 ## Apache Couchbase Node Overview
 
 The Apache Couchbase node overview dashboard provides details on memory usage, cpu usage, network request info (request methods and response codes), query service request info (volume, type, and processing time), index service performance (request volume, cache hit ratio, and scan latency), and both error and couchdb logs. The default Couchbase system log path is `/opt/couchbase/var/lib/couchbase/logs` on Linux, or `C:\Program\Files\Couchbase\Server\var\lib\couchbase\logs` on Windows.
 
-![First screenshot of the Apache Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-Couchbase/screenshots/Couchbase_nodes_1.png)
+![First screenshot of the Apache Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/node-overview-1.png)
+![Second screenshot of the Apache Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/node-overview-2.png)
+![Third screenshot of the Apache Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/node-overview-3.png)
 
 Couchbase system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -55,7 +58,8 @@ scrape_configs:
 
 The Apache Bucket overview dashboard provides details on the top buckets based on key resource usage, items, operations, operations failed, high priority requests, cache hit ratio, number of replica vBuckets, and vBucket queue memory usage.
 
-![First screenshot of the Apache Couchbase bucket overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-Couchbase/screenshots/Couchbase_overview_1.png)
+![First screenshot of the Apache Couchbase bucket overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/bucket-overview-1.png)
+![Second screenshot of the Apache Couchbase bucket overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/bucket-overview-2.png)
 
 ## Alerts Overview
 
