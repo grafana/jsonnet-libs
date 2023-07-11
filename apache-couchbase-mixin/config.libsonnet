@@ -1,7 +1,7 @@
 {
   _config+:: {
     dashboardTags: ['couchbase-mixin'],
-    dashboardPeriod: 'now-3h',
+    dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
 

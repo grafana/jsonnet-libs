@@ -53,8 +53,8 @@ scrape_configs:
       - targets: [localhost]
         labels:
           job: integrations/apache-couchdb
-          instance: "<your-instance-name>"
-          cluster: "<your-cluster-name>"
+          instance: '<your-instance-name>'
+          cluster: '<your-cluster-name>'
           __path__: /var/log/couchdb/couchdb.log
 ```
 
