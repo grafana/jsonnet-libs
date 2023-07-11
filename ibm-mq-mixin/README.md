@@ -1,39 +1,33 @@
-# Microsoft IIS Mixin
+# IBM MQ Mixin
 
-Microsoft IIS mixin is a set of configurable Grafana dashboards and alerts.
+IBM MQ mixin is a set of configurable Grafana dashboards and alerts.
 
-The Microsoft IIS mixin contains the following dashboards:
+The IBM MQ mixin contains the following dashboards:
 
-- Microsoft IIS overview
-- Microsoft IIS applications
+- IBM MQ cluster overview
+- IBM MQ queue overview
+- IBM MQ queue manager overview
+- IBM MQ topics overview
 
 and the following alerts:
 
-- MicrosoftIISHighNumberOfRejectedAsyncIORequests
-- MicrosoftIISHighNumberOf5xxRequestErrors
-- MicrosoftIISLowSuccessRateForWebsocketConnections
-- MicrosoftIISThreadpoolUtilizationNearingMax
-- MicrosoftIISHighNumberOfWorkerProcessFailures
+- IBMMQStaleMessages
+- IBMMQStaleMessages
+- IBMMQLowDiskSpace
+- IBMMQHighQueueManagerCpuUsage
 
-Default thresholds can be configured in `config,libsonnet`
+## IBM MQ cluster overview
 
-```js
-{
-  _config+:: {
-    alertsWarningHighRejectedAsyncIORequests: 20        // requests
-    alertsCriticalHigh5xxRequests: 5,                   // # of 500 level requests
-    alertsCriticalLowWebsocketConnectionSuccessRate: 80,// %
-    alertsCriticalHighThreadPoolUtilization: 90,        // %
-    alertsWarningHighWorkerProcessFailures: 10,         // failures
-  },
-}
-```
+The IBM MQ cluster overview dashboard provides details on the number and status of clusters, queue managers, queues, and topics within and IBM MQ cluster. This also includes information about the amount of time it takes for a messsage to get through a transmission queue.
 
-## Microsoft IIS overview
+# screenshots
+![]()
 
-The Microsoft IIS overview dashboard provides details on traffic, connections, files sent/received, and access logs. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. Microsoft IIS access logs can be found via this glob `C:\inetpub\logs\LogFiles\W3SVC*\u_ex*.txt`. There will typically be a folder `W3SVC[siteID]` for each site. Under that folder there will be a number of log files corresponding to each date (Example: u_ex230313.txt).
+## IBM MQ queue manager overview
 
-Microsoft IIS logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+The IBM MQ queue manager dashboard provides details on the different queue managers within a cluster. This includes memory usage, active connections, the numbers of queues controlled, current status, published and expired messages, and queue operations. Lastly, queue manager dashboard provides a look at IBM MQ error logs. IBM MQ error logs can be found via this glob `/var/mqm/log/<qmgr>/errors/*.log` on Linux or ` C:\Program Files\IBM\MQ\qmgrs\**\errors\*.(log|LOG)` on Windows. There will typically be a folder for each queue manager. Under that folder there will hold all the error logs for a specific queue manager (Example: `/var/mqm/log/LONDON/errors/*.log`).
+
+IBM MQ logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -42,26 +36,63 @@ Microsoft IIS logs are enabled by default in the `config.libsonnet` and can be r
   },
 }
 ```
+
+In order for the selectors to properly work for error logs ingested into your logs datasource, please also include the matching `job` and `instance` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics. In order to add a `qmgr` label to filter logs in a dashboard, be sure to include the `pipeline_stages` section from the snippet below.
+
+```yaml
+- job_name: integrations/ibm_mq
+      static_configs:
+        - targets:
+            - localhost
+          labels:
+            job: integrations/ibm_mq
+            instance: <your-instance>
+            __path__: /var/mqm/qmgrs/*/errors/*.LOG
+      pipeline_stages:
+      - match:
+          selector: '{job="integrations/ibm_mq",instance="<your-instance>"}'
+          stages:
+          - regex:
+              source: filename
+              expression: "/var/mqm/qmgrs/(?P<qmgr>.*?)/errors/.*\\.LOG"
+          - labels:
+              qmgr:
+      - multiline:
+          firstline: '^\s*\d{2}\/\d{2}\/\d{2}\s+\d{2}:\d{2}:\d{2}\s*-'
+```
 # screenshots
-![Screenshot1 of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/overview-1.png)
-![Screenshot2 of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/overview-2.png)
-![Screenshot3 of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/overview-3.png)
+![]()
+## IBM MQ queue overview
 
-## Microsoft IIS applications
-
-The Microsoft IIS applications dashboard provides details on worker requests, websocket connections, thread utilization, and worker process failures. 
+The IBM MQ queue overview dashboard provides details on queue depth, average queue time, expired queue messages, operations, and operations throughput. 
 
 # screenshots
-![Screenshot1 of the applications dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/application-1.png)
-![Screenshot2 of the applications dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/application-2.png)
-![Screenshot3 of the applications dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/iis/screenshots/application-3.png)
+![]()
+## IBM MQ topics overview
+
+The IBM MQ topics overview dashboard provides details on topic subscribers, topic publishers, time since last message, and subscription status.
+
+# screenshots
+![]()
 ## Alerts overview
 
-MicrosoftIISHighNumberOfRejectedAsyncIORequests: There are a high number of rejected async I/O requests for a site.
-MicrosoftIISHighNumberOf5xxRequestErrors: There are a high number of 5xx request errors for an application.
-MicrosoftIISLowSuccessRateForWebsocketConnections: There is a low success rate for websocket connections for an application.
-MicrosoftIISThreadpoolUtilizationNearingMax: The thread pool utilization is nearing max capacity.
-MicrosoftIISHighNumberOfWorkerProcessFailures: There are a high number of worker process failures for an application.
+IBMMQStaleMessages: There are expired messages, which imply that application resilience is failing.
+IBMMQStaleMessages: Stale messages have been detected.
+IBMMQLowDiskSpace: There is limited disk available for a queue manager.
+IBMMQHighQueueManagerCpuUsage: There is a high cpu usage estimate for a queue manager.
+
+Default thresholds can be configured in `config,libsonnet`
+
+```js
+{
+  _config+:: {
+    alertsExpiredMessages: 2,  //count
+    alertsStaleMessagesSeconds: 300,  //seconds
+    alertsLowDiskSpace: 5,  //percentage: 0-100
+    alertsHighQueueManagerCpuUsage: 85,  //percentage: 0-100
+  },
+}
+```
 
 ## Install Tools
 

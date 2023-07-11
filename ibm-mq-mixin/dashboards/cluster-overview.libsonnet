@@ -16,7 +16,7 @@ local clustersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_qmgr_commit_count) by (mq_cluster))',
+      'count(count(ibmmq_qmgr_commit_count{job=~"$job"}) by (mq_cluster))',
       datasource=promDatasource,
       legendFormat='{{job}} - {{mq_cluster}}',
     ),
@@ -67,7 +67,7 @@ local queueManagersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_qmgr_commit_count) by (qmgr, mq_cluster))',
+      'count(count(ibmmq_qmgr_commit_count{job=~"$job"}) by (qmgr, mq_cluster))',
       datasource=promDatasource,
     ),
   ],
@@ -219,7 +219,7 @@ local topicsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_topic_messages_received) by (topic, mq_cluster))',
+      'count(count(ibmmq_topic_messages_received{job=~"$job"}) by (topic, mq_cluster))',
       datasource=promDatasource,
       legendFormat='{{job}} - {{mq_cluster}}',
     ),
@@ -270,7 +270,7 @@ local queuesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_queue_depth) by (queue, mq_cluster))',
+      'count(count(ibmmq_queue_depth{job=~"$job"}) by (queue, mq_cluster))',
       datasource=promDatasource,
       legendFormat='',
     ),
@@ -321,7 +321,7 @@ local clusterStatusPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_cluster_suspend{mq_cluster=~"$mq_cluster"}',
+      'ibmmq_cluster_suspend{mq_cluster=~"$mq_cluster", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='{{job}} - {{mq_cluster}}',
     ),
@@ -427,7 +427,7 @@ local queueManagerStatusPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_status{mq_cluster=~"$mq_cluster"}',
+      'ibmmq_qmgr_status{mq_cluster=~"$mq_cluster", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='',
     ),

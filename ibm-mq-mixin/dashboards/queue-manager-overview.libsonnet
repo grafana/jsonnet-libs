@@ -121,7 +121,7 @@ local queuesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_queue_depth) by (queue, mq_cluster, qmgr))',
+      'count(count(ibmmq_queue_depth{job=~"$job"}) by (queue, mq_cluster, qmgr))',
       datasource=promDatasource,
     ),
   ],
@@ -361,7 +361,41 @@ local queueManagerStatusPanel = {
         filterable: false,
         inspect: false,
       },
-      mappings: [],
+      mappings: [
+        {
+          options: {
+            '-1': {
+              index: 0,
+              text: 'N/A',
+            },
+            '0': {
+              index: 1,
+              text: 'Stopped',
+            },
+            '1': {
+              index: 2,
+              text: 'Starting',
+            },
+            '2': {
+              index: 3,
+              text: 'Running',
+            },
+            '3': {
+              index: 4,
+              text: 'Quiescing',
+            },
+            '4': {
+              index: 5,
+              text: 'Stopping',
+            },
+            '5': {
+              index: 6,
+              text: 'Standby',
+            },
+          },
+          type: 'value',
+        },
+      ],
       thresholds: {
         mode: 'absolute',
         steps: [

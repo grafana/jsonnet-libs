@@ -7,6 +7,10 @@ exclusions:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-instance-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  target-instance-rule:
+    reason: "The dashboards use a mix of 'cluster', 'queue manager', and 'queue' labels as selectors, rather than 'instance'"
+  template-label-promql-rule:
+    reason: "The dashboards use a variable that which excludes certain label values, this is inline with the regex needed to exclude such values."
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
@@ -20,3 +24,11 @@ exclusions:
     - panel: "Topic subscribers"
     - panel: "Topic publishers"
     - panel: "Subscription messages received"
+    - panel: "Active listeners"
+    - panel: "Active connections"
+    - panel: "Published messages"
+    - panel: "Commits"
+    - panel: "Expired messages"
+    - panel: "Queue operations"
+    - panel: "Operations"
+    - panel: "Depth"
