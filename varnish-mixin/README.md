@@ -18,7 +18,7 @@ and the following alerts:
 
 ## Varnish Cache overview
 
-The Varnish overview dashboard delivers a breakdown of metrics such as thread utilization, client and backend requests + connections, cache, network throughput, and client and backend log data, offering an in-depth perspective on connections and communication. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
+The Varnish overview dashboard delivers a breakdown of metrics such as thread utilization, client and backend requests, connections, cache, network throughput, and client and backend log data, offering an in-depth perspective on connections and communication. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
 
 ![First screenshot of the Varnish Cache overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/varnish-cache/screenshots/varnish_cache_overview_1.png)
 ![Second screenshot of the Varnish Cache overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/varnish-cache/screenshots/varnish_cache_overview_2.png)
@@ -37,13 +37,11 @@ sudo varnishncsa -F '{"Timestamp": "%t", "Varnish-Side": "%{Varnish:side}x", "Ag
 sudo varnishncsa -b -F '{"Timestamp": "%t", "Varnish-Side": "%{Varnish:side}x", "Handling": "%{Varnish:handling}x", "Request": "%r", "Status": "%s", "Response-Reason": "%{VSL:RespReason}x", "Fetch-Error": "%{VSL:FetchError}x", "Bytes": "%b", "Time-To-Serve": %D}' -D -w /var/log/varnish/varnishncsa-backend.log
 ```
 
-The above two commmands provide client and backend logs. Note the
+The above two commmands provide client and backend logs. Note the portion below which specifies where the logs are written and to daemonize the process.
 
 ```bash
 -D -w /var/log/varnish/
 ```
-
-This portion specifies where the logs are written and to daemonize the process.
 
 ```yaml
 scrape_configs:

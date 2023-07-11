@@ -13,7 +13,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
@@ -845,7 +844,6 @@ local backendLogsPanel = {
     wrapLogMessage: false,
   },
 };
-
 
 {
   grafanaDashboards+:: {
