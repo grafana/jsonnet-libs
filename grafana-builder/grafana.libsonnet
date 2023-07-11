@@ -13,7 +13,7 @@
       rows+: [row { panels: panels }],
     },
 
-    addTemplate(name, metric_name, label_name, hide=0, allValue=null, includeAll=false):: self {
+    addTemplate(name, metric_name, label_name, hide=0, allValue=null, includeAll=false, sort=2):: self {
       templating+: {
         list+: [{
           allValue: allValue,
@@ -31,7 +31,7 @@
           query: 'label_values(%s, %s)' % [metric_name, label_name],
           refresh: 1,
           regex: '',
-          sort: 2,
+          sort: sort,
           tagValuesQuery: '',
           tags: [],
           tagsQuery: '',
@@ -41,7 +41,7 @@
       },
     },
 
-    addMultiTemplate(name, metric_name, label_name, hide=0, allValue='.+'):: self {
+    addMultiTemplate(name, metric_name, label_name, hide=0, allValue='.+', sort=2):: self {
       templating+: {
         list+: [{
           allValue: allValue,
@@ -60,7 +60,7 @@
           query: 'label_values(%s, %s)' % [metric_name, label_name],
           refresh: 1,
           regex: '',
-          sort: 2,
+          sort: sort,
           tagValuesQuery: '',
           tags: [],
           tagsQuery: '',
