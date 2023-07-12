@@ -622,6 +622,7 @@ local queryServiceRequestsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -720,6 +721,7 @@ local queryServiceRequestProcessingTimePanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -798,6 +800,7 @@ local indexServiceRequestsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -877,6 +880,7 @@ local indexCacheHitRatioPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -955,6 +959,7 @@ local averageScanLatencyPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -986,7 +991,7 @@ local errorLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/opt/couchbase/var/lib/couchbase/logs/error.log", job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"} |= ``',
+      expr: '{filename=~"/opt/couchbase/var/lib/couchbase/logs/error\\.log", job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}',
       queryType: 'range',
       refId: 'A',
     },
@@ -1012,7 +1017,7 @@ local couchbaseLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", filename=~"/opt/couchbase/var/lib/couchbase/logs/couchdb.log"} |= ``',
+      expr: '{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", filename=~"/opt/couchbase/var/lib/couchbase/logs/couchdb\\.log"} != `---`',
       queryType: 'range',
       refId: 'A',
     },
@@ -1045,13 +1050,7 @@ local couchbaseLogsPanel = {
         description='',
         uid=dashboardUid,
       )
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Other Apache Couchbase dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
+
       .addTemplates(
         std.flattenArrays([
           [
@@ -1088,7 +1087,7 @@ local couchbaseLogsPanel = {
               'couchbase_cluster',
               promDatasource,
               'label_values(sys_mem_actual_used,couchbase_cluster)',
-              label='Couchbase Cluster',
+              label='Couchbase cluster',
               refresh=2,
               includeAll=true,
               multi=true,
