@@ -10,6 +10,7 @@
     alertsStaleMessagesSeconds: 300,  //seconds
     alertsLowDiskSpace: 5,  //percentage: 0-100
     alertsHighQueueManagerCpuUsage: 85,  //percentage: 0-100
+
     enableLokiLogs: true,
   },
 }

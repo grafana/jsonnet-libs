@@ -1,4 +1,3 @@
-local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
@@ -329,6 +328,7 @@ local operationsPanel = {
           },
         ],
       },
+      unit: 'operations',
     },
     overrides: [],
   },
@@ -498,6 +498,13 @@ local operationThroughputPanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other IBM MQ dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           averageQueueTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },

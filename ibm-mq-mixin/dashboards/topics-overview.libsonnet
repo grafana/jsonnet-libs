@@ -1,4 +1,3 @@
-local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
@@ -581,7 +580,7 @@ local subscriptionStatusPanel = {
           template.new(
             'topic',
             promDatasource,
-            'label_values(ibmmq_topic_subscriber_count{qmgr=~"$qmgr",topic!~"SYSTEM.*|\\$SYS.*|"},topic)',
+            'label_values(ibmmq_topic_subscriber_count{qmgr=~"$qmgr",topic!~"SYSTEM.*|\\\\$SYS.*|"},topic)',
             label='Topic',
             refresh=1,
             includeAll=true,
@@ -602,6 +601,13 @@ local subscriptionStatusPanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other IBM MQ dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           topicsRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },

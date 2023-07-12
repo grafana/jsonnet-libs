@@ -1,4 +1,3 @@
-local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
@@ -979,6 +978,7 @@ local queueOperationsPanel = {
           },
         ],
       },
+      unit: 'operations',
     },
     overrides: [],
   },
@@ -1256,6 +1256,13 @@ local errorLogsPanel = {
           ],
         ])
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other IBM MQ dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         std.flattenArrays([
           [
