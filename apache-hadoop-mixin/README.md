@@ -86,17 +86,14 @@ ApacheHadoopHighNodeManagerMemoryUsage - A NodeManager has a higher memory utili
 ApacheHadoopHighResourceManagerVirtualCoreCPUUsage - A ResourceManager has a virtual core CPU usage higher than the configured threshold.
 ApacheHadoopHighResourceManagerMemoryUsage - A ResourceManager has a higher memory utilization than the configured threshold.
 
-## Install tools
+## Install Tools
+
+For linting and formatting, you would also need `mixtool` and `jsonnetfmt` installed. If you
+have a working Go development environment, it's easiest to run the following:
 
 ```bash
 go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
 go install github.com/monitoring-mixins/mixtool/cmd/mixtool@latest
-```
-
-For linting and formatting, you would also need `jsonnetfmt` installed. If you
-have a working Go development environment, it's easiest to run the following:
-
-```bash
 go install github.com/google/go-jsonnet/cmd/jsonnetfmt@latest
 ```
 
@@ -105,7 +102,7 @@ into your Grafana server. The exact details will be depending on your environmen
 
 `prometheus_alerts.yaml` needs to be imported into Prometheus.
 
-## Generate dashboards and alerts
+# Generate Dashboards And Alerts
 
 Edit `config.libsonnet` if required and then build JSON dashboard files for Grafana:
 
