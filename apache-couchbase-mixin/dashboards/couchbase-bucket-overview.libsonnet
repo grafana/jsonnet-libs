@@ -702,7 +702,7 @@ local topBucketsByVBucketQueueMemoryPanel = {
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Data source',
             refresh='load'
           ),
           template.new(
@@ -720,7 +720,7 @@ local topBucketsByVBucketQueueMemoryPanel = {
             'couchbase_cluster',
             promDatasource,
             'label_values(kv_mem_used_bytes,couchbase_cluster)',
-            label='Couchbase Cluster',
+            label='Couchbase cluster',
             refresh=2,
             includeAll=true,
             multi=true,
