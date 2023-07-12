@@ -1545,8 +1545,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1613,8 +1612,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1681,8 +1679,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1749,8 +1746,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1930,6 +1926,6 @@
   "timezone": "",
   "title": "Velero",
   "uid": "f26f8304-ebe7-4b5f-bb36-fe9dd4e5081e",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
