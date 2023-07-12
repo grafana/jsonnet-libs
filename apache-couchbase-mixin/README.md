@@ -21,6 +21,7 @@ The Apache Couchbase cluster overview dashboard provides details on the top node
 
 ![First screenshot of the Apache Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/cluster-overview-1.png)
 ![Second screenshot of the Apache Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/cluster-overview-2.png)
+![Third screenshot of the Apache Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-couchbase/screenshots/cluster-overview-3.png)
 
 ## Apache Couchbase Node Overview
 
@@ -52,6 +53,9 @@ scrape_configs:
           instance: "<your-instance-name>"
           cluster: "<your-cluster-name>"
           __path__: /opt/couchbase/var/lib/couchbase/logs/*.log
+    pipeline_stages:
+      - multiline:
+          firstline: '\[(ns_server|couchdb):(error|info),.*\]'
 ```
 
 ## Apache Couchbase Bucket Overview
