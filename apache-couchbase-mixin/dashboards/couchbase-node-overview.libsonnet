@@ -1048,13 +1048,7 @@ local couchbaseLogsPanel = {
         description='',
         uid=dashboardUid,
       )
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Other Apache Couchbase dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
+
       .addTemplates(
         std.flattenArrays([
           [
