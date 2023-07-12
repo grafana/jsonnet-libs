@@ -19,3 +19,11 @@ groups:
         annotations:
           summary: 'Harbor project exceeds disk usage quota.'
           description: 'Harbor project {{ $labels.project_name }} has exceeded the configured disk usage quota for the past 15 minutes'
+      - alert: HarborHighErrorRate
+        expr: sum(rate(harbor_core_http_request_total{code=~"4..|5.."}[5m]))/sum(rate(harbor_core_http_request_total[5m])) > 0.15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Harbor high error rate.
+          description: HTTP Requests of {{ $labels.instance }} are having a high Error rate

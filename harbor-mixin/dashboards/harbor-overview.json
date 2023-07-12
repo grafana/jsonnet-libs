@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 75,
+  "id": 83,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -57,6 +57,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "Current status of Harbor components",
@@ -131,7 +132,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "harbor_up{job=\"integrations/harbor/exporter\"}",
+          "expr": "harbor_up{job=~\"$job\", cluster=~\"$cluster\"}",
           "format": "time_series",
           "instant": false,
           "legendFormat": "{{component}}",
@@ -228,7 +229,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "max(harbor_system_info{job=\"integrations/harbor/exporter\"}) by (harbor_version)",
+          "expr": "max(harbor_system_info{job=~\"$job\", cluster=~\"$cluster\"}) by (harbor_version)",
           "format": "table",
           "legendFormat": "",
           "range": true,
@@ -312,7 +313,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(harbor_project_total{job=\"integrations/harbor/exporter\"})",
+          "expr": "sum(harbor_project_total{job=~\"$job\", cluster=~\"$cluster\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -380,7 +381,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(harbor_project_artifact_total{job=\"integrations/harbor/exporter\",artifact_type=\"IMAGE\"})",
+          "expr": "sum(harbor_project_artifact_total{job=~\"$job\", artifact_type=\"IMAGE\", cluster=~\"$cluster\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -448,7 +449,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(harbor_project_artifact_total{job=\"integrations/harbor/exporter\",artifact_type=\"CHART\"})",
+          "expr": "sum(harbor_project_artifact_total{job=~\"$job\", artifact_type=\"CHART\", cluster=~\"$cluster\"})",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -515,7 +516,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_artifact_pulled{job=\"integrations/harbor/exporter\",project_name=~\"$Project\"}",
+          "expr": "harbor_artifact_pulled{job=~\"$job\", project_name=~\"$Project\", cluster=~\"$cluster\"}",
           "legendFormat": "{{project_name}}",
           "range": true,
           "refId": "A"
@@ -624,7 +625,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "rate(harbor_core_http_request_total{job=\"integrations/harbor/core\"}[$__rate_interval])",
+          "expr": "rate(harbor_core_http_request_total{job=~\"$job\", cluster=~\"$cluster\"}[$__rate_interval])",
           "legendFormat": "{{operation}}",
           "range": true,
           "refId": "A"
@@ -719,7 +720,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_core_http_inflight_requests{job=\"integrations/harbor/core\"}",
+          "expr": "harbor_core_http_inflight_requests{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "In-flight",
           "range": true,
           "refId": "A"
@@ -815,7 +816,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(harbor_core_http_request_duration_seconds{job=\"integrations/harbor/core\"}  >0) by (quantile)",
+          "expr": "max(harbor_core_http_request_duration_seconds{job=~\"$job\", cluster=~\"$cluster\"}  >0) by (quantile)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -901,7 +902,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_project_quota_usage_byte{job=\"integrations/harbor/exporter\", project_name=~\"$Project\"}/ harbor_project_quota_byte{job=\"integrations/harbor/exporter\", project_name=~\"$Project\"} ",
+          "expr": "harbor_project_quota_usage_byte{job=~\"$job\", cluster=~\"$cluster\", project_name=~\"$Project\"}/ harbor_project_quota_byte{job=~\"$job\", project_name=~\"$Project\"} ",
           "legendFormat": "{{project_name}}",
           "range": true,
           "refId": "A"
@@ -969,7 +970,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_project_member_total{job=\"integrations/harbor/exporter\", project_name=~\"$Project\"}",
+          "expr": "harbor_project_member_total{job=~\"$job\", project_name=~\"$Project\", cluster=~\"$cluster\"}",
           "format": "time_series",
           "legendFormat": "{{project_name}}",
           "range": true,
@@ -1030,7 +1031,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "harbor_project_artifact_total{job=\"integrations/harbor/exporter\",project_name=~\"$Project\"}",
+          "expr": "harbor_project_artifact_total{job=~\"$job\",project_name=~\"$Project\", cluster=~\"$cluster\"}",
           "format": "time_series",
           "instant": false,
           "legendFormat": "__auto",
@@ -1110,7 +1111,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_project_repo_total{job=\"integrations/harbor/exporter\",project_name=~\"$Project\"}",
+          "expr": "harbor_project_repo_total{job=~\"$job\",project_name=~\"$Project\", cluster=~\"$cluster\"}",
           "legendFormat": "{{project_name}}",
           "range": true,
           "refId": "A"
@@ -1218,7 +1219,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(registry_http_requests_total{code=~\"4..|5..\",job=\"integrations/harbor/registry\"}[$__rate_interval]))",
+          "expr": "sum(rate(registry_http_requests_total{code=~\"4..|5..\",job=~\"$job\", cluster=~\"$cluster\"}[$__rate_interval]))",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1313,7 +1314,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "registry_storage_action_seconds_bucket{job=\"integrations/harbor/registry\"}",
+          "expr": "registry_storage_action_seconds_bucket{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "{{action}}",
           "range": true,
           "refId": "A"
@@ -1409,7 +1410,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "registry_http_request_size_bytes_bucket{job=\"integrations/harbor/registry\"}",
+          "expr": "registry_http_request_size_bytes_bucket{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1504,7 +1505,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "registry_http_response_size_bytes_bucket{job=\"integrations/harbor/registry\"}",
+          "expr": "registry_http_response_size_bytes_bucket{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1599,7 +1600,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "registry_http_request_duration_seconds_bucket{job=\"integrations/harbor/registry\"}",
+          "expr": "registry_http_request_duration_seconds_bucket{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1671,7 +1672,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "registry_http_in_flight_requests{job=\"integrations/harbor/registry\"}",
+          "expr": "registry_http_in_flight_requests{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "{{handler}}",
           "range": true,
           "refId": "A"
@@ -1759,7 +1760,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_jobservice_info{job=\"integrations/harbor/jobservice\"}",
+          "expr": "harbor_jobservice_info{job=~\"$job\", cluster=~\"$cluster\"}",
           "format": "table",
           "legendFormat": "__auto",
           "range": true,
@@ -1874,7 +1875,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_jobservice_task_total{job=\"integrations/harbor/jobservice\"}",
+          "expr": "harbor_jobservice_task_total{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
@@ -1956,7 +1957,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_jobservice_task_process_time_seconds{quantile=\"0.9\"}",
+          "expr": "harbor_jobservice_task_process_time_seconds{job=~\"$job\", quantile=\"0.9\", cluster=~\"$cluster\"}",
           "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
@@ -2065,7 +2066,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_task_queue_size{job=\"integrations/harbor/exporter\"}",
+          "expr": "harbor_task_queue_size{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
@@ -2160,7 +2161,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_task_queue_latency{job=\"integrations/harbor/exporter\"}",
+          "expr": "harbor_task_queue_latency{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
@@ -2255,7 +2256,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_task_concurrency{job=\"integrations/harbor/exporter\"}",
+          "expr": "harbor_task_concurrency{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "{{type}}",
           "range": true,
           "refId": "A"
@@ -2350,7 +2351,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_task_scheduled_total{job=\"integrations/harbor/exporter\"}",
+          "expr": "harbor_task_scheduled_total{job=~\"$job\", cluster=~\"$cluster\"}",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -2413,6 +2414,61 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "integrations/harbor",
+          "value": "integrations/harbor"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(job)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "job",
+        "multi": true,
+        "allValue": ".+",
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(job)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "staging",
+          "value": "staging"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "$datasource"
+        },
+        "definition": "label_values(cluster)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "cluster",
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(cluster)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -2422,8 +2478,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Harbor2",
-  "uid": "aeeaeced-0227-4425-9ecf-fa6231cc435ab",
+  "title": "Harbor",
+  "uid": "aeeaeced-0227-4425-9ecf-fa6231cc435a",
   "version": 1,
   "weekStart": ""
 }
