@@ -1,0 +1,3 @@
+exclusions:
+  panel-units-rule:
+    reason: Panel units are self descriptive
