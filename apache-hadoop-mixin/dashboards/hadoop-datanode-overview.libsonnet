@@ -299,7 +299,13 @@ local datanodeLogsPanel = {
         description='',
         uid=dashboardUid,
       )
-
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache Hadoop dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addTemplates(
         std.flattenArrays([
           [
