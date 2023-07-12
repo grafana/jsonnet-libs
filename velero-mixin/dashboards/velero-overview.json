@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 79,
+  "id": 87,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -128,7 +128,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_total{job=~\"$job\"}",
+          "expr": "velero_backup_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -196,7 +196,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_attempt_total{job=~\"$job\"}",
+          "expr": "velero_backup_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -264,7 +264,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_success_total{job=~\"$job\"}",
+          "expr": "velero_backup_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -332,7 +332,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_failure_total{job=~\"$job\"}",
+          "expr": "velero_backup_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -400,7 +400,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_deletion_attempt_total{job=~\"$job\"}",
+          "expr": "velero_backup_deletion_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -468,7 +468,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_deletion_success_total{job=~\"$job\"}",
+          "expr": "velero_backup_deletion_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -536,7 +536,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_deletion_failure_total{job=~\"$job\"}",
+          "expr": "velero_backup_deletion_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -620,7 +620,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "up{job=~\"$job\"}",
+          "expr": "up{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "legendFormat": "__auto",
           "range": true,
@@ -689,7 +689,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_items_total{job=~\"$job\"}",
+          "expr": "velero_backup_items_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -757,7 +757,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_volume_snapshot_attempt_total{job=~\"$job\"}",
+          "expr": "velero_volume_snapshot_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -825,7 +825,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_volume_snapshot_success_total{job=~\"$job\"}",
+          "expr": "velero_volume_snapshot_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -893,7 +893,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_volume_snapshot_failure_total{job=~\"$job\"}",
+          "expr": "velero_volume_snapshot_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -988,7 +988,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "velero_backup_last_status{job=~\"$job\"}",
+          "expr": "velero_backup_last_status{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "format": "time_series",
           "instant": false,
           "legendFormat": "Status",
@@ -1058,7 +1058,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_csi_snapshot_attempt_total{job=~\"$job\"}",
+          "expr": "velero_csi_snapshot_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -1126,7 +1126,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_csi_snapshot_success_total{job=~\"$job\"}",
+          "expr": "velero_csi_snapshot_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -1194,7 +1194,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_csi_snapshot_failure_total{job=~\"$job\"}",
+          "expr": "velero_csi_snapshot_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -1298,7 +1298,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(velero_backup_success_total{job=~\"$job\"}[1h]))",
+          "expr": "sum(increase(velero_backup_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}[1h]))",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1311,7 +1311,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(velero_backup_failure_total{job=~\"$job\"}[1h]))",
+          "expr": "sum(increase(velero_backup_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}[1h]))",
           "hide": false,
           "legendFormat": "Backup failure",
           "range": true,
@@ -1323,7 +1323,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(velero_backup_partial_failure_total{job=~\"$job\"}[1h]))",
+          "expr": "sum(increase(velero_backup_partial_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}[1h]))",
           "legendFormat": "Backup partial failure",
           "range": true,
           "refId": "C"
@@ -1334,7 +1334,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(velero_backup_deletion_success_total{job=~\"$job\"}[1h]))",
+          "expr": "sum(increase(velero_backup_deletion_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}[1h]))",
           "legendFormat": "Backup deletion success",
           "range": true,
           "refId": "D"
@@ -1345,7 +1345,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(increase(velero_backup_deletion_failure_total{job=~\"$job\"}[1h]))",
+          "expr": "sum(increase(velero_backup_deletion_failure_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}[1h]))",
           "legendFormat": "Backup deletion failure",
           "range": true,
           "refId": "E"
@@ -1439,7 +1439,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "backup_duration_seconds{job=~\"$job\"}",
+          "expr": "backup_duration_seconds{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -1508,7 +1508,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg_over_time(velero_backup_tarball_size_bytes{job=~\"$job\"}[15m])",
+          "expr": "avg_over_time(velero_backup_tarball_size_bytes{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}[15m])",
           "legendFormat": "{{schedule}}",
           "range": true,
           "refId": "A"
@@ -1519,7 +1519,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "avg_over_time(velero_backup_tarball_size_bytes{job=~\"$job\"}[15m])",
+          "expr": "avg_over_time(velero_backup_tarball_size_bytes{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}[15m])",
           "hide": false,
           "legendFormat": "Non Scheduled",
           "range": true,
@@ -1599,7 +1599,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_restore_total{job=~\"$job\"}",
+          "expr": "velero_restore_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -1666,7 +1666,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_restore_attempt_total{job=~\"$job\"}",
+          "expr": "velero_restore_attempt_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -1733,7 +1733,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_restore_success_total{job=~\"$job\"}",
+          "expr": "velero_restore_success_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -1800,7 +1800,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_restore_failed_total{job=~\"$job\"}",
+          "expr": "velero_restore_failed_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -1839,10 +1839,15 @@
         "type": "datasource"
       },
       {
+        "allValue": ".+",
         "current": {
-          "selected": false,
-          "text": "integrations/velero",
-          "value": "integrations/velero"
+          "selected": true,
+          "text": [
+            "integrations/velero"
+          ],
+          "value": [
+            "integrations/velero"
+          ]
         },
         "datasource": {
           "type": "prometheus",
@@ -1866,10 +1871,15 @@
         "type": "query"
       },
       {
+        "allValue": ".+",
         "current": {
-          "selected": false,
-          "text": "velero.default.svc.cluster.local:8085",
-          "value": "velero.default.svc.cluster.local:8085"
+          "selected": true,
+          "text": [
+            "velero.default.svc.cluster.local:8085"
+          ],
+          "value": [
+            "velero.default.svc.cluster.local:8085"
+          ]
         },
         "datasource": {
           "type": "prometheus",
@@ -1929,6 +1939,6 @@
   "timezone": "",
   "title": "Velero",
   "uid": "f26f8304-ebe7-4b5f-bb36-fe9dd4e5081e",
-  "version": 3,
+  "version": 2,
   "weekStart": ""
 }
