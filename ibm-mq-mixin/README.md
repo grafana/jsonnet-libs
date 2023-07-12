@@ -16,7 +16,7 @@ and the following alerts:
 - IBMMQLowDiskSpace
 - IBMMQHighQueueManagerCpuUsage
 
-## IBM MQ cluster overview
+## IBM MQ cluster overview 
 
 The IBM MQ cluster overview dashboard provides details on the number and status of clusters, queue managers, queues, and topics within and IBM MQ cluster. This also includes information about the amount of time it takes for a messsage to get through a transmission queue.
 
