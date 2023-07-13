@@ -10,6 +10,8 @@ and the following alerts:
 
 - VeleroBackupPartialFailure
 - VeleroBackupFailed
+- RestoreFailed
+- NoBackupJob
 
 ## Velero Dashboard Overview
 Velero dashbaord provides details on the overall status of the Velero Backups and Restores. The dashboard includes visualizations for backup attempts, failed backups and more panels about the restore operatons. 
@@ -18,6 +20,8 @@ Velero dashbaord provides details on the overall status of the Velero Backups an
 ## Alerts Overview
 - VeleroBackupPartialFailure: A Velero backup has Partially Failed.
 - VeleroBackupFailed: A Velero backup has Failed.
+- NoBackupJob: A Velero restore has Failed.
+- NoBackupJob: No Velero Backup attempts in last 24 hours
 
 ## Tools
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
