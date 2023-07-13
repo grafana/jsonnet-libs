@@ -29,7 +29,7 @@ groups:
           description: 'Velero backup {{ $labels.schedule }} has failed Restores.'
       
       - alert: NoBackupJob
-        expr: delta(velero_backup_attempt_total[24h]) < 0
+        expr: delta(velero_backup_attempt_total[24h]) <= 0
         for: 1m
         labels:
           severity: warning
