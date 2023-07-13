@@ -267,7 +267,7 @@ local datanodeLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-datanode.*\\.log"} |= ``',
+      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-datanode.*.log"} |= ``',
       queryType: 'range',
       refId: 'A',
     },

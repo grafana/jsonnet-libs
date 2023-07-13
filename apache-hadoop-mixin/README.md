@@ -49,7 +49,7 @@ The Apache Hadoop ResourceManager overview dashboard provides details on Node Ma
 
 ## Logging
 
-To get Apache Hadoop NameNode, DataNode, NodeManager or ResourceManager logs on the related dashboard, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Apache Hadoop log path is indicated in the `HADDOP_LOG_DIR` for your system located in `/etc/hadoop/conf`. An example log path may look like `/var/log/hadoop/hdfs/*.log` on Linux.
+To get Apache Hadoop NameNode, DataNode, NodeManager or ResourceManager logs on the related dashboard, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Apache Hadoop log path is indicated in the `HADDOP_LOG_DIR` for your system located in `/etc/hadoop/conf`. An example log path may look like `/hadoop/logs/*.log` on Linux.
 
 Hadoop NameNode, DataNode, NodeManager and ResourceManager logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 

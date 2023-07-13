@@ -1303,7 +1303,7 @@ local nodemanagerLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-nodemanager.*\\.log"} |= ``',
+      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-nodemanager.*.log"} |= ``',
       queryType: 'range',
       refId: 'A',
     },

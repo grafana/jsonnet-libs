@@ -709,7 +709,7 @@ local resourcemanagerLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-resourcemanager.*\\.log"} |= ``',
+      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-resourcemanager.*.log"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
