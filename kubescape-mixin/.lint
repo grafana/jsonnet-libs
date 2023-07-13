@@ -1,0 +1,5 @@
+exclusions:
+  panel-units-rule:
+    reason: Panel units are defined as numbers already
+  alert-description-templating:
+    reason: kubescape_cluster_complianceScore does not export any usable labels for the alert
