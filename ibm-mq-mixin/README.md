@@ -20,7 +20,7 @@ and the following alerts:
 
 The IBM MQ cluster overview dashboard provides details on the number and status of clusters, queue managers, queues, and topics within and IBM MQ cluster. This also includes information about the amount of time it takes for a messsage to get through a transmission queue.
 
-# screenshots
+# Screenshots
 ![]()
 
 ## IBM MQ queue manager overview
@@ -60,13 +60,13 @@ In order for the selectors to properly work for error logs ingested into your lo
       - multiline:
           firstline: '^\s*\d{2}\/\d{2}\/\d{2}\s+\d{2}:\d{2}:\d{2}\s*-'
 ```
-# screenshots
+# Screenshots
 ![]()
 ## IBM MQ queue overview
 
 The IBM MQ queue overview dashboard provides details on queue depth, average queue time, expired queue messages, operations, and operations throughput. 
 
-# screenshots
+# Screenshots
 ![]()
 ## IBM MQ topics overview
 
