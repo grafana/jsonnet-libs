@@ -1,6 +1,6 @@
 # Velero Mixin
 
-The Veler mixin is a set of configurable Grafana dashboards and alerts.
+The Velero mixin is a set of configurable Grafana dashboards and alerts.
 
 The Velero mixin contains the following dashboards:
 
