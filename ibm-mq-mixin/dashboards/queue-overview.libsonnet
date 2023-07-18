@@ -1,3 +1,4 @@
+local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
@@ -18,6 +19,7 @@ local averageQueueTimePanel = {
       'ibmmq_queue_average_queue_time_seconds{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{queue}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -35,7 +37,7 @@ local averageQueueTimePanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -48,7 +50,7 @@ local averageQueueTimePanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -93,6 +95,7 @@ local expiredMessagesPanel = {
       'ibmmq_queue_expired_messages{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{queue}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -110,7 +113,7 @@ local expiredMessagesPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -123,7 +126,7 @@ local expiredMessagesPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -154,7 +157,7 @@ local expiredMessagesPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -171,6 +174,7 @@ local depthPanel = {
       'ibmmq_queue_depth{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{queue}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -188,7 +192,7 @@ local depthPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -201,7 +205,7 @@ local depthPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -225,110 +229,6 @@ local depthPanel = {
           },
         ],
       },
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local operationsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'ibmmq_queue_mqset_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
-      datasource=promDatasource,
-      legendFormat='{{qmgr}} - {{queue}} - MQSET',
-    ),
-    prometheus.target(
-      'ibmmq_queue_mqinq_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
-      datasource=promDatasource,
-      legendFormat='{{qmgr}} - {{queue}} - MQINQ',
-    ),
-    prometheus.target(
-      'ibmmq_queue_mqget_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
-      datasource=promDatasource,
-      legendFormat='{{qmgr}} - {{queue}} - MQGET',
-    ),
-    prometheus.target(
-      'ibmmq_queue_mqopen_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
-      datasource=promDatasource,
-      legendFormat='{{qmgr}} - {{queue}} - MQOPEN',
-    ),
-    prometheus.target(
-      'ibmmq_queue_mqclose_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
-      datasource=promDatasource,
-      legendFormat='{{qmgr}} - {{queue}} - MQCLOSE',
-    ),
-    prometheus.target(
-      'ibmmq_queue_mqput_mqput1_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
-      datasource=promDatasource,
-      legendFormat='{{qmgr}} - {{queue}} - MQPUT/MQPUT1',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Operations',
-  description: 'The number of queue operations of the queue manager.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'operations',
     },
     overrides: [],
   },
@@ -353,11 +253,13 @@ local operationThroughputPanel = {
       'ibmmq_queue_mqget_bytes{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQGET',
+      format='time_series',
     ),
     prometheus.target(
       'ibmmq_queue_mqput_bytes{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
       datasource=promDatasource,
       legendFormat='{{qmgr}} - {{queue}} - MQPUT',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -375,7 +277,7 @@ local operationThroughputPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -388,7 +290,7 @@ local operationThroughputPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -420,7 +322,117 @@ local operationThroughputPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local operationsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'ibmmq_queue_mqset_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      datasource=promDatasource,
+      legendFormat='{{qmgr}} - {{queue}} - MQSET',
+      format='time_series',
+    ),
+    prometheus.target(
+      'ibmmq_queue_mqinq_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      datasource=promDatasource,
+      legendFormat='{{qmgr}} - {{queue}} - MQINQ',
+      format='time_series',
+    ),
+    prometheus.target(
+      'ibmmq_queue_mqget_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      datasource=promDatasource,
+      legendFormat='{{qmgr}} - {{queue}} - MQGET',
+      format='time_series',
+    ),
+    prometheus.target(
+      'ibmmq_queue_mqopen_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      datasource=promDatasource,
+      legendFormat='{{qmgr}} - {{queue}} - MQOPEN',
+      format='time_series',
+    ),
+    prometheus.target(
+      'ibmmq_queue_mqclose_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      datasource=promDatasource,
+      legendFormat='{{qmgr}} - {{queue}} - MQCLOSE',
+      format='time_series',
+    ),
+    prometheus.target(
+      'ibmmq_queue_mqput_mqput1_count{job=~"$job", mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", queue=~"$queue"}',
+      datasource=promDatasource,
+      legendFormat='{{qmgr}} - {{queue}} - MQPUT/MQPUT1',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Operations',
+  description: 'The number of queue operations of the queue manager.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'operations',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -468,7 +480,7 @@ local operationThroughputPanel = {
             promDatasource,
             'label_values(ibmmq_queue_average_queue_time_seconds{job=~"$job"},mq_cluster)',
             label='MQ cluster',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
@@ -498,22 +510,14 @@ local operationThroughputPanel = {
           ),
         ]
       )
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Other IBM MQ dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
       .addPanels(
         [
           averageQueueTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
           expiredMessagesPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
           depthPanel { gridPos: { h: 8, w: 24, x: 0, y: 8 } },
-          operationsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          operationThroughputPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+          operationThroughputPanel { gridPos: { h: 8, w: 9, x: 0, y: 16 } },
+          operationsPanel { gridPos: { h: 8, w: 15, x: 9, y: 16 } },
         ]
       ),
-
   },
 }
