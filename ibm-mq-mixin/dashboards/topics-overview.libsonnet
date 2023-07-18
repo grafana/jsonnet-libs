@@ -1,3 +1,4 @@
+local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
@@ -13,7 +14,13 @@ local promDatasource = {
 
 local topicsRow = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      '',
+      datasource=promDatasource,
+      legendFormat='',
+    ),
+  ],
   type: 'row',
   title: 'Topics',
 };
@@ -25,6 +32,7 @@ local topicMessagesReceivedPanel = {
       'ibmmq_topic_messages_received{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{topic}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -42,7 +50,7 @@ local topicMessagesReceivedPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -55,7 +63,7 @@ local topicMessagesReceivedPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -84,7 +92,7 @@ local topicMessagesReceivedPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -141,7 +149,7 @@ local timeSinceLastMessagePanel = {
     showUnfilled: true,
     valueMode: 'color',
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
+  pluginVersion: '10.0.2',
 };
 
 local topicSubscribersPanel = {
@@ -151,6 +159,7 @@ local topicSubscribersPanel = {
       'ibmmq_topic_subscriber_count{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{topic}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -168,7 +177,7 @@ local topicSubscribersPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -181,7 +190,7 @@ local topicSubscribersPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -227,6 +236,7 @@ local topicPublishersPanel = {
       'ibmmq_topic_publisher_count{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",topic=~"$topic"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{topic}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -244,7 +254,7 @@ local topicPublishersPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -257,7 +267,7 @@ local topicPublishersPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -298,7 +308,13 @@ local topicPublishersPanel = {
 
 local subscriptionsRow = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      '',
+      datasource=promDatasource,
+      legendFormat='',
+    ),
+  ],
   type: 'row',
   title: 'Subscriptions',
   collapsed: false,
@@ -311,6 +327,7 @@ local subscriptionMessagesReceivedPanel = {
       'ibmmq_subscription_messsages_received{job=~"$job",mq_cluster=~"$mq_cluster",qmgr=~"$qmgr",subscription=~"$subscription"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - {{subscription}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -328,7 +345,7 @@ local subscriptionMessagesReceivedPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -341,7 +358,7 @@ local subscriptionMessagesReceivedPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -370,7 +387,7 @@ local subscriptionMessagesReceivedPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -444,7 +461,7 @@ local subscriptionStatusPanel = {
       },
     ],
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
+  pluginVersion: '10.0.2',
   transformations: [
     {
       id: 'organize',
@@ -549,7 +566,7 @@ local subscriptionStatusPanel = {
             promDatasource,
             'label_values(ibmmq_topic_messages_received,job)',
             label='Job',
-            refresh=1,
+            refresh=2,
             includeAll=false,
             multi=false,
             allValues='',
@@ -560,7 +577,7 @@ local subscriptionStatusPanel = {
             promDatasource,
             'label_values(ibmmq_topic_messages_received{job=~"$job"},mq_cluster)',
             label='MQ cluster',
-            refresh=1,
+            refresh=2,
             includeAll=false,
             multi=false,
             allValues='',
@@ -571,7 +588,7 @@ local subscriptionStatusPanel = {
             promDatasource,
             'label_values(ibmmq_topic_messages_received{mq_cluster=~"$mq_cluster"},qmgr)',
             label='Queue manager',
-            refresh=1,
+            refresh=2,
             includeAll=false,
             multi=false,
             allValues='',
@@ -582,7 +599,7 @@ local subscriptionStatusPanel = {
             promDatasource,
             'label_values(ibmmq_topic_subscriber_count{qmgr=~"$qmgr",topic!~"SYSTEM.*|\\\\$SYS.*|"},topic)',
             label='Topic',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
@@ -593,7 +610,7 @@ local subscriptionStatusPanel = {
             promDatasource,
             'label_values(ibmmq_subscription_messsages_received{qmgr=~"$qmgr",subscription!~"SYSTEM.*|"},subscription)',
             label='Subscription',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
@@ -601,13 +618,6 @@ local subscriptionStatusPanel = {
           ),
         ]
       )
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Other IBM MQ dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
       .addPanels(
         [
           topicsRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
@@ -620,6 +630,5 @@ local subscriptionStatusPanel = {
           subscriptionStatusPanel { gridPos: { h: 10, w: 24, x: 0, y: 20 } },
         ]
       ),
-
   },
 }
