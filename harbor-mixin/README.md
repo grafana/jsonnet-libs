@@ -13,7 +13,7 @@ and the following alerts:
 - HarborHighErrorRate
 
 ## Harbor Dashboard Overview
-Harbor dashbaord provides details on the overall status of the Harbor repository including the details about each project and artifcats. The dashboard includes visualizations for Harbor's Components metrics, along with key visualiozation like number of project, images, pulled images etc. 
+Harbor dashboard provides details on the overall status of the Harbor repository including the details about each project and artifacts. The dashboard includes visualizations for Harbor's Components metrics, along with key visualization like number of project, images, pulled images etc. 
 
 #TODO screenshots
 
