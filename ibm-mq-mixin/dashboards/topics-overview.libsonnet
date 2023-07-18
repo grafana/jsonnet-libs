@@ -67,7 +67,7 @@ local topicMessagesReceivedPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -362,7 +362,7 @@ local subscriptionMessagesReceivedPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',

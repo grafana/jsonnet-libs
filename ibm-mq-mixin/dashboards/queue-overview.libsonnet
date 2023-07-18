@@ -130,7 +130,7 @@ local expiredMessagesPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -294,7 +294,7 @@ local operationThroughputPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -404,7 +404,7 @@ local operationsPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
