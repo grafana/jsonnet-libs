@@ -1,3 +1,4 @@
+local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
@@ -12,6 +13,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
@@ -22,6 +24,8 @@ local activeListenersPanel = {
     prometheus.target(
       'ibmmq_qmgr_active_listeners{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
+      legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'stat',
@@ -51,7 +55,7 @@ local activeListenersPanel = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -63,7 +67,6 @@ local activeListenersPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.1-cloud.3.f250259e',
 };
 
 local activeConnectionsPanel = {
@@ -72,6 +75,8 @@ local activeConnectionsPanel = {
     prometheus.target(
       'ibmmq_qmgr_connection_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
+      legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'stat',
@@ -101,7 +106,7 @@ local activeConnectionsPanel = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -113,7 +118,6 @@ local activeConnectionsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.1-cloud.3.f250259e',
 };
 
 local queuesPanel = {
@@ -122,6 +126,8 @@ local queuesPanel = {
     prometheus.target(
       'count(count(ibmmq_queue_depth{job=~"$job"}) by (queue, mq_cluster, qmgr))',
       datasource=promDatasource,
+      legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'stat',
@@ -151,7 +157,7 @@ local queuesPanel = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -163,100 +169,16 @@ local queuesPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.1-cloud.3.f250259e',
-};
-
-local cpuUsagePanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'ibmmq_qmgr_user_cpu_time_percentage{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
-      datasource=promDatasource,
-      legendFormat='{{mq_cluster}} - {{qmgr}} - user',
-    ),
-    prometheus.target(
-      'ibmmq_qmgr_system_cpu_time_percentage{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
-      datasource=promDatasource,
-      legendFormat='{{mq_cluster}} - {{qmgr}} - system',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'CPU usage',
-  description: 'The system/user CPU usage of the queue manager.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'percent',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'none',
-    },
-  },
 };
 
 local estimatedMemoryUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(ibmmq_qmgr_ram_total_estimate_for_queue_manager_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}/ibmmq_qmgr_ram_total_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}) * 100',
+      '(ibmmq_qmgr_ram_total_estimate_for_queue_manager_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}/ibmmq_qmgr_ram_total_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -274,7 +196,7 @@ local estimatedMemoryUtilizationPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -287,7 +209,7 @@ local estimatedMemoryUtilizationPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -311,7 +233,7 @@ local estimatedMemoryUtilizationPanel = {
           },
         ],
       },
-      unit: 'percent',
+      unit: 'percentunit',
     },
     overrides: [],
   },
@@ -342,6 +264,7 @@ local queueManagerStatusPanel = {
       'ibmmq_qmgr_status{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='Status',
+      format='time_series',
     ),
   ],
   type: 'table',
@@ -353,7 +276,7 @@ local queueManagerStatusPanel = {
         mode: 'thresholds',
       },
       custom: {
-        align: 'auto',
+        align: 'left',
         cellOptions: {
           type: 'auto',
         },
@@ -414,7 +337,7 @@ local queueManagerStatusPanel = {
         properties: [
           {
             id: 'custom.width',
-            value: 280,
+            value: 149,
           },
           {
             id: 'unit',
@@ -431,6 +354,30 @@ local queueManagerStatusPanel = {
           {
             id: 'custom.width',
             value: 318,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Queue manager',
+        },
+        properties: [
+          {
+            id: 'custom.width',
+            value: 168,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'MQ cluster',
+        },
+        properties: [
+          {
+            id: 'custom.width',
+            value: 129,
           },
         ],
       },
@@ -451,7 +398,6 @@ local queueManagerStatusPanel = {
     showHeader: true,
     sortBy: [],
   },
-  pluginVersion: '10.0.1-cloud.3.f250259e',
   transformations: [
     {
       id: 'joinByField',
@@ -507,6 +453,92 @@ local queueManagerStatusPanel = {
   ],
 };
 
+local cpuUsagePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'ibmmq_qmgr_user_cpu_time_percentage{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      datasource=promDatasource,
+      legendFormat='{{mq_cluster}} - {{qmgr}} - user',
+      format='time_series',
+    ),
+    prometheus.target(
+      'ibmmq_qmgr_system_cpu_time_percentage{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      datasource=promDatasource,
+      legendFormat='{{mq_cluster}} - {{qmgr}} - system',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'CPU usage',
+  description: 'The system/user CPU usage of the queue manager.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'percent',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'none',
+    },
+  },
+};
+
 local diskUsagePanel = {
   datasource: promDatasource,
   targets: [
@@ -514,6 +546,7 @@ local diskUsagePanel = {
       'ibmmq_qmgr_queue_manager_file_system_in_use_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -531,7 +564,7 @@ local diskUsagePanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -544,7 +577,7 @@ local diskUsagePanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -586,6 +619,85 @@ local diskUsagePanel = {
   },
 };
 
+local commitsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'ibmmq_qmgr_commit_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      datasource=promDatasource,
+      legendFormat='{{mq_cluster}} - {{qmgr}}',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Commits',
+  description: 'The commits of the queue manager.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'single',
+      sort: 'none',
+    },
+  },
+};
+
 local publishThroughputPanel = {
   datasource: promDatasource,
   targets: [
@@ -593,6 +705,7 @@ local publishThroughputPanel = {
       'ibmmq_qmgr_published_to_subscribers_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -610,7 +723,7 @@ local publishThroughputPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -623,7 +736,7 @@ local publishThroughputPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -672,6 +785,7 @@ local publishedMessagesPanel = {
       'ibmmq_qmgr_published_to_subscribers_message_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -689,7 +803,7 @@ local publishedMessagesPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -702,7 +816,7 @@ local publishedMessagesPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -739,83 +853,6 @@ local publishedMessagesPanel = {
   },
 };
 
-local commitsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'ibmmq_qmgr_commit_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
-      datasource=promDatasource,
-      legendFormat='{{mq_cluster}} - {{qmgr}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Commits',
-  description: 'The commits of the queue manager.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'single',
-      sort: 'none',
-    },
-  },
-};
-
 local expiredMessagesPanel = {
   datasource: promDatasource,
   targets: [
@@ -823,6 +860,7 @@ local expiredMessagesPanel = {
       'ibmmq_qmgr_expired_message_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -840,7 +878,7 @@ local expiredMessagesPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -853,7 +891,7 @@ local expiredMessagesPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -869,6 +907,7 @@ local expiredMessagesPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -900,31 +939,37 @@ local queueOperationsPanel = {
       'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqset_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQSET',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqinq_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQINQ',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqget_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQGET',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqopen_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQOPEN',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqclose_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQCLOSE',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqput_mqput1_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQPUT/MQPUT1',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -942,7 +987,7 @@ local queueOperationsPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -955,7 +1000,7 @@ local queueOperationsPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -971,6 +1016,7 @@ local queueOperationsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -985,8 +1031,8 @@ local queueOperationsPanel = {
   options: {
     legend: {
       calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -998,7 +1044,13 @@ local queueOperationsPanel = {
 
 local logsRow = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      '',
+      datasource=promDatasource,
+      legendFormat='',
+    ),
+  ],
   type: 'row',
   title: 'Logs',
   collapsed: false,
@@ -1011,6 +1063,7 @@ local logLatencyPanel = {
       'ibmmq_qmgr_log_write_latency_seconds{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -1028,7 +1081,7 @@ local logLatencyPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -1041,7 +1094,7 @@ local logLatencyPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -1057,6 +1110,7 @@ local logLatencyPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -1089,6 +1143,7 @@ local logUsagePanel = {
       'ibmmq_qmgr_log_in_use_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -1106,7 +1161,7 @@ local logUsagePanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -1119,7 +1174,7 @@ local logUsagePanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -1135,6 +1190,7 @@ local logUsagePanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -1185,6 +1241,7 @@ local errorLogsPanel = {
     wrapLogMessage: false,
   },
 };
+
 
 {
   grafanaDashboards+:: {
@@ -1266,24 +1323,24 @@ local errorLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            activeListenersPanel { gridPos: { h: 7, w: 8, x: 0, y: 0 } },
-            activeConnectionsPanel { gridPos: { h: 7, w: 8, x: 8, y: 0 } },
-            queuesPanel { gridPos: { h: 7, w: 8, x: 16, y: 0 } },
-            cpuUsagePanel { gridPos: { h: 8, w: 12, x: 0, y: 7 } },
-            estimatedMemoryUtilizationPanel { gridPos: { h: 8, w: 12, x: 12, y: 7 } },
-            queueManagerStatusPanel { gridPos: { h: 9, w: 24, x: 0, y: 15 } },
-            diskUsagePanel { gridPos: { h: 8, w: 8, x: 0, y: 24 } },
-            publishThroughputPanel { gridPos: { h: 8, w: 8, x: 8, y: 24 } },
-            publishedMessagesPanel { gridPos: { h: 8, w: 8, x: 16, y: 24 } },
-            commitsPanel { gridPos: { h: 8, w: 8, x: 0, y: 32 } },
-            expiredMessagesPanel { gridPos: { h: 8, w: 8, x: 8, y: 32 } },
-            queueOperationsPanel { gridPos: { h: 8, w: 8, x: 16, y: 32 } },
-            logsRow { gridPos: { h: 1, w: 24, x: 0, y: 40 } },
-            logLatencyPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
-            logUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
+            activeListenersPanel { gridPos: { h: 7, w: 4, x: 0, y: 0 } },
+            activeConnectionsPanel { gridPos: { h: 7, w: 4, x: 4, y: 0 } },
+            queuesPanel { gridPos: { h: 7, w: 4, x: 8, y: 0 } },
+            estimatedMemoryUtilizationPanel { gridPos: { h: 7, w: 12, x: 12, y: 0 } },
+            queueManagerStatusPanel { gridPos: { h: 7, w: 8, x: 0, y: 7 } },
+            cpuUsagePanel { gridPos: { h: 7, w: 8, x: 8, y: 7 } },
+            diskUsagePanel { gridPos: { h: 7, w: 8, x: 16, y: 7 } },
+            commitsPanel { gridPos: { h: 7, w: 8, x: 0, y: 14 } },
+            publishThroughputPanel { gridPos: { h: 7, w: 8, x: 8, y: 14 } },
+            publishedMessagesPanel { gridPos: { h: 7, w: 8, x: 16, y: 14 } },
+            expiredMessagesPanel { gridPos: { h: 7, w: 8, x: 0, y: 21 } },
+            queueOperationsPanel { gridPos: { h: 7, w: 16, x: 8, y: 21 } },
+            logsRow { gridPos: { h: 1, w: 24, x: 0, y: 28 } },
+            logLatencyPanel { gridPos: { h: 7, w: 12, x: 0, y: 29 } },
+            logUsagePanel { gridPos: { h: 7, w: 12, x: 12, y: 29 } },
           ],
           if $._config.enableLokiLogs then [
-            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 49 } },
+            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 36 } },
           ] else [],
           [
           ],

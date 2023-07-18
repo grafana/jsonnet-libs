@@ -1,3 +1,4 @@
+local g = (import 'grafana-builder/grafana.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
@@ -11,6 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local clustersPanel = {
   datasource: promDatasource,
   targets: [
@@ -18,6 +20,7 @@ local clustersPanel = {
       'count(count(ibmmq_qmgr_commit_count{job=~"$job"}) by (mq_cluster))',
       datasource=promDatasource,
       legendFormat='{{job}} - {{mq_cluster}}',
+      format='time_series',
     ),
   ],
   type: 'stat',
@@ -59,7 +62,6 @@ local clustersPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
 };
 
 local queueManagersPanel = {
@@ -68,6 +70,8 @@ local queueManagersPanel = {
     prometheus.target(
       'count(count(ibmmq_qmgr_commit_count{job=~"$job"}) by (qmgr, mq_cluster))',
       datasource=promDatasource,
+      legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'stat',
@@ -109,7 +113,108 @@ local queueManagersPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
+};
+
+local topicsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'count(count(ibmmq_topic_messages_received{job=~"$job"}) by (topic, mq_cluster))',
+      datasource=promDatasource,
+      legendFormat='{{job}} - {{mq_cluster}}',
+      format='time_series',
+    ),
+  ],
+  type: 'stat',
+  title: 'Topics',
+  description: 'The unique number of topics in the cluster.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+};
+
+local queuesPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'count(count(ibmmq_queue_depth{job=~"$job"}) by (queue, mq_cluster))',
+      datasource=promDatasource,
+      legendFormat='',
+      format='time_series',
+    ),
+  ],
+  type: 'stat',
+  title: 'Queues',
+  description: 'The unique number of queues in the cluster.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
 };
 
 local queueOperationsPanel = {
@@ -119,31 +224,37 @@ local queueOperationsPanel = {
       'sum by (mq_cluster) (ibmmq_queue_mqset_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='MQSET',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster) (ibmmq_queue_mqinq_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='MQINQ',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster) (ibmmq_queue_mqget_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='MQGET',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster) (ibmmq_queue_mqopen_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='MQOPEN',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster) (ibmmq_queue_mqclose_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='MQCLOSE',
+      format='time_series',
     ),
     prometheus.target(
       'sum by (mq_cluster) (ibmmq_queue_mqput_mqput1_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='MQPUT/MQPUT1',
+      format='time_series',
     ),
   ],
   type: 'piechart',
@@ -215,108 +326,6 @@ local queueOperationsPanel = {
   },
 };
 
-local topicsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'count(count(ibmmq_topic_messages_received{job=~"$job"}) by (topic, mq_cluster))',
-      datasource=promDatasource,
-      legendFormat='{{job}} - {{mq_cluster}}',
-    ),
-  ],
-  type: 'stat',
-  title: 'Topics',
-  description: 'The unique number of topics in the cluster.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'auto',
-  },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
-};
-
-local queuesPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'count(count(ibmmq_queue_depth{job=~"$job"}) by (queue, mq_cluster))',
-      datasource=promDatasource,
-      legendFormat='',
-    ),
-  ],
-  type: 'stat',
-  title: 'Queues',
-  description: 'The unique number of queues in the cluster.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'auto',
-  },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
-};
-
 local clusterStatusPanel = {
   datasource: promDatasource,
   targets: [
@@ -324,6 +333,7 @@ local clusterStatusPanel = {
       'ibmmq_cluster_suspend{mq_cluster=~"$mq_cluster", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='{{job}} - {{mq_cluster}}',
+      format='time_series',
     ),
   ],
   type: 'table',
@@ -384,7 +394,6 @@ local clusterStatusPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
   transformations: [
     {
       id: 'joinByLabels',
@@ -430,6 +439,7 @@ local queueManagerStatusPanel = {
       'ibmmq_qmgr_status{mq_cluster=~"$mq_cluster", job=~"$job"}',
       datasource=promDatasource,
       legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'table',
@@ -516,7 +526,6 @@ local queueManagerStatusPanel = {
       },
     ],
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
   transformations: [
     {
       id: 'joinByLabels',
@@ -562,11 +571,13 @@ local transmissionQueueTimePanel = {
       'ibmmq_channel_xmitq_time_short{type="SENDER",job=~"$job", mq_cluster=~"$mq_cluster"}',
       datasource=promDatasource,
       legendFormat='{{channel}} - short',
+      format='time_series',
     ),
     prometheus.target(
       'ibmmq_channel_xmitq_time_long{type=~"SENDER", job=~"$job", mq_cluster=~"$mq_cluster"}',
       datasource=promDatasource,
       legendFormat='{{channel}} - long',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -584,7 +595,7 @@ local transmissionQueueTimePanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 10,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -597,7 +608,7 @@ local transmissionQueueTimePanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -637,8 +648,8 @@ local transmissionQueueTimePanel = {
       sort: 'desc',
     },
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
 };
+
 
 {
   grafanaDashboards+:: {
@@ -695,14 +706,14 @@ local transmissionQueueTimePanel = {
       ))
       .addPanels(
         [
-          clustersPanel { gridPos: { h: 8, w: 6, x: 0, y: 0 } },
-          queueManagersPanel { gridPos: { h: 8, w: 6, x: 6, y: 0 } },
-          queueOperationsPanel { gridPos: { h: 16, w: 12, x: 12, y: 0 } },
-          topicsPanel { gridPos: { h: 8, w: 6, x: 0, y: 8 } },
-          queuesPanel { gridPos: { h: 8, w: 6, x: 6, y: 8 } },
-          clusterStatusPanel { gridPos: { h: 5, w: 24, x: 0, y: 16 } },
-          queueManagerStatusPanel { gridPos: { h: 4, w: 24, x: 0, y: 21 } },
-          transmissionQueueTimePanel { gridPos: { h: 8, w: 24, x: 0, y: 25 } },
+          clustersPanel { gridPos: { h: 7, w: 4, x: 0, y: 0 } },
+          queueManagersPanel { gridPos: { h: 7, w: 4, x: 4, y: 0 } },
+          topicsPanel { gridPos: { h: 7, w: 4, x: 8, y: 0 } },
+          queuesPanel { gridPos: { h: 7, w: 4, x: 12, y: 0 } },
+          queueOperationsPanel { gridPos: { h: 15, w: 8, x: 16, y: 0 } },
+          clusterStatusPanel { gridPos: { h: 4, w: 16, x: 0, y: 7 } },
+          queueManagerStatusPanel { gridPos: { h: 4, w: 16, x: 0, y: 11 } },
+          transmissionQueueTimePanel { gridPos: { h: 8, w: 24, x: 0, y: 15 } },
         ]
       ),
 
