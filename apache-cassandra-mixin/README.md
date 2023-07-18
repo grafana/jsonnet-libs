@@ -43,7 +43,7 @@ Cassandra system logs are enabled by default in the `config.libsonnet` and can b
 }
 ```
 
-In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance`, `job`, and `cluster` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance`, `job`, and `cassandra_cluster` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
 ```yaml
 scrape_configs:
@@ -53,7 +53,7 @@ scrape_configs:
         labels:
           job: integrations/apache-cassandra
           instance: '<your-instance-name>'
-          cluster: '<your-cluster-name>'
+          cassandra_cluster: '<your-cluster-name>'
           __path__: /var/log/cassandra/system.log
 ```
 

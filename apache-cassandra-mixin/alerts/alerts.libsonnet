@@ -97,7 +97,7 @@
           {
             alert: 'UnavailableWriteRequestsFound',
             expr: |||
-              sum(cassandra_clientrequest_unavailables_count{clientrequest="Write"}) by (cluster) > %(alertsCriticalUnavailableWriteRequests5m)s
+              sum(cassandra_clientrequest_unavailables_count{clientrequest="Write"}) by (cassandra_cluster) > %(alertsCriticalUnavailableWriteRequests5m)s
             ||| % $._config,
             'for': '5m',
             labels: {

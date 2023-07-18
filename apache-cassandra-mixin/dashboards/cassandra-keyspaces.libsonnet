@@ -708,13 +708,13 @@ local keyspaceReadLatencyPanel(matcher) = {
       'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.95"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p95',
-      format='heatmap',
+      format='time_series',
     ),
     prometheus.target(
       'sum(cassandra_keyspace_readlatency_seconds{' + matcher + ', quantile="0.99"} >= 0) by (keyspace)',
       datasource=promDatasource,
       legendFormat='{{ keyspace }} - p99',
-      format='heatmap',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -787,7 +787,7 @@ local keyspaceReadLatencyPanel(matcher) = {
   },
 };
 
-local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspace", cluster=~"$cluster"' +
+local getMatcher(cfg) = '%(cassandraSelector)s, instance=~"$instance", keyspace=~"$keyspace", cassandra_cluster=~"$cassandra_cluster"' % cfg +
                         if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
 
 {
@@ -812,7 +812,6 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
       .addTemplates(
         std.flattenArrays([
           [
-
             template.datasource(
               promDatasourceName,
               'prometheus',
@@ -834,8 +833,20 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
             template.new(
               'cluster',
               promDatasource,
-              'label_values(cassandra_up_endpoint_count, cluster)',
+              'label_values(cassandra_up_endpoint_count{%(multiclusterSelector)s}, cluster)' % $._config,
               label='Cluster',
+              refresh=1,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
+              'cassandra_cluster',
+              promDatasource,
+              'label_values(cassandra_up_endpoint_count{%(cassandraSelector)s}, cassandra_cluster)' % $._config,
+              label='Cassandra cluster',
               refresh=1,
               includeAll=true,
               multi=true,
@@ -845,7 +856,9 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
             template.new(
               'instance',
               promDatasource,
-              'label_values(cassandra_up_endpoint_count, instance)',
+              'label_values(cassandra_up_endpoint_count{%(cassandraSelector)s, cassandra_cluster="$cassandra_cluster"' % $._config +
+              if $._config.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if $._config.enableRackLabel then
+                ', rack=~"$rack"' else '' + '}, instance)',
               label='Instance',
               refresh=1,
               includeAll=true,
@@ -856,7 +869,8 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
             template.new(
               'keyspace',
               promDatasource,
-              'label_values(cassandra_keyspace_caspreparelatency_seconds, keyspace)',
+              'label_values(cassandra_keyspace_caspreparelatency_seconds{%(cassandraSelector)s, cassandra_cluster="$cassandra_cluster",' % $._config +
+              'instance="$instance"}, keyspace)',
               label='Keyspace',
               refresh=1,
               includeAll=true,
@@ -869,7 +883,7 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
             template.new(
               'datacenter',
               promDatasource,
-              'label_values(cassandra_cache_size, datacenter)',
+              'label_values(cassandra_cache_size{%(cassandraSelector)s}, datacenter)' % $._config,
               label='Datacenter',
               refresh=1,
               includeAll=true,
@@ -882,7 +896,8 @@ local getMatcher(cfg) = 'job=~"$job", instance=~"$instance", keyspace=~"$keyspac
             template.new(
               'rack',
               promDatasource,
-              'label_values(cassandra_cache_size, rack)',
+              'label_values(cassandra_cache_size{%(cassandraSelector)s' % $._config +
+              if $._config.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + '}, rack)',
               label='Rack',
               refresh=1,
               includeAll=true,
