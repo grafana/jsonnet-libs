@@ -146,6 +146,10 @@
                 "value": null
               },
               {
+                "color": "yellow",
+                "value": 15
+              },
+              {
                 "color": "red",
                 "value": 40
               }
@@ -1316,6 +1320,6 @@
   "timezone": "",
   "title": "Kubescape",
   "uid": "SwdcJornz",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
