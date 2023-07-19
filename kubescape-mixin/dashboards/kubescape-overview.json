@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 25,
+  "id": 28,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -49,7 +49,7 @@
         "content": "![kubescapeimage](https://landscape.cncf.io/logos/kubescape.svg)",
         "mode": "markdown"
       },
-      "pluginVersion": "10.0.2-cloud.1.94a6f396",
+      "pluginVersion": "10.0.3-cloud.2.14737d80",
       "transparent": true,
       "type": "text"
     },
@@ -62,7 +62,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-RdYlGr"
+            "mode": "thresholds"
           },
           "mappings": [],
           "max": 100,
@@ -71,12 +71,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "yellow",
+                "value": 60
+              },
+              {
+                "color": "green",
+                "value": 75
               }
             ]
           },
@@ -103,7 +107,7 @@
         "showThresholdLabels": false,
         "showThresholdMarkers": true
       },
-      "pluginVersion": "10.0.2-cloud.1.94a6f396",
+      "pluginVersion": "10.0.3-cloud.2.14737d80",
       "targets": [
         {
           "datasource": {
@@ -131,7 +135,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-GrYlRd"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -143,7 +147,7 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 40
               }
             ]
           },
@@ -172,7 +176,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.2-cloud.1.94a6f396",
+      "pluginVersion": "10.0.3-cloud.2.14737d80",
       "targets": [
         {
           "datasource": {
@@ -256,7 +260,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.2-cloud.1.94a6f396",
+      "pluginVersion": "10.0.3-cloud.2.14737d80",
       "targets": [
         {
           "datasource": {
@@ -287,18 +291,22 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "max": 100,
+          "max": 1,
           "min": 0,
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "yellow",
+                "value": 35
+              },
+              {
+                "color": "green",
+                "value": 45
               }
             ]
           },
@@ -327,7 +335,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.2-cloud.1.94a6f396",
+      "pluginVersion": "10.0.3-cloud.2.14737d80",
       "targets": [
         {
           "datasource": {
@@ -643,18 +651,22 @@
             "mode": "thresholds"
           },
           "mappings": [],
-          "max": 100,
+          "max": 1,
           "min": 0,
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#EAB839",
+                "value": 65
+              },
+              {
+                "color": "green",
+                "value": 75
               }
             ]
           },
@@ -683,7 +695,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "10.0.2-cloud.1.94a6f396",
+      "pluginVersion": "10.0.3-cloud.2.14737d80",
       "targets": [
         {
           "datasource": {
@@ -691,7 +703,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "kubescape_framework_count_resources_passed{job=~\"$job\",instance=~\"$instance\", cluster=~\"$cluster\"} / (kubescape_framework_count_resources_passed{job=~\"$job\",instance=~\"$instance\", cluster=~\"$cluster\"} +    kubescape_framework_count_resources_failed{job=~\"$job\",instance=~\"$instance\", cluster=~\"$cluster\"} + kubescape_framework_count_resources_skipped{job=~\"$job\",instance=~\"$instance\", cluster=~\"$cluster\"})",
+          "expr": "(kubescape_framework_count_resources_passed{job=~\"$job\",instance=~\"$instance\", cluster=~\"$cluster\"} / (kubescape_framework_count_resources_passed{job=~\"$job\",instance=~\"$instance\", cluster=~\"$cluster\"} +    kubescape_framework_count_resources_failed{job=~\"$job\",instance=~\"$instance\", cluster=~\"$cluster\"} + kubescape_framework_count_resources_skipped{job=~\"$job\",instance=~\"$instance\", cluster=~\"$cluster\"}))",
           "instant": false,
           "legendFormat": "{{name}}",
           "range": true,
@@ -1011,7 +1023,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1042,7 +1055,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "10.0.2-cloud.1.94a6f396",
+      "pluginVersion": "10.0.3-cloud.2.14737d80",
       "targets": [
         {
           "datasource": {
@@ -1111,7 +1124,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1145,7 +1159,7 @@
         "showUnfilled": true,
         "valueMode": "color"
       },
-      "pluginVersion": "10.0.2-cloud.1.94a6f396",
+      "pluginVersion": "10.0.3-cloud.2.14737d80",
       "targets": [
         {
           "datasource": {
@@ -1195,6 +1209,7 @@
         "type": "datasource"
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -1214,7 +1229,6 @@
         "label": "job",
         "multi": true,
         "name": "job",
-        "allValue": ".+",
         "options": [],
         "query": {
           "query": "label_values(job)",
@@ -1227,8 +1241,9 @@
         "type": "query"
       },
       {
+        "allValue": ".+",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "kubescape.kubescape.svc.cluster.local:8080",
           "value": "kubescape.kubescape.svc.cluster.local:8080"
         },
@@ -1242,7 +1257,6 @@
         "label": "instance",
         "multi": true,
         "name": "instance",
-        "allValue": ".+",
         "options": [],
         "query": {
           "query": "label_values(instance)",
@@ -1302,6 +1316,6 @@
   "timezone": "",
   "title": "Kubescape",
   "uid": "SwdcJornz",
-  "version": 17,
+  "version": 2,
   "weekStart": ""
 }
