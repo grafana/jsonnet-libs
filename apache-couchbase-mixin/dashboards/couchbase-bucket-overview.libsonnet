@@ -6,7 +6,7 @@ local prometheus = grafana.prometheus;
 
 local dashboardUid = 'apache-couchbase-bucket-overview';
 
-local promDatasourceName = 'prometheus_datasource';
+local promDatasourceName = 'datasource';
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
