@@ -13,22 +13,23 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local cacheHitPassPanel = {
+local cacheHitRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}',
+      'avg((rate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]) + rate(varnish_main_cache_miss{job=~"$job",instance=~"$instance"}[$__rate_interval]), 1))) * 100\n',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
   ],
-  type: 'stat',
-  title: 'Cache hit pass',
-  description: 'Number of cache hits for pass objects.',
+  type: 'gauge',
+  title: 'Cache hit rate',
+  description: 'Rate of cache hits to misses.',
   fieldConfig: {
     defaults: {
       color: {
@@ -42,16 +43,25 @@ local cacheHitPassPanel = {
             color: 'green',
             value: null,
           },
+          {
+            color: 'red',
+            value: 0,
+          },
+          {
+            color: '#EAB839',
+            value: 50,
+          },
+          {
+            color: 'green',
+            value: 80,
+          },
         ],
       },
-      unit: 'none',
+      unit: 'percent',
     },
     overrides: [],
   },
   options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
       calcs: [
@@ -60,23 +70,25 @@ local cacheHitPassPanel = {
       fields: '',
       values: false,
     },
-    textMode: 'auto',
+    showThresholdLabels: false,
+    showThresholdMarkers: true,
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
 };
 
-local sessionQueueLengthPanel = {
+local frontendRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'varnish_main_thread_queue_len{job=~"$job",instance=~"$instance"}',
+      'sum(irate(varnish_main_client_req{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{nstance}}',
     ),
   ],
   type: 'stat',
-  title: 'Session queue length',
-  description: 'Length of session queue waiting for threads.',
+  title: 'Frontend requests',
+  description: 'The rate of requests sent to the Varnish Cache frontend.',
   fieldConfig: {
     defaults: {
       color: {
@@ -92,7 +104,7 @@ local sessionQueueLengthPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'reqps',
     },
     overrides: [],
   },
@@ -110,7 +122,212 @@ local sessionQueueLengthPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
+};
+
+local backendRequestsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum(irate(varnish_backend_req{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'stat',
+  title: 'Backend requests',
+  description: 'The rate of requests sent to the Varnish Cache backends.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'reqps',
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
+};
+
+local sessionsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum(irate(varnish_main_sessions_total{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'stat',
+  title: 'Sessions',
+  description: 'The rate of total sessions created in the Varnish Cache instance.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: '/ sec',
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
+};
+
+local cacheHitsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum(irate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]))',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'stat',
+  title: 'Cache hits',
+  description: 'The rate of cache hits.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: '/ sec',
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
+};
+
+local backendUpAndDownPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'scalar(count(varnish_backend_up{job=~"$job", instance=~"$instance"} == 1))',
+      datasource=promDatasource,
+      legendFormat='{{instance}} Up',
+    ),
+    prometheus.target(
+      'scalar(count(varnish_backend_up{job=~"$job", instance=~"$instance"} == 0))',
+      datasource=promDatasource,
+      legendFormat='{{instance}} Down',
+    ),
+  ],
+  type: 'stat',
+  title: 'Backend up and down',
+  description: 'Number of Varnish Cache backends that are up/down.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
 };
 
 local poolsPanel = {
@@ -158,7 +375,57 @@ local poolsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.2-cloud.1.94a6f396',
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
+};
+
+local cacheHitPassPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum(irate(varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}[$__rate_interval]))',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'stat',
+  title: 'Cache hit pass',
+  description: 'Rate of cache hits for pass objects (fulfilled requests that are not cached).',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: '/ sec',
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
 };
 
 local Row = {
@@ -213,7 +480,7 @@ local backendConnectionsPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 20,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -221,16 +488,19 @@ local backendConnectionsPanel = {
           viz: false,
         },
         lineInterpolation: 'linear',
+        lineStyle: {
+          fill: 'solid',
+        },
         lineWidth: 1,
-        pointSize: 5,
+        pointSize: 1,
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -254,7 +524,7 @@ local backendConnectionsPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -285,7 +555,7 @@ local sessionsPanel = {
   ],
   type: 'timeseries',
   title: 'Sessions',
-  description: 'Number of connected, queued, and dropped sessions.',
+  description: 'Number of new connected, queued, and dropped sessions.',
   fieldConfig: {
     defaults: {
       color: {
@@ -298,7 +568,7 @@ local sessionsPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 20,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -311,7 +581,7 @@ local sessionsPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -339,7 +609,235 @@ local sessionsPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'none',
+    },
+  },
+};
+
+local sessionQueueLengthPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'varnish_main_thread_queue_len{job=~"$job",instance=~"$instance"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'stat',
+  title: 'Session queue length',
+  description: 'Length of session queue waiting for threads.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
+};
+
+local memoryUsedPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'varnish_sma_g_bytes{job=~"$job",instance=~"$instance",type="s0"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Memory used',
+  description: 'Bytes allocated from Varnish Cache storage.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'decbytes',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'single',
+      sort: 'none',
+    },
+  },
+};
+
+local cachePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(varnish_main_n_expired{job=~"$job",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - Expired',
+    ),
+    prometheus.target(
+      'increase(varnish_main_n_lru_nuked{job=~"$job",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - Nuked',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Cache',
+  description: 'Number of expired, LRU nuked objects, and current cache storage used in bytes.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+    },
+    overrides: [
+      {
+        matcher: {
+          id: 'byFrameRefID',
+          options: 'C',
+        },
+        properties: [
+          {
+            id: 'custom.axisPlacement',
+            value: 'right',
+          },
+          {
+            id: 'unit',
+            value: 'decbytes',
+          },
+        ],
+      },
+    ],
+  },
+  options: {
+    legend: {
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -355,7 +853,7 @@ local requestsPanel = {
     prometheus.target(
       'increase(varnish_main_client_req{job=~"$job",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}} - Client',
+      legendFormat='{{instance}} - Frontend',
     ),
     prometheus.target(
       'increase(varnish_main_backend_req{job=~"$job",instance=~"$instance"}[$__interval:])',
@@ -378,7 +876,7 @@ local requestsPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 20,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -391,7 +889,7 @@ local requestsPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -419,7 +917,7 @@ local requestsPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -433,7 +931,7 @@ local cacheHitRatioPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__interval:]) / clamp_min((increase(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__interval:]) + increase(varnish_main_cache_miss{job=~"$job",instance=~"$instance"}[$__interval:])),1) * 100',
+      'avg by (instance, job) ((rate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]) + rate(varnish_main_cache_miss{job=~"$job",instance=~"$instance"}[$__rate_interval]), 1))) * 100',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -451,9 +949,10 @@ local cacheHitRatioPanel = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisSoftMax: 100,
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 0,
+        fillOpacity: 20,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -466,11 +965,113 @@ local cacheHitRatioPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'area',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'percentage',
+        steps: [
+          {
+            color: 'transparent',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 0,
+          },
+          {
+            color: 'yellow',
+            value: 50,
+          },
+          {
+            color: 'green',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'percent',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'single',
+      sort: 'none',
+    },
+  },
+};
+
+local networkPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(varnish_main_s_resp_hdrbytes{job=~"$job",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} -  Frontend header',
+    ),
+    prometheus.target(
+      'increase(varnish_main_s_resp_bodybytes{job=~"$job",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - Frontend body',
+    ),
+    prometheus.target(
+      'increase(varnish_backend_beresp_hdrbytes{job=~"$job",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} -  {{backend}} - Backend header',
+    ),
+    prometheus.target(
+      'increase(varnish_backend_beresp_bodybytes{job=~"$job",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} -  {{backend}} - Backend body',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Network',
+  description: 'Response bytes of header and body for client and backends.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -486,7 +1087,7 @@ local cacheHitRatioPanel = {
           },
         ],
       },
-      unit: 'percent',
+      unit: 'decbytes',
     },
     overrides: [],
   },
@@ -494,11 +1095,11 @@ local cacheHitRatioPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -556,7 +1157,7 @@ local threadsPanel = {
         scaleDistribution: {
           type: 'linear',
         },
-        showPoints: 'auto',
+        showPoints: 'never',
         spanNulls: false,
         stacking: {
           group: 'A',
@@ -584,198 +1185,7 @@ local threadsPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'none',
-    },
-  },
-};
-
-local cachePanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'increase(varnish_main_n_expired{job=~"$job",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Expired',
-    ),
-    prometheus.target(
-      'increase(varnish_main_n_lru_nuked{job=~"$job",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Nuked',
-    ),
-    prometheus.target(
-      'varnish_sma_g_bytes{job=~"$job",instance=~"$instance",type="s0"}',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Used memory',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Cache',
-  description: 'Number of expired, LRU nuked objects, and current cache storage used in bytes.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-    },
-    overrides: [
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'C',
-        },
-        properties: [
-          {
-            id: 'custom.axisPlacement',
-            value: 'right',
-          },
-          {
-            id: 'unit',
-            value: 'decbytes',
-          },
-        ],
-      },
-    ],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'none',
-    },
-  },
-};
-
-local networkPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'increase(varnish_main_s_resp_hdrbytes{job=~"$job",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Client header',
-    ),
-    prometheus.target(
-      'increase(varnish_main_s_resp_bodybytes{job=~"$job",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Client body',
-    ),
-    prometheus.target(
-      'increase(varnish_backend_beresp_hdrbytes{job=~"$job",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Backend header',
-    ),
-    prometheus.target(
-      'increase(varnish_backend_beresp_bodybytes{job=~"$job",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Backend body',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Network',
-  description: 'Response bytes of header and body for client and backends.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 0,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'auto',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'decbytes',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -793,7 +1203,7 @@ local logsRow = {
   collapsed: false,
 };
 
-local clientLogsPanel = {
+local frontendLogsPanel = {
   datasource: lokiDatasource,
   targets: [
     {
@@ -805,7 +1215,7 @@ local clientLogsPanel = {
     },
   ],
   type: 'logs',
-  title: 'Client logs',
+  title: 'Frontend logs',
   description: 'Client logs for Varnish Cache.',
   options: {
     dedupStrategy: 'none',
@@ -844,6 +1254,7 @@ local backendLogsPanel = {
     wrapLogMessage: false,
   },
 };
+
 
 {
   grafanaDashboards+:: {
@@ -885,8 +1296,8 @@ local backendLogsPanel = {
               'label_values(varnish_main_sessions,job)',
               label='Job',
               refresh=2,
-              includeAll=false,
-              multi=false,
+              includeAll=true,
+              multi=true,
               allValues='',
               sort=0
             ),
@@ -896,8 +1307,8 @@ local backendLogsPanel = {
               'label_values(varnish_main_sessions,instance)',
               label='Instance',
               refresh=2,
-              includeAll=false,
-              multi=false,
+              includeAll=true,
+              multi=true,
               allValues='',
               sort=0
             ),
@@ -907,26 +1318,33 @@ local backendLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            cacheHitPassPanel { gridPos: { h: 8, w: 3, x: 0, y: 0 } },
-            sessionQueueLengthPanel { gridPos: { h: 8, w: 3, x: 3, y: 0 } },
-            poolsPanel { gridPos: { h: 8, w: 3, x: 6, y: 0 } },
-            Row { gridPos: { h: 1, w: 24, x: 0, y: 8 } },
-            backendConnectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 9 } },
-            sessionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 9 } },
-            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
-            cacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
-            threadsPanel { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
-            cachePanel { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
-            networkPanel { gridPos: { h: 9, w: 24, x: 0, y: 33 } },
-            logsRow { gridPos: { h: 1, w: 24, x: 0, y: 42 } },
+            cacheHitRatePanel { gridPos: { h: 4, w: 3, x: 0, y: 0 } },
+            frontendRequestsPanel { gridPos: { h: 4, w: 3, x: 3, y: 0 } },
+            backendRequestsPanel { gridPos: { h: 4, w: 3, x: 6, y: 0 } },
+            sessionsPanel { gridPos: { h: 4, w: 3, x: 9, y: 0 } },
+            cacheHitsPanel { gridPos: { h: 4, w: 3, x: 12, y: 0 } },
+            backendUpAndDownPanel { gridPos: { h: 4, w: 3, x: 15, y: 0 } },
+            poolsPanel { gridPos: { h: 4, w: 3, x: 18, y: 0 } },
+            cacheHitPassPanel { gridPos: { h: 4, w: 3, x: 21, y: 0 } },
+            Row { gridPos: { h: 1, w: 24, x: 0, y: 4 } },
+            backendConnectionsPanel { gridPos: { h: 8, w: 10, x: 0, y: 5 } },
+            sessionsPanel { gridPos: { h: 8, w: 10, x: 10, y: 5 } },
+            sessionQueueLengthPanel { gridPos: { h: 8, w: 4, x: 20, y: 5 } },
+            memoryUsedPanel { gridPos: { h: 7, w: 12, x: 0, y: 13 } },
+            cachePanel { gridPos: { h: 7, w: 12, x: 12, y: 13 } },
+            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 20 } },
+            cacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
+            networkPanel { gridPos: { h: 10, w: 12, x: 0, y: 28 } },
+            threadsPanel { gridPos: { h: 10, w: 12, x: 12, y: 28 } },
+            logsRow { gridPos: { h: 1, w: 24, x: 0, y: 38 } },
           ],
           if $._config.enableLokiLogs then [
-            clientLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 43 } },
+            frontendLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 39 } },
           ] else [],
           [
           ],
           if $._config.enableLokiLogs then [
-            backendLogsPanel { gridPos: { h: 7, w: 24, x: 0, y: 51 } },
+            backendLogsPanel { gridPos: { h: 7, w: 24, x: 0, y: 47 } },
           ] else [],
           [
           ],
