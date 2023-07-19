@@ -66,6 +66,7 @@ local activeListenersPanel = {
     },
     textMode: 'auto',
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local activeConnectionsPanel = {
@@ -117,6 +118,7 @@ local activeConnectionsPanel = {
     },
     textMode: 'auto',
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local queuesPanel = {
@@ -168,6 +170,7 @@ local queuesPanel = {
     },
     textMode: 'auto',
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local estimatedMemoryUtilizationPanel = {
@@ -397,6 +400,7 @@ local queueManagerStatusPanel = {
     showHeader: true,
     sortBy: [],
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
   transformations: [
     {
       id: 'joinByField',
@@ -580,7 +584,7 @@ local diskUsagePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1109,7 +1113,6 @@ local logLatencyPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -1189,7 +1192,6 @@ local logUsagePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',

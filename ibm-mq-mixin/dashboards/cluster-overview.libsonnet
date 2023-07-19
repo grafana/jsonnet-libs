@@ -12,6 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local clustersPanel = {
   datasource: promDatasource,
   targets: [
@@ -40,7 +41,7 @@ local clustersPanel = {
           },
           {
             color: 'red',
-            value: 80,
+            value: 0,
           },
         ],
       },
@@ -61,6 +62,7 @@ local clustersPanel = {
     },
     textMode: 'auto',
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local queueManagersPanel = {
@@ -91,7 +93,7 @@ local queueManagersPanel = {
           },
           {
             color: 'red',
-            value: 80,
+            value: 0,
           },
         ],
       },
@@ -112,6 +114,7 @@ local queueManagersPanel = {
     },
     textMode: 'auto',
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local topicsPanel = {
@@ -142,7 +145,7 @@ local topicsPanel = {
           },
           {
             color: 'red',
-            value: 80,
+            value: 0,
           },
         ],
       },
@@ -163,6 +166,7 @@ local topicsPanel = {
     },
     textMode: 'auto',
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local queuesPanel = {
@@ -193,7 +197,7 @@ local queuesPanel = {
           },
           {
             color: 'red',
-            value: 80,
+            value: 0,
           },
         ],
       },
@@ -214,6 +218,7 @@ local queuesPanel = {
     },
     textMode: 'auto',
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local queueOperationsPanel = {
@@ -341,12 +346,12 @@ local clusterStatusPanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       custom: {
         align: 'center',
         cellOptions: {
-          type: 'auto',
+          type: 'color-text',
         },
         inspect: false,
       },
@@ -354,10 +359,12 @@ local clusterStatusPanel = {
         {
           options: {
             '0': {
+              color: 'green',
               index: 0,
               text: 'Not suspended',
             },
             '1': {
+              color: 'red',
               index: 1,
               text: 'Suspended',
             },
@@ -385,6 +392,7 @@ local clusterStatusPanel = {
     cellHeight: 'sm',
     footer: {
       countRows: false,
+      enablePagination: false,
       fields: '',
       reducer: [
         'sum',
@@ -393,6 +401,7 @@ local clusterStatusPanel = {
     },
     showHeader: true,
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
   transformations: [
     {
       id: 'joinByLabels',
@@ -447,12 +456,12 @@ local queueManagerStatusPanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       custom: {
         align: 'center',
         cellOptions: {
-          type: 'auto',
+          type: 'color-text',
         },
         inspect: false,
       },
@@ -460,18 +469,22 @@ local queueManagerStatusPanel = {
         {
           options: {
             '-1': {
+              color: 'dark-red',
               index: 0,
               text: 'N/A',
             },
             '0': {
+              color: 'red',
               index: 1,
               text: 'Stopped',
             },
             '1': {
+              color: 'light-green',
               index: 2,
               text: 'Starting',
             },
             '2': {
+              color: 'green',
               index: 3,
               text: 'Running',
             },
@@ -480,6 +493,7 @@ local queueManagerStatusPanel = {
               text: 'Quiescing',
             },
             '4': {
+              color: 'light-red',
               index: 5,
               text: 'Stopping',
             },
@@ -525,6 +539,7 @@ local queueManagerStatusPanel = {
       },
     ],
   },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
   transformations: [
     {
       id: 'joinByLabels',
@@ -648,6 +663,7 @@ local transmissionQueueTimePanel = {
     },
   },
 };
+
 
 {
   grafanaDashboards+:: {
