@@ -27,7 +27,7 @@
             expr: |||
               max without(job, name) (hadoop_namenode_missingblocks) > %(alertsCriticalHDFSMissingBlocks)s
             ||| % $._config,
-            'for': '1m',
+            'for': '5m',
             labels: {
               severity: 'critical',
             },
@@ -45,7 +45,7 @@
             expr: |||
               max without(job, name) (hadoop_namenode_volumefailurestotal) > %(alertsCriticalHDFSVolumeFailures)s
             ||| % $._config,
-            'for': '1m',
+            'for': '5m',
             labels: {
               severity: 'critical',
             },
@@ -63,7 +63,7 @@
             expr: |||
               max without(job, name) (hadoop_namenode_numdeaddatanodes) > %(alertsCriticalDeadDataNodes)s
             ||| % $._config,
-            'for': '1m',
+            'for': '5m',
             labels: {
               severity: 'critical',
             },

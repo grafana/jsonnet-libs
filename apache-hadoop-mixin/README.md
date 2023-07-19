@@ -1,4 +1,4 @@
-# Apache Hadoop Mixin
+# Apache Hadoop mixin
 
 The Apache Hadoop mixin is a set of configurable Grafana dashboards and alerts.
 
@@ -20,27 +20,27 @@ and the following alerts:
 - ApacheHadoopHighResourceManagerVirtualCoreCPUUsage
 - ApacheHadoopHighResourceManagerMemoryUsage
 
-## Apache Hadoop NameNode Overview
+## Apache Hadoop NameNode overview
 
 The Apache Hadoop NameNode overview dashboard provides details on all DataNode state, capacity utilization, total, missing and under-replicated blocks, volume failures, total file and total load.
 
 ![First screenshot of the Apache Hadoop NameNode overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hadoop/screenshots/hadoop_namenode_overview_1.png)
 ![Second screenshot of the Apache Hadoop NameNode overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hadoop/screenshots/hadoop_namenode_overview_2.png)
 
-## Apache Hadoop DataNode Overview
+## Apache Hadoop DataNode overview
 
 The Apache Hadoop DataNode overview dashboard provides details on the number of unread blocks evicted, blocks removed and volume failures.
 
 ![First screenshot of the Apache Hadoop DataNode overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hadoop/screenshots/hadoop_datanode_overview_1.png)
 
-## Apache Hadoop NodeManager Overview
+## Apache Hadoop NodeManager overview
 
 The Apache Hadoop NodeManager overview dashboard provides details on number of applications running, allocated containers, containers localization duration, launch duration and state, JVM resource metrics, Node resource metrics and container resource metrics.
 
 ![First screenshot of the Apache Hadoop NodeManager overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hadoop/screenshots/hadoop_nodemanager_overview_1.png)
 ![Second screenshot of the Apache Hadoop NodeManager overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hadoop/screenshots/hadoop_nodemanager_overview_2.png)
 
-## Apache ResourceManager Overview
+## Apache ResourceManager overview
 
 The Apache Hadoop ResourceManager overview dashboard provides details on Node Managers state, application state and resource metrics and JVM resource metrics.
 
@@ -75,7 +75,7 @@ scrape_configs:
           __path__: '<your-log-path>'
 ```
 
-## Alerts Overview
+## Alerts overview
 
 ApacheHadoopLowHDFSCapacity - Remaining HDFS cluster capacity is low which may result in DataNode failures or prevent DataNodes from writing data.
 ApacheHadoopHDFSMissingBlocks - There are missing blocks in the HDFS cluster which may indicate potential data loss.
