@@ -115,7 +115,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "velero_backup_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\", schedule=~\"$schedule\"}",
+          "expr": "velero_backup_total{job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\" , schedule=~\"$schedule\"}",
           "instant": false,
           "range": true,
           "refId": "A"
@@ -555,7 +555,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Current number of existent backups",
+      "description": "Overview of Velero Backup attempts including success and failure",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -678,7 +678,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Total number of Restore Attempts",
+      "description": "Overview of Velero restore attempts including success and failure",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -801,7 +801,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Total number of Backup Deletion Attempts",
+      "description": "Overview of Velero Backup Deletion attempts including success and failure",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -924,7 +924,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Total number of Volume Snapshots Attempts",
+      "description": "Overview of Volume snapshot attempts including success and failure",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1047,7 +1047,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Total number of CSI Snapshots Attempts",
+      "description": "Overview of CSI snapshot attempts including success and failure",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1161,7 +1161,7 @@
           "refId": "C"
         }
       ],
-      "title": "Total CSI Snapshots Attempts",
+      "title": "CSI Snapshots overview",
       "transparent": true,
       "type": "timeseries"
     },
@@ -1609,8 +1609,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Veler",
-  "uid": "a1412804-2830-4842-b0d2-ee2d8af020",
-  "version": 1,
+  "title": "Velero Copy",
+  "uid": "a1412804-2830-4842-b0d2-ee2d8af020f0",
+  "version": 5,
   "weekStart": ""
 }
