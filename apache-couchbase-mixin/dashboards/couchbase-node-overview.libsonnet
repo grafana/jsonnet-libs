@@ -6,13 +6,12 @@ local prometheus = grafana.prometheus;
 
 local dashboardUid = 'apache-couchbase-node-overview';
 
-local promDatasourceName = 'prometheus_datasource';
+local promDatasourceName = 'datasource';
 local lokiDatasourceName = 'loki_datasource';
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
-
 
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
@@ -1036,7 +1035,6 @@ local couchbaseLogsPanel = {
     wrapLogMessage: false,
   },
 };
-
 
 {
   grafanaDashboards+:: {
