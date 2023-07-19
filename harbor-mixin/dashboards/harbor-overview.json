@@ -40,7 +40,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "# ![harborimage](https://cncf-branding.netlify.app/img/projects/harbor/horizontal/color/harbor-horizontal-color.png)",
+        "content": "# ![harborimage](https://goharbor.io/img/logos/harbor-horizontal-color.png)",
         "mode": "markdown"
       },
       "pluginVersion": "10.0.2-cloud.1.94a6f396",
@@ -516,7 +516,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "harbor_artifact_pulled{job=~\"$job\", project_name=~\"$Project\", cluster=~\"$cluster\"}",
+          "expr": "increase(harbor_artifact_pulled{job=~\"$job\", project_name=~\"$Project\", cluster=~\"$cluster\"}[$__rate_interval])",
           "legendFormat": "{{project_name}}",
           "range": true,
           "refId": "A"
