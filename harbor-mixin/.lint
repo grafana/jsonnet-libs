@@ -1,0 +1,7 @@
+exclusions:   
+  template-instance-rule:
+    reason: Harbor Filtering is achieved using job label
+  target-instance-rule:
+    reason: Harbor Filtering is achieved using job label
+  panel-units-rule:
+    reason: Panel units are self descriptive
