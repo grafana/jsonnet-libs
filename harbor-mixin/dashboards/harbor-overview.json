@@ -516,7 +516,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "increase(harbor_artifact_pulled{job=~\"$job\", project_name=~\"$Project\", cluster=~\"$cluster\"}[$__rate_interval])",
+          "expr": "increase(harbor_artifact_pulled{job=~\"$job\", project_name=~\"$Project\", cluster=~\"$cluster\"}[$__range])",
           "legendFormat": "{{project_name}}",
           "range": true,
           "refId": "A"
