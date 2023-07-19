@@ -578,9 +578,9 @@ local subscriptionStatusPanel = {
             'label_values(ibmmq_topic_messages_received{job=~"$job"},mq_cluster)',
             label='MQ cluster',
             refresh=2,
-            includeAll=false,
-            multi=false,
-            allValues='',
+            includeAll=true,
+            multi=true,
+            allValues='.+',
             sort=0
           ),
           template.new(
