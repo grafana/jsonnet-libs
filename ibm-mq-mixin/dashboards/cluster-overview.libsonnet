@@ -596,7 +596,7 @@ local transmissionQueueTimePanel = {
   ],
   type: 'timeseries',
   title: 'Transmission queue time',
-  description: 'The time it takes for the messages to get through the transmission queue.',
+  description: 'The time it takes for the messages to get through the transmission queue. (Long) - total time taken for messages to be transmitted over the channel, (Short) - an average, minimum, or maximum time taken to transmit messages over the channel in recent intervals.  ',
   fieldConfig: {
     defaults: {
       color: {
