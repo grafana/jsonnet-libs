@@ -12,6 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local averageQueueTimePanel = {
   datasource: promDatasource,
   targets: [
@@ -430,8 +431,12 @@ local operationsPanel = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
+      calcs: [
+        'min',
+        'max',
+        'mean',
+      ],
+      displayMode: 'table',
       placement: 'right',
       showLegend: true,
     },
@@ -441,6 +446,7 @@ local operationsPanel = {
     },
   },
 };
+
 
 {
   grafanaDashboards+:: {
