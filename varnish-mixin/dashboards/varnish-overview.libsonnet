@@ -13,7 +13,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
@@ -273,23 +272,18 @@ local cacheHitsPanel = {
   transparent: true,
 };
 
-local backendUpAndDownPanel = {
+local cacheHitPassPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'scalar(count(varnish_backend_up{job=~"$job", instance=~"$instance"} == 1))',
+      'sum(irate(varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{instance}} Up',
-    ),
-    prometheus.target(
-      'scalar(count(varnish_backend_up{job=~"$job", instance=~"$instance"} == 0))',
-      datasource=promDatasource,
-      legendFormat='{{instance}} Down',
+      legendFormat='{{instance}}',
     ),
   ],
   type: 'stat',
-  title: 'Backend up and down',
-  description: 'Number of Varnish Cache backends that are up/down.',
+  title: 'Cache hit pass',
+  description: 'Rate of cache hits for pass objects (fulfilled requests that are not cached).',
   fieldConfig: {
     defaults: {
       color: {
@@ -303,12 +297,58 @@ local backendUpAndDownPanel = {
             color: 'green',
             value: null,
           },
+        ],
+      },
+      unit: '/ sec',
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '10.0.3-cloud.2.14737d80',
+  transparent: true,
+};
+
+local sessionQueueLengthPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'varnish_main_thread_queue_len{job=~"$job",instance=~"$instance"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'stat',
+  title: 'Session queue length',
+  description: 'Length of session queue waiting for threads.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
           {
-            color: 'red',
-            value: 80,
+            color: 'green',
+            value: null,
           },
         ],
       },
+      unit: 'none',
     },
     overrides: [],
   },
@@ -379,95 +419,38 @@ local poolsPanel = {
   transparent: true,
 };
 
-local cacheHitPassPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'sum(irate(varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}[$__rate_interval]))',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'stat',
-  title: 'Cache hit pass',
-  description: 'Rate of cache hits for pass objects (fulfilled requests that are not cached).',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'thresholds',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: '/ sec',
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'auto',
-  },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
-  transparent: true,
-};
-
-local Row = {
-  datasource: promDatasource,
-  targets: [],
-  type: 'row',
-  title: '',
-  collapsed: false,
-};
-
 local backendConnectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(varnish_main_backend_conn{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_backend_conn{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Accepted',
     ),
     prometheus.target(
-      'increase(varnish_main_backend_recycle{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_backend_recycle{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Recycled',
     ),
     prometheus.target(
-      'increase(varnish_main_backend_reuse{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_backend_reuse{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Reused',
     ),
     prometheus.target(
-      'increase(varnish_main_backend_busy{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_backend_busy{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Busy',
     ),
     prometheus.target(
-      'increase(varnish_main_backend_unhealthy{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_backend_unhealthy{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Unhealthy',
     ),
   ],
   type: 'timeseries',
   title: 'Backend connections',
-  description: 'Number of recycled, reused, busy, unhealthy, and accepted backend connections by Varnish Cache.',
+  description: 'Rate of recycled, reused, busy, unhealthy, and accepted backend connections by Varnish Cache.',
   fieldConfig: {
     defaults: {
       color: {
@@ -538,24 +521,24 @@ local sessionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(varnish_main_sessions{job=~"$job",instance=~"$instance",type="conn"}[$__interval:])',
+      'irate(varnish_main_sessions{job=~"$job",instance=~"$instance",type="conn"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Connected',
     ),
     prometheus.target(
-      'increase(varnish_main_sessions{job=~"$job",instance=~"$instance",type="queued"}[$__interval:])',
+      'irate(varnish_main_sessions{job=~"$job",instance=~"$instance",type="queued"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Queued',
     ),
     prometheus.target(
-      'increase(varnish_main_sessions{job=~"$job",instance=~"$instance",type="dropped"}[$__interval:])',
+      'irate(varnish_main_sessions{job=~"$job",instance=~"$instance",type="dropped"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Dropped',
     ),
   ],
   type: 'timeseries',
   title: 'Sessions',
-  description: 'Number of new connected, queued, and dropped sessions.',
+  description: 'Rate of new connected, queued, and dropped sessions.',
   fieldConfig: {
     defaults: {
       color: {
@@ -617,55 +600,6 @@ local sessionsPanel = {
       sort: 'none',
     },
   },
-};
-
-local sessionQueueLengthPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'varnish_main_thread_queue_len{job=~"$job",instance=~"$instance"}',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'stat',
-  title: 'Session queue length',
-  description: 'Length of session queue waiting for threads.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'thresholds',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'auto',
-  },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
-  transparent: true,
 };
 
 local memoryUsedPanel = {
@@ -751,19 +685,19 @@ local cachePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(varnish_main_n_expired{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_n_expired{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Expired',
     ),
     prometheus.target(
-      'increase(varnish_main_n_lru_nuked{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_n_lru_nuked{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Nuked',
     ),
   ],
   type: 'timeseries',
   title: 'Cache',
-  description: 'Number of expired, LRU nuked objects, and current cache storage used in bytes.',
+  description: 'Rate of expired and LRU (least recently used) nuked objects.',
   fieldConfig: {
     defaults: {
       color: {
@@ -810,24 +744,7 @@ local cachePanel = {
         ],
       },
     },
-    overrides: [
-      {
-        matcher: {
-          id: 'byFrameRefID',
-          options: 'C',
-        },
-        properties: [
-          {
-            id: 'custom.axisPlacement',
-            value: 'right',
-          },
-          {
-            id: 'unit',
-            value: 'decbytes',
-          },
-        ],
-      },
-    ],
+    overrides: [],
   },
   options: {
     legend: {
@@ -851,19 +768,19 @@ local requestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(varnish_main_client_req{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_client_req{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Frontend',
     ),
     prometheus.target(
-      'increase(varnish_main_backend_req{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_backend_req{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Backend',
     ),
   ],
   type: 'timeseries',
   title: 'Requests',
-  description: 'Number of client and backend requests received.',
+  description: 'Rate of frontend and backend requests received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1019,29 +936,29 @@ local networkPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(varnish_main_s_resp_hdrbytes{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_s_resp_hdrbytes{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} -  Frontend header',
     ),
     prometheus.target(
-      'increase(varnish_main_s_resp_bodybytes{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_main_s_resp_bodybytes{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Frontend body',
     ),
     prometheus.target(
-      'increase(varnish_backend_beresp_hdrbytes{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_backend_beresp_hdrbytes{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} -  {{backend}} - Backend header',
     ),
     prometheus.target(
-      'increase(varnish_backend_beresp_bodybytes{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'irate(varnish_backend_beresp_bodybytes{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} -  {{backend}} - Backend body',
     ),
   ],
   type: 'timeseries',
   title: 'Network',
-  description: 'Response bytes of header and body for client and backends.',
+  description: 'Rate for the response bytes of header and body for frontend and backends.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1179,7 +1096,44 @@ local threadsPanel = {
       },
       unit: 'none',
     },
-    overrides: [],
+    overrides: [
+      {
+        matcher: {
+          id: 'byFrameRefID',
+          options: 'A',
+        },
+        properties: [
+          {
+            id: 'custom.fillOpacity',
+            value: 20,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byFrameRefID',
+          options: 'B',
+        },
+        properties: [
+          {
+            id: 'custom.fillOpacity',
+            value: 20,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byFrameRefID',
+          options: 'C',
+        },
+        properties: [
+          {
+            id: 'custom.fillOpacity',
+            value: 20,
+          },
+        ],
+      },
+    ],
   },
   options: {
     legend: {
@@ -1255,7 +1209,6 @@ local backendLogsPanel = {
   },
 };
 
-
 {
   grafanaDashboards+:: {
     'varnish-overview.json':
@@ -1323,28 +1276,26 @@ local backendLogsPanel = {
             backendRequestsPanel { gridPos: { h: 4, w: 3, x: 6, y: 0 } },
             sessionsPanel { gridPos: { h: 4, w: 3, x: 9, y: 0 } },
             cacheHitsPanel { gridPos: { h: 4, w: 3, x: 12, y: 0 } },
-            backendUpAndDownPanel { gridPos: { h: 4, w: 3, x: 15, y: 0 } },
-            poolsPanel { gridPos: { h: 4, w: 3, x: 18, y: 0 } },
-            cacheHitPassPanel { gridPos: { h: 4, w: 3, x: 21, y: 0 } },
-            Row { gridPos: { h: 1, w: 24, x: 0, y: 4 } },
-            backendConnectionsPanel { gridPos: { h: 8, w: 10, x: 0, y: 5 } },
-            sessionsPanel { gridPos: { h: 8, w: 10, x: 10, y: 5 } },
-            sessionQueueLengthPanel { gridPos: { h: 8, w: 4, x: 20, y: 5 } },
-            memoryUsedPanel { gridPos: { h: 7, w: 12, x: 0, y: 13 } },
-            cachePanel { gridPos: { h: 7, w: 12, x: 12, y: 13 } },
-            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 20 } },
-            cacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
-            networkPanel { gridPos: { h: 10, w: 12, x: 0, y: 28 } },
-            threadsPanel { gridPos: { h: 10, w: 12, x: 12, y: 28 } },
-            logsRow { gridPos: { h: 1, w: 24, x: 0, y: 38 } },
+            cacheHitPassPanel { gridPos: { h: 4, w: 3, x: 15, y: 0 } },
+            sessionQueueLengthPanel { gridPos: { h: 4, w: 3, x: 18, y: 0 } },
+            poolsPanel { gridPos: { h: 4, w: 3, x: 21, y: 0 } },
+            backendConnectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
+            sessionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
+            memoryUsedPanel { gridPos: { h: 7, w: 12, x: 0, y: 12 } },
+            cachePanel { gridPos: { h: 7, w: 12, x: 12, y: 12 } },
+            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 19 } },
+            cacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 19 } },
+            networkPanel { gridPos: { h: 10, w: 12, x: 0, y: 27 } },
+            threadsPanel { gridPos: { h: 10, w: 12, x: 12, y: 27 } },
+            logsRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
           ],
           if $._config.enableLokiLogs then [
-            frontendLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 39 } },
+            frontendLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 38 } },
           ] else [],
           [
           ],
           if $._config.enableLokiLogs then [
-            backendLogsPanel { gridPos: { h: 7, w: 24, x: 0, y: 47 } },
+            backendLogsPanel { gridPos: { h: 7, w: 24, x: 0, y: 46 } },
           ] else [],
           [
           ],
