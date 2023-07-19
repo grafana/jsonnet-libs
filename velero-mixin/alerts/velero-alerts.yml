@@ -29,12 +29,19 @@ groups:
           description: 'Velero backup {{ $labels.schedule }} has failed Restores.'
       
       - alert: NoBackupJob
-        expr: delta(velero_backup_attempt_total[24h]) <= 0
+        expr: delta(velero_backup_attempt_total[48h]) <= 0
         for: 1m
         labels:
           severity: warning
         annotations:
-          summary: 'No Backup in last 24 hours.'
+          summary: 'No Backup in last 48 hours.'
           description: 'No Velero backup has been taken in the last 24 hours.'
-      
-      
+
+      - alert: NoVolumeSnapshots
+        expr: delta(velero_volume_snapshot_attempt_total[24h]) <= 0 and delta(velero_csi_snapshot_attempt_total[24h]) <= 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'No Volume Snapshots in last 24 hours.'
+          description: 'No Volume Snapshot has been taken in the last 24 hours.'
