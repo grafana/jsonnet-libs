@@ -1,0 +1,47 @@
+groups:
+- name: Istio                                              
+  rules:
+    - alert: IstioComponentDown
+      expr: avg_over_time(istio_build{}[1m]) < 1
+      for: 5m
+      labels:                                               
+        severity: critical
+      annotations:
+        summary: 'Istio Component is Down.'
+        description: '{{ $labels.component }} pods have stopped running for the last 5 minutes'
+
+    - alert: IstioGlobalRequestRateHigh
+      expr: sum(irate(istio_requests_total{reporter="destination"}[5m])) > 1000
+      for: 5m
+      labels:                                               
+        severity: warning
+      annotations:
+        summary: 'Istio Global Request Rate High.'
+        description: 'Istio has a high Global request rate'
+
+    - alert: IstioGlobalRequestRateLow
+      expr: sum(irate(istio_requests_total{reporter="destination"}[5m])) < 50
+      for: 5m
+      labels:                                               
+        severity: warning
+      annotations:
+        summary: 'Istio Global Request Rate Low.'
+        description: 'Istio has a very low Global request rate'
+
+    - alert: High5xxResponseRatio
+      expr: istio_requests_total{response_code=~"5.*"} / istio_requests_total{} > 0.2
+      for: 5m
+      labels:                                               
+        severity: warning
+      annotations:
+        summary: 'High Percentage of 5xx reponses in Istio.'
+        description: 'High Percentage of {{ $labels.response_code }} responses have been observed in {{ $labels.cluster }}'
+
+    - alert: High4xxResponseRatio
+      expr: istio_requests_total{response_code=~"4.*"} / istio_requests_total{} > 0.2
+      for: 5m
+      labels:                                               
+        severity: warning
+      annotations:
+        summary: 'High Percentage of 4xx reponses in Istio.'
+        description: 'High Percentage of {{ $labels.response_code }} responses have been observed in {{ $labels.cluster }}'
