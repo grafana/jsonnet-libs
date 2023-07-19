@@ -62,7 +62,6 @@ local clustersPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local queueManagersPanel = {
@@ -114,7 +113,6 @@ local queueManagersPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local topicsPanel = {
@@ -166,7 +164,6 @@ local topicsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local queuesPanel = {
@@ -218,7 +215,6 @@ local queuesPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
 };
 
 local queueOperationsPanel = {
@@ -401,7 +397,6 @@ local clusterStatusPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
   transformations: [
     {
       id: 'joinByLabels',
@@ -539,7 +534,6 @@ local queueManagerStatusPanel = {
       },
     ],
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
   transformations: [
     {
       id: 'joinByLabels',

@@ -149,7 +149,6 @@ local timeSinceLastMessagePanel = {
     showUnfilled: true,
     valueMode: 'color',
   },
-  pluginVersion: '10.0.2',
 };
 
 local topicSubscribersPanel = {
@@ -461,7 +460,6 @@ local subscriptionStatusPanel = {
       },
     ],
   },
-  pluginVersion: '10.0.2',
   transformations: [
     {
       id: 'organize',
