@@ -13,6 +13,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
@@ -244,8 +245,8 @@ local estimatedMemoryUtilizationPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
-      sort: 'none',
+      mode: 'multi',
+      sort: 'desc',
     },
   },
 };
@@ -272,12 +273,12 @@ local queueManagerStatusPanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       custom: {
         align: 'left',
         cellOptions: {
-          type: 'auto',
+          type: 'color-text',
         },
         filterable: false,
         inspect: false,
@@ -286,18 +287,22 @@ local queueManagerStatusPanel = {
         {
           options: {
             '-1': {
+              color: 'dark-red',
               index: 0,
               text: 'N/A',
             },
             '0': {
+              color: 'red',
               index: 1,
               text: 'Stopped',
             },
             '1': {
+              color: 'light-green',
               index: 2,
               text: 'Starting',
             },
             '2': {
+              color: 'green',
               index: 3,
               text: 'Running',
             },
@@ -306,10 +311,12 @@ local queueManagerStatusPanel = {
               text: 'Quiescing',
             },
             '4': {
+              color: 'light-red',
               index: 5,
               text: 'Stopping',
             },
             '5': {
+              color: 'yellow',
               index: 6,
               text: 'Standby',
             },
@@ -533,7 +540,7 @@ local cpuUsagePanel = {
     },
     tooltip: {
       mode: 'multi',
-      sort: 'none',
+      sort: 'desc',
     },
   },
 };
@@ -612,8 +619,8 @@ local diskUsagePanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
-      sort: 'none',
+      mode: 'multi',
+      sort: 'desc',
     },
   },
 };
@@ -660,7 +667,7 @@ local commitsPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -691,8 +698,8 @@ local commitsPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
-      sort: 'none',
+      mode: 'multi',
+      sort: 'desc',
     },
   },
 };
@@ -771,8 +778,8 @@ local publishThroughputPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
-      sort: 'none',
+      mode: 'multi',
+      sort: 'desc',
     },
   },
 };
@@ -819,7 +826,7 @@ local publishedMessagesPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -846,8 +853,8 @@ local publishedMessagesPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
-      sort: 'none',
+      mode: 'multi',
+      sort: 'desc',
     },
   },
 };
@@ -894,7 +901,7 @@ local expiredMessagesPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -925,8 +932,8 @@ local expiredMessagesPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
-      sort: 'none',
+      mode: 'multi',
+      sort: 'desc',
     },
   },
 };
@@ -1003,7 +1010,7 @@ local queueOperationsPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1036,7 +1043,7 @@ local queueOperationsPanel = {
     },
     tooltip: {
       mode: 'multi',
-      sort: 'none',
+      sort: 'desc',
     },
   },
 };
@@ -1097,7 +1104,7 @@ local logLatencyPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1109,6 +1116,7 @@ local logLatencyPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -1128,8 +1136,8 @@ local logLatencyPanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
-      sort: 'none',
+      mode: 'multi',
+      sort: 'desc',
     },
   },
 };
@@ -1176,7 +1184,7 @@ local logUsagePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1188,6 +1196,7 @@ local logUsagePanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -1207,8 +1216,8 @@ local logUsagePanel = {
       showLegend: true,
     },
     tooltip: {
-      mode: 'single',
-      sort: 'none',
+      mode: 'multi',
+      sort: 'desc',
     },
   },
 };
@@ -1238,6 +1247,7 @@ local errorLogsPanel = {
     wrapLogMessage: false,
   },
 };
+
 
 {
   grafanaDashboards+:: {
