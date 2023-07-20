@@ -499,7 +499,7 @@ local backendConnectionsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'conn/s',
     },
     overrides: [],
   },
@@ -584,7 +584,7 @@ local sessionsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'sess/s',
     },
     overrides: [],
   },
@@ -592,168 +592,6 @@ local sessionsPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'none',
-    },
-  },
-};
-
-local memoryUsedPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'varnish_sma_g_bytes{job=~"$job",instance=~"$instance",type="s0"}',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Memory used',
-  description: 'Bytes allocated from Varnish Cache storage.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'decbytes',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [
-        'min',
-        'mean',
-        'max',
-      ],
-      displayMode: 'table',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'single',
-      sort: 'none',
-    },
-  },
-};
-
-local cachePanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'irate(varnish_main_n_expired{job=~"$job",instance=~"$instance"}[$__rate_interval])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Expired',
-    ),
-    prometheus.target(
-      'irate(varnish_main_n_lru_nuked{job=~"$job",instance=~"$instance"}[$__rate_interval])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - Nuked',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Cache',
-  description: 'Rate of expired and LRU (least recently used) nuked objects.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'normal',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [
-        'min',
-        'mean',
-        'max',
-      ],
-      displayMode: 'table',
       placement: 'right',
       showLegend: true,
     },
@@ -826,7 +664,7 @@ local requestsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'reqps',
     },
     overrides: [],
   },
@@ -927,6 +765,169 @@ local cacheHitRatioPanel = {
     },
     tooltip: {
       mode: 'single',
+      sort: 'none',
+    },
+  },
+};
+
+local memoryUsedPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'varnish_sma_g_bytes{job=~"$job",instance=~"$instance",type="s0"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Memory used',
+  description: 'Bytes allocated from Varnish Cache storage.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'decbytes',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'single',
+      sort: 'none',
+    },
+  },
+};
+
+local cacheEventsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'irate(varnish_main_n_expired{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - Expired',
+    ),
+    prometheus.target(
+      'irate(varnish_main_n_lru_nuked{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - Nuked',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Cache events',
+  description: 'Rate of expired and LRU (least recently used) nuked objects.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'ops',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
       sort: 'none',
     },
   },
@@ -1281,10 +1282,10 @@ local backendLogsPanel = {
             poolsPanel { gridPos: { h: 4, w: 3, x: 21, y: 0 } },
             backendConnectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
             sessionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
-            memoryUsedPanel { gridPos: { h: 7, w: 12, x: 0, y: 12 } },
-            cachePanel { gridPos: { h: 7, w: 12, x: 12, y: 12 } },
-            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 19 } },
-            cacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 19 } },
+            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
+            cacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
+            memoryUsedPanel { gridPos: { h: 7, w: 12, x: 0, y: 20 } },
+            cacheEventsPanel { gridPos: { h: 7, w: 12, x: 12, y: 20 } },
             networkPanel { gridPos: { h: 10, w: 12, x: 0, y: 27 } },
             threadsPanel { gridPos: { h: 10, w: 12, x: 12, y: 27 } },
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
