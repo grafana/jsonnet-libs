@@ -28,7 +28,7 @@ groups:
         summary: 'Istio Global Request Rate Low.'
         description: 'Istio has a very low Global request rate which is less that 50'
 
-    - alert: High5xxResponseRatio
+    - alert: IstioHigh5xxResponseRatio
       expr: (istio_requests_total{response_code=~"5.*"} / istio_requests_total{}) > 0.05
       for: 5m
       labels:                                               
@@ -37,7 +37,7 @@ groups:
         summary: 'High Percentage of 5xx reponses in Istio.'
         description: 'High Percentage of {{ $labels.response_code }} responses have been observed in {{ $labels.cluster }}'
 
-    - alert: High4xxResponseRatio
+    - alert: IstioHigh4xxResponseRatio
       expr: (istio_requests_total{response_code=~"4.*"} / istio_requests_total{}) > 0.05
       for: 5m
       labels:                                               
