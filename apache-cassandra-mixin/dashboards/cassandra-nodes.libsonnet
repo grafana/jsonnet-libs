@@ -1338,7 +1338,7 @@ local systemLogsPanel(matcher) = {
   },
 };
 
-local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"' +
+local getMatcher(cfg) = '%(cassandraSelector)s, cassandra_cluster=~"$cassandra_cluster", instance=~"$instance"' % cfg +
                         if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
 
 {
@@ -1395,8 +1395,20 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
             template.new(
               'cluster',
               promDatasource,
-              'label_values(cassandra_cache_size, cluster)',
+              'label_values(cassandra_cache_size{%(multiclusterSelector)s}, cluster)' % $._config,
               label='Cluster',
+              refresh=1,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
+              'cassandra_cluster',
+              promDatasource,
+              'label_values(cassandra_cache_size{%(cassandraSelector)s}, cassandra_cluster)' % $._config,
+              label='Cassandra cluster',
               refresh=1,
               includeAll=true,
               multi=true,
@@ -1406,7 +1418,9 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
             template.new(
               'instance',
               promDatasource,
-              'label_values(cassandra_cache_size, instance)',
+              'label_values(cassandra_cache_size{%(cassandraSelector)s, cassandra_cluster="$cassandra_cluster"' % $._config +
+              if $._config.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if $._config.enableRackLabel then
+                ', rack=~"$rack"' else '' + '}, instance)',
               label='Instance',
               refresh=1,
               includeAll=true,
@@ -1419,7 +1433,7 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
             template.new(
               'datacenter',
               promDatasource,
-              'label_values(cassandra_cache_size, datacenter)',
+              'label_values(cassandra_cache_size{%(cassandraSelector)s}, datacenter)' % $._config,
               label='Datacenter',
               refresh=1,
               includeAll=true,
@@ -1432,7 +1446,8 @@ local getMatcher(cfg) = 'job=~"$job", cluster=~"$cluster", instance=~"$instance"
             template.new(
               'rack',
               promDatasource,
-              'label_values(cassandra_cache_size, rack)',
+              'label_values(cassandra_cache_size{%(cassandraSelector)s' % $._config +
+              if $._config.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + '}, rack)',
               label='Rack',
               refresh=1,
               includeAll=true,

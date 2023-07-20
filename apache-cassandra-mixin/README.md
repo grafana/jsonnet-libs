@@ -28,7 +28,7 @@ The Apache Cassandra overview dashboard provides details on number of clusters, 
 
 ## Apache Cassandra Nodes
 
-The Apache Cassandra nodes dashboard provides details on disk/memory/cpu usage, garbage collections, number of pending/blocked compaction tasks, number and latency of reads/writes, and logs for a specific node in the cluster. To get Cassandra system logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Cassandra system log path is `/var/log/cassandra/system.log` on Linux.
+The Apache Cassandra nodes dashboard provides details on disk/memory/cpu usage, garbage collections, number of pending/blocked compaction tasks, number and latency of reads/writes, and logs for a specific node in the Cassandra cluster. To get Cassandra system logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default Cassandra system log path is `/var/log/cassandra/system.log` on Linux.
 
 ![First screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_1.png)
 ![Second screenshot of the Apache Cassandra nodes dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-cassandra/screenshots/nodes_2.png)
@@ -43,7 +43,7 @@ Cassandra system logs are enabled by default in the `config.libsonnet` and can b
 }
 ```
 
-In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance`, `job`, and `cluster` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance`, `job`, and `cassandra_cluster` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
 ```yaml
 scrape_configs:
@@ -53,7 +53,7 @@ scrape_configs:
         labels:
           job: integrations/apache-cassandra
           instance: '<your-instance-name>'
-          cluster: '<your-cluster-name>'
+          cassandra_cluster: '<your-cassandra-cluster-name>'
           __path__: /var/log/cassandra/system.log
 ```
 

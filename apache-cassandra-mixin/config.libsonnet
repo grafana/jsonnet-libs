@@ -1,5 +1,9 @@
 {
   _config+:: {
+    enableMultiCluster: false,
+    cassandraSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
+    multiclusterSelector: 'job=~"$job"',
+
     dashboardTags: ['apache-cassandra-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
