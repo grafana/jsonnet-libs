@@ -1,0 +1,32 @@
+exclusions:
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
+  panel-datasource-rule:
+    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  target-instance-rule:
+    reason: "The dashboards use a mix of 'cluster', 'queue manager', and 'queue' labels as selectors, rather than 'instance'"
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+    - panel: "Clusters"
+    - panel: "Queue managers"
+    - panel: "Topics"
+    - panel: "Queues"
+    - panel: "Cluster status"
+    - panel: "Queue manager status"
+    - panel: "Topic messages received"
+    - panel: "Topic subscribers"
+    - panel: "Topic publishers"
+    - panel: "Subscription messages received"
+    - panel: "Active listeners"
+    - panel: "Active connections"
+    - panel: "Published messages"
+    - panel: "Commits"
+    - panel: "Expired messages"
+    - panel: "Queue operations"
+    - panel: "Operations"
+    - panel: "Depth"
