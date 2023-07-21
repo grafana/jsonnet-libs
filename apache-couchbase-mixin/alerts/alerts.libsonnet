@@ -7,7 +7,7 @@
           {
             alert: 'ApacheCouchbaseHighCPUUsage',
             expr: |||
-              sum without(category, job) (sys_cpu_utilization_rate) > %(alertsCriticalCPUUsage)s
+              (sys_cpu_utilization_rate) > %(alertsCriticalCPUUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -25,7 +25,7 @@
           {
             alert: 'ApacheCouchbaseHighMemoryUsage',
             expr: |||
-              100 * sum without(category, job) (sys_mem_actual_used / clamp_min(sys_mem_actual_used + sys_mem_actual_free, 1)) > %(alertsCriticalMemoryUsage)s
+              100 * (sys_mem_actual_used / clamp_min(sys_mem_actual_used + sys_mem_actual_free, 1)) > %(alertsCriticalMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -43,7 +43,7 @@
           {
             alert: 'ApacheCouchbaseMemoryEvictionRate',
             expr: |||
-              sum without(job) (kv_ep_num_value_ejects) > %(alertsWarningMemoryEvictionRate)s
+              (kv_ep_num_value_ejects) > %(alertsWarningMemoryEvictionRate)s
             ||| % $._config,
             'for': '5m',
             labels: {
