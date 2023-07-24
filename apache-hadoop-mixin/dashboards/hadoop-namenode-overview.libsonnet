@@ -140,32 +140,7 @@ local capacityUtilizationPanel = {
       },
       unit: 'percent',
     },
-    overrides: [
-      {
-        __systemRef: 'hideSeriesFrom',
-        matcher: {
-          id: 'byNames',
-          options: {
-            mode: 'exclude',
-            names: [
-              'hadoop-cluster-0 - instance-0',
-            ],
-            prefix: 'All except:',
-            readOnly: true,
-          },
-        },
-        properties: [
-          {
-            id: 'custom.hideFrom',
-            value: {
-              legend: false,
-              tooltip: false,
-              viz: true,
-            },
-          },
-        ],
-      },
-    ],
+    overrides: [],
   },
   options: {
     legend: {
