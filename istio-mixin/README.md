@@ -17,7 +17,7 @@ and the following alerts:
 
 The Istio Mixin is a collection of Grafana dashboards for operating an [Istio](https://istio.io/) service mesh.
 
-The dashboards are heavily isnpired  from [official ones maintained](https://istio.io/latest/docs/tasks/observability/metrics/using-istio-dashboard/) by the Istio community. In addition, [alerting rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to operate istio in production.
+The dashboards are heavily inspired from [official ones maintained](https://istio.io/latest/docs/tasks/observability/metrics/using-istio-dashboard/) by the Istio community. In addition, [alerting rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) to operate Istio in production.
 
 
 ## Istio Dashboard Overview
