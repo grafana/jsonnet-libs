@@ -4,4 +4,4 @@ exclusions:
   panel-units-rule:
     reason: Panel units are self descriptive
   panel-title-description-rule:
-    reason: Intionally leaving title from requests and response table panels for better vizualization
+    reason: Intentionally leaving title from requests and response table panels for better visualization
