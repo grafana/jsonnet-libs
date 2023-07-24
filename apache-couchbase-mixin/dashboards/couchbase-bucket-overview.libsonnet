@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local topBucketsByMemoryUsedPanel = {
   datasource: promDatasource,
   targets: [
@@ -675,7 +674,6 @@ local topBucketsByVBucketQueueMemoryPanel = {
     },
   },
 };
-
 
 {
   grafanaDashboards+:: {

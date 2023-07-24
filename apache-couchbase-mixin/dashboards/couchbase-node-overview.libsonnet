@@ -13,7 +13,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
@@ -1037,7 +1036,6 @@ local couchbaseLogsPanel = {
   },
 };
 
-
 {
   grafanaDashboards+:: {
     'apache-couchbase-node-overview.json':
@@ -1050,7 +1048,13 @@ local couchbaseLogsPanel = {
         description='',
         uid=dashboardUid,
       )
-
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache Couchbase dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addTemplates(
         std.flattenArrays([
           [

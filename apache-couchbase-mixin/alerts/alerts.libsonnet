@@ -7,7 +7,7 @@
           {
             alert: 'ApacheCouchbaseHighCPUUsage',
             expr: |||
-              max without(category, job) (sys_cpu_utilization_rate) > %(alertsCriticalCPUUsage)s
+              (sys_cpu_utilization_rate) > %(alertsCriticalCPUUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -25,7 +25,7 @@
           {
             alert: 'ApacheCouchbaseHighMemoryUsage',
             expr: |||
-              100 * max without(category, job) (sys_mem_actual_used / clamp_min(sys_mem_actual_used + sys_mem_actual_free, 1)) > %(alertsCriticalMemoryUsage)s
+              100 * (sys_mem_actual_used / clamp_min(sys_mem_actual_used + sys_mem_actual_free, 1)) > %(alertsCriticalMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -43,7 +43,7 @@
           {
             alert: 'ApacheCouchbaseMemoryEvictionRate',
             expr: |||
-              max without(job) (kv_ep_num_value_ejects) > %(alertsWarningMemoryEvictionRate)s
+              (kv_ep_num_value_ejects) > %(alertsWarningMemoryEvictionRate)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -61,7 +61,7 @@
           {
             alert: 'ApacheCouchbaseInvalidRequestVolume',
             expr: |||
-              max without(instance, job) (rate(n1ql_invalid_requests[2m])) > %(alertsWarningInvalidRequestVolume)s
+              sum without(instance, job) (rate(n1ql_invalid_requests[2m])) > %(alertsWarningInvalidRequestVolume)s
             ||| % $._config,
             'for': '2m',
             labels: {

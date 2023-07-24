@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local topNodesByMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
@@ -892,7 +891,6 @@ local topBucketsByVBucketsCountPanel = {
   },
   pluginVersion: '10.0.2-cloud.1.94a6f396',
 };
-
 
 {
   grafanaDashboards+:: {
