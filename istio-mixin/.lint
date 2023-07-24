@@ -3,5 +3,3 @@ exclusions:
     reason: IstioGlobalRequestRateLow does not use any lables
   panel-units-rule:
     reason: Panel units are self descriptive
-  panel-title-description-rule:
-    reason: Intentionally leaving title from requests and response table panels for better visualization

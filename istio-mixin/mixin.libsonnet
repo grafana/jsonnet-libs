@@ -1,6 +1,7 @@
 {
   grafanaDashboards: {
     'istio-overview.json': (import 'dashboards/istio-overview.json'),
+    'istio-service-overview.json': (import 'dashboards/istio-service-overview.json'),
   },
 
   // Helper function to ensure that we don't override other rules, by forcing
