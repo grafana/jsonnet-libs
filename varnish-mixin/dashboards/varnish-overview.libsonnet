@@ -174,11 +174,11 @@ local backendRequestsPanel = {
   transparent: true,
 };
 
-local sessionsPanel = {
+local sessionsRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_main_sessions_total{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_sessions_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -1001,7 +1001,6 @@ local networkPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1091,7 +1090,6 @@ local threadsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1275,7 +1273,7 @@ local backendLogsPanel = {
             cacheHitRatePanel { gridPos: { h: 4, w: 3, x: 0, y: 0 } },
             frontendRequestsPanel { gridPos: { h: 4, w: 3, x: 3, y: 0 } },
             backendRequestsPanel { gridPos: { h: 4, w: 3, x: 6, y: 0 } },
-            sessionsPanel { gridPos: { h: 4, w: 3, x: 9, y: 0 } },
+            sessionsRatePanel { gridPos: { h: 4, w: 3, x: 9, y: 0 } },
             cacheHitsPanel { gridPos: { h: 4, w: 3, x: 12, y: 0 } },
             cacheHitPassPanel { gridPos: { h: 4, w: 3, x: 15, y: 0 } },
             sessionQueueLengthPanel { gridPos: { h: 4, w: 3, x: 18, y: 0 } },
