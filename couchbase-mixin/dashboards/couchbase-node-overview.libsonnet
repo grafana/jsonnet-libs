@@ -6,7 +6,7 @@ local prometheus = grafana.prometheus;
 
 local dashboardUid = 'couchbase-node-overview';
 
-local promDatasourceName = 'datasource';
+local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
 local promDatasource = {
