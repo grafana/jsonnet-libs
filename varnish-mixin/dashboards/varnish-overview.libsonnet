@@ -80,7 +80,7 @@ local frontendRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_main_client_req{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_client_req{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{nstance}}',
     ),
@@ -129,7 +129,7 @@ local backendRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_backend_req{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_backend_req{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -184,7 +184,7 @@ local sessionsRatePanel = {
     ),
   ],
   type: 'stat',
-  title: 'Sessions',
+  title: 'Sessions rate',
   description: 'The rate of total sessions created in the Varnish Cache instance.',
   fieldConfig: {
     defaults: {
@@ -227,7 +227,7 @@ local cacheHitsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -276,7 +276,7 @@ local cacheHitPassPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -1001,6 +1001,7 @@ local networkPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -1090,6 +1091,7 @@ local threadsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
