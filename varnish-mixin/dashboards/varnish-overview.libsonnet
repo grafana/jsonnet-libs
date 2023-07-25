@@ -72,7 +72,7 @@ local cacheHitRatePanel = {
     showThresholdLabels: false,
     showThresholdMarkers: true,
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -121,7 +121,7 @@ local frontendRequestsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -129,7 +129,7 @@ local backendRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_backend_req{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_backend_req{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -170,7 +170,7 @@ local backendRequestsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -219,7 +219,7 @@ local sessionsRatePanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -268,7 +268,7 @@ local cacheHitsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -317,7 +317,7 @@ local cacheHitPassPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -366,7 +366,7 @@ local sessionQueueLengthPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -415,7 +415,7 @@ local poolsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -1001,7 +1001,6 @@ local networkPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1091,7 +1090,6 @@ local threadsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
