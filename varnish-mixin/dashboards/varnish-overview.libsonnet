@@ -72,7 +72,7 @@ local cacheHitRatePanel = {
     showThresholdLabels: false,
     showThresholdMarkers: true,
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -80,7 +80,7 @@ local frontendRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_main_client_req{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_client_req{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{nstance}}',
     ),
@@ -121,7 +121,7 @@ local frontendRequestsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -129,7 +129,7 @@ local backendRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_backend_req{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_backend_req{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -170,21 +170,21 @@ local backendRequestsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
-local sessionsPanel = {
+local sessionsRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_main_sessions_total{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_sessions_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
   ],
   type: 'stat',
-  title: 'Sessions',
+  title: 'Sessions rate',
   description: 'The rate of total sessions created in the Varnish Cache instance.',
   fieldConfig: {
     defaults: {
@@ -219,7 +219,7 @@ local sessionsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -227,7 +227,7 @@ local cacheHitsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -268,7 +268,7 @@ local cacheHitsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -276,7 +276,7 @@ local cacheHitPassPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(irate(varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}[$__rate_interval]))',
+      'irate(varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -317,7 +317,7 @@ local cacheHitPassPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -366,7 +366,7 @@ local sessionQueueLengthPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -415,7 +415,7 @@ local poolsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.0.3-cloud.2.14737d80',
+  pluginVersion: '10.0.3-cloud.3.cec3ab0e',
   transparent: true,
 };
 
@@ -1001,7 +1001,6 @@ local networkPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1091,7 +1090,6 @@ local threadsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1275,7 +1273,7 @@ local backendLogsPanel = {
             cacheHitRatePanel { gridPos: { h: 4, w: 3, x: 0, y: 0 } },
             frontendRequestsPanel { gridPos: { h: 4, w: 3, x: 3, y: 0 } },
             backendRequestsPanel { gridPos: { h: 4, w: 3, x: 6, y: 0 } },
-            sessionsPanel { gridPos: { h: 4, w: 3, x: 9, y: 0 } },
+            sessionsRatePanel { gridPos: { h: 4, w: 3, x: 9, y: 0 } },
             cacheHitsPanel { gridPos: { h: 4, w: 3, x: 12, y: 0 } },
             cacheHitPassPanel { gridPos: { h: 4, w: 3, x: 15, y: 0 } },
             sessionQueueLengthPanel { gridPos: { h: 4, w: 3, x: 18, y: 0 } },
