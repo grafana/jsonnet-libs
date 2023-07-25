@@ -95,24 +95,6 @@
             },
           },
           {
-            alert: 'VarnishCacheBackendFailure',
-            expr: |||
-              increase(varnish_main_backend_fail[5m]) > %(alertsCriticalBackendFailure)s
-            ||| % $._config,
-            'for': '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'There was a failure to connect to the backend.',
-              description:
-                (
-                  'The number of backend failures is {{ printf "%%.0f" $value }} over the last 5 minutes on {{$labels.instance}}, ' +
-                  'which is above the threshold of %(alertsCriticalBackendFailure)s.'
-                ) % $._config,
-            },
-          },
-          {
             alert: 'VarnishCacheBackendUnhealthy',
             expr: |||
               increase(varnish_main_backend_unhealthy[5m]) > %(alertsCriticalBackendUnhealthy)s
