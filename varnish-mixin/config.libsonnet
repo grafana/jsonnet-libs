@@ -11,7 +11,6 @@
     alertsCriticalCacheEviction: 0,
     alertsWarningHighSaturation: 0,
     alertsCriticalSessionsDropped: 0,
-    alertsCriticalBackendFailure: 0,
     alertsCriticalBackendUnhealthy: 0,
     enableLokiLogs: true,
   },

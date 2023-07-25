@@ -13,7 +13,6 @@ and the following alerts:
 - VarnishCacheHighCacheEvictionRate
 - VarnishCacheHighSaturation
 - VarnishCacheSessionsDropping
-- VarnishCacheBackendFailure
 - VarnishCacheBackendUnhealthy
 
 ## Varnish Cache overview
@@ -51,7 +50,7 @@ scrape_configs:
           - localhost
         labels:
           job: integrations/varnish-cache
-          instance: <varnish_host>:9131
+          instance: <exporter_host>:<exporter_port>
           __path__: /var/log/varnish/varnishncsa*.log*
 ```
 
@@ -64,7 +63,6 @@ scrape_configs:
 | VarnishCacheHighCacheEvictionRate | The cache is evicting too many objects.                                             |
 | VarnishCacheHighSaturation        | There are too many threads in queue, Varnish is saturated and responses are slowed. |
 | VarnishCacheSessionsDropping      | Incoming requests are being dropped due to a lack of free worker threads.           |
-| VarnishCacheBackendFailure        | There was a failure to connect to the backend.                                      |
 | VarnishCacheBackendUnhealthy      | Backend has been marked as unhealthy due to slow 200 responses.                     |
 
 Default thresholds can be configured in `config.libsonnet`.
@@ -77,7 +75,6 @@ Default thresholds can be configured in `config.libsonnet`.
     alertsCriticalCacheEviction: 0,
     alertsWarningHighSaturation: 0,
     alertsCriticalSessionsDropped: 0,
-    alertsCriticalBackendFailure: 0,
     alertsCriticalBackendUnhealthy: 0,
     enableLokiLogs: true,
   },
