@@ -616,6 +616,13 @@ local subscriptionStatusPanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other IBM MQ dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           topicsRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },

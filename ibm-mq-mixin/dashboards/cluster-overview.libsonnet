@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local clustersPanel = {
   datasource: promDatasource,
   targets: [
@@ -657,7 +656,6 @@ local transmissionQueueTimePanel = {
     },
   },
 };
-
 
 {
   grafanaDashboards+:: {

@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local averageQueueTimePanel = {
   datasource: promDatasource,
   targets: [
@@ -447,7 +446,6 @@ local operationsPanel = {
   },
 };
 
-
 {
   grafanaDashboards+:: {
     'ibm-mq-queue-overview.json':
@@ -516,6 +514,13 @@ local operationsPanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other IBM MQ dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           averageQueueTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
