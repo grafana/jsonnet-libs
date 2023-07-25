@@ -734,7 +734,7 @@
         "datasource": {
           "uid": "$datasource"
         },
-        "definition": "label_values(kafka_consumergroup_current_offset, job)",
+        "definition": "label_values(kafka_topic_partition_current_offset, job)",
         "hide": 0,
         "includeAll": true,
         "label": "job",
@@ -742,7 +742,7 @@
         "name": "job",
         "options": [],
         "query": {
-          "query": "label_values(kafka_consumergroup_current_offset, job)",
+          "query": "label_values(kafka_topic_partition_current_offset, job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -768,7 +768,7 @@
         "datasource": {
           "uid": "${datasource}"
         },
-        "definition": "label_values(kafka_consumergroup_current_offset{job=~\"$job\"}, instance)",
+        "definition": "label_values(kafka_topic_partition_current_offset{job=~\"$job\"}, instance)",
         "hide": 0,
         "includeAll": true,
         "label": "instance",
@@ -776,7 +776,7 @@
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(kafka_consumergroup_current_offset{job=~\"$job\"}, instance)",
+          "query": "label_values(kafka_topic_partition_current_offset{job=~\"$job\"}, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -851,5 +851,5 @@
   "timezone": "browser",
   "title": "Kafka lag overview",
   "uid": "jwPKIsniz",
-  "version": 5
+  "version": 6
 }
