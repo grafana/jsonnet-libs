@@ -2,9 +2,9 @@ local g = import '../../g.libsonnet';
 local base = import './base.libsonnet';
 local stat = g.panel.stat;
 //uptime panel. expects duration in seconds as input
-{
+base {
   new(title='Uptime', targets, description=''):
-    base.new(title, targets, description)
+    super.new(title, targets, description)
     + stat.standardOptions.withDecimals(1)
     + stat.standardOptions.withUnit('dtdurations')
     + stat.options.withColorMode('thresholds')
