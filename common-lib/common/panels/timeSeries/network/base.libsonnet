@@ -22,5 +22,5 @@ base {
       + fieldOverride.byType.withPropertiesFromOptions(
         defaults.custom.withTransform('negative-Y')
       )
-  )
+    ),
 }

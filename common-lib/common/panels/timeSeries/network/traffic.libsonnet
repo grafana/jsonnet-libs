@@ -12,5 +12,5 @@ base {
     description='',
   ):
     super.new(title, targets, description)
-    + timeSeries.standardOptions.withUnit('bps')
+    + timeSeries.standardOptions.withUnit('bps'),
 }

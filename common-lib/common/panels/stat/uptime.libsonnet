@@ -21,5 +21,5 @@ local stat = g.panel.stat;
     )
     + stat.options.reduceOptions.withCalcs([
       'lastNotNull',
-    ])
+    ]),
 }

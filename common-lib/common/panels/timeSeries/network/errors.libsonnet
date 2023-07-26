@@ -11,5 +11,5 @@ base {
     targets,
     description='',
   ):
-  super.new(title, targets, description)
+    super.new(title, targets, description),
 }
