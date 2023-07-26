@@ -2,10 +2,10 @@
   prometheusAlerts+:: {
     groups+: [
       {
-        name: 'apache-couchbase',
+        name: 'couchbase',
         rules: [
           {
-            alert: 'ApacheCouchbaseHighCPUUsage',
+            alert: 'CouchbaseHighCPUUsage',
             expr: |||
               (sys_cpu_utilization_rate) > %(alertsCriticalCPUUsage)s
             ||| % $._config,
@@ -23,7 +23,7 @@
             },
           },
           {
-            alert: 'ApacheCouchbaseHighMemoryUsage',
+            alert: 'CouchbaseHighMemoryUsage',
             expr: |||
               100 * (sys_mem_actual_used / clamp_min(sys_mem_actual_used + sys_mem_actual_free, 1)) > %(alertsCriticalMemoryUsage)s
             ||| % $._config,
@@ -41,7 +41,7 @@
             },
           },
           {
-            alert: 'ApacheCouchbaseMemoryEvictionRate',
+            alert: 'CouchbaseMemoryEvictionRate',
             expr: |||
               (kv_ep_num_value_ejects) > %(alertsWarningMemoryEvictionRate)s
             ||| % $._config,
@@ -59,7 +59,7 @@
             },
           },
           {
-            alert: 'ApacheCouchbaseInvalidRequestVolume',
+            alert: 'CouchbaseInvalidRequestVolume',
             expr: |||
               sum without(instance, job) (rate(n1ql_invalid_requests[2m])) > %(alertsWarningInvalidRequestVolume)s
             ||| % $._config,

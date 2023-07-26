@@ -10,7 +10,7 @@ exclusions:
   target-instance-rule:
     reason: "The dashboard is a 'cluster' dashboard where the instance refers to nodes, this dashboard focuses only on the cluster view."
     entries:
-      - dashboard: "Apache Couchbase cluster overview"
+      - dashboard: "Couchbase cluster overview"
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
