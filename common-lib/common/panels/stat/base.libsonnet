@@ -1,8 +1,10 @@
 local g = import '../../g.libsonnet';
 local stat = g.panel.stat;
-function(title, targets, description='')
+local base = import '../all/base.libsonnet';
 
-  stat.new(title)
-  + stat.queryOptions.withTargets(targets)
-  + stat.panelOptions.withDescription(description)
-  + stat.queryOptions.withInterval('1m')
+stat + base {
+  new(title, targets, description=''):
+    stat.new(title)
+    + super.new(title, targets, description)
+    
+}
