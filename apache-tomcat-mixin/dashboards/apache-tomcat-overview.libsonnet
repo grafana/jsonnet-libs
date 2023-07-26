@@ -646,7 +646,7 @@ local logsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out|/Program Files/Apache Software Foundation/Tomcat .*..*/logs/catalina.out"} |= ``',
+      expr: '{filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out|/Program Files/Apache Software Foundation/Tomcat .*..*/logs/catalina.out",job=~"$job", instance=~"$instance"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
