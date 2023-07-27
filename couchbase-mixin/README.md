@@ -19,17 +19,17 @@ and the following alerts:
 
 The Couchbase cluster overview dashboard provides details on the top nodes and buckets for a cluster, including memory and disk usage, network requests, key service metrics, rate of operations, along with replication metrics at all levels of a Couchbase cluster.
 
-![First screenshot of the Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/cluster_overview_1.png)
-![Second screenshot of the Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/cluster_overview_2.png)
-![Third screenshot of the Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/cluster_overview_3.png)
+![First screenshot of the Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/couchbase_cluster_overview_1.png)
+![Second screenshot of the Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/couchbase_cluster_overview_2.png)
+![Third screenshot of the Couchbase cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/couchbase_cluster_overview_3.png)
 
 ## Couchbase Node Overview
 
 The Couchbase node overview dashboard provides details on memory usage, cpu usage, network request info (request methods and response codes), query service request info (volume, type, and processing time), index service performance (request volume, cache hit ratio, and scan latency), and both error and couchdb logs. The default Couchbase system log path is `/opt/couchbase/var/lib/couchbase/logs` on Linux, or `C:\Program\Files\Couchbase\Server\var\lib\couchbase\logs` on Windows.
 
-![First screenshot of the Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/node_overview_1.png)
-![Second screenshot of the Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/node_overview_2.png)
-![Third screenshot of the Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/node_overview_3.png)
+![First screenshot of the Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/couchbase_node_overview_1.png)
+![Second screenshot of the Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/couchbase_node_overview_2.png)
+![Third screenshot of the Couchbase node overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/couchbase_node_overview_3.png)
 
 Couchbase system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -54,6 +54,8 @@ scrape_configs:
           cluster: "<your-cluster-name>"
           __path__: /opt/couchbase/var/lib/couchbase/logs/*.log
     pipeline_stages:
+      - drop:
+          expression: '---'
       - multiline:
           firstline: '\[(ns_server|couchdb):(error|info),.*\]'
 ```
@@ -62,8 +64,8 @@ scrape_configs:
 
 The Couchbase Bucket overview dashboard provides details on the top buckets based on key resource usage, items, operations, operations failed, high priority requests, cache hit ratio, number of replica vBuckets, and vBucket queue memory usage.
 
-![First screenshot of the Couchbase bucket overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/bucket_overview_1.png)
-![Second screenshot of the Couchbase bucket overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/bucket_overview_2.png)
+![First screenshot of the Couchbase bucket overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/couchbase_bucket_overview_1.png)
+![Second screenshot of the Couchbase bucket overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/couchbase/screenshots/couchbase_bucket_overview_2.png)
 
 ## Alerts Overview
 

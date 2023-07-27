@@ -264,7 +264,7 @@ local topBucketsByOperationsPanel = {
           type: 'linear',
         },
         showPoints: 'auto',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -467,7 +467,7 @@ local bottomBucketsByCacheHitRatioPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"})) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}), 1) + sum by(couchbase_cluster, job, instance, bucket) (index_cache_misses{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}))',
+      'bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval]))) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_misses{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval])))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
     ),
@@ -501,7 +501,7 @@ local bottomBucketsByCacheHitRatioPanel = {
           type: 'linear',
         },
         showPoints: 'auto',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
