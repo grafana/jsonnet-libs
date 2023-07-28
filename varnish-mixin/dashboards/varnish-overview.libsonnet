@@ -1030,16 +1030,22 @@ local threadsPanel = {
       'increase(varnish_main_threads_failed{job=~"$job",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Failed',
+      format='time_series',
+      interval='1m',
     ),
     prometheus.target(
       'increase(varnish_main_threads_created{job=~"$job",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Created',
+      format='time_series',
+      interval='1m',
     ),
     prometheus.target(
       'increase(varnish_main_threads_limited{job=~"$job",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Limited',
+      format='time_series',
+      interval='1m',
     ),
     prometheus.target(
       'varnish_main_threads{job=~"$job",instance=~"$instance"}',
