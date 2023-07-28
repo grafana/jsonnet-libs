@@ -505,6 +505,7 @@ local localBackupSizePanel = {
         mode: 'fixed',
       },
       mappings: [],
+      min: 1,
       thresholds: {
         mode: 'absolute',
         steps: [

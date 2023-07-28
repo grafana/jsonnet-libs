@@ -562,7 +562,7 @@ local queryServiceRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(n1ql_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval]) + rate(n1ql_invalid_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - total',
     ),
@@ -829,7 +829,7 @@ local indexCacheHitRatioPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(couchbase_cluster, job, instance) (index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}) / (clamp_min(sum by(couchbase_cluster, job, instance) (index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}), 1) + sum by(couchbase_cluster, job, instance) (index_cache_misses{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}))',
+      'sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])) / (clamp_min(sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance) (increase(index_cache_misses{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])))',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
@@ -863,7 +863,7 @@ local indexCacheHitRatioPanel = {
           type: 'linear',
         },
         showPoints: 'auto',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
