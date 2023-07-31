@@ -18,7 +18,7 @@ local config = (import './config.libsonnet');
               multi: false,
               name: 'cluster',
               options: [],
-              query: 'label_values(%s)' % config.cluster_labelname,
+              query: 'label_values({},%s)' % config.cluster_labelname,
               refresh: 2,
               regex: '',
               sort: 1,
