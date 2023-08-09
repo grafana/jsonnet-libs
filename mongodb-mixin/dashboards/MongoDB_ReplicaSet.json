@@ -1597,7 +1597,7 @@
         "description": null,
         "error": null,
         "hide": 2,
-        "includeAll": false,
+        "includeAll": true,
         "label": "job",
         "multi": true,
         "name": "job",
