@@ -1979,6 +1979,13 @@ local mongosNodesPanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Atlas dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           performanceRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },

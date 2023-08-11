@@ -807,6 +807,13 @@ local hardwareIOWaitTimePanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Atlas dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           memoryPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },

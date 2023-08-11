@@ -20,27 +20,32 @@ and the following alerts:
 ## Atlas cluster overview
 The Atlas cluster overview dashboard provides an at a glance view into an Atlas cluster. Metrics such as hardware I/O's, network requests, memory usage, hardware disk usage, connections, latency, operations, deadlocks, and inventory tables for the nodes in the cluster. Please note that lock related panels such as deadlocks and wait times will show "no data" until load is generated for their respective metrics.
 
-todo: pictures
+![First screenshot of the MongoDB Atlas cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-cluster-overview-1.png)
+![Second screenshot of the MongoDB Atlas cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-cluster-overview-2.png)
 
 ## Atlas performance overview
 The Atlas performance overview dashboard provides a detailed look at the performance of specific nodes in the Atlas environment. Metrics available include memory usage, hardware disk usage, network requests, slow network requests, and hardware I/O counts and wait times. 
 
-todo: pictures
+![First screenshot of the MongoDB Atlas performance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-performance-overview-1.png)
+![Second screenshot of the MongoDB Atlas performance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-performance-overview-2.png)
 
 ## Atlas operations overview
 The Atlas operations overview dashboard provides a detailed look at the operations occurring in an Atlas node. Metrics include CRUD operation counts, connection counts, read and write operations and latency, deadlock counts, and lock wait times. Please note that lock related panels such as deadlocks and wait times will show "no data" until load is generated for their respective metrics.
 
-todo: pictures
+![First screenshot of the MongoDB Atlas operations overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-operations-overview-1.png)
+![Second screenshot of the MongoDB Atlas operations overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-operations-overview-2.png)
 
 ## Atlas elections overview
 The Atlas elections overview dashboard provides a detailed look into the election states of replica sets in the Atlas cluster, at the node level. Metrics include various "called" and "successful" counts for various election types and catch-up related numbers like catch-ups successful, skipped, and failed.
 
-todo: pictures
+![First screenshot of the MongoDB Atlas elections overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-elections-overview-1.png)
+![Second screenshot of the MongoDB Atlas elections overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-elections-overview-2.png)
 
 ## Atlas sharding overview
 The Atlas sharding overview dashboard is exclusive for sharded Atlas clusters. This dashboard includes metrics like refreshes started and failed, refresh times, blocked cache operations, stale configs, and counts for operations that target a different number of shards.
 
-todo: pictures
+![First screenshot of the MongoDB Atlas sharding overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-sharding-overview-1.png)
+![Second screenshot of the MongoDB Atlas sharding overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-sharding-overview-2.png)
 
 ## Environment configuration
 This mixin includes the Atlas sharding overview dashboard, however the metrics used report data only when there is a sharded cluster in the project the prometheus integration is reporting on. Because of this, the Atlas sharding overview dashboard is disabled by default. However, if you do have a sharded cluster and want to use the Atlas sharding overview dashboard, you can set the `enableShardingDashboard` parameter in `config.libsonnet` to `true`.
