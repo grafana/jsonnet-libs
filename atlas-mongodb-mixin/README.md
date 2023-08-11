@@ -42,7 +42,7 @@ The Atlas elections overview dashboard provides a detailed look into the electio
 ![Second screenshot of the MongoDB Atlas elections overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-elections-overview-2.png)
 
 ## Atlas sharding overview
-The Atlas sharding overview dashboard is exclusive for sharded Atlas clusters. This dashboard includes metrics like refreshes started and failed, refresh times, blocked cache operations, stale configs, and counts for operations that target a different number of shards.
+The Atlas sharding overview dashboard is exclusive for sharded Atlas clusters. This dashboard includes metrics like refreshes started and failed, refresh times, blocked cache operations, stale configs, and counts for operations that target a different number of shards. Panels in this dashboard only apply to `shardsvr` and `mongos` nodes. Between those 2 node types, most panels only apply to one or the other.
 
 ![First screenshot of the MongoDB Atlas sharding overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-sharding-overview-1.png)
 ![Second screenshot of the MongoDB Atlas sharding overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/atlas-mongodb/screenshots/atlas-sharding-overview-2.png)

@@ -864,6 +864,13 @@ local averageCatchupOperationsPanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Atlas dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           stepupElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 0 } },
