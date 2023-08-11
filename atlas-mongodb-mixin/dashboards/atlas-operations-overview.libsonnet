@@ -12,6 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local queryOperationsPanel = {
   datasource: promDatasource,
   targets: [
@@ -24,7 +25,7 @@ local queryOperationsPanel = {
   ],
   type: 'timeseries',
   title: 'Query operations',
-  description: 'The number of query operations the node has performed.',
+  description: 'The number of query operations the node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -104,7 +105,7 @@ local insertOperationsPanel = {
   ],
   type: 'timeseries',
   title: 'Insert operations',
-  description: 'The number of insert operations the node has performed.',
+  description: 'The number of insert operations the node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -184,7 +185,7 @@ local updateOperationsPanel = {
   ],
   type: 'timeseries',
   title: 'Update operations',
-  description: 'The number of update operations this node has performed.',
+  description: 'The number of update operations this node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -264,7 +265,7 @@ local deleteOperationsPanel = {
   ],
   type: 'timeseries',
   title: 'Delete operations',
-  description: 'The number of delete operations this node has performed.',
+  description: 'The number of delete operations this node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1110,6 +1111,7 @@ local collectionWaitTimePanel = {
     },
   },
 };
+
 
 {
   grafanaDashboards+:: {
