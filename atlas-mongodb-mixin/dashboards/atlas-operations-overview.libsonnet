@@ -16,7 +16,7 @@ local queryOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_query{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_opcounters_query{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -96,7 +96,7 @@ local insertOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -176,7 +176,7 @@ local updateOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_update{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_opcounters_update{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -256,7 +256,7 @@ local deleteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -336,7 +336,7 @@ local currentConnectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mongodb_connections_current{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}',
+      'mongodb_connections_current{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -411,7 +411,7 @@ local activeConnectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mongodb_connections_active{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}',
+      'mongodb_connections_active{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -486,13 +486,13 @@ local readAndWriteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
       interval='1m',
@@ -572,13 +572,13 @@ local readAndWriteLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opLatencies_reads_latency{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_opLatencies_reads_latency{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_opLatencies_writes_latency{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_opLatencies_writes_latency{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
       interval='1m',
@@ -632,7 +632,7 @@ local readAndWriteLatencyPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'µs',
     },
     overrides: [],
   },
@@ -665,7 +665,7 @@ local databaseDeadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
+      '(increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -740,7 +740,7 @@ local collectionDeadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
+      '(increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -815,7 +815,7 @@ local databaseWaitCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
+      '(increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -890,7 +890,7 @@ local collectionWaitCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
+      '(increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -965,7 +965,7 @@ local databaseWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
+      '(increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -1040,7 +1040,7 @@ local collectionWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
+      '(increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -1138,18 +1138,18 @@ local collectionWaitTimePanel = {
             promDatasource,
             'label_values(mongodb_network_bytesIn,job)',
             label='Job',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
             sort=0
           ),
           template.new(
-            'cluster',
+            'cl_name',
             promDatasource,
             'label_values(mongodb_network_bytesIn{job=~"$job"},cl_name)',
-            label='Cluster',
-            refresh=1,
+            label='Atlas cluster',
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
@@ -1158,9 +1158,9 @@ local collectionWaitTimePanel = {
           template.new(
             'rs',
             promDatasource,
-            'label_values(mongodb_network_bytesIn{cl_name=~"$cluster"},rs_nm)',
+            'label_values(mongodb_network_bytesIn{cl_name=~"$cl_name"},rs_nm)',
             label='Replica set',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
@@ -1171,7 +1171,7 @@ local collectionWaitTimePanel = {
             promDatasource,
             'label_values(mongodb_network_bytesIn{rs_nm=~"$rs"},instance)',
             label='Node',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',

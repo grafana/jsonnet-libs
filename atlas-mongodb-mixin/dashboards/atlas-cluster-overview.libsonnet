@@ -24,13 +24,13 @@ local hardwareIOPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
       interval='1m',
@@ -110,13 +110,13 @@ local hardwareIOWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(hardware_disk_metrics_read_time_milliseconds{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(hardware_disk_metrics_read_time_milliseconds{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - read',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(hardware_disk_metrics_write_time_milliseconds{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(hardware_disk_metrics_write_time_milliseconds{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - write',
       interval='1m',
@@ -196,13 +196,13 @@ local networkBytesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - received',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - sent',
       interval='1m',
@@ -283,7 +283,7 @@ local networkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_network_numRequests{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}}',
       interval='1m',
@@ -359,13 +359,13 @@ local memoryPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_mem_resident{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_mem_resident{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - RAM',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_mem_virtual{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_mem_virtual{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - virtual',
       interval='1m',
@@ -441,7 +441,7 @@ local diskSpacePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(sum (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cluster"}) by(cl_name)) / (clamp_min(sum (hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cluster"}) by(cl_name) + sum (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cluster"}) by(cl_name),0.1))',
+      '(sum (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name)) / (clamp_min(sum (hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name) + sum (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name),0.1))',
       datasource=promDatasource,
       legendFormat='{{cl_name}}',
     ),
@@ -516,7 +516,7 @@ local hardwareCPUInterruptServiceTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(hardware_system_cpu_irq_milliseconds{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(hardware_system_cpu_irq_milliseconds{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}}',
       interval='1m',
@@ -592,13 +592,13 @@ local slowRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - DNS',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - SSL',
       interval='1m',
@@ -682,7 +682,7 @@ local connectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_connections_totalCreated{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_connections_totalCreated{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}}',
       interval='1m',
@@ -758,13 +758,13 @@ local readwriteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
       interval='1m',
@@ -844,25 +844,25 @@ local operationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - insert',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_opcounters_query{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_opcounters_query{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - query',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_opcounters_update{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_opcounters_update{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - update',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - delete',
       interval='1m',
@@ -917,13 +917,13 @@ local readwriteLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_opLatencies_reads_latency{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_opLatencies_reads_latency{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
       interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_opLatencies_writes_latency{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)',
+      'sum (increase(mongodb_opLatencies_writes_latency{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
       interval='1m',
@@ -1011,12 +1011,12 @@ local currentQueuePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (mongodb_globalLock_currentQueue_readers{job=~"$job",cl_name=~"$cluster"}) by (cl_name)',
+      'sum (mongodb_globalLock_currentQueue_readers{job=~"$job",cl_name=~"$cl_name"}) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
     ),
     prometheus.target(
-      'sum (mongodb_globalLock_currentQueue_writers{job=~"$job",cl_name=~"$cluster"}) by (cl_name)',
+      'sum (mongodb_globalLock_currentQueue_writers{job=~"$job",cl_name=~"$cl_name"}) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
     ),
@@ -1091,12 +1091,12 @@ local activeClientOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (mongodb_globalLock_activeClients_readers{job=~"$job",cl_name=~"$cluster"}) by (cl_name)',
+      'sum (mongodb_globalLock_activeClients_readers{job=~"$job",cl_name=~"$cl_name"}) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
     ),
     prometheus.target(
-      'sum (mongodb_globalLock_activeClients_writers{job=~"$job",cl_name=~"$cluster"}) by (cl_name)',
+      'sum (mongodb_globalLock_activeClients_writers{job=~"$job",cl_name=~"$cl_name"}) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
     ),
@@ -1171,13 +1171,13 @@ local deadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(sum (increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name))',
+      '(sum (increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name))',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - database',
       interval='1m',
     ),
     prometheus.target(
-      '(sum (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name))',
+      '(sum (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name))',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - collection',
       interval='1m',
@@ -1253,13 +1253,13 @@ local waitAcquiringLockPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(sum (increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name))',
+      '(sum (increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name))',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - database',
       interval='1m',
     ),
     prometheus.target(
-      '(sum (increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cluster"}[$__interval:])) by (cl_name))',
+      '(sum (increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name))',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - collection',
       interval='1m',
@@ -1343,7 +1343,7 @@ local shardNodesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mongodb_network_bytesIn{job=~"$job",cl_name=~"$cluster"}',
+      'mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name"}',
       datasource=promDatasource,
       legendFormat='',
     ),
@@ -1544,7 +1544,7 @@ local configNodesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mongodb_network_bytesIn{job=~"$job",cl_name=~"$cluster"}',
+      'mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name"}',
       datasource=promDatasource,
       legendFormat='',
     ),
@@ -1744,7 +1744,7 @@ local mongosNodesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mongodb_network_bytesIn{job=~"$job",cl_name=~"$cluster"}',
+      'mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name"}',
       datasource=promDatasource,
       legendFormat='',
     ),
@@ -1967,10 +1967,10 @@ local mongosNodesPanel = {
             sort=0
           ),
           template.new(
-            'cluster',
+            'cl_name',
             promDatasource,
             'label_values(mongodb_network_bytesIn{job=~"$job"},cl_name)',
-            label='Cluster',
+            label='Atlas cluster',
             refresh=2,
             includeAll=true,
             multi=true,

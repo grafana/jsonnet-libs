@@ -16,13 +16,13 @@ local memoryPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_mem_resident{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_mem_resident{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - RAM',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_mem_virtual{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_mem_virtual{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - virtual',
       interval='1m',
@@ -98,7 +98,7 @@ local hardwareCPUInterruptServiceTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hardware_system_cpu_irq_milliseconds{job=~"$job",cl_name=~"$cluster",instance=~"$node"}[$__interval:])',
+      'increase(hardware_system_cpu_irq_milliseconds{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -174,12 +174,12 @@ local diskSpacePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name="$cluster",instance=~"$node"}',
+      'hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - free',
     ),
     prometheus.target(
-      'hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name="$cluster",instance=~"$node"}',
+      'hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - used',
     ),
@@ -254,7 +254,7 @@ local diskSpaceUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cluster",instance=~"$node"}) / ((hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cluster",instance=~"$node"}) + (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cluster",instance=~"$node"}))',
+      '(hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}) / clamp_min((hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}) + (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -329,7 +329,7 @@ local networkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_network_numRequests{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -405,13 +405,13 @@ local slowNetworkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - DNS',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - SSL',
       interval='1m',
@@ -487,13 +487,13 @@ local networkThroughputPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - received',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cluster",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - sent',
       interval='1m',
@@ -573,13 +573,13 @@ local hardwareIOPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cluster",instance=~"$node"}[$__interval:])',
+      'increase(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
       interval='1m',
     ),
     prometheus.target(
-      'increase(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cluster",instance=~"$node"}[$__interval:])',
+      'increase(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
       interval='1m',
@@ -658,13 +658,13 @@ local hardwareIOWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hardware_disk_metrics_read_time_milliseconds{job=~"$job",cl_name=~"$cluster",instance=~"$node"}[$__interval:])',
+      'increase(hardware_disk_metrics_read_time_milliseconds{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - read',
       interval='1m',
     ),
     prometheus.target(
-      'increase(hardware_disk_metrics_write_time_milliseconds{job=~"$job",cl_name=~"$cluster",instance=~"$node"}[$__interval:])',
+      'increase(hardware_disk_metrics_write_time_milliseconds{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - write',
       interval='1m',
@@ -766,18 +766,18 @@ local hardwareIOWaitTimePanel = {
             promDatasource,
             'label_values(mongodb_network_bytesIn,job)',
             label='Job',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
             sort=0
           ),
           template.new(
-            'cluster',
+            'cl_name',
             promDatasource,
             'label_values(mongodb_network_bytesIn{job=~"$job"},cl_name)',
-            label='Cluster',
-            refresh=1,
+            label='Atlas cluster',
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
@@ -786,9 +786,9 @@ local hardwareIOWaitTimePanel = {
           template.new(
             'rs',
             promDatasource,
-            'label_values(mongodb_network_bytesIn{cl_name=~"$cluster"},rs_nm)',
+            'label_values(mongodb_network_bytesIn{cl_name=~"$cl_name"},rs_nm)',
             label='Replica set',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
@@ -799,7 +799,7 @@ local hardwareIOWaitTimePanel = {
             promDatasource,
             'label_values(mongodb_network_bytesIn{rs_nm=~"$rs"},instance)',
             label='Node',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
