@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local queryOperationsPanel = {
   datasource: promDatasource,
   targets: [
@@ -1111,7 +1110,6 @@ local collectionWaitTimePanel = {
     },
   },
 };
-
 
 {
   grafanaDashboards+:: {
