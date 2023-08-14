@@ -16,13 +16,13 @@ local stepupElectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_stepUpCmd_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_stepUpCmd_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - called',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_electionMetrics_stepUpCmd_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_stepUpCmd_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - successful',
       interval='1m',
@@ -98,13 +98,13 @@ local priorityElectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_priorityTakeover_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_priorityTakeover_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - called',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_electionMetrics_priorityTakeover_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_priorityTakeover_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - successful',
       interval='1m',
@@ -180,13 +180,13 @@ local takeoverElectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_catchUpTakeover_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_catchUpTakeover_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - called',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_electionMetrics_catchUpTakeover_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_catchUpTakeover_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - successful',
       interval='1m',
@@ -262,13 +262,13 @@ local timeoutElectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_electionTimeout_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_electionTimeout_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - called',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_electionMetrics_electionTimeout_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_electionTimeout_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - successful',
       interval='1m',
@@ -351,7 +351,7 @@ local catchupsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_numCatchUps{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_numCatchUps{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -426,7 +426,7 @@ local catchupsSkippedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_numCatchUpsSkipped{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_numCatchUpsSkipped{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -501,7 +501,7 @@ local catchupsSucceededPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_numCatchUpsSucceeded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_numCatchUpsSucceeded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -576,7 +576,7 @@ local catchupsFailedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_numCatchUpsFailedWithError{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_numCatchUpsFailedWithError{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -651,7 +651,7 @@ local catchupTimeoutsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_electionMetrics_numCatchUpsTimedOut{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_electionMetrics_numCatchUpsTimedOut{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -726,7 +726,7 @@ local averageCatchupOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mongodb_electionMetrics_averageCatchUpOps{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}',
+      'mongodb_electionMetrics_averageCatchUpOps{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -852,7 +852,7 @@ local averageCatchupOperationsPanel = {
             sort=0
           ),
           template.new(
-            'node',
+            'instance',
             promDatasource,
             'label_values(mongodb_network_bytesIn{rs_nm=~"$rs"},instance)',
             label='Node',

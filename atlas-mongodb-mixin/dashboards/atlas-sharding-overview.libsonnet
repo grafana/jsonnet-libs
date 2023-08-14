@@ -16,7 +16,7 @@ local staleConfigsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_countStaleConfigErrors{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_countStaleConfigErrors{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -92,7 +92,7 @@ local chunkMigrationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_countRecipientMoveChunkStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_countRecipientMoveChunkStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -168,13 +168,13 @@ local docsClonedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_countDocsClonedOnDonor{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_countDocsClonedOnDonor{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - donor',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_countDocsClonedOnRecipient{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_countDocsClonedOnRecipient{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - recipient',
       interval='1m',
@@ -254,7 +254,7 @@ local criticalSectionTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_totalCriticalSectionTimeMillis{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_totalCriticalSectionTimeMillis{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -338,13 +338,13 @@ local refreshesStartedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_catalogCache_countIncrementalRefreshesStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_catalogCache_countIncrementalRefreshesStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - incremental',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_catalogCache_countFullRefreshesStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_catalogCache_countFullRefreshesStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - full',
       interval='1m',
@@ -424,7 +424,7 @@ local refreshesFailedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_catalogCache_countFailedRefreshes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_catalogCache_countFailedRefreshes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -500,7 +500,7 @@ local cacheStaleConfigsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_catalogCache_countStaleConfigErrors{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_catalogCache_countStaleConfigErrors{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -576,13 +576,13 @@ local cacheEntriesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_catalogCache_numDatabaseEntries{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_catalogCache_numDatabaseEntries{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - database',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_catalogCache_numCollectionEntries{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_catalogCache_numCollectionEntries{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - collection',
       interval='1m',
@@ -658,7 +658,7 @@ local cacheRefreshTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_catalogCache_totalRefreshWaitTimeMicros{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_catalogCache_totalRefreshWaitTimeMicros{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -734,7 +734,7 @@ local cacheOperationsBlockedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_catalogCache_operationsBlockedByRefresh_countAllOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_catalogCache_operationsBlockedByRefresh_countAllOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -817,31 +817,31 @@ local allShardsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_find_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_find_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_insert_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_insert_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_update_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_update_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_delete_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_delete_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
       interval='1m',
@@ -921,31 +921,31 @@ local manyShardsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_find_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_find_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_insert_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_insert_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_update_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_update_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_delete_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_delete_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
       interval='1m',
@@ -1025,31 +1025,31 @@ local oneShardPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_find_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_find_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_insert_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_insert_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_update_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_update_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_delete_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_delete_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
       interval='1m',
@@ -1129,31 +1129,31 @@ local unshardedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_find_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_find_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_insert_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_insert_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_update_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_update_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_delete_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_delete_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$node"}[$__interval:])',
+      'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
       interval='1m',
@@ -1286,7 +1286,7 @@ local unshardedPanel = {
               sort=0
             ),
             template.new(
-              'node',
+              'instance',
               promDatasource,
               'label_values(mongodb_network_bytesIn{rs_nm=~"$rs"},instance)',
               label='Node',
