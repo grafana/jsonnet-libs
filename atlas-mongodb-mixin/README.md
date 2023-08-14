@@ -20,7 +20,7 @@ and the following alerts:
 **Please note:**
 - Some metrics may be reset if the MongoDB Atlas cluster is ever reset.
 - Lock related metrics such as deadlocks and wait count do not report data until the respective event has occurred.
-- The Atlas sharding overview dashboard is controlled by a boolean flag in the config file. By default it is set to false, but if you have a sharded cluster you wish to monitor change the flag to true.
+- The Atlas sharding overview dashboard is controlled by a boolean flag in the config file. See more in the [environment configuration](#environment-configuration) section.
 - Within the Atlas sharding overview dashboard certain panels only relate to `shardsvr` nodes, other panels relate only to `mongos` nodes, and other relate to both nodes.
 
 ## Atlas cluster overview
