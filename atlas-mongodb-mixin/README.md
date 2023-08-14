@@ -17,6 +17,12 @@ and the following alerts:
 - AtlasSlowHardwareIO
 - AtlasHighNumberOfTimeoutElections
 
+**Please note:**
+- Some metrics may be reset if the MongoDB Atlas cluster is ever reset.
+- Lock related metrics such as deadlocks and wait count do not report data until the respective event has occurred.
+- The Atlas sharding overview dashboard is controlled by a boolean flag in the config file. By default it is set to false, but if you have a sharded cluster you wish to monitor change the flag to true.
+- Within the Atlas sharding overview dashboard certain panels only relate to `shardsvr` nodes, other panels relate only to `mongos` nodes, and other relate to both nodes.
+
 ## Atlas cluster overview
 The Atlas cluster overview dashboard provides an at a glance view into an Atlas cluster. Metrics such as hardware I/O's, network requests, memory usage, hardware disk usage, connections, latency, operations, deadlocks, and inventory tables for the nodes in the cluster. Please note that lock related panels such as deadlocks and wait times will show "no data" until load is generated for their respective metrics.
 
