@@ -60,11 +60,11 @@ This mixin includes the Atlas sharding overview dashboard, however the metrics u
 
 ## Alerts overview
 
-- AtlasHighNumberOfDeadlocks: There are a high number of deadlocks occurring.
-- AtlasHighNumberOfSlowNetworkRequests: There are a high number of slow network requests.
+- AtlasHighNumberOfDeadlocks: There is a high number of deadlocks occurring.
+- AtlasHighNumberOfSlowNetworkRequests: There is a high number of slow network requests.
 - AtlasDiskSpaceLow: Hardware is running out of disk space.
 - AtlasSlowHardwareIO: Read and write I/O's are taking too long to complete.
-- AtlasHighNumberOfTimeoutElections: There are a high number of elections being called due to the primary node timing out.
+- AtlasHighNumberOfTimeoutElections: There is a high number of elections being called due to the primary node timing out.
 
 ## Install tools
 
