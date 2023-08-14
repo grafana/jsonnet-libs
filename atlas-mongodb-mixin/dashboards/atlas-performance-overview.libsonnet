@@ -98,7 +98,7 @@ local hardwareCPUInterruptServiceTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hardware_system_cpu_irq_milliseconds{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(hardware_system_cpu_irq_milliseconds{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -174,12 +174,12 @@ local diskSpacePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
+      'hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - free',
     ),
     prometheus.target(
-      'hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
+      'hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - used',
     ),
@@ -254,7 +254,7 @@ local diskSpaceUtilizationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}) / clamp_min((hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}) + (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}), 1)',
+      '(hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}) / clamp_min((hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}) + (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -573,13 +573,13 @@ local hardwareIOPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
       interval='1m',
     ),
     prometheus.target(
-      'increase(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
       interval='1m',
@@ -658,13 +658,13 @@ local hardwareIOWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hardware_disk_metrics_read_time_milliseconds{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(hardware_disk_metrics_read_time_milliseconds{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - read',
       interval='1m',
     ),
     prometheus.target(
-      'increase(hardware_disk_metrics_write_time_milliseconds{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(hardware_disk_metrics_write_time_milliseconds{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - write',
       interval='1m',
