@@ -10,7 +10,8 @@ local base = import '../base.libsonnet';
 timeSeries + base {
   new(title, targets, description=''):
     super.new(title, targets, description)
-    + timeSeries.new(title),
+    + timeSeries.new(title)
+    + self.stylize(),
 
   stylize():
     super.stylize()
