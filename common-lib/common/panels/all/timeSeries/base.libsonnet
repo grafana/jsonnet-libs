@@ -25,14 +25,10 @@ timeSeries + base {
     // Style choice: Smoother lines
     + custom.withLineInterpolation('smooth')
     // Style choice: Show all values in tooltip, sorted
-    + options.withTooltip(
-      options.tooltip.withMode('multi')
+    + options.tooltip.withMode('multi')
     + options.tooltip.withSort('desc')
-    )
     // Style choice: Use simple legend without any values (cleaner look)
-    + options.withLegend(
-      options.legend.withDisplayMode('list')
+    + options.legend.withDisplayMode('list')
     + options.legend.withCalcs([])
-    ),
 
 }
