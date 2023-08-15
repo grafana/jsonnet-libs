@@ -1,4 +1,4 @@
-local g = import '../../g.libsonnet';
+local g = import '../../../g.libsonnet';
 local base = import './base.libsonnet';
 local stat = g.panel.stat;
 // Panels to display metrics that can go from 0 to 100%.
