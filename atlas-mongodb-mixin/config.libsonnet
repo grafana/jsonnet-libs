@@ -12,7 +12,7 @@
     alertsDeadlocks: 10,  // count
     alertsSlowNetworkRequests: 10,  // count
     alertsHighDiskUsage: 90,  // percentage: 0-100
-    alertsSlowHardwareIO: 1,  // seconds
+    alertsSlowHardwareIO: 3,  // seconds
     alertsHighTimeoutElections: 10,  // count
 
     enableLokiLogs: false,

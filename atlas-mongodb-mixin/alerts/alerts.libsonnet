@@ -17,7 +17,7 @@
               summary: 'There is a high number of deadlocks occurring.',
               description:
                 (
-                  'The number of deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{$labels.value}} which is above the threshold of %(alertsDeadlocks)s'
+                  'The number of deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{$values.A}} which is above the threshold of %(alertsDeadlocks)s.'
                 ) % $._config,
             },
           },
@@ -34,7 +34,7 @@
               summary: 'There is a high number of slow network requests.',
               description:
                 (
-                  'The number of DNS and SSL operations taking more than 1 second to complete on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{$labels.value}} which is above the threshold of %(alertsSlowNetworkRequests)s'
+                  'The number of DNS and SSL operations taking more than 1 second to complete on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{$values.A}} which is above the threshold of %(alertsSlowNetworkRequests)s.'
                 ) % $._config,
             },
           },
@@ -51,7 +51,7 @@
               summary: 'Hardware is running out of disk space.',
               description:
                 (
-                  'The amount of hardware disk space being used on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{$labels.value}} which is above the threshold of %(alertsHighDiskUsage)s'
+                  'The amount of hardware disk space being used on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{$values.A}}%% which is above the threshold of %(alertsHighDiskUsage)s%%.'
                 ) % $._config,
             },
           },
@@ -68,7 +68,7 @@
               summary: 'Read and write I/Os are taking too long to complete.',
               description:
                 (
-                  'The latency time for read and write I/Os on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{$labels.value}} which is above the threshold of %(alertsSlowHardwareIO)s'
+                  'The latency time for read and write I/Os on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{$values.A}} seconds which is above the threshold of %(alertsSlowHardwareIO)s seconds.'
                 ) % $._config,
             },
           },
@@ -85,7 +85,7 @@
               summary: 'There is a high number of elections being called due to the primary node timing out.',
               description:
                 (
-                  'The number of elections being called due to the primary node timing out in replica set {{$labels.rs_m}} in cluster {{$labels.cl_name}} is {{$labels.value}} which is above the threshold of %(alertsHighTimeoutElections)s'
+                  'The number of elections being called due to the primary node timing out in replica set {{$labels.rs_m}} in cluster {{$labels.cl_name}} is {{$values.A}} which is above the threshold of %(alertsHighTimeoutElections)s.'
                 ) % $._config,
             },
           },
