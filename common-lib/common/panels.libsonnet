@@ -1,4 +1,4 @@
-local g = import 'g.libsonnet';
+local g = import './g.libsonnet';
 
 {
   all: {
