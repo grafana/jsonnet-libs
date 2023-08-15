@@ -11,6 +11,10 @@ base {
     + stat.options.withColorMode('value')
     + stat.standardOptions.color.withMode('continuous-BlYlRd')
     + stat.standardOptions.withMax(100)
-    + stat.standardOptions.withMin(0),
+    + stat.standardOptions.withMin(0)
+    // Show last value by default, not mean.
+    + stat.options.reduceOptions.withCalcs([
+      'lastNotNull',
+    ]),
 
 }
