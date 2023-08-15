@@ -7,5 +7,6 @@ stat + base {
     stat.new(title)
     + super.new(title, targets, description)
     + self.stylize(),
-  stylize(): {},
+  stylize():
+    super.stylize(),
 }

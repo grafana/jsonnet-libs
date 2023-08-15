@@ -10,14 +10,14 @@ local base = import '../base.libsonnet';
 timeSeries + base {
   new(title, targets, description=''):
     super.new(title, targets, description)
-    + timeSeries.new(title)
-    + self.stylize(),
-  
+    + timeSeries.new(title),
+
   stylize():
+    super.stylize()
     // Style choice: Make line more thick
-    custom.withLineWidth(2)
+    + custom.withLineWidth(2)
     // Style choice: Opacity level
-    + custom.withFillOpacity(10)
+    + custom.withFillOpacity(30)
     // Style choice: Don't show points on lines
     + custom.withShowPoints('never')
     // Style choice: Opacity gradient
@@ -27,12 +27,12 @@ timeSeries + base {
     // Style choice: Show all values in tooltip, sorted
     + options.withTooltip(
       options.tooltip.withMode('multi')
-      + options.tooltip.withSort('desc')
+    + options.tooltip.withSort('desc')
     )
     // Style choice: Use simple legend without any values (cleaner look)
     + options.withLegend(
       options.legend.withDisplayMode('list')
-      + options.legend.withCalcs([])
+    + options.legend.withCalcs([])
     ),
 
 }

@@ -13,5 +13,6 @@ local g = import './g.libsonnet';
   },
   cpu: {
     stat: import './panels/cpu/stat/main.libsonnet',
+    timeSeries: import './panels/cpu/timeSeries/main.libsonnet',
   },
 }
