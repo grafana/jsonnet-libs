@@ -17,6 +17,7 @@ base {
 
   withNegateOutPackets(regexp='/transmit|tx|out/'):
     defaults.custom.withAxisLabel('out(-) | in(+)')
+    + defaults.custom.withAxisCenteredZero(true)
     + timeSeries.standardOptions.withOverrides(
       fieldOverride.byRegexp.new(regexp)
       + fieldOverride.byType.withPropertiesFromOptions(
