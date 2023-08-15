@@ -6,7 +6,9 @@ local stat = g.panel.stat;
 base {
   new(title, targets, description=''):
     super.new(title, targets, description)
-    + stat.standardOptions.withDecimals(1)
+    + self.stylize(),
+  stylize():
+    stat.standardOptions.withDecimals(1)
     + stat.standardOptions.withUnit('percent')
     + stat.options.withColorMode('value')
     + stat.standardOptions.color.withMode('continuous-BlYlRd')

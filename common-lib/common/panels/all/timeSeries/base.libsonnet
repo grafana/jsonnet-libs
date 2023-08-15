@@ -11,8 +11,11 @@ timeSeries + base {
   new(title, targets, description=''):
     super.new(title, targets, description)
     + timeSeries.new(title)
+    + self.stylize(),
+  
+  stylize():
     // Style choice: Make line more thick
-    + custom.withLineWidth(2)
+    custom.withLineWidth(2)
     // Style choice: Opacity level
     + custom.withFillOpacity(10)
     // Style choice: Don't show points on lines
@@ -31,4 +34,5 @@ timeSeries + base {
       options.legend.withDisplayMode('list')
       + options.legend.withCalcs([])
     ),
+
 }

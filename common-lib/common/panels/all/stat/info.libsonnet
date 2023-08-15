@@ -5,8 +5,10 @@ local stat = g.panel.stat;
 base {
   new(title, targets, description=''):
     super.new(title, targets, description)
+    + self.stylize(),
+  stylize():
     // Style choice: Make it bigger
-    + stat.options.text.withValueSize(20)
+    stat.options.text.withValueSize(20)
     // Style choice: No color for simple text panels by default
     + stat.options.withColorMode('fixed')
     + stat.standardOptions.color.withFixedColor('text')
