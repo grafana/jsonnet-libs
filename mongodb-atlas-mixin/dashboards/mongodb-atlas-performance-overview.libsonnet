@@ -741,9 +741,9 @@ local hardwareIOWaitTimePanel = {
 
 {
   grafanaDashboards+:: {
-    'atlas-performance-overview.json':
+    'mongodb-atlas-performance-overview.json':
       dashboard.new(
-        'Atlas performance overview',
+        'MongoDB Atlas performance overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -809,7 +809,7 @@ local hardwareIOWaitTimePanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Atlas dashboards',
+        title='MongoDB Atlas dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),

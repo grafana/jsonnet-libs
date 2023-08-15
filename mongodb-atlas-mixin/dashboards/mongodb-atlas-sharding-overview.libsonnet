@@ -1232,9 +1232,9 @@ local unshardedPanel = {
 {
   grafanaDashboards+::
     if $._config.enableShardingOverview then {
-      'atlas-sharding-overview.json':
+      'mongodb-atlas-sharding-overview.json':
         dashboard.new(
-          'Atlas sharding overview',
+          'MongoDB Atlas sharding overview',
           time_from='%s' % $._config.dashboardPeriod,
           tags=($._config.dashboardTags),
           timezone='%s' % $._config.dashboardTimezone,
@@ -1300,7 +1300,7 @@ local unshardedPanel = {
         )
         .addLink(grafana.link.dashboards(
           asDropdown=false,
-          title='Atlas dashboards',
+          title='MongoDB Atlas dashboards',
           includeVars=true,
           keepTime=true,
           tags=($._config.dashboardTags),

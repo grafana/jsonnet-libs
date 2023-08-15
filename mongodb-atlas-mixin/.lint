@@ -10,6 +10,6 @@ exclusions:
   target-instance-rule:
     reason: "Cluster overview dashboard does not have an instance selector"
   alert-name-camelcase:
-    reason: "AlertSlowHardwareIO uses IO in the name"
+    reason: "MongoDBAtlasSlowHardwareIO uses IO in the name"
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"

@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'atlas-operations-overview';
+local dashboardUid = 'atlas-election-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 
@@ -12,338 +12,25 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local queryOperationsPanel = {
+local stepupElectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_query{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(mongodb_electionMetrics_stepUpCmd_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{instance}} - called',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_electionMetrics_stepUpCmd_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - successful',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Query operations',
-  description: 'The number of query operations the node has received.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'normal',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local insertOperationsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'increase(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Insert operations',
-  description: 'The number of insert operations the node has received.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'normal',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local updateOperationsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'increase(mongodb_opcounters_update{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Update operations',
-  description: 'The number of update operations this node has received.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'normal',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local deleteOperationsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'increase(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Delete operations',
-  description: 'The number of delete operations this node has received.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'normal',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local currentConnectionsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'mongodb_connections_current{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Current connections',
-  description: 'The number of incoming connections from clients to the node.',
+  title: 'Step-up elections',
+  description: 'The number of elections called and elections won by the node when the primary stepped down.',
   fieldConfig: {
     defaults: {
       color: {
@@ -407,18 +94,25 @@ local currentConnectionsPanel = {
   },
 };
 
-local activeConnectionsPanel = {
+local priorityElectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mongodb_connections_active{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
+      'increase(mongodb_electionMetrics_priorityTakeover_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{instance}} - called',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_electionMetrics_priorityTakeover_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - successful',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Active connections',
-  description: 'The number of connections that currently have operations in progress.',
+  title: 'Priority elections',
+  description: 'The number of elections called and elections won by the node when it had a higher priority than the primary node.',
   fieldConfig: {
     defaults: {
       color: {
@@ -482,25 +176,25 @@ local activeConnectionsPanel = {
   },
 };
 
-local readAndWriteOperationsPanel = {
+local takeoverElectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(mongodb_electionMetrics_catchUpTakeover_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}} - reads',
+      legendFormat='{{instance}} - called',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(mongodb_electionMetrics_catchUpTakeover_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}} - writes',
+      legendFormat='{{instance}} - successful',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Read and write operations',
-  description: 'The number of read and write operations performed by the node.',
+  title: 'Takeover elections',
+  description: 'The number of elections called and elections won by the node when it was more current than the primary node.',
   fieldConfig: {
     defaults: {
       color: {
@@ -530,7 +224,7 @@ local readAndWriteOperationsPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -552,13 +246,9 @@ local readAndWriteOperationsPanel = {
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -568,25 +258,25 @@ local readAndWriteOperationsPanel = {
   },
 };
 
-local readAndWriteLatencyPanel = {
+local timeoutElectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opLatencies_reads_latency{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(mongodb_electionMetrics_electionTimeout_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}} - reads',
+      legendFormat='{{instance}} - called',
       interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_opLatencies_writes_latency{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'increase(mongodb_electionMetrics_electionTimeout_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}} - writes',
+      legendFormat='{{instance}} - successful',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Read and write latency',
-  description: 'The latency time for read and write operations performed by this node.',
+  title: 'Timeout elections',
+  description: 'The number of elections called and elections won by the node when the time it took to reach the primary node exceeded the election timeout limit.',
   fieldConfig: {
     defaults: {
       color: {
@@ -616,7 +306,7 @@ local readAndWriteLatencyPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -632,19 +322,15 @@ local readAndWriteLatencyPanel = {
           },
         ],
       },
-      unit: 'µs',
+      unit: 'none',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -654,26 +340,26 @@ local readAndWriteLatencyPanel = {
   },
 };
 
-local locksRow = {
+local catchupsRow = {
   datasource: promDatasource,
   targets: [],
   type: 'row',
-  title: 'Locks',
+  title: 'Catch-ups',
 };
 
-local databaseDeadlocksPanel = {
+local catchupsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      'increase(mongodb_electionMetrics_numCatchUps{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Database deadlocks',
-  description: 'The number of deadlocks that have occurred for the database lock.',
+  title: 'Catch-ups',
+  description: 'The number of times the node had to catch up to the highest known oplog entry.',
   fieldConfig: {
     defaults: {
       color: {
@@ -736,19 +422,19 @@ local databaseDeadlocksPanel = {
   },
 };
 
-local collectionDeadlocksPanel = {
+local catchupsSkippedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      'increase(mongodb_electionMetrics_numCatchUpsSkipped{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Collection deadlocks',
-  description: 'The number of deadlocks that have occurred for the collection lock.',
+  title: 'Catch-ups skipped',
+  description: 'The number of times the node skipped the catch up process when it was the newly elected primary.',
   fieldConfig: {
     defaults: {
       color: {
@@ -811,19 +497,19 @@ local collectionDeadlocksPanel = {
   },
 };
 
-local databaseWaitCountPanel = {
+local catchupsSucceededPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      'increase(mongodb_electionMetrics_numCatchUpsSucceeded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Database wait count',
-  description: 'The number of database lock acquisitions that had to wait.',
+  title: 'Catch-ups succeeded',
+  description: 'The number of times the node succeeded in catching up when it was the newly elected primary.',
   fieldConfig: {
     defaults: {
       color: {
@@ -886,19 +572,19 @@ local databaseWaitCountPanel = {
   },
 };
 
-local collectionWaitCountPanel = {
+local catchupsFailedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      'increase(mongodb_electionMetrics_numCatchUpsFailedWithError{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Collection wait count',
-  description: 'The number of collection lock acquisitions that had to wait.',
+  title: 'Catch-ups failed',
+  description: 'The number of times the node failed in catching up when it was the newly elected primary.',
   fieldConfig: {
     defaults: {
       color: {
@@ -961,19 +647,19 @@ local collectionWaitCountPanel = {
   },
 };
 
-local databaseWaitTimePanel = {
+local catchupTimeoutsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      'increase(mongodb_electionMetrics_numCatchUpsTimedOut{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Database wait time',
-  description: 'The time spent waiting for the database lock acquisition.',
+  title: 'Catch-up timeouts',
+  description: 'The number of times the node timed out during the catch-up process when it was the newly elected primary.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1018,7 +704,7 @@ local databaseWaitTimePanel = {
           },
         ],
       },
-      unit: 'µs',
+      unit: 'none',
     },
     overrides: [],
   },
@@ -1036,19 +722,18 @@ local databaseWaitTimePanel = {
   },
 };
 
-local collectionWaitTimePanel = {
+local averageCatchupOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      'mongodb_electionMetrics_averageCatchUpOps{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Collection wait time',
-  description: 'The time spent waiting for the collection lock acquisition.',
+  title: 'Average catch-up operations',
+  description: 'The average number of operations done during the catch-up process when this node is the newly elected primary.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1093,7 +778,7 @@ local collectionWaitTimePanel = {
           },
         ],
       },
-      unit: 'µs',
+      unit: 'none',
     },
     overrides: [],
   },
@@ -1113,9 +798,9 @@ local collectionWaitTimePanel = {
 
 {
   grafanaDashboards+:: {
-    'atlas-operations-overview.json':
+    'mongodb-atlas-election-overview.json':
       dashboard.new(
-        'Atlas operations overview',
+        'MongoDB Atlas election overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -1181,28 +866,24 @@ local collectionWaitTimePanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Atlas dashboards',
+        title='MongoDB Atlas dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
       .addPanels(
         [
-          queryOperationsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-          insertOperationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-          updateOperationsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-          deleteOperationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-          currentConnectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          activeConnectionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-          readAndWriteOperationsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
-          readAndWriteLatencyPanel { gridPos: { h: 8, w: 24, x: 0, y: 32 } },
-          locksRow { gridPos: { h: 1, w: 24, x: 0, y: 40 } },
-          databaseDeadlocksPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
-          collectionDeadlocksPanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
-          databaseWaitCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 49 } },
-          collectionWaitCountPanel { gridPos: { h: 8, w: 12, x: 12, y: 49 } },
-          databaseWaitTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 57 } },
-          collectionWaitTimePanel { gridPos: { h: 8, w: 12, x: 12, y: 57 } },
+          stepupElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 0 } },
+          priorityElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 8 } },
+          takeoverElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 16 } },
+          timeoutElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
+          catchupsRow { gridPos: { h: 1, w: 24, x: 0, y: 32 } },
+          catchupsPanel { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
+          catchupsSkippedPanel { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
+          catchupsSucceededPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
+          catchupsFailedPanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
+          catchupTimeoutsPanel { gridPos: { h: 8, w: 12, x: 0, y: 49 } },
+          averageCatchupOperationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 49 } },
         ]
       ),
   },

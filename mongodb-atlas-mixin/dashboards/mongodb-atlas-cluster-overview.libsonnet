@@ -1935,9 +1935,9 @@ local mongosNodesPanel = {
 
 {
   grafanaDashboards+:: {
-    'atlas-cluster-overview.json':
+    'mongodb-atlas-cluster-overview.json':
       dashboard.new(
-        'Atlas cluster overview',
+        'MongoDB Atlas cluster overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -1981,7 +1981,7 @@ local mongosNodesPanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Atlas dashboards',
+        title='MongoDB Atlas dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
