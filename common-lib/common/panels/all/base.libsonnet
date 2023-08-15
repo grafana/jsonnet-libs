@@ -7,7 +7,6 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 {
   new(title, targets, description=''):
-    timeSeries.queryOptions.withInterval('1m')
-    + timeSeries.queryOptions.withTargets(targets)
+    timeSeries.queryOptions.withTargets(targets)
     + timeSeries.panelOptions.withDescription(description),
 }
