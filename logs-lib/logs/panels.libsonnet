@@ -22,12 +22,13 @@ function(
       + custom.withFillOpacity(50)
       + timeSeries.withInterval('30s')  // must be set , otherwise interval is around 1ms
       + options.tooltip.withMode('multi')
+      + options.tooltip.withSort('desc')
       + timeSeries.withTransformationsMixin(
         {
           id: 'renameByRegex',
           options: {
             regex: 'Value',
-            renamePattern: 'unknown',
+            renamePattern: 'logs',
           },
         }
       )
@@ -57,7 +58,7 @@ function(
               { regex: '(N|n)(otice|ote)|(I|i)(nf.*|NF.*)', color: 'green' },
               { regex: 'dbg.*|DBG.*|(D|d)(EBUG|ebug)', color: 'blue' },
               { regex: '(T|t)(race|RACE)', color: 'light-blue' },
-              { regex: 'unknown', color: 'text' },
+              { regex: 'logs', color: 'text' },
             ]
         ]
       ),

@@ -27,12 +27,23 @@ local kubeLabels = ['cluster', 'namespace', 'app', 'pod', 'container'];
 // set null or do not provide at all if parsing is not required.
 local formatParser = 'logfmt';
 
+//group by 'app' label instead of 'level':
+local logsVolumeGroupBy = 'app';
 
-(logsDashboard.new('Kubernetes apps logs',
-               datasourceRegex='',
-               filterSelector=kubeFilterSelector,
-               labels=kubeLabels,
-               formatParser=formatParser)
+//extra filters to do advanced line_format:
+local extraFilters = |||
+  | label_format timestamp="{{__timestamp__}}"
+  | line_format `{{ if eq "[[pod]]" ".*" }}{{.pod | trunc 20}}:{{else}}{{.container}}:{{end}} {{__line__}}`
+|||;
+
+(
+  logsDashboard.new('Kubernetes apps logs',
+                    datasourceRegex='',
+                    filterSelector=kubeFilterSelector,
+                    labels=kubeLabels,
+                    formatParser=formatParser,
+                    logsVolumeGroupBy=logsVolumeGroupBy,
+                    extraFilters=extraFilters)
 ).dashboards.logs
 ```
 

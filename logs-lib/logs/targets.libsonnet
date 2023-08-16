@@ -4,8 +4,9 @@ local lokiQuery = g.query.loki;
 function(
   variables,
   formatParser,
+  logsVolumeGroupBy,
+  extraFilters,
 ) {
-
   formatParser:: if formatParser != null then '| %s | __error__=``' % formatParser else '',
   logsTarget::
     lokiQuery.new(
@@ -14,9 +15,11 @@ function(
         {%s} 
         |~ "$regex_search"
         %s
+        %s
       ||| % [
         variables.queriesSelector,
         self.formatParser,
+        extraFilters,
       ]
     ),
 
@@ -24,14 +27,15 @@ function(
     lokiQuery.new(
       datasource='$' + variables.datasource.name,
       expr=|||
-        sum by (level) (count_over_time({%s} 
+        sum by (%s) (count_over_time({%s} 
         |~ "$regex_search"
         %s
         [$__interval]))
       ||| % [
+        logsVolumeGroupBy,
         variables.queriesSelector,
         self.formatParser,
       ]
     )
-    + lokiQuery.withLegendFormat('{{ level }}'),
+    + lokiQuery.withLegendFormat('{{ %s }}' % logsVolumeGroupBy),
 }

@@ -13,6 +13,8 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
     datasourceName='datasource',
     formatParser=null,
     showLogsVolume=true,
+    logsVolumeGroupBy='level',
+    extraFilters='',
   ): {
 
     local this = self,
@@ -26,11 +28,13 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
     targets: targets(
       this.variables,
       formatParser,
+      logsVolumeGroupBy,
+      extraFilters,
     ),
 
     panels: panels(
       this.targets.logsVolumeTarget,
-      this.targets.logsTarget
+      this.targets.logsTarget,
     ),
 
     dashboards: dashboards(
