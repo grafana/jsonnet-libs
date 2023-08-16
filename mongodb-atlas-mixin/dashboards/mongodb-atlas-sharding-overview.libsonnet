@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local staleConfigsPanel = {
   datasource: promDatasource,
   targets: [
@@ -1281,94 +1280,101 @@ local unshardedPanel = {
   },
 };
 
-
 {
-  grafanaDashboards+:: {
-    'mongodb-atlas-sharding-overview.json':
-      dashboard.new(
-        'MongoDB Atlas sharding overview',
-        time_from='%s' % $._config.dashboardPeriod,
-        tags=($._config.dashboardTags),
-        timezone='%s' % $._config.dashboardTimezone,
-        refresh='%s' % $._config.dashboardRefresh,
-        description='',
-        uid=dashboardUid,
-      )
+  grafanaDashboards+::
+    if $._config.enableShardingOverview then {
+      'mongodb-atlas-sharding-overview.json':
+        dashboard.new(
+          'MongoDB Atlas sharding overview',
+          time_from='%s' % $._config.dashboardPeriod,
+          tags=($._config.dashboardTags),
+          timezone='%s' % $._config.dashboardTimezone,
+          refresh='%s' % $._config.dashboardRefresh,
+          description='',
+          uid=dashboardUid,
+        )
 
-      .addTemplates(
-        [
-          template.datasource(
-            promDatasourceName,
-            'prometheus',
-            null,
-            label='Data Source',
-            refresh='load'
-          ),
-          template.new(
-            'job',
-            promDatasource,
-            'label_values(mongodb_network_bytesIn,job)',
-            label='Job',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='',
-            sort=0
-          ),
-          template.new(
-            'cl_name',
-            promDatasource,
-            'label_values(mongodb_network_bytesIn{job=~"$job"},cl_name)',
-            label='Atlas cluster',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='',
-            sort=0
-          ),
-          template.new(
-            'rs',
-            promDatasource,
-            'label_values(mongodb_network_bytesIn{cl_name=~"$cl_name"},rs_nm)',
-            label='Replica set',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='',
-            sort=0
-          ),
-          template.new(
-            'instance',
-            promDatasource,
-            'label_values(mongodb_network_bytesIn{rs_nm=~"$rs"},instance)',
-            label='Node',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='',
-            sort=0
-          ),
-        ]
-      )
-      .addPanels(
-        [
-          staleConfigsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-          chunkMigrationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-          docsClonedPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-          criticalSectionTimePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-          catalogCacheRow { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
-          refreshesStartedPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
-          refreshesFailedPanel { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
-          cacheStaleConfigsPanel { gridPos: { h: 8, w: 6, x: 0, y: 25 } },
-          cacheEntriesPanel { gridPos: { h: 8, w: 6, x: 6, y: 25 } },
-          cacheRefreshTimePanel { gridPos: { h: 8, w: 6, x: 12, y: 25 } },
-          cacheOperationsBlockedPanel { gridPos: { h: 8, w: 6, x: 18, y: 25 } },
-          shardOperationsRow { gridPos: { h: 1, w: 24, x: 0, y: 33 } },
-          allShardsPanel { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
-          manyShardsPanel { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
-          oneShardPanel { gridPos: { h: 8, w: 12, x: 0, y: 42 } },
-          unshardedPanel { gridPos: { h: 8, w: 12, x: 12, y: 42 } },
-        ]
-      ),
-  },
+        .addTemplates(
+          [
+            template.datasource(
+              promDatasourceName,
+              'prometheus',
+              null,
+              label='Data Source',
+              refresh='load'
+            ),
+            template.new(
+              'job',
+              promDatasource,
+              'label_values(mongodb_network_bytesIn,job)',
+              label='Job',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              sort=0
+            ),
+            template.new(
+              'cl_name',
+              promDatasource,
+              'label_values(mongodb_network_bytesIn{job=~"$job"},cl_name)',
+              label='Atlas cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              sort=0
+            ),
+            template.new(
+              'rs',
+              promDatasource,
+              'label_values(mongodb_network_bytesIn{cl_name=~"$cl_name"},rs_nm)',
+              label='Replica set',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              sort=0
+            ),
+            template.new(
+              'instance',
+              promDatasource,
+              'label_values(mongodb_network_bytesIn{rs_nm=~"$rs"},instance)',
+              label='Node',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              sort=0
+            ),
+          ]
+        )
+        .addLink(grafana.link.dashboards(
+          asDropdown=false,
+          title='MongoDB Atlas dashboards',
+          includeVars=true,
+          keepTime=true,
+          tags=($._config.dashboardTags),
+        ))
+        .addPanels(
+          [
+            staleConfigsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            chunkMigrationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+            docsClonedPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            criticalSectionTimePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            catalogCacheRow { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
+            refreshesStartedPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
+            refreshesFailedPanel { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
+            cacheStaleConfigsPanel { gridPos: { h: 8, w: 6, x: 0, y: 25 } },
+            cacheEntriesPanel { gridPos: { h: 8, w: 6, x: 6, y: 25 } },
+            cacheRefreshTimePanel { gridPos: { h: 8, w: 6, x: 12, y: 25 } },
+            cacheOperationsBlockedPanel { gridPos: { h: 8, w: 6, x: 18, y: 25 } },
+            shardOperationsRow { gridPos: { h: 1, w: 24, x: 0, y: 33 } },
+            allShardsPanel { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
+            manyShardsPanel { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
+            oneShardPanel { gridPos: { h: 8, w: 12, x: 0, y: 42 } },
+            unshardedPanel { gridPos: { h: 8, w: 12, x: 12, y: 42 } },
+          ]
+        ),
+    } else {},
 }

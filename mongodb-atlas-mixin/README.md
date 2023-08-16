@@ -54,12 +54,12 @@ The MongoDB Atlas sharding overview dashboard is exclusive for sharded Atlas clu
 ![Second screenshot of the MongoDB Atlas sharding overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/mongodb-atlas/screenshots/mongodb-atlas-sharding-overview-2.png)
 
 ## Environment configuration
-This mixin includes the MongoDB Atlas sharding overview dashboard, however the metrics used report data only when there is a sharded cluster in the project the prometheus integration is reporting on. Because of this, the MongoDB Atlas sharding overview dashboard is disabled by default. However, if you do have a sharded cluster and want to use the MongoDB Atlas sharding overview dashboard, you can set the `enableShardingDashboard` parameter in `config.libsonnet` to `true`.
+This mixin includes the MongoDB Atlas sharding overview dashboard, however the metrics used report data only when there is a sharded cluster in the project the prometheus integration is reporting on. Because of this, the MongoDB Atlas sharding overview dashboard is disabled by default. However, if you do have a sharded cluster and want to use the MongoDB Atlas sharding overview dashboard, you can set the `enableShardingOverview` parameter in `config.libsonnet` to `true`.
 
 ```
 {
   _config+:: {
-    enableShardingDashboard: true,
+    enableShardingOverview: true,
   },
 }
 ```
@@ -69,7 +69,7 @@ This mixin includes the MongoDB Atlas sharding overview dashboard, however the m
 - MongoDBAtlasHighNumberOfDeadlocks: There is a high number of deadlocks occurring.
 - MongoDBAtlasHighNumberOfSlowNetworkRequests: There is a high number of slow network requests.
 - MongoDBAtlasDiskSpaceLow: Hardware is running out of disk space.
-- MongoDBAtlasSlowHardwareIO: Read and write I/O's are taking too long to complete.
+- MongoDBAtlasSlowHardwareIO: Read and write I/Os are taking too long to complete.
 - MongoDBAtlasHighNumberOfTimeoutElections: There is a high number of elections being called due to the primary node timing out.
 
 ## Install tools
