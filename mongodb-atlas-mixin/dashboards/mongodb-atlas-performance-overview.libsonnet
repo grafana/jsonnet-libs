@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'atlas-performance-overview';
+local dashboardUid = 'mongodb-atlas-performance-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 

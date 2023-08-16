@@ -4,13 +4,14 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'atlas-sharding-overview';
+local dashboardUid = 'mongodb-atlas-sharding-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
+
 
 local staleConfigsPanel = {
   datasource: promDatasource,
@@ -19,6 +20,7 @@ local staleConfigsPanel = {
       'increase(mongodb_shardingStatistics_countStaleConfigErrors{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -44,6 +46,7 @@ local staleConfigsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -95,6 +98,7 @@ local chunkMigrationsPanel = {
       'increase(mongodb_shardingStatistics_countRecipientMoveChunkStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -120,6 +124,7 @@ local chunkMigrationsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -171,12 +176,14 @@ local docsClonedPanel = {
       'increase(mongodb_shardingStatistics_countDocsClonedOnDonor{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - donor',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_countDocsClonedOnRecipient{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - recipient',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -202,6 +209,7 @@ local docsClonedPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -257,6 +265,7 @@ local criticalSectionTimePanel = {
       'increase(mongodb_shardingStatistics_totalCriticalSectionTimeMillis{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -282,6 +291,7 @@ local criticalSectionTimePanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -328,7 +338,13 @@ local criticalSectionTimePanel = {
 
 local catalogCacheRow = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      '',
+      datasource=promDatasource,
+      legendFormat='',
+    ),
+  ],
   type: 'row',
   title: 'Catalog cache',
   collapsed: false,
@@ -341,12 +357,14 @@ local refreshesStartedPanel = {
       'increase(mongodb_shardingStatistics_catalogCache_countIncrementalRefreshesStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - incremental',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_catalogCache_countFullRefreshesStarted{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - full',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -372,6 +390,7 @@ local refreshesStartedPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -427,6 +446,7 @@ local refreshesFailedPanel = {
       'increase(mongodb_shardingStatistics_catalogCache_countFailedRefreshes{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -452,6 +472,7 @@ local refreshesFailedPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -503,6 +524,7 @@ local cacheStaleConfigsPanel = {
       'increase(mongodb_shardingStatistics_catalogCache_countStaleConfigErrors{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -528,6 +550,7 @@ local cacheStaleConfigsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -579,12 +602,14 @@ local cacheEntriesPanel = {
       'increase(mongodb_shardingStatistics_catalogCache_numDatabaseEntries{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - database',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_catalogCache_numCollectionEntries{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - collection',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -610,6 +635,7 @@ local cacheEntriesPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -661,6 +687,7 @@ local cacheRefreshTimePanel = {
       'increase(mongodb_shardingStatistics_catalogCache_totalRefreshWaitTimeMicros{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -686,6 +713,7 @@ local cacheRefreshTimePanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -737,6 +765,7 @@ local cacheOperationsBlockedPanel = {
       'increase(mongodb_shardingStatistics_catalogCache_operationsBlockedByRefresh_countAllOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -762,6 +791,7 @@ local cacheOperationsBlockedPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -808,7 +838,13 @@ local cacheOperationsBlockedPanel = {
 
 local shardOperationsRow = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      '',
+      datasource=promDatasource,
+      legendFormat='',
+    ),
+  ],
   type: 'row',
   title: 'Shard operations',
 };
@@ -820,30 +856,35 @@ local allShardsPanel = {
       'increase(mongodb_shardingStatistics_numHostsTargeted_find_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_insert_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_update_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_delete_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -891,7 +932,6 @@ local allShardsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -924,30 +964,35 @@ local manyShardsPanel = {
       'increase(mongodb_shardingStatistics_numHostsTargeted_find_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_insert_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_update_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_delete_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -995,7 +1040,6 @@ local manyShardsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1028,30 +1072,35 @@ local oneShardPanel = {
       'increase(mongodb_shardingStatistics_numHostsTargeted_find_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_insert_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_update_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_delete_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -1099,7 +1148,6 @@ local oneShardPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1132,30 +1180,35 @@ local unshardedPanel = {
       'increase(mongodb_shardingStatistics_numHostsTargeted_find_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_insert_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_update_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_delete_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_shardingStatistics_numHostsTargeted_aggregate_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -1203,7 +1256,6 @@ local unshardedPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1229,102 +1281,94 @@ local unshardedPanel = {
   },
 };
 
-{
-  grafanaDashboards+::
-    if $._config.enableShardingOverview then {
-      'mongodb-atlas-sharding-overview.json':
-        dashboard.new(
-          'MongoDB Atlas sharding overview',
-          time_from='%s' % $._config.dashboardPeriod,
-          tags=($._config.dashboardTags),
-          timezone='%s' % $._config.dashboardTimezone,
-          refresh='%s' % $._config.dashboardRefresh,
-          description='',
-          uid=dashboardUid,
-        )
 
-        .addTemplates(
-          [
-            template.datasource(
-              promDatasourceName,
-              'prometheus',
-              null,
-              label='Data Source',
-              refresh='load'
-            ),
-            template.new(
-              'job',
-              promDatasource,
-              'label_values(mongodb_network_bytesIn,job)',
-              label='Job',
-              refresh=2,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
-            template.new(
-              'cl_name',
-              promDatasource,
-              'label_values(mongodb_network_bytesIn{job=~"$job"},cl_name)',
-              label='Atlas cluster',
-              refresh=2,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
-            template.new(
-              'rs',
-              promDatasource,
-              'label_values(mongodb_network_bytesIn{cl_name=~"$cl_name"},rs_nm)',
-              label='Replica set',
-              refresh=2,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
-            template.new(
-              'instance',
-              promDatasource,
-              'label_values(mongodb_network_bytesIn{rs_nm=~"$rs"},instance)',
-              label='Node',
-              refresh=2,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              sort=0
-            ),
-          ]
-        )
-        .addLink(grafana.link.dashboards(
-          asDropdown=false,
-          title='MongoDB Atlas dashboards',
-          includeVars=true,
-          keepTime=true,
-          tags=($._config.dashboardTags),
-        ))
-        .addPanels(
-          [
-            staleConfigsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-            chunkMigrationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-            docsClonedPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            criticalSectionTimePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-            catalogCacheRow { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
-            refreshesStartedPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
-            refreshesFailedPanel { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
-            cacheStaleConfigsPanel { gridPos: { h: 8, w: 6, x: 0, y: 25 } },
-            cacheEntriesPanel { gridPos: { h: 8, w: 6, x: 6, y: 25 } },
-            cacheRefreshTimePanel { gridPos: { h: 8, w: 6, x: 12, y: 25 } },
-            cacheOperationsBlockedPanel { gridPos: { h: 8, w: 6, x: 18, y: 25 } },
-            shardOperationsRow { gridPos: { h: 1, w: 24, x: 0, y: 33 } },
-            allShardsPanel { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
-            manyShardsPanel { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
-            oneShardPanel { gridPos: { h: 8, w: 12, x: 0, y: 42 } },
-            unshardedPanel { gridPos: { h: 8, w: 12, x: 12, y: 42 } },
-          ]
-        ),
-    }
-    else {},
+{
+  grafanaDashboards+:: {
+    'mongodb-atlas-sharding-overview.json':
+      dashboard.new(
+        'MongoDB Atlas sharding overview',
+        time_from='%s' % $._config.dashboardPeriod,
+        tags=($._config.dashboardTags),
+        timezone='%s' % $._config.dashboardTimezone,
+        refresh='%s' % $._config.dashboardRefresh,
+        description='',
+        uid=dashboardUid,
+      )
+
+      .addTemplates(
+        [
+          template.datasource(
+            promDatasourceName,
+            'prometheus',
+            null,
+            label='Data Source',
+            refresh='load'
+          ),
+          template.new(
+            'job',
+            promDatasource,
+            'label_values(mongodb_network_bytesIn,job)',
+            label='Job',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
+            'cl_name',
+            promDatasource,
+            'label_values(mongodb_network_bytesIn{job=~"$job"},cl_name)',
+            label='Atlas cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
+            'rs',
+            promDatasource,
+            'label_values(mongodb_network_bytesIn{cl_name=~"$cl_name"},rs_nm)',
+            label='Replica set',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
+            'instance',
+            promDatasource,
+            'label_values(mongodb_network_bytesIn{rs_nm=~"$rs"},instance)',
+            label='Node',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+        ]
+      )
+      .addPanels(
+        [
+          staleConfigsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+          chunkMigrationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+          docsClonedPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+          criticalSectionTimePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+          catalogCacheRow { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
+          refreshesStartedPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
+          refreshesFailedPanel { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
+          cacheStaleConfigsPanel { gridPos: { h: 8, w: 6, x: 0, y: 25 } },
+          cacheEntriesPanel { gridPos: { h: 8, w: 6, x: 6, y: 25 } },
+          cacheRefreshTimePanel { gridPos: { h: 8, w: 6, x: 12, y: 25 } },
+          cacheOperationsBlockedPanel { gridPos: { h: 8, w: 6, x: 18, y: 25 } },
+          shardOperationsRow { gridPos: { h: 1, w: 24, x: 0, y: 33 } },
+          allShardsPanel { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
+          manyShardsPanel { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
+          oneShardPanel { gridPos: { h: 8, w: 12, x: 0, y: 42 } },
+          unshardedPanel { gridPos: { h: 8, w: 12, x: 12, y: 42 } },
+        ]
+      ),
+  },
 }

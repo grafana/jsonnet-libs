@@ -1,9 +1,9 @@
 {
   _config+:: {
     // sharding dashboard flag
-    enableShardingOverview: false,
+    enableShardingOverview: true,
 
-    dashboardTags: ['atlas-mongodb-mixin'],
+    dashboardTags: ['mongodb-atlas-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
