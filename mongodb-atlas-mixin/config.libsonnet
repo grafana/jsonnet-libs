@@ -1,7 +1,7 @@
 {
   _config+:: {
     // sharding dashboard flag
-    enableShardingOverview: true,
+    enableShardingOverview: false,
 
     dashboardTags: ['mongodb-atlas-mixin'],
     dashboardPeriod: 'now-1h',
