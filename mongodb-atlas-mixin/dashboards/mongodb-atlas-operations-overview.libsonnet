@@ -665,7 +665,7 @@ local databaseDeadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      '(increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -740,7 +740,7 @@ local collectionDeadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      '(increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -815,7 +815,7 @@ local databaseWaitCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      '(increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -890,7 +890,7 @@ local collectionWaitCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      '(increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -965,7 +965,7 @@ local databaseWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      '(increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -1040,7 +1040,7 @@ local collectionWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) + (increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:]))',
+      '(increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',

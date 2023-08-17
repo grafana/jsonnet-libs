@@ -1171,13 +1171,13 @@ local deadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(sum (increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name))',
+      '(sum (increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - database',
       interval='1m',
     ),
     prometheus.target(
-      '(sum (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name))',
+      '(sum (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - collection',
       interval='1m',
@@ -1253,13 +1253,13 @@ local waitAcquiringLockPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(sum (increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name))',
+      '(sum (increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - database',
       interval='1m',
     ),
     prometheus.target(
-      '(sum (increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name))',
+      '(sum (increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) > 0',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - collection',
       interval='1m',
