@@ -1,0 +1,5 @@
+exclusions:
+  alert-description-templating:
+    reason: IstioGlobalRequestRateLow does not use any lables
+  panel-units-rule:
+    reason: Panel units are self descriptive
