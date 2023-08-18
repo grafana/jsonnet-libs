@@ -1721,7 +1721,7 @@ local shardCountPanel = {
           template.new(
             'opensearch_cluster',
             promDatasource,
-            'label_values(opensearch_index_search_fetch_count{%s, job=~"$job"}, cluster)'% $._config.filteringSelector,
+            'label_values(opensearch_index_search_fetch_count{%s, job=~"$job"}, cluster)' % $._config.filteringSelector,
             label='OpenSearch Cluster',
             refresh=2,
             includeAll=true,
