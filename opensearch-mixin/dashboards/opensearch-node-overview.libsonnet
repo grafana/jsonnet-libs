@@ -1528,18 +1528,17 @@ local errorLogsPanelPanel = {
             template.new(
               'job',
               promDatasource,
-              'label_values(opensearch_cluster_status,job)',
+              'label_values(opensearch_cluster_status{%s},job)' % $._config.filteringSelector,
               label='Job',
               refresh=2,
               includeAll=true,
               multi=true,
-              allValues='.+',
               sort=1
             ),
             template.new(
               'opensearch_cluster',
               promDatasource,
-              'label_values(opensearch_cluster_status{job=~"$job"}, cluster)',
+              'label_values(opensearch_cluster_status{%s, job=~"$job"}, cluster)' % $._config.filteringSelector,
               label='OpenSearch Cluster',
               refresh=2,
               includeAll=true,
@@ -1550,7 +1549,7 @@ local errorLogsPanelPanel = {
             template.new(
               'node',
               promDatasource,
-              'label_values(opensearch_os_cpu_percent{job=~"$job", cluster=~"$opensearch_cluster"}, node)',
+              'label_values(opensearch_os_cpu_percent{%s, job=~"$job", cluster=~"$opensearch_cluster"}, node)' % $._config.filteringSelector,
               label='Node',
               refresh=2,
               includeAll=true,

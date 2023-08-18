@@ -1711,18 +1711,17 @@ local shardCountPanel = {
           template.new(
             'job',
             promDatasource,
-            'label_values(opensearch_index_search_fetch_count, job)',
+            'label_values(opensearch_index_search_fetch_count{%s}, job)' % $._config.filteringSelector,
             label='Job',
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='.+',
             sort=1
           ),
           template.new(
             'opensearch_cluster',
             promDatasource,
-            'label_values(opensearch_index_search_fetch_count{job=~"$job"}, cluster)',
+            'label_values(opensearch_index_search_fetch_count{%s, job=~"$job"}, cluster)'% $._config.filteringSelector,
             label='OpenSearch Cluster',
             refresh=2,
             includeAll=true,
@@ -1733,7 +1732,7 @@ local shardCountPanel = {
           template.new(
             'opensearch_index',
             promDatasource,
-            'label_values(opensearch_index_search_fetch_count{job=~"$job", cluster=~"$opensearch_cluster"}, index)',
+            'label_values(opensearch_index_search_fetch_count{%s, job=~"$job", cluster=~"$opensearch_cluster"}, index)' % $._config.filteringSelector,
             label='Index',
             refresh=2,
             includeAll=true,

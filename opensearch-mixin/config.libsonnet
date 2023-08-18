@@ -1,5 +1,8 @@
 {
   _config+:: {
+    // extra static selector to apply to all templated variables and alerts
+    filteringSelector: 'cluster!=""',
+
     dashboardTags: ['opensearch-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',

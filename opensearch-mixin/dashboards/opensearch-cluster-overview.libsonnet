@@ -1562,18 +1562,17 @@ local topIndicesByIndexFailuresPanel = {
           template.new(
             'job',
             promDatasource,
-            'label_values(opensearch_cluster_status,job)',
+            'label_values(opensearch_cluster_status{%s},job)' % $._config.filteringSelector,
             label='Job',
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='.+',
             sort=1
           ),
           template.new(
             'opensearch_cluster',
             promDatasource,
-            'label_values(opensearch_cluster_status{job=~"$job"}, cluster)',
+            'label_values(opensearch_cluster_status{%s, job=~"$job"}, cluster)' % $._config.filteringSelector,
             label='OpenSearch Cluster',
             refresh=2,
             includeAll=true,
