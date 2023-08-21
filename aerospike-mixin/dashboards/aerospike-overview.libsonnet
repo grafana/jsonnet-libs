@@ -438,7 +438,7 @@ local topNodesByMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 - topk($k, sum by(aerospike_cluster, instance) (aerospike_node_stats_system_free_mem_pct{job=~"$job", aerospike_cluster=~"$aerospike_cluster"}))',
+      'topk($k, 100 - sum by(aerospike_cluster, instance) (avg_over_time(aerospike_node_stats_system_free_mem_pct{job=~"$job", aerospike_cluster=~"$aerospike_cluster"}[$__interval])))',
       datasource=promDatasource,
       format='table',
     ),
@@ -572,7 +572,7 @@ local topNodesByDiskUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 - topk($k, sum by(aerospike_cluster, instance) (aerospike_namespace_device_free_pct{job=~"$job", aerospike_cluster=~"$aerospike_cluster"}))',
+      'topk($k, 100 - sum by(aerospike_cluster, instance) (avg_over_time(aerospike_namespace_device_free_pct{job=~"$job", aerospike_cluster=~"$aerospike_cluster"}[$__interval])))',
       datasource=promDatasource,
       format='table',
     ),
