@@ -652,6 +652,9 @@ local cacheReadUtilizationPanel = {
   },
 };
 
+local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg +
+                        if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
+
 {
   grafanaDashboards+:: {
     'aerospike-namespace-overview.json':
