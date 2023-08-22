@@ -10,8 +10,8 @@
     dashboardRefresh: '1m',
 
     // alerts thresholds
-    alertsCriticalNodeHighMemoryUsage: 20,  // %
-    alertsCriticalNamespaceHighDiskUsage: 20,  // %
+    alertsCriticalNodeHighMemoryUsage: 80,  // %
+    alertsCriticalNamespaceHighDiskUsage: 80,  // %
     alertsCriticalUnavailablePartitions: 0,  // count
     alertsCriticalDeadPartitions: 0,  // count
     alertsCriticalSystemRejectingWrites: 0,  // count

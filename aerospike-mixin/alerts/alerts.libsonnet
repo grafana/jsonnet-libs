@@ -7,7 +7,7 @@
           {
             alert: 'AerospikeNodeHighMemoryUsage',
             expr: |||
-              sum without (service) (aerospike_node_stats_system_free_mem_pct) <= %(alertsCriticalNodeHighMemoryUsage)s
+              100 - sum without (service) (aerospike_node_stats_system_free_mem_pct) >= %(alertsCriticalNodeHighMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -17,15 +17,15 @@
               summary: 'There is a limited amount of memory available for a node.',
               description:
                 (
-                  'Only {{ printf "%%.0f" $value }} percent of system memory free on node {{$labels.instance}} on cluster {{$labels.aerospike_cluster}}, ' +
-                  'which is below the threshold of %(alertsCriticalNodeHighMemoryUsage)s.'
+                  '{{ printf "%%.0f" $value }} percent of system memory used on node {{$labels.instance}} on cluster {{$labels.aerospike_cluster}}, ' +
+                  'which is above the threshold of %(alertsCriticalNodeHighMemoryUsage)s.'
                 ) % $._config,
             },
           },
           {
             alert: 'AerospikeNamespaceHighDiskUsage',
             expr: |||
-              sum without (service) (aerospike_namespace_device_free_pct) <= %(alertsCriticalNamespaceHighDiskUsage)s
+              100 - sum without (service) (aerospike_namespace_device_free_pct) >= %(alertsCriticalNamespaceHighDiskUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -35,8 +35,8 @@
               summary: 'There is a limited amount of disk space available for a node.',
               description:
                 (
-                  'Only {{ printf "%%.0f" $value }} percent of disk space available for namespace {{$labels.ns}} on node {{$labels.instance}}, on cluster {{$labels.aerospike_cluster}}, ' +
-                  'which is below the threshold of %(alertsCriticalNamespaceHighDiskUsage)s.'
+                  '{{ printf "%%.0f" $value }} percent of disk space available for namespace {{$labels.ns}} on node {{$labels.instance}}, on cluster {{$labels.aerospike_cluster}}, ' +
+                  'which is above the threshold of %(alertsCriticalNamespaceHighDiskUsage)s.'
                 ) % $._config,
             },
           },
@@ -50,7 +50,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'There is an unavailable partition in the Aerospike cluster.',
+              summary: 'There are unavailable partitions in the Aerospike cluster.',
               description:
                 (
                   '{{ printf "%%.0f" $value }} unavailable partition(s) in namespace {{$labels.ns}}, on node {{$labels.instance}}, on cluster {{$labels.aerospike_cluster}}, ' +
@@ -68,7 +68,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'There is a dead partition in the Aerospike cluster.',
+              summary: 'There are dead partitions in the Aerospike cluster.',
               description:
                 (
                   '{{ printf "%%.0f" $value }} dead partition(s) in namespace {{$labels.ns}}, on node {{$labels.instance}}, on cluster {{$labels.aerospike_cluster}}, ' +
