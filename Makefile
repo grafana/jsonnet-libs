@@ -2,9 +2,9 @@ JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 2 --string-style s --comment-st
 SHELL := /bin/bash
 
 install-ci-deps:
-	go install github.com/google/go-jsonnet/cmd/jsonnet@v0.18.0
-	go install github.com/google/go-jsonnet/cmd/jsonnetfmt@v0.18.0
-	go install github.com/google/go-jsonnet/cmd/jsonnet-lint@v0.18.0
+	go install github.com/google/go-jsonnet/cmd/jsonnet@v0.20.0
+	go install github.com/google/go-jsonnet/cmd/jsonnetfmt@v0.20.0
+	go install github.com/google/go-jsonnet/cmd/jsonnet-lint@v0.20.0
 	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@ae18e31161ea
 	go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v0.4.0
 
