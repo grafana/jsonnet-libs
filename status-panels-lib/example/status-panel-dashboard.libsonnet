@@ -1,18 +1,24 @@
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local statusPanels = import '../status-panels/main.libsonnet';
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
 local dashboard = g.dashboard;
-local title = 'Status Panel Test';
+local title = 'Status Panel Example';
 
-dashboard.new(title)
-+ dashboard.withUid(g.util.string.slugify(title))
-+ dashboard.withPanels(
-  [
-    (statusPanels.new(
-      'Integration Status',
-      statusPanelsQuery="abc",
-      datasourceName="DS",
-      showIntegrationVersion=true,
-    )).rows.statusPanelRow
-  ]
-)
+{
+  grafanaDashboards+:: {
+    'status-panel-example.json': dashboard.new(title)
+                                 + dashboard.withUid(g.util.string.slugify(title))
+                                 + dashboard.withPanels(
+                                   (statusPanels.new(
+                                      'Integration Status',
+                                      statusPanelsQuery='up{job=~"$job"}',
+                                      datasourceName='$prometheus_datasource',
+                                      showIntegrationVersion=true,
+                                      integrationVersion='x.x.x',
+                                      panelsHeight=2,
+                                      panelsWidth=8,
+                                      rowPositionY=10,
+                                    )).panels.statusPanelsRow
+                                 ),
+  },
+}

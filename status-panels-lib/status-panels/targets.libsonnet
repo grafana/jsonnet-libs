@@ -1,4 +1,3 @@
-local utils = import '../utils.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local prometheusQuery = g.query.prometheus;
 function(
@@ -7,7 +6,7 @@ function(
 ) {
   statusPanelsTarget::
     prometheusQuery.new(
-      datasource='$' + datasourceName,
+      datasource=datasourceName,
       expr=|||
         %s
       ||| % [

@@ -1,1 +1,1 @@
-import 'example/status-panel-dashboard.libsonnet'
+(import 'example/status-panel-dashboard.libsonnet')

@@ -1,6 +1,6 @@
-# Logs lib
+# Status panels lib
 
-This logs lib can be used to add a status panel row for integration dashboards using [grafonnet](https://github.com/grafana/grafonnet).
+This status panels lib can be used to add a status panel row for integration dashboards using [grafonnet](https://github.com/grafana/grafonnet).
 
 ## Import
 
@@ -9,118 +9,89 @@ jb init
 jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
 ```
 
-## Examples
+# Usage
 
-### Generate kubernetes logs dashboard
-
-```jsonnet
-local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
-
-//Additional selector to add to all variable queries and alerts(if any)
-local kubeFilterSelector = 'namespace!=""';
-// Array of labels to compose chained grafana variables (order matters)
-local kubeLabels = ['cluster', 'namespace', 'app', 'pod', 'container'];
-
-// pick one of Loki's parsers to use: i.e. logfmt, json.
-// | __error__=`` is appended automatically
-// https://grafana.com/docs/loki/latest/logql/log_queries/#parser-expression
-// set null or do not provide at all if parsing is not required.
-local formatParser = 'logfmt';
-
-//group by 'app' label instead of 'level':
-local logsVolumeGroupBy = 'app';
-
-//extra filters to do advanced line_format:
-local extraFilters = |||
-  | label_format timestamp="{{__timestamp__}}"
-  | line_format `{{ if eq "[[pod]]" ".*" }}{{.pod | trunc 20}}:{{else}}{{.container}}:{{end}} {{__line__}}`
-|||;
-
-(
-  logsDashboard.new('Kubernetes apps logs',
-                    datasourceRegex='',
-                    filterSelector=kubeFilterSelector,
-                    labels=kubeLabels,
-                    formatParser=formatParser,
-                    logsVolumeGroupBy=logsVolumeGroupBy,
-                    extraFilters=extraFilters)
-).dashboards.logs
+```
+(statusPanels.new(
+  'Integration Status',
+  statusPanelsQuery='up{job=~"$job"}',
+  datasourceName='$prometheus_datasource',
+  showIntegrationVersion=true,
+  integrationVersion='x.x.x',
+  panelsHeight=2,
+  panelsWidth=8,
+  rowPositionY=10,
+)).panels.statusPanelsRow
 ```
 
-![image](https://github.com/grafana/jsonnet-libs/assets/14870891/7b246cc9-5de1-42f5-b3cd-bb9f89302405)
+This will return a row with the status panels appended to it
 
-### Generate systemd logs dashboard and modify panels and variables
+## Options
 
-This lib exposes `variables`, `targets`, `panels`, and `dashboards`.
+### title
 
-Because of that, you can override options of those objects before exporting the dashboard.
+Title of the status panels row
 
-Again, use [Grafonnet](https://grafana.github.io/grafonnet/API/panel/index.html) for this:
+### statusPanelsQuery
 
-```jsonnet
+Query for checking the status of the integration (Should be the most commonly available metric which is almost always available like up{})
+
+### datasourceName
+
+Name of the data source to be used with the query targets
+
+### showIntegrationVersion
+
+Whether to show or hide the integration version panel (Default `true`)
+
+### integrationVersion
+
+Pass integration version in "x.x.x" format (Applicable if `showIntegrationVersion` is set to true)
+
+### panelsHeight
+
+Height of the status panels (Default `2`)
+
+### panelsWidth
+
+Width of the status panels (Default `8`)
+
+### rowPositionY
+
+Position (Default `0`)
+
+## Sample Dashboard
+
+`status-panel-dashboard.libsonnet`
+
+```
+local statusPanels = import '../status-panels/main.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
-local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 
+local dashboard = g.dashboard;
+local title = 'Status Panel Example';
 
-local linuxFilterSelector = 'unit!=""';
-local linuxLabels = ['job', 'instance', 'unit', 'level'];
-
-// pick one of Loki's parsers to use: i.e. logfmt, json.
-// | __error__=`` is appended automatically
-// https://grafana.com/docs/loki/latest/logql/log_queries/#parser-expression
-// set null or do not provide at all if parsing is not required.
-local formatParser = 'unpack';
-
-// 2. create and export systemd logs dashboard
-local systemdLogs =
-  logsDashboard.new('Linux systemd logs',
-                    datasourceRegex='',
-                    filterSelector=linuxFilterSelector,
-                    labels=linuxLabels,
-                    formatParser=formatParser,
-                    showLogsVolume=true)
-  // override panels or variables using grafonnet
-  {
-    panels+:
-      {
-        logs+:
-          g.panel.logs.options.withEnableLogDetails(false),
-      },
-    variables+:
-      {
-        regex_search+:
-          g.dashboard.variable.textbox.new('regex_search', default='error'),
-      },
-  };
-// export logs dashboard
-systemdLogs.dashboards.logs
+{
+  grafanaDashboards+:: {
+      'status-panel-example.json': dashboard.new(title)
+        + dashboard.withUid(g.util.string.slugify(title))
+        + dashboard.withPanels(
+          (statusPanels.new(
+            'Integration Status',
+            statusPanelsQuery='up{job=~"$job"}',
+            datasourceName='$prometheus_datasource',
+            showIntegrationVersion=true,
+            integrationVersion='x.x.x',
+            panelsHeight=2,
+            panelsWidth=8,
+            rowPositionY=10,
+          )).panels.statusPanelsRow
+        )
+  }
+}
 
 ```
 
-![image](https://github.com/grafana/jsonnet-libs/assets/14870891/5e6313fd-9135-446a-b7bf-cf124b436970)
+### Screenshot
 
-### Generate docker logs dashboard
-
-```jsonnet
-
-local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
-
-// Array of labels to compose chained grafana variables
-local dockerFilterSelector = 'container_name!=""';
-local dockerLabels = ['job', 'instance', 'container_name'];
-
-// pick one of Loki's parsers to use: i.e. logfmt, json.
-// | __error__=`` is appended automatically
-// https://grafana.com/docs/loki/latest/logql/log_queries/#parser-expression
-// set null or do not provide at all if parsing is not required.
-local formatParser = 'logfmt';
-
-(
-  logsDashboard.new('Docker logs',
-                    datasourceRegex='',
-                    filterSelector=dockerFilterSelector,
-                    labels=dockerLabels,
-                    formatParser=formatParser)
-).dashboards.logs
-
-```
+![Dashboard screenshot](example/status-panel-dashboard.png?raw=true "Optional Title")
