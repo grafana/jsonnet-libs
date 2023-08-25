@@ -39,7 +39,7 @@ Title of the status panels row
 
 ### statusPanelsQuery
 
-Query for checking the status of the integration (Should be the most commonly available metric which is almost always available like up{job="integrations/my-integration"})
+Query for checking the status of the integration (Should be the most commonly available metric which is almost always available like up{job="integrations/my-integration qwe34"})
 
 ### datasourceName
 

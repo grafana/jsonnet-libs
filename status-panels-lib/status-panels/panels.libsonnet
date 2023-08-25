@@ -21,7 +21,8 @@ function(
       + stat.standardOptions.withUnit('string')
       + stat.standardOptions.withNoValue('No data')
       + stat.withTargets(targets)
-      + stat.standardOptions.color.withMode('thresholds')
+      + stat.standardOptions.color.withMode('fixed')
+      + stat.standardOptions.color.withFixedColor('text')
       + stat.options.reduceOptions.withCalcs('lastNotNull')
       + stat.options.withColorMode('background')
       + stat.options.withGraphMode('none')
@@ -35,16 +36,16 @@ function(
         + stat.valueMapping.RangeMap.options.withTo(0)
         + stat.valueMapping.RangeMap.options.result.withIndex(1)
         + stat.valueMapping.RangeMap.options.result.withText('No metrics detected')
-        + stat.valueMapping.RangeMap.options.result.withColor('red'),
+        + stat.valueMapping.RangeMap.options.result.withColor('light-red'),
         stat.valueMapping.RangeMap.withType('range')
         + stat.valueMapping.RangeMap.options.withFrom(0)
         + stat.valueMapping.RangeMap.options.withTo(1000000)
         + stat.valueMapping.RangeMap.options.result.withIndex(1)
         + stat.valueMapping.RangeMap.options.result.withText('Agent sending metrics')
-        + stat.valueMapping.RangeMap.options.result.withColor('green'),
+        + stat.valueMapping.RangeMap.options.result.withColor('light-green'),
       ])
       + row.gridPos.withY(rowPositionY),
-      
+
     latestMetricReceivedInit(targets, title='Latest ' + type + ' received')::
       stat.new(title)
       + stat.panelOptions.withDescription('Shows the timestamp of the latest ' + type + ' received for this integration.')
