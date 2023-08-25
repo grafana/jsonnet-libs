@@ -35,11 +35,11 @@ Title of the status panels row
 
 ### type
 
-`metrics` or `logs` (Default `true`)
+`metrics` or `logs` (Default `metrics`)
 
 ### statusPanelsQuery
 
-Query for checking the status of the integration (Should be the most commonly available metric which is almost always available like up{})
+Query for checking the status of the integration (Should be the most commonly available metric which is almost always available like up{job="integrations/my-integration"})
 
 ### datasourceName
 
@@ -83,6 +83,7 @@ local title = 'Status Panel Example';
         + dashboard.withPanels(
           (statusPanels.new(
             'Integration Status',
+            type='metrics',
             statusPanelsQuery='up{job=~"$job"}',
             datasourceName='$prometheus_datasource',
             showIntegrationVersion=true,

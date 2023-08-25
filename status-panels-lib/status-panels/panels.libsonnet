@@ -3,8 +3,8 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 local stat = g.panel.stat;
 local row = g.panel.row;
 function(
-  type,
   title,
+  type,
   showIntegrationVersion,
   integrationVersion,
   statusPanelsTarget,
@@ -15,8 +15,7 @@ function(
 
   {
     local this = self,
-
-    integrationStatusInit(targets, title='Integration Status')::
+    integrationStatusInit(targets, title='Integration status')::
       stat.new(title)
       + stat.panelOptions.withDescription('Shows the status of this integration.')
       + stat.standardOptions.withUnit('string')
@@ -45,10 +44,10 @@ function(
         + stat.valueMapping.RangeMap.options.result.withColor('green'),
       ])
       + row.gridPos.withY(rowPositionY),
-
-    latestMetricReceivedInit(targets, title='Latest Metric Received')::
+      
+    latestMetricReceivedInit(targets, title='Latest ' + type + ' received')::
       stat.new(title)
-      + stat.panelOptions.withDescription('Shows the timestamp of the latest metric received for this integration.')
+      + stat.panelOptions.withDescription('Shows the timestamp of the latest ' + type + ' received for this integration.')
       + stat.standardOptions.withUnit('dateTimeAsIso')
       + stat.standardOptions.withNoValue('No data')
       + stat.withTargets(targets)
@@ -64,7 +63,7 @@ function(
       + stat.gridPos.withX(0 + 1 * panelsWidth)
       + row.gridPos.withY(rowPositionY),
 
-    integrationVersionInit(targets, title='Integration Version')::
+    integrationVersionInit(targets, title='Integration version')::
       stat.new(title)
       + stat.panelOptions.withDescription('Shows the installed version of this integration.')
       + stat.standardOptions.withUnit('string')

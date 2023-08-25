@@ -11,6 +11,7 @@ local title = 'Status Panel Example';
                                  + dashboard.withPanels(
                                    (statusPanels.new(
                                       'Integration Status',
+                                      type='metrics',
                                       statusPanelsQuery='up{job=~"$job"}',
                                       datasourceName='$prometheus_datasource',
                                       showIntegrationVersion=true,
