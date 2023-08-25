@@ -7,6 +7,7 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 {
   new(
     title,
+    type='metrics',
     statusPanelsQuery,
     datasourceName='datasource',
     showIntegrationVersion=true,
@@ -19,12 +20,14 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
     local this = self,
 
     targets: targets(
+      type,
       datasourceName,
       statusPanelsQuery,
     ),
 
     panels: panels(
       title,
+      type,
       showIntegrationVersion,
       integrationVersion,
       this.targets.statusPanelsTarget,

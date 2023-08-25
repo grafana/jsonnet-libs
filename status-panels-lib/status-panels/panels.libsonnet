@@ -3,6 +3,7 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 local stat = g.panel.stat;
 local row = g.panel.row;
 function(
+  type,
   title,
   showIntegrationVersion,
   integrationVersion,

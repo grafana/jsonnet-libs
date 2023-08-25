@@ -14,6 +14,7 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
 ```
 (statusPanels.new(
   'Integration Status',
+  type='metrics',
   statusPanelsQuery='up{job=~"$job"}',
   datasourceName='$prometheus_datasource',
   showIntegrationVersion=true,
@@ -31,6 +32,10 @@ This will return a row with the status panels appended to it
 ### title
 
 Title of the status panels row
+
+### type
+
+`metrics` or `logs` (Default `true`)
 
 ### statusPanelsQuery
 
