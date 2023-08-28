@@ -770,7 +770,7 @@ local cacheOperationsBlockedPanel = {
   ],
   type: 'timeseries',
   title: 'Cache operations blocked',
-  description: 'The number of operations that are blocked by a refresh of the catalog cache.',
+  description: 'The number of operations that are blocked by a refresh of the catalog cache. Specific to mongos nodes found under replica set "none".',
   fieldConfig: {
     defaults: {
       color: {
@@ -889,7 +889,7 @@ local allShardsPanel = {
   ],
   type: 'timeseries',
   title: 'All shards',
-  description: 'The number of CRUD operations and aggregation commands run that targeted all shards.',
+  description: 'The number of CRUD operations and aggregation commands run that targeted all shards. Specific to mongos nodes found under replica set "none".',
   fieldConfig: {
     defaults: {
       color: {
@@ -997,7 +997,7 @@ local manyShardsPanel = {
   ],
   type: 'timeseries',
   title: 'Many shards',
-  description: 'The number of CRUD operations and aggregation commands run that targeted more than 1 shard.',
+  description: 'The number of CRUD operations and aggregation commands run that targeted more than 1 shard. Specific to mongos nodes found under replica set "none".',
   fieldConfig: {
     defaults: {
       color: {
@@ -1105,7 +1105,7 @@ local oneShardPanel = {
   ],
   type: 'timeseries',
   title: 'One shard',
-  description: 'The number of CRUD operations and aggregation commands run that targeted 1 shard.',
+  description: 'The number of CRUD operations and aggregation commands run that targeted 1 shard. Specific to mongos nodes found under replica set "none".',
   fieldConfig: {
     defaults: {
       color: {
@@ -1213,7 +1213,7 @@ local unshardedPanel = {
   ],
   type: 'timeseries',
   title: 'Unsharded',
-  description: 'The number of CRUD operations and aggregation commands run on an unsharded collection.',
+  description: 'The number of CRUD operations and aggregation commands run on an unsharded collection. Specific to mongos nodes found under replica set "none".',
   fieldConfig: {
     defaults: {
       color: {

@@ -19,6 +19,7 @@ local queryOperationsPanel = {
       'increase(mongodb_opcounters_query{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -44,6 +45,7 @@ local queryOperationsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -99,6 +101,7 @@ local insertOperationsPanel = {
       'increase(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -124,6 +127,7 @@ local insertOperationsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -179,6 +183,7 @@ local updateOperationsPanel = {
       'increase(mongodb_opcounters_update{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -204,6 +209,7 @@ local updateOperationsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -259,6 +265,7 @@ local deleteOperationsPanel = {
       'increase(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -284,6 +291,7 @@ local deleteOperationsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -339,6 +347,7 @@ local currentConnectionsPanel = {
       'mongodb_connections_current{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -363,6 +372,7 @@ local currentConnectionsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -414,6 +424,7 @@ local activeConnectionsPanel = {
       'mongodb_connections_active{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -438,6 +449,7 @@ local activeConnectionsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -489,12 +501,14 @@ local readAndWriteOperationsPanel = {
       'increase(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -520,6 +534,7 @@ local readAndWriteOperationsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -575,12 +590,14 @@ local readAndWriteLatencyPanel = {
       'increase(mongodb_opLatencies_reads_latency{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_opLatencies_writes_latency{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -606,6 +623,7 @@ local readAndWriteLatencyPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -656,7 +674,14 @@ local readAndWriteLatencyPanel = {
 
 local locksRow = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      '',
+      datasource=promDatasource,
+      legendFormat='',
+      format='time_series',
+    ),
+  ],
   type: 'row',
   title: 'Locks',
 };
@@ -665,9 +690,31 @@ local databaseDeadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
+      'increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{instance}} - exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent shared',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -693,6 +740,7 @@ local databaseDeadlocksPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -703,7 +751,7 @@ local databaseDeadlocksPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -715,6 +763,7 @@ local databaseDeadlocksPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -726,7 +775,7 @@ local databaseDeadlocksPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -740,9 +789,31 @@ local collectionDeadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
+      'increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{instance}} - exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent shared',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -768,6 +839,7 @@ local collectionDeadlocksPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -778,7 +850,7 @@ local collectionDeadlocksPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -790,6 +862,7 @@ local collectionDeadlocksPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -801,7 +874,7 @@ local collectionDeadlocksPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -815,9 +888,31 @@ local databaseWaitCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
+      'increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{instance}} - exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent shared',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -843,6 +938,7 @@ local databaseWaitCountPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -853,7 +949,7 @@ local databaseWaitCountPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -865,6 +961,7 @@ local databaseWaitCountPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -876,7 +973,7 @@ local databaseWaitCountPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -890,9 +987,31 @@ local collectionWaitCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
+      'increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{instance}} - exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent shared',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -918,6 +1037,7 @@ local collectionWaitCountPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -928,7 +1048,7 @@ local collectionWaitCountPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -940,6 +1060,7 @@ local collectionWaitCountPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -951,7 +1072,7 @@ local collectionWaitCountPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -965,9 +1086,31 @@ local databaseWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
+      'increase(mongodb_locks_Database_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{instance}} - exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Database_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent shared',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -993,6 +1136,7 @@ local databaseWaitTimePanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -1003,7 +1147,7 @@ local databaseWaitTimePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1015,6 +1159,7 @@ local databaseWaitTimePanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -1026,7 +1171,7 @@ local databaseWaitTimePanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -1040,9 +1185,31 @@ local collectionWaitTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) + (increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])) OR vector(0) > 0',
+      'increase(mongodb_locks_Collection_timeAcquiringMicros_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{instance}} - exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_timeAcquiringMicros_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_timeAcquiringMicros_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_timeAcquiringMicros_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent shared',
+      format='time_series',
       interval='1m',
     ),
   ],
@@ -1068,6 +1235,7 @@ local collectionWaitTimePanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -1078,7 +1246,7 @@ local collectionWaitTimePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1090,6 +1258,7 @@ local collectionWaitTimePanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -1101,7 +1270,7 @@ local collectionWaitTimePanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {

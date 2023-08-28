@@ -19,6 +19,7 @@ local shardRow = {
       '',
       datasource=promDatasource,
       legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'row',
@@ -153,7 +154,7 @@ local shardNodesPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59585pre',
   transformations: [
     {
       id: 'reduce',
@@ -227,6 +228,7 @@ local configRow = {
       '',
       datasource=promDatasource,
       legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'row',
@@ -361,7 +363,7 @@ local configNodesPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59585pre',
   transformations: [
     {
       id: 'reduce',
@@ -435,6 +437,7 @@ local mongosRow = {
       '',
       datasource=promDatasource,
       legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'row',
@@ -569,7 +572,7 @@ local mongosNodesPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59585pre',
   transformations: [
     {
       id: 'reduce',
@@ -643,6 +646,7 @@ local performanceRow = {
       '',
       datasource=promDatasource,
       legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'row',
@@ -1059,7 +1063,6 @@ local memoryPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1136,7 +1139,6 @@ local diskSpacePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1214,7 +1216,6 @@ local hardwareCPUInterruptServiceTimePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1299,7 +1300,6 @@ local slowRequestsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1328,6 +1328,7 @@ local operationsRow = {
       '',
       datasource=promDatasource,
       legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'row',
@@ -1391,7 +1392,6 @@ local connectionsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1476,7 +1476,6 @@ local readwriteOperationsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1642,7 +1641,6 @@ local readwriteLatencyPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1675,6 +1673,7 @@ local locksRow = {
       '',
       datasource=promDatasource,
       legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'row',
@@ -1743,7 +1742,6 @@ local currentQueuePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1826,7 +1824,6 @@ local activeClientOperationsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1848,27 +1845,41 @@ local activeClientOperationsPanel = {
   },
 };
 
-local deadlocksPanel = {
+local databaseDeadlocksPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(sum (increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) > 0',
+      'sum (increase(mongodb_locks_Database_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
-      legendFormat='{{cl_name}} - database',
+      legendFormat='{{cl_name}} - exclusive',
       format='time_series',
       interval='1m',
     ),
     prometheus.target(
-      '(sum (increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) > 0',
+      'sum (increase(mongodb_locks_Database_deadlockCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
-      legendFormat='{{cl_name}} - collection',
+      legendFormat='{{cl_name}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'sum (increase(mongodb_locks_Database_deadlockCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'sum (increase(mongodb_locks_Database_deadlockCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}} - intent shared',
       format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Deadlocks',
-  description: 'The number of deadlocks for database and collection level locks.',
+  title: 'Database deadlocks',
+  description: 'The number of deadlocks for database level locks.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1899,7 +1910,7 @@ local deadlocksPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1911,7 +1922,6 @@ local deadlocksPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1923,7 +1933,7 @@ local deadlocksPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -1933,27 +1943,41 @@ local deadlocksPanel = {
   },
 };
 
-local waitAcquiringLockPanel = {
+local databaseWaitsAcquiringLockPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(sum (increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) > 0',
+      'sum (increase(mongodb_locks_Database_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
-      legendFormat='{{cl_name}} - database',
+      legendFormat='{{cl_name}} - exclusive',
       format='time_series',
       interval='1m',
     ),
     prometheus.target(
-      '(sum (increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) + (sum (increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)) OR vector(0) > 0',
+      'sum (increase(mongodb_locks_Database_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
-      legendFormat='{{cl_name}} - collection',
+      legendFormat='{{cl_name}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'sum (increase(mongodb_locks_Database_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'sum (increase(mongodb_locks_Database_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}} - intent shared',
       format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Wait acquiring lock',
-  description: 'The number of times lock acquisitions encounter waits for database and collection level locks.',
+  title: 'Database waits acquiring lock',
+  description: 'The number of times lock acquisitions encounter waits for database level locks.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1984,7 +2008,7 @@ local waitAcquiringLockPanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'none',
+          mode: 'normal',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -1996,7 +2020,6 @@ local waitAcquiringLockPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -2008,7 +2031,7 @@ local waitAcquiringLockPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -2064,6 +2087,13 @@ local waitAcquiringLockPanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='MongoDB Atlas dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           shardRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
@@ -2087,10 +2117,10 @@ local waitAcquiringLockPanel = {
           operationsPanel { gridPos: { h: 12, w: 6, x: 18, y: 41 } },
           readwriteLatencyPanel { gridPos: { h: 6, w: 12, x: 0, y: 47 } },
           locksRow { gridPos: { h: 1, w: 24, x: 0, y: 53 } },
-          currentQueuePanel { gridPos: { h: 6, w: 6, x: 0, y: 54 } },
-          activeClientOperationsPanel { gridPos: { h: 6, w: 6, x: 6, y: 54 } },
-          deadlocksPanel { gridPos: { h: 6, w: 6, x: 12, y: 54 } },
-          waitAcquiringLockPanel { gridPos: { h: 6, w: 6, x: 18, y: 54 } },
+          currentQueuePanel { gridPos: { h: 6, w: 12, x: 0, y: 54 } },
+          activeClientOperationsPanel { gridPos: { h: 6, w: 12, x: 12, y: 54 } },
+          databaseDeadlocksPanel { gridPos: { h: 6, w: 12, x: 0, y: 60 } },
+          databaseWaitsAcquiringLockPanel { gridPos: { h: 6, w: 12, x: 12, y: 60 } },
         ]
       ),
   },

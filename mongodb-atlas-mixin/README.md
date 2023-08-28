@@ -50,8 +50,13 @@ The MongoDB Atlas elections overview dashboard provides a detailed look into the
 ## MongoDB Atlas sharding overview
 The MongoDB Atlas sharding overview dashboard is exclusive for sharded Atlas clusters. This dashboard includes metrics like refreshes started and failed, refresh times, blocked cache operations, stale configs, and counts for operations that target a different number of shards. Panels in this dashboard only apply to `shardsvr` and `mongos` nodes. Between those 2 node types, most panels only apply to one or the other.
 
-![First screenshot of the MongoDB Atlas sharding overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/mongodb-atlas/screenshots/mongodb-atlas-sharding-overview-1.png)
-![Second screenshot of the MongoDB Atlas sharding overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/mongodb-atlas/screenshots/mongodb-atlas-sharding-overview-2.png)
+# shardsvr
+![First screenshot of the MongoDB Atlas sharding overview (shardsvr) dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/mongodb-atlas/screenshots/mongodb-atlas-sharding-overview-shardsvr-1.png)
+![Second screenshot of the MongoDB Atlas sharding overview (shardsvr) dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/mongodb-atlas/screenshots/mongodb-atlas-sharding-overview-shardsvr-2.png)
+
+# mongos
+![First screenshot of the MongoDB Atlas sharding overview (mongos) dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/mongodb-atlas/screenshots/mongodb-atlas-sharding-overview-mongos-1.png)
+![Second screenshot of the MongoDB Atlas sharding overview (mongos) dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/mongodb-atlas/screenshots/mongodb-atlas-sharding-overview-mongos-2.png)
 
 ## Environment configuration
 This mixin includes the MongoDB Atlas sharding overview dashboard, however the metrics used report data only when there is a sharded cluster in the project the prometheus integration is reporting on. Because of this, the MongoDB Atlas sharding overview dashboard is disabled by default. However, if you do have a sharded cluster and want to use the MongoDB Atlas sharding overview dashboard, you can set the `enableShardingOverview` parameter in `config.libsonnet` to `true`.
