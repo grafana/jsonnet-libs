@@ -1115,8 +1115,7 @@ local connectionsPanel = {
   },
 };
 
-local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg +
-                        if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
+local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg
 
 {
   grafanaDashboards+:: {
@@ -1183,7 +1182,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             'k',
             promDatasource,
             '5,10,20,50',
-            label='Top K',
+            label='Top node count',
             refresh=2,
             includeAll=false,
             multi=false,
