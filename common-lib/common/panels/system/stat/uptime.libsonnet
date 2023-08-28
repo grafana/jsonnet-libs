@@ -19,7 +19,9 @@ base {
         + stat.thresholdStep.withValue(600),
       ]
     )
-    + stat.options.reduceOptions.withCalcs([
+    + stat.options.withReduceOptions({})
+    + stat.options.reduceOptions.withCalcsMixin([
       'lastNotNull',
-    ]),
+      ]
+    )
 }

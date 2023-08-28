@@ -15,8 +15,11 @@ base {
     + stat.standardOptions.withMax(100)
     + stat.standardOptions.withMin(0)
     // Show last value by default, not mean.
-    + stat.options.reduceOptions.withCalcs([
+    + stat.options.withReduceOptions({})
+    + stat.options.reduceOptions.withCalcsMixin([
       'lastNotNull',
-    ]),
+      ]
+    )
+    
 
 }

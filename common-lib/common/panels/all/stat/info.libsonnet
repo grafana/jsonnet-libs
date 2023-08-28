@@ -15,7 +15,10 @@ base {
     // Style choice: No graph
     + stat.options.withGraphMode('none')
     // Show last value by default, not mean.
-    + stat.options.reduceOptions.withCalcs([
+    + stat.options.withReduceOptions({})
+    + stat.options.reduceOptions.withCalcsMixin([
       'lastNotNull',
-    ]),
+      ]
+    )
+    
 }
