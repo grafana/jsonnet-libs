@@ -1,5 +1,5 @@
-local utils = import '../utils.libsonnet';
 local g = import '../common/g.libsonnet';
+local utils = import '../utils.libsonnet';
 local stat = g.panel.stat;
 local row = g.panel.row;
 function(

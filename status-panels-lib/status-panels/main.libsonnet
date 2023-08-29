@@ -1,8 +1,8 @@
+local g = import '../common/g.libsonnet';
 local panels = import './panels.libsonnet';
 local rows = import './rows.libsonnet';
 local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
-local g = import '../common/g.libsonnet';
 {
   new(
     title,
