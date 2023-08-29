@@ -2,27 +2,27 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 local prometheusQuery = g.query.prometheus;
 local lokiQuery = g.query.loki;
 function(
-  type,
-  datasourceName,
-  statusPanelsQuery,
+  datasourceNameMetrics,
+  datasourceNameLogs,
+  statusPanelsQueryMetrics,
+  statusPanelsQueryLogs
 ) {
-  statusPanelsTarget::
-    if type == 'metrics' then
-      prometheusQuery.new(
-        datasource=datasourceName,
-        expr=|||
-          %s
-        ||| % [
-          statusPanelsQuery,
-        ]
-      )
-    else if type == 'logs' then
-      lokiQuery.new(
-        datasource=datasourceName,
-        expr=|||
-          %s
-        ||| % [
-          statusPanelsQuery,
-        ]
-      ),
+  statusPanelsTargetMetrics::
+    prometheusQuery.new(
+      datasource=datasourceNameMetrics,
+      expr=|||
+        %s
+      ||| % [
+        statusPanelsQueryMetrics,
+      ]
+    ),
+  statusPanelsTargetLogs::
+    lokiQuery.new(
+      datasource=datasourceNameLogs,
+      expr=|||
+        %s
+      ||| % [
+        statusPanelsQueryLogs,
+      ]
+    ),
 }

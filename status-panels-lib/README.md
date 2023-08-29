@@ -11,12 +11,30 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
 
 # Usage
 
+## Metrics
+
 ```
 (statusPanels.new(
   'Integration Status',
   type='metrics',
-  statusPanelsQuery='up{job=~"$job"}',
-  datasourceName='$prometheus_datasource',
+  statusPanelsQueryMetrics='up{job=~"$job"}',
+  datasourceNameMetrics='$prometheus_datasource',
+  showIntegrationVersion=true,
+  integrationVersion='x.x.x',
+  panelsHeight=2,
+  panelsWidth=8,
+  rowPositionY=10,
+)).panels.statusPanelsRow
+```
+
+## Logs
+
+```
+(statusPanels.new(
+  'Integration Status',
+  type='metrics',
+  statusPanelsQueryLogs='count_over_time{job=~"$job"}',
+  datasourceNameLogs='$loki_datasource',
   showIntegrationVersion=true,
   integrationVersion='x.x.x',
   panelsHeight=2,
@@ -35,15 +53,26 @@ Title of the status panels row
 
 ### type
 
-`metrics` or `logs` (Default `metrics`)
+`metrics`, `logs` or `both` (Default `metrics`)
+When using `metrics` provide `statusPanelsQueryMetrics` and `datasourceNameMetrics`
+When using `logs` provide `statusPanelsQueryLogs` and `datasourceNameLogs`
+When using `both` provide both metrics & logs query & data source names
 
-### statusPanelsQuery
+### statusPanelsQueryMetrics
 
-Query for checking the status of the integration (Should be the most commonly available metric which is almost always available like up{job="integrations/my-integration qwe34"})
+Query for checking the status of the integration (Should be the most commonly available metric which is almost always available like up{job="integrations/my-integration"})
 
-### datasourceName
+### statusPanelsQueryLogs
 
-Name of the data source to be used with the query targets
+Query for checking the status of the integration (Should be the most commonly available metric which is almost always available like count_over_time{job="integrations/my-integration"})
+
+### datasourceNameMetrics
+
+Name of the data source to be used with the query targets for metrics
+
+### datasourceNameLogs
+
+Name of the data source to be used with the query targets for logs
 
 ### showIntegrationVersion
 
@@ -84,8 +113,8 @@ local title = 'Status Panel Example';
           (statusPanels.new(
             'Integration Status',
             type='metrics',
-            statusPanelsQuery='up{job=~"$job"}',
-            datasourceName='$prometheus_datasource',
+            statusPanelsQueryMetrics='up{job=~"$job"}',
+            datasourceNameMetrics='$prometheus_datasource',
             showIntegrationVersion=true,
             integrationVersion='x.x.x',
             panelsHeight=2,

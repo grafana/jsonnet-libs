@@ -1,4 +1,5 @@
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local utils = import '../utils.libsonnet';
 
 local stat = g.panel.stat;
 local row = g.panel.row;
@@ -7,7 +8,8 @@ function(
   type,
   showIntegrationVersion,
   integrationVersion,
-  statusPanelsTarget,
+  statusPanelsTargetMetrics,
+  statusPanelsTargetLogs,
   panelsHeight,
   panelsWidth,
   rowPositionY,
@@ -15,8 +17,8 @@ function(
 
   {
     local this = self,
-    integrationStatusInit(targets, title='Integration status')::
-      stat.new(title)
+    integrationStatusInit(targets, statusType)::
+      stat.new(if statusType == 'metrics' then 'Metrics' else if statusType == 'logs' then 'Logs' else '' + ' status')
       + stat.panelOptions.withDescription('Shows the status of this integration.')
       + stat.standardOptions.withUnit('string')
       + stat.standardOptions.withNoValue('No data')
@@ -35,19 +37,19 @@ function(
         + stat.valueMapping.RangeMap.options.withFrom(0)
         + stat.valueMapping.RangeMap.options.withTo(0)
         + stat.valueMapping.RangeMap.options.result.withIndex(1)
-        + stat.valueMapping.RangeMap.options.result.withText('No metrics detected')
+        + stat.valueMapping.RangeMap.options.result.withText('No ' + statusType + ' detected')
         + stat.valueMapping.RangeMap.options.result.withColor('light-red'),
         stat.valueMapping.RangeMap.withType('range')
         + stat.valueMapping.RangeMap.options.withFrom(0)
         + stat.valueMapping.RangeMap.options.withTo(1000000)
         + stat.valueMapping.RangeMap.options.result.withIndex(1)
-        + stat.valueMapping.RangeMap.options.result.withText('Agent sending metrics')
+        + stat.valueMapping.RangeMap.options.result.withText('Agent sending ' + statusType)
         + stat.valueMapping.RangeMap.options.result.withColor('light-green'),
       ])
       + row.gridPos.withY(rowPositionY),
 
-    latestMetricReceivedInit(targets, title='Latest ' + type + ' received')::
-      stat.new(title)
+    latestMetricReceivedInit(targets, statusType)::
+      stat.new('Latest ' + statusType + ' received')
       + stat.panelOptions.withDescription('Shows the timestamp of the latest ' + type + ' received for this integration.')
       + stat.standardOptions.withUnit('dateTimeAsIso')
       + stat.standardOptions.withNoValue('No data')
@@ -64,8 +66,8 @@ function(
       + stat.gridPos.withX(0 + 1 * panelsWidth)
       + row.gridPos.withY(rowPositionY),
 
-    integrationVersionInit(targets, title='Integration version')::
-      stat.new(title)
+    integrationVersionInit(targets)::
+      stat.new('Integration version')
       + stat.panelOptions.withDescription('Shows the installed version of this integration.')
       + stat.standardOptions.withUnit('string')
       + stat.standardOptions.withNoValue(integrationVersion)
@@ -80,17 +82,30 @@ function(
       row.new(title)
       + row.gridPos.withY(rowPositionY),
 
-    integrationStatusPanel: self.integrationStatusInit(statusPanelsTarget),
-    latestMetricReceivedPanel: self.latestMetricReceivedInit(statusPanelsTarget),
-    integrationVersionPanel: self.integrationVersionInit(statusPanelsTarget),
-    row: self.rowInit(title),
+    row:: self.rowInit(title),
+    integrationStatusMetrics:: self.integrationStatusInit(statusPanelsTargetMetrics, "metrics"),
+    latestMetricReceivedMetrics:: self.latestMetricReceivedInit(statusPanelsTargetMetrics, "metrics"),
+    integrationStatusLogs:: self.integrationStatusInit(statusPanelsTargetLogs, "logs"),
+    latestMetricReceivedLogs:: self.latestMetricReceivedInit(statusPanelsTargetLogs, "logs"),
+    integrationVersion:: self.integrationVersionInit(integrationVersion),
 
-    statusPanelsRow: [
-      self.row,
-      self.integrationStatusPanel,
-      self.latestMetricReceivedPanel,
-      if showIntegrationVersion then
-        self.integrationVersionPanel,
-    ],
-
+    statusPanelsRow: utils.join([
+      [
+        self.row
+      ],
+      if type == 'metrics' || type == 'both' then
+      [
+        self.integrationStatusMetrics,
+        self.latestMetricReceivedMetrics,
+      ] else [],
+      if type == 'logs' || type == 'both' then
+      [
+        self.integrationStatusLogs,
+        self.latestMetricReceivedLogs,
+      ] else [],
+      if showIntegrationVersion == true then
+      [
+        self.integrationVersion,
+      ] else [],
+    ])
   }

@@ -3,13 +3,14 @@ local rows = import './rows.libsonnet';
 local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
-
 {
   new(
     title,
     type='metrics',
-    statusPanelsQuery,
-    datasourceName='datasource',
+    statusPanelsQueryMetrics='',
+    statusPanelsQueryLogs='',
+    datasourceNameMetrics='',
+    datasourceNameLogs='',
     showIntegrationVersion=true,
     integrationVersion='0.0.0',
     panelsHeight=2,
@@ -20,9 +21,10 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
     local this = self,
 
     targets: targets(
-      type,
-      datasourceName,
-      statusPanelsQuery,
+      datasourceNameMetrics,
+      datasourceNameLogs,
+      statusPanelsQueryMetrics,
+      statusPanelsQueryLogs,
     ),
 
     panels: panels(
@@ -30,7 +32,8 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
       type,
       showIntegrationVersion,
       integrationVersion,
-      this.targets.statusPanelsTarget,
+      this.targets.statusPanelsTargetMetrics,
+      this.targets.statusPanelsTargetLogs,
       panelsHeight,
       panelsWidth,
       rowPositionY=0,
