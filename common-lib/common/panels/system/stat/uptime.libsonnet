@@ -21,7 +21,7 @@ base {
     )
     + stat.options.withReduceOptions({})
     + stat.options.reduceOptions.withCalcsMixin([
-      'lastNotNull',
+        'lastNotNull',
       ]
     )
 }

@@ -12,8 +12,8 @@ base {
     description=''
   ):
     super.new(title, targets, description)
-    + self.standardOptions.withDecimals(1)
-    + self.standardOptions.withUnit('pps'),
+    + timeSeries.standardOptions.withDecimals(1)
+    + timeSeries.standardOptions.withUnit('pps'),
 
   withNegateOutPackets(regexp='/transmit|tx|out/'):
     defaults.custom.withAxisLabel('out(-) | in(+)')

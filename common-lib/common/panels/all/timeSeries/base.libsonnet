@@ -7,7 +7,7 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 local base = import '../base.libsonnet';
 
-timeSeries + base {
+base {
   new(title, targets, description=''):
     super.new(title, targets, description)
     + timeSeries.new(title)
