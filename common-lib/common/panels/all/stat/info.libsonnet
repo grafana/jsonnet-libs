@@ -8,16 +8,16 @@ base {
     + self.stylize(),
   stylize():
     // Style choice: Make it bigger
-    stat.options.text.withValueSize(20)
+    // stat.options.text.withValueSize(20)
     // Style choice: No color for simple text panels by default
-    + stat.options.withColorMode('fixed')
+    stat.options.withColorMode('fixed')
     + stat.standardOptions.color.withFixedColor('text')
     // Style choice: No graph
     + stat.options.withGraphMode('none')
     // Show last value by default, not mean.
     + stat.options.withReduceOptions({})
     + stat.options.reduceOptions.withCalcsMixin([
-      'lastNotNull',
+        'lastNotNull',
       ]
     )
     
