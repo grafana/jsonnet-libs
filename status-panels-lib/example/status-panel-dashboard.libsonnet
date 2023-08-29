@@ -1,5 +1,5 @@
 local statusPanels = import '../status-panels/main.libsonnet';
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local g = import '../common/g.libsonnet';
 
 local dashboard = g.dashboard;
 local title = 'Status Panel Example';
