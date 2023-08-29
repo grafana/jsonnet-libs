@@ -12,7 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local nodesPanel = {
+local nodesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -153,7 +153,7 @@ local nodesPanel = {
   ],
 };
 
-local namespacesPanel = {
+local namespacesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -303,7 +303,7 @@ local namespacesPanel = {
   ],
 };
 
-local unavailablePartitionsPanel = {
+local unavailablePartitionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -375,7 +375,7 @@ local unavailablePartitionsPanel = {
   ],
 };
 
-local deadPartitionsPanel = {
+local deadPartitionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -446,7 +446,7 @@ local deadPartitionsPanel = {
   ],
 };
 
-local topNodesByMemoryUsagePanel = {
+local topNodesByMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -582,7 +582,7 @@ local topNodesByMemoryUsagePanel = {
   ],
 };
 
-local topNodesByDiskUsagePanel = {
+local topNodesByDiskUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -719,7 +719,7 @@ local topNodesByDiskUsagePanel = {
   ],
 };
 
-local clientReadsPanel = {
+local clientReadsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -824,7 +824,7 @@ local clientReadsPanel = {
   },
 };
 
-local clientWritesPanel = {
+local clientWritesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -923,7 +923,7 @@ local clientWritesPanel = {
   },
 };
 
-local clientUDFTransactionsPanel = {
+local clientUDFTransactionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -1022,7 +1022,7 @@ local clientUDFTransactionsPanel = {
   },
 };
 
-local connectionsPanel = {
+local connectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -1115,7 +1115,7 @@ local connectionsPanel = {
   },
 };
 
-local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg
+local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg;
 
 {
   grafanaDashboards+:: {
@@ -1165,6 +1165,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             includeAll=true,
             multi=true,
             allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
           template.new(
@@ -1178,31 +1179,30 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             allValues='',
             sort=0
           ),
-          template.new(
+          template.custom(
             'k',
-            promDatasource,
-            '5,10,20,50',
+            query='5,10,20,50',
+            current='5',
             label='Top node count',
-            refresh=2,
+            refresh='never',
             includeAll=false,
             multi=false,
             allValues='',
-            sort=0,
           ),
         ]
       )
       .addPanels(
         [
-          nodesPanel { gridPos: { h: 7, w: 7, x: 0, y: 0 } },
-          namespacesPanel { gridPos: { h: 7, w: 7, x: 7, y: 0 } },
-          unavailablePartitionsPanel { gridPos: { h: 7, w: 5, x: 14, y: 0 } },
-          deadPartitionsPanel { gridPos: { h: 7, w: 5, x: 19, y: 0 } },
-          topNodesByMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 0, y: 7 } },
-          topNodesByDiskUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 7 } },
-          clientReadsPanel { gridPos: { h: 8, w: 12, x: 0, y: 15 } },
-          clientWritesPanel { gridPos: { h: 8, w: 12, x: 12, y: 15 } },
-          clientUDFTransactionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 23 } },
-          connectionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 23 } },
+          nodesPanel(getMatcher($._config)) { gridPos: { h: 7, w: 7, x: 0, y: 0 } },
+          namespacesPanel(getMatcher($._config)) { gridPos: { h: 7, w: 7, x: 7, y: 0 } },
+          unavailablePartitionsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 5, x: 14, y: 0 } },
+          deadPartitionsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 5, x: 19, y: 0 } },
+          topNodesByMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 7 } },
+          topNodesByDiskUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 7 } },
+          clientReadsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 15 } },
+          clientWritesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 15 } },
+          clientUDFTransactionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 23 } },
+          connectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 23 } },
         ]
       ),
   },

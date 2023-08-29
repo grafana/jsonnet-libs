@@ -12,7 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local unavailablePartitionsPanel = {
+local unavailablePartitionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -68,7 +68,7 @@ local unavailablePartitionsPanel = {
   pluginVersion: '10.2.0-59542pre',
 };
 
-local diskUsagePanel = {
+local diskUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -148,7 +148,7 @@ local diskUsagePanel = {
   },
 };
 
-local deadPartitionsPanel = {
+local deadPartitionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -204,7 +204,7 @@ local deadPartitionsPanel = {
   pluginVersion: '10.2.0-59542pre',
 };
 
-local memoryUsagePanel = {
+local memoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -284,7 +284,7 @@ local memoryUsagePanel = {
   },
 };
 
-local clientReadsPanel = {
+local clientReadsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -384,7 +384,7 @@ local clientReadsPanel = {
   },
 };
 
-local clientWritesPanel = {
+local clientWritesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -479,7 +479,7 @@ local clientWritesPanel = {
   },
 };
 
-local clientUDFTransactionsPanel = {
+local clientUDFTransactionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -573,7 +573,7 @@ local clientUDFTransactionsPanel = {
   },
 };
 
-local cacheReadUtilizationPanel = {
+local cacheReadUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -652,8 +652,7 @@ local cacheReadUtilizationPanel = {
   },
 };
 
-local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg +
-                        if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
+local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg;
 
 {
   grafanaDashboards+:: {
@@ -743,14 +742,14 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
       )
       .addPanels(
         [
-          unavailablePartitionsPanel { gridPos: { h: 8, w: 8, x: 0, y: 0 } },
-          diskUsagePanel { gridPos: { h: 8, w: 16, x: 8, y: 0 } },
-          deadPartitionsPanel { gridPos: { h: 8, w: 8, x: 0, y: 8 } },
-          memoryUsagePanel { gridPos: { h: 8, w: 16, x: 8, y: 8 } },
-          clientReadsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          clientWritesPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-          clientUDFTransactionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
-          cacheReadUtilizationPanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
+          unavailablePartitionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 0 } },
+          diskUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 16, x: 8, y: 0 } },
+          deadPartitionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 8 } },
+          memoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 16, x: 8, y: 8 } },
+          clientReadsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
+          clientWritesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+          clientUDFTransactionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
+          cacheReadUtilizationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
         ]
       ),
   },

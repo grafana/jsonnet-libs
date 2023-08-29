@@ -17,7 +17,7 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local unavailablePartitionsPanel = {
+local unavailablePartitionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -74,7 +74,7 @@ local unavailablePartitionsPanel = {
   pluginVersion: '10.2.0-59542pre',
 };
 
-local memoryUsagePanel = {
+local memoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -155,7 +155,7 @@ local memoryUsagePanel = {
   },
 };
 
-local deadPartitionsPanel = {
+local deadPartitionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -212,7 +212,7 @@ local deadPartitionsPanel = {
   pluginVersion: '10.2.0-59542pre',
 };
 
-local diskUsagePanel = {
+local diskUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -293,7 +293,7 @@ local diskUsagePanel = {
   },
 };
 
-local heapMemoryEfficiencyPanel = {
+local heapMemoryEfficiencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -374,7 +374,7 @@ local heapMemoryEfficiencyPanel = {
   },
 };
 
-local connectionsPanel = {
+local connectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -467,7 +467,7 @@ local connectionsPanel = {
   },
 };
 
-local clientReadsPanel = {
+local clientReadsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -571,7 +571,7 @@ local clientReadsPanel = {
   },
 };
 
-local clientWritesPanel = {
+local clientWritesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -669,7 +669,7 @@ local clientWritesPanel = {
   },
 };
 
-local clientUDFTransactionsPanel = {
+local clientUDFTransactionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -767,7 +767,7 @@ local clientUDFTransactionsPanel = {
   },
 };
 
-local cacheReadUtilizationPanel = {
+local cacheReadUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -847,7 +847,7 @@ local cacheReadUtilizationPanel = {
   },
 };
 
-local systemLogsPanel = {
+local systemLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
@@ -873,8 +873,7 @@ local systemLogsPanel = {
   },
 };
 
-local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg +
-                        if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
+local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg;
 
 {
   grafanaDashboards+:: {
@@ -922,8 +921,8 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
               'label_values(aerospike_namespace_ns_cluster_size,job)',
               label='Job',
               refresh=2,
-              includeAll=false,
-              multi=false,
+              includeAll=true,
+              multi=true,
               allValues='',
               sort=0
             ),
@@ -959,7 +958,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
               includeAll=true,
               multi=true,
               allValues='',
-              sort=0
+              sort=0,
             ),
           ],
         ])
@@ -967,22 +966,21 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
       .addPanels(
         std.flattenArrays([
           [
-            unavailablePartitionsPanel { gridPos: { h: 8, w: 7, x: 0, y: 0 } },
-            memoryUsagePanel { gridPos: { h: 8, w: 17, x: 7, y: 0 } },
-            deadPartitionsPanel { gridPos: { h: 8, w: 7, x: 0, y: 8 } },
-            diskUsagePanel { gridPos: { h: 8, w: 17, x: 7, y: 8 } },
-            heapMemoryEfficiencyPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-            connectionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-            clientReadsPanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
-            clientWritesPanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
-            clientUDFTransactionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
-            cacheReadUtilizationPanel { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
+            unavailablePartitionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 7, x: 0, y: 0 } },
+            memoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 17, x: 7, y: 0 } },
+            deadPartitionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 7, x: 0, y: 8 } },
+            diskUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 17, x: 7, y: 8 } },
+            heapMemoryEfficiencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
+            connectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+            clientReadsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
+            clientWritesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
+            clientUDFTransactionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
+            cacheReadUtilizationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
           ],
           if $._config.enableLokiLogs then [
-            systemLogsPanel { gridPos: { h: 10, w: 24, x: 0, y: 40 } },
+            systemLogsPanel(getMatcher($._config)) { gridPos: { h: 10, w: 24, x: 0, y: 40 } },
           ] else [],
-          [
-          ],
+          [],
         ])
       ),
   },
