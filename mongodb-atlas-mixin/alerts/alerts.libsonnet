@@ -5,9 +5,9 @@
         name: 'mongodb-atlas-alerts',
         rules: [
           {
-            alert: 'MongoDBAtlasHighNumberOfDeadlocks',
+            alert: 'MongoDBAtlasHighNumberOfCollectionExclusiveDeadlocks',
             expr: |||
-              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_R[5m])) OR vector(0) + sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_W[5m])) OR vector(0) + sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_r[5m])) OR vector(0) + sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_w[5m])) OR vector(0) + sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_R[5m])) OR vector(0) + sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_W[5m])) OR vector(0) + sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_r[5m])) OR vector(0) + sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_w[5m])) OR vector(0) > %(alertsDeadlocks)s
+              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_W[5m])) > %(alertsDeadlocks)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -17,7 +17,126 @@
               summary: 'There is a high number of deadlocks occurring.',
               description:
                 (
-                  'The number of deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
+                  'The number of collection exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
+                ) % $._config,
+            },
+          },
+          {
+            alert: 'MongoDBAtlasHighNumberOfCollectionIntentExclusiveDeadlocks',
+            expr: |||
+              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_w[5m])) > %(alertsDeadlocks)s
+            ||| % $._config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'There is a high number of deadlocks occurring.',
+              description:
+                (
+                  'The number of collection intent-exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
+                ) % $._config,
+            },
+          },
+          {
+            alert: 'MongoDBAtlasHighNumberOfCollectionSharedDeadlocks',
+            expr: |||
+              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_R[5m])) > %(alertsDeadlocks)s
+            ||| % $._config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'There is a high number of deadlocks occurring.',
+              description:
+                (
+                  'The number of collection shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
+                ) % $._config,
+            },
+          },
+          {
+            alert: 'MongoDBAtlasHighNumberOfCollectionIntentSharedDeadlocks',
+            expr: |||
+              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Collection_deadlockCount_r[5m])) > %(alertsDeadlocks)s
+            ||| % $._config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'There is a high number of deadlocks occurring.',
+              description:
+                (
+                  'The number of collection intent-shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
+                ) % $._config,
+            },
+          },
+          {
+            alert: 'MongoDBAtlasHighNumberOfDatabaseExclusiveDeadlocks',
+            expr: |||
+              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_W[5m])) > %(alertsDeadlocks)s
+            ||| % $._config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'There is a high number of deadlocks occurring.',
+              description:
+                (
+                  'The number of database exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
+                ) % $._config,
+            },
+          },
+          {
+            alert: 'MongoDBAtlasHighNumberOfDatabaseIntentExclusiveDeadlocks',
+            expr: |||
+              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_w[5m])) > %(alertsDeadlocks)s
+            ||| % $._config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'There is a high number of deadlocks occurring.',
+              description:
+                (
+                  'The number of database intent-exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
+                ) % $._config,
+            },
+          },
+          {
+            alert: 'MongoDBAtlasHighNumberOfDatabaseSharedDeadlocks',
+            expr: |||
+              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_R[5m])) > %(alertsDeadlocks)s
+            ||| % $._config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'There is a high number of deadlocks occurring.',
+              description:
+                (
+                  'The number of database shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
+                ) % $._config,
+            },
+          },
+          {
+            alert: 'MongoDBAtlasHighNumberOfDatabaseIntentSharedDeadlocks',
+            expr: |||
+              sum without(cl_role,process_port,rs_nm,rs_state) (increase(mongodb_locks_Database_deadlockCount_r[5m])) > %(alertsDeadlocks)s
+            ||| % $._config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'There is a high number of deadlocks occurring.',
+              description:
+                (
+                  'The number of database intent-shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
                 ) % $._config,
             },
           },
