@@ -9,6 +9,14 @@
         }
       },
       "version": "master"
+    },
+    {
+      "source": {
+        "local": {
+          "directory": "lib/windows-lib"
+        }
+      },
+      "version": ""
     }
   ],
   "legacyImports": true
