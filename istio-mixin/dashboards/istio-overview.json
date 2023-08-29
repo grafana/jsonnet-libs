@@ -2746,7 +2746,7 @@
           "editorMode": "code",
           "expr": "galley_validation_config_updates{job=~\"$job\", cluster=~\"$cluster\", instance=~\"$instance\"}",
           "instant": false,
-          "legendFormat": "Updates"
+          "legendFormat": "Updates",
           "range": true,
           "refId": "A"
         }
