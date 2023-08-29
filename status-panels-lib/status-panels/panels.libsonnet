@@ -1,5 +1,5 @@
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 local utils = import '../utils.libsonnet';
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
 local stat = g.panel.stat;
 local row = g.panel.row;
@@ -83,29 +83,29 @@ function(
       + row.gridPos.withY(rowPositionY),
 
     row:: self.rowInit(title),
-    integrationStatusMetrics:: self.integrationStatusInit(statusPanelsTargetMetrics, "metrics"),
-    latestMetricReceivedMetrics:: self.latestMetricReceivedInit(statusPanelsTargetMetrics, "metrics"),
-    integrationStatusLogs:: self.integrationStatusInit(statusPanelsTargetLogs, "logs"),
-    latestMetricReceivedLogs:: self.latestMetricReceivedInit(statusPanelsTargetLogs, "logs"),
+    integrationStatusMetrics:: self.integrationStatusInit(statusPanelsTargetMetrics, 'metrics'),
+    latestMetricReceivedMetrics:: self.latestMetricReceivedInit(statusPanelsTargetMetrics, 'metrics'),
+    integrationStatusLogs:: self.integrationStatusInit(statusPanelsTargetLogs, 'logs'),
+    latestMetricReceivedLogs:: self.latestMetricReceivedInit(statusPanelsTargetLogs, 'logs'),
     integrationVersion:: self.integrationVersionInit(integrationVersion),
 
     statusPanelsRow: utils.join([
       [
-        self.row
+        self.row,
       ],
       if type == 'metrics' || type == 'both' then
-      [
-        self.integrationStatusMetrics,
-        self.latestMetricReceivedMetrics,
-      ] else [],
+        [
+          self.integrationStatusMetrics,
+          self.latestMetricReceivedMetrics,
+        ] else [],
       if type == 'logs' || type == 'both' then
-      [
-        self.integrationStatusLogs,
-        self.latestMetricReceivedLogs,
-      ] else [],
+        [
+          self.integrationStatusLogs,
+          self.latestMetricReceivedLogs,
+        ] else [],
       if showIntegrationVersion == true then
-      [
-        self.integrationVersion,
-      ] else [],
-    ])
+        [
+          self.integrationVersion,
+        ] else [],
+    ]),
   }
