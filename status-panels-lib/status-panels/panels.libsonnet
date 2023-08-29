@@ -1,6 +1,5 @@
 local utils = import '../utils.libsonnet';
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
-
+local g = import '../common/g.libsonnet';
 local stat = g.panel.stat;
 local row = g.panel.row;
 function(

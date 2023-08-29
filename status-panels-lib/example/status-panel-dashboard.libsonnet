@@ -10,7 +10,7 @@ local title = 'Status Panel Example';
                                  + dashboard.withUid(g.util.string.slugify(title))
                                  + dashboard.withPanels(
                                    (statusPanels.new(
-                                      'Integration Status',
+                                      'Integration status',
                                       type='metrics',
                                       statusPanelsQueryMetrics='up{job=~"$job"}',
                                       datasourceNameMetrics='$prometheus_datasource',
