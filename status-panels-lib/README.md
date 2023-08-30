@@ -43,7 +43,7 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
 ```
 (statusPanels.new(
   'Integration Status',
-  type='metrics',
+  type='logs',
   statusPanelsQueryLogs='count_over_time{job=~"$job"}',
   datasourceNameLogs='$loki_datasource',
   showIntegrationVersion=true,
@@ -111,7 +111,7 @@ Position (Default `0`)
 
 ```
 local statusPanels = import '../status-panels/main.libsonnet';
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local g = import 'github.com/grafana/grafonnet/gen/grafonnet-v10.0.0/main.libsonnet';
 
 local dashboard = g.dashboard;
 local title = 'Status Panel Example';
