@@ -140,4 +140,4 @@ local title = 'Status Panel Example';
 
 ### Screenshot
 
-![Dashboard screenshot](example/status-panel-dashboard.png?raw=true "Optional Title")
+![Dashboard screenshot](https://github.com/grafana/jsonnet-libs/assets/17196882/7d9cecd0-861e-4ddf-aa85-df92cdf555bc)
