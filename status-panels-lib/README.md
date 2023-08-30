@@ -2,6 +2,17 @@
 
 This status panels lib can be used to add a status panel row for integration dashboards using [grafonnet](https://github.com/grafana/grafonnet).
 
+The status panels provide the following information for an integration.
+
+- Metrics status
+  - Shows if the agent is sending metrics for this integration
+  - Shows the latest timestamp the metrics were received for this integration
+- Logs status
+  - Shows if the agent is sending logs for this integration
+  - Shows the latest timestamp the logs were received for this integration
+- Integration version
+  - Shows the current installed version of the integration
+
 ## Import
 
 ```sh
