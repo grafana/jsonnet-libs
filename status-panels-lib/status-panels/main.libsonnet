@@ -16,6 +16,7 @@ local variables = import './variables.libsonnet';
     panelsHeight=2,
     panelsWidth=8,
     rowPositionY=0,
+    dateTimeUnit='dateTimeFromNow',
   ): {
 
     local this = self,
@@ -36,7 +37,8 @@ local variables = import './variables.libsonnet';
       this.targets.statusPanelsTargetLogs,
       panelsHeight,
       panelsWidth,
-      rowPositionY=0,
+      rowPositionY,
+      dateTimeUnit,
     ),
   },
 

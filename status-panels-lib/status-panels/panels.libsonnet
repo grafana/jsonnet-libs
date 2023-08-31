@@ -12,6 +12,7 @@ function(
   panelsHeight,
   panelsWidth,
   rowPositionY,
+  dateTimeUnit,
 )
 
   {
@@ -27,7 +28,6 @@ function(
       + stat.options.reduceOptions.withCalcs('lastNotNull')
       + stat.options.withColorMode('background')
       + stat.options.withGraphMode('none')
-      + stat.queryOptions.withTimeFrom('now/d')
       + stat.gridPos.withH(panelsHeight)
       + stat.gridPos.withW(panelsWidth)
       + stat.gridPos.withX(0)
@@ -50,7 +50,7 @@ function(
     latestMetricReceivedInit(targets, statusType)::
       stat.new('Latest ' + statusType + ' received')
       + stat.panelOptions.withDescription('Shows the timestamp of the latest ' + type + ' received for this integration.')
-      + stat.standardOptions.withUnit('dateTimeAsIso')
+      + stat.standardOptions.withUnit(dateTimeUnit)
       + stat.standardOptions.withNoValue('No data')
       + stat.withTargets(targets)
       + stat.standardOptions.color.withMode('fixed')

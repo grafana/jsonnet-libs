@@ -105,6 +105,10 @@ Width of the status panels (Default `8`)
 
 Position (Default `0`)
 
+### dateTimeUnit
+
+Override the datetime unit for panels (Default `dateTimeFromNow`)
+
 ## Sample Dashboard
 
 `status-panel-dashboard.libsonnet`
@@ -140,4 +144,4 @@ local title = 'Status Panel Example';
 
 ### Screenshot
 
-![Dashboard screenshot](https://github.com/grafana/jsonnet-libs/assets/17196882/7d9cecd0-861e-4ddf-aa85-df92cdf555bc)
+![Dashboard screenshot](https://github.com/grafana/jsonnet-libs/assets/17196882/a9eee5ab-b2a8-4ed5-b473-7e1fc27c8ec0)
