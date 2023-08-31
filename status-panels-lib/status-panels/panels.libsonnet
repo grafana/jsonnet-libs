@@ -19,7 +19,7 @@ function(
     local this = self,
     integrationStatusInit(targets, statusType)::
       stat.new(if statusType == 'metrics' then 'Metrics' else if statusType == 'logs' then 'Logs' else '' + ' status')
-      + stat.panelOptions.withDescription('Shows the status of this integration.')
+      + stat.panelOptions.withDescription('Shows if ' + statusType + ' are being received for the selected time range.')
       + stat.standardOptions.withUnit('string')
       + stat.standardOptions.withNoValue('No data')
       + stat.withTargets(targets)
@@ -49,7 +49,7 @@ function(
 
     latestMetricReceivedInit(targets, statusType)::
       stat.new('Latest ' + statusType + ' received')
-      + stat.panelOptions.withDescription('Shows the timestamp of the latest ' + type + ' received for this integration.')
+      + stat.panelOptions.withDescription('Shows the timestamp of the latest ' + type + ' received for this integration in the last 24 hours.')
       + stat.standardOptions.withUnit(dateTimeUnit)
       + stat.standardOptions.withNoValue('No data')
       + stat.withTargets(targets)
@@ -59,7 +59,7 @@ function(
       + stat.options.reduceOptions.withFields('Time')
       + stat.options.withColorMode('background')
       + stat.options.withGraphMode('none')
-      + stat.queryOptions.withTimeFrom('now/d')
+      + stat.queryOptions.withTimeFrom('now-24h')
       + stat.gridPos.withH(panelsHeight)
       + stat.gridPos.withW(panelsWidth)
       + stat.gridPos.withX(0 + 1 * panelsWidth)
