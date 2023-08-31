@@ -459,7 +459,7 @@ local topNodesByMemoryUsagePanel(matcher) = {
   ],
   type: 'table',
   title: 'Top nodes by memory usage',
-  description: 'Memory utilization for the top percentile of nodes in an Aerospike cluster.',
+  description: 'Memory utilization for the top k nodes in an Aerospike cluster.',
   fieldConfig: {
     defaults: {
       color: {
@@ -595,7 +595,7 @@ local topNodesByDiskUsagePanel(matcher) = {
   ],
   type: 'table',
   title: 'Top nodes by disk usage',
-  description: 'Disk utilization for the top percentile of nodes in an Aerospike cluster.',
+  description: 'Disk utilization for the top k nodes in an Aerospike cluster.',
   fieldConfig: {
     defaults: {
       color: {
