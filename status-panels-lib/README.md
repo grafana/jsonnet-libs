@@ -35,7 +35,7 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
   panelsHeight=2,
   panelsWidth=8,
   rowPositionY=10,
-)).panels.statusPanelsRow
+)).panels.statusPanelsWithRow
 ```
 
 ## Logs
@@ -51,10 +51,24 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
   panelsHeight=2,
   panelsWidth=8,
   rowPositionY=10,
-)).panels.statusPanelsRow
+)).panels.statusPanelsWithRow
 ```
 
-This will return a row with the status panels appended to it
+## Only panels without row
+
+```
+(statusPanels.new(
+  'Integration Status',
+  type='logs',
+  statusPanelsQueryLogs='count_over_time{job=~"$job"}',
+  datasourceNameLogs='$loki_datasource',
+  showIntegrationVersion=true,
+  integrationVersion='x.x.x',
+  panelsHeight=2,
+  panelsWidth=8,
+  rowPositionY=10,
+)).panels.statusPanels
+```
 
 ## Options
 
@@ -135,7 +149,7 @@ local title = 'Status Panel Example';
             panelsHeight=2,
             panelsWidth=8,
             rowPositionY=10,
-          )).panels.statusPanelsRow
+          )).panels.statusPanelsWithRow
         )
   }
 }

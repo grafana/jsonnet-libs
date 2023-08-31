@@ -88,10 +88,7 @@ function(
     latestMetricReceivedLogs:: self.latestMetricReceivedInit(statusPanelsTargetLogs, 'logs'),
     integrationVersion:: self.integrationVersionInit(integrationVersion),
 
-    statusPanelsRow: utils.join([
-      [
-        self.row,
-      ],
+    statusPanels: utils.join([
       if type == 'metrics' || type == 'both' then
         [
           self.integrationStatusMetrics,
@@ -106,5 +103,12 @@ function(
         [
           self.integrationVersion,
         ] else [],
+    ]),
+
+    statusPanelsWithRow: utils.join([
+      [
+        self.row,
+      ],
+      self.statusPanels,
     ]),
   }
