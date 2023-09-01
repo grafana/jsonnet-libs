@@ -38,22 +38,17 @@ local commonlib = import 'common/main.libsonnet';
       instanceLabels,
     ),
 
-    // targets: targets.new(
-    //   this.variables,
-    // //   formatParser,
-    // //   logsVolumeGroupBy,
-    // //   extraFilters,
-    // ),
-    // annotations: {
-    //   reboot: commonlib.annotations.reboot.new(
-    //   title="Reboot",
-    //   target=c.commonPromTarget(
-    //     'windows_system_system_up_time{%(nodeQuerySelector)s}*1000 > $__from < $__to' % config { nodeQuerySelector: nodeQuerySelector },
-    //     legendFormat='',
-    //   ),
-    //   instanceLabels="instance",
-    // ),
-    // },
+    targets: targets.new(
+      this.variables,
+    ),
+
+    annotations: {
+      reboot: commonlib.annotations.reboot.new(
+      title="Reboot",
+      target=this.targets.reboot,
+      instanceLabels=std.join(",", instanceLabels),
+      ),
+    },
 
     // common links here
     links: {
@@ -83,6 +78,7 @@ local commonlib = import 'common/main.libsonnet';
       uid,
       // this.panels,
       this.variables,
+      this.annotations,
     ),
 
     alerts: {},
