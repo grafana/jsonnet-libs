@@ -16,9 +16,9 @@ local numberOfQueuesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by(instance) (activemq_queue_queue_size{instance=~"$instance", job=~"$job"})',
+      'count by(instance, activemq_cluster) (activemq_queue_queue_size{activemq_cluster=~"$activemq_cluster", instance=~"$instance", job=~"$job"})',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
   ],
   type: 'stat',
@@ -44,7 +44,7 @@ local numberOfQueuesPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -57,16 +57,63 @@ local numberOfQueuesPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59981',
+};
+
+local queueSizePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum by (instance, activemq_cluster) (activemq_queue_queue_size{job=~"$job",activemq_cluster=~"$activemq_cluster",instance=~"$instance"})',
+      datasource=promDatasource,
+      legendFormat='{{activemq_cluster}} - {{instance}}',
+    ),
+  ],
+  type: 'stat',
+  title: 'Queue size',
+  description: 'Number of messages in queue destinations.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'none',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+  },
+  pluginVersion: '10.2.0-59981',
 };
 
 local producerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance) (activemq_queue_producer_count{job=~"$job", instance=~"$instance"})',
+      'sum by(instance, activemq_cluster) (activemq_queue_producer_count{activemq_cluster=~"$activemq_cluster", job=~"$job", instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
   ],
   type: 'stat',
@@ -92,7 +139,7 @@ local producerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -105,16 +152,16 @@ local producerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local consumerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance) (activemq_queue_consumer_count{instance=~"$instance", job=~"$job"})',
+      'sum by(instance,activemq_cluster) (activemq_queue_consumer_count{activemq_cluster=~"$activemq_cluster", instance=~"$instance", job=~"$job"})',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
   ],
   type: 'stat',
@@ -140,7 +187,7 @@ local consumerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -153,64 +200,16 @@ local consumerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59542pre',
-};
-
-local deadLetterQueuePanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'sum by (instance) (activemq_queue_dlq{job=~"$job", instance=~"$instance"})',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'stat',
-  title: 'Dead letter queue',
-  description: 'The number of messages in dead letter queue.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'thresholds',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'auto',
-  },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local topQueuesByEnqueueRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, rate(activemq_queue_enqueue_count{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_queue_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster",instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -236,8 +235,8 @@ local topQueuesByEnqueueRatePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -246,7 +245,7 @@ local topQueuesByEnqueueRatePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -284,9 +283,9 @@ local topQueuesByDequeueRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, rate(activemq_queue_dequeue_count{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_queue_dequeue_count{job=~"$job", instance=~"$instance", activemq_cluster=~"$activemq_cluster", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -312,8 +311,8 @@ local topQueuesByDequeueRatePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -322,7 +321,7 @@ local topQueuesByDequeueRatePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -360,9 +359,9 @@ local topQueuesByAverageEnqueueTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, activemq_queue_average_enqueue_time{job=~"$job", instance=~"$instance"})',
+      'topk by(instance, activemq_cluster) ($k_selector, activemq_queue_average_enqueue_time{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -388,8 +387,8 @@ local topQueuesByAverageEnqueueTimePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -398,7 +397,7 @@ local topQueuesByAverageEnqueueTimePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -436,9 +435,9 @@ local topQueuesByExpiredMessageRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, rate(activemq_queue_expired_count{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_queue_expired_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -464,8 +463,8 @@ local topQueuesByExpiredMessageRatePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -474,7 +473,7 @@ local topQueuesByExpiredMessageRatePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -512,9 +511,9 @@ local topQueuesByAverageMessageSizePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, activemq_queue_average_message_size{job=~"$job", instance=~"$instance"})',
+      'topk by(instance, activemq_cluster) ($k_selector, activemq_queue_average_message_size{job=~"$job",activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -541,8 +540,8 @@ local topQueuesByAverageMessageSizePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -551,7 +550,7 @@ local topQueuesByAverageMessageSizePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -584,6 +583,176 @@ local topQueuesByAverageMessageSizePanel = {
       sort: 'desc',
     },
   },
+};
+
+local queueSummaryPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'rate(activemq_queue_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='table',
+    ),
+    prometheus.target(
+      'rate(activemq_queue_dequeue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='table',
+    ),
+    prometheus.target(
+      'activemq_queue_average_enqueue_time{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='table',
+    ),
+    prometheus.target(
+      'activemq_queue_average_message_size{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='table',
+    ),
+  ],
+  type: 'table',
+  title: 'Queue summary',
+  description: 'Summary of queues showing queue name, enqueue and dequeue rate, average enqueue time, and average message size.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      custom: {
+        align: 'center',
+        cellOptions: {
+          type: 'auto',
+        },
+        inspect: false,
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+    },
+    overrides: [
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Average message size',
+        },
+        properties: [
+          {
+            id: 'unit',
+            value: 'decbytes',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Enqueue rate',
+        },
+        properties: [
+          {
+            id: 'unit',
+            value: 'mps',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Dequeue rate',
+        },
+        properties: [
+          {
+            id: 'unit',
+            value: 'mps',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Average enqueue time',
+        },
+        properties: [
+          {
+            id: 'unit',
+            value: 'ms',
+          },
+        ],
+      },
+    ],
+  },
+  options: {
+    cellHeight: 'sm',
+    footer: {
+      countRows: false,
+      fields: '',
+      reducer: [
+        'sum',
+      ],
+      show: false,
+    },
+    showHeader: true,
+    sortBy: [
+      {
+        desc: false,
+        displayName: '{activemq_cluster="cluster-a", destination="TEST", instance="localhost:12345", job="integrations/activemq"}',
+      },
+    ],
+  },
+  pluginVersion: '10.2.0-59981',
+  transformations: [
+    {
+      id: 'joinByField',
+      options: {
+        byField: 'destination',
+        mode: 'outer',
+      },
+    },
+    {
+      id: 'organize',
+      options: {
+        excludeByName: {
+          'Time 1': true,
+          'Time 2': true,
+          'Time 3': true,
+          'Time 4': true,
+          '__name__ 1': true,
+          '__name__ 2': true,
+          'activemq_cluster 1': true,
+          'activemq_cluster 2': true,
+          'activemq_cluster 3': true,
+          'activemq_cluster 4': true,
+          'instance 1': true,
+          'instance 2': true,
+          'instance 3': true,
+          'instance 4': true,
+          'job 1': true,
+          'job 2': true,
+          'job 3': true,
+          'job 4': true,
+        },
+        indexByName: {},
+        renameByName: {
+          'Time 1': '',
+          'Value #A': 'Enqueue rate',
+          'Value #B': 'Dequeue rate',
+          'Value #C': 'Average enqueue time',
+          'Value #D': 'Average message size',
+          'activemq_cluster 1': '',
+          destination: 'Destination',
+        },
+      },
+    },
+  ],
 };
 
 {
@@ -620,13 +789,46 @@ local topQueuesByAverageMessageSizePanel = {
             sort=0
           ),
           template.new(
+            'activemq_cluster',
+            promDatasource,
+            'label_values(activemq_memory_usage_ratio{job=~"$job"},activemq_cluster)',
+            label='ActiveMQ cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
             'instance',
             promDatasource,
-            'label_values(activemq_topic_producer_count{job=~"$job"},instance)',
+            'label_values(activemq_topic_producer_count{activemq_cluster=~"$activemq_cluster"},instance)',
             label='Instance',
             refresh=2,
             includeAll=true,
             multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
+            'k_selector',
+            promDatasource,
+            '2,4,6,8,10',
+            label='Top k count',
+            refresh=0,
+            includeAll=false,
+            multi=false,
+            allValues='',
+            sort=0
+          ),
+          template.new(
+            'name',
+            promDatasource,
+            '.*',
+            label='Queue by name',
+            refresh=0,
+            includeAll=false,
+            multi=false,
             allValues='',
             sort=0
           ),
@@ -635,14 +837,15 @@ local topQueuesByAverageMessageSizePanel = {
       .addPanels(
         [
           numberOfQueuesPanel { gridPos: { h: 4, w: 6, x: 0, y: 0 } },
-          producerCountPanel { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
-          consumerCountPanel { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
-          deadLetterQueuePanel { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
+          queueSizePanel { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
+          producerCountPanel { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
+          consumerCountPanel { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
           topQueuesByEnqueueRatePanel { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
           topQueuesByDequeueRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
           topQueuesByAverageEnqueueTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
           topQueuesByExpiredMessageRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
           topQueuesByAverageMessageSizePanel { gridPos: { h: 7, w: 24, x: 0, y: 20 } },
+          queueSummaryPanel { gridPos: { h: 7, w: 24, x: 0, y: 27 } },
         ]
       ),
   },

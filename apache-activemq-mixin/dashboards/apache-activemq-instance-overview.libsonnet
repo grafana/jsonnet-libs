@@ -38,6 +38,10 @@ local averageBrokerMemoryUsagePanel = {
             value: null,
           },
           {
+            color: '#EAB839',
+            value: 50,
+          },
+          {
             color: 'red',
             value: 70,
           },
@@ -48,6 +52,8 @@ local averageBrokerMemoryUsagePanel = {
     overrides: [],
   },
   options: {
+    minVizHeight: 75,
+    minVizWidth: 75,
     orientation: 'auto',
     reduceOptions: {
       calcs: [
@@ -59,7 +65,7 @@ local averageBrokerMemoryUsagePanel = {
     showThresholdLabels: false,
     showThresholdMarkers: true,
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local averageStoreMemoryUsagePanel = {
@@ -88,6 +94,10 @@ local averageStoreMemoryUsagePanel = {
             value: null,
           },
           {
+            color: '#EAB839',
+            value: 50,
+          },
+          {
             color: 'red',
             value: 70,
           },
@@ -98,6 +108,8 @@ local averageStoreMemoryUsagePanel = {
     overrides: [],
   },
   options: {
+    minVizHeight: 75,
+    minVizWidth: 75,
     orientation: 'auto',
     reduceOptions: {
       calcs: [
@@ -109,7 +121,7 @@ local averageStoreMemoryUsagePanel = {
     showThresholdLabels: false,
     showThresholdMarkers: true,
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local averageTemporaryMemoryUsagePanel = {
@@ -138,6 +150,10 @@ local averageTemporaryMemoryUsagePanel = {
             value: null,
           },
           {
+            color: '#EAB839',
+            value: 50,
+          },
+          {
             color: 'red',
             value: 70,
           },
@@ -148,6 +164,8 @@ local averageTemporaryMemoryUsagePanel = {
     overrides: [],
   },
   options: {
+    minVizHeight: 75,
+    minVizWidth: 75,
     orientation: 'auto',
     reduceOptions: {
       calcs: [
@@ -159,7 +177,7 @@ local averageTemporaryMemoryUsagePanel = {
     showThresholdLabels: false,
     showThresholdMarkers: true,
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local producerCountPanel = {
@@ -194,7 +212,7 @@ local producerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -207,7 +225,7 @@ local producerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local consumerCountPanel = {
@@ -242,7 +260,7 @@ local consumerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -255,7 +273,7 @@ local consumerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local averageUnacknowledgedMessagesPanel = {
@@ -290,7 +308,7 @@ local averageUnacknowledgedMessagesPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -303,7 +321,7 @@ local averageUnacknowledgedMessagesPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local queueSizePanel = {
@@ -338,8 +356,8 @@ local queueSizePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -402,7 +420,7 @@ local destinationMemoryUsagePanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'palette-classic',
+        mode: 'continuous-BlYlRd',
       },
       custom: {
         axisCenteredZero: false,
@@ -419,8 +437,8 @@ local destinationMemoryUsagePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -436,6 +454,8 @@ local destinationMemoryUsagePanel = {
         },
       },
       mappings: [],
+      max: 100,
+      min: 0,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -467,12 +487,12 @@ local enqueueCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster) (activemq_queue_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"})',
+      'sum by(instance, activemq_cluster) (increase(activemq_queue_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - queue',
     ),
     prometheus.target(
-      'sum by(instance, activemq_cluster) (activemq_topic_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"})',
+      'sum by(instance, activemq_cluster) (increase(activemq_topic_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - topic',
     ),
@@ -500,8 +520,8 @@ local enqueueCountPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -662,8 +682,8 @@ local averageEnqueueTimePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -743,8 +763,8 @@ local expiredMessagesPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -827,8 +847,8 @@ local garbageCollectionDurationPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -849,6 +869,7 @@ local garbageCollectionDurationPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -902,8 +923,8 @@ local garbageCollectionCountPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -924,6 +945,7 @@ local garbageCollectionCountPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -942,6 +964,43 @@ local garbageCollectionCountPanel = {
       mode: 'multi',
       sort: 'desc',
     },
+  },
+};
+
+local alertsRow = {
+  datasource: promDatasource,
+  targets: [],
+  type: 'row',
+  title: 'Alerts',
+  collapsed: false,
+};
+
+local activemqAlertsPanel = {
+  datasource: promDatasource,
+  targets: [],
+  type: 'alertlist',
+  title: 'ActiveMQ Alerts',
+  description: 'Alerts for Apache ActiveMQ environment.',
+  options: {
+    alertInstanceLabelFilter: '',
+    alertName: '',
+    dashboardAlerts: false,
+    folder: {
+      title: 'Integrations - ActiveMQ',
+      uid: 'ac912ae2-f603-4a05-878f-42033c5b96f3',
+    },
+    groupBy: [],
+    groupMode: 'default',
+    maxItems: 5,
+    sortOrder: 1,
+    stateFilter: {
+      'error': true,
+      firing: true,
+      noData: true,
+      normal: true,
+      pending: true,
+    },
+    viewMode: 'list',
   },
 };
 
@@ -984,8 +1043,8 @@ local garbageCollectionCountPanel = {
             'label_values(activemq_memory_usage_ratio{job=~"$job"},activemq_cluster)',
             label='ActiveMQ cluster',
             refresh=2,
-            includeAll=false,
-            multi=false,
+            includeAll=true,
+            multi=true,
             allValues='',
             sort=0
           ),
@@ -1019,6 +1078,8 @@ local garbageCollectionCountPanel = {
           jvmResourcesRow { gridPos: { h: 1, w: 24, x: 0, y: 28 } },
           garbageCollectionDurationPanel { gridPos: { h: 8, w: 12, x: 0, y: 29 } },
           garbageCollectionCountPanel { gridPos: { h: 8, w: 12, x: 12, y: 29 } },
+          alertsRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
+          activemqAlertsPanel { gridPos: { h: 8, w: 24, x: 0, y: 38 } },
         ]
       ),
   },

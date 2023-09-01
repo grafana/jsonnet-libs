@@ -44,7 +44,7 @@ local clusterCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -57,7 +57,7 @@ local clusterCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local brokerCountPanel = {
@@ -92,7 +92,7 @@ local brokerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -105,7 +105,7 @@ local brokerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local producerCountPanel = {
@@ -140,7 +140,7 @@ local producerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -153,7 +153,7 @@ local producerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local consumerCountPanel = {
@@ -188,7 +188,7 @@ local consumerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -201,14 +201,14 @@ local consumerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local enqueueCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster) (activemq_enqueue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'sum by (activemq_cluster) (increase(activemq_enqueue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -219,6 +219,7 @@ local enqueueCountPanel = {
   fieldConfig: {
     defaults: {
       color: {
+        fixedColor: '#C8F2C2',
         mode: 'palette-classic',
       },
       custom: {
@@ -236,8 +237,8 @@ local enqueueCountPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -284,7 +285,7 @@ local dequeueCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster) (activemq_dequeue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'sum by (activemq_cluster) (increase(activemq_dequeue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -312,8 +313,8 @@ local dequeueCountPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -382,6 +383,10 @@ local averageTemporaryMemoryUsagePanel = {
             value: null,
           },
           {
+            color: '#EAB839',
+            value: 50,
+          },
+          {
             color: 'red',
             value: 70,
           },
@@ -407,7 +412,7 @@ local averageTemporaryMemoryUsagePanel = {
     text: {},
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local averageStoreMemoryUsagePanel = {
@@ -436,6 +441,10 @@ local averageStoreMemoryUsagePanel = {
             value: null,
           },
           {
+            color: '#EAB839',
+            value: 50,
+          },
+          {
             color: 'red',
             value: 70,
           },
@@ -460,7 +469,7 @@ local averageStoreMemoryUsagePanel = {
     showUnfilled: false,
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local averageBrokerMemoryUsagePanel = {
@@ -489,6 +498,10 @@ local averageBrokerMemoryUsagePanel = {
             value: null,
           },
           {
+            color: '#EAB839',
+            value: 50,
+          },
+          {
             color: 'red',
             value: 70,
           },
@@ -513,7 +526,7 @@ local averageBrokerMemoryUsagePanel = {
     showUnfilled: false,
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 {

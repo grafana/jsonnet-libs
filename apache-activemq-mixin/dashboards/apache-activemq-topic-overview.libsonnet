@@ -16,7 +16,7 @@ local numberOfTopicsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by(instance) (activemq_topic_queue_size{instance=~"$instance", job=~"$job"})',
+      'count by(instance, activemq_cluster) (activemq_topic_queue_size{instance=~"$instance",activemq_cluster=~"$activemq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -44,7 +44,7 @@ local numberOfTopicsPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -57,14 +57,14 @@ local numberOfTopicsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local producerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance) (activemq_topic_producer_count{job=~"$job", instance=~"$instance"})',
+      'sum by(instance, activemq_cluster) (activemq_topic_producer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -92,7 +92,7 @@ local producerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -105,14 +105,14 @@ local producerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local consumerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance) (activemq_topic_consumer_count{instance=~"$instance", job=~"$job"})',
+      'sum by(instance, activemq_cluster) (activemq_topic_consumer_count{instance=~"$instance", activemq_cluster=~"$activemq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -140,7 +140,7 @@ local consumerCountPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -153,14 +153,14 @@ local consumerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local averageConsumersPerTopicPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance) (activemq_topic_consumer_count{job=~"$job", instance=~"$instance"})',
+      'avg by (instance, activemq_cluster) (activemq_topic_consumer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -188,7 +188,7 @@ local averageConsumersPerTopicPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
+    colorMode: 'none',
     graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -201,16 +201,16 @@ local averageConsumersPerTopicPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local topTopicsByEnqueueRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, rate(activemq_topic_enqueue_count{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_topic_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -236,8 +236,8 @@ local topTopicsByEnqueueRatePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -246,7 +246,7 @@ local topTopicsByEnqueueRatePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -284,9 +284,9 @@ local topTopicsByDequeueRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, rate(activemq_topic_dequeue_count{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_topic_dequeue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -312,8 +312,8 @@ local topTopicsByDequeueRatePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -322,7 +322,7 @@ local topTopicsByDequeueRatePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -360,9 +360,9 @@ local topTopicsByAverageEnqueueTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, activemq_topic_average_enqueue_time{job=~"$job", instance=~"$instance"})',
+      'topk by(instance, activemq_cluster) ($k_selector, activemq_topic_average_enqueue_time{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -388,8 +388,8 @@ local topTopicsByAverageEnqueueTimePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -398,7 +398,7 @@ local topTopicsByAverageEnqueueTimePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -436,9 +436,9 @@ local topTopicsByExpiredMessageRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, rate(activemq_topic_expired_count{job=~"$job", instance=~"$instance"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_topic_expired_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -464,8 +464,8 @@ local topTopicsByExpiredMessageRatePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -474,7 +474,7 @@ local topTopicsByExpiredMessageRatePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -512,9 +512,9 @@ local topTopicsByConsumersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, activemq_topic_consumer_count{job=~"$job", instance=~"$instance"})',
+      'topk by(instance, activemq_cluster) (5, activemq_topic_consumer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'bargauge',
@@ -523,7 +523,7 @@ local topTopicsByConsumersPanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -554,16 +554,16 @@ local topTopicsByConsumersPanel = {
     showUnfilled: true,
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-59542pre',
+  pluginVersion: '10.2.0-59981',
 };
 
 local topTopicsByAverageMessageSizePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance) (5, activemq_topic_average_message_size{job=~"$job", instance=~"$instance"})',
+      'topk by(instance, activemq_cluster) (5, activemq_topic_average_message_size{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{destination}}',
+      legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
   ],
   type: 'timeseries',
@@ -590,8 +590,8 @@ local topTopicsByAverageMessageSizePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -635,6 +635,169 @@ local topTopicsByAverageMessageSizePanel = {
   },
 };
 
+local topicSummaryPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'rate(activemq_topic_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval])',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='table',
+    ),
+    prometheus.target(
+      'rate(activemq_topic_dequeue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval])',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='table',
+    ),
+    prometheus.target(
+      'activemq_topic_average_enqueue_time{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='table',
+    ),
+    prometheus.target(
+      'activemq_topic_average_message_size{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='table',
+    ),
+  ],
+  type: 'table',
+  title: 'Topic summary',
+  description: 'Summary of topics showing topic name, enqueue and dequeue rate, average enqueue time, and average message size.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      custom: {
+        align: 'left',
+        cellOptions: {
+          type: 'auto',
+        },
+        inspect: false,
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+    },
+    overrides: [
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Enqueue rate',
+        },
+        properties: [
+          {
+            id: 'unit',
+            value: 'mps',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Dequeue rate',
+        },
+        properties: [
+          {
+            id: 'unit',
+            value: 'mps',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Average enqueue time',
+        },
+        properties: [
+          {
+            id: 'unit',
+            value: 'ms',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Average message size',
+        },
+        properties: [
+          {
+            id: 'unit',
+            value: 'decbytes',
+          },
+        ],
+      },
+    ],
+  },
+  options: {
+    cellHeight: 'sm',
+    footer: {
+      countRows: false,
+      fields: '',
+      reducer: [
+        'sum',
+      ],
+      show: false,
+    },
+    showHeader: true,
+  },
+  pluginVersion: '10.2.0-59981',
+  transformations: [
+    {
+      id: 'joinByField',
+      options: {
+        byField: 'destination',
+        mode: 'outer',
+      },
+    },
+    {
+      id: 'organize',
+      options: {
+        excludeByName: {
+          'Time 1': true,
+          'Time 2': true,
+          'Time 3': true,
+          'Time 4': true,
+          '__name__ 1': true,
+          '__name__ 2': true,
+          'activemq_cluster 1': true,
+          'activemq_cluster 2': true,
+          'activemq_cluster 3': true,
+          'activemq_cluster 4': true,
+          'instance 1': true,
+          'instance 2': true,
+          'instance 3': true,
+          'instance 4': true,
+          'job 1': true,
+          'job 2': true,
+          'job 3': true,
+          'job 4': true,
+        },
+        indexByName: {},
+        renameByName: {
+          'Time 3': '',
+          'Value #A': 'Enqueue rate',
+          'Value #B': 'Dequeue rate',
+          'Value #C': 'Average enqueue time',
+          'Value #D': 'Average message size',
+          destination: 'Destination',
+        },
+      },
+    },
+  ],
+};
+
 {
   grafanaDashboards+:: {
     'apache-activemq-topic-overview.json':
@@ -669,13 +832,46 @@ local topTopicsByAverageMessageSizePanel = {
             sort=0
           ),
           template.new(
+            'activemq_cluster',
+            promDatasource,
+            'label_values(activemq_memory_usage_ratio{job=~"$job"},activemq_cluster)',
+            label='ActiveMQ cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
             'instance',
             promDatasource,
-            'label_values(activemq_topic_producer_count{job=~"$job"},instance)',
+            'label_values(activemq_topic_producer_count{activemq_cluster=~"$activemq_cluster"},instance)',
             label='Instance',
             refresh=2,
             includeAll=true,
             multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
+            'k_selector',
+            promDatasource,
+            '2,4,6,8,10',
+            label='Top k count',
+            refresh=0,
+            includeAll=false,
+            multi=false,
+            allValues='',
+            sort=0
+          ),
+          template.new(
+            'name',
+            promDatasource,
+            '',
+            label='Topic by name',
+            refresh=0,
+            includeAll=false,
+            multi=false,
             allValues='',
             sort=0
           ),
@@ -693,6 +889,7 @@ local topTopicsByAverageMessageSizePanel = {
           topTopicsByExpiredMessageRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
           topTopicsByConsumersPanel { gridPos: { h: 8, w: 12, x: 0, y: 20 } },
           topTopicsByAverageMessageSizePanel { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
+          topicSummaryPanel { gridPos: { h: 8, w: 24, x: 0, y: 28 } },
         ]
       ),
   },

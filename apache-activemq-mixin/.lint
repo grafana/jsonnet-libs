@@ -16,3 +16,7 @@ exclusions:
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
+  target-promql-rule:
+    reason: "Linter does not support selector variable value as a scalar in top-k PromQL queries."
+  template-label-promql-rule:
+    reason: "Defining a selector for the value of top-k requires a predefined label that the linter considers invalid."
