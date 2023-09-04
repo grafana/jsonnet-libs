@@ -15,6 +15,18 @@ local g = import './g.libsonnet';
         fleet: 
             local title=prefix+"Windows fleet overview";
             g.dashboard.new(title)
+            + g.dashboard.withPanels(
+                g.util.grid.wrapPanels(
+                    [
+                        // g.panel.row.new("Overview"),
+                        g.panel.table.new("Fleet overview") {gridPos+: {w: 24, h:16}},
+                        g.panel.timeSeries.new("CPU") {gridPos+: {w: 24}},
+                        g.panel.timeSeries.new("Memory") {gridPos+: {w: 24}},
+                        panels.diskIO {gridPos+: {w: 12}},
+                        panels.diskUsage {gridPos+: {w: 12}},
+                        panels.networkErrors {gridPos+: {w: 24}},
+                    ],12,7)
+            )
             // hide link to self
             + this.applyCommon(vars.multiInstance, uid+'-fleet', tags, links + { backToFleet+:: {}, backToOverview+:: {} }, annotations),
         overview: g.dashboard.new(prefix+"Windows overview")
@@ -24,20 +36,8 @@ local g = import './g.libsonnet';
                     [
                         g.panel.row.new("Overview"),
                         panels.uptime,
-                        panels.hostname,// {id: 1001},
+                        panels.hostname,
                         panels.osVersion,
-                        // + g.panel.stat.withDatasource(
-                        //     g.panel.stat.datasource.withType("datasource")
-                        //     + g.panel.stat.datasource.withUid("-- Dashboard --")
-                        // )
-                        // + {targets:: []}
-                        // + g.panel.stat.withTargets(
-                        //     // {
-                        //     //     "uid": "-- Dashboard --",
-                        //     //     "type": "datasource"
-                        //     // },
-                        //     [{panelId: 1001, format: 'table'}],
-                        // ),
                         panels.osInfo,
                         panels.cpuCount,
                         panels.memoryTotal,
@@ -50,18 +50,46 @@ local g = import './g.libsonnet';
                         panels.memoryUsageStat {gridPos+: { w:6, h:6}},
                         panels.memoryUsageTs {gridPos+: { w:18, h:6}},
                         g.panel.row.new("Disk"),
-                        g.panel.timeSeries.new("test12") {gridPos+: { w:12, h:8}},
-                        g.panel.timeSeries.new("test13") {gridPos+: { w:12, h:8}},
+                        panels.diskIO {gridPos+: { w:12, h:8}},
+                        panels.diskUsage {gridPos+: { w:12, h:8}},
                         g.panel.row.new("Network"),
-                        g.panel.timeSeries.new("test12") {gridPos+: { w:12, h:8}},
-                        g.panel.timeSeries.new("test13") {gridPos+: { w:12, h:8}},
+                        panels.networkUsage {gridPos+: { w:12, h:8}},
+                        panels.networkErrors {gridPos+: { w:12, h:8}},
                     ],6,2)
             )
             + this.applyCommon(vars.singleInstance, uid+'-overview', tags, links + { backToOverview+:: {} }, annotations),
         network: g.dashboard.new(prefix+"Windows network")
+            + g.dashboard.withPanels(
+                g.util.grid.wrapPanels(
+                    [
+                        g.panel.row.new("Network"),
+                        panels.networkInterfacesOverview {gridPos+: {w: 24}},
+                        panels.networkUsage,
+                        panels.networkInterfaceCarrierStatus,
+                        panels.networkErrors,
+                        panels.networkDropped,
+                        panels.networkPackets,
+                        panels.networkMulticast,
+                    ],12,7)
+            )
             + this.applyCommon(vars.singleInstance, uid+'-network', tags, links, annotations),
 
         disks: g.dashboard.new(prefix+"Windows disks and filesystems")
+            + g.dashboard.withPanels(
+                g.util.grid.wrapPanels(
+                    [
+                        g.panel.row.new("Filesystem"),
+                        panels.networkUsage,
+                        panels.networkInterfaceCarrierStatus,
+                        panels.networkErrors,
+                        panels.networkDropped,
+                        g.panel.row.new("Disk"),
+                        panels.networkPackets,
+                        panels.networkMulticast,
+                        panels.networkPackets,
+                        panels.networkMulticast,
+                    ],12,7)
+            )
             + this.applyCommon(vars.singleInstance, uid+'-disks', tags, links, annotations),
 
         logs: g.dashboard.new(prefix+"Windows logs")
