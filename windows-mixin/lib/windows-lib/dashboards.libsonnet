@@ -8,6 +8,7 @@ local g = import './g.libsonnet';
         uid,
         vars,
         annotations,
+        panels,
         ):
     {
         local stat = g.panel.stat,
@@ -22,27 +23,32 @@ local g = import './g.libsonnet';
                 g.util.grid.wrapPanels(
                     [
                         g.panel.row.new("Overview"),
-                        g.panel.stat.new("test1"),
-                        g.panel.stat.new("test2"),
-                        g.panel.stat.new("test3"),
-                        g.panel.stat.new("test4"),
-                        g.panel.stat.new("test5"),
-                        g.panel.stat.new("test6"),
-                        g.panel.stat.new("test7"),
-                        g.panel.stat.new("test8"),
+                        panels.uptime,
+                        panels.hostname,// {id: 1001},
+                        panels.osVersion,
+                        // + g.panel.stat.withDatasource(
+                        //     g.panel.stat.datasource.withType("datasource")
+                        //     + g.panel.stat.datasource.withUid("-- Dashboard --")
+                        // )
+                        // + {targets:: []}
+                        // + g.panel.stat.withTargets(
+                        //     // {
+                        //     //     "uid": "-- Dashboard --",
+                        //     //     "type": "datasource"
+                        //     // },
+                        //     [{panelId: 1001, format: 'table'}],
+                        // ),
+                        panels.osInfo,
+                        panels.cpuCount,
+                        panels.memoryTotal,
+                        panels.memoryPageTotal,
+                        panels.diskTotalC,
                         g.panel.row.new("CPU"),
-                        g.panel.timeSeries.new("test9")
-                        + g.panel.stat.gridPos.withW(6)
-                        + g.panel.stat.gridPos.withH(6),
-                        g.panel.timeSeries.new("test10")
-                        + g.panel.stat.gridPos.withW(12)
-                        + g.panel.stat.gridPos.withH(6),
-                        g.panel.timeSeries.new("test11")
-                        + g.panel.stat.gridPos.withW(6)
-                        + g.panel.stat.gridPos.withH(6),
+                        panels.cpuUsageStat {gridPos+: { w:6, h:6}},
+                        panels.cpuUsageTs {gridPos+: { w:18, h:6}},
                         g.panel.row.new("Memory"),
-                        g.panel.timeSeries.new("test12") {gridPos+: { w:6, h:6}},
-                        g.panel.timeSeries.new("test13") {gridPos+: { w:18, h:6}},
+                        panels.memoryUsageStat {gridPos+: { w:6, h:6}},
+                        panels.memoryUsageTs {gridPos+: { w:18, h:6}},
                         g.panel.row.new("Disk"),
                         g.panel.timeSeries.new("test12") {gridPos+: { w:12, h:8}},
                         g.panel.timeSeries.new("test13") {gridPos+: { w:12, h:8}},

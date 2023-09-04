@@ -18,15 +18,8 @@ local commonlib = import 'common/main.libsonnet';
     filterSelector,
     tags=[uid],
     uid,
-    // filterSelector,
     groupLabels=['job'],
     instanceLabels=['instance']
-    // datasourceRegex,
-    // datasourceName='datasource',
-    // formatParser=null,
-    // showLogsVolume=true,
-    // logsVolumeGroupBy='level',
-    // extraFilters='',
   ): {
 
     local this = self,
@@ -67,8 +60,7 @@ local commonlib = import 'common/main.libsonnet';
     },
 
     panels: panels.new(
-    //   this.targets.logsVolumeTarget,
-    //   this.targets.logsTarget,
+      this.targets
     ),
 
     dashboards: dashboards.new(
@@ -76,9 +68,9 @@ local commonlib = import 'common/main.libsonnet';
       this.links,
       tags,
       uid,
-      // this.panels,
       this.variables,
       this.annotations,
+      this.panels,
     ),
 
     alerts: {},
