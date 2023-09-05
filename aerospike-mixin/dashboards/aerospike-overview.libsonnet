@@ -114,6 +114,18 @@ local nodesPanel(matcher) = {
           },
         ],
       },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'job',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
     ],
   },
   links: [
@@ -262,6 +274,18 @@ local namespacesPanel(matcher) = {
           {
             id: 'displayName',
             value: 'namespace',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'job',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
           },
         ],
       },
@@ -545,6 +569,18 @@ local topNodesByMemoryUsagePanel(matcher) = {
           },
         ],
       },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'job',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
     ],
   },
   links: [
@@ -682,6 +718,18 @@ local topNodesByDiskUsagePanel(matcher) = {
           },
         ],
       },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'job',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
     ],
   },
   links: [
@@ -776,8 +824,8 @@ local clientReadsPanel(matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -812,8 +860,12 @@ local clientReadsPanel(matcher) = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
+      calcs: [
+        'min',
+        'mean',
+        'max'
+      ],
+      displayMode: 'table',
       placement: 'right',
       showLegend: true,
     },
@@ -875,8 +927,8 @@ local clientWritesPanel(matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -911,8 +963,12 @@ local clientWritesPanel(matcher) = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
+      calcs: [
+        'min',
+        'mean',
+        'max'
+      ],
+      displayMode: 'table',
       placement: 'right',
       showLegend: true,
     },
@@ -974,8 +1030,8 @@ local clientUDFTransactionsPanel(matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -1010,8 +1066,12 @@ local clientUDFTransactionsPanel(matcher) = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
+      calcs: [
+        'min',
+        'mean',
+        'max'
+      ],
+      displayMode: 'table',
       placement: 'right',
       showLegend: true,
     },
@@ -1067,8 +1127,8 @@ local connectionsPanel(matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',

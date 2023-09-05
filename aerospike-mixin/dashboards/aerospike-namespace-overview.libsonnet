@@ -83,7 +83,7 @@ local diskUsagePanel(matcher) = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'palette-classic',
+        mode: 'continuous-BlYlRd',
       },
       custom: {
         axisCenteredZero: false,
@@ -93,15 +93,15 @@ local diskUsagePanel(matcher) = {
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 20,
-        gradientMode: 'none',
+        gradientMode: 'scheme',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -117,6 +117,8 @@ local diskUsagePanel(matcher) = {
         },
       },
       mappings: [],
+      min: 0,
+      max: 100,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -219,7 +221,7 @@ local memoryUsagePanel(matcher) = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'palette-classic',
+        mode: 'continuous-BlYlRd',
       },
       custom: {
         axisCenteredZero: false,
@@ -229,15 +231,15 @@ local memoryUsagePanel(matcher) = {
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 20,
-        gradientMode: 'none',
+        gradientMode: 'scheme',
         hideFrom: {
           legend: false,
           tooltip: false,
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -253,6 +255,8 @@ local memoryUsagePanel(matcher) = {
         },
       },
       mappings: [],
+      min: 0,
+      max: 100,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -336,8 +340,8 @@ local clientReadsPanel(matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -372,8 +376,12 @@ local clientReadsPanel(matcher) = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
+      calcs: [
+        'min',
+        'mean',
+        'max'
+      ],
+      displayMode: 'table',
       placement: 'right',
       showLegend: true,
     },
@@ -431,8 +439,8 @@ local clientWritesPanel(matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -467,8 +475,12 @@ local clientWritesPanel(matcher) = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
+      calcs: [
+        'min',
+        'mean',
+        'max'
+      ],
+      displayMode: 'table',
       placement: 'right',
       showLegend: true,
     },
@@ -526,8 +538,8 @@ local clientUDFTransactionsPanel(matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
@@ -561,8 +573,12 @@ local clientUDFTransactionsPanel(matcher) = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
+      calcs: [
+        'min',
+        'mean',
+        'max'
+      ],
+      displayMode: 'table',
       placement: 'right',
       showLegend: true,
     },
@@ -605,8 +621,8 @@ local cacheReadUtilizationPanel(matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
           type: 'linear',
