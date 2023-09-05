@@ -7,16 +7,30 @@ local defaults = table.fieldConfig.defaults;
 local options = table.options;
 base {
   new(
-    title,
+    title='Disk space usage',
     totalTarget,
     usageTarget,
+    groupLabel,
     description=''
-  ):
+  ): 
+    // validate inputs
+    std.prune(
+      {
+        checks: [
+          if !(std.objectHas(totalTarget, 'format') && std.assertEqual(totalTarget.format, 'table')) then error 'totalTarget format must be "table"',
+          if !(std.objectHas(totalTarget, 'instant') && std.assertEqual(totalTarget.instant, true)) then error 'totalTarget must be type instant',
+          if !(std.objectHas(usageTarget, 'format') && std.assertEqual(usageTarget.format, 'table')) then error 'usageTarget format must be "table"',
+          if !(std.objectHas(usageTarget, 'instant') && std.assertEqual(usageTarget.instant, true)) then error 'usageTarget must be type instant',
+          if std.length(std.findSubstr(groupLabel, totalTarget.expr)) == 0 then error 'totalTarget expression must be grouped by groupLabel "%s", current expression is %s' % [groupLabel, totalTarget.expr],
+          if std.length(std.findSubstr(groupLabel, usageTarget.expr)) == 0 then error 'usageTarget expression must be grouped by groupLabel "%s", current expression is %s' % [groupLabel, totalTarget.expr],
+        ]
+      }
+    ) +
     super.new(
       title=title,
       targets=[
-        totalTarget {"refId": "TOTAL"}, 
-        usageTarget {"refId": "USAGE"}
+        totalTarget {"refId": "TOTAL"},
+        usageTarget {"refId": "USAGE"},
       ],
       description=description,
     )
@@ -35,9 +49,9 @@ base {
 fieldOverride.byName.new('Mounted on')
 + fieldOverride.byName.withProperty('custom.width','260'),
 fieldOverride.byName.new('Size')
-+ fieldOverride.byName.withProperty('custom.width','72'),
++ fieldOverride.byName.withProperty('custom.width','80'),
 fieldOverride.byName.new('Used')
-+ fieldOverride.byName.withProperty('custom.width','72'),
++ fieldOverride.byName.withProperty('custom.width','80'),
 fieldOverride.byName.new('Available')
 + fieldOverride.byName.withProperty('custom.width','80'),
 fieldOverride.byName.new('Used, %')
@@ -48,7 +62,7 @@ fieldOverride.byName.new('Used, %')
   + table.standardOptions.withUnit('percentunit')
 )
 ])
-+ table.standardOptions.withUnit('decbytes')
++ table.standardOptions.withUnit('bytes')
 + table.withTransformationsMixin(
           [
             {
@@ -67,7 +81,7 @@ fieldOverride.byName.new('Used, %')
                     ],
                     operation: 'aggregate',
                   },
-                  mountpoint: {
+                  [groupLabel]: {
                     aggregations: [],
                     operation: 'groupby',
                   },
@@ -118,7 +132,7 @@ fieldOverride.byName.new('Used, %')
                 renameByName: {
                   'Value #TOTAL (lastNotNull)': 'Size',
                   'Value #USAGE (lastNotNull)': 'Available',
-                  mountpoint: 'Mounted on',
+                  [groupLabel]: 'Mounted on',
                 },
               },
             },
