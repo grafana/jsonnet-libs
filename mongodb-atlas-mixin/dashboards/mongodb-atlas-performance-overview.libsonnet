@@ -16,16 +16,16 @@ local memoryPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_mem_resident{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'mongodb_mem_resident{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - RAM',
-      interval='1m',
+      format='time_series',
     ),
     prometheus.target(
-      'increase(mongodb_mem_virtual{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'mongodb_mem_virtual{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - virtual',
-      interval='1m',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -50,6 +50,7 @@ local memoryPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -76,7 +77,7 @@ local memoryPanel = {
           },
         ],
       },
-      unit: 'mbytes',
+      unit: 'decbytes',
     },
     overrides: [],
   },
@@ -101,11 +102,12 @@ local hardwareCPUInterruptServiceTimePanel = {
       'increase(hardware_system_cpu_irq_milliseconds{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Hardware CPU interrupt service time',
+  title: 'Hardware CPU interrupt service time / $__interval',
   description: 'The amount of time spent servicing CPU interrupts.',
   fieldConfig: {
     defaults: {
@@ -126,6 +128,7 @@ local hardwareCPUInterruptServiceTimePanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -177,11 +180,13 @@ local diskSpacePanel = {
       'hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - free',
+      format='time_series',
     ),
     prometheus.target(
       'hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - used',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -206,6 +211,7 @@ local diskSpacePanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -216,7 +222,7 @@ local diskSpacePanel = {
         spanNulls: false,
         stacking: {
           group: 'A',
-          mode: 'normal',
+          mode: 'none',
         },
         thresholdsStyle: {
           mode: 'off',
@@ -240,7 +246,7 @@ local diskSpacePanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'right',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -257,6 +263,7 @@ local diskSpaceUtilizationPanel = {
       '(hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}) / clamp_min((hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}) + (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -281,6 +288,7 @@ local diskSpaceUtilizationPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -298,6 +306,8 @@ local diskSpaceUtilizationPanel = {
         },
       },
       mappings: [],
+      max: 1,
+      min: 0,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -329,15 +339,15 @@ local networkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
-      interval='1m',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
   title: 'Network requests',
-  description: 'The number of distinct requests the node has received.',
+  description: 'The rate of distinct requests the node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -357,6 +367,7 @@ local networkRequestsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -383,7 +394,7 @@ local networkRequestsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'reqps',
     },
     overrides: [],
   },
@@ -405,21 +416,21 @@ local slowNetworkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - DNS',
-      interval='1m',
+      format='time_series',
     ),
     prometheus.target(
-      'increase(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - SSL',
-      interval='1m',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
   title: 'Slow network requests',
-  description: 'The number of slow DNS and SSL operations received by this node.',
+  description: 'The rate of slow DNS and SSL operations received by this node.',
   fieldConfig: {
     defaults: {
       color: {
@@ -439,6 +450,7 @@ local slowNetworkRequestsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -465,7 +477,7 @@ local slowNetworkRequestsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'reqps',
     },
     overrides: [],
   },
@@ -487,21 +499,21 @@ local networkThroughputPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - received',
-      interval='1m',
+      format='time_series',
     ),
     prometheus.target(
-      'increase(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - sent',
-      interval='1m',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
   title: 'Network throughput',
-  description: 'The number of bytes sent and received by the node over a network connection.',
+  description: 'The rate of bytes sent and received by the node over a network connection.',
   fieldConfig: {
     defaults: {
       color: {
@@ -521,6 +533,7 @@ local networkThroughputPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -543,23 +556,18 @@ local networkThroughputPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
-      unit: 'decbytes',
+      unit: 'Bps',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -573,21 +581,21 @@ local hardwareIOPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
+      'rate(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
-      interval='1m',
+      format='time_series',
     ),
     prometheus.target(
-      'increase(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
+      'rate(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
-      interval='1m',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
   title: 'Hardware I/O',
-  description: "The number of read and write I/O's processed by this node.",
+  description: "The rate of read and write I/O's processed by this node.",
   fieldConfig: {
     defaults: {
       color: {
@@ -607,6 +615,7 @@ local hardwareIOPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -632,19 +641,15 @@ local hardwareIOPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'iops',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -661,17 +666,19 @@ local hardwareIOWaitTimePanel = {
       'increase(hardware_disk_metrics_read_time_milliseconds{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - read',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(hardware_disk_metrics_write_time_milliseconds{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - write',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Hardware I/O wait time',
+  title: 'Hardware I/O wait time / $__interval',
   description: "The amount of time the node has spent waiting for read and write I/O's to process.",
   fieldConfig: {
     defaults: {
@@ -692,6 +699,7 @@ local hardwareIOWaitTimePanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -723,13 +731,9 @@ local hardwareIOWaitTimePanel = {
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {

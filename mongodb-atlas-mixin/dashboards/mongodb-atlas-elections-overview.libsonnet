@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'mongodb-atlas-election-overview';
+local dashboardUid = 'mongodb-atlas-elections-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 
@@ -19,17 +19,19 @@ local stepupElectionsPanel = {
       'increase(mongodb_electionMetrics_stepUpCmd_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - called',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_electionMetrics_stepUpCmd_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - successful',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Step-up elections',
+  title: 'Step-up elections / $__interval',
   description: 'The number of elections called and elections won by the node when the primary stepped down.',
   fieldConfig: {
     defaults: {
@@ -50,6 +52,7 @@ local stepupElectionsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -101,17 +104,19 @@ local priorityElectionsPanel = {
       'increase(mongodb_electionMetrics_priorityTakeover_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - called',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_electionMetrics_priorityTakeover_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - successful',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Priority elections',
+  title: 'Priority elections / $__interval',
   description: 'The number of elections called and elections won by the node when it had a higher priority than the primary node.',
   fieldConfig: {
     defaults: {
@@ -132,6 +137,7 @@ local priorityElectionsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -183,17 +189,19 @@ local takeoverElectionsPanel = {
       'increase(mongodb_electionMetrics_catchUpTakeover_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - called',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_electionMetrics_catchUpTakeover_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - successful',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Takeover elections',
+  title: 'Takeover elections / $__interval',
   description: 'The number of elections called and elections won by the node when it was more current than the primary node.',
   fieldConfig: {
     defaults: {
@@ -214,6 +222,7 @@ local takeoverElectionsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -265,17 +274,19 @@ local timeoutElectionsPanel = {
       'increase(mongodb_electionMetrics_electionTimeout_called{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - called',
+      format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'increase(mongodb_electionMetrics_electionTimeout_successful{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - successful',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Timeout elections',
+  title: 'Timeout elections / $__interval',
   description: 'The number of elections called and elections won by the node when the time it took to reach the primary node exceeded the election timeout limit.',
   fieldConfig: {
     defaults: {
@@ -296,6 +307,7 @@ local timeoutElectionsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -342,7 +354,13 @@ local timeoutElectionsPanel = {
 
 local catchupsRow = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      '',
+      datasource=promDatasource,
+      legendFormat='',
+    ),
+  ],
   type: 'row',
   title: 'Catch-ups',
 };
@@ -354,11 +372,12 @@ local catchupsPanel = {
       'increase(mongodb_electionMetrics_numCatchUps{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Catch-ups',
+  title: 'Catch-ups / $__interval',
   description: 'The number of times the node had to catch up to the highest known oplog entry.',
   fieldConfig: {
     defaults: {
@@ -379,6 +398,7 @@ local catchupsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -401,6 +421,7 @@ local catchupsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -429,11 +450,12 @@ local catchupsSkippedPanel = {
       'increase(mongodb_electionMetrics_numCatchUpsSkipped{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Catch-ups skipped',
+  title: 'Catch-ups skipped / $__interval',
   description: 'The number of times the node skipped the catch up process when it was the newly elected primary.',
   fieldConfig: {
     defaults: {
@@ -454,6 +476,7 @@ local catchupsSkippedPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -476,6 +499,7 @@ local catchupsSkippedPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -504,11 +528,12 @@ local catchupsSucceededPanel = {
       'increase(mongodb_electionMetrics_numCatchUpsSucceeded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Catch-ups succeeded',
+  title: 'Catch-ups succeeded / $__interval',
   description: 'The number of times the node succeeded in catching up when it was the newly elected primary.',
   fieldConfig: {
     defaults: {
@@ -529,6 +554,7 @@ local catchupsSucceededPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -579,11 +605,12 @@ local catchupsFailedPanel = {
       'increase(mongodb_electionMetrics_numCatchUpsFailedWithError{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Catch-ups failed',
+  title: 'Catch-ups failed / $__interval',
   description: 'The number of times the node failed in catching up when it was the newly elected primary.',
   fieldConfig: {
     defaults: {
@@ -604,6 +631,7 @@ local catchupsFailedPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -654,11 +682,12 @@ local catchupTimeoutsPanel = {
       'increase(mongodb_electionMetrics_numCatchUpsTimedOut{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Catch-up timeouts',
+  title: 'Catch-up timeouts / $__interval',
   description: 'The number of times the node timed out during the catch-up process when it was the newly elected primary.',
   fieldConfig: {
     defaults: {
@@ -679,6 +708,7 @@ local catchupTimeoutsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -729,6 +759,7 @@ local averageCatchupOperationsPanel = {
       'mongodb_electionMetrics_averageCatchUpOps{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -753,6 +784,7 @@ local averageCatchupOperationsPanel = {
           tooltip: false,
           viz: false,
         },
+        insertNulls: false,
         lineInterpolation: 'linear',
         lineWidth: 1,
         pointSize: 5,
@@ -798,7 +830,7 @@ local averageCatchupOperationsPanel = {
 
 {
   grafanaDashboards+:: {
-    'mongodb-atlas-election-overview.json':
+    'mongodb-atlas-elections-overview.json':
       dashboard.new(
         'MongoDB Atlas election overview',
         time_from='%s' % $._config.dashboardPeriod,
@@ -873,17 +905,17 @@ local averageCatchupOperationsPanel = {
       ))
       .addPanels(
         [
-          stepupElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 0 } },
-          priorityElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 8 } },
-          takeoverElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 16 } },
-          timeoutElectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
-          catchupsRow { gridPos: { h: 1, w: 24, x: 0, y: 32 } },
-          catchupsPanel { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
-          catchupsSkippedPanel { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
-          catchupsSucceededPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
-          catchupsFailedPanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
-          catchupTimeoutsPanel { gridPos: { h: 8, w: 12, x: 0, y: 49 } },
-          averageCatchupOperationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 49 } },
+          stepupElectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+          priorityElectionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+          takeoverElectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+          timeoutElectionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+          catchupsRow { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
+          catchupsPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
+          catchupsSkippedPanel { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
+          catchupsSucceededPanel { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
+          catchupsFailedPanel { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
+          catchupTimeoutsPanel { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
+          averageCatchupOperationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
         ]
       ),
   },

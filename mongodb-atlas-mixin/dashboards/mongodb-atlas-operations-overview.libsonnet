@@ -16,16 +16,15 @@ local queryOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_query{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_opcounters_query{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
   title: 'Query operations',
-  description: 'The number of query operations the node has received.',
+  description: 'The rate of query operations the node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -72,19 +71,15 @@ local queryOperationsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'ops',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -98,16 +93,15 @@ local insertOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
   title: 'Insert operations',
-  description: 'The number of insert operations the node has received.',
+  description: 'The rate of insert operations the node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -154,19 +148,15 @@ local insertOperationsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'ops',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -180,16 +170,15 @@ local updateOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_update{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_opcounters_update{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
   title: 'Update operations',
-  description: 'The number of update operations this node has received.',
+  description: 'The rate of update operations this node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -236,19 +225,15 @@ local updateOperationsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'ops',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -262,16 +247,15 @@ local deleteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
   title: 'Delete operations',
-  description: 'The number of delete operations this node has received.',
+  description: 'The rate of delete operations this node has received.',
   fieldConfig: {
     defaults: {
       color: {
@@ -318,19 +302,15 @@ local deleteOperationsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'ops',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -498,23 +478,21 @@ local readAndWriteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
       format='time_series',
-      interval='1m',
     ),
     prometheus.target(
-      'increase(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      'rate(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
   title: 'Read and write operations',
-  description: 'The number of read and write operations performed by the node.',
+  description: 'The rate of read and write operations performed by the node.',
   fieldConfig: {
     defaults: {
       color: {
@@ -557,23 +535,18 @@ local readAndWriteOperationsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
-      unit: 'none',
+      unit: 'ops',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -602,7 +575,7 @@ local readAndWriteLatencyPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Read and write latency',
+  title: 'Read and write latency / $__interval',
   description: 'The latency time for read and write operations performed by this node.',
   fieldConfig: {
     defaults: {
@@ -646,7 +619,6 @@ local readAndWriteLatencyPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -656,13 +628,9 @@ local readAndWriteLatencyPanel = {
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -719,7 +687,7 @@ local databaseDeadlocksPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Database deadlocks',
+  title: 'Database deadlocks / $__interval',
   description: 'The number of deadlocks that have occurred for the database lock.',
   fieldConfig: {
     defaults: {
@@ -763,7 +731,6 @@ local databaseDeadlocksPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -775,106 +742,7 @@ local databaseDeadlocksPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local collectionDeadlocksPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - exclusive',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - intent exclusive',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - shared',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - intent shared',
-      format='time_series',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Collection deadlocks',
-  description: 'The number of deadlocks that have occurred for the collection lock.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'normal',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'right',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -917,7 +785,7 @@ local databaseWaitCountPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Database wait count',
+  title: 'Database wait count / $__interval',
   description: 'The number of database lock acquisitions that had to wait.',
   fieldConfig: {
     defaults: {
@@ -961,7 +829,6 @@ local databaseWaitCountPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -973,106 +840,7 @@ local databaseWaitCountPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local collectionWaitCountPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - exclusive',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - intent exclusive',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - shared',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - intent shared',
-      format='time_series',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Collection wait count',
-  description: 'The number of collection lock acquisitions that had to wait.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'normal',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'right',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -1115,7 +883,7 @@ local databaseWaitTimePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Database wait time',
+  title: 'Database wait time / $__interval',
   description: 'The time spent waiting for the database lock acquisition.',
   fieldConfig: {
     defaults: {
@@ -1159,7 +927,6 @@ local databaseWaitTimePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1171,7 +938,203 @@ local databaseWaitTimePanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'right',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local collectionDeadlocksPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(mongodb_locks_Collection_deadlockCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_deadlockCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_deadlockCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_deadlockCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent shared',
+      format='time_series',
+      interval='1m',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Collection deadlocks / $__interval',
+  description: 'The number of deadlocks that have occurred for the collection lock.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local collectionWaitCountPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(mongodb_locks_Collection_acquireWaitCount_W{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_acquireWaitCount_w{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent exclusive',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_acquireWaitCount_R{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - shared',
+      format='time_series',
+      interval='1m',
+    ),
+    prometheus.target(
+      'increase(mongodb_locks_Collection_acquireWaitCount_r{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - intent shared',
+      format='time_series',
+      interval='1m',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Collection wait count / $__interval',
+  description: 'The number of collection lock acquisitions that had to wait.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -1214,7 +1177,7 @@ local collectionWaitTimePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Collection wait time',
+  title: 'Collection wait time / $__interval',
   description: 'The time spent waiting for the collection lock acquisition.',
   fieldConfig: {
     defaults: {
@@ -1258,7 +1221,6 @@ local collectionWaitTimePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1270,7 +1232,7 @@ local collectionWaitTimePanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'right',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -1363,15 +1325,15 @@ local collectionWaitTimePanel = {
           deleteOperationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           currentConnectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
           activeConnectionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-          readAndWriteOperationsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
-          readAndWriteLatencyPanel { gridPos: { h: 8, w: 24, x: 0, y: 32 } },
-          locksRow { gridPos: { h: 1, w: 24, x: 0, y: 40 } },
-          databaseDeadlocksPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
-          collectionDeadlocksPanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
-          databaseWaitCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 49 } },
-          collectionWaitCountPanel { gridPos: { h: 8, w: 12, x: 12, y: 49 } },
-          databaseWaitTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 57 } },
-          collectionWaitTimePanel { gridPos: { h: 8, w: 12, x: 12, y: 57 } },
+          readAndWriteOperationsPanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
+          readAndWriteLatencyPanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
+          locksRow { gridPos: { h: 1, w: 24, x: 0, y: 32 } },
+          databaseDeadlocksPanel { gridPos: { h: 8, w: 8, x: 0, y: 33 } },
+          databaseWaitCountPanel { gridPos: { h: 8, w: 8, x: 8, y: 33 } },
+          databaseWaitTimePanel { gridPos: { h: 8, w: 8, x: 16, y: 33 } },
+          collectionDeadlocksPanel { gridPos: { h: 8, w: 8, x: 0, y: 41 } },
+          collectionWaitCountPanel { gridPos: { h: 8, w: 8, x: 8, y: 41 } },
+          collectionWaitTimePanel { gridPos: { h: 8, w: 8, x: 16, y: 41 } },
         ]
       ),
   },

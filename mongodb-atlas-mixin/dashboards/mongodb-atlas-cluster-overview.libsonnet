@@ -139,6 +139,40 @@ local shardNodesPanel = {
           },
         ],
       },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'State',
+        },
+        properties: [
+          {
+            id: 'custom.cellOptions',
+            value: {
+              type: 'color-text',
+            },
+          },
+          {
+            id: 'mappings',
+            value: [
+              {
+                options: {
+                  '1': {
+                    color: 'green',
+                    index: 0,
+                    text: 'Primary',
+                  },
+                  '2': {
+                    color: 'yellow',
+                    index: 1,
+                    text: 'Secondary',
+                  },
+                },
+                type: 'value',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   options: {
@@ -154,7 +188,7 @@ local shardNodesPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
   transformations: [
     {
       id: 'reduce',
@@ -348,6 +382,40 @@ local configNodesPanel = {
           },
         ],
       },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'State',
+        },
+        properties: [
+          {
+            id: 'custom.cellOptions',
+            value: {
+              type: 'color-text',
+            },
+          },
+          {
+            id: 'mappings',
+            value: [
+              {
+                options: {
+                  '1': {
+                    color: 'green',
+                    index: 0,
+                    text: 'Primary',
+                  },
+                  '2': {
+                    color: 'yellow',
+                    index: 1,
+                    text: 'Secondary',
+                  },
+                },
+                type: 'value',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   options: {
@@ -363,7 +431,7 @@ local configNodesPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
   transformations: [
     {
       id: 'reduce',
@@ -572,7 +640,7 @@ local mongosNodesPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.2.0-59585pre',
+  pluginVersion: '10.2.0-59981',
   transformations: [
     {
       id: 'reduce',
@@ -658,18 +726,16 @@ local hardwareIOPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      'sum (rate(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
       format='time_series',
-      interval='1m',
     ),
     prometheus.target(
-      'sum (increase(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      'sum (rate(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -717,23 +783,18 @@ local hardwareIOPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
-      unit: 'none',
+      unit: 'iops',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -762,7 +823,7 @@ local hardwareIOWaitTimePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Hardware I/O wait time',
+  title: 'Hardware I/O wait time / $__interval',
   description: 'The amount of time spent waiting for I/O requests.',
   fieldConfig: {
     defaults: {
@@ -806,343 +867,10 @@ local hardwareIOWaitTimePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
       unit: 'ms',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local networkBytesPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'sum (increase(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
-      datasource=promDatasource,
-      legendFormat='{{cl_name}} - received',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'sum (increase(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
-      datasource=promDatasource,
-      legendFormat='{{cl_name}} - sent',
-      format='time_series',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Network bytes',
-  description: 'The number of bytes sent and received over network connections.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'normal',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'bytes',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-  transformations: [],
-};
-
-local networkRequestsPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'sum (increase(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
-      datasource=promDatasource,
-      legendFormat='{{cl_name}}',
-      format='time_series',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Network requests',
-  description: 'The number of distinct requests that the server has received.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local memoryPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'sum (increase(mongodb_mem_resident{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
-      datasource=promDatasource,
-      legendFormat='{{cl_name}} - RAM',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'sum (increase(mongodb_mem_virtual{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
-      datasource=promDatasource,
-      legendFormat='{{cl_name}} - virtual',
-      format='time_series',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Memory',
-  description: 'The amount of RAM and virtual memory being used.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-          },
-        ],
-      },
-      unit: 'mbytes',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local diskSpacePanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      '(sum (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name)) / (clamp_min(sum (hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name) + sum (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name),0.1))',
-      datasource=promDatasource,
-      legendFormat='{{cl_name}}',
-      format='time_series',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Disk space',
-  description: 'The percentage of hardware space used.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 10,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'linear',
-        lineWidth: 1,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-          },
-        ],
-      },
-      unit: 'percentunit',
     },
     overrides: [],
   },
@@ -1172,7 +900,7 @@ local hardwareCPUInterruptServiceTimePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Hardware CPU interrupt service time',
+  title: 'Hardware CPU interrupt service time / $__interval',
   description: 'The amount of time spent servicing CPU interrupts.',
   fieldConfig: {
     defaults: {
@@ -1237,27 +965,25 @@ local hardwareCPUInterruptServiceTimePanel = {
   },
 };
 
-local slowRequestsPanel = {
+local memoryPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      'sum (mongodb_mem_resident{job=~"$job",cl_name=~"$cl_name"}) by (cl_name)',
       datasource=promDatasource,
-      legendFormat='{{cl_name}} - DNS',
+      legendFormat='{{cl_name}} - RAM',
       format='time_series',
-      interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      'sum (mongodb_mem_virtual{job=~"$job",cl_name=~"$cl_name"}) by (cl_name)',
       datasource=promDatasource,
-      legendFormat='{{cl_name}} - SSL',
+      legendFormat='{{cl_name}} - virtual',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Slow requests',
-  description: 'The number of DNS and SSL operations that took longer than 1 second.',
+  title: 'Memory',
+  description: 'The amount of RAM and virtual memory being used.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1303,7 +1029,326 @@ local slowRequestsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'decbytes',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local diskSpaceUsagePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      '(sum (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name)) / (clamp_min(sum (hardware_disk_metrics_disk_space_free_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name) + sum (hardware_disk_metrics_disk_space_used_bytes{job=~"$job",cl_name=~"$cl_name"}) by(cl_name),0.1))',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}}',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Disk space usage',
+  description: 'The percentage of hardware space used.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      max: 1,
+      min: 0,
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+        ],
+      },
+      unit: 'percentunit',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local networkRequestsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum (rate(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}}',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Network requests',
+  description: 'The number of distinct requests that the server has received.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+        ],
+      },
+      unit: 'reqps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local networkBytesPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum (rate(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}} - received',
+      format='time_series',
+    ),
+    prometheus.target(
+      'sum (rate(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}} - sent',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Network bytes',
+  description: 'The number of bytes sent and received over network connections.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+        ],
+      },
+      unit: 'Bps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+  transformations: [],
+};
+
+local slowRequestsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum (rate(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}} - DNS',
+      format='time_series',
+    ),
+    prometheus.target(
+      'sum (rate(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      datasource=promDatasource,
+      legendFormat='{{cl_name}} - SSL',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Slow requests',
+  description: 'The rate of DNS and SSL operations that took longer than 1 second.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 10,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'linear',
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+        ],
+      },
+      unit: 'reqps',
     },
     overrides: [],
   },
@@ -1340,16 +1385,15 @@ local connectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_connections_totalCreated{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      'sum (rate(mongodb_connections_totalCreated{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}}',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
   title: 'Connections',
-  description: 'The number of incoming connections to the cluster created.',
+  description: 'The rate of incoming connections to the cluster created.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1395,7 +1439,7 @@ local connectionsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'conns/sec',
     },
     overrides: [],
   },
@@ -1417,18 +1461,16 @@ local readwriteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (increase(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      'sum (rate(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
       format='time_series',
-      interval='1m',
     ),
     prometheus.target(
-      'sum (increase(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
+      'sum (rate(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
       format='time_series',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -1479,18 +1521,14 @@ local readwriteOperationsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'ops',
     },
     overrides: [],
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
+      calcs: [],
+      displayMode: 'list',
       placement: 'bottom',
       showLegend: true,
     },
@@ -1557,8 +1595,8 @@ local operationsPanel = {
     displayLabels: [],
     legend: {
       displayMode: 'table',
-      placement: 'right',
-      showLegend: true,
+      placement: 'bottom',
+      showLegend: false,
       values: [
         'value',
       ],
@@ -1597,7 +1635,7 @@ local readwriteLatencyPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Read/Write latency',
+  title: 'Read/Write latency / $__interval',
   description: 'The latency for read and write operations.',
   fieldConfig: {
     defaults: {
@@ -1650,13 +1688,9 @@ local readwriteLatencyPanel = {
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'max',
-        'mean',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -1752,8 +1786,8 @@ local currentQueuePanel = {
   options: {
     legend: {
       calcs: [],
-      displayMode: 'table',
-      placement: 'right',
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -1834,8 +1868,8 @@ local activeClientOperationsPanel = {
   options: {
     legend: {
       calcs: [],
-      displayMode: 'table',
-      placement: 'right',
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -1878,7 +1912,7 @@ local databaseDeadlocksPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Database deadlocks',
+  title: 'Database deadlocks / $__interval',
   description: 'The number of deadlocks for database level locks.',
   fieldConfig: {
     defaults: {
@@ -1976,7 +2010,7 @@ local databaseWaitsAcquiringLockPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Database waits acquiring lock',
+  title: 'Database waits acquiring lock / $__interval',
   description: 'The number of times lock acquisitions encounter waits for database level locks.',
   fieldConfig: {
     defaults: {
@@ -2103,24 +2137,24 @@ local databaseWaitsAcquiringLockPanel = {
           mongosRow { gridPos: { h: 1, w: 24, x: 0, y: 14 } },
           mongosNodesPanel { gridPos: { h: 6, w: 24, x: 0, y: 15 } },
           performanceRow { gridPos: { h: 1, w: 24, x: 0, y: 21 } },
-          hardwareIOPanel { gridPos: { h: 6, w: 12, x: 0, y: 22 } },
-          hardwareIOWaitTimePanel { gridPos: { h: 6, w: 12, x: 12, y: 22 } },
-          networkBytesPanel { gridPos: { h: 6, w: 12, x: 0, y: 28 } },
-          networkRequestsPanel { gridPos: { h: 6, w: 12, x: 12, y: 28 } },
-          memoryPanel { gridPos: { h: 6, w: 6, x: 0, y: 34 } },
-          diskSpacePanel { gridPos: { h: 6, w: 6, x: 6, y: 34 } },
-          hardwareCPUInterruptServiceTimePanel { gridPos: { h: 6, w: 6, x: 12, y: 34 } },
-          slowRequestsPanel { gridPos: { h: 6, w: 6, x: 18, y: 34 } },
-          operationsRow { gridPos: { h: 1, w: 24, x: 0, y: 40 } },
-          connectionsPanel { gridPos: { h: 6, w: 12, x: 0, y: 41 } },
-          readwriteOperationsPanel { gridPos: { h: 12, w: 6, x: 12, y: 41 } },
-          operationsPanel { gridPos: { h: 12, w: 6, x: 18, y: 41 } },
-          readwriteLatencyPanel { gridPos: { h: 6, w: 12, x: 0, y: 47 } },
-          locksRow { gridPos: { h: 1, w: 24, x: 0, y: 53 } },
-          currentQueuePanel { gridPos: { h: 6, w: 12, x: 0, y: 54 } },
-          activeClientOperationsPanel { gridPos: { h: 6, w: 12, x: 12, y: 54 } },
-          databaseDeadlocksPanel { gridPos: { h: 6, w: 12, x: 0, y: 60 } },
-          databaseWaitsAcquiringLockPanel { gridPos: { h: 6, w: 12, x: 12, y: 60 } },
+          hardwareIOPanel { gridPos: { h: 6, w: 6, x: 0, y: 22 } },
+          hardwareIOWaitTimePanel { gridPos: { h: 6, w: 6, x: 6, y: 22 } },
+          hardwareCPUInterruptServiceTimePanel { gridPos: { h: 6, w: 6, x: 12, y: 22 } },
+          memoryPanel { gridPos: { h: 6, w: 6, x: 18, y: 22 } },
+          diskSpaceUsagePanel { gridPos: { h: 6, w: 6, x: 0, y: 28 } },
+          networkRequestsPanel { gridPos: { h: 6, w: 6, x: 6, y: 28 } },
+          networkBytesPanel { gridPos: { h: 6, w: 6, x: 12, y: 28 } },
+          slowRequestsPanel { gridPos: { h: 6, w: 6, x: 18, y: 28 } },
+          operationsRow { gridPos: { h: 1, w: 24, x: 0, y: 34 } },
+          connectionsPanel { gridPos: { h: 6, w: 12, x: 0, y: 35 } },
+          readwriteOperationsPanel { gridPos: { h: 12, w: 6, x: 12, y: 35 } },
+          operationsPanel { gridPos: { h: 12, w: 6, x: 18, y: 35 } },
+          readwriteLatencyPanel { gridPos: { h: 6, w: 12, x: 0, y: 41 } },
+          locksRow { gridPos: { h: 1, w: 24, x: 0, y: 47 } },
+          currentQueuePanel { gridPos: { h: 6, w: 12, x: 0, y: 48 } },
+          activeClientOperationsPanel { gridPos: { h: 6, w: 12, x: 12, y: 48 } },
+          databaseDeadlocksPanel { gridPos: { h: 6, w: 12, x: 0, y: 54 } },
+          databaseWaitsAcquiringLockPanel { gridPos: { h: 6, w: 12, x: 12, y: 54 } },
         ]
       ),
   },
