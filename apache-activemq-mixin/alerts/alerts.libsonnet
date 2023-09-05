@@ -14,7 +14,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'Topic destination memory usage high which may result in a reduction of the rate at which producers send messages.',
+              summary: 'Topic destination memory usage is high, which may result in a reduction of the rate at which producers send messages.',
               description:
                 (
                   '{{ printf "%%.0f" $value }} percent of memory used by topic {{$labels.destination}} on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
@@ -32,7 +32,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'Queue destination memory usage high which may result in a reduction of the rate at which producers send messages.',
+              summary: 'Queue destination memory usage is high, which may result in a reduction of the rate at which producers send messages.',
               description:
                 (
                   '{{ printf "%%.0f" $value }} percent of memory used by queue {{$labels.destination}} on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
@@ -50,7 +50,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'Store memory usage high which may result in producers unable to send messages.',
+              summary: 'Store memory usage is high, which may result in producers unable to send messages.',
               description:
                 (
                   '{{ printf "%%.0f" $value }} percent of store memory used on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
@@ -68,7 +68,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'Temporary memory usage high which may result in saturation of messaging throughput.',
+              summary: 'Temporary memory usage is high, which may result in saturation of messaging throughput.',
               description:
                 (
                   '{{ printf "%%.0f" $value }} percent of temporary memory used on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +

@@ -23,9 +23,10 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
             },
           dashboards+:
             {
-              logs+:
-                // copy links from another dashboard
-                g.dashboard.withLinksMixin($.grafanaDashboards['apache-activemq-cluster-overview.json'].links),
+              logs+: g.dashboard.withLinksMixin($.grafanaDashboards['apache-activemq-cluster-overview.json'].links)
+                     + g.dashboard.withUid($._config.grafanaDashboardIDs['apache-activemq-logs-overview.json'])
+                     + g.dashboard.withTags($._config.dashboardTags)
+                     + g.dashboard.withRefresh($._config.dashboardRefresh),
             },
         },
       'apache-activemq-logs.json': activemqLogs.dashboards.logs,

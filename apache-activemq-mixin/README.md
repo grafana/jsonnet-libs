@@ -19,23 +19,23 @@ and the following alerts:
 
 ## Apache ActiveMQ cluster overview
 
-The Apache ActiveMQ cluster overview provides cluster level statistics showing cluster count, broker count, producer count and consumer counts, overall memory level usage, and a general look into enqueue/dequeue counts.
+The Apache ActiveMQ cluster overview provides cluster level statistics showing cluster count, broker count, producer counts, consumer counts, overall memory level usage, and a general look into enqueue/dequeue counts.
 ![Screenshot of the Apache ActiveMQ cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_cluster_overview.png)
 
 ## Apache ActiveMQ instance overview
 
-The Apache ActiveMQ instance overview provides instance level statistics showing memory levels, producer and consumer counts, queue sizes, enqueue/dequeue counts, average enqueue times, expired message counts, jvm garabage collection info, and alerts.
+The Apache ActiveMQ instance overview provides instance level statistics showing memory levels, producer counts, consumer counts, queue sizes, enqueue/dequeue counts, average enqueue times, expired message counts, jvm garabage collection info, and alerts.
 ![First screenshot of the Apache ActiveMQ instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_instance_overview_1.png)
 ![Second screenshot of the Apache ActiveMQ instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_instance_overview_2.png)
 
 ## Apache ActiveMQ queue overview
 
-The Apache ActiveMQ queue overview provides queue level statistics showing number of queues, message size, producer and consumer count, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
+The Apache ActiveMQ queue overview provides queue level statistics showing number of queues, message size, producer counts, consumer counts, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
 ![Screenshot of the Apache ActiveMQ queue overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_queue_overview.png)
 
 ## Apache ActiveMQ queue overview
 
-The Apache ActiveMQ topic overview provides queue level statistics showing number of topics, message size, producer and consumer count, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
+The Apache ActiveMQ topic overview provides queue level statistics showing number of topics, message size, producer counts, consumer counts, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
 ![Screenshot of the Apache ActiveMQ topic overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_topic_overview.png)
 
 ## Apache ActiveMQ logs overview
@@ -45,10 +45,10 @@ The Apache ActiveMQ logs overview provides logs of the ActiveMQ environmnet that
 
 ## Alerts Overview
 
-- ApacheActiveMQHighTopicMemoryUsage: Topic destination memory usage high which may result in a reduction of the rate at which producers send messages.
-- ApacheActiveMQHighQueueMemoryUsage: Queue destination memory usage high which may result in a reduction of the rate at which producers send messages.
-- ApacheActiveMQHighStoreMemoryUsage: Store memory usage high which may result in producers unable to send messages.
-- ApacheActiveMQHighTemporaryMemoryUsage: Temporary memory usage high which may result in saturation of messaging throughput.
+- ApacheActiveMQHighTopicMemoryUsage: Topic destination memory usage is high which may result in a reduction of the rate at which producers send messages.
+- ApacheActiveMQHighQueueMemoryUsage: Queue destination memory usage is high which may result in a reduction of the rate at which producers send messages.
+- ApacheActiveMQHighStoreMemoryUsage: Store memory usage is high which may result in producers unable to send messages.
+- ApacheActiveMQHighTemporaryMemoryUsage: Temporary memory usage is high which may result in saturation of messaging throughput.
 
 Default thresholds can be configured in `config.libsonnet`.
 

@@ -16,7 +16,7 @@ local numberOfTopicsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by(instance, activemq_cluster) (activemq_topic_queue_size{instance=~"$instance",activemq_cluster=~"$activemq_cluster", job=~"$job"})',
+      'count by(instance, activemq_cluster, job) (activemq_topic_queue_size{instance=~"$instance",activemq_cluster=~"$activemq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -57,14 +57,14 @@ local numberOfTopicsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local producerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster) (activemq_topic_producer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_topic_producer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -105,14 +105,14 @@ local producerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local consumerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster) (activemq_topic_consumer_count{instance=~"$instance", activemq_cluster=~"$activemq_cluster", job=~"$job"})',
+      'sum by(instance, activemq_cluster, job) (activemq_topic_consumer_count{instance=~"$instance", activemq_cluster=~"$activemq_cluster", job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -153,14 +153,14 @@ local consumerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local averageConsumersPerTopicPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, activemq_cluster) (activemq_topic_consumer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"})',
+      'avg by (instance, activemq_cluster, job) (activemq_topic_consumer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -201,14 +201,14 @@ local averageConsumersPerTopicPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local topTopicsByEnqueueRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_topic_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -226,6 +226,7 @@ local topTopicsByEnqueueRatePanel = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisShow: false,
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 25,
@@ -284,7 +285,7 @@ local topTopicsByDequeueRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_topic_dequeue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_dequeue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -302,6 +303,7 @@ local topTopicsByDequeueRatePanel = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisShow: false,
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 25,
@@ -360,7 +362,7 @@ local topTopicsByAverageEnqueueTimePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster) ($k_selector, activemq_topic_average_enqueue_time{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -378,6 +380,7 @@ local topTopicsByAverageEnqueueTimePanel = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisShow: false,
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 25,
@@ -436,7 +439,7 @@ local topTopicsByExpiredMessageRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_topic_expired_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_expired_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -454,6 +457,7 @@ local topTopicsByExpiredMessageRatePanel = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisShow: false,
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 25,
@@ -512,7 +516,7 @@ local topTopicsByConsumersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster) (5, activemq_topic_consumer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) (5, activemq_topic_consumer_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -554,14 +558,14 @@ local topTopicsByConsumersPanel = {
     showUnfilled: true,
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local topTopicsByAverageMessageSizePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster) (5, activemq_topic_average_message_size{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) (5, activemq_topic_average_message_size{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -579,6 +583,7 @@ local topTopicsByAverageMessageSizePanel = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisShow: false,
         axisSoftMin: 0,
         barAlignment: 0,
         drawStyle: 'line',
@@ -684,7 +689,6 @@ local topicSummaryPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -752,7 +756,7 @@ local topicSummaryPanel = {
     },
     showHeader: true,
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
   transformations: [
     {
       id: 'joinByField',
@@ -832,9 +836,20 @@ local topicSummaryPanel = {
             sort=0
           ),
           template.new(
+            'cluster',
+            promDatasource,
+            'label_values(activemq_memory_usage_ratio{job=~"$job"},cluster)',
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
             'activemq_cluster',
             promDatasource,
-            'label_values(activemq_memory_usage_ratio{job=~"$job"},activemq_cluster)',
+            'label_values(activemq_memory_usage_ratio{job=~"$job", cluster=~"$cluster"},activemq_cluster)',
             label='ActiveMQ cluster',
             refresh=2,
             includeAll=true,
@@ -877,6 +892,13 @@ local topicSummaryPanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache ActiveMQ dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           numberOfTopicsPanel { gridPos: { h: 4, w: 6, x: 0, y: 0 } },

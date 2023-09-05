@@ -5,6 +5,10 @@
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
 
+    grafanaDashboardIDs: {
+      'apache-activemq-logs-overview.json': 'apache-activemq-logs',
+    },
+
     // alerts thresholds
     alertsHighTopicMemoryUsage: 70,  // %
     alertsHighQueueMemoryUsage: 70,  // %

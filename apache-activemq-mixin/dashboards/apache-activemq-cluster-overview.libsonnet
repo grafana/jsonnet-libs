@@ -16,7 +16,7 @@ local clusterCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by (activemq_cluster) (activemq_memory_usage_ratio{job=~"$job"})',
+      'count by (activemq_cluster, job) (activemq_memory_usage_ratio{job=~"$job"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -57,14 +57,14 @@ local clusterCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local brokerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by (instance, activemq_cluster) (activemq_memory_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'count by (instance, activemq_cluster, job) (activemq_memory_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -105,14 +105,14 @@ local brokerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local producerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster) (activemq_producer_total{job=~"$job", activemq_cluster="$activemq_cluster"})',
+      'sum by (activemq_cluster, job) (activemq_producer_total{job=~"$job", activemq_cluster="$activemq_cluster"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -153,14 +153,14 @@ local producerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local consumerCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster) (activemq_consumer_total{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'sum by (activemq_cluster, job) (activemq_consumer_total{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -201,14 +201,14 @@ local consumerCountPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local enqueueCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster) (increase(activemq_enqueue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"}[$__interval:]))',
+      'sum by (activemq_cluster, job) (increase(activemq_enqueue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -227,6 +227,7 @@ local enqueueCountPanel = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisShow: false,
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 25,
@@ -285,7 +286,7 @@ local dequeueCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster) (increase(activemq_dequeue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"}[$__interval:]))',
+      'sum by (activemq_cluster, job) (increase(activemq_dequeue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -303,6 +304,7 @@ local dequeueCountPanel = {
         axisColorMode: 'text',
         axisLabel: '',
         axisPlacement: 'auto',
+        axisShow: false,
         barAlignment: 0,
         drawStyle: 'line',
         fillOpacity: 25,
@@ -361,7 +363,7 @@ local averageTemporaryMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (activemq_cluster) (activemq_temp_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'avg by (activemq_cluster, job) (activemq_temp_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -412,14 +414,14 @@ local averageTemporaryMemoryUsagePanel = {
     text: {},
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local averageStoreMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (activemq_cluster) (activemq_store_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'avg by (activemq_cluster, job) (activemq_store_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -469,14 +471,14 @@ local averageStoreMemoryUsagePanel = {
     showUnfilled: false,
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 local averageBrokerMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (activemq_cluster) (activemq_memory_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'avg by (activemq_cluster, job) (activemq_memory_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -526,7 +528,7 @@ local averageBrokerMemoryUsagePanel = {
     showUnfilled: false,
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-59981',
+  pluginVersion: '10.2.0-60139',
 };
 
 {
@@ -563,9 +565,20 @@ local averageBrokerMemoryUsagePanel = {
             sort=0
           ),
           template.new(
+            'cluster',
+            promDatasource,
+            'label_values(activemq_memory_usage_ratio{job=~"$job", cluster=~"$cluster"},cluster)',
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
             'activemq_cluster',
             promDatasource,
-            'label_values(activemq_memory_usage_ratio{job=~"$job"},activemq_cluster)',
+            'label_values(activemq_memory_usage_ratio{cluster=~"$cluster"},activemq_cluster)',
             label='ActiveMQ cluster',
             refresh=2,
             includeAll=true,
@@ -575,6 +588,13 @@ local averageBrokerMemoryUsagePanel = {
           ),
         ]
       )
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Apache ActiveMQ dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addPanels(
         [
           clusterCountPanel { gridPos: { h: 6, w: 6, x: 0, y: 0 } },
