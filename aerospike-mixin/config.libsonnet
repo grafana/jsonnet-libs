@@ -1,6 +1,6 @@
 {
   _config+:: {
-    enableMultiCluster: true,
+    enableMultiCluster: false,
     aerospikeSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
     multiclusterSelector: 'job=~"$job"',
 
