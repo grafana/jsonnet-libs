@@ -30,6 +30,5 @@ base {
     + options.tooltip.withSort('desc')
     // Style choice: Use simple legend without any values (cleaner look)
     + options.legend.withDisplayMode('list')
-    + options.legend.withCalcs([])
-
+    + options.legend.withCalcs([]),
 }
