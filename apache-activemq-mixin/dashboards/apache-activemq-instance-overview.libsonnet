@@ -72,7 +72,7 @@ local averageStoreMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, activemq_cluster) (activemq_store_usage_ratio{' + matcher + ', instance=~"$instance"})',
+      'avg by (instance, activemq_cluster, job) (activemq_store_usage_ratio{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -128,7 +128,7 @@ local averageTemporaryMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, activemq_cluster) (activemq_temp_usage_ratio{' + matcher + ', instance=~"$instance"})',
+      'avg by (instance, activemq_cluster, job) (activemq_temp_usage_ratio{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -184,7 +184,7 @@ local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance) (activemq_producer_total{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_producer_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -232,7 +232,7 @@ local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance) (activemq_consumer_total{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_consumer_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -280,7 +280,7 @@ local averageUnacknowledgedMessagesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance) (activemq_message_total{' + matcher + ', instance=~"$instance"})',
+      'avg by (instance, activemq_cluster, job) (activemq_message_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
