@@ -5,8 +5,8 @@ local winlib = import '../lib/windows-lib/main.libsonnet';
     local windows = winlib.new(
         prefix="My ",
         uid="windows",
-        filterSelector='job="windows"',
+        filterSelector='job!=""',
     ),
-    grafanaDashboards+:: 
+    grafanaDashboards+::
         windows.dashboards
 }

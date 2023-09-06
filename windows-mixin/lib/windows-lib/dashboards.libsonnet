@@ -22,9 +22,9 @@ local g = import './g.libsonnet';
                         g.panel.table.new("Fleet overview") {gridPos+: {w: 24, h:16}},
                         g.panel.timeSeries.new("CPU") {gridPos+: {w: 24}},
                         g.panel.timeSeries.new("Memory") {gridPos+: {w: 24}},
-                        panels.diskIO {gridPos+: {w: 12}},
+                        panels.diskIOBytesPerSec {gridPos+: {w: 12}},
                         panels.diskUsage {gridPos+: {w: 12}},
-                        panels.networkErrors {gridPos+: {w: 24}},
+                        panels.networkErrorsPerSec {gridPos+: {w: 24}},
                     ],12,7)
             )
             // hide link to self
@@ -40,21 +40,21 @@ local g = import './g.libsonnet';
                         panels.osVersion,
                         panels.osInfo,
                         panels.cpuCount,
-                        panels.memoryTotal,
-                        panels.memoryPageTotal,
+                        panels.memoryTotalBytes,
+                        panels.memoryPageTotalBytes,
                         panels.diskTotalC,
                         g.panel.row.new("CPU"),
                         panels.cpuUsageStat {gridPos+: { w:6, h:6}},
                         panels.cpuUsageTs {gridPos+: { w:18, h:6}},
                         g.panel.row.new("Memory"),
-                        panels.memoryUsageStat {gridPos+: { w:6, h:6}},
-                        panels.memoryUsageTs {gridPos+: { w:18, h:6}},
+                        panels.memoryUsageStatPercent {gridPos+: { w:6, h:6}},
+                        panels.memoryUsageTsBytes {gridPos+: { w:18, h:6}},
                         g.panel.row.new("Disk"),
-                        panels.diskIO {gridPos+: { w:12, h:8}},
+                        panels.diskIOBytesPerSec {gridPos+: { w:12, h:8}},
                         panels.diskUsage {gridPos+: { w:12, h:8}},
                         g.panel.row.new("Network"),
-                        panels.networkUsage {gridPos+: { w:12, h:8}},
-                        panels.networkErrors {gridPos+: { w:12, h:8}},
+                        panels.networkUsagePerSec {gridPos+: { w:12, h:8}},
+                        panels.networkErrorsPerSec {gridPos+: { w:12, h:8}},
                     ],6,2)
             )
             + this.applyCommon(vars.singleInstance, uid+'-overview', tags, links + { backToOverview+:: {} }, annotations),
@@ -64,11 +64,11 @@ local g = import './g.libsonnet';
                     [
                         g.panel.row.new("Network"),
                         panels.networkInterfacesOverview {gridPos+: {w: 24}},
-                        panels.networkUsage,
+                        panels.networkUsagePerSec,
                         panels.networkInterfaceCarrierStatus,
-                        panels.networkErrors,
-                        panels.networkDropped,
-                        panels.networkPackets,
+                        panels.networkErrorsPerSec,
+                        panels.networkDroppedPerSec,
+                        panels.networkPacketsPerSec,
                         panels.networkMulticast,
                     ],12,7)
             )
@@ -79,14 +79,14 @@ local g = import './g.libsonnet';
                 g.util.grid.wrapPanels(
                     [
                         g.panel.row.new("Filesystem"),
-                        panels.networkUsage,
+                        panels.networkUsagePerSec,
                         panels.networkInterfaceCarrierStatus,
-                        panels.networkErrors,
-                        panels.networkDropped,
+                        panels.networkErrorsPerSec,
+                        panels.networkDroppedPerSec,
                         g.panel.row.new("Disk"),
-                        panels.networkPackets,
+                        panels.networkPacketsPerSec,
                         panels.networkMulticast,
-                        panels.networkPackets,
+                        panels.networkPacketsPerSec,
                         panels.networkMulticast,
                     ],12,7)
             )
