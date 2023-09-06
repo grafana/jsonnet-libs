@@ -1,5 +1,5 @@
 local g = import '../../../g.libsonnet';
-local base = import '../../all/stat/percentage.libsonnet';
+local base = import '../../all/stat/main.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local custom = timeSeries.fieldConfig.defaults.custom;
@@ -11,5 +11,5 @@ base + {
     targets,
     description=''
   ):
-    super.new(title, targets, description)
+    super.base.new(title, targets, description)
 }
