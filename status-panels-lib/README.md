@@ -85,11 +85,11 @@ When using `both` provide both metrics & logs query & data source names
 
 ### statusPanelsQueryMetrics
 
-Query for checking the status of the integration. Should be the most commonly available metric, which for most cases (a simple prometheus job scrape) is `up{job="integrations/my-integration"}`. For mixins that are based on a separate exporter the following query returns more concise results: `vector(1) and on() ((count(up{job="integrations/my-integration"} == 1) > 0) and (absent(absent(redis_up{job="integrations/my-integration"})))) or vector(0) and on() ((count(up{job="integrations/my-integration"}) > 0) and (absent(redis_up{job="integrations/my-integration"})))`.
+Query for checking the status of the integration. Should be the most commonly available metric, which for most cases (a simple prometheus job scrape) is `up{job="integrations/my-integration"}`. For mixins that are based on a separate exporter the following query returns more concise results: `vector(1) and on() ((count(up{job="integrations/my-integration"} == 1) > 0) and (absent(absent(<exporter_main_metric>{job="integrations/my-integration"})))) or vector(0) and on() ((count(up{job="integrations/my-integration"}) > 0) and (absent(<exporter_main_metric>{job="integrations/my-integration"})))`.
 
 ### statusPanelsQueryLogs
 
-Query for checking the status of the integration. Should be the most commonly available metric which is almost always available like `count_over_time{job="integrations/my-integration"}`.
+Query for checking the status of the integration. Should be the most commonly available metric which is almost always available like `count_over_time({job="integrations/my-integration"}[1m])`.
 
 ### datasourceNameMetrics
 

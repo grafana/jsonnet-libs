@@ -32,16 +32,23 @@ function(
       + stat.gridPos.withW(panelsWidth)
       + stat.gridPos.withX(0)
       + stat.standardOptions.withMappings([
+        stat.valueMapping.SpecialValueMap.withType('special')
+        + stat.valueMapping.SpecialValueMap.options.withMatch('null')
+        + stat.valueMapping.SpecialValueMap.result.withIndex(0)
+        // if up{} returns null for metrics, it means the agent is not running or misconfigured, since it should always write a value if running and configured to collect the target
+        + stat.valueMapping.SpecialValueMap.result.withText(if statusType == 'metrics' then 'Agent not running or misconfigured' else if statusType == 'logs' then 'Agent failing to collect logs or no logs available')
+        // setting to yellow for logs, since it might be the case that logs just aren't available for the check metrics time frame
+        + stat.valueMapping.SpecialValueMap.result.withColor(if statusType == 'metrics' then 'light-red' else if statusType == 'logs' then 'light-yellow'),
         stat.valueMapping.RangeMap.withType('range')
         + stat.valueMapping.RangeMap.options.withFrom(0)
         + stat.valueMapping.RangeMap.options.withTo(0)
         + stat.valueMapping.RangeMap.options.result.withIndex(1)
-        + stat.valueMapping.RangeMap.options.result.withText('No ' + statusType + ' detected')
-        + stat.valueMapping.RangeMap.options.result.withColor('light-red'),
+        + stat.valueMapping.RangeMap.options.result.withText(if statusType == 'metrics' then 'Agent failing to collect metrics' else if statusType == 'logs' then 'Agent failing to collect logs or no logs available')
+        + stat.valueMapping.RangeMap.options.result.withColor(if statusType == 'metrics' then 'light-red' else if statusType == 'logs' then 'light-yellow'),
         stat.valueMapping.RangeMap.withType('range')
-        + stat.valueMapping.RangeMap.options.withFrom(0)
+        + stat.valueMapping.RangeMap.options.withFrom(1)
         + stat.valueMapping.RangeMap.options.withTo(1000000)
-        + stat.valueMapping.RangeMap.options.result.withIndex(1)
+        + stat.valueMapping.RangeMap.options.result.withIndex(2)
         + stat.valueMapping.RangeMap.options.result.withText('Agent sending ' + statusType)
         + stat.valueMapping.RangeMap.options.result.withColor('light-green'),
       ])

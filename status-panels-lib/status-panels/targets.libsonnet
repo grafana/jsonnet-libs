@@ -15,7 +15,7 @@ function(
       ||| % [
         statusPanelsQueryMetrics,
       ]
-    ),
+    ),    
   statusPanelsTargetLogs::
     lokiQuery.new(
       datasource=datasourceNameLogs,
