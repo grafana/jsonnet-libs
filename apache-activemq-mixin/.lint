@@ -11,8 +11,6 @@ exclusions:
     reason: "Instance selector is not needed for this dashboard, but certain panels take use of the instance variable for querying purposes"
   panel-title-description-rule:
     reason: "Not required for logs volume"
-    entries:
-      - panel: "Logs volume" 
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:

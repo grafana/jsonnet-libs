@@ -40,7 +40,7 @@ The Apache ActiveMQ topic overview provides queue level statistics showing numbe
 
 ## Apache ActiveMQ logs overview
 
-The Apache ActiveMQ logs overview provides logs of the ActiveMQ environmnet that is able to be parsed by severity.
+The Apache ActiveMQ logs overview provides logs of the ActiveMQ environment that is able to be parsed by severity.
 ![Screenshot of the Apache ActiveMQ logs overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_logs_overview.png)
 
 ## Alerts Overview
