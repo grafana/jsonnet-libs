@@ -5,7 +5,7 @@
     multiclusterSelector: 'job=~"$job"',
 
     dashboardTags: ['aerospike-mixin'],
-    dashboardPeriod: 'now-1h',
+    dashboardPeriod: 'now-30m',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
 

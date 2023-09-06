@@ -572,7 +572,7 @@ local clientReadsPanel(matcher) = {
       calcs: [
         'min',
         'mean',
-        'max'
+        'max',
       ],
       displayMode: 'table',
       placement: 'right',
@@ -674,7 +674,7 @@ local clientWritesPanel(matcher) = {
       calcs: [
         'min',
         'mean',
-        'max'
+        'max',
       ],
       displayMode: 'table',
       placement: 'right',
@@ -776,7 +776,7 @@ local clientUDFTransactionsPanel(matcher) = {
       calcs: [
         'min',
         'mean',
-        'max'
+        'max',
       ],
       displayMode: 'table',
       placement: 'right',
