@@ -16,8 +16,16 @@ local g = import './g.libsonnet';
     stat: import './panels/cpu/stat/main.libsonnet',
     timeSeries: import './panels/cpu/timeSeries/main.libsonnet',
   },
+  memory: {
+    stat: import './panels/memory/stat/main.libsonnet',
+    timeSeries: import './panels/memory/timeSeries/main.libsonnet',
+  },
   filesystem: {
     timeSeries: import './panels/filesystem/timeSeries/main.libsonnet',
     table: import './panels/filesystem/table/main.libsonnet',
+    stat: import './panels/filesystem/stat/main.libsonnet',
   },
+  disk: {
+    timeSeries: import './panels/disk/timeSeries/main.libsonnet',
+  }
 }
