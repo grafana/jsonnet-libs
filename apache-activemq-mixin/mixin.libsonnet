@@ -1,4 +1,3 @@
 (import 'dashboards/dashboards.libsonnet') +
 (import 'alerts/alerts.libsonnet') +
-(import 'config.libsonnet') +
-(import 'dashboards/apache-activemq-logs-overview.libsonnet')
+(import 'config.libsonnet')

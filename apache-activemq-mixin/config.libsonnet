@@ -1,7 +1,10 @@
 {
   _config+:: {
+    enableMultiCluster: false,
+    activemqSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
+
     dashboardTags: ['apache-activemq-mixin'],
-    dashboardPeriod: 'now-1h',
+    dashboardPeriod: 'now-30m',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
 

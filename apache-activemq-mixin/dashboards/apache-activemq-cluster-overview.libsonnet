@@ -12,11 +12,11 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local clusterCountPanel = {
+local clusterCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by (activemq_cluster, job) (activemq_memory_usage_ratio{job=~"$job"})',
+      'count by (activemq_cluster, job) (activemq_memory_usage_ratio{' + matcher + ')',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -60,11 +60,11 @@ local clusterCountPanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local brokerCountPanel = {
+local brokerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by (instance, activemq_cluster, job) (activemq_memory_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'count by (instance, activemq_cluster, job) (activemq_memory_usage_ratio{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -108,11 +108,11 @@ local brokerCountPanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local producerCountPanel = {
+local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (activemq_producer_total{job=~"$job", activemq_cluster="$activemq_cluster"})',
+      'sum by (activemq_cluster, job) (activemq_producer_total{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -156,11 +156,11 @@ local producerCountPanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local consumerCountPanel = {
+local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (activemq_consumer_total{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'sum by (activemq_cluster, job) (activemq_consumer_total{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -204,11 +204,11 @@ local consumerCountPanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local enqueueCountPanel = {
+local enqueueCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (increase(activemq_enqueue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"}[$__interval:]))',
+      'sum by (activemq_cluster, job) (increase(activemq_enqueue_total{' + matcher + '}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -282,11 +282,11 @@ local enqueueCountPanel = {
   },
 };
 
-local dequeueCountPanel = {
+local dequeueCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (increase(activemq_dequeue_total{job=~"$job", activemq_cluster=~"$activemq_cluster"}[$__interval:]))',
+      'sum by (activemq_cluster, job) (increase(activemq_dequeue_total{' + matcher + '}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -359,11 +359,11 @@ local dequeueCountPanel = {
   },
 };
 
-local averageTemporaryMemoryUsagePanel = {
+local averageTemporaryMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (activemq_cluster, job) (activemq_temp_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'avg by (activemq_cluster, job) (activemq_temp_usage_ratio{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -417,11 +417,11 @@ local averageTemporaryMemoryUsagePanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local averageStoreMemoryUsagePanel = {
+local averageStoreMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (activemq_cluster, job) (activemq_store_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'avg by (activemq_cluster, job) (activemq_store_usage_ratio{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -474,11 +474,11 @@ local averageStoreMemoryUsagePanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local averageBrokerMemoryUsagePanel = {
+local averageBrokerMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (activemq_cluster, job) (activemq_memory_usage_ratio{job=~"$job", activemq_cluster=~"$activemq_cluster"})',
+      'avg by (activemq_cluster, job) (activemq_memory_usage_ratio{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -531,6 +531,8 @@ local averageBrokerMemoryUsagePanel = {
   pluginVersion: '10.2.0-60139',
 };
 
+local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_cluster"' % cfg;
+
 {
   grafanaDashboards+:: {
     'apache-activemq-cluster-overview.json':
@@ -573,12 +575,13 @@ local averageBrokerMemoryUsagePanel = {
             includeAll=true,
             multi=true,
             allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
           template.new(
             'activemq_cluster',
             promDatasource,
-            'label_values(activemq_memory_usage_ratio{cluster=~"$cluster"},activemq_cluster)',
+            'label_values(activemq_memory_usage_ratio{%(activemqSelector)s},activemq_cluster)',
             label='ActiveMQ cluster',
             refresh=2,
             includeAll=true,
@@ -597,15 +600,15 @@ local averageBrokerMemoryUsagePanel = {
       ))
       .addPanels(
         [
-          clusterCountPanel { gridPos: { h: 6, w: 6, x: 0, y: 0 } },
-          brokerCountPanel { gridPos: { h: 6, w: 6, x: 6, y: 0 } },
-          producerCountPanel { gridPos: { h: 6, w: 6, x: 12, y: 0 } },
-          consumerCountPanel { gridPos: { h: 6, w: 6, x: 18, y: 0 } },
-          enqueueCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 6 } },
-          dequeueCountPanel { gridPos: { h: 8, w: 12, x: 12, y: 6 } },
-          averageTemporaryMemoryUsagePanel { gridPos: { h: 10, w: 8, x: 0, y: 14 } },
-          averageStoreMemoryUsagePanel { gridPos: { h: 10, w: 8, x: 8, y: 14 } },
-          averageBrokerMemoryUsagePanel { gridPos: { h: 10, w: 8, x: 16, y: 14 } },
+          clusterCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 0 } },
+          brokerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 0 } },
+          producerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 0 } },
+          consumerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 0 } },
+          enqueueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 6 } },
+          dequeueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 6 } },
+          averageTemporaryMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 10, w: 8, x: 0, y: 14 } },
+          averageStoreMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 10, w: 8, x: 8, y: 14 } },
+          averageBrokerMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 10, w: 8, x: 16, y: 14 } },
         ]
       ),
   },

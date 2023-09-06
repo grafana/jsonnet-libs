@@ -12,11 +12,11 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local numberOfQueuesPanel = {
+local numberOfQueuesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by(instance, activemq_cluster, job) (activemq_queue_queue_size{activemq_cluster=~"$activemq_cluster", instance=~"$instance", job=~"$job"})',
+      'count by(instance, activemq_cluster, job) (activemq_queue_queue_size{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -60,11 +60,11 @@ local numberOfQueuesPanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local queueSizePanel = {
+local queueSizePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (instance, activemq_cluster, job) (activemq_queue_queue_size{job=~"$job",activemq_cluster=~"$activemq_cluster",instance=~"$instance"})',
+      'sum by (instance, activemq_cluster, job) (activemq_queue_queue_size{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -107,11 +107,11 @@ local queueSizePanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local producerCountPanel = {
+local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_queue_producer_count{activemq_cluster=~"$activemq_cluster", job=~"$job", instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_queue_producer_count{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -155,11 +155,11 @@ local producerCountPanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local consumerCountPanel = {
+local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance,activemq_cluster, job) (activemq_queue_consumer_count{activemq_cluster=~"$activemq_cluster", instance=~"$instance", job=~"$job"})',
+      'sum by(instance,activemq_cluster, job) (activemq_queue_consumer_count{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -203,11 +203,11 @@ local consumerCountPanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local topQueuesByEnqueueRatePanel = {
+local topQueuesByEnqueueRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster",instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_enqueue_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -280,11 +280,11 @@ local topQueuesByEnqueueRatePanel = {
   },
 };
 
-local topQueuesByDequeueRatePanel = {
+local topQueuesByDequeueRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_queue_dequeue_count{job=~"$job", instance=~"$instance", activemq_cluster=~"$activemq_cluster", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster) ($k_selector, rate(activemq_queue_dequeue_count{' + matcher + ',instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -357,11 +357,11 @@ local topQueuesByDequeueRatePanel = {
   },
 };
 
-local topQueuesByAverageEnqueueTimePanel = {
+local topQueuesByAverageEnqueueTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster) ($k_selector, activemq_queue_average_enqueue_time{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster) ($k_selector, activemq_queue_average_enqueue_time{' + matcher + ', instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -434,11 +434,11 @@ local topQueuesByAverageEnqueueTimePanel = {
   },
 };
 
-local topQueuesByExpiredMessageRatePanel = {
+local topQueuesByExpiredMessageRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_expired_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_queue_expired_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -511,11 +511,11 @@ local topQueuesByExpiredMessageRatePanel = {
   },
 };
 
-local topQueuesByAverageMessageSizePanel = {
+local topQueuesByAverageMessageSizePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) ($k_selector, activemq_queue_average_message_size{job=~"$job",activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) ($k_selector, activemq_queue_average_message_size{' + matcher + ', instance=~"$instance", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -590,29 +590,29 @@ local topQueuesByAverageMessageSizePanel = {
   },
 };
 
-local queueSummaryPanel = {
+local queueSummaryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(activemq_queue_enqueue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval:])',
+      'rate(activemq_queue_enqueue_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='table',
     ),
     prometheus.target(
-      'rate(activemq_queue_dequeue_count{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}[$__rate_interval:])',
+      'rate(activemq_queue_dequeue_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='table',
     ),
     prometheus.target(
-      'activemq_queue_average_enqueue_time{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}',
+      'activemq_queue_average_enqueue_time{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='table',
     ),
     prometheus.target(
-      'activemq_queue_average_message_size{job=~"$job", activemq_cluster=~"$activemq_cluster", instance=~"$instance", destination=~".*$name.*"}',
+      'activemq_queue_average_message_size{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='table',
@@ -759,6 +759,8 @@ local queueSummaryPanel = {
   ],
 };
 
+local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_cluster"' % cfg;
+
 {
   grafanaDashboards+:: {
     'apache-activemq-queue-overview.json':
@@ -801,12 +803,13 @@ local queueSummaryPanel = {
             includeAll=true,
             multi=true,
             allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
           template.new(
             'activemq_cluster',
             promDatasource,
-            'label_values(activemq_memory_usage_ratio{job=~"$job", cluster=~"$cluster"},activemq_cluster)',
+            'label_values(activemq_memory_usage_ratio{%(activemqSelector)s},activemq_cluster)',
             label='ActiveMQ cluster',
             refresh=2,
             includeAll=true,
@@ -817,7 +820,7 @@ local queueSummaryPanel = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(activemq_topic_producer_count{activemq_cluster=~"$activemq_cluster"},instance)',
+            'label_values(activemq_topic_producer_count{%(activemqSelector)s, activemq_cluster=~"$activemq_cluster"},instance)',
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -858,16 +861,16 @@ local queueSummaryPanel = {
       ))
       .addPanels(
         [
-          numberOfQueuesPanel { gridPos: { h: 4, w: 6, x: 0, y: 0 } },
-          queueSizePanel { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
-          producerCountPanel { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
-          consumerCountPanel { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
-          topQueuesByEnqueueRatePanel { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
-          topQueuesByDequeueRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
-          topQueuesByAverageEnqueueTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
-          topQueuesByExpiredMessageRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
-          topQueuesByAverageMessageSizePanel { gridPos: { h: 7, w: 24, x: 0, y: 20 } },
-          queueSummaryPanel { gridPos: { h: 7, w: 24, x: 0, y: 27 } },
+          numberOfQueuesPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 0, y: 0 } },
+          queueSizePanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
+          producerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
+          consumerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
+          topQueuesByEnqueueRatePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
+          topQueuesByDequeueRatePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
+          topQueuesByAverageEnqueueTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
+          topQueuesByExpiredMessageRatePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
+          topQueuesByAverageMessageSizePanel(getMatcher($._config)) { gridPos: { h: 7, w: 24, x: 0, y: 20 } },
+          queueSummaryPanel(getMatcher($._config)) { gridPos: { h: 7, w: 24, x: 0, y: 27 } },
         ]
       ),
   },
