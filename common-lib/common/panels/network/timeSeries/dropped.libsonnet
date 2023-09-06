@@ -7,7 +7,7 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 base {
   new(
-    title='Network packets',
+    title='Dropped packets',
     targets,
     description='',
   ):

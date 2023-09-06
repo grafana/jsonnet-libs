@@ -20,7 +20,7 @@ base {
     + defaults.custom.withAxisCenteredZero(true)
     + timeSeries.standardOptions.withOverrides(
       fieldOverride.byRegexp.new(regexp)
-      + fieldOverride.byType.withPropertiesFromOptions(
+      + fieldOverride.byRegexp.withPropertiesFromOptions(
         defaults.custom.withTransform('negative-Y')
       )
     ),
