@@ -1,0 +1,3 @@
+{
+    total: import './total.libsonnet',
+}
