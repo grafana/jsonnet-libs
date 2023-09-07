@@ -19,12 +19,12 @@ local g = import './g.libsonnet';
                 g.util.grid.wrapPanels(
                     [
                         // g.panel.row.new("Overview"),
-                        g.panel.table.new("Fleet overview") {gridPos+: {w: 24, h:16}},
-                        g.panel.timeSeries.new("CPU") {gridPos+: {w: 24}},
-                        g.panel.timeSeries.new("Memory") {gridPos+: {w: 24}},
-                        panels.diskIOBytesPerSec {gridPos+: {w: 12}},
-                        panels.diskUsage {gridPos+: {w: 12}},
-                        panels.networkErrorsPerSec {gridPos+: {w: 24}},
+                        panels.fleetOverviewTable {gridPos+: {w: 24, h:16}},
+                        panels.cpuUsageTopk {gridPos+: {w: 24}},
+                        panels.memotyUsageTopKPercent {gridPos+: {w: 24}},
+                        panels.diskIOutilPercentTopK {gridPos+: {w: 12}},
+                        panels.diskUsagePercentTopK {gridPos+: {w: 12}},
+                        panels.networkErrorsAndDroppedPerSec {gridPos+: {w: 24}},
                     ],12,7)
             )
             // hide link to self

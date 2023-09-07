@@ -23,6 +23,12 @@ local commonlib = import 'common/main.libsonnet';
   ): {
 
     local this = self,
+    groupLabels:: groupLabels,
+    instanceLabels:: instanceLabels,
+    config: {
+      ignoreVolumes: 'HarddiskVolume.*'
+    },
+
     variables: variables.new(
     //   datasourceName,
     //   datasourceRegex,
@@ -32,7 +38,7 @@ local commonlib = import 'common/main.libsonnet';
     ),
 
     targets: targets.new(
-      this.variables,
+      this
     ),
 
     annotations: {
@@ -60,7 +66,7 @@ local commonlib = import 'common/main.libsonnet';
     },
 
     panels: panels.new(
-      this.targets
+      this
     ),
 
     dashboards: dashboards.new(
