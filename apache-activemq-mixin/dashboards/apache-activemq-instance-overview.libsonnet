@@ -330,7 +330,7 @@ local queueSizePanel(matcher) = {
     prometheus.target(
       'sum by(instance, activemq_cluster, job) (activemq_queue_queue_size{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}} - queue',
+      legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
   ],
   type: 'timeseries',
@@ -665,7 +665,7 @@ local averageEnqueueTimePanel(matcher) = {
   ],
   type: 'timeseries',
   title: 'Average enqueue time',
-  description: 'Average time a message was held on all destinations.',
+  description: 'Average time a message was held across all destinations.',
   fieldConfig: {
     defaults: {
       color: {
@@ -832,7 +832,7 @@ local garbageCollectionDurationPanel(matcher) = {
   ],
   type: 'timeseries',
   title: 'Garbage collection duration',
-  description: 'The amount of time spent performing the most recent garbage collection.',
+  description: 'The average time spent performing recent garbage collections',
   fieldConfig: {
     defaults: {
       color: {

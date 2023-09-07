@@ -214,7 +214,7 @@ local topQueuesByEnqueueRatePanel(matcher) = {
   ],
   type: 'timeseries',
   title: 'Top queues by enqueue rate',
-  description: 'The rate messages sent to the top k queue destinations.',
+  description: 'The rate messages sent to queue destinations.',
   fieldConfig: {
     defaults: {
       color: {
@@ -291,7 +291,7 @@ local topQueuesByDequeueRatePanel(matcher) = {
   ],
   type: 'timeseries',
   title: 'Top queues by dequeue rate',
-  description: 'The rate messages have been acknowledged (and removed) from the top k queue destinations.',
+  description: 'The rate messages have been acknowledged (and removed) from queue destinations.',
   fieldConfig: {
     defaults: {
       color: {
@@ -368,7 +368,7 @@ local topQueuesByAverageEnqueueTimePanel(matcher) = {
   ],
   type: 'timeseries',
   title: 'Top queues by average enqueue time',
-  description: 'Average time a message was held on top k queue destinations.',
+  description: 'Average time a message was held on queue destinations.',
   fieldConfig: {
     defaults: {
       color: {
@@ -445,7 +445,7 @@ local topQueuesByExpiredMessageRatePanel(matcher) = {
   ],
   type: 'timeseries',
   title: 'Top queues by expired message rate',
-  description: 'The rate messages have expired on the top k queue destinations.',
+  description: 'The rate messages have expired on queue destinations.',
   fieldConfig: {
     defaults: {
       color: {
@@ -832,7 +832,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             'k_selector',
             promDatasource,
             '2,4,6,8,10',
-            label='Top k count',
+            label='Top queue count',
             refresh=0,
             includeAll=false,
             multi=false,
