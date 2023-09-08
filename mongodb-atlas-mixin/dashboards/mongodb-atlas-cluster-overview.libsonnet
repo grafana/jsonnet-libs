@@ -965,7 +965,7 @@ local hardwareCPUInterruptServiceTimePanel = {
   },
 };
 
-local memoryPanel = {
+local memoryUsedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -982,7 +982,7 @@ local memoryPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Memory',
+  title: 'Memory used',
   description: 'The amount of RAM and virtual memory being used.',
   fieldConfig: {
     defaults: {
@@ -2140,7 +2140,7 @@ local databaseWaitsAcquiringLockPanel = {
           hardwareIOPanel { gridPos: { h: 6, w: 6, x: 0, y: 22 } },
           hardwareIOWaitTimePanel { gridPos: { h: 6, w: 6, x: 6, y: 22 } },
           hardwareCPUInterruptServiceTimePanel { gridPos: { h: 6, w: 6, x: 12, y: 22 } },
-          memoryPanel { gridPos: { h: 6, w: 6, x: 18, y: 22 } },
+          memoryUsedPanel { gridPos: { h: 6, w: 6, x: 18, y: 22 } },
           diskSpaceUsagePanel { gridPos: { h: 6, w: 6, x: 0, y: 28 } },
           networkRequestsPanel { gridPos: { h: 6, w: 6, x: 6, y: 28 } },
           networkThroughputPanel { gridPos: { h: 6, w: 6, x: 12, y: 28 } },
