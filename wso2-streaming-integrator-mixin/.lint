@@ -11,11 +11,7 @@ exclusions:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   template-on-time-change-reload-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-instance-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-job-rule:
     reason: "there are many platforms that generate \"up\" metrics, so for this panel this query has to be especific for the wso2 job"
     entries:
       - panel: Servers Up/Down
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"

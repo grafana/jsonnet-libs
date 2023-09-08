@@ -1,6 +1,4 @@
 exclusions:
-  panel-title-description-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
@@ -18,9 +16,3 @@ exclusions:
       - dashboard: "Redis Enterprise overview"
       - dashboard: "Redis Enterprise node overview"
       - dashbaord: "Redis Enterprise database overview"
-  target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  panel-datasource-rule:
-    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"

@@ -9,11 +9,7 @@ exclusions:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   template-job-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  template-on-time-change-reload-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"

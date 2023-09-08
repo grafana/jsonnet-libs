@@ -1,6 +1,4 @@
 exclusions:
-  panel-title-description-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
@@ -31,9 +29,3 @@ exclusions:
     reason: "The dashboard is a 'cluster' dashboard where the instance refers to nodes, this dashboard focuses only on the cluster view."
     entries:
       - dashboard: "Apache Cassandra overview"
-  target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  panel-datasource-rule:
-    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"

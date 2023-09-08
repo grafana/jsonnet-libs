@@ -1,6 +1,4 @@
 exclusions:
-  panel-title-description-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
@@ -32,9 +30,3 @@ exclusions:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
     reason: "The dashboards use a mix of 'cluster', 'queue manager', and 'queue' labels as selectors, rather than 'instance'"
-  target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  panel-datasource-rule:
-    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"

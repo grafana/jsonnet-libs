@@ -1,6 +1,4 @@
 exclusions:
-  panel-title-description-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   panel-units-rule:
     reason: "Units not applicable on this panel"
     entries:
@@ -14,11 +12,3 @@ exclusions:
     reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
   template-on-time-change-reload-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-instance-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  panel-datasource-rule:
-    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"

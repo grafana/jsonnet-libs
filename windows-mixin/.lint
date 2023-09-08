@@ -1,14 +1,10 @@
 exclusions:
-  panel-title-description-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   panel-units-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   template-datasource-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-instance-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  template-job-rule:
-    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
   template-on-time-change-reload-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
@@ -19,13 +15,3 @@ exclusions:
     reason: "Linter does not support all LogQL queries and gives ivalid PromQL query error"
     entries:
       - dashboard: "Windows logs"
-  alert-name-camelcase:
-    reason: CPU can be kept as CPU.
-    entries:
-      - alert: WindowsCPUHigh
-  panel-datasource-rule:
-    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
-  panel-job-instance-rule:
-    reason: "No instance label in windows exporter metrics"
-  panel-rate-interval-rule:
-    reason: "Cannot use $__rate_interval in LogQL"

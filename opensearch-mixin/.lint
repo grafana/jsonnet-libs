@@ -1,6 +1,4 @@
 exclusions:
-  panel-title-description-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
@@ -29,23 +27,11 @@ exclusions:
       - panel: "Merge count"
       - panel: "Shard count"
       - panel: "Node open connections"
-  template-datasource-rule:
-    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-instance-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
-  template-job-rule:
-    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
-  template-on-time-change-reload-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
     reason: "The dashboard monitors on a cluster, node or index level, not an instance level."
     entries:
       - dashboard: "OpenSearch cluster overview"
       - dashboard: "OpenSearch node overview"
       - dashboard: "OpenSearch search and index overview"
-  target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  panel-datasource-rule:
-    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"

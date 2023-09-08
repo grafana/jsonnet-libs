@@ -20,7 +20,3 @@ exclusions:
       - dashboard: Consul Overview
         panel: Latency
         reason: Query is aggregated on instance
-  target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script merges the content of .lint.base.yaml file into all mixin dirs (as a .lint) file.
+
 # Search for directories containing mixin.libsonnet files
 directories=$(find . -type f -name 'mixin.libsonnet' -exec dirname {} \;)
 

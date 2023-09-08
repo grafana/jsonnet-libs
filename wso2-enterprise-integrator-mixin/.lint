@@ -21,7 +21,3 @@ exclusions:
     reason: "This dashboard is supposed to work only with the cluster label."
     entries:
       - dashboard: "WSO2 Integration Cluster Metrics"
-  target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"

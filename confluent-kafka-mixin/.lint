@@ -16,8 +16,3 @@ exclusions:
   # Newer version of dashboard-linter  
   target-job-rule:
     reason: "Job label is named scrape_job and is being used."
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  # Previous version of dashboard-linter
-  panel-job-instance-rule:
-    reason: "Job label is named scrape_job and is being used."

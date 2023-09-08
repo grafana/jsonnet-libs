@@ -1,21 +1,13 @@
 exclusions:
-  panel-title-description-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  panel-units-rule:
-    reason: "Panel units are self descriptive"
   template-datasource-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   template-instance-rule:
     reason: "ArgoCD instance filtering is accomplished by the namespace and grouping template variables"
   template-job-rule:
     reason: "ArgoCD instance filtering is accomplished by the namespace and grouping template variables"
-  template-on-time-change-reload-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
     reason: "ArgoCD instance filtering is accomplished by the namespace and grouping template variables"
   target-job-rule:
     reason: "ArgoCD instance filtering is accomplished by the namespace and grouping template variables"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   alert-description-templating:
     reason: ArgoAppMissing will not have any labels to template into the description, as it is checking for the absense of data

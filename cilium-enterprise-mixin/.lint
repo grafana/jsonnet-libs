@@ -15,7 +15,3 @@ exclusions:
     reason: "The dashboards use a mix of 'cluster', 'namespace', and 'pod' labels as selectors, rather than 'instance'"
   target-job-rule:
     reason: "The dashboards use a mix of 'cluster', 'namespace', and 'pod' labels as selectors, rather than 'job'"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  panel-datasource-rule:
-    reason: "Prometheus datasource variable is being named as 'prometheus_datasource' now while linter expects 'datasource'"

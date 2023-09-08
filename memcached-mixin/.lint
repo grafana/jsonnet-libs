@@ -15,7 +15,3 @@ exclusions:
     reason: "Instance selector not required in denominator"
     entries:
       - panel: "Hit Rate"
-  target-job-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  target-promql-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
