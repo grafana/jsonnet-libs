@@ -9,7 +9,7 @@ local commonlib = import 'common/main.libsonnet';
         local fieldOverride = g.panel.table.fieldOverride,
         local instanceLabel = 'instance',
         fleetOverviewTable: g.panel.table.new("Fleet overview")
-            + table.withTargets([
+            + table.queryOptions.withTargets([
                 t.osInfo
                 + g.query.prometheus.withFormat('table')
                 + g.query.prometheus.withInstant(true)
@@ -77,7 +77,7 @@ local commonlib = import 'common/main.libsonnet';
                 table.standardOptions.withUnit('percent')
             ),
             ])
-            + table.withTransformationsMixin(
+            + table.queryOptions.withTransformationsMixin(
                         [
                             {
                                 "id": "joinByField",
