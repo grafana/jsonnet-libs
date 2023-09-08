@@ -1,8 +1,8 @@
 local dashboards = import './dashboards.libsonnet';
+local g = import './g.libsonnet';
 local panels = import './panels.libsonnet';
 local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
-local g = import './g.libsonnet';
 
 {
   new(

@@ -1,5 +1,5 @@
-local utils = import '../utils.libsonnet';
 local g = import './g.libsonnet';
+local utils = import '../utils.libsonnet';
 local lokiQuery = g.query.loki;
 function(
   variables,
