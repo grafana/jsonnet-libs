@@ -751,7 +751,7 @@ local cacheOperationsBlockedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_shardingStatistics_catalogCache_operationsBlockedByRefresh_countAllOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_catalogCache_operationsBlockedByRefresh_countAllOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -841,31 +841,31 @@ local allShardsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_find_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_find_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_insert_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_insert_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_update_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_update_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_delete_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_delete_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_allShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
       format='time_series',
@@ -941,31 +941,31 @@ local manyShardsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_find_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_find_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_insert_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_insert_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_update_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_update_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_delete_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_delete_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_manyShards{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
       format='time_series',
@@ -1041,31 +1041,31 @@ local oneShardPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_find_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_find_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_insert_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_insert_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_update_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_update_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_delete_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_delete_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_oneShard{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
       format='time_series',
@@ -1141,31 +1141,31 @@ local unshardedPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_find_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_find_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - find',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_insert_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_insert_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - insert',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_update_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_update_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - update',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_delete_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_delete_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_shardingStatistics_numHostsTargeted_aggregate_unsharded{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - aggregate',
       format='time_series',

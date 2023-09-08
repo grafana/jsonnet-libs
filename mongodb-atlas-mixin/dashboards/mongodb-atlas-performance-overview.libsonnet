@@ -339,7 +339,7 @@ local networkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -416,13 +416,13 @@ local slowNetworkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - DNS',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - SSL',
       format='time_series',
@@ -581,13 +581,13 @@ local hardwareIOPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__rate_interval:])',
+      'rate(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
       format='time_series',
     ),
     prometheus.target(
-      'rate(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__rate_interval:])',
+      'rate(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
       format='time_series',

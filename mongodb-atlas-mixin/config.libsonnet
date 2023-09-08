@@ -14,7 +14,5 @@
     alertsHighDiskUsage: 90,  // percentage: 0-100
     alertsSlowHardwareIO: 3,  // seconds
     alertsHighTimeoutElections: 10,  // count
-
-    enableLokiLogs: false,
   },
 }

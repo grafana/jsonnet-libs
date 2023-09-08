@@ -91,7 +91,27 @@ This mixin includes the MongoDB Atlas sharding overview dashboard, however the m
 - MongoDBAtlasHighNumberOfDatabaseSharedDeadlocks: There is a high number of database shared-lock deadlocks.
 - MongoDBAtlasHighNumberOfDatabaseIntentSharedDeadlocks: There is a high number of database intent-shared-lock deadlocks.
 
+Default thresholds can be configured in `config.libsonnet`.
+```js
+{
+  _config+:: {
+    // sharding dashboard flag
+    enableShardingOverview: false,
 
+    dashboardTags: ['mongodb-atlas-mixin'],
+    dashboardPeriod: 'now-1h',
+    dashboardTimezone: 'default',
+    dashboardRefresh: '1m',
+
+    // alerts thresholds
+    alertsDeadlocks: 10,  // count
+    alertsSlowNetworkRequests: 10,  // count
+    alertsHighDiskUsage: 90,  // percentage: 0-100
+    alertsSlowHardwareIO: 3,  // seconds
+    alertsHighTimeoutElections: 10,  // count
+  },
+}
+```
 
 ## Install tools
 

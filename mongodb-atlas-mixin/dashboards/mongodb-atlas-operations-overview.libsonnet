@@ -16,7 +16,7 @@ local queryOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_opcounters_query{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_opcounters_query{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -93,7 +93,7 @@ local insertOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_opcounters_insert{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -170,7 +170,7 @@ local updateOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_opcounters_update{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_opcounters_update{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -247,7 +247,7 @@ local deleteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_opcounters_delete{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -478,13 +478,13 @@ local readAndWriteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - reads',
       format='time_series',
     ),
     prometheus.target(
-      'rate(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval:])',
+      'rate(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name",rs_nm=~"$rs",instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - writes',
       format='time_series',

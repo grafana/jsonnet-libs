@@ -726,13 +726,13 @@ local hardwareIOPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (rate(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(hardware_disk_metrics_read_count{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
       format='time_series',
     ),
     prometheus.target(
-      'sum (rate(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(hardware_disk_metrics_write_count{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
       format='time_series',
@@ -1129,7 +1129,7 @@ local networkRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (rate(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(mongodb_network_numRequests{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}}',
       format='time_series',
@@ -1205,13 +1205,13 @@ local networkBytesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (rate(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(mongodb_network_bytesIn{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - received',
       format='time_series',
     ),
     prometheus.target(
-      'sum (rate(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(mongodb_network_bytesOut{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - sent',
       format='time_series',
@@ -1288,13 +1288,13 @@ local slowRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (rate(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(mongodb_network_numSlowDNSOperations{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - DNS',
       format='time_series',
     ),
     prometheus.target(
-      'sum (rate(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(mongodb_network_numSlowSSLOperations{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - SSL',
       format='time_series',
@@ -1461,13 +1461,13 @@ local readwriteOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum (rate(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(mongodb_opLatencies_reads_ops{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - reads',
       format='time_series',
     ),
     prometheus.target(
-      'sum (rate(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval:])) by (cl_name)',
+      'sum (rate(mongodb_opLatencies_writes_ops{job=~"$job",cl_name=~"$cl_name"}[$__rate_interval])) by (cl_name)',
       datasource=promDatasource,
       legendFormat='{{cl_name}} - writes',
       format='time_series',
