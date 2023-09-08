@@ -121,7 +121,7 @@ local commonlib = import 'common/main.libsonnet';
             title="CPU usage",
             target=t.cpuUsage,
             topk=25,
-            legendLabels=this.instanceLabels,
+            legendLabels=this.config.instanceLabels,
         ),
         cpuUsageStat: commonlib.panels.cpu.stat.usage.new(targets=[t.cpuUsage]),
         memoryTotalBytes: commonlib.panels.memory.stat.total.new(targets=[t.memoryTotalBytes]),
@@ -131,7 +131,7 @@ local commonlib = import 'common/main.libsonnet';
             title="Memory usage",
             target=t.memoryUsagePercent,
             topk=25,
-            legendLabels=this.instanceLabels,
+            legendLabels=this.config.instanceLabels,
         ),
         memoryUsageTsBytes: commonlib.panels.memory.timeSeries.usageBytes.new(targets=[t.memoryUsedBytes, t.memoryTotalBytes]),
         diskTotalC: commonlib.panels.filesystem.stat.total.new("Disk C: size", targets=[t.diskTotalC]),
@@ -148,7 +148,7 @@ local commonlib = import 'common/main.libsonnet';
             title="Disk space usage",
             target=t.diskUsagePercent,
             topk=25,
-            legendLabels=this.instanceLabels + ['volume'],
+            legendLabels=this.config.instanceLabels + ['volume'],
         ),
         diskIOBytesPerSec: commonlib.panels.disk.timeSeries.ioBytesPerSec.new(targets=[t.diskIOreadBytesPerSec,t.diskIOwriteBytesPerSec]),
         diskIOutilPercentTopK: 
@@ -156,7 +156,7 @@ local commonlib = import 'common/main.libsonnet';
             title="Disk IO",
             target=t.diskIOutilization,
             topk=25,
-            legendLabels=this.instanceLabels + ['volume'],
+            legendLabels=this.config.instanceLabels + ['volume'],
         ),
         osInfo: commonlib.panels.all.stat.info.new("OS family", targets=[t.osInfo])
             { options+: { reduceOptions+: { fields: '/^product$/' } } },
@@ -173,7 +173,7 @@ local commonlib = import 'common/main.libsonnet';
                 function(t) t + 
                 {
                     expr: '('+t.expr+')>0.5',
-                    legendFormat: "{{" + this.instanceLabels[0]+"}}: "+std.get(t,'legendFormat',"{{ nic }}")
+                    legendFormat: "{{" + this.config.instanceLabels[0]+"}}: "+std.get(t,'legendFormat',"{{ nic }}")
                 },
                     [
                         t.networkOutErrorsPerSec,

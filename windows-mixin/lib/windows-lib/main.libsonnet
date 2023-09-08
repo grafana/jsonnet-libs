@@ -23,10 +23,14 @@ local commonlib = import 'common/main.libsonnet';
   ): {
 
     local this = self,
-    groupLabels:: groupLabels,
-    instanceLabels:: instanceLabels,
     config: {
-      ignoreVolumes: 'HarddiskVolume.*'
+      ignoreVolumes: 'HarddiskVolume.*',
+      groupLabels: groupLabels,
+      instanceLabels: instanceLabels,
+      filterSelector: filterSelector,
+      tags: tags,
+      uid: uid,
+      prefix: prefix,
     },
 
     variables: variables.new(
@@ -70,13 +74,7 @@ local commonlib = import 'common/main.libsonnet';
     ),
 
     dashboards: dashboards.new(
-      prefix,
-      this.links,
-      tags,
-      uid,
-      this.variables,
-      this.annotations,
-      this.panels,
+      this
     ),
 
     alerts: {},
