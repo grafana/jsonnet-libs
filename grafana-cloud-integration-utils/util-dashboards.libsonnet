@@ -156,7 +156,7 @@
             },
             hide: 0,
             includeAll: false,
-            label: 'Data Source',
+            label: 'Data source',
             multi: false,
             name: 'datasource',
             options: [],
