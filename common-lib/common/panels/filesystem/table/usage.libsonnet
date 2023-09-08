@@ -63,7 +63,7 @@ fieldOverride.byName.new('Used, %')
 )
 ])
 + table.standardOptions.withUnit('bytes')
-+ table.withTransformationsMixin(
++ table.queryOptions.withTransformationsMixin(
           [
             {
               id: 'groupBy',
