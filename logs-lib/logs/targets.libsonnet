@@ -1,5 +1,5 @@
 local utils = import '../utils.libsonnet';
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local g = import './g.libsonnet';
 local lokiQuery = g.query.loki;
 function(
   variables,
@@ -27,7 +27,7 @@ function(
     lokiQuery.new(
       datasource='$' + variables.datasource.name,
       expr=|||
-        sum by (%s) (count_over_time({%s} 
+        sum by (%s) (count_over_time({%s}
         |~ "$regex_search"
         %s
         [$__interval]))

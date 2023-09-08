@@ -1,4 +1,4 @@
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
+local g = import './g.libsonnet';
 
 local timeSeries = g.panel.timeSeries;
 local logsPanel = g.panel.logs;
