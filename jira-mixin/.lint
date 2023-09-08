@@ -1,0 +1,3 @@
+exclusions:
+  alert-description-templating:
+    reason: "Allow untemplated descriptions for now. TODO: Improve descriptions"
