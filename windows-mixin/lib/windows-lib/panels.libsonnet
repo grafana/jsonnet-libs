@@ -44,7 +44,7 @@ local commonlib = import 'common/main.libsonnet';
                 + g.query.prometheus.withRefId("Disk C: used"),
             ])
             + commonlib.panels.system.table.uptime.stylizeByName('Uptime')
-            + table.standardOptions.withOverrides([
+            + table.standardOptions.withOverridesMixin([
             fieldOverride.byName.new('CPU count')
             + fieldOverride.byName.withProperty('custom.width','120'),
             fieldOverride.byName.new('CPU usage')
