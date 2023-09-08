@@ -1029,7 +1029,7 @@ local memoryPanel = {
           },
         ],
       },
-      unit: 'decbytes',
+      unit: 'mbytes',
     },
     overrides: [],
   },
@@ -1439,7 +1439,7 @@ local connectionsPanel = {
           },
         ],
       },
-      unit: 'conns/sec',
+      unit: 'conns/s',
     },
     overrides: [],
   },
@@ -1596,7 +1596,7 @@ local operationsPanel = {
     legend: {
       displayMode: 'table',
       placement: 'bottom',
-      showLegend: false,
+      showLegend: true,
       values: [
         'value',
       ],

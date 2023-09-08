@@ -77,7 +77,7 @@ local memoryPanel = {
           },
         ],
       },
-      unit: 'decbytes',
+      unit: 'mbytes',
     },
     overrides: [],
   },
