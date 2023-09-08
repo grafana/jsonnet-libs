@@ -11,5 +11,6 @@ base {
     targets,
     description='',
   ):
-    super.new(title, targets, description),
+    super.new(title, targets, description)
+    + timeSeries.standardOptions.withNoValue("No errors"),
 }

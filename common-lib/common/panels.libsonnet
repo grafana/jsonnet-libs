@@ -11,6 +11,7 @@ local g = import './g.libsonnet';
   },
   system: {
     stat: import './panels/system/stat/main.libsonnet',
+    table: import './panels/system/table/main.libsonnet',
   },
   cpu: {
     stat: import './panels/cpu/stat/main.libsonnet',

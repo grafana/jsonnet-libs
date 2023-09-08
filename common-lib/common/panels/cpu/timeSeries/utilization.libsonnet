@@ -12,5 +12,8 @@ base {
     description=''
   ):
     super.new(title, targets, description)
-    + base.percentage.stylize()
+    + self.stylize(),
+
+  stylize():
+    base.percentage.stylize()
 }
