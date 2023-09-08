@@ -810,14 +810,14 @@ local hardwareIOWaitTimePanel = {
     prometheus.target(
       'sum (increase(hardware_disk_metrics_read_time_milliseconds{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
-      legendFormat='{{cl_name}} - read',
+      legendFormat='{{cl_name}} - reads',
       format='time_series',
       interval='1m',
     ),
     prometheus.target(
       'sum (increase(hardware_disk_metrics_write_time_milliseconds{job=~"$job",cl_name=~"$cl_name"}[$__interval:])) by (cl_name)',
       datasource=promDatasource,
-      legendFormat='{{cl_name}} - write',
+      legendFormat='{{cl_name}} - writes',
       format='time_series',
       interval='1m',
     ),
@@ -1201,7 +1201,7 @@ local networkRequestsPanel = {
   },
 };
 
-local networkBytesPanel = {
+local networkThroughputPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -1218,7 +1218,7 @@ local networkBytesPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Network bytes',
+  title: 'Network throughput',
   description: 'The number of bytes sent and received over network connections.',
   fieldConfig: {
     defaults: {
@@ -2143,7 +2143,7 @@ local databaseWaitsAcquiringLockPanel = {
           memoryPanel { gridPos: { h: 6, w: 6, x: 18, y: 22 } },
           diskSpaceUsagePanel { gridPos: { h: 6, w: 6, x: 0, y: 28 } },
           networkRequestsPanel { gridPos: { h: 6, w: 6, x: 6, y: 28 } },
-          networkBytesPanel { gridPos: { h: 6, w: 6, x: 12, y: 28 } },
+          networkThroughputPanel { gridPos: { h: 6, w: 6, x: 12, y: 28 } },
           slowRequestsPanel { gridPos: { h: 6, w: 6, x: 18, y: 28 } },
           operationsRow { gridPos: { h: 1, w: 24, x: 0, y: 34 } },
           connectionsPanel { gridPos: { h: 6, w: 12, x: 0, y: 35 } },
