@@ -14,7 +14,7 @@ jb install https://github.com/grafana/jsonnet-libs/logs-lib
 ### Generate kubernetes logs dashboard
 
 ```jsonnet
-local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
+local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 
 //Additional selector to add to all variable queries and alerts(if any)
 local kubeFilterSelector = 'namespace!=""';
@@ -59,7 +59,7 @@ Again, use [Grafonnet](https://grafana.github.io/grafonnet/API/panel/index.html)
 
 ```jsonnet
 local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
-local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
+local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 
 
 local linuxFilterSelector = 'unit!=""';
@@ -73,7 +73,7 @@ local formatParser = 'unpack';
 
 // 2. create and export systemd logs dashboard
 local systemdLogs =
-  logsDashboard.new('Linux systemd logs',
+  logslib.new('Linux systemd logs',
                     datasourceRegex='',
                     filterSelector=linuxFilterSelector,
                     labels=linuxLabels,
@@ -103,7 +103,7 @@ systemdLogs.dashboards.logs
 
 ```jsonnet
 
-local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
+local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 
 // Array of labels to compose chained grafana variables
 local dockerFilterSelector = 'container_name!=""';
@@ -116,7 +116,7 @@ local dockerLabels = ['job', 'instance', 'container_name'];
 local formatParser = 'logfmt';
 
 (
-  logsDashboard.new('Docker logs',
+  logslib.new('Docker logs',
                     datasourceRegex='',
                     filterSelector=dockerFilterSelector,
                     labels=dockerLabels,
