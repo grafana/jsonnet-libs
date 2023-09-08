@@ -276,18 +276,18 @@ local consumerCountPanel(matcher) = {
   pluginVersion: '10.2.0-60139',
 };
 
-local averageUnacknowledgedMessagesPanel(matcher) = {
+local unacknowledgedMessagesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, activemq_cluster, job) (activemq_message_total{' + matcher + ', instance=~"$instance"})',
+      'sum by (instance, activemq_cluster, job) (increase(activemq_message_total{' + matcher + ', instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
   ],
   type: 'stat',
-  title: 'Average unacknowledged messages',
-  description: 'Average number of unacknowledged messages on the broker.',
+  title: 'Unacknowledged messages / $__interval',
+  description: 'Recent number of unacknowledged messages on the broker.',
   fieldConfig: {
     defaults: {
       color: {
@@ -500,7 +500,7 @@ local enqueueCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Enqueue count',
+  title: 'Enqueue count / $__interval',
   description: 'Number of messages that have been sent to the destination.',
   fieldConfig: {
     defaults: {
@@ -571,12 +571,12 @@ local dequeueCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster) (activemq_queue_dequeue_count{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster) (increase(activemq_queue_dequeue_count{' + matcher + ', instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - queue',
     ),
     prometheus.target(
-      'sum by(instance, activemq_cluster) (activemq_topic_dequeue_count{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster) (increase(activemq_topic_dequeue_count{' + matcher + ', instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - topic',
     ),
@@ -735,18 +735,18 @@ local expiredMessagesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_queue_expired_count{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (increase(activemq_queue_expired_count{' + matcher + ', instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - queue',
     ),
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_topic_expired_count{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (increase(activemq_topic_expired_count{' + matcher + ', instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - topic',
     ),
   ],
   type: 'timeseries',
-  title: 'Expired messages',
+  title: 'Expired messages / $__interval',
   description: 'Number of messages across destinations that are expired.',
   fieldConfig: {
     defaults: {
@@ -831,7 +831,7 @@ local garbageCollectionDurationPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Garbage collection duration',
+  title: 'Garbage collection duration / $__interval',
   description: 'The average time spent performing recent garbage collections',
   fieldConfig: {
     defaults: {
@@ -907,7 +907,7 @@ local garbageCollectionCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Garbage collection count',
+  title: 'Garbage collection count / $__interval',
   description: 'The recent increase in the number of garbage collection events for the JVM.',
   fieldConfig: {
     defaults: {
@@ -1060,7 +1060,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
           template.new(
             'activemq_cluster',
             promDatasource,
-            'label_values(activemq_memory_usage_ratio{%(activemqSelector)s},activemq_cluster)',
+            'label_values(activemq_memory_usage_ratio{%(activemqSelector)s},activemq_cluster)' % $._config,
             label='ActiveMQ cluster',
             refresh=2,
             includeAll=true,
@@ -1071,7 +1071,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
           template.new(
             'instance',
             promDatasource,
-            'label_values(activemq_topic_producer_count{%(activemqSelector)s, activemq_cluster=~"$activemq_cluster"},instance)',
+            'label_values(activemq_topic_producer_count{%(activemqSelector)s, activemq_cluster=~"$activemq_cluster"},instance)' % $._config,
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -1095,7 +1095,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
           averageTemporaryMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 8, y: 0 } },
           producerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 12, y: 0 } },
           consumerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 16, y: 0 } },
-          averageUnacknowledgedMessagesPanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 20, y: 0 } },
+          unacknowledgedMessagesPanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 20, y: 0 } },
           queueSizePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
           destinationMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
           enqueueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 12 } },

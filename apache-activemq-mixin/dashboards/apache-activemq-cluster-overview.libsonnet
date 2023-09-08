@@ -581,7 +581,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
           template.new(
             'activemq_cluster',
             promDatasource,
-            'label_values(activemq_memory_usage_ratio{%(activemqSelector)s},activemq_cluster)',
+            'label_values(activemq_memory_usage_ratio{%(activemqSelector)s},activemq_cluster)' % $._config,
             label='ActiveMQ cluster',
             refresh=2,
             includeAll=true,
