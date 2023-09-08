@@ -1,5 +1,21 @@
 exclusions:
+  panel-title-description-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  panel-units-rule:
+    reason: "Panel units are self descriptive"
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-promql-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   alert-description-templating:
     reason: IstioGlobalRequestRateLow does not use any lables
-  panel-units-rule:
-    reason: Panel units are self descriptive

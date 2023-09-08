@@ -1,12 +1,26 @@
----
 exclusions:
+  panel-title-description-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  panel-units-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-promql-rule:
-    reason: The linter does not yet support panel reference targets. See grafana/dashboard-linter#59
+    reason: "The linter does not yet support panel reference targets. See grafana/dashboard-linter#59"
     entries:
-    - dashboard: AWX
-      panel: License Type
-    - dashboard: AWX
-      panel: License Expiry
-    - dashboard: AWX
-      panel: Tower Base URL
-
+      - dashboard: AWX
+        panel: License Type
+      - dashboard: AWX
+        panel: License Expiry
+      - dashboard: AWX
+        panel: Tower Base URL

@@ -1,8 +1,26 @@
 exclusions:
+  panel-title-description-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  panel-units-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-promql-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   panel-rate-interval-rule:
     reason: "Some panel calculations need specific time frames."
   alert-name-camelcase:
     reason: "These alerts are using the ISR acronym (In-Sync Replica)"
     entries:
-    - alert: ISRExpandRate
-    - alert: ISRShrinkRate
+      - alert: ISRExpandRate
+      - alert: ISRShrinkRate

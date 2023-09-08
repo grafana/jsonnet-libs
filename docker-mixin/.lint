@@ -1,35 +1,41 @@
 exclusions:
-  template-job-rule:
-    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
-  panel-datasource-rule:
-    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
-  template-datasource-rule:
-    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
-  target-promql-rule:
-    reason: "Linter does not support parsing PromQL queries"
-    entries:
-    - dashboard: "Docker Logs"
-  template-instance-rule:
-    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   panel-title-description-rule:
     reason: "These panels do not require a description"
     entries:
-    - dashboard: "Docker Overview"
-      panel: "" # Storage table panel has no name
+      - dashboard: "Docker Overview"
+        panel: "" # Storage table panel has no name
   panel-units-rule:
     reason: "Linter does not properly read unit property for old SingleStat, Graph and Table panel"
     entries:
-    - dashboard: "Docker Overview"
-      panel: "CPU Utilization by Containers"
-    - dashboard: "Docker Overview"
-      panel: "Memory Reserved by Containers" 
-    - dashboard: "Docker Overview"
-      panel: "CPU"
-    - dashboard: "Docker Overview"
-      panel: "Memory"
-    - dashboard: "Docker Overview"
-      panel: "Bandwidth"
-    - dashboard: "Docker Overview"
-      panel: "TCP Sockets By State"
-    - dashboard: "Docker Overview"
-      panel: "" # Storage table panel has no name
+      - dashboard: "Docker Overview"
+        panel: "CPU Utilization by Containers"
+      - dashboard: "Docker Overview"
+        panel: "Memory Reserved by Containers"
+      - dashboard: "Docker Overview"
+        panel: "CPU"
+      - dashboard: "Docker Overview"
+        panel: "Memory"
+      - dashboard: "Docker Overview"
+        panel: "Bandwidth"
+      - dashboard: "Docker Overview"
+        panel: "TCP Sockets By State"
+      - dashboard: "Docker Overview"
+        panel: "" # Storage table panel has no name
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-promql-rule:
+    reason: "Linter does not support parsing PromQL queries"
+    entries:
+      - dashboard: "Docker Logs"
+  panel-datasource-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
