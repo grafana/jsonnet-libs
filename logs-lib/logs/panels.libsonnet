@@ -16,14 +16,14 @@ function(
 
     logsVolumeInit(targets, title='Logs volume')::
       timeSeries.new(title)
-      + timeSeries.withTargets(targets)
+      + timeSeries.queryOptions.withTargets(targets)
       + custom.withDrawStyle('bars')
       + custom.stacking.withMode('normal')
       + custom.withFillOpacity(50)
-      + timeSeries.withInterval('30s')  // must be set , otherwise interval is around 1ms
+      + timeSeries.queryOptions.withInterval('30s')  // must be set , otherwise interval is around 1ms
       + options.tooltip.withMode('multi')
       + options.tooltip.withSort('desc')
-      + timeSeries.withTransformationsMixin(
+      + timeSeries.queryOptions.withTransformationsMixin(
         {
           id: 'renameByRegex',
           options: {
@@ -32,7 +32,7 @@ function(
           },
         }
       )
-      + fieldConfig.withOverridesMixin(
+      + timeSeries.standardOptions.withOverridesMixin(
         [
           {
             matcher: {
@@ -65,7 +65,7 @@ function(
 
     logsInit(targets, title='Logs')::
       logsPanel.new(title)
-      + logsPanel.withTargets(targets)
+      + logsPanel.queryOptions.withTargets(targets)
       + logsPanel.options.withDedupStrategy('exact')  //"none", "exact", "numbers", "signature"
       + logsPanel.options.withEnableLogDetails(true)
       + logsPanel.options.withShowTime(true)
