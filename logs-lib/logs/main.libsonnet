@@ -10,7 +10,7 @@ local g = import './g.libsonnet';
     filterSelector,
     labels,
     datasourceRegex,
-    datasourceName='datasource',
+    datasourceName='loki_datasource',
     formatParser=null,
     showLogsVolume=true,
     logsVolumeGroupBy='level',
