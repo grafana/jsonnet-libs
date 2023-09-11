@@ -12,7 +12,7 @@
           },
           annotations: {
             description: 'HAProxy {{$labels.job}} on {{$labels.instance}} is dropping logs.',
-            summary: 'HAProxy is dropping logs',
+            summary: 'HAProxy is dropping logs.',
           },
         },
         {
@@ -24,7 +24,7 @@
           },
           annotations: {
             description: 'HAProxy {{$labels.job}} backend {{$labels.proxy}} on {{$labels.instance}} has flapping checks.',
-            summary: 'HAProxy backend checks are flapping',
+            summary: 'HAProxy backend checks are flapping.',
           },
         },
         {
@@ -36,7 +36,7 @@
           },
           annotations: {
             description: 'HAProxy {{$labels.job}} server {{$labels.server}} on {{$labels.instance}} has flapping checks.',
-            summary: 'HAProxy server checks are flapping',
+            summary: 'HAProxy server checks are flapping.',
           },
         },
       ],

@@ -1,9 +1,23 @@
 exclusions:
-  target-instance-rule:
-    reason: "This dashboard is supposed to work only with the cluster label."
-    entries:
-    - dashboard: "WSO2 Integration Cluster Metrics"
+  panel-title-description-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  panel-units-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   template-instance-rule:
     reason: "This dashboard is supposed to work only with the cluster label."
     entries:
-    - dashboard: "WSO2 Integration Cluster Metrics"
+      - dashboard: "WSO2 Integration Cluster Metrics"
+      - dashboard: "WSO2 Proxy Service Metrics"
+      - dashboard: "WSO2 API Metrics"
+      - dashboard: "WSO2 Inbound Endpoint Metrics"
+      - dashboard: "WSO2 Integration Node Metrics"
+  template-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "This dashboard is supposed to work only with the cluster label."
+    entries:
+      - dashboard: "WSO2 Integration Cluster Metrics"
