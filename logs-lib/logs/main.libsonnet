@@ -1,8 +1,8 @@
 local dashboards = import './dashboards.libsonnet';
+local g = import './g.libsonnet';
 local panels = import './panels.libsonnet';
 local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
-local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonnet';
 
 {
   new(
@@ -10,7 +10,7 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
     filterSelector,
     labels,
     datasourceRegex,
-    datasourceName='datasource',
+    datasourceName='loki_datasource',
     formatParser=null,
     showLogsVolume=true,
     logsVolumeGroupBy='level',
