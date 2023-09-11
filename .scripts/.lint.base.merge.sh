@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # This script merges the content of .lint.base.yaml file into all mixin dirs (as a .lint) file.
 
 # Search for directories containing mixin.libsonnet files

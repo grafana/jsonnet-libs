@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # This script iterates over all .lint files and remove all no-op exclusions (that don't affect the linting result)
 
 # Find all directories containing .lint files
