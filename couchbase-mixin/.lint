@@ -1,19 +1,17 @@
 exclusions:
-  template-job-rule:
-    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
-  panel-datasource-rule:
-    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"
-  template-datasource-rule:
-    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
-  template-instance-rule:
-    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
-  target-instance-rule:
-    reason: "The dashboard is a 'cluster' dashboard where the instance refers to nodes, this dashboard focuses only on the cluster view."
-    entries:
-      - dashboard: "Couchbase cluster overview"
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
       - panel: "XDCR docs received"
       - panel: "Current connections"
       - panel: "Top buckets by current items"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
+  target-instance-rule:
+    reason: "The dashboard is a 'cluster' dashboard where the instance refers to nodes, this dashboard focuses only on the cluster view."
+    entries:
+      - dashboard: "Couchbase cluster overview"

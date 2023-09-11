@@ -1,29 +1,29 @@
 exclusions:
-  template-job-rule:
-    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
-  panel-datasource-rule:
-    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "Number of clusters"
+      - panel: "Number of nodes"
+      - panel: "Cluster health"
+      - panel: "Open OS files"
+      - panel: "Open databases"
+      - panel: "Replicator changes manager deaths"
+      - panel: "Replicator changes queue deaths"
+      - panel: "Replicator changes reader deaths"
+      - panel: "Replicator connection owner crashes"
+      - panel: "Replicator connection worker crashes"
+      - panel: "Replicator job crashes"
+      - panel: "Replicator jobs pending"
+      - panel: "Log types"
   template-datasource-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-instance-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
     reason: "The dashboard is a 'cluster' dashboard where the instance refers to nodes, this dashboard focuses only on the cluster view."
     entries:
-    - dashboard: "Apache CouchDB overview"
-  panel-units-rule:
-    reason: "Custom units are used for better user experience in these panels"
-    entries:
-    - panel: "Number of clusters"
-    - panel: "Number of nodes"
-    - panel: "Cluster health"
-    - panel: "Open OS files"
-    - panel: "Open databases"
-    - panel: "Replicator changes manager deaths"
-    - panel: "Replicator changes queue deaths"
-    - panel: "Replicator changes reader deaths"
-    - panel: "Replicator connection owner crashes"
-    - panel: "Replicator connection worker crashes"
-    - panel: "Replicator job crashes"
-    - panel: "Replicator jobs pending"
-    - panel: "Log types"
+      - dashboard: "Apache CouchDB overview"

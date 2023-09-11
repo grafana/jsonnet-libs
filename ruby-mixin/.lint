@@ -1,8 +1,4 @@
 exclusions:
-  panel-title-description-rule:
-    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
-  panel-units-rule:
-    reason: "The dashboard already has units but it is using older panel versions for which this rule does not work correctly"
   template-datasource-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   template-instance-rule:
