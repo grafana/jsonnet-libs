@@ -195,7 +195,7 @@ local producerCountPanel(matcher) = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -213,7 +213,7 @@ local producerCountPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -243,7 +243,7 @@ local consumerCountPanel(matcher) = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -261,7 +261,7 @@ local consumerCountPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -291,7 +291,7 @@ local unacknowledgedMessagesPanel(matcher) = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -309,7 +309,7 @@ local unacknowledgedMessagesPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -421,7 +421,7 @@ local destinationMemoryUsagePanel(matcher) = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'continuous-BlYlRd',
+        mode: 'palette-classic',
       },
       custom: {
         axisCenteredZero: false,
@@ -973,28 +973,17 @@ local garbageCollectionCountPanel(matcher) = {
   },
 };
 
-local alertsRow = {
-  datasource: promDatasource,
-  targets: [],
-  type: 'row',
-  title: 'Alerts',
-  collapsed: false,
-};
-
-local activemqAlertsPanel = {
+local activemqAlertsPanel(matcher) = {
   datasource: promDatasource,
   targets: [],
   type: 'alertlist',
-  title: 'ActiveMQ Alerts',
-  description: 'Alerts for Apache ActiveMQ environment.',
+  title: 'ActiveMQ alerts',
+  description: 'Firing alerts for Apache ActiveMQ environment.',
   options: {
-    alertInstanceLabelFilter: '',
     alertName: '',
     dashboardAlerts: false,
-    folder: {
-      title: 'Integrations - ActiveMQ',
-      uid: 'ac912ae2-f603-4a05-878f-42033c5b96f3',
-    },
+    alertInstanceLabelFilter: '{' + matcher + ', instance=~"${instance:regex}"}',
+    datasource: promDatasource,
     groupBy: [],
     groupMode: 'default',
     maxItems: 5,
@@ -1090,23 +1079,22 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
       ))
       .addPanels(
         [
-          averageBrokerMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 0, y: 0 } },
-          averageStoreMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 4, y: 0 } },
-          averageTemporaryMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 8, y: 0 } },
-          producerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 12, y: 0 } },
-          consumerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 16, y: 0 } },
-          unacknowledgedMessagesPanel(getMatcher($._config)) { gridPos: { h: 4, w: 4, x: 20, y: 0 } },
-          queueSizePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
-          destinationMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
-          enqueueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
-          dequeueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
-          averageEnqueueTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 20 } },
-          expiredMessagesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
-          jvmResourcesRow { gridPos: { h: 1, w: 24, x: 0, y: 28 } },
-          garbageCollectionDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 29 } },
-          garbageCollectionCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 29 } },
-          alertsRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
-          activemqAlertsPanel { gridPos: { h: 8, w: 24, x: 0, y: 38 } },
+          averageBrokerMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 0, y: 0 } },
+          averageStoreMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
+          averageTemporaryMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
+          unacknowledgedMessagesPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
+          activemqAlertsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 4 } },
+          producerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 4 } },
+          consumerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 4 } },
+          queueSizePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 10 } },
+          destinationMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 10 } },
+          enqueueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 18 } },
+          dequeueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 18 } },
+          averageEnqueueTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 26 } },
+          expiredMessagesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 26 } },
+          jvmResourcesRow { gridPos: { h: 1, w: 24, x: 0, y: 34 } },
+          garbageCollectionDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 35 } },
+          garbageCollectionCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 35 } },
         ]
       ),
   },

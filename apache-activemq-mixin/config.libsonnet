@@ -17,7 +17,7 @@
     alertsHighStoreMemoryUsage: 70,  // %
     alertsHighTemporaryMemoryUsage: 70,  // %
 
-    enableLokiLogs: false,
+    enableLokiLogs: true,
     filterSelector: 'job=~"integrations/activemq"',
   },
 }
