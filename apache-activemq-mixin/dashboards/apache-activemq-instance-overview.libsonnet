@@ -1000,6 +1000,7 @@ local activemqAlertsPanel(matcher) = {
 };
 
 local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_cluster"' % cfg;
+local getAlertsMatcher(cfg) = '%(activemqAlertsSelector)s, activemq_cluster=~"${activemq_cluster:regex}"' % cfg;
 
 {
   grafanaDashboards+:: {
@@ -1083,7 +1084,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
           averageStoreMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
           averageTemporaryMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
           unacknowledgedMessagesPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
-          activemqAlertsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 4 } },
+          activemqAlertsPanel(getAlertsMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 4 } },
           producerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 4 } },
           consumerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 4 } },
           queueSizePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 10 } },

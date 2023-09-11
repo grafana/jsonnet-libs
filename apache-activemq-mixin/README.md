@@ -41,7 +41,7 @@ The Apache ActiveMQ topic overview provides queue level statistics showing numbe
 ## Apache ActiveMQ logs overview
 
 The Apache ActiveMQ logs overview provides logs of the ActiveMQ environment that is able to be parsed by severity.
-![Screenshot of the Apache ActiveMQ logs overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_logs_overview.png)
+#![Screenshot of the Apache ActiveMQ logs overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_logs_overview.png)
 
 ## Alerts Overview
 
@@ -71,7 +71,19 @@ Default thresholds can be configured in `config.libsonnet`.
   },
 }
 ```
+## Logs configuration
+In order to get logs parsing multiple lines and levels correctly you will need to add the following lines to your grafana-agent.yaml file in the logs section
 
+```yaml
+pipeline_stages:
+        - multiline:
+            firstline: '^[\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}'
+        - regex:
+            expression: '(?P<timestamp>[\d]{4}-[\d]{2}-[\d]{2} [\d]{2}:[\d]{2}:[\d]{2},[\d]{3}) \| (?P<level>\w+)  \| (?P<message>.*?) \| (
+  ?P<class>[\w\.]+) \| (?P<thread>\w+)'
+        - labels:
+            level:
+```
 ## Install tools
 
 ```bash
