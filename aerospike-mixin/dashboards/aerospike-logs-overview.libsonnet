@@ -27,6 +27,6 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
                      + g.dashboard.withRefresh($._config.dashboardRefresh),
             },
         },
-      'aerospike-logs.json': aerospikeLogs.dashboards.logs,
+      'aerospike-logs.json': aerospikeLogs.dashboards.logs
     },
 }

@@ -869,32 +869,6 @@ local cacheReadUtilizationPanel(matcher) = {
   },
 };
 
-local systemLogsPanel(matcher) = {
-  datasource: lokiDatasource,
-  targets: [
-    {
-      datasource: lokiDatasource,
-      editorMode: 'code',
-      expr: '{' + matcher + ', instance=~"$instance"}',
-      queryType: 'range',
-      refId: 'A',
-    },
-  ],
-  type: 'logs',
-  title: 'System logs',
-  description: 'Recent system logs from an Aerospike node.',
-  options: {
-    dedupStrategy: 'none',
-    enableLogDetails: true,
-    prettifyLogMessage: false,
-    showCommonLabels: false,
-    showLabels: false,
-    showTime: false,
-    sortOrder: 'Descending',
-    wrapLogMessage: false,
-  },
-};
-
 local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg;
 
 {
@@ -927,15 +901,6 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
               refresh='load'
             ),
           ],
-          if $._config.enableLokiLogs then [
-            template.datasource(
-              lokiDatasourceName,
-              'loki',
-              null,
-              label='Loki Datasource',
-              refresh='load',
-            ),
-          ] else [],
           [
             template.new(
               'job',
@@ -999,9 +964,6 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             clientUDFTransactionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
             cacheReadUtilizationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
           ],
-          if $._config.enableLokiLogs then [
-            systemLogsPanel(getMatcher($._config)) { gridPos: { h: 10, w: 24, x: 0, y: 40 } },
-          ] else [],
           [],
         ])
       ),
