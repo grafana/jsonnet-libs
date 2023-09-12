@@ -873,8 +873,6 @@ local cacheReadUtilizationPanel(matcher) = {
 
 local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg;
 
-local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"' % cfg;
-
 {
   grafanaDashboards+:: {
     'aerospike-instance-overview.json':
