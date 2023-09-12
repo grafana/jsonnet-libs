@@ -7,6 +7,7 @@ The Aerospike mixin contains the following dashboards:
 - Aerospike overview
 - Aerospike instance overview
 - Aerospike namespace overview
+- Aerospike logs
 
 and the following alerts:
 
@@ -64,6 +65,12 @@ The Aerospike namespace overview dashboard provides details on one or more names
 
 ![First screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_1.png)
 ![Second screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_2.png)
+
+## Aerospike Logs
+
+The Aerospike logs dashboard provides details on incoming system logs.
+
+![First screenshot of the Aerospike logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_logs_1.png)
 
 ## Alerts Overview
 
