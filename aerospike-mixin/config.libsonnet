@@ -20,6 +20,6 @@
     alertsWarningHighClientWriteErrorRate: 25,  // %
     alertsWarningHighClientUDFErrorRate: 25,  // %
 
-    enableLokiLogs: true,
+    enableLokiLogs: false,
   },
 }
