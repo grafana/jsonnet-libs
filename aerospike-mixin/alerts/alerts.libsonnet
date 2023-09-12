@@ -81,7 +81,7 @@
             expr: |||
               sum without(service) (aerospike_namespace_stop_writes + aerospike_namespace_clock_skew_stop_writes) > %(alertsCriticalSystemRejectingWrites)s
             ||| % $._config,
-            'for': '1m',
+            'for': '5m',
             labels: {
               severity: 'critical',
             },

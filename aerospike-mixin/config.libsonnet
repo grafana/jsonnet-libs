@@ -3,6 +3,7 @@
     enableMultiCluster: false,
     aerospikeSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
     multiclusterSelector: 'job=~"$job"',
+    filterSelector: 'job=~"integrations/aerospike"',
 
     dashboardTags: ['aerospike-mixin'],
     dashboardPeriod: 'now-30m',
@@ -19,6 +20,6 @@
     alertsWarningHighClientWriteErrorRate: 25,  // %
     alertsWarningHighClientUDFErrorRate: 25,  // %
 
-    enableLokiLogs: true,
+    enableLokiLogs: false,
   },
 }
