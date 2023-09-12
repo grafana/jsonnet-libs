@@ -22,6 +22,7 @@ function(
           customAllValue='.*'
         )
         + var.query.selectionOptions.withMulti()
+        + var.query.refresh.onTime()
         + var.query.withSort(
           i=1,
           type='alphabetical',
