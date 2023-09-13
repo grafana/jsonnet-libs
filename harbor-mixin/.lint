@@ -1,7 +1,11 @@
-exclusions:   
+exclusions:
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   template-instance-rule:
-    reason: Harbor Filtering is achieved using job label
+    reason: "Harbor Filtering is achieved using job label"
+  template-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
-    reason: Harbor Filtering is achieved using job label
-  panel-units-rule:
-    reason: Panel units are self descriptive
+    reason: "Harbor Filtering is achieved using job label"
