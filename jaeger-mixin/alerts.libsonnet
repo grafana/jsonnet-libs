@@ -21,7 +21,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger agent is dropping UDP packets.',
+            description: |||
               {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }} UDP packets per second.
             |||,
           },
@@ -33,7 +34,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger agent is experiencing HTTP errors.',
+            description: |||
               {{ $labels.job }} {{ $labels.instance }} is experiencing {{ printf "%.2f" $value }}% HTTP errors.
             |||,
           },
@@ -45,7 +47,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger client is dropping spans.',
+            description: |||
               service {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }}% spans.
             |||,
           },
@@ -57,7 +60,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger agent is dropping spans.',
+            description: |||
               agent {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }}% spans.
             |||,
           },
@@ -69,7 +73,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger collector is not able to drain the queue.',
+            description: |||
               collector {{ $labels.job }} {{ $labels.instance }} is not able to drain the queue.
             |||,
           },
@@ -81,7 +86,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger collector is dropping spans.',
+            description: |||
               collector {{ $labels.job }} {{ $labels.instance }} is dropping {{ printf "%.2f" $value }}% spans.
             |||,
           },
@@ -93,7 +99,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: "Jaeger's sampling update is failing.",
+            description: |||
               {{ $labels.job }} {{ $labels.instance }} is failing {{ printf "%.2f" $value }}% in updating sampling policies.
             |||,
           },
@@ -105,7 +112,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger collector is slow at persisting spans.',
+            description: |||
               {{ $labels.job }} {{ $labels.instance }} is slow at persisting spans.
             |||,
           },
@@ -117,7 +125,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: "Jaeger's throttling update is failing.",
+            description: |||
               {{ $labels.job }} {{ $labels.instance }} is failing {{ printf "%.2f" $value }}% in updating throttling policies.
             |||,
           },
@@ -129,7 +138,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger queries are failing.',
+            description: |||
               {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
             |||,
           },
@@ -141,7 +151,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger writes to Cassandra are failing.',
+            description: |||
               {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
             |||,
           },
@@ -153,7 +164,8 @@ local percentErrsWithTotal(metric_errs, metric_total) = '100 * sum(rate(%(metric
             severity: 'warning',
           },
           annotations: {
-            message: |||
+            summary: 'Jaeger reads from Cassandra are failing.',
+            description: |||
               {{ $labels.job }} {{ $labels.instance }} is seeing {{ printf "%.2f" $value }}% query errors on {{ $labels.operation }}.
             |||,
           },

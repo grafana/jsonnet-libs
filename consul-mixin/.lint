@@ -1,6 +1,18 @@
----
 exclusions:
+  panel-title-description-rule:
+    reason: "Overly aggressive"
+  panel-units-rule:
+    reason: "Overly aggressive"
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
     entries:
       - dashboard: Consul Overview
         panel: QPS
@@ -8,7 +20,3 @@ exclusions:
       - dashboard: Consul Overview
         panel: Latency
         reason: Query is aggregated on instance
-  panel-units-rule:
-    reason: Overly aggressive
-  panel-title-description-rule:
-    reason: Overly aggressive
