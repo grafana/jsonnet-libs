@@ -2,7 +2,7 @@ local g = import 'github.com/grafana/grafonnet/gen/grafonnet-latest/main.libsonn
 local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 {
   grafanaDashboards+::
-    {
+    if $._config.enableLokiLogs then {
       local aerospikeLogs =
         logsDashboard.new(
           'Aerospike logs',
@@ -27,6 +27,6 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
                      + g.dashboard.withRefresh($._config.dashboardRefresh),
             },
         },
-      'aerospike-logs.json': aerospikeLogs.dashboards.logs
-    },
+      'aerospike-logs.json': aerospikeLogs.dashboards.logs,
+    } else {},
 }

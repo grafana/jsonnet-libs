@@ -57,6 +57,13 @@ scrape_configs:
           instance: "<your-instance-name>"
           aerospike_cluster: "<your-cluster-name>"
           __path__: /var/log/aerospike/aerospike.log
+    pipeline_stages:
+        - multiline:
+            firstline: '\w{3} \d{2} \d{4}'
+        - regex:
+            expression: '\w{3} \d{2} \d{4} \d{2}:\d{2}:\d{2} \w{3}: (?P<level>\w+) (?P<context>\(\w+\)): (?P<trace>\(\S+\))\s+(?P<message>.*)'
+        - labels:
+            level:
 ```
 
 ## Aerospike Namespace Overview
