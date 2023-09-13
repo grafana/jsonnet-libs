@@ -16,7 +16,7 @@ local clusterCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by (activemq_cluster, job) (activemq_memory_usage_ratio{' + matcher + ')',
+      'count by (activemq_cluster, job) (activemq_memory_usage_ratio{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -214,7 +214,7 @@ local enqueueCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Enqueue count',
+  title: 'Enqueue count / $__interval',
   description: 'Number of messages that have been sent to destinations in a cluster',
   fieldConfig: {
     defaults: {
@@ -292,7 +292,7 @@ local dequeueCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Dequeue count',
+  title: 'Dequeue count / $__interval',
   description: 'Number of messages that have been acknowledged (and removed) from destinations in a cluster.',
   fieldConfig: {
     defaults: {

@@ -582,7 +582,7 @@ local dequeueCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Dequeue count',
+  title: 'Dequeue count / $__interval',
   description: 'Number of messages that have been acknowledged (and removed) from the destinations.',
   fieldConfig: {
     defaults: {
