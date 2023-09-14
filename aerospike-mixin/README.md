@@ -1,4 +1,4 @@
-# Aerospike Mixin
+# Aerospike mixin
 
 The Aerospike mixin is a set of configurable Grafana dashboards and alerts.
 
@@ -20,14 +20,14 @@ and the following alerts:
 - AerospikeHighClientWriteErrorRate
 - AerospikeHighClientUDFErrorRate
 
-## Aerospike Overview
+## Aerospike overview
 
 The Aerospike overview dashboard provides cluster statistics, including number of namespaces and nodes, unavailable/dead partitions, memory/disk usage, client transactions, and connections. 
 
 ![First screenshot of the Aerospike overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_overview_1.png)
 ![Second screenshot of the Aerospike overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_overview_2.png)
 
-## Aerospike Instance Overview
+## Aerospike instance overview
 
 The Aerospike instance overview dashboard provides details on one or more instances, including memory/disk usage, unavailable/dead partitions, client transactions, system resources, and system logs. By default, Aerospike logs are sent to STDERR, but the recommended configuration sends logs to `/var/log/aerospike/aerospike.log`.
 
@@ -35,14 +35,14 @@ The Aerospike instance overview dashboard provides details on one or more instan
 ![Second screenshot of the Aerospike instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_instance_overview_2.png)
 ![Third screenshot of the Aerospike instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_instance_overview_3.png)
 
-## Aerospike Namespace Overview
+## Aerospike namespace overview
 
 The Aerospike namespace overview dashboard provides details on one or more namespaces, including system resource utilization, unavailable/dead partitions, and client transactions.
 
 ![First screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_1.png)
 ![Second screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_2.png)
 
-## Aerospike Logs
+## Aerospike logs
 
 The Aerospike logs dashboard provides details on incoming system logs.
 
@@ -79,7 +79,7 @@ scrape_configs:
             level:
 ```
 
-## Alerts Overview
+## Alerts overview
 
 - AerospikeNodeHighMemoryUsage: There is a limited amount of memory available for a node.
 - AerospikeNamespaceHighDiskUsage: There is a limited amount of disk space available for a node.
