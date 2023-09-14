@@ -14,7 +14,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'There is a high number of deadlocks occurring.',
+              summary: 'There is a high number of collection exclusive deadlocks occurring.',
               description:
                 (
                   'The number of collection exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
@@ -31,7 +31,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'There is a high number of deadlocks occurring.',
+              summary: 'There is a high number of collection intent-exclusive deadlocks occurring.',
               description:
                 (
                   'The number of collection intent-exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
@@ -48,7 +48,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'There is a high number of deadlocks occurring.',
+              summary: 'There is a high number of collection shared deadlocks occurring.',
               description:
                 (
                   'The number of collection shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
@@ -65,7 +65,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'There is a high number of deadlocks occurring.',
+              summary: 'There is a high number of collection intent-shared deadlocks occurring.',
               description:
                 (
                   'The number of collection intent-shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
@@ -82,7 +82,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'There is a high number of deadlocks occurring.',
+              summary: 'There is a high number of database exclusive deadlocks occurring.',
               description:
                 (
                   'The number of database exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
@@ -99,7 +99,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'There is a high number of deadlocks occurring.',
+              summary: 'There is a high number of database intent-exclusive deadlocks occurring.',
               description:
                 (
                   'The number of database intent-exclusive-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
@@ -116,7 +116,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'There is a high number of deadlocks occurring.',
+              summary: 'There is a high number of database shared deadlocks occurring.',
               description:
                 (
                   'The number of database shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
@@ -133,7 +133,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'There is a high number of deadlocks occurring.',
+              summary: 'There is a high number of database intent-shared deadlocks occurring.',
               description:
                 (
                   'The number of database intent-shared-lock deadlocks occurring on node {{$labels.instance}} in cluster {{$labels.cl_name}} is {{printf "%%.0f" $value}} which is above the threshold of %(alertsDeadlocks)s.'
