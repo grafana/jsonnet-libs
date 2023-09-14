@@ -80,19 +80,6 @@ scrape_configs:
             context:
 ```
 
-## Aerospike Namespace Overview
-
-The Aerospike namespace overview dashboard provides details on one or more namespaces, including system resource utilization, unavailable/dead partitions, and client transactions.
-
-![First screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_1.png)
-![Second screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_2.png)
-
-## Aerospike Logs
-
-The Aerospike logs dashboard provides details on incoming system logs.
-
-![First screenshot of the Aerospike logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_logs_1.png)
-
 ## Alerts Overview
 
 - AerospikeNodeHighMemoryUsage: There is a limited amount of memory available for a node.
