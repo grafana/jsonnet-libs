@@ -184,7 +184,7 @@ local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_producer_total{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_queue_producer_count{' + matcher + ', instance=~"$instance"}) + sum by(instance, activemq_cluster, job) (activemq_topic_producer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -232,7 +232,7 @@ local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_consumer_total{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_queue_consumer_count{' + matcher + ', instance=~"$instance"}) + sum by(instance, activemq_cluster, job) (activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -410,7 +410,7 @@ local destinationMemoryUsagePanel(matcher) = {
       legendFormat='{{activemq_cluster}} - {{instance}} - queue',
     ),
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_topic_memory_percent_usage{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_topic_memory_percent_usage{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - topic',
     ),
@@ -494,7 +494,7 @@ local enqueueCountPanel(matcher) = {
       legendFormat='{{activemq_cluster}} - {{instance}} - queue',
     ),
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (increase(activemq_topic_enqueue_count{' + matcher + ', instance=~"$instance"}[$__interval:]))',
+      'sum by(instance, activemq_cluster, job) (increase(activemq_topic_enqueue_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - topic',
     ),
@@ -576,7 +576,7 @@ local dequeueCountPanel(matcher) = {
       legendFormat='{{activemq_cluster}} - {{instance}} - queue',
     ),
     prometheus.target(
-      'sum by(instance, activemq_cluster) (increase(activemq_topic_dequeue_count{' + matcher + ', instance=~"$instance"}[$__interval:]))',
+      'sum by(instance, activemq_cluster) (increase(activemq_topic_dequeue_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - topic',
     ),
@@ -658,7 +658,7 @@ local averageEnqueueTimePanel(matcher) = {
       legendFormat='{{activemq_cluster}} - {{instance}} - queue',
     ),
     prometheus.target(
-      'avg by (activemq_cluster, instance, job) (activemq_topic_average_enqueue_time{' + matcher + ', instance=~"$instance"})',
+      'avg by (activemq_cluster, instance, job) (activemq_topic_average_enqueue_time{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - topic',
     ),
@@ -740,7 +740,7 @@ local expiredMessagesPanel(matcher) = {
       legendFormat='{{activemq_cluster}} - {{instance}} - queue',
     ),
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (increase(activemq_topic_expired_count{' + matcher + ', instance=~"$instance"}[$__interval:]))',
+      'sum by(instance, activemq_cluster, job) (increase(activemq_topic_expired_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - topic',
     ),
@@ -982,7 +982,7 @@ local activemqAlertsPanel(matcher) = {
   options: {
     alertName: '',
     dashboardAlerts: false,
-    alertInstanceLabelFilter: '{' + matcher + ', instance=~"${instance:regex}"}',
+    alertInstanceLabelFilter: '{' + matcher + ', instance=~"${instance:regex}", destination!~"ActiveMQ.Advisory.*"}',
     datasource: promDatasource,
     groupBy: [],
     groupMode: 'default',

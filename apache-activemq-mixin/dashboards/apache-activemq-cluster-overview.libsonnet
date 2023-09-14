@@ -112,7 +112,7 @@ local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (activemq_producer_total{' + matcher + '})',
+      'sum by (activemq_cluster, job) (activemq_queue_producer_count{' + matcher + '}) + sum by (activemq_cluster, job) (activemq_topic_producer_count{' + matcher + ',destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -160,7 +160,7 @@ local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (activemq_consumer_total{' + matcher + '})',
+      'sum by (activemq_cluster, job) (activemq_queue_consumer_count{' + matcher + '}) + sum by (activemq_cluster, job) (activemq_topic_consumer_count{' + matcher + ',destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -208,7 +208,7 @@ local enqueueCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (increase(activemq_enqueue_total{' + matcher + '}[$__interval:]))',
+      'sum by (activemq_cluster, job) (increase(activemq_queue_enqueue_count{' + matcher + '}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_enqueue_count{' + matcher + ', destination!~"ActiveMQ.Advisory.*"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),
@@ -286,7 +286,7 @@ local dequeueCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (increase(activemq_dequeue_total{' + matcher + '}[$__interval:]))',
+      'sum by (activemq_cluster, job) (increase(activemq_queue_dequeue_count{' + matcher + '}[$__interval:])) + sum by (activemq_cluster, job) (increase(activemq_topic_dequeue_count{' + matcher + ', destination!~"ActiveMQ.Advisory.*"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}}',
     ),

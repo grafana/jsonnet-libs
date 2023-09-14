@@ -16,7 +16,7 @@ local numberOfTopicsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by(instance, activemq_cluster, job) (activemq_topic_queue_size{' + matcher + ', instance=~"$instance"})',
+      'count by(instance, activemq_cluster, job) (activemq_topic_queue_size{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -64,7 +64,7 @@ local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_topic_producer_count{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_topic_producer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -112,7 +112,7 @@ local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_topic_consumer_count{' + matcher + ', instance=~"$instance"})',
+      'sum by(instance, activemq_cluster, job) (activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -160,7 +160,7 @@ local averageConsumersPerTopicPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, activemq_cluster, job) (activemq_topic_consumer_count{' + matcher + ', instance=~"$instance"})',
+      'avg by (instance, activemq_cluster, job) (activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -208,7 +208,7 @@ local topTopicsByEnqueueRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_enqueue_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_enqueue_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -285,7 +285,7 @@ local topTopicsByDequeueRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_dequeue_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_dequeue_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -362,7 +362,7 @@ local topTopicsByAverageEnqueueTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{' + matcher + ', instance=~"$instance", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) ($k_selector, activemq_topic_average_enqueue_time{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -439,7 +439,7 @@ local topTopicsByExpiredMessageRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_expired_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval]))',
+      'topk by(instance, activemq_cluster, job) ($k_selector, rate(activemq_topic_expired_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -516,7 +516,7 @@ local topTopicsByConsumersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) (5, activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) (5, activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -565,7 +565,7 @@ local topTopicsByAverageMessageSizePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) (5, activemq_topic_average_message_size{' + matcher + ', instance=~"$instance", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) (5, activemq_topic_average_message_size{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -644,25 +644,25 @@ local topicSummaryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(activemq_topic_enqueue_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval])',
+      'rate(activemq_topic_enqueue_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='table',
     ),
     prometheus.target(
-      'rate(activemq_topic_dequeue_count{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}[$__rate_interval])',
+      'rate(activemq_topic_dequeue_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='table',
     ),
     prometheus.target(
-      'activemq_topic_average_enqueue_time{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}',
+      'activemq_topic_average_enqueue_time{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='table',
     ),
     prometheus.target(
-      'activemq_topic_average_message_size{' + matcher + ', instance=~"$instance", destination=~".*$name.*"}',
+      'activemq_topic_average_message_size{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='table',
@@ -871,27 +871,19 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             allValues='',
             sort=0
           ),
-          template.new(
+          template.custom(
             'k_selector',
-            promDatasource,
-            '2,4,6,8,10',
+            query='2,4,6,8,10',
+            current='4',
             label='Top topic count',
-            refresh=0,
+            refresh='never',
             includeAll=false,
             multi=false,
             allValues='',
-            sort=0
           ),
-          template.new(
+          template.text(
             'name',
-            promDatasource,
-            '',
             label='Topic by name',
-            refresh=0,
-            includeAll=false,
-            multi=false,
-            allValues='',
-            sort=0
           ),
         ]
       )

@@ -828,27 +828,19 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             allValues='',
             sort=0
           ),
-          template.new(
+          template.custom(
             'k_selector',
-            promDatasource,
-            '2,4,6,8,10',
+            query='2,4,6,8,10',
+            current='4',
             label='Top queue count',
-            refresh=0,
+            refresh='never',
             includeAll=false,
             multi=false,
-            allValues='',
-            sort=0
+            allValues=''
           ),
-          template.new(
+          template.text(
             'name',
-            promDatasource,
-            '.*',
             label='Queue by name',
-            refresh=0,
-            includeAll=false,
-            multi=false,
-            allValues='',
-            sort=0
           ),
         ]
       )
