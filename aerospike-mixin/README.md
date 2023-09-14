@@ -80,7 +80,7 @@ scrape_configs:
             context:
 ```
 
-## Alerts Overview
+## Alerts overview
 
 - AerospikeNodeHighMemoryUsage: There is a limited amount of memory available for a node.
 - AerospikeNamespaceHighDiskUsage: There is a limited amount of disk space available for a node.
