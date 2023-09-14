@@ -190,7 +190,7 @@ local producerCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Producer count',
+  title: 'Producers',
   description: 'The number of producers attached to destinations.',
   fieldConfig: {
     defaults: {
@@ -238,7 +238,7 @@ local consumerCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Consumer count',
+  title: 'Consumers',
   description: 'The number of consumers subscribed to destinations on the broker.',
   fieldConfig: {
     defaults: {
@@ -500,7 +500,7 @@ local enqueueCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Enqueue count / $__interval',
+  title: 'Enqueue / $__interval',
   description: 'Number of messages that have been sent to the destination.',
   fieldConfig: {
     defaults: {
@@ -582,7 +582,7 @@ local dequeueCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Dequeue count / $__interval',
+  title: 'Dequeue / $__interval',
   description: 'Number of messages that have been acknowledged (and removed) from the destinations.',
   fieldConfig: {
     defaults: {
@@ -713,7 +713,7 @@ local averageEnqueueTimePanel(matcher) = {
           },
         ],
       },
-      unit: 's',
+      unit: 'ms',
     },
     overrides: [],
   },

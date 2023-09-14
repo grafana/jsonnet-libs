@@ -22,12 +22,12 @@ local clusterCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Cluster count',
+  title: 'Clusters',
   description: 'Number of clusters that are reporting metrics from ActiveMQ.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -45,7 +45,7 @@ local clusterCountPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -70,12 +70,12 @@ local brokerCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Broker count',
+  title: 'Broker',
   description: 'Number of broker instances across clusters.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -93,7 +93,7 @@ local brokerCountPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -118,12 +118,12 @@ local producerCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Producer count',
+  title: 'Producers',
   description: 'Number of message producers active on destinations across clusters.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -141,7 +141,7 @@ local producerCountPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -166,12 +166,12 @@ local consumerCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Consumer count',
+  title: 'Consumers',
   description: 'The number of consumers subscribed to destinations across clusters.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -189,7 +189,7 @@ local consumerCountPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -214,7 +214,7 @@ local enqueueCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Enqueue count / $__interval',
+  title: 'Enqueue / $__interval',
   description: 'Number of messages that have been sent to destinations in a cluster',
   fieldConfig: {
     defaults: {
@@ -292,7 +292,7 @@ local dequeueCountPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Dequeue count / $__interval',
+  title: 'Dequeue / $__interval',
   description: 'Number of messages that have been acknowledged (and removed) from destinations in a cluster.',
   fieldConfig: {
     defaults: {
@@ -394,7 +394,7 @@ local averageTemporaryMemoryUsagePanel(matcher) = {
           },
         ],
       },
-      unit: 'percent',
+      unit: 'percentunit',
     },
     overrides: [],
   },
@@ -452,7 +452,7 @@ local averageStoreMemoryUsagePanel(matcher) = {
           },
         ],
       },
-      unit: 'percent',
+      unit: 'percentunit',
     },
     overrides: [],
   },
@@ -509,7 +509,7 @@ local averageBrokerMemoryUsagePanel(matcher) = {
           },
         ],
       },
-      unit: 'percent',
+      unit: 'percentunit',
     },
     overrides: [],
   },
@@ -600,10 +600,10 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
       ))
       .addPanels(
         [
-          clusterCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 0 } },
-          brokerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 0 } },
-          producerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 0 } },
-          consumerCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 0 } },
+          clusterCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 0, y: 0 } },
+          brokerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
+          producerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
+          consumerCountPanel(getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
           enqueueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 6 } },
           dequeueCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 6 } },
           averageTemporaryMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 10, w: 8, x: 0, y: 14 } },

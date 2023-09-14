@@ -22,12 +22,12 @@ local numberOfTopicsPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Number of topics',
+  title: 'Topics',
   description: 'Number of topics connected with the broker instance.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -45,7 +45,7 @@ local numberOfTopicsPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -70,12 +70,12 @@ local producerCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Producer count',
+  title: 'Producers',
   description: 'The number of producers attached to topic destinations.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -93,7 +93,7 @@ local producerCountPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -118,12 +118,12 @@ local consumerCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Consumer count',
+  title: 'Consumers',
   description: 'The number of consumers subscribed to topic destinations.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -141,7 +141,7 @@ local consumerCountPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -171,7 +171,7 @@ local averageConsumersPerTopicPanel(matcher) = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
       },
       mappings: [],
       thresholds: {
@@ -189,7 +189,7 @@ local averageConsumersPerTopicPanel(matcher) = {
   },
   options: {
     colorMode: 'none',
-    graphMode: 'none',
+    graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
