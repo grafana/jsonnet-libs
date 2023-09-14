@@ -71,7 +71,7 @@
           {
             alert: 'SquidLowCacheHitRatio',
             expr: |||
-              rate(squid_client_http_hits_total[10m]) / clamp_min(rate(Squid_client_http_requests_total[10m]),1) * 100 < %(alertsWarningLowCacheHitRatio)s
+              rate(squid_client_http_hits_total[10m]) / clamp_min(rate(squid_client_http_requests_total[10m]),1) * 100 < %(alertsWarningLowCacheHitRatio)s
             ||| % $._config,
             'for': '10m',
             labels: {
