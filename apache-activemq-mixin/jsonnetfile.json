@@ -10,6 +10,15 @@
       },
       "version": "master"
     },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-latest"
+        }
+      },
+      "version": "main"
+    },
 		{
       "source": {
         "git": {
