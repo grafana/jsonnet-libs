@@ -35,6 +35,19 @@ The Aerospike instance overview dashboard provides details on one or more instan
 ![Second screenshot of the Aerospike instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_instance_overview_2.png)
 ![Third screenshot of the Aerospike instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_instance_overview_3.png)
 
+## Aerospike Namespace Overview
+
+The Aerospike namespace overview dashboard provides details on one or more namespaces, including system resource utilization, unavailable/dead partitions, and client transactions.
+
+![First screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_1.png)
+![Second screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_2.png)
+
+## Aerospike Logs
+
+The Aerospike logs dashboard provides details on incoming system logs.
+
+![First screenshot of the Aerospike logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_logs_1.png)
+
 Aerospike system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
 ```
@@ -61,23 +74,10 @@ scrape_configs:
         - multiline:
             firstline: '\w{3} \d{2} \d{4}'
         - regex:
-            expression: '\w{3} \d{2} \d{4} \d{2}:\d{2}:\d{2} \w{3}: (?P<level>\w+) (?P<context>\(\w+\)): (?P<trace>\(\S+\))\s+(?P<message>.*)'
+            expression: '\w{3} \d{2} \d{4} \d{2}:\d{2}:\d{2} \w{3}: (?P<level>\w+) (?P<context>\(\w+\)): (?P<trace>\(\S+\))\s+(?P<message>(?s:.*))$'
         - labels:
             level:
 ```
-
-## Aerospike Namespace Overview
-
-The Aerospike namespace overview dashboard provides details on one or more namespaces, including system resource utilization, unavailable/dead partitions, and client transactions.
-
-![First screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_1.png)
-![Second screenshot of the Aerospike namespace overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_namespace_overview_2.png)
-
-## Aerospike Logs
-
-The Aerospike logs dashboard provides details on incoming system logs.
-
-![First screenshot of the Aerospike logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/aerospike_logs_1.png)
 
 ## Alerts Overview
 
