@@ -9,7 +9,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
           datasourceName='loki_datasource',
           datasourceRegex='',
           filterSelector=$._config.filterSelector,
-          labels=['job', 'aerospike_cluster', 'instance', 'level'],
+          labels=['job', 'aerospike_cluster', 'instance', 'context', 'level'],
           formatParser=null,
           showLogsVolume=true
         )

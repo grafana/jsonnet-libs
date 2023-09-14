@@ -74,9 +74,10 @@ scrape_configs:
         - multiline:
             firstline: '\w{3} \d{2} \d{4}'
         - regex:
-            expression: '\w{3} \d{2} \d{4} \d{2}:\d{2}:\d{2} \w{3}: (?P<level>\w+) (?P<context>\(\w+\)): (?P<trace>\(\S+\))\s+(?P<message>(?s:.*))$'
+            expression: '\w{3} \d{2} \d{4} \d{2}:\d{2}:\d{2} \w{3}: (?P<level>\w+) \((?P<context>\w+)\): (?P<trace>\(\S+\))\s+(?P<message>(?s:.*))$'
         - labels:
             level:
+            context:
 ```
 
 ## Alerts overview
