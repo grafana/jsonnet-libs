@@ -80,7 +80,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg(kafka_schema_registry_registered_count{instance=~\"$instance\",job=~\"$job\"})",
+          "expr": "avg(kafka_schema_registry_registered_count{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -139,7 +139,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg by(schema_type) (kafka_schema_registry_schemas_created{instance=~\"$instance\",job=~\"$job\"})",
+          "expr": "avg by(schema_type) (kafka_schema_registry_schemas_created{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"})",
           "interval": "",
           "legendFormat": "{{schema_type}}",
           "refId": "A"
@@ -240,7 +240,7 @@
       "pluginVersion": "7.3.4",
       "targets": [
         {
-          "expr": "avg by(schema_type)(kafka_schema_registry_schemas_created{instance=~\"$instance\",job=~\"$job\"})",
+          "expr": "avg by(schema_type)(kafka_schema_registry_schemas_created{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{schema_type}}",
@@ -306,7 +306,7 @@
       "pluginVersion": "7.3.4",
       "targets": [
         {
-          "expr": "avg by(schema_type)(kafka_schema_registry_schemas_deleted{instance=~\"$instance\",job=~\"$job\"})",
+          "expr": "avg by(schema_type)(kafka_schema_registry_schemas_deleted{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{schema_type}}",
@@ -382,7 +382,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "irate(process_cpu_seconds_total{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval])*100",
+          "expr": "irate(process_cpu_seconds_total{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"}[$__rate_interval])*100",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -479,13 +479,13 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(area)(jvm_memory_bytes_used{instance=~\"$instance\",job=~\"$job\"})",
+          "expr": "sum without(area)(jvm_memory_bytes_used{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"})",
           "interval": "",
           "legendFormat": "Used:{{instance}}",
           "refId": "A"
         },
         {
-          "expr": "jvm_memory_bytes_max{instance=~\"$instance\",job=~\"$job\",area=\"heap\"}",
+          "expr": "jvm_memory_bytes_max{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\",area=\"heap\"}",
           "interval": "",
           "legendFormat": "Max:{{instance}}",
           "refId": "B"
@@ -582,7 +582,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{instance=~\"$instance\",job=~\"$job\"}[$__rate_interval]))",
+          "expr": "sum without(gc)(rate(jvm_gc_collection_seconds_sum{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -689,7 +689,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_schema_registry_jetty_metrics_connections_active{instance=~\"$instance\",job=~\"$job\"}",
+          "expr": "kafka_schema_registry_jetty_metrics_connections_active{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -783,7 +783,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_schema_registry_jersey_metrics_request_rate{instance=~\"$instance\",job=~\"$job\"}",
+          "expr": "kafka_schema_registry_jersey_metrics_request_rate{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -877,7 +877,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "kafka_schema_registry_jersey_metrics_request_latency_99{instance=~\"$instance\",job=~\"$job\"}",
+          "expr": "kafka_schema_registry_jersey_metrics_request_latency_99{instance=~\"$instance\",kafka_cluster=~\"kafka_cluster\", job=~\"$job\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -982,7 +982,34 @@
         "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(kafka_schema_registry_registered_count{job=~\"$job\"},instance)",
+        "definition": "label_values(kafka_connect_app_info{job=~\"$job\"}, kafka_cluster)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "kafka cluster",
+        "multi": true,
+        "name": "kafka_cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(kafka_connect_app_info{job=~\"$job\"}, kafka_cluster)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {},
+        "datasource": "${datasource}",
+        "definition": "label_values(kafka_schema_registry_registered_count{kafka_cluster=~\"kafka_cluster\", job=~\"$job\"},instance)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -992,7 +1019,7 @@
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(kafka_schema_registry_registered_count{job=~\"$job\"},instance)",
+          "query": "label_values(kafka_schema_registry_registered_count{kafka_cluster=~\"kafka_cluster\", job=~\"$job\"},instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 0,
