@@ -24,3 +24,5 @@ exclusions:
     - panel: "Packets  / $__interval"
     - panel: "Connections"
     - panel: "Packets  / $__interval"
+  panel-title-description-rule:
+    reason: "Not required for logs volume"
