@@ -583,7 +583,7 @@
         "allValue": ".+",
         "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(kafka_connect_app_info{job=~\"$job\"}, kafka_cluster)",
+        "definition": "label_values(kafka_log_log_size{job=~\"$job\"}, kafka_cluster)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -593,7 +593,7 @@
         "name": "kafka_cluster",
         "options": [],
         "query": {
-          "query": "label_values(kafka_connect_app_info{job=~\"$job\"}, kafka_cluster)",
+          "query": "label_values(kafka_log_log_size{job=~\"$job\"}, kafka_cluster)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
