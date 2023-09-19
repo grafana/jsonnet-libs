@@ -41,7 +41,7 @@ local nodeAvailabilityPanel = {
             value: 95,
           },
           {
-            color: '#EAB839',
+            color: 'yellow',
             value: 96,
           },
           {
@@ -256,7 +256,7 @@ local topOutboundTrafficNodesPanel = {
     ),
   ],
   type: 'bargauge',
-  title: 'Top outbound traffic nodes',
+  title: 'Top outbound traffic nodes / $__interval',
   description: 'Nodes with the highest outbound traffic.',
   fieldConfig: {
     defaults: {
@@ -377,7 +377,7 @@ local topRequestedPoolsPanel = {
           },
         ],
       },
-      unit: 'requests',
+      unit: 'none',
     },
     overrides: [],
   },
@@ -462,7 +462,7 @@ local topUtilizedVirtualServersPanel = {
     ),
   ],
   type: 'bargauge',
-  title: 'Top utilized virtual servers',
+  title: 'Top utilized virtual servers / $__interval',
   description: 'Virtual servers with the highest traffic (inbound and outbound).',
   fieldConfig: {
     defaults: {

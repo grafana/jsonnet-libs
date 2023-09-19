@@ -55,7 +55,7 @@ local availabilityStatusPanel = {
           },
         ],
       },
-      unit: '',
+      unit: 'none',
     },
     overrides: [],
   },
@@ -165,7 +165,7 @@ local requests__intervalPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Requests  / $__interval',
+  title: 'Requests / $__interval',
   description: 'The number of requests made to the node.',
   fieldConfig: {
     defaults: {
@@ -414,7 +414,7 @@ local packets__intervalPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Packets  / $__interval',
+  title: 'Packets / $__interval',
   description: 'The number of packets sent and received by the node from the pool.',
   fieldConfig: {
     defaults: {
@@ -536,7 +536,7 @@ local packets__intervalPanel = {
             template.new(
               'f5_node',
               promDatasource,
-              'label_values(bigip_node_status_availability_state{instance=~"$job|$instance", job=~"$job"},node)',
+              'label_values(bigip_node_status_availability_state{job=~"$job", instance=~"$instance"},node)',
               label='f5 node',
               refresh=2,
               includeAll=true,

@@ -47,7 +47,7 @@ The F5 virtual server overview dashboard provides virtual server specific metric
 
 ## F5 Log Overview
 
-The F5 log overview dashboard collects F5 [syslog which are forwarded to grafana loki via promtail](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup). The dashboard can be used to monitor server, high availability, and audit logs using a logs volume and the raw logs panel. This dashboard includes query labels to filter logs such has job, host, syslog_facility, level and a regex search. The syslog_facility collects [enabled logs](https://my.f5.com/manage/s/article/K35284961) on the F5 system which may include auth, authpriv, daemon, local0 and local6. Additional logs can be enabled depending on the users need.
+The F5 log overview dashboard collects F5 [syslog which are forwarded to grafana loki via promtail](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup). The dashboard can be used to monitor server, high availability, and audit logs using a logs volume and the raw logs panel. This dashboard includes query labels to filter logs such as job, host, syslog_facility, level and a regex search. The syslog_facility collects [enabled logs](https://my.f5.com/manage/s/article/K35284961) on the F5 system which may include auth, authpriv, daemon, local0 and local6. Additional logs can be enabled depending on the users need.
 
 The logs dashboard can be used to select a syslog_facility which are created when enabling different [log sources](https://clouddocs.f5.com/api/icontrol-soap/Log__Filter__Source.html) in F5. Some useful categorizes to enable are: 
 

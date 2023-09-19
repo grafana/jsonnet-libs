@@ -10,19 +10,14 @@ exclusions:
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
-    - panel: "Availability status"
     - panel: "Logs volume"
+    - panel: "Availability status"
     - panel: "Active sessions"
-    - panel: "Requests  / $__interval"
-    - panel: "Connections"
-    - panel: "Packets  / $__interval"
-    - panel: "Members"
     - panel: "Requests / $__interval"
     - panel: "Connections"
+    - panel: "Packets / $__interval"
+    - panel: "Members"
     - panel: "Connection queue depth"
     - panel: "Connection queue serviced / $__interval"
-    - panel: "Packets  / $__interval"
-    - panel: "Connections"
-    - panel: "Packets  / $__interval"
   panel-title-description-rule:
     reason: "Not required for logs volume"
