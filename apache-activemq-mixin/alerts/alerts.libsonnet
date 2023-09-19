@@ -7,7 +7,7 @@
           {
             alert: 'ApacheActiveMQHighTopicMemoryUsage',
             expr: |||
-              activemq_topic_memory_percent_usage > %(alertsHighTopicMemoryUsage)s
+              sum without (job) (activemq_topic_memory_percent_usage{destination!~"ActiveMQ.Advisory.*"}) > %(alertsHighTopicMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -17,7 +17,7 @@
               summary: 'Topic destination memory usage is high, which may result in a reduction of the rate at which producers send messages.',
               description:
                 (
-                  '{{ printf "%%.0f" $value }} percent of memory used by topic {{$labels.destination}} on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
+                  '{{ printf "%%.0f" $value }} percent of memory used by topics on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
                   'which is above the threshold of %(alertsHighTopicMemoryUsage)s percent.'
                 ) % $._config,
             },
@@ -25,7 +25,7 @@
           {
             alert: 'ApacheActiveMQHighQueueMemoryUsage',
             expr: |||
-              activemq_queue_memory_percent_usage > %(alertsHighQueueMemoryUsage)s
+              sum without (job) (activemq_queue_memory_percent_usage) > %(alertsHighQueueMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -35,7 +35,7 @@
               summary: 'Queue destination memory usage is high, which may result in a reduction of the rate at which producers send messages.',
               description:
                 (
-                  '{{ printf "%%.0f" $value }} percent of memory used by queue {{$labels.destination}} on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
+                  '{{ printf "%%.0f" $value }} percent of memory used by queues on {{$labels.instance}} in cluster {{$labels.activemq_cluster}}, ' +
                   'which is above the threshold of %(alertsHighQueueMemoryUsage)s percent.'
                 ) % $._config,
             },
