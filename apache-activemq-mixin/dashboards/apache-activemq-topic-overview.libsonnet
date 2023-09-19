@@ -516,7 +516,7 @@ local topTopicsByConsumersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) (5, activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) ($k_selector, activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
@@ -565,7 +565,7 @@ local topTopicsByAverageMessageSizePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk by(instance, activemq_cluster, job) (5, activemq_topic_average_message_size{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"})',
+      'topk by(instance, activemq_cluster, job) ($k_selector, activemq_topic_average_message_size{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*", destination=~".*$name.*"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}} - {{destination}}',
     ),
