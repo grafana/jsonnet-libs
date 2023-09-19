@@ -2,7 +2,7 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
-local dashboardUid = 'f5-cluster-overview';
+local dashboardUid = 'bigip-cluster-overview';
 
 local promDatasourceName = 'datasource';
 
@@ -14,7 +14,7 @@ local nodeAvailabilityPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 * sum by(partition, instance) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance"})  / clamp_min(count by(partition, instance) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
+      '100 * sum by(partition, instance, job) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance"})  / clamp_min(count by(partition, instance, job) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
       datasource=promDatasource,
       legendFormat='{{partition}} - {{instance}}',
       format='time_series',
@@ -75,7 +75,7 @@ local poolAvailabilityPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 * sum by(partition, instance) (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"}) / clamp_min(count by(partition, instance)  (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
+      '100 * sum by(partition, instance, job) (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"}) / clamp_min(count by(partition, instance, job)  (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
       datasource=promDatasource,
       legendFormat='{{partition}} - {{instance}}',
       format='time_series',
@@ -136,7 +136,7 @@ local virtualServerAvailabilityPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 * sum by(partition, instance) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"}) / clamp_min(count by(partition, instance) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
+      '100 * sum by(partition, instance, job) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"}) / clamp_min(count by(partition, instance, job) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
       datasource=promDatasource,
       legendFormat='{{partition}} - {{instance}}',
       format='time_series',
@@ -359,7 +359,7 @@ local topRequestedPoolsPanel = {
     ),
   ],
   type: 'bargauge',
-  title: 'Top requested pools',
+  title: 'Top requested pools / $__interval',
   description: 'Pools with the highest number of requests.',
   fieldConfig: {
     defaults: {
@@ -555,9 +555,9 @@ local topLatencyVirtualServersPanel = {
 
 {
   grafanaDashboards+:: {
-    'f5-cluster-overview.json':
+    'bigip-cluster-overview.json':
       dashboard.new(
-        'F5 cluster overview',
+        'Big IP cluster overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -567,7 +567,7 @@ local topLatencyVirtualServersPanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other F5 dashboards',
+        title='Other Big IP dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
@@ -585,7 +585,7 @@ local topLatencyVirtualServersPanel = {
             'job',
             promDatasource,
             'label_values(bigip_node_status_availability_state,job)',
-            label='job',
+            label='Job',
             refresh=2,
             includeAll=true,
             multi=true,
@@ -596,7 +596,7 @@ local topLatencyVirtualServersPanel = {
             'instance',
             promDatasource,
             'label_values(bigip_node_status_availability_state{job=~"$job"}, instance)',
-            label='instance',
+            label='Instance',
             refresh=2,
             includeAll=true,
             multi=true,
@@ -607,7 +607,7 @@ local topLatencyVirtualServersPanel = {
             'k',
             query='5,10,20,50',
             current='5',
-            label='top node count',
+            label='Top node count',
             refresh='never',
             includeAll=false,
             multi=false,

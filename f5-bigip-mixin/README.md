@@ -2,54 +2,54 @@
 
 F5 BIG IP mixin is a set of configurable Grafana dashboards and alerts.
 
-The F5 mixin contains the following dashboards:
+The Big IP mixin contains the following dashboards:
 
--  F5 cluster overview
--  F5 node overview
--  F5 pool overview
--  F5 virtual server overview
--  F5 logs overview
+-  Big IP cluster overview
+-  Big IP node overview
+-  Big IP pool overview
+-  Big IP virtual server overview
+-  Big IP logs overview
 
-The F5 mixin contains the following alerts:
+The Big IP mixin contains the following alerts:
 
-- F5BigIPLowNodeAvailabilityStatus
-- F5BigIPServerSideConnectionLimit
-- F5BigIPHighRequestRate
-- F5BigIPHighConnectionQueueDepth
+- BigIPLowNodeAvailabilityStatus
+- BigIPServerSideConnectionLimit
+- BigIPHighRequestRate
+- BigIPHighConnectionQueueDepth
 
-## F5 Cluster Overview
+## Big IP Cluster Overview
 
-The F5 cluster overview dashboard provides high level details on node, pool and virtual server availability. Additionally, the top metrics for the server-side, outbound traffic, active members in pools, requested pools, queue depth, utilized virtual servers and latency virtual servers is shown.
+The Big IP cluster overview dashboard provides high level details on node, pool and virtual server availability. Additionally, the top metrics for the server-side, outbound traffic, active members in pools, requested pools, queue depth, utilized virtual servers and latency virtual servers is shown.
 
-![F5 Cluster Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/f5-cluster-overview.png)
-
-
-## F5 Node Overview
-
-The F5 node overview dashboard provides node specific metrics such as availability, active sessions, requests, connections, traffic and packets.
-
-![F5 Node Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/f5-node-overview.png)
+![Big IP Cluster Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-cluster-overview.png)
 
 
-## F5 Pool Overview
+## Big IP Node Overview
 
-The F5 pool overview dashboard provides pool specific metrics such as availability, members, requests, connections, connection queue depth, connection queue serviced, traffic and packets.
+The Big IP node overview dashboard provides node specific metrics such as availability, active sessions, requests, connections, traffic and packets.
 
-![F5 Pool Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/f5-pool-overview.png)
-
-
-## F5 Virtual Server Overview
-
-The F5 virtual server overview dashboard provides virtual server specific metrics such as availability, requests, connections, average connection duration, traffic and packets.
-
-![F5 Virtual Server Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/f5-virtual-server-overview.png)
+![F5 Node Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-node-overview.png)
 
 
-## F5 Log Overview
+## Big IP Pool Overview
 
-The F5 log overview dashboard collects F5 [syslog which are forwarded to grafana loki via promtail](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup). The dashboard can be used to monitor server, high availability, and audit logs using a logs volume and the raw logs panel. This dashboard includes query labels to filter logs such as job, host, syslog_facility, level and a regex search. The syslog_facility collects [enabled logs](https://my.f5.com/manage/s/article/K35284961) on the F5 system which may include auth, authpriv, daemon, local0 and local6. Additional logs can be enabled depending on the users need.
+The Big IP pool overview dashboard provides pool specific metrics such as availability, members, requests, connections, connection queue depth, connection queue serviced, traffic and packets.
 
-The logs dashboard can be used to select a syslog_facility which are created when enabling different [log sources](https://clouddocs.f5.com/api/icontrol-soap/Log__Filter__Source.html) in F5. Some useful categorizes to enable are: 
+![Big IP Pool Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-pool-overview.png)
+
+
+## Big IP Virtual Server Overview
+
+The Big IP virtual server overview dashboard provides virtual server specific metrics such as availability, requests, connections, average connection duration, traffic and packets.
+
+![Big IP Virtual Server Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-virtual-server-overview.png)
+
+
+## Big IP Log Overview
+
+The Big IP log overview dashboard collects Big IP [syslog which are forwarded to grafana loki via promtail](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup). The dashboard can be used to monitor server, high availability, and audit logs using a logs volume and the raw logs panel. This dashboard includes query labels to filter logs such as job, host, syslog_facility, level and a regex search. The syslog_facility collects [enabled logs](https://my.f5.com/manage/s/article/K35284961) on the Big IP system which may include auth, authpriv, daemon, local0 and local6. Additional logs can be enabled depending on the users need.
+
+The logs dashboard can be used to select a syslog_facility which are created when enabling different [log sources](https://clouddocs.f5.com/api/icontrol-soap/Log__Filter__Source.html) in Big IP. Some useful categorizes to enable are: 
 
 | Log category          | log source                  | log description                                                                   | Syslog Facility files        |
 |-----------------------|-----------------------------|-----------------------------------------------------------------------------------|------------------------------|
@@ -64,7 +64,7 @@ The logs dashboard can be used to select a syslog_facility which are created whe
 | Audit logs            | LOG_SOURCE_SHELL(79)        | Shell commands logs.                                                              | `user`, `local0`             |
 
 
-F5 logs are disabled by default in the `config.libsonnet` and can be updated by setting `enableLokiLogs` to `true`. Then run `make` again to regenerate the dashboard:
+Big IP logs are disabled by default in the `config.libsonnet` and can be updated by setting `enableLokiLogs` to `true`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -108,17 +108,17 @@ scrape_configs:
         target_label: syslog_identifier
 ```
 
-![F5 Logs Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/f5-logs-overview.png)
+![Big IP Logs Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-logs-overview.png)
 
 
 ## Alerts Overview
 
 | Alert                            | Summary                                                                                                          |
 |----------------------------------|------------------------------------------------------------------------------------------------------------------|
-| F5BigIPLowNodeAvailabilityStatus | Detecting a significant number of unavailable nodes which can causes potential downtime or degraded performance. |
-| F5BigIPServerSideConnectionLimit | Approaching the connection limit may lead to rejecting new connections, impacting availability.                  |
-| F5BigIPHighRequestRate           | An unexpected spike in requests might indicate an issue like a DDoS attack or unexpected high load.              |
-| F5BigIPHighConnectionQueueDepth  | A sudden spike or sustained high queue depth may indicate a bottleneck in handling incoming connections.         |
+| BigIPLowNodeAvailabilityStatus | Detecting a significant number of unavailable nodes which can causes potential downtime or degraded performance. |
+| BigIPServerSideConnectionLimit | Approaching the connection limit may lead to rejecting new connections, impacting availability.                  |
+| BigIPHighRequestRate           | An unexpected spike in requests might indicate an issue like a DDoS attack or unexpected high load.              |
+| BigIPHighConnectionQueueDepth  | A sudden spike or sustained high queue depth may indicate a bottleneck in handling incoming connections.         |
 
 Default thresholds can be configured in `config.libsonnet`
 
@@ -131,7 +131,7 @@ Default thresholds can be configured in `config.libsonnet`
     dashboardRefresh: '1m',
 
     grafanaLogDashboardIDs: {
-      'f5-logs-overview.json': 'f5-logs-overview',
+      'bigip-logs-overview.json': 'bigip-logs-overview',
     },
 
     // alerts thresholds

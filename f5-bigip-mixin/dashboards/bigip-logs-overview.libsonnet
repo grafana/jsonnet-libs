@@ -5,9 +5,9 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
   grafanaDashboards+::
     if $._config.enableLokiLogs then
       {
-        local f5LogsPanel =
+        local bigIPLogsPanel =
           logsDashboard.new(
-            'F5 logs',
+            'Big IP logs',
             datasourceName='loki_datasource',
             datasourceRegex='',
             filterSelector=$._config.filterSelector,
@@ -17,7 +17,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
           ),
         local highAvailabilityLogsPanel =
           logsDashboard.new(
-            'F5 high availability logs',
+            'Big IP high availability logs',
             datasourceName='loki_datasource',
             datasourceRegex='',
             filterSelector=$._config.filterSelector,
@@ -29,17 +29,17 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
             panels+:
               {
                 logs+:
-                  // F5 logs already have timestamp
+                  // Big IP logs already have timestamp
                   g.panel.logs.options.withShowTime(false),
               },
             dashboards+:
               {
-                logs+: g.dashboard.withLinksMixin($.grafanaDashboards['f5-cluster-overview.json'].links)
-                       + g.dashboard.withUid($._config.grafanaDashboardIDs['f5-logs-overview.json'])
+                logs+: g.dashboard.withLinksMixin($.grafanaDashboards['bigip-cluster-overview.json'].links)
+                       + g.dashboard.withUid($._config.grafanaDashboardIDs['bigip-logs-overview.json'])
                        + g.dashboard.withTags($._config.dashboardTags)
                        + g.dashboard.withRefresh($._config.dashboardRefresh),
               },
           },
-        'f5-logs-overview.json': f5LogsPanel.dashboards.logs,
+        'bigip-logs-overview.json': bigIPLogsPanel.dashboards.logs,
       } else {},
 }

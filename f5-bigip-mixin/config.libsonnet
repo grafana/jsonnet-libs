@@ -6,7 +6,7 @@
     dashboardRefresh: '1m',
 
     grafanaLogDashboardIDs: {
-      'f5-logs-overview.json': 'f5-logs-overview',
+      'bigip-logs-overview.json': 'bigip-logs-overview',
     },
 
     // alerts thresholds

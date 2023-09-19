@@ -2,10 +2,10 @@
   prometheusAlerts+:: {
     groups+: [
       {
-        name: 'f5-bigip-alerts',
+        name: 'bigip-alerts',
         rules: [
           {
-            alert: 'F5BigIPLowNodeAvailabilityStatus',
+            alert: 'BigIPLowNodeAvailabilityStatus',
             expr: |||
               100 * (sum(bigip_node_status_availability_state) / clamp_min(count(bigip_node_status_availability_state), 1)) < %(alertsCriticalNodeAvailability)s
             ||| % $._config,
@@ -23,7 +23,7 @@
             },
           },
           {
-            alert: 'F5BigIPServerSideConnectionLimit',
+            alert: 'BigIPServerSideConnectionLimit',
             expr: |||
               max without(instance, job) (100 * bigip_node_serverside_cur_conns / clamp_min(bigip_node_serverside_max_conns, 1)) > %(alertsWarningServerSideConnectionLimit)s
             ||| % $._config,
@@ -41,13 +41,13 @@
             },
           },
           {
-            alert: 'F5BigIPHighRequestRate',
+            alert: 'BigIPHighRequestRate',
             expr: |||
-              max without(instance, job) (100 * increase(bigip_pool_tot_requests[10m]) / clamp_min(increase(bigip_pool_tot_requests[1h]), 1)) > %(alertsCriticalHighRequestRate)s
+              max without(instance, job) (100 * increase(bigip_pool_tot_requests[10m]) / clamp_min(increase(bigip_pool_tot_requests[50m] offset 10m), 1)) > %(alertsCriticalHighRequestRate)s
             ||| % $._config,
             'for': '10m',
             labels: {
-              severity: 'critical',
+              severity: 'warning',
             },
             annotations: {
               summary: 'An unexpected spike in requests might indicate an issue like a DDoS attack or unexpected high load.',
@@ -59,9 +59,9 @@
             },
           },
           {
-            alert: 'F5BigIPHighConnectionQueueDepth',
+            alert: 'BigIPHighConnectionQueueDepth',
             expr: |||
-              max without(instance, job) (100 * increase(bigip_pool_connq_depth[5m])) / clamp_min(increase(bigip_pool_connq_depth[1h]), 1) > %(alertsCriticalHighConnectionQueueDepth)s
+              max without(instance, job) (100 * increase(bigip_pool_connq_depth[5m])) / clamp_min(increase(bigip_pool_connq_depth[50m] offset 10m), 1) > %(alertsCriticalHighConnectionQueueDepth)s
             ||| % $._config,
             'for': '5m',
             labels: {

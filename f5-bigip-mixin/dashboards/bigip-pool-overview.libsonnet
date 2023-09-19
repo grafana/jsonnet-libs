@@ -3,9 +3,9 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'f5-node-overview';
+local dashboardUid = 'bigip-pool-overview';
 
-local promDatasourceName = 'datasource';
+local promDatasourceName = 'prometheus_datasource';
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -15,15 +15,15 @@ local availabilityStatusPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_node_status_availability_state{job=~"$job", instance=~"$instance", node=~"$f5_node"}',
+      'bigip_pool_status_availability_state{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}}',
+      legendFormat='{{pool}} - {{partition}} - {{instance}}',
       format='time_series',
     ),
   ],
   type: 'stat',
   title: 'Availability status',
-  description: 'The availability status of the node.',
+  description: 'The availability state of the pool.',
   fieldConfig: {
     defaults: {
       color: {
@@ -76,19 +76,25 @@ local availabilityStatusPanel = {
   pluginVersion: '10.2.0-60139',
 };
 
-local activeSessionsPanel = {
+local membersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_node_cur_sessions{job=~"$job", instance=~"$instance", node=~"$f5_node"}',
+      'bigip_pool_active_member_cnt{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}}',
+      legendFormat='{{pool}} - {{partition}} - {{instance}} - active',
+      format='time_series',
+    ),
+    prometheus.target(
+      'bigip_pool_min_active_members{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}',
+      datasource=promDatasource,
+      legendFormat='{{pool}} - {{partition}} - {{instance}} - minimum',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Active sessions',
-  description: 'The current number of active sessions to the node.',
+  title: 'Members',
+  description: 'The number of active and minimum required members within the pool.',
   fieldConfig: {
     defaults: {
       color: {
@@ -135,7 +141,7 @@ local activeSessionsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'members',
     },
     overrides: [],
   },
@@ -157,16 +163,16 @@ local requests__intervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_node_tot_requests{job=~"$job", instance=~"$instance", node=~"$f5_node"}[$__interval:])',
+      'increase(bigip_pool_tot_requests{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}}',
+      legendFormat='{{pool}} - {{partition}} - {{instance}}',
       format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
   title: 'Requests / $__interval',
-  description: 'The number of requests made to the node.',
+  description: 'The number of requests made to the pool.',
   fieldConfig: {
     defaults: {
       color: {
@@ -235,21 +241,176 @@ local connectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_node_serverside_cur_conns{job=~"$job", instance=~"$instance", node=~"$f5_node"}',
+      'bigip_pool_serverside_cur_conns{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - current',
+      legendFormat='{{pool}} - {{partition}} - {{instance}} - current',
       format='time_series',
     ),
     prometheus.target(
-      'bigip_node_serverside_max_conns{job=~"$job", instance=~"$instance", node=~"$f5_node"}',
+      'bigip_pool_serverside_max_conns{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - max',
+      legendFormat='{{pool}} - {{partition}} - {{instance}} - maximum',
       format='time_series',
     ),
   ],
   type: 'timeseries',
   title: 'Connections',
-  description: 'The current active server-side connections to the node in comparison to the maximum connection capacity.',
+  description: 'The current and maximum number of node connections within the pool.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local connectionQueueDepthPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'bigip_pool_connq_depth{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}',
+      datasource=promDatasource,
+      legendFormat='{{pool}} - {{partition}} - {{instance}}',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Connection queue depth',
+  description: 'The depth of connection queues within the pool, including the current depth.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local connectionQueueServiced__intervalPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(bigip_pool_connq_serviced{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{pool}} - {{partition}} - {{instance}}',
+      format='time_series',
+      interval='1m',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Connection queue serviced / $__interval',
+  description: 'The number of connections that have been serviced within the pool.',
   fieldConfig: {
     defaults: {
       color: {
@@ -318,20 +479,20 @@ local trafficPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(bigip_node_serverside_bytes_in{job=~"$job", instance=~"$instance", node=~"$f5_node"}[$__rate_interval])',
+      'rate(bigip_pool_serverside_bytes_in{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - received',
+      legendFormat='{{pool}} - {{partition}} - {{instance}} - received',
       format='time_series',
     ),
     prometheus.target(
-      'rate(bigip_node_serverside_bytes_out{job=~"$job", instance=~"$instance", node=~"$f5_node"}[$__rate_interval])',
+      'rate(bigip_pool_serverside_bytes_out{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - sent',
+      legendFormat='{{pool}} - {{partition}} - {{instance}} - sent',
     ),
   ],
   type: 'timeseries',
   title: 'Traffic',
-  description: 'The rate of data sent and received from the pool by the node.',
+  description: 'The rate of date sent and received from virtual servers by the pool.',
   fieldConfig: {
     defaults: {
       color: {
@@ -400,22 +561,22 @@ local packets__intervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_node_serverside_pkts_in{job=~"$job", instance=~"$instance", node=~"$f5_node"}[$__interval:])',
+      'increase(bigip_pool_serverside_pkts_in{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - received',
+      legendFormat='{{pool}} - {{partition}} - {{instance}} - received',
       format='time_series',
       interval='1m',
     ),
     prometheus.target(
-      'increase(bigip_node_serverside_pkts_out{job=~"$job", instance=~"$instance", node=~"$f5_node"}[$__interval:])',
+      'increase(bigip_pool_serverside_pkts_out{job=~"$job", instance=~"$instance", pool=~"$bigip_pool"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - sent',
+      legendFormat='{{pool}} - {{partition}} - {{instance}} - sent',
       interval='1m',
     ),
   ],
   type: 'timeseries',
   title: 'Packets / $__interval',
-  description: 'The number of packets sent and received by the node from the pool.',
+  description: 'The number of packets sent and received from virtual servers by the pool.',
   fieldConfig: {
     defaults: {
       color: {
@@ -482,9 +643,9 @@ local packets__intervalPanel = {
 
 {
   grafanaDashboards+:: {
-    'f5-node-overview.json':
+    'bigip-pool-overview.json':
       dashboard.new(
-        'F5 node overview',
+        'Big IP pool overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -494,7 +655,7 @@ local packets__intervalPanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other F5 dashboards',
+        title='Other Big IP dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
@@ -514,8 +675,8 @@ local packets__intervalPanel = {
             template.new(
               'job',
               promDatasource,
-              'label_values(bigip_node_status_availability_state,job)',
-              label='job',
+              'label_values(bigip_pool_status_availability_state,job)',
+              label='Job',
               refresh=2,
               includeAll=true,
               multi=true,
@@ -525,8 +686,8 @@ local packets__intervalPanel = {
             template.new(
               'instance',
               promDatasource,
-              'label_values(bigip_node_status_availability_state{job=~"$job"}, instance)',
-              label='instance',
+              'label_values(bigip_pool_status_availability_state{job=~"$job"}, instance)',
+              label='Instance',
               refresh=2,
               includeAll=true,
               multi=true,
@@ -534,10 +695,10 @@ local packets__intervalPanel = {
               sort=1
             ),
             template.new(
-              'f5_node',
+              'bigip_pool',
               promDatasource,
-              'label_values(bigip_node_status_availability_state{job=~"$job", instance=~"$instance"},node)',
-              label='f5 node',
+              'label_values(bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"},pool)',
+              label='Big IP pool',
               refresh=2,
               includeAll=true,
               multi=true,
@@ -550,10 +711,12 @@ local packets__intervalPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            availabilityStatusPanel { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
-            activeSessionsPanel { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
-            requests__intervalPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-            connectionsPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+            availabilityStatusPanel { gridPos: { h: 6, w: 8, x: 0, y: 0 } },
+            membersPanel { gridPos: { h: 6, w: 8, x: 8, y: 0 } },
+            requests__intervalPanel { gridPos: { h: 6, w: 8, x: 16, y: 0 } },
+            connectionsPanel { gridPos: { h: 6, w: 8, x: 0, y: 6 } },
+            connectionQueueDepthPanel { gridPos: { h: 6, w: 8, x: 8, y: 6 } },
+            connectionQueueServiced__intervalPanel { gridPos: { h: 6, w: 8, x: 16, y: 6 } },
             trafficPanel { gridPos: { h: 6, w: 24, x: 0, y: 12 } },
             packets__intervalPanel { gridPos: { h: 6, w: 24, x: 0, y: 18 } },
           ],
