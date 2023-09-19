@@ -244,9 +244,13 @@ local connectionsPanel = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
