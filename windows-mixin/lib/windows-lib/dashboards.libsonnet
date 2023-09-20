@@ -105,14 +105,14 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                     datasourceName='loki_datasource',
                     datasourceRegex='',
                     filterSelector=this.config.filterSelector,
-                    labels=this.config.groupLabels + this.config.instanceLabels + ['channel', 'source', 'level'],
+                    labels=this.config.groupLabels + this.config.instanceLabels + ['channel', 'source', 'keywords', 'level'],
                     formatParser='json',
                     showLogsVolume=true,
-                    logsVolumeGroupBy='levelText',
+                    logsVolumeGroupBy='level',
                     extraFilters=|||
                       | label_format timestamp="{{__timestamp__}}"
-                      | label_format level=levelText
-                      | line_format `{{ if eq "[[instance]]" ".*" }}{{.instance | trunc 20}}:{{end}} {{.channel }} {{.source}} {{ .message }}`
+                      | drop channel_extracted,source_extracted,computer_extracted,level_extracted,keywords_extracted
+                      | line_format `{{ if eq "[[instance]]" ".*" }}{{ alignLeft 15 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 15 .source}}| {{ .message }}`
                     |||)
         {
           dashboards+:
