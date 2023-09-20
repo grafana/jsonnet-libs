@@ -6,11 +6,10 @@ local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 local base = import '../base.libsonnet';
-
 base {
   new(title, targets, description=''):
-    super.new(title, targets, description)
-    + timeSeries.new(title)
+    timeSeries.new(title)
+    + super.new(title, targets, description)
     + self.stylize(),
 
   stylize():
