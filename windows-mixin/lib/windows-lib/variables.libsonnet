@@ -28,7 +28,7 @@ local utils = import './utils.libsonnet';
                 + var.query.selectionOptions.withMulti(
                     if (!multiInstance && std.member(instanceLabels, chainVar.label)) then false else true,
                 )
-                + var.query.withRefresh(2)
+                + var.query.refresh.onTime()
                 + var.query.withSort(
                     i=1,
                     type='alphabetical',
