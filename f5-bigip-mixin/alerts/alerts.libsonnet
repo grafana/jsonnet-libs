@@ -43,7 +43,7 @@
           {
             alert: 'BigIPHighRequestRate',
             expr: |||
-              max without(instance, job) (100 * increase(bigip_pool_tot_requests[10m]) / clamp_min(increase(bigip_pool_tot_requests[50m] offset 10m), 1)) > %(alertsCriticalHighRequestRate)s
+              max without(instance, job) (100 * rate(bigip_pool_tot_requests[10m]) / clamp_min(rate(bigip_pool_tot_requests[50m] offset 10m), 1)) > %(alertsCriticalHighRequestRate)s
             ||| % $._config,
             'for': '10m',
             labels: {
@@ -61,11 +61,11 @@
           {
             alert: 'BigIPHighConnectionQueueDepth',
             expr: |||
-              max without(instance, job) (100 * increase(bigip_pool_connq_depth[5m])) / clamp_min(increase(bigip_pool_connq_depth[50m] offset 10m), 1) > %(alertsCriticalHighConnectionQueueDepth)s
+              max without(instance, job) (100 * rate(bigip_pool_connq_depth[5m])) / clamp_min(rate(bigip_pool_connq_depth[50m] offset 10m), 1) > %(alertsCriticalHighConnectionQueueDepth)s
             ||| % $._config,
             'for': '5m',
             labels: {
-              severity: 'critical',
+              severity: 'warning',
             },
             annotations: {
               summary: 'A sudden spike or sustained high queue depth may indicate a bottleneck in handling incoming connections.',
