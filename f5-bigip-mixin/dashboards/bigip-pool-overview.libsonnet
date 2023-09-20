@@ -645,7 +645,7 @@ local packets__intervalPanel = {
   grafanaDashboards+:: {
     'bigip-pool-overview.json':
       dashboard.new(
-        'Big IP pool overview',
+        'BIG-IP pool overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -655,7 +655,7 @@ local packets__intervalPanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other Big IP dashboards',
+        title='Other BIG-IP dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
@@ -698,7 +698,7 @@ local packets__intervalPanel = {
               'bigip_pool',
               promDatasource,
               'label_values(bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"},pool)',
-              label='Big IP pool',
+              label='BIG-IP pool',
               refresh=2,
               includeAll=true,
               multi=true,

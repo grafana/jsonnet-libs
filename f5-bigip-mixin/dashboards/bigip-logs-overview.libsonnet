@@ -7,7 +7,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
       {
         local bigIPLogsPanel =
           logsDashboard.new(
-            'Big IP logs',
+            'BIG-IP logs',
             datasourceName='loki_datasource',
             datasourceRegex='',
             filterSelector=$._config.filterSelector,
@@ -17,7 +17,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
           ),
         local highAvailabilityLogsPanel =
           logsDashboard.new(
-            'Big IP high availability logs',
+            'BIG-IP high availability logs',
             datasourceName='loki_datasource',
             datasourceRegex='',
             filterSelector=$._config.filterSelector,
@@ -29,7 +29,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
             panels+:
               {
                 logs+:
-                  // Big IP logs already have timestamp
+                  // BIG-IP logs already have timestamp
                   g.panel.logs.options.withShowTime(false),
               },
             dashboards+:

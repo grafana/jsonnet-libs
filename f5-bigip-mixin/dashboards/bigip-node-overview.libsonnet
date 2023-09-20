@@ -484,7 +484,7 @@ local packets__intervalPanel = {
   grafanaDashboards+:: {
     'bigip-node-overview.json':
       dashboard.new(
-        'Big IP node overview',
+        'BIG-IP node overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -494,7 +494,7 @@ local packets__intervalPanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other Big IP dashboards',
+        title='Other BIG-IP dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
@@ -537,7 +537,7 @@ local packets__intervalPanel = {
               'bigip_node',
               promDatasource,
               'label_values(bigip_node_status_availability_state{job=~"$job", instance=~"$instance"},node)',
-              label='Big IP node',
+              label='BIG-IP node',
               refresh=2,
               includeAll=true,
               multi=true,

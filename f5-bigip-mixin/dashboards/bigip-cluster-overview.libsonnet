@@ -557,7 +557,7 @@ local topLatencyVirtualServersPanel = {
   grafanaDashboards+:: {
     'bigip-cluster-overview.json':
       dashboard.new(
-        'Big IP cluster overview',
+        'BIG-IP cluster overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -567,7 +567,7 @@ local topLatencyVirtualServersPanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other Big IP dashboards',
+        title='Other BIG-IP dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),

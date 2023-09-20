@@ -1,55 +1,55 @@
-# F5 BIG IP Mixin
+# F5 BIG-IP Mixin
 
-F5 BIG IP mixin is a set of configurable Grafana dashboards and alerts.
+F5 BIG-IP mixin is a set of configurable Grafana dashboards and alerts.
 
-The Big IP mixin contains the following dashboards:
+The BIG-IP mixin contains the following dashboards:
 
--  Big IP cluster overview
--  Big IP node overview
--  Big IP pool overview
--  Big IP virtual server overview
--  Big IP logs overview
+-  BIG-IP cluster overview
+-  BIG-IP node overview
+-  BIG-IP pool overview
+-  BIG-IP virtual server overview
+-  BIG-IP logs overview
 
-The Big IP mixin contains the following alerts:
+The BIG-IP mixin contains the following alerts:
 
 - BigIPLowNodeAvailabilityStatus
 - BigIPServerSideConnectionLimit
 - BigIPHighRequestRate
 - BigIPHighConnectionQueueDepth
 
-## Big IP Cluster Overview
+## BIG-IP Cluster Overview
 
-The Big IP cluster overview dashboard provides high level details on node, pool and virtual server availability. Additionally, the top metrics for the server-side, outbound traffic, active members in pools, requested pools, queue depth, utilized virtual servers and latency virtual servers is shown.
+The BIG-IP cluster overview dashboard provides high level details on node, pool and virtual server availability. Additionally, the top metrics for the server-side, outbound traffic, active members in pools, requested pools, queue depth, utilized virtual servers and latency virtual servers is shown.
 
-![Big IP Cluster Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-cluster-overview.png)
+![BIG-IP Cluster Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-cluster-overview.png)
 
 
-## Big IP Node Overview
+## BIG-IP Node Overview
 
-The Big IP node overview dashboard provides node specific metrics such as availability, active sessions, requests, connections, traffic and packets.
+The BIG-IP node overview dashboard provides node specific metrics such as availability, active sessions, requests, connections, traffic and packets.
 
 ![F5 Node Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-node-overview.png)
 
 
-## Big IP Pool Overview
+## BIG-IP Pool Overview
 
-The Big IP pool overview dashboard provides pool specific metrics such as availability, members, requests, connections, connection queue depth, connection queue serviced, traffic and packets.
+The BIG-IP pool overview dashboard provides pool specific metrics such as availability, members, requests, connections, connection queue depth, connection queue serviced, traffic and packets.
 
-![Big IP Pool Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-pool-overview.png)
-
-
-## Big IP Virtual Server Overview
-
-The Big IP virtual server overview dashboard provides virtual server specific metrics such as availability, requests, connections, average connection duration, traffic and packets.
-
-![Big IP Virtual Server Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-virtual-server-overview.png)
+![BIG-IP Pool Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-pool-overview.png)
 
 
-## Big IP Log Overview
+## BIG-IP Virtual Server Overview
 
-The Big IP log overview dashboard collects Big IP [syslog which are forwarded to grafana loki via promtail](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup). The dashboard can be used to monitor server, high availability, and audit logs using a logs volume and the raw logs panel. This dashboard includes query labels to filter logs such as job, host, syslog_facility, level and a regex search. The syslog_facility collects [enabled logs](https://my.f5.com/manage/s/article/K35284961) on the Big IP system which may include auth, authpriv, daemon, local0 and local6. Additional logs can be enabled depending on the users need.
+The BIG-IP virtual server overview dashboard provides virtual server specific metrics such as availability, requests, connections, average connection duration, traffic and packets.
 
-The logs dashboard can be used to select a syslog_facility which are created when enabling different [log sources](https://clouddocs.f5.com/api/icontrol-soap/Log__Filter__Source.html) in Big IP. Some useful categorizes to enable are: 
+![BIG-IP Virtual Server Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-virtual-server-overview.png)
+
+
+## BIG-IP Log Overview
+
+The BIG-IP log overview dashboard collects BIG-IP [syslog which are forwarded to grafana loki via promtail](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup). The dashboard can be used to monitor server, high availability, and audit logs using a logs volume and the raw logs panel. This dashboard includes query labels to filter logs such as job, host, syslog_facility, level and a regex search. The syslog_facility collects [enabled logs](https://my.f5.com/manage/s/article/K35284961) on the BIG-IP system which may include auth, authpriv, daemon, local0 and local6. Additional logs can be enabled depending on the users need.
+
+The logs dashboard can be used to select a syslog_facility which are created when enabling different [log sources](https://clouddocs.f5.com/api/icontrol-soap/Log__Filter__Source.html) in BIG-IP. Some useful categorizes to enable are: 
 
 | Log category          | log source                  | log description                                                                   | Syslog Facility files        |
 |-----------------------|-----------------------------|-----------------------------------------------------------------------------------|------------------------------|
@@ -64,7 +64,7 @@ The logs dashboard can be used to select a syslog_facility which are created whe
 | Audit logs            | LOG_SOURCE_SHELL(79)        | Shell commands logs.                                                              | `user`, `local0`             |
 
 
-Big IP logs are disabled by default in the `config.libsonnet` and can be updated by setting `enableLokiLogs` to `true`. Then run `make` again to regenerate the dashboard:
+BIG-IP logs are disabled by default in the `config.libsonnet` and can be updated by setting `enableLokiLogs` to `true`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -108,7 +108,7 @@ scrape_configs:
         target_label: syslog_identifier
 ```
 
-![Big IP Logs Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-logs-overview.png)
+![BIG-IP Logs Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-logs-overview.png)
 
 
 ## Alerts Overview
