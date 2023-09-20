@@ -6,8 +6,8 @@ local debug(obj) =
   std.trace(std.toString(obj), obj);
 
 local notNull(i) = i != null;
-local maybeFlatten(acc, i) = if std.type(i) == 'array' then acc + i else acc + [i];
-local join(a) = std.foldl(maybeFlatten, std.filter(notNull, a), []);
+local flatten(acc, i) = acc + i;
+local join(a) = std.foldl(flatten, std.filter(notNull, a), []);
 
 local setGridPos(h, w, x, y) = {
   gridPos: {
