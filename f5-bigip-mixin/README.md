@@ -126,7 +126,7 @@ Default thresholds can be configured in `config.libsonnet`
 {
   _config+:: {
     dashboardTags: ['f5-bigip-mixin'],
-    dashboardPeriod: 'now-1h',
+    dashboardPeriod: 'now-30m',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
 

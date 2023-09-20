@@ -418,9 +418,13 @@ local trafficPanel = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -515,9 +519,13 @@ local packets__intervalPanel = {
   },
   options: {
     legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
