@@ -1,8 +1,13 @@
 local g = import 'grafonnet-latest/main.libsonnet';
 local grafana = (import 'grafonnet/grafana.libsonnet');
+local statusPanels = import 'status-panels-lib/status-panels/main.libsonnet';
 
 local debug(obj) =
   std.trace(std.toString(obj), obj);
+
+local notNull(i) = i != null;
+local flatten(acc, i) = acc + i;
+local join(a) = std.foldl(flatten, std.filter(notNull, a), []);
 
 local setGridPos(h, w, x, y) = {
   gridPos: {
@@ -236,6 +241,49 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
   add_status_panels(dashboard, config, version)::
     if std.member(config.statusPanelDashboards, dashboard.title) then
       $.integration_status_row(dashboard, config, version)
+    else {},
+  integration_status_row_lib(type, dashboard, config)::
+    if std.isArray(dashboard.panels) && std.length(dashboard.panels) > 0 then
+      {
+        panels: join(
+          [
+            (statusPanels.new(
+               'Integration Status',
+               type=type,
+               statusPanelsQueryMetrics=config.statusPanelsQueryMetrics,
+               datasourceNameMetrics=config.statusPanelsDatasourceNameMetrics,
+               statusPanelsQueryLogs=config.statusPanelsQueryLogs,
+               datasourceNameLogs=config.statusPanelsDatasourceNameLogs,
+               showIntegrationVersion=true,
+               integrationVersion=config.statusPanelsIntegrationVersion,
+               panelsHeight=config.statusPanelsGridPos[0],
+               panelsWidth=config.statusPanelsGridPos[1],
+               rowPositionY=config.statusPanelsGridPos[3],
+             )).panels.statusPanelsWithRow,
+            [
+              panel {
+                gridPos+: {
+                  y: if std.objectHas(panel, 'gridPos') && std.objectHas(panel.gridPos, 'y') then
+                    panel.gridPos.y + config.statusPanelsGridPos[0] + 1
+                  else config.statusPanelsGridPos[0] + 1,
+                },
+              }
+              for panel in dashboard.panels
+            ],
+          ]
+        ),
+      }
+    else
+      {
+        rows: dashboard.rows,
+      },
+  add_status_panels_lib(dashboard, config)::
+    if std.member(config.statusPanelsDashboardsMetrics, dashboard.title) then
+      $.integration_status_row_lib('metrics', dashboard, config)
+    else if std.member(config.statusPanelsDashboardsLogs, dashboard.title) then
+      $.integration_status_row_lib('logs', dashboard, config)
+    else if std.member(config.statusPanelsDashboardsBoth, dashboard.title) then
+      $.integration_status_row_lib('both', dashboard, config)
     else {},
 
   // adds links by integration tag.

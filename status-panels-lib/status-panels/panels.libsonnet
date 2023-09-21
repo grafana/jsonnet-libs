@@ -22,7 +22,7 @@ function(
       + stat.panelOptions.withDescription('Shows if ' + statusType + ' are being received for the selected time range.')
       + stat.standardOptions.withUnit('string')
       + stat.standardOptions.withNoValue('No data')
-      + stat.withTargets(targets)
+      + stat.queryOptions.withTargets(targets)
       + stat.standardOptions.color.withMode('fixed')
       + stat.standardOptions.color.withFixedColor('text')
       + stat.options.reduceOptions.withCalcs('lastNotNull')
@@ -34,11 +34,11 @@ function(
       + stat.standardOptions.withMappings([
         stat.valueMapping.SpecialValueMap.withType('special')
         + stat.valueMapping.SpecialValueMap.options.withMatch('null')
-        + stat.valueMapping.SpecialValueMap.result.withIndex(0)
+        + stat.valueMapping.SpecialValueMap.options.result.withIndex(0)
         // if up{} returns null for metrics, it means the agent is not running or misconfigured, since it should always write a value if running and configured to collect the target
-        + stat.valueMapping.SpecialValueMap.result.withText(if statusType == 'metrics' then 'Agent not running or misconfigured' else if statusType == 'logs' then 'Agent failing to collect logs or no logs available')
+        + stat.valueMapping.SpecialValueMap.options.result.withText(if statusType == 'metrics' then 'Agent not running or misconfigured' else if statusType == 'logs' then 'Agent failing to collect logs or no logs available')
         // setting to yellow for logs, since it might be the case that logs just aren't available for the check metrics time frame
-        + stat.valueMapping.SpecialValueMap.result.withColor(if statusType == 'metrics' then 'light-red' else if statusType == 'logs' then 'light-yellow'),
+        + stat.valueMapping.SpecialValueMap.options.result.withColor(if statusType == 'metrics' then 'light-red' else if statusType == 'logs' then 'light-yellow'),
         stat.valueMapping.RangeMap.withType('range')
         + stat.valueMapping.RangeMap.options.withFrom(0)
         + stat.valueMapping.RangeMap.options.withTo(0)
@@ -59,7 +59,7 @@ function(
       + stat.panelOptions.withDescription('Shows the timestamp of the latest ' + type + ' received for this integration in the last 24 hours.')
       + stat.standardOptions.withUnit(dateTimeUnit)
       + stat.standardOptions.withNoValue('No data')
-      + stat.withTargets(targets)
+      + stat.queryOptions.withTargets(targets)
       + stat.standardOptions.color.withMode('fixed')
       + stat.standardOptions.color.withFixedColor('text')
       + stat.options.reduceOptions.withCalcs('lastNotNull')
