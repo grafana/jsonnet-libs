@@ -7,7 +7,7 @@ local commonlib = import 'common/main.libsonnet';
         local t = this.targets,
         local table = g.panel.table,
         local fieldOverride = g.panel.table.fieldOverride,
-        local instanceLabel = 'instance',
+        local instanceLabel = this.config.instanceLabels[0],
         fleetOverviewTable: g.panel.table.new("Fleet overview")
             + table.queryOptions.withTargets([
                 t.osInfo
@@ -45,6 +45,26 @@ local commonlib = import 'common/main.libsonnet';
             ])
             + commonlib.panels.system.table.uptime.stylizeByName('Uptime')
             + table.standardOptions.withOverridesMixin([
+            fieldOverride.byRegexp.new('Product|^Hostname$')
+            + fieldOverride.byRegexp.withProperty('custom.filterable', true),
+            fieldOverride.byName.new('Instance')
+            + fieldOverride.byName.withProperty('custom.filterable', true)
+            + fieldOverride.byName.withProperty('links', [
+              {
+                "targetBlank": false,
+                "title": "Drill down to ${__field.name} ${__value.text}",
+                "url": "d/%s?var-%s=${__data.fields.%s}&${__url_time_range}" % [this.dashboards.overview.uid, instanceLabel,instanceLabel],
+              }
+            ]),
+            fieldOverride.byRegexp.new(std.join('|', this.config.groupLabels))
+            + fieldOverride.byRegexp.withProperty('custom.filterable', true)
+            + fieldOverride.byRegexp.withProperty('links', [
+              {
+                "targetBlank": false,
+                "title": "Filter by ${__field.name}",
+                "url": "d/%s?var-${__field.name}=${__value.text}&${__url_time_range}" % [this.dashboards.fleet.uid],
+              }
+            ]),
             fieldOverride.byName.new('CPU count')
             + fieldOverride.byName.withProperty('custom.width','120'),
             fieldOverride.byName.new('CPU usage')
@@ -62,9 +82,7 @@ local commonlib = import 'common/main.libsonnet';
             + fieldOverride.byName.withProperty('custom.width','120')
             + fieldOverride.byName.withProperty('custom.displayMode','basic')
             + fieldOverride.byName.withPropertiesFromOptions(
-                table.standardOptions.withMax(100)
-                + table.standardOptions.withMin(0)
-                + table.standardOptions.withUnit('percent')
+                commonlib.panels.cpu.timeSeries.utilization.stylize()
             ),
             fieldOverride.byName.new('Disk C: total')
             + fieldOverride.byName.withProperty('custom.width','120')
@@ -73,8 +91,12 @@ local commonlib = import 'common/main.libsonnet';
             ),
             fieldOverride.byName.new('Disk C: used')
             + fieldOverride.byName.withProperty('custom.width','120')
+            + fieldOverride.byName.withProperty('custom.displayMode','basic')
             + fieldOverride.byName.withPropertiesFromOptions(
                 table.standardOptions.withUnit('percent')
+            )
+            + fieldOverride.byName.withPropertiesFromOptions(
+                commonlib.panels.cpu.timeSeries.utilization.stylize()
             ),
             ])
             + table.queryOptions.withTransformationsMixin(
@@ -90,7 +112,8 @@ local commonlib = import 'common/main.libsonnet';
                                 "id": "filterFieldsByName",
                                 "options": {
                                     "include": {
-                                      "pattern": instanceLabel+"|product|^hostname$|Value.+"
+                                      #' 1' - would only match first occurence of group label, so no duplicates
+                                      "pattern": std.join(' 1|',this.config.groupLabels)+' 1|'+instanceLabel+"|product|^hostname$|Value.+"
                                     }
                                 }
                             },
@@ -103,6 +126,8 @@ local commonlib = import 'common/main.libsonnet';
                                     indexByName: {},
                                     renameByName: {
                                         'product': 'Product',
+                                        [instanceLabel]: 'Instance',
+                                        'hostname': 'Hostname',
                                     },
                                 },
                             },
