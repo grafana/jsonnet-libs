@@ -8,12 +8,12 @@ local utils = import './utils.libsonnet';
     this
   ): {
 
-       local filterSelector = this.config.filterSelector,
+       local filteringSelector = this.config.filteringSelector,
        local groupLabels = this.config.groupLabels,
        local instanceLabels = this.config.instanceLabels,
        local root = self,
        local varMetric = 'windows_os_info',
-       local variablesFromLabels(groupLabels, instanceLabels, filterSelector, multiInstance=true) =
+       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
          local chainVarProto(index, chainVar) =
            var.query.new(chainVar.label)
            + var.query.withDatasourceFromVariable(root.datasources.prometheus)
@@ -36,7 +36,7 @@ local utils = import './utils.libsonnet';
              asc=true,
              caseInsensitive=false
            );
-         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filterSelector])),
+         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
        datasources: {
          prometheus:
            var.datasource.new('datasource', 'prometheus')
@@ -48,14 +48,14 @@ local utils = import './utils.libsonnet';
        },
        multiInstance:
          [root.datasources.prometheus]
-         + variablesFromLabels(groupLabels, instanceLabels, filterSelector),
+         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
        singleInstance:
          [root.datasources.prometheus]
-         + variablesFromLabels(groupLabels, instanceLabels, filterSelector, multiInstance=false),
+         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
 
        queriesSelector:
          '%s,%s' % [
-           filterSelector,
+           filteringSelector,
            utils.labelsToPromQLSelector(groupLabels + instanceLabels),
          ],
      }

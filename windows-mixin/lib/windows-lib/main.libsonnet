@@ -9,18 +9,20 @@ local commonlib = import 'common/main.libsonnet';
 {
 
   // any modular library should inlcude as inputs:
-  // 'prefix' - Use as prefix for all Dashboards and (optional) rule groups
-  // 'filterSelector' - Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
+  // 'dashboardNamePrefix' - Use as prefix for all Dashboards and (optional) rule groups
+  // 'filteringSelector' - Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
   // 'groupLabels' - one or more labels that can be used to identify 'group' of instances. In simple cases, can be 'job' or 'cluster'.
   // 'instanceLabels' - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
+  // 'uid' - UID to prefix all dashboards original uids
 
   new(
-    prefix='',
-    filterSelector,
-    tags=[uid],
-    uid,
+    filteringSelector,
     groupLabels=['job'],
     instanceLabels=['instance'],
+    dashboardNamePrefix='',
+    dashboardTags=[uid],
+    uid,
+
   ): {
 
     local this = self,
@@ -28,10 +30,10 @@ local commonlib = import 'common/main.libsonnet';
       ignoreVolumes: 'HarddiskVolume.*',
       groupLabels: groupLabels,
       instanceLabels: instanceLabels,
-      filterSelector: filterSelector,
-      tags: tags,
+      filteringSelector: filteringSelector,
+      dashboardTags: dashboardTags,
       uid: uid,
-      prefix: prefix,
+      dashboardNamePrefix: dashboardNamePrefix,
       enableLokiLogs: true,
     },
 
@@ -74,7 +76,7 @@ local commonlib = import 'common/main.libsonnet';
         link.link.new('Back to Windows overview', '/d/' + this.dashboards.overview.uid)
         + link.link.options.withKeepTime(true),
       otherDashboards:
-        link.dashboards.new('All Windows dashboards', tags)
+        link.dashboards.new('All Windows dashboards', dashboardTags)
         + link.dashboards.options.withIncludeVars(true)
         + link.dashboards.options.withKeepTime(true)
         + link.dashboards.options.withAsDropdown(true),
