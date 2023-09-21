@@ -42,6 +42,14 @@ local commonlib = import 'common/main.libsonnet';
                 + g.query.prometheus.withFormat('table')
                 + g.query.prometheus.withInstant(true)
                 + g.query.prometheus.withRefId("Disk C: used"),
+                t.alertsCritical
+                + g.query.prometheus.withFormat('table')
+                + g.query.prometheus.withInstant(true)
+                + g.query.prometheus.withRefId("CRITICAL"),
+                t.alertsWarning
+                + g.query.prometheus.withFormat('table')
+                + g.query.prometheus.withInstant(true)
+                + g.query.prometheus.withRefId("WARNING"),
             ])
             + commonlib.panels.system.table.uptime.stylizeByName('Uptime')
             + table.standardOptions.withOverridesMixin([

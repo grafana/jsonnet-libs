@@ -24,6 +24,16 @@ local lokiQuery = g.query.loki;
             '${' + this.variables.datasources.loki.name+"}",
             '{%(queriesSelector)s, channel="System", level="Critical"} | json' % variables
             ),
+        alertsCritical:
+            prometheusQuery.new(
+            '${' + this.variables.datasources.prometheus.name+"}",
+            'count by (%(instanceLabels)s) (max_over_time(ALERTS{%(queriesSelector)s, alertstate="firing", severity="critical"}[1m])) * group by (%(instanceLabels)s) (windows_os_info{%(queriesSelector)s})' % variables {instanceLabels: std.join(',', this.config.instanceLabels)},
+            ),
+        alertsWarning:
+            prometheusQuery.new(
+            '${' + this.variables.datasources.prometheus.name+"}",
+            'count by (%(instanceLabels)s) (max_over_time(ALERTS{%(queriesSelector)s, alertstate="firing", severity="warning"}[1m])) * group by (%(instanceLabels)s) (windows_os_info{%(queriesSelector)s})' % variables {instanceLabels: std.join(',', this.config.instanceLabels)},
+            ),
 
         uptime: 
             prometheusQuery.new(
