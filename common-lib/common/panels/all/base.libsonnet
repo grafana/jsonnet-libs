@@ -8,13 +8,13 @@ local options = timeSeries.options;
 {
   new(title, targets, description=''):
     timeSeries.queryOptions.withTargets(targets)
-    // set first target's datasource 
+    // set first target's datasource
     // to panel's datasource if only sinlge type of
     // datasoures are used accross all targets:
-    + if std.length(std.set(targets, function(t) t.datasource.type))==1 then
+    + timeSeries.panelOptions.withDescription(description)
+    + if std.length(std.set(targets, function(t) t.datasource.type)) == 1 then
       timeSeries.queryOptions.withDatasource(
-        targets[0].datasource.type,targets[0].datasource.uid
-      ) else {}
-    + timeSeries.panelOptions.withDescription(description),
-  stylize(): {}
+        targets[0].datasource.type, targets[0].datasource.uid
+      ) else {},
+  stylize(): {},
 }
