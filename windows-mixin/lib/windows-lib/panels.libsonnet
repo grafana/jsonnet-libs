@@ -181,6 +181,9 @@ local commonlib = import 'common/main.libsonnet';
           CPU usage by different modes.
         |||
       ),
+      // TODO add why it is important, consider alert
+      // https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc940375(v=technet.10)
+      cpuQueue: commonlib.panels.all.timeSeries.base.new('CPU average queue', targets=[t.cpuQueue]),
       memoryTotalBytes: commonlib.panels.memory.stat.total.new(targets=[t.memoryTotalBytes]),
       memoryPageTotalBytes: commonlib.panels.memory.stat.total.new('Pagefile size', targets=[t.memoryPageTotalBytes]),
       memoryUsageStatPercent: commonlib.panels.memory.stat.usage.new(targets=[t.memoryUsagePercent]),
