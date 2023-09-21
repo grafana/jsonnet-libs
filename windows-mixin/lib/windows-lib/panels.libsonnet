@@ -149,6 +149,22 @@ local commonlib = import 'common/main.libsonnet';
                             ]
                           ),
       uptime: commonlib.panels.system.stat.uptime.new(targets=[t.uptime]),
+      systemContextSwitchesAndInterrupts:
+        commonlib.panels.all.timeSeries.base.new(
+          'Context switches/Interrupts',
+          targets=[
+            t.systemContextSwitches,
+            t.systemInterrupts,
+          ],
+          description=|||
+            Context switches occur when the operating system switches from running one process to another. Interrupts are signals sent to the CPU by external devices to request its attention.
+
+            A high number of context switches or interrupts can indicate that the system is overloaded or that there are problems with specific devices or processes.
+          |||
+        ),
+      // TODO:
+      // timeNtpStatus: commonlib. targets=[t.timeNtpStatus,
+      // description=
       cpuCount: commonlib.panels.cpu.stat.count.new(targets=[t.cpuCount]),
       cpuUsageTs: commonlib.panels.cpu.timeSeries.utilization.new(targets=[t.cpuUsage]),
       cpuUsageTopk: commonlib.panels.all.timeSeries.topkPercentage.new(
@@ -159,6 +175,12 @@ local commonlib = import 'common/main.libsonnet';
         drillDownDashboardUid=this.dashboards.overview.uid,
       ),
       cpuUsageStat: commonlib.panels.cpu.stat.usage.new(targets=[t.cpuUsage]),
+      cpuUsageByMode: commonlib.panels.cpu.timeSeries.utilizationByMode.new(
+        targets=[t.cpuUsageByMode],
+        description=|||
+          CPU usage by different modes.
+        |||
+      ),
       memoryTotalBytes: commonlib.panels.memory.stat.total.new(targets=[t.memoryTotalBytes]),
       memoryPageTotalBytes: commonlib.panels.memory.stat.total.new('Pagefile size', targets=[t.memoryPageTotalBytes]),
       memoryUsageStatPercent: commonlib.panels.memory.stat.usage.new(targets=[t.memoryUsagePercent]),

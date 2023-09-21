@@ -87,12 +87,12 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                     g.panel.row.new('System'),
                     panels.cpuUsageStat { gridPos+: { w: 6, h: 6 } },
                     panels.cpuUsageTs { gridPos+: { w: 9, h: 6 } },
-                    g.panel.timeSeries.new('CPU usage(by mode)') { gridPos+: { w: 9, h: 6 } },
+                    panels.cpuUsageByMode { gridPos+: { w: 9, h: 6 } },
                     g.panel.timeSeries.new('Load average'),
-                    g.panel.timeSeries.new('Context switches/Interrups'),
+                    panels.systemContextSwitchesAndInterrupts,
                     g.panel.row.new('Time'),
                     panels.osTimezone { gridPos+: { w: 3, h: 3 } },
-                    g.panel.timeSeries.new('NTP status'),
+                    g.panel.timeSeries.new('NTP status') { gridPos+: { w: 21, h: 3 } },
                     panels.networkPacketsPerSec { gridPos+: { w: 24, h: 7 } },
                   ], 12, 7
                 )

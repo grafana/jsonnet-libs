@@ -51,6 +51,17 @@ local lokiQuery = g.query.loki;
         '100 - (avg by (instance) (rate(windows_cpu_time_total{mode="idle", %(queriesSelector)s}[$__rate_interval])*100))' % variables
       )
       + prometheusQuery.withLegendFormat('CPU usage'),
+    cpuUsageByMode:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        |||
+          sum by(instance, mode) (irate(windows_cpu_time_total{%(queriesSelector)s}[$__rate_interval])) 
+          / on(instance) 
+          group_left sum by (instance)((irate(windows_cpu_time_total{%(queriesSelector)s}[$__rate_interval]))) * 100
+        ||| % variables
+      )
+      + prometheusQuery.withLegendFormat('{{ mode }}'),
+
     memoryTotalBytes:
       prometheusQuery.new(
         '${' + this.variables.datasources.prometheus.name + '}',
@@ -140,6 +151,26 @@ local lokiQuery = g.query.loki;
         'windows_os_timezone{%(queriesSelector)s}' % variables,
       )
       + prometheusQuery.withFormat('table'),
+    systemContextSwitches:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'irate(windows_system_context_switches_total{%(queriesSelector)s}[$__rate_interval])' % variables,
+      )
+      + prometheusQuery.withLegendFormat('Context switches'),
+    systemInterrupts:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'sum without (core) (irate(windows_cpu_interrupts_total{%(queriesSelector)s}[$__rate_interval]))' % variables,
+      )
+      + prometheusQuery.withLegendFormat('Interrupts'),
+
+    timeNtpStatus:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'clamp_max(windows_time_ntp_client_time_sources{%(queriesSelector)s}, 1)' % variables,
+      )
+      + prometheusQuery.withLegendFormat('NTP status'),
+
 
     networkOutBitPerSec:
       prometheusQuery.new(
