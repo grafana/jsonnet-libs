@@ -12,23 +12,25 @@ base {
     topk=25,
     instanceLabels,
     drillDownDashboardUid,
-    description='Top %s' % topk):
+    description='Top %s' % topk
+  ):
 
     local topTarget = target
-      + {expr: 'topk('+topk+','+target.expr+')'}
-      + g.query.prometheus.withLegendFormat(
-        std.join(': ',std.map(function(l) '{{'+l+'}}', instanceLabels)));
-    local meanTarget = target 
-      + {expr: 'avg('+target.expr+')'}
-      + g.query.prometheus.withLegendFormat('Mean');
-        super.base.new(title, targets=[topTarget,meanTarget], description=description)
-      + self.stylize()
-      + self.withDataLink(instanceLabels,drillDownDashboardUid),
+                      { expr: 'topk(' + topk + ',' + target.expr + ')' }
+                      + g.query.prometheus.withLegendFormat(
+                        std.join(': ', std.map(function(l) '{{' + l + '}}', instanceLabels))
+                      );
+    local meanTarget = target
+                       { expr: 'avg(' + target.expr + ')' }
+                       + g.query.prometheus.withLegendFormat('Mean');
+    super.base.new(title, targets=[topTarget, meanTarget], description=description)
+    + self.stylize()
+    + self.withDataLink(instanceLabels, drillDownDashboardUid),
   withDataLink(instanceLabels, drillDownDashboardUid):
     standardOptions.withLinks(
       {
-        url: 'd/'+drillDownDashboardUid+'?'+std.join('&',std.map(function(l) 'var-%s=${__field.labels.%s}' % [l,l], instanceLabels))+'&${__url_time_range}',
-        title: "Drill down to this instance",
+        url: 'd/' + drillDownDashboardUid + '?' + std.join('&', std.map(function(l) 'var-%s=${__field.labels.%s}' % [l, l], instanceLabels)) + '&${__url_time_range}',
+        title: 'Drill down to this instance',
       }
     ),
   stylize():
@@ -42,22 +44,24 @@ base {
     + fieldConfig.defaults.custom.withFillOpacity(1)
     + fieldConfig.defaults.custom.withLineWidth(1)
     + timeSeries.options.legend.withDisplayMode('table')
-      + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.options.legend.withCalcsMixin([
-          'mean','max','lastNotNull',
-      ])
+    + timeSeries.options.legend.withPlacement('right')
+    + timeSeries.options.legend.withCalcsMixin([
+      'mean',
+      'max',
+      'lastNotNull',
+    ])
     + timeSeries.standardOptions.withOverrides(
       fieldOverride.byName.new('Mean')
       + fieldOverride.byName.withPropertiesFromOptions(
-          fieldConfig.defaults.custom.withLineStyleMixin(
+        fieldConfig.defaults.custom.withLineStyleMixin(
           {
             fill: 'dash',
-            dash: [10,10],
+            dash: [10, 10],
           }
         )
         + fieldConfig.defaults.custom.withFillOpacity(0)
         + timeSeries.standardOptions.color.withMode('fixed')
         + timeSeries.standardOptions.color.withFixedColor('light-purple'),
       )
-  ),
+    ),
 }
