@@ -12,6 +12,6 @@ base {
     description='',
   ):
     super.new(title, targets, description)
-    + timeSeries.standardOptions.withUnit('decbytes')
-    + timeSeries.standardOptions.withMin(0)
+    + timeSeries.standardOptions.withUnit('bytes')
+    + timeSeries.standardOptions.withMin(0),
 }
