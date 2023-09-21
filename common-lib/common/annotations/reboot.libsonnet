@@ -9,7 +9,7 @@ base {
         instanceLabels,
     ):
         super.new(title, target)
-        + annotation.withIconColor("light-orange")
+        + annotation.withIconColor("light-yellow")
         + annotation.withHide(true)
         + {"useValueForTime": "on"}
         + base.withTagKeys(instanceLabels)
