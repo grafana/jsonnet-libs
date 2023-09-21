@@ -5,17 +5,15 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
   new(
     this
   ):
+      local prefix = this.config.prefix;
+      local links = this.links;
+      local tags = this.config.tags;
+      local uid = this.config.uid;
+      local vars = this.variables;
+      local annotations = this.annotations;
+      local panels = this.panels;
+      local stat = g.panel.stat;
     {
-      local prefix = this.config.prefix,
-      local links = this.links,
-      local tags = this.config.tags,
-      local uid = this.config.uid,
-      local vars = this.variables,
-      local annotations = this.annotations,
-      local panels = this.panels,
-
-
-      local stat = g.panel.stat,
       fleet:
         local title = prefix + 'Windows fleet overview';
         g.dashboard.new(title)
@@ -99,43 +97,49 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                )
              )
              + root.applyCommon(vars.singleInstance, uid + '-disks', tags, links, annotations),
-
+    }
+    +
+    if this.config.enableLokiLogs
+    then
+    {
       logs:
-        logslib.new(prefix + 'Windows logs',
-                    datasourceName='loki_datasource',
-                    datasourceRegex='',
-                    filterSelector=this.config.filterSelector,
-                    labels=this.config.groupLabels + this.config.instanceLabels + ['channel', 'source', 'keywords', 'level'],
-                    formatParser='json',
-                    showLogsVolume=true,
-                    logsVolumeGroupBy='level',
-                    extraFilters=|||
-                      | label_format timestamp="{{__timestamp__}}"
-                      | drop channel_extracted,source_extracted,computer_extracted,level_extracted,keywords_extracted
-                      | line_format `{{ if eq "[[instance]]" ".*" }}{{ alignLeft 15 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 15 .source}}| {{ .message }}`
-                    |||)
-        {
-          dashboards+:
+          
+            logslib.new(prefix + 'Windows logs',
+                        datasourceName='loki_datasource',
+                        datasourceRegex='',
+                        filterSelector=this.config.filterSelector,
+                        labels=this.config.groupLabels + this.config.instanceLabels + ['channel', 'source', 'keywords', 'level'],
+                        formatParser='json',
+                        showLogsVolume=true,
+                        logsVolumeGroupBy='level',
+                        extraFilters=|||
+                          | label_format timestamp="{{__timestamp__}}"
+                          | drop channel_extracted,source_extracted,computer_extracted,level_extracted,keywords_extracted
+                          | line_format `{{ if eq "[[instance]]" ".*" }}{{ alignLeft 15 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 15 .source}}| {{ .message }}`
+                        |||)
             {
-              logs+:
-                // reference self, already generated variables to keep them, but apply other common data in applyCommon
-                root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations),
-            },
-          panels+:
-            {
-              logs+:
-                g.panel.logs.options.withEnableLogDetails(true)
-                + g.panel.logs.options.withShowTime(false)
-                + g.panel.logs.options.withWrapLogMessage(false),
-            },
-          variables+: {
-            // add prometheus datasource for annotations processing
-            toArray+: [
-              this.variables.datasource { hide: 2 },
-            ],
-          },
-        }.dashboards.logs,
-    },
+              dashboards+:
+                {
+                  logs+:
+                    // reference self, already generated variables to keep them, but apply other common data in applyCommon
+                    root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations),
+                },
+              panels+:
+                {
+                  logs+:
+                    g.panel.logs.options.withEnableLogDetails(true)
+                    + g.panel.logs.options.withShowTime(false)
+                    + g.panel.logs.options.withWrapLogMessage(false),
+                },
+              variables+: {
+                // add prometheus datasource for annotations processing
+                toArray+: [
+                  this.variables.datasources.prometheus { hide: 2 },
+                ],
+              },
+            }.dashboards.logs
+    }
+    else {},
 
   applyCommon(vars, uid, tags, links, annotations):
     g.dashboard.withTags(tags)

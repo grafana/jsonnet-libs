@@ -1,7 +1,8 @@
+local datasources = import './datasources.libsonnet';
+local variables = import './variables.libsonnet';
 local dashboards = import './dashboards.libsonnet';
 local panels = import './panels.libsonnet';
 local targets = import './targets.libsonnet';
-local variables = import './variables.libsonnet';
 local g = import './g.libsonnet';
 local commonlib = import 'common/main.libsonnet';
 
@@ -19,7 +20,7 @@ local commonlib = import 'common/main.libsonnet';
     tags=[uid],
     uid,
     groupLabels=['job'],
-    instanceLabels=['instance']
+    instanceLabels=['instance'],
   ): {
 
     local this = self,
@@ -31,19 +32,12 @@ local commonlib = import 'common/main.libsonnet';
       tags: tags,
       uid: uid,
       prefix: prefix,
+      enableLokiLogs: true,
     },
 
-    variables: variables.new(
-    //   datasourceName,
-    //   datasourceRegex,
-      filterSelector,
-      groupLabels,
-      instanceLabels,
-    ),
+    variables: variables.new(this),
 
-    targets: targets.new(
-      this
-    ),
+    targets: targets.new(this),
 
     annotations: {
       reboot: commonlib.annotations.reboot.new(
@@ -51,7 +45,23 @@ local commonlib = import 'common/main.libsonnet';
       target=this.targets.reboot,
       instanceLabels=std.join(",", instanceLabels),
       ),
-    },
+    }
+    +
+    if this.config.enableLokiLogs then
+    {
+      serviceFailed: commonlib.annotations.serviceFailed.new(
+        title='Service failed',
+        target=this.targets.serviceFailed,
+      )
+      + commonlib.annotations.base.withTagKeys(std.join(",",groupLabels+instanceLabels+['level']))
+      + commonlib.annotations.base.withTextFormat('{{message}}'),
+      criticalEvents: commonlib.annotations.fatal.new(
+        title='Critical system event',
+        target=this.targets.criticalEvents,
+      )
+      + commonlib.annotations.base.withTagKeys(std.join(",",groupLabels+instanceLabels+['level']))
+      + commonlib.annotations.base.withTextFormat('{{message}}'),
+    } else {},
 
     // common links here
     links: {
