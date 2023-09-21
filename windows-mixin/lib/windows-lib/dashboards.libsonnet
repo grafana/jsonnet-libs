@@ -88,7 +88,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                     panels.cpuUsageStat { gridPos+: { w: 6, h: 6 } },
                     panels.cpuUsageTs { gridPos+: { w: 9, h: 6 } },
                     panels.cpuUsageByMode { gridPos+: { w: 9, h: 6 } },
-                    g.panel.timeSeries.new('Load average'),
+                    panels.cpuQueue,
                     panels.systemContextSwitchesAndInterrupts,
                     g.panel.row.new('Time'),
                     panels.osTimezone { gridPos+: { w: 3, h: 3 } },

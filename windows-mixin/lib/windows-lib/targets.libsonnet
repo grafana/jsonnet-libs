@@ -62,6 +62,16 @@ local lokiQuery = g.query.loki;
       )
       + prometheusQuery.withLegendFormat('{{ mode }}'),
 
+    // https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc940375(v=technet.10)?redirectedfrom=MSDN
+    cpuQueue:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        |||
+          windows_system_processor_queue_length{%(queriesSelector)s}
+        ||| % variables
+      )
+      + prometheusQuery.withLegendFormat('CPU average queue'),
+
     memoryTotalBytes:
       prometheusQuery.new(
         '${' + this.variables.datasources.prometheus.name + '}',
