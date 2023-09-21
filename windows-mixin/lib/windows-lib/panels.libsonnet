@@ -201,6 +201,8 @@ local commonlib = import 'common/main.libsonnet';
               { options+: { reduceOptions+: { fields: '/^product$/' } } },
       osVersion: commonlib.panels.all.stat.info.new('OS version', targets=[t.osInfo])
                  { options+: { reduceOptions+: { fields: '/^version$/' } } },
+      osTimezone: commonlib.panels.all.stat.info.new('Timezone', targets=[t.osTimezone])
+                  { options+: { reduceOptions+: { fields: '/^timezone$/' } } },
       hostname: commonlib.panels.all.stat.info.new('Hostname', targets=[t.osInfo])
                 { options+: { reduceOptions+: { fields: '/^hostname$/' } } },
       networkInterfacesOverview: g.panel.table.new('Network interfaces overview'),

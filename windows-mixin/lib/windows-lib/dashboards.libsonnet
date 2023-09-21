@@ -78,21 +78,38 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                  )
                )
                + root.applyCommon(vars.singleInstance, uid + '-network', tags, links, annotations),
+      // TODO advanced memory dashboard (must enable memory collector)
+      // memory:
+      system: g.dashboard.new(prefix + 'Windows CPU and system')
+              + g.dashboard.withPanels(
+                g.util.grid.wrapPanels(
+                  [
+                    g.panel.row.new('System'),
+                    panels.cpuUsageStat { gridPos+: { w: 6, h: 6 } },
+                    panels.cpuUsageTs { gridPos+: { w: 9, h: 6 } },
+                    g.panel.timeSeries.new('CPU usage(by mode)') { gridPos+: { w: 9, h: 6 } },
+                    g.panel.timeSeries.new('Load average'),
+                    g.panel.timeSeries.new('Context switches/Interrups'),
+                    g.panel.row.new('Time'),
+                    panels.osTimezone { gridPos+: { w: 3, h: 3 } },
+                    g.panel.timeSeries.new('NTP status'),
+                    panels.networkPacketsPerSec { gridPos+: { w: 24, h: 7 } },
+                  ], 12, 7
+                )
+              )
+              + root.applyCommon(vars.singleInstance, uid + '-system', tags, links, annotations),
 
       disks: g.dashboard.new(prefix + 'Windows disks and filesystems')
              + g.dashboard.withPanels(
                g.util.grid.wrapPanels(
                  [
                    g.panel.row.new('Filesystem'),
-                   panels.networkUsagePerSec,
-                   panels.diskUsage,
-                   panels.networkErrorsPerSec,
-                   panels.networkDroppedPerSec,
+                   g.panel.timeSeries.new('Disk space available'),
                    g.panel.row.new('Disk'),
-                   panels.diskIOBytesPerSec,
-                   panels.networkMulticast,
-                   panels.networkPacketsPerSec,
-                   panels.networkMulticast,
+                   g.panel.timeSeries.new('Disk I/O'),
+                   g.panel.timeSeries.new('Disk I/Ops completed'),
+                   g.panel.timeSeries.new('Disk average wait time'),
+                   g.panel.timeSeries.new('Average queue size'),
                  ], 12, 7
                )
              )
