@@ -3,36 +3,34 @@ local base = import './main.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local fieldConfig = g.panel.timeSeries.fieldConfig;
+local standardOptions = g.panel.timeSeries.standardOptions;
 // Styly to display Top K metrics that can go from 0 to 100%.
 base {
   new(
     title,
     target,
     topk=25,
-    legendLabels,
+    instanceLabels,
+    drillDownDashboardUid,
     description='Top %s' % topk):
 
     local topTarget = target
       + {expr: 'topk('+topk+','+target.expr+')'}
       + g.query.prometheus.withLegendFormat(
-        std.join(': ',std.map(function(l) '{{'+l+'}}', legendLabels)));
+        std.join(': ',std.map(function(l) '{{'+l+'}}', instanceLabels)));
     local meanTarget = target 
       + {expr: 'avg('+target.expr+')'}
       + g.query.prometheus.withLegendFormat('Mean');
         super.base.new(title, targets=[topTarget,meanTarget], description=description)
       + self.stylize()
-      + self.withDataLink("t", "b"),
-  withDataLink(title, url):
-
+      + self.withDataLink(instanceLabels,drillDownDashboardUid),
+  withDataLink(instanceLabels, drillDownDashboardUid):
+    standardOptions.withLinks(
       {
-        links+:
-        [
-          {
-            url: "d/nodes?var-instance=${__field.labels.instance}&${__url_time_range}&var-datasource=${datasource}",
-            title: "abc"
-          }
-        ]
-      },
+        url: 'd/'+drillDownDashboardUid+'?'+std.join('&',std.map(function(l) 'var-%s=${__field.labels.%s}' % [l,l], instanceLabels))+'&${__url_time_range}',
+        title: "Drill down to this instance",
+      }
+    ),
   stylize():
     base.percentage.stylize()
     // make dots cloud
