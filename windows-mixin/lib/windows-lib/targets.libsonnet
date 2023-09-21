@@ -134,6 +134,13 @@ local lokiQuery = g.query.loki;
       )
       + prometheusQuery.withFormat('table'),
 
+    osTimezone:  //timezone label
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'windows_os_timezone{%(queriesSelector)s}' % variables,
+      )
+      + prometheusQuery.withFormat('table'),
+
     networkOutBitPerSec:
       prometheusQuery.new(
         '${' + this.variables.datasources.prometheus.name + '}',
