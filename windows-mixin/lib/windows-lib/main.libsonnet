@@ -1,9 +1,9 @@
-local datasources = import './datasources.libsonnet';
-local variables = import './variables.libsonnet';
 local dashboards = import './dashboards.libsonnet';
+local datasources = import './datasources.libsonnet';
+local g = import './g.libsonnet';
 local panels = import './panels.libsonnet';
 local targets = import './targets.libsonnet';
-local g = import './g.libsonnet';
+local variables = import './variables.libsonnet';
 local commonlib = import 'common/main.libsonnet';
 
 {
@@ -15,7 +15,7 @@ local commonlib = import 'common/main.libsonnet';
   // 'instanceLabels' - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
 
   new(
-    prefix="",
+    prefix='',
     filterSelector,
     tags=[uid],
     uid,
@@ -40,40 +40,40 @@ local commonlib = import 'common/main.libsonnet';
     targets: targets.new(this),
 
     annotations: {
-      reboot: commonlib.annotations.reboot.new(
-      title="Reboot",
-      target=this.targets.reboot,
-      instanceLabels=std.join(",", instanceLabels),
-      )
-      + commonlib.annotations.base.withTagKeys(std.join(",",groupLabels+instanceLabels+['level']))
-    }
-    +
-    if this.config.enableLokiLogs then
-    {
-      serviceFailed: commonlib.annotations.serviceFailed.new(
-        title='Service failed',
-        target=this.targets.serviceFailed,
-      )
-      + commonlib.annotations.base.withTagKeys(std.join(",",groupLabels+instanceLabels+['level']))
-      + commonlib.annotations.base.withTextFormat('{{message}}'),
-      criticalEvents: commonlib.annotations.fatal.new(
-        title='Critical system event',
-        target=this.targets.criticalEvents,
-      )
-      + commonlib.annotations.base.withTagKeys(std.join(",",groupLabels+instanceLabels+['level']))
-      + commonlib.annotations.base.withTextFormat('{{message}}'),
-    } else {},
+                   reboot: commonlib.annotations.reboot.new(
+                             title='Reboot',
+                             target=this.targets.reboot,
+                             instanceLabels=std.join(',', instanceLabels),
+                           )
+                           + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level'])),
+                 }
+                 +
+                 if this.config.enableLokiLogs then
+                   {
+                     serviceFailed: commonlib.annotations.serviceFailed.new(
+                                      title='Service failed',
+                                      target=this.targets.serviceFailed,
+                                    )
+                                    + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level']))
+                                    + commonlib.annotations.base.withTextFormat('{{message}}'),
+                     criticalEvents: commonlib.annotations.fatal.new(
+                                       title='Critical system event',
+                                       target=this.targets.criticalEvents,
+                                     )
+                                     + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level']))
+                                     + commonlib.annotations.base.withTextFormat('{{message}}'),
+                   } else {},
 
     // common links here
     links: {
       local link = g.dashboard.link,
       backToFleet:
-        link.link.new('Back to Windows fleet', "/d/" + this.dashboards.fleet.uid)
+        link.link.new('Back to Windows fleet', '/d/' + this.dashboards.fleet.uid)
         + link.link.options.withKeepTime(true),
       backToOverview:
-        link.link.new('Back to Windows overview', "/d/" + this.dashboards.overview.uid)
+        link.link.new('Back to Windows overview', '/d/' + this.dashboards.overview.uid)
         + link.link.options.withKeepTime(true),
-      otherDashboards:  
+      otherDashboards:
         link.dashboards.new('All Windows dashboards', tags)
         + link.dashboards.options.withIncludeVars(true)
         + link.dashboards.options.withKeepTime(true)
