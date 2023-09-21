@@ -44,7 +44,8 @@ local commonlib = import 'common/main.libsonnet';
       title="Reboot",
       target=this.targets.reboot,
       instanceLabels=std.join(",", instanceLabels),
-      ),
+      )
+      + commonlib.annotations.base.withTagKeys(std.join(",",groupLabels+instanceLabels+['level']))
     }
     +
     if this.config.enableLokiLogs then
