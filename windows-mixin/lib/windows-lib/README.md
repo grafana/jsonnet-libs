@@ -1,3 +1,7 @@
+## Collectors used:
+
+enabled_collectors: cpu,cs,logical_disk,net,os,service,system,textfile,tcp,scheduled_task,time,memory,iis
+
 ## Logs scrape snippet:
 
 ```

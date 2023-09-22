@@ -3,12 +3,11 @@
   "dependencies": [
     {
       "source": {
-        "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs.git",
-          "subdir": "common-lib/common"
+        "local": {
+          "directory": "../../../../jl-common-lib/common-lib/common"
         }
       },
-      "version": "vzhuravlev/common-lib"
+      "version": ""
     },
     {
       "source": {

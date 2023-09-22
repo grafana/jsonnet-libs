@@ -1,3 +1,4 @@
+local alerts = import './alerts.libsonnet';
 local dashboards = import './dashboards.libsonnet';
 local datasources = import './datasources.libsonnet';
 local g = import './g.libsonnet';
@@ -35,6 +36,12 @@ local commonlib = import 'common/main.libsonnet';
       uid: uid,
       dashboardNamePrefix: dashboardNamePrefix,
       enableLokiLogs: true,
+      alertsCPUThresholdWarning: '90',
+      alertMemoryUsageThresholdCritical: '90',
+      alertDiskUsageThresholdCritical: '90',
+      dashboardPeriod: 'now-1h',
+      dashboardTimezone: 'default',
+      dashboardRefresh: '1m',
     },
 
     variables: variables.new(this),
@@ -95,7 +102,7 @@ local commonlib = import 'common/main.libsonnet';
       this
     ),
 
-    alerts: {},
+    alerts: alerts.new(this),
     recordingRules: {},
   },
 

@@ -11,6 +11,9 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     local uid = this.config.uid;
     local vars = this.variables;
     local annotations = this.annotations;
+    local refresh = this.config.dashboardRefresh;
+    local period = this.config.dashboardPeriod;
+    local timezone = this.config.dashboardTimezone;
     local panels = this.panels;
     local stat = g.panel.stat;
     {
@@ -31,7 +34,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
           )
         )
         // hide link to self
-        + root.applyCommon(vars.multiInstance, uid + '-fleet', tags, links { backToFleet+:: {}, backToOverview+:: {} }, annotations),
+        + root.applyCommon(vars.multiInstance, uid + '-fleet', tags, links { backToFleet+:: {}, backToOverview+:: {} }, annotations, timezone, refresh, period),
       overview: g.dashboard.new(prefix + 'Windows overview')
                 + g.dashboard.withUid('overview')
                 + g.dashboard.withPanels(
@@ -61,7 +64,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                     ], 6, 2
                   )
                 )
-                + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { backToOverview+:: {} }, annotations),
+                + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
       network: g.dashboard.new(prefix + 'Windows network')
                + g.dashboard.withPanels(
                  g.util.grid.wrapPanels(
@@ -73,11 +76,11 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                      panels.networkErrorsPerSec,
                      panels.networkDroppedPerSec,
                      panels.networkPacketsPerSec,
-                     panels.networkMulticast,
+                     //panels.networkMulticast,
                    ], 12, 7
                  )
                )
-               + root.applyCommon(vars.singleInstance, uid + '-network', tags, links, annotations),
+               + root.applyCommon(vars.singleInstance, uid + '-network', tags, links, annotations, timezone, refresh, period),
       // TODO advanced memory dashboard (must enable memory collector)
       // memory:
       system: g.dashboard.new(prefix + 'Windows CPU and system')
@@ -99,7 +102,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                   ], 12, 7
                 )
               )
-              + root.applyCommon(vars.singleInstance, uid + '-system', tags, links, annotations),
+              + root.applyCommon(vars.singleInstance, uid + '-system', tags, links, annotations, timezone, refresh, period),
 
       disks: g.dashboard.new(prefix + 'Windows disks and filesystems')
              + g.dashboard.withPanels(
@@ -115,7 +118,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                  ], 12, 7
                )
              )
-             + root.applyCommon(vars.singleInstance, uid + '-disks', tags, links, annotations),
+             + root.applyCommon(vars.singleInstance, uid + '-disks', tags, links, annotations, timezone, refresh, period),
     }
     +
     if this.config.enableLokiLogs
@@ -141,7 +144,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
               {
                 logs+:
                   // reference self, already generated variables to keep them, but apply other common data in applyCommon
-                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations),
+                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
               },
             panels+:
               {
@@ -159,11 +162,13 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
           }.dashboards.logs,
       }
     else {},
-
-  applyCommon(vars, uid, tags, links, annotations):
+  applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(g.util.string.slugify(uid))
     + g.dashboard.withLinks(std.objectValues(links))
+    + g.dashboard.withTimezone(timezone)
+    + g.dashboard.withRefresh(refresh)
+    + g.dashboard.time.withFrom(period)
     + g.dashboard.withVariables(vars)
     + g.dashboard.withAnnotations(std.objectValues(annotations)),
 }

@@ -297,7 +297,7 @@ local commonlib = import 'common/main.libsonnet';
                               targets=[t.networkInPacketsPerSec, t.networkOutPacketsPerSec]
                             )
                             + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
-      networkMulticast: commonlib.panels.network.timeSeries.multicast.new(targets=[t.networkMulticast])
-                        + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+      // networkMulticast: commonlib.panels.network.timeSeries.multicast.new(targets=[t.networkMulticast])
+      //                   + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
     },
 }
