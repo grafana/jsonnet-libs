@@ -5,7 +5,7 @@ local g = import './g.libsonnet';
 local panels = import './panels.libsonnet';
 local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
-local commonlib = import 'common/main.libsonnet';
+local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main.libsonnet';
 
 {
 

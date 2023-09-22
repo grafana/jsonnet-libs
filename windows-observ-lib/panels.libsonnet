@@ -1,5 +1,5 @@
 local g = import './g.libsonnet';
-local commonlib = import 'common/main.libsonnet';
+local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main.libsonnet';
 
 {
   new(this):
