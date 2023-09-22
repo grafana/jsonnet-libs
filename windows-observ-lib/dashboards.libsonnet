@@ -65,6 +65,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                   )
                 )
                 + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
+      // WIP
       network: g.dashboard.new(prefix + 'Windows network')
                + g.dashboard.withPanels(
                  g.util.grid.wrapPanels(
@@ -81,7 +82,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                  )
                )
                + root.applyCommon(vars.singleInstance, uid + '-network', tags, links, annotations, timezone, refresh, period),
-      // TODO advanced memory dashboard (must enable memory collector)
+      // add TODO advanced memory dashboard (must enable memory collector)
       // memory:
       system: g.dashboard.new(prefix + 'Windows CPU and system')
               + g.dashboard.withPanels(
@@ -104,6 +105,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
               )
               + root.applyCommon(vars.singleInstance, uid + '-system', tags, links, annotations, timezone, refresh, period),
 
+      // WIP
       disks: g.dashboard.new(prefix + 'Windows disks and filesystems')
              + g.dashboard.withPanels(
                g.util.grid.wrapPanels(
