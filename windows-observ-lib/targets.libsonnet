@@ -124,12 +124,14 @@ local lokiQuery = g.query.loki;
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         'windows_logical_disk_size_bytes{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}-windows_logical_disk_free_bytes{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}' % variables { ignoreVolumes: config.ignoreVolumes }
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} used'),
     diskUsagePercent:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         '100 - windows_logical_disk_free_bytes{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}/windows_logical_disk_size_bytes{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}*100' % variables { ignoreVolumes: config.ignoreVolumes }
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} used, %'),
     diskIOreadBytesPerSec:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
@@ -148,6 +150,56 @@ local lokiQuery = g.query.loki;
         '(1-clamp_max(irate(windows_logical_disk_idle_seconds_total{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval]),1)) * 100' % variables { ignoreVolumes: config.ignoreVolumes }
       )
       + prometheusQuery.withLegendFormat('{{ volume }} io util'),
+    diskReadQueue:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        'irate(windows_logical_disk_avg_read_requests_queued{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval])' % variables { ignoreVolumes: config.ignoreVolumes }
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} read queue'),
+    diskWriteQueue:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        'irate(windows_logical_disk_avg_write_requests_queued{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval])' % variables { ignoreVolumes: config.ignoreVolumes }
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} write queue'),
+
+    diskIOWaitWriteTime:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        |||
+          irate(windows_logical_disk_write_seconds_total{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval])
+          /
+          irate(windows_logical_disk_writes_total{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval])
+        ||| % variables { ignoreVolumes: config.ignoreVolumes }
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} avg write time'),
+    diskIOWaitReadTime:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        |||
+          irate(windows_logical_disk_read_seconds_total{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval])
+          /
+          irate(windows_logical_disk_reads_total{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval])
+        ||| % variables { ignoreVolumes: config.ignoreVolumes }
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} avg read time'),
+    diskIOReads:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        |||
+          irate(windows_logical_disk_reads_total{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval])
+        ||| % variables { ignoreVolumes: config.ignoreVolumes }
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} reads'),
+    diskIOWrites:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        |||
+          irate(windows_logical_disk_writes_total{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}[$__rate_interval])
+        ||| % variables { ignoreVolumes: config.ignoreVolumes }
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} writes'),
+
     osInfo:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',

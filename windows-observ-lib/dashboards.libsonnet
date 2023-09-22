@@ -105,19 +105,19 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
               )
               + root.applyCommon(vars.singleInstance, uid + '-system', tags, links, annotations, timezone, refresh, period),
 
-      // WIP
       disks: g.dashboard.new(prefix + 'Windows disks and filesystems')
              + g.dashboard.withPanels(
                g.util.grid.wrapPanels(
                  [
                    g.panel.row.new('Filesystem'),
-                   g.panel.timeSeries.new('Disk space available'),
+                   panels.diskUsagePercent,
+                   panels.diskUsage,
                    g.panel.row.new('Disk'),
-                   g.panel.timeSeries.new('Disk I/O'),
-                   g.panel.timeSeries.new('Disk I/Ops completed'),
-                   g.panel.timeSeries.new('Disk average wait time'),
-                   g.panel.timeSeries.new('Average queue size'),
-                 ], 12, 7
+                   panels.diskIOBytesPerSec,
+                   panels.diskIOps,
+                   panels.diskIOWaitTime,
+                   panels.diskQueue,
+                 ], 12, 8
                )
              )
              + root.applyCommon(vars.singleInstance, uid + '-disks', tags, links, annotations, timezone, refresh, period),
