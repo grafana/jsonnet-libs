@@ -9,6 +9,14 @@
         }
       },
       "version": "master"
+    },
+    {
+      "source": {
+        "local": {
+          "directory": "../windows-observ-lib"
+        }
+      },
+      "version": ""
     }
   ],
   "legacyImports": true
