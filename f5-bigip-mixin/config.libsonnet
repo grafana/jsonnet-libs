@@ -5,10 +5,6 @@
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
 
-    grafanaLogDashboardIDs: {
-      'bigip-logs-overview.json': 'bigip-logs-overview',
-    },
-
     // alerts thresholds
     alertsCriticalNodeAvailability: 95,  // %
     alertsWarningServerSideConnectionLimit: 80,  // %

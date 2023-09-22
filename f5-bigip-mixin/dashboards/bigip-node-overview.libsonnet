@@ -17,17 +17,26 @@ local availabilityStatusPanel = {
     prometheus.target(
       'bigip_node_status_availability_state{job=~"$job", instance=~"$instance", node=~"$bigip_node"}',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}}',
-      format='time_series',
+      intervalFactor=2,
+      instant=true,
+      legendFormat='{{node}} - {{instance}}',
+      format='table',
     ),
   ],
-  type: 'stat',
+  type: 'table',
   title: 'Availability status',
   description: 'The availability status of the node.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
+      },
+      custom: {
+        align: 'center',
+        cellOptions: {
+          type: 'color-text',
+        },
+        inspect: false,
       },
       mappings: [
         {
@@ -57,21 +66,104 @@ local availabilityStatusPanel = {
       },
       unit: 'none',
     },
-    overrides: [],
+    overrides: [
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Time',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'job',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: '__name__',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'partition',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'instance',
+        },
+        properties: [
+          {
+            id: 'displayName',
+            value: 'Instance',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'node',
+        },
+        properties: [
+          {
+            id: 'displayName',
+            value: 'Node',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Value',
+        },
+        properties: [
+          {
+            id: 'displayName',
+            value: 'Status',
+          },
+        ],
+      },
+    ],
   },
   options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
+    cellHeight: 'sm',
+    footer: {
+      countRows: false,
+      fields: [],
+      reducer: [
+        'sum',
       ],
-      fields: '',
-      values: false,
+      show: false,
     },
-    textMode: 'auto',
+    showHeader: true,
   },
   pluginVersion: '10.2.0-60139',
 };
@@ -82,7 +174,7 @@ local activeSessionsPanel = {
     prometheus.target(
       'bigip_node_cur_sessions{job=~"$job", instance=~"$instance", node=~"$bigip_node"}',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}}',
+      legendFormat='{{node}} - {{instance}}',
       format='time_series',
     ),
   ],
@@ -159,7 +251,7 @@ local requests__intervalPanel = {
     prometheus.target(
       'increase(bigip_node_tot_requests{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}}',
+      legendFormat='{{node}} - {{instance}}',
       format='time_series',
       interval='1m',
     ),
@@ -237,13 +329,13 @@ local connectionsPanel = {
     prometheus.target(
       'bigip_node_serverside_cur_conns{job=~"$job", instance=~"$instance", node=~"$bigip_node"}',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - current',
+      legendFormat='{{node}} - {{instance}} - current',
       format='time_series',
     ),
     prometheus.target(
       'bigip_node_serverside_max_conns{job=~"$job", instance=~"$instance", node=~"$bigip_node"}',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - max',
+      legendFormat='{{node}} - {{instance}} - max',
       format='time_series',
     ),
   ],
@@ -302,6 +394,87 @@ local connectionsPanel = {
   },
   options: {
     legend: {
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local trafficInboundPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'rate(bigip_node_serverside_bytes_in{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__rate_interval])',
+      datasource=promDatasource,
+      legendFormat='{{node}} - {{instance}}',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Traffic inbound',
+  description: 'The rate of data received from the pool by the node.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'Bps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
       calcs: [],
       displayMode: 'list',
       placement: 'bottom',
@@ -313,25 +486,18 @@ local connectionsPanel = {
     },
   },
 };
-
-local trafficPanel = {
+local trafficOutboundPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(bigip_node_serverside_bytes_in{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__rate_interval])',
-      datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - received',
-      format='time_series',
-    ),
-    prometheus.target(
       'rate(bigip_node_serverside_bytes_out{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - sent',
+      legendFormat='{{node}} - {{instance}}',
     ),
   ],
   type: 'timeseries',
-  title: 'Traffic',
-  description: 'The rate of data sent and received from the pool by the node.',
+  title: 'Traffic ountbound',
+  description: 'The rate of data sent from the pool by the node.',
   fieldConfig: {
     defaults: {
       color: {
@@ -396,26 +562,97 @@ local trafficPanel = {
   },
 };
 
-local packets__intervalPanel = {
+local packetsInboundIntervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'increase(bigip_node_serverside_pkts_in{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - received',
+      legendFormat='{{node}} - {{instance}}',
       format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(bigip_node_serverside_pkts_out{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}} - sent',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Packets / $__interval',
-  description: 'The number of packets sent and received by the node from the pool.',
+  title: 'Packets inbound / $__interval',
+  description: 'The number of packets received by the node from the pool.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local packetsOutboundIntervalPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(bigip_node_serverside_pkts_out{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{node}} - {{instance}}',
+      interval='1m',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Packets outbound / $__interval',
+  description: 'The number of packets sent by the node from the pool.',
   fieldConfig: {
     defaults: {
       color: {
@@ -550,12 +787,14 @@ local packets__intervalPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            availabilityStatusPanel { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
-            activeSessionsPanel { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
-            requests__intervalPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-            connectionsPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-            trafficPanel { gridPos: { h: 6, w: 24, x: 0, y: 12 } },
-            packets__intervalPanel { gridPos: { h: 6, w: 24, x: 0, y: 18 } },
+            availabilityStatusPanel { gridPos: { h: 5, w: 8, x: 0, y: 0 } },
+            requests__intervalPanel { gridPos: { h: 5, w: 8, x: 8, y: 0 } },
+            activeSessionsPanel { gridPos: { h: 5, w: 8, x: 16, y: 0 } },
+            connectionsPanel { gridPos: { h: 5, w: 24, x: 0, y: 5 } },
+            trafficInboundPanel { gridPos: { h: 5, w: 12, x: 0, y: 10 } },
+            trafficOutboundPanel { gridPos: { h: 5, w: 12, x: 12, y: 10 } },
+            packetsInboundIntervalPanel { gridPos: { h: 5, w: 12, x: 0, y: 15 } },
+            packetsOutboundIntervalPanel { gridPos: { h: 5, w: 12, x: 12, y: 15 } },
           ],
         ])
       ),

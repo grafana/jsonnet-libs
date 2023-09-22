@@ -16,11 +16,11 @@ local nodeAvailabilityPanel = {
     prometheus.target(
       '100 * sum by(partition, instance, job) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance"})  / clamp_min(count by(partition, instance, job) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
       datasource=promDatasource,
-      legendFormat='{{partition}} - {{instance}}',
+      legendFormat='{{instance}}',
       format='time_series',
     ),
   ],
-  type: 'stat',
+  type: 'gauge',
   title: 'Node availability',
   description: 'The percentage of nodes available.',
   fieldConfig: {
@@ -55,9 +55,8 @@ local nodeAvailabilityPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
+    minVizHeight: 75,
+    minVizWidth: 75,
     orientation: 'auto',
     reduceOptions: {
       calcs: [
@@ -66,7 +65,8 @@ local nodeAvailabilityPanel = {
       fields: '',
       values: false,
     },
-    textMode: 'auto',
+    showThresholdLabels: false,
+    showThresholdMarkers: true,
   },
   pluginVersion: '10.2.0-60139',
 };
@@ -77,11 +77,11 @@ local poolAvailabilityPanel = {
     prometheus.target(
       '100 * sum by(partition, instance, job) (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"}) / clamp_min(count by(partition, instance, job)  (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
       datasource=promDatasource,
-      legendFormat='{{partition}} - {{instance}}',
+      legendFormat='{{instance}}',
       format='time_series',
     ),
   ],
-  type: 'stat',
+  type: 'gauge',
   title: 'Pool availability',
   description: 'The percentage of pools available.',
   fieldConfig: {
@@ -116,9 +116,8 @@ local poolAvailabilityPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
+    minVizHeight: 75,
+    minVizWidth: 75,
     orientation: 'auto',
     reduceOptions: {
       calcs: [
@@ -127,7 +126,8 @@ local poolAvailabilityPanel = {
       fields: '',
       values: false,
     },
-    textMode: 'auto',
+    showThresholdLabels: false,
+    showThresholdMarkers: true,
   },
   pluginVersion: '10.2.0-60139',
 };
@@ -138,11 +138,11 @@ local virtualServerAvailabilityPanel = {
     prometheus.target(
       '100 * sum by(partition, instance, job) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"}) / clamp_min(count by(partition, instance, job) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
       datasource=promDatasource,
-      legendFormat='{{partition}} - {{instance}}',
+      legendFormat='{{instance}}',
       format='time_series',
     ),
   ],
-  type: 'stat',
+  type: 'gauge',
   title: 'Virtual server availability',
   description: 'The percentage of virtual servers available.',
   fieldConfig: {
@@ -177,9 +177,8 @@ local virtualServerAvailabilityPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
+    minVizHeight: 75,
+    minVizWidth: 75,
     orientation: 'auto',
     reduceOptions: {
       calcs: [
@@ -188,7 +187,8 @@ local virtualServerAvailabilityPanel = {
       fields: '',
       values: false,
     },
-    textMode: 'auto',
+    showThresholdLabels: false,
+    showThresholdMarkers: true,
   },
   pluginVersion: '10.2.0-60139',
 };
@@ -199,7 +199,7 @@ local topActiveServersideNodesPanel = {
     prometheus.target(
       'topk($k, bigip_node_serverside_cur_conns{job=~"$job", instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}}',
+      legendFormat='{{node}} - {{instance}}',
       format='time_series',
     ),
   ],
@@ -250,7 +250,7 @@ local topOutboundTrafficNodesPanel = {
     prometheus.target(
       'topk($k, increase(bigip_node_serverside_bytes_out{job=~"$job", instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
-      legendFormat='{{node}} - {{partition}} - {{instance}}',
+      legendFormat='{{node}} - {{instance}}',
       format='time_series',
       interval='1m',
     ),
@@ -302,7 +302,7 @@ local topActiveMembersInPoolsPanel = {
     prometheus.target(
       'topk($k, bigip_pool_active_member_cnt{job=~"$job", instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{pool}} - {{partition}} - {{instance}}',
+      legendFormat='{{pool}} - {{instance}}',
       format='time_series',
     ),
   ],
@@ -353,7 +353,7 @@ local topRequestedPoolsPanel = {
     prometheus.target(
       'topk($k, increase(bigip_pool_tot_requests{job=~"$job", instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
-      legendFormat='{{pool}} - {{partition}} - {{instance}}',
+      legendFormat='{{pool}} - {{instance}}',
       format='time_series',
       interval='1m',
     ),
@@ -405,7 +405,7 @@ local topQueueDepthPanel = {
     prometheus.target(
       'topk($k, bigip_pool_connq_depth{job=~"$job", instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{pool}} - {{partition}} - {{instance}}',
+      legendFormat='{{pool}} - {{instance}}',
       format='time_series',
     ),
   ],
@@ -456,7 +456,7 @@ local topUtilizedVirtualServersPanel = {
     prometheus.target(
       'topk($k, increase(bigip_vs_clientside_bytes_in{job=~"$job", instance=~"$instance"}[$__interval:])) + topk(5, increase(bigip_vs_clientside_bytes_out{job=~"$job", instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}}',
+      legendFormat='{{vs}} - {{instance}}',
       format='time_series',
       interval='1m',
     ),
@@ -508,7 +508,7 @@ local topLatencyVirtualServersPanel = {
     prometheus.target(
       'topk($k, bigip_vs_cs_mean_conn_dur{job=~"$job", instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}}',
+      legendFormat='{{vs}} - {{instance}}',
       format='time_series',
     ),
   ],
@@ -617,16 +617,16 @@ local topLatencyVirtualServersPanel = {
       )
       .addPanels(
         [
-          nodeAvailabilityPanel { gridPos: { h: 6, w: 8, x: 0, y: 0 } },
-          poolAvailabilityPanel { gridPos: { h: 6, w: 8, x: 8, y: 0 } },
-          virtualServerAvailabilityPanel { gridPos: { h: 6, w: 8, x: 16, y: 0 } },
-          topActiveServersideNodesPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-          topOutboundTrafficNodesPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-          topActiveMembersInPoolsPanel { gridPos: { h: 6, w: 8, x: 0, y: 12 } },
-          topRequestedPoolsPanel { gridPos: { h: 6, w: 8, x: 8, y: 12 } },
-          topQueueDepthPanel { gridPos: { h: 6, w: 8, x: 16, y: 12 } },
-          topUtilizedVirtualServersPanel { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
-          topLatencyVirtualServersPanel { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
+          nodeAvailabilityPanel { gridPos: { h: 5, w: 8, x: 0, y: 0 } },
+          poolAvailabilityPanel { gridPos: { h: 5, w: 8, x: 8, y: 0 } },
+          virtualServerAvailabilityPanel { gridPos: { h: 5, w: 8, x: 16, y: 0 } },
+          topActiveServersideNodesPanel { gridPos: { h: 5, w: 12, x: 0, y: 5 } },
+          topOutboundTrafficNodesPanel { gridPos: { h: 5, w: 12, x: 12, y: 5 } },
+          topActiveMembersInPoolsPanel { gridPos: { h: 5, w: 8, x: 0, y: 10 } },
+          topRequestedPoolsPanel { gridPos: { h: 5, w: 8, x: 8, y: 10 } },
+          topQueueDepthPanel { gridPos: { h: 5, w: 8, x: 16, y: 9 } },
+          topUtilizedVirtualServersPanel { gridPos: { h: 5, w: 12, x: 0, y: 15 } },
+          topLatencyVirtualServersPanel { gridPos: { h: 5, w: 12, x: 12, y: 15 } },
         ]
       ),
   },

@@ -16,17 +16,26 @@ local availabilityStatusPanel = {
     prometheus.target(
       'bigip_vs_status_availability_state{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}}',
-      format='time_series',
+      legendFormat='{{vs}} - {{instance}}',
+      intervalFactor=2,
+      instant=true,
+      format='table',
     ),
   ],
-  type: 'stat',
+  type: 'table',
   title: 'Availability status',
-  description: 'The availability state of the virtual server.',
+  description: 'The availability status of the virtual server.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'fixed',
+      },
+      custom: {
+        align: 'center',
+        cellOptions: {
+          type: 'color-text',
+        },
+        inspect: false,
       },
       mappings: [
         {
@@ -56,21 +65,104 @@ local availabilityStatusPanel = {
       },
       unit: 'none',
     },
-    overrides: [],
+    overrides: [
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Time',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'job',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: '__name__',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'partition',
+        },
+        properties: [
+          {
+            id: 'custom.hidden',
+            value: true,
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'instance',
+        },
+        properties: [
+          {
+            id: 'displayName',
+            value: 'Instance',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'vs',
+        },
+        properties: [
+          {
+            id: 'displayName',
+            value: 'Virtual server',
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Value',
+        },
+        properties: [
+          {
+            id: 'displayName',
+            value: 'Status',
+          },
+        ],
+      },
+    ],
   },
   options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
+    cellHeight: 'sm',
+    footer: {
+      countRows: false,
+      fields: [],
+      reducer: [
+        'sum',
       ],
-      fields: '',
-      values: false,
+      show: false,
     },
-    textMode: 'auto',
+    showHeader: true,
   },
   pluginVersion: '10.2.0-60139',
 };
@@ -81,7 +173,7 @@ local requests__intervalPanel = {
     prometheus.target(
       'increase(bigip_vs_tot_requests{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}}',
+      legendFormat='{{vs}} - {{instance}}',
       format='time_series',
       interval='1m',
     ),
@@ -159,39 +251,114 @@ local connectionsPanel = {
     prometheus.target(
       'bigip_vs_clientside_cur_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - current',
+      legendFormat='{{vs}} - {{instance}} - current',
       format='time_series',
     ),
     prometheus.target(
       'bigip_vs_clientside_max_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - maximum',
+      legendFormat='{{vs}} - {{instance}} - maximum',
       format='time_series',
-    ),
-    prometheus.target(
-      'bigip_vs_ephemeral_cur_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - ephemeral current',
-    ),
-    prometheus.target(
-      'bigip_vs_ephemeral_max_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - ephemeral maximum',
     ),
     prometheus.target(
       'bigip_vs_clientside_evicted_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - evicted',
-    ),
-    prometheus.target(
-      'bigip_vs_ephemeral_evicted_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - ephemeral evicted',
+      legendFormat='{{vs}} - {{instance}} - evicted',
     ),
   ],
   type: 'timeseries',
   title: 'Connections',
-  description: 'The ephemeral, evicted, and current client-side connections within the virtual server.',
+  description: 'The evicted and current client-side connections within the virtual server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [
+        'min',
+        'mean',
+        'max',
+      ],
+      displayMode: 'table',
+      placement: 'right',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local ephemeralConnectionsPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'bigip_vs_ephemeral_cur_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}} - current',
+    ),
+    prometheus.target(
+      'bigip_vs_ephemeral_max_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}} - maximum',
+    ),
+    prometheus.target(
+      'bigip_vs_ephemeral_evicted_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}} - evicted',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Ephemeral connections',
+  description: 'The ephemeral evicted and current client-side connections within the virtual server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -266,7 +433,7 @@ local averageConnectionDurationPanel = {
     prometheus.target(
       'bigip_vs_cs_mean_conn_dur{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}}',
+      legendFormat='{{vs}} - {{instance}}',
       format='time_series',
     ),
   ],
@@ -337,35 +504,19 @@ local averageConnectionDurationPanel = {
   },
 };
 
-local trafficPanel = {
+local trafficInboundPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'rate(bigip_vs_clientside_bytes_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - received',
+      legendFormat='{{vs}} - {{instance}}',
       format='time_series',
-    ),
-    prometheus.target(
-      'rate(bigip_vs_ephemeral_bytes_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - ephemeral received',
-      format='time_series',
-    ),
-    prometheus.target(
-      'rate(bigip_vs_clientside_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - sent',
-    ),
-    prometheus.target(
-      'rate(bigip_vs_ephemeral_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - ephemeral sent',
     ),
   ],
   type: 'timeseries',
-  title: 'Traffic',
-  description: 'The rate of data sent and received from clients by the virtual server.',
+  title: 'Traffic inbound',
+  description: 'The rate of data received from clients by the virtual server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -418,13 +569,9 @@ local trafficPanel = {
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'mean',
-        'max',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -434,39 +581,249 @@ local trafficPanel = {
   },
 };
 
-local packets__intervalPanel = {
+local trafficOutboundPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'rate(bigip_vs_clientside_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Traffic outbound',
+  description: 'The rate of data sent from clients by the virtual server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'Bps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local trafficInboundEphemeralPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'rate(bigip_vs_ephemeral_bytes_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}}',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Ephemeral traffic inbound',
+  description: 'The rate of ephemeral data received from clients by the virtual server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'Bps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local trafficOutboundEphemeralPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'rate(bigip_vs_ephemeral_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Ephemeral traffic outbound',
+  description: 'The rate of ephemeral data sent from clients by the virtual server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'Bps',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local packetsInboundIntervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'increase(bigip_vs_clientside_pkts_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
       datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - received',
+      legendFormat='{{vs}} - {{instance}}',
       format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(bigip_vs_ephemeral_pkts_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - ephemeral received',
-      format='time_series',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(bigip_vs_clientside_pkts_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - sent',
-      interval='1m',
-    ),
-    prometheus.target(
-      'increase(bigip_vs_ephemeral_pkts_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{vs}} - {{partition}} - {{instance}} - ephemeral sent',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Packets / $__interval',
-  description: 'The number of packets sent and received by the virtual server.',
+  title: 'Packets inbound / $__interval',
+  description: 'The number of packets received by the virtual server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -519,13 +876,241 @@ local packets__intervalPanel = {
   },
   options: {
     legend: {
-      calcs: [
-        'min',
-        'mean',
-        'max',
-      ],
-      displayMode: 'table',
-      placement: 'right',
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local packetsOutboundIntervalPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(bigip_vs_clientside_pkts_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}}',
+      interval='1m',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Packets outbound / $__interval',
+  description: 'The number of packets sent by the virtual server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local packetsEphemeralInboundntervalPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(bigip_vs_ephemeral_pkts_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}}',
+      format='time_series',
+      interval='1m',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Ephemeral packets inbound / $__interval',
+  description: 'The number of ephemeral packets received by the virtual server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local packetsEphemeralOutboundIntervalPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(bigip_vs_ephemeral_pkts_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{vs}} - {{instance}}',
+      interval='1m',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Ephemeral packets outbound / $__interval',
+  description: 'The number of ephemeral packets sent by the virtual server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 30,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -605,12 +1190,19 @@ local packets__intervalPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            availabilityStatusPanel { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
-            requests__intervalPanel { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
-            connectionsPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-            averageConnectionDurationPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-            trafficPanel { gridPos: { h: 6, w: 24, x: 0, y: 12 } },
-            packets__intervalPanel { gridPos: { h: 6, w: 24, x: 0, y: 18 } },
+            availabilityStatusPanel { gridPos: { h: 5, w: 8, x: 0, y: 0 } },
+            requests__intervalPanel { gridPos: { h: 5, w: 8, x: 8, y: 0 } },
+            averageConnectionDurationPanel { gridPos: { h: 5, w: 8, x: 16, y: 0 } },
+            connectionsPanel { gridPos: { h: 5, w: 24, x: 0, y: 5 } },
+            ephemeralConnectionsPanel { gridPos: { h: 5, w: 24, x: 0, y: 10 } },
+            trafficInboundPanel { gridPos: { h: 5, w: 12, x: 0, y: 15 } },
+            trafficOutboundPanel { gridPos: { h: 5, w: 12, x: 12, y: 15 } },
+            trafficInboundEphemeralPanel { gridPos: { h: 5, w: 12, x: 0, y: 20 } },
+            trafficOutboundEphemeralPanel { gridPos: { h: 5, w: 12, x: 12, y: 20 } },
+            packetsInboundIntervalPanel { gridPos: { h: 5, w: 12, x: 0, y: 25 } },
+            packetsOutboundIntervalPanel { gridPos: { h: 5, w: 12, x: 12, y: 25 } },
+            packetsEphemeralInboundntervalPanel { gridPos: { h: 5, w: 12, x: 0, y: 30 } },
+            packetsEphemeralOutboundIntervalPanel { gridPos: { h: 5, w: 12, x: 12, y: 30 } },
           ],
         ])
       ),

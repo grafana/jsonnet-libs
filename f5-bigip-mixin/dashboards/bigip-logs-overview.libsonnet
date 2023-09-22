@@ -9,19 +9,9 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
           logsDashboard.new(
             'BIG-IP logs',
             datasourceName='loki_datasource',
-            datasourceRegex='',
+            datasourceRegex='(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+',
             filterSelector=$._config.filterSelector,
             labels=['job', 'host', 'syslog_facility', 'level'],
-            formatParser=null,
-            showLogsVolume=true
-          ),
-        local highAvailabilityLogsPanel =
-          logsDashboard.new(
-            'BIG-IP high availability logs',
-            datasourceName='loki_datasource',
-            datasourceRegex='',
-            filterSelector=$._config.filterSelector,
-            labels=['job'],
             formatParser=null,
             showLogsVolume=true
           )
@@ -35,7 +25,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
             dashboards+:
               {
                 logs+: g.dashboard.withLinksMixin($.grafanaDashboards['bigip-cluster-overview.json'].links)
-                       + g.dashboard.withUid($._config.grafanaDashboardIDs['bigip-logs-overview.json'])
+                       + g.dashboard.withUid('bigip-logs-overview')
                        + g.dashboard.withTags($._config.dashboardTags)
                        + g.dashboard.withRefresh($._config.dashboardRefresh),
               },
