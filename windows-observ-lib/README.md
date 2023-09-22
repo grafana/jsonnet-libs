@@ -19,19 +19,18 @@ You can use lib to fill in monitoring-mixin structure:
 // mixin.libsonnet file
 local g = import './g.libsonnet';
 local var = g.dashboard.variable;
-local winlib = import './windows-observ-lib/main.libsonnet';
+local winlib = import 'github.com/grafana/jsonnet-libs/windows-observ-lib/main.libsonnet';
+local config = (import 'config.libsonnet')._config;
 {
-  // init lib
   local windows =
     winlib.new(
-      dashboardNamePrefix=$._config.dashboardNamePrefix,
-      uid=$._config.uid,
-      filteringSelector=$._config.filteringSelector,
+      dashboardNamePrefix=config.dashboardNamePrefix,
+      uid=config.uid,
+      filteringSelector=config.filteringSelector,
     )
     +
-    // provide config to customize results
     {
-      config+: (import 'config.libsonnet')._config,
+      config+: config,
     },
   
   // get alerts from package:
