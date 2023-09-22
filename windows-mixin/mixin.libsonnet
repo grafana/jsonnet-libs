@@ -19,7 +19,7 @@ local winlib = import 'github.com/grafana/jsonnet-libs/windows-observ-lib/main.l
        variables+: {
          datasources+: {
            loki+: var.datasource.withRegex('Loki|.+logs'),
-           prometheus+: var.datasource.withRegex('Victoria|Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
+           prometheus+: var.datasource.withRegex('Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
          },
        },
      })
