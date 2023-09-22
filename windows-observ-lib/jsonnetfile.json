@@ -4,7 +4,7 @@
     {
       "source": {
         "local": {
-          "directory": "../../../../jl-common-lib/common-lib/common"
+          "directory": "../../jl-common-lib/common-lib/common"
         }
       },
       "version": ""
