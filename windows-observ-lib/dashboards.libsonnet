@@ -8,7 +8,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     local prefix = this.config.dashboardNamePrefix;
     local links = this.links;
     local tags = this.config.dashboardTags;
-    local uid = this.config.uid;
+    local uid = g.util.string.slugify(this.config.uid);
     local vars = this.variables;
     local annotations = this.annotations;
     local refresh = this.config.dashboardRefresh;
@@ -149,7 +149,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     else {},
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
-    + g.dashboard.withUid(g.util.string.slugify(uid))
+    + g.dashboard.withUid(uid)
     + g.dashboard.withLinks(std.objectValues(links))
     + g.dashboard.withTimezone(timezone)
     + g.dashboard.withRefresh(refresh)
