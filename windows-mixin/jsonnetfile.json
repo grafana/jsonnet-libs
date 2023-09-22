@@ -4,19 +4,11 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/grafonnet-lib.git",
-          "subdir": "grafonnet"
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "windows-observ-lib"
         }
       },
-      "version": "master"
-    },
-    {
-      "source": {
-        "local": {
-          "directory": "../windows-observ-lib"
-        }
-      },
-      "version": ""
+      "version": "vzhuravlev/jl-windows-new"
     }
   ],
   "legacyImports": true
