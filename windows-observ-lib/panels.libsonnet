@@ -237,6 +237,9 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
                     + g.query.prometheus.withInstant(true),
         groupLabel='volume'
       ),
+      diskUsagePercent: commonlib.panels.filesystem.timeSeries.usagePercent.new(
+        targets=[t.diskUsagePercent]
+      ),
       diskUsagePercentTopK: commonlib.panels.all.timeSeries.topkPercentage.new(
         title='Disk space usage',
         target=t.diskUsagePercent,
@@ -244,7 +247,9 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
         instanceLabels=this.config.instanceLabels + ['volume'],
         drillDownDashboardUid=this.dashboards.overview.uid,
       ),
-      diskIOBytesPerSec: commonlib.panels.disk.timeSeries.ioBytesPerSec.new(targets=[t.diskIOreadBytesPerSec, t.diskIOwriteBytesPerSec]),
+      diskIOBytesPerSec: commonlib.panels.disk.timeSeries.ioBytesPerSec.new(
+        targets=[t.diskIOreadBytesPerSec, t.diskIOwriteBytesPerSec, t.diskIOutilization]
+      ),
       diskIOutilPercentTopK:
         commonlib.panels.all.timeSeries.topkPercentage.new(
           title='Disk IO',
@@ -253,6 +258,30 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
           instanceLabels=this.config.instanceLabels + ['volume'],
           drillDownDashboardUid=this.dashboards.overview.uid,
         ),
+      diskIOps:
+        commonlib.panels.disk.timeSeries.iops.new(
+          targets=[
+            t.diskIOReads,
+            t.diskIOWrites,
+          ]
+        ),
+
+      diskQueue:
+        commonlib.panels.disk.timeSeries.ioQueue.new(
+          'Disk average queue',
+          targets=
+          [
+            t.diskReadQueue,
+            t.diskWriteQueue,
+          ]
+        ),
+      diskIOWaitTime: commonlib.panels.disk.timeSeries.ioWaitTime.new(
+        targets=[
+          t.diskIOWaitReadTime,
+          t.diskIOWaitWriteTime,
+        ]
+      )
+      ,
       osInfo: commonlib.panels.all.stat.info.new('OS family', targets=[t.osInfo])
               { options+: { reduceOptions+: { fields: '/^product$/' } } },
       osVersion: commonlib.panels.all.stat.info.new('OS version', targets=[t.osInfo])

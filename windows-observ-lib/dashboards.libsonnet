@@ -65,25 +65,9 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                   )
                 )
                 + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
-      // WIP
-      network: g.dashboard.new(prefix + 'Windows network')
-               + g.dashboard.withPanels(
-                 g.util.grid.wrapPanels(
-                   [
-                     g.panel.row.new('Network'),
-                     panels.networkInterfacesOverview { gridPos+: { w: 24 } },
-                     panels.networkUsagePerSec,
-                     panels.networkInterfaceCarrierStatus,
-                     panels.networkErrorsPerSec,
-                     panels.networkDroppedPerSec,
-                     panels.networkPacketsPerSec,
-                     //panels.networkMulticast,
-                   ], 12, 7
-                 )
-               )
-               + root.applyCommon(vars.singleInstance, uid + '-network', tags, links, annotations, timezone, refresh, period),
       // add TODO advanced memory dashboard (must enable memory collector)
       // memory:
+
       system: g.dashboard.new(prefix + 'Windows CPU and system')
               + g.dashboard.withPanels(
                 g.util.grid.wrapPanels(
@@ -109,10 +93,9 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
              + g.dashboard.withPanels(
                g.util.grid.wrapPanels(
                  [
-                   g.panel.row.new('Filesystem'),
+                   g.panel.row.new('Disk'),
                    panels.diskUsagePercent,
                    panels.diskUsage,
-                   g.panel.row.new('Disk'),
                    panels.diskIOBytesPerSec,
                    panels.diskIOps,
                    panels.diskIOWaitTime,
