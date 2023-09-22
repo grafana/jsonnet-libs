@@ -7,11 +7,11 @@
         name: 'windows-alerts-' + this.config.uid,
         rules: [
           {
-            alert: 'WindowsCPUHigh',
+            alert: 'WindowsCPUHighUsage',
             expr: |||
               100 - (avg without (mode, core) (rate(windows_cpu_time_total{%(filteringSelector)s, mode="idle"}[2m])) * 100) > %(alertsCPUThresholdWarning)s
             ||| % this.config,
-            'for': '5m',
+            'for': '15m',
             labels: {
               severity: 'warning',
             },
@@ -23,13 +23,13 @@
             },
           },
           {
-            alert: 'WindowsMemoryHigh',
+            alert: 'WindowsMemoryHighUtilization',
             expr: |||
               100 - ((windows_os_physical_memory_free_bytes{%(filteringSelector)s}
               /
               windows_cs_physical_memory_bytes{%(filteringSelector)s}) * 100) > %(alertMemoryUsageThresholdCritical)s
             ||| % this.config,
-            'for': '5m',
+            'for': '15m',
             labels: {
               severity: 'critical',
             },
@@ -41,11 +41,11 @@
             },
           },
           {
-            alert: 'WindowsDiskUsageHigh',
+            alert: 'WindowsDiskAlmostOutOfSpace',
             expr: |||
               100 - ((windows_logical_disk_free_bytes{%(filteringSelector)s} ) / (windows_logical_disk_size_bytes{%(filteringSelector)s})) * 100  > %(alertDiskUsageThresholdCritical)s
             ||| % this.config,
-            'for': '5m',
+            'for': '15m',
             labels: {
               severity: 'critical',
             },
@@ -85,7 +85,7 @@
             annotations: {
               summary: 'Windows physical disk is not healthy.',
               description: |||
-                Windows disk {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.
+                Windows disk {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}' status.
               ||| % this.config,
             },
           },
