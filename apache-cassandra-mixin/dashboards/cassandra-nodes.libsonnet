@@ -1418,7 +1418,7 @@ local getMatcher(cfg) = '%(cassandraSelector)s, cassandra_cluster=~"$cassandra_c
             template.new(
               'instance',
               promDatasource,
-              'label_values(cassandra_cache_size{%(cassandraSelector)s, cassandra_cluster="$cassandra_cluster"' % $._config +
+              'label_values(cassandra_cache_size{%(cassandraSelector)s, cassandra_cluster=~"$cassandra_cluster"' % $._config +
               if $._config.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if $._config.enableRackLabel then
                 ', rack=~"$rack"' else '' + '}, instance)',
               label='Instance',
