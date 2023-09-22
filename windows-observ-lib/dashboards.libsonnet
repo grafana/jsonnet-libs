@@ -139,7 +139,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                       extraFilters=|||
                         | label_format timestamp="{{__timestamp__}}"
                         | drop channel_extracted,source_extracted,computer_extracted,level_extracted,keywords_extracted
-                        | line_format `{{ if eq "[[instance]]" ".*" }}{{ alignLeft 15 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 15 .source}}| {{ .message }}`
+                        | line_format `{{ if eq "[[instance]]" ".*" }}{{ alignLeft 25 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 25 .source}}| {{ .message }}`
                       |||)
           {
             dashboards+:
