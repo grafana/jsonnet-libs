@@ -72,6 +72,23 @@
               ||| % this.config,
             },
           },
+          // enable diskdrive collector for this alert
+          {
+            alert: 'WindowsDiskDriveNotHealthy',
+            expr: |||
+              windows_disk_drive_status{%(filteringSelector)s, status="OK"} != 1
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'Windows physical disk is not healthy.',
+              description: |||
+                Windows disk {{ $labels.name }} is not in healthy state, currently in '{{ $labels.status }}'.
+              ||| % this.config,
+            },
+          },
         ],
       },
     ],
