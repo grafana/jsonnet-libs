@@ -5,6 +5,7 @@ local g = import './g.libsonnet';
     stat: import './panels/all/stat/main.libsonnet',
     timeSeries: import './panels/all/timeSeries/main.libsonnet',
     table: import './panels/all/table/main.libsonnet',
+    statusHistory: import './panels/all/statusHistory/main.libsonnet',
   },
   network: {
     timeSeries: import './panels/network/timeSeries/main.libsonnet',
@@ -12,6 +13,7 @@ local g = import './g.libsonnet';
   system: {
     stat: import './panels/system/stat/main.libsonnet',
     table: import './panels/system/table/main.libsonnet',
+    statusHistory: import './panels/system/statusHistory/main.libsonnet',
   },
   cpu: {
     stat: import './panels/cpu/stat/main.libsonnet',
@@ -28,5 +30,5 @@ local g = import './g.libsonnet';
   },
   disk: {
     timeSeries: import './panels/disk/timeSeries/main.libsonnet',
-  }
+  },
 }
