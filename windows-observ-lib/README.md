@@ -110,7 +110,7 @@ The following collectors should be enabled in windows_exporter/windows integrati
 
 Loki logs are used to populate logs dashboard and also for quering annotations.
 
-To opt-out, you can set `enableLokiLogs: false` in config. See example above
+To opt-out, you can set `enableLokiLogs: false` in config. See example above.
 
 The following scrape snippet can be used:
 
@@ -138,7 +138,7 @@ The following scrape snippet can be used:
     - job_name: integrations/windows-exporter-security
         windows_events:
         use_incoming_timestamp: true
-        bookmark_path: "C:\\Program Files\\Grafana Agent\secsys.xml"
+        bookmark_path: "C:\\Program Files\\Grafana Agent\\secsys.xml"
         eventlog_name: Security
         labels:
             job: integrations/windows_exporter
