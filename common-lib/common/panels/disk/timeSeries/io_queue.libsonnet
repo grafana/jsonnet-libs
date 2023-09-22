@@ -1,5 +1,5 @@
 local g = import '../../../g.libsonnet';
-local base = import '../../all/timeSeries/main.libsonnet';
+local base = import './base.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local custom = timeSeries.fieldConfig.defaults.custom;
@@ -7,11 +7,12 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 base {
   new(
-    title,
+    title='Disk IO queue',
     targets,
-    description=''
+    description='Disk average IO queue.',
   ):
-    super.base.new(title, targets, description)
-    // Decrease opacity (would look better with too many timeseries)
-    + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(1),
+    super.new(title, targets, description),
+  stylize():
+    super.stylize()
+    + super.withNegateOutPackets(),
 }

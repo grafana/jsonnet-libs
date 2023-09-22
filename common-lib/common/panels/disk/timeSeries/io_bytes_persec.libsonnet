@@ -7,10 +7,19 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 base {
   new(
-    title='Disk IO',
+    title='Disk reads/writes',
     targets,
     description='Disk read/writes in bytes per second.',
   ):
     super.new(title, targets, description)
-    + timeSeries.standardOptions.withUnit('Bps'),
+    + timeSeries.standardOptions.withUnit('Bps')
+    // move 'IO busy time' to second axis if found
+    + timeSeries.standardOptions.withOverrides(
+      fieldOverride.byRegexp.new('/time|used|busy|util/')
+      + fieldOverride.byRegexp.withPropertiesFromOptions(
+        timeSeries.standardOptions.withUnit('percent')
+        + timeSeries.fieldConfig.defaults.custom.withDrawStyle('points')
+        + timeSeries.fieldConfig.defaults.custom.withAxisSoftMax(100)
+      )
+    ),
 }

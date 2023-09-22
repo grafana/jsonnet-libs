@@ -11,5 +11,15 @@ base {
     targets,
     description=''
   ):
-    super.new(title, targets, description)
+    super.new(title, targets, description),
+
+  withNegateOutPackets(regexp='/write|written/'):
+    defaults.custom.withAxisLabel('write(-) | read(+)')
+    + defaults.custom.withAxisCenteredZero(true)
+    + timeSeries.standardOptions.withOverrides(
+      fieldOverride.byRegexp.new(regexp)
+      + fieldOverride.byRegexp.withPropertiesFromOptions(
+        defaults.custom.withTransform('negative-Y')
+      )
+    ),
 }
