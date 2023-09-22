@@ -35,14 +35,14 @@ The BIG-IP node overview dashboard provides node specific metrics such as availa
 
 The BIG-IP pool overview dashboard provides pool specific metrics such as availability, members, requests, connections, connection queue depth, connection queue serviced, traffic and packets.
 
-![BIG-IP Pool Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-pool-overview.png)
+![BIG-IP Pool Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-pool-overview-1.png)
 
 
 ## BIG-IP Virtual Server Overview
 
 The BIG-IP virtual server overview dashboard provides virtual server specific metrics such as availability, requests, connections, average connection duration, traffic and packets.
 
-![BIG-IP Virtual Server Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-virtual-server-overview.png)
+![BIG-IP Virtual Server Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-virtual-server-overview-1.png)
 
 
 ## BIG-IP Log Overview
