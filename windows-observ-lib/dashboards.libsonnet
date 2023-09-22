@@ -112,27 +112,24 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
         logs:
 
           logslib.new(prefix + 'Windows logs',
-                      datasourceName='loki_datasource',
-                      datasourceRegex='',
+                      datasourceName=this.variables.datasources.loki.name,
+                      datasourceRegex=this.variables.datasources.loki.regex,
                       filterSelector=this.config.filteringSelector,
-                      labels=this.config.groupLabels + this.config.instanceLabels + ['channel', 'source', 'keywords', 'level'],
+                      labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
                       formatParser='json',
-                      showLogsVolume=true,
-                      logsVolumeGroupBy='level',
-                      extraFilters=|||
-                        | label_format timestamp="{{__timestamp__}}"
-                        | drop channel_extracted,source_extracted,computer_extracted,level_extracted,keywords_extracted
-                        | line_format `{{ if eq "[[instance]]" ".*" }}{{ alignLeft 25 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 25 .source}}| {{ .message }}`
-                      |||)
+                      showLogsVolume=this.config.showLogsVolume,
+                      logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+                      extraFilters=this.config.logsExtraFilters)
           {
             dashboards+:
               {
                 logs+:
-                  // reference self, already generated variables to keep them, but apply other common data in applyCommon
+                  // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
                   root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
               },
             panels+:
               {
+                // modify log panel
                 logs+:
                   g.panel.logs.options.withEnableLogDetails(true)
                   + g.panel.logs.options.withShowTime(false)
