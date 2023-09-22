@@ -2,13 +2,16 @@ local g = import './g.libsonnet';
 local var = g.dashboard.variable;
 local winlib = import './windows-observ-lib/main.libsonnet';
 {
-  local windows = winlib.new(
-    dashboardNamePrefix='',
-    uid='windows',
-    filteringSelector='job="integrations/windows"',
-  ) + {
-    config+: $._config,
-  },
+  local windows =
+    winlib.new(
+      dashboardNamePrefix=$._config.dashboardNamePrefix,
+      uid=$._config.uid,
+      filteringSelector=$._config.filteringSelector,
+    )
+    +
+    {
+      config+: $._config,
+    },
   prometheusAlerts+:: windows.alerts,
   grafanaDashboards+::
     (windows {

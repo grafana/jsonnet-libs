@@ -1,5 +1,8 @@
 {
   _config+:: {
+    filteringSelector: 'job=~".*windows.*"',
+    uid: 'windows',
+    dashboardNamePrefix: '',
     dashboardTags: ['windows'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
