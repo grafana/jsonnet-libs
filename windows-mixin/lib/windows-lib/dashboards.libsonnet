@@ -90,10 +90,12 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                     panels.cpuUsageByMode { gridPos+: { w: 9, h: 6 } },
                     panels.cpuQueue,
                     panels.systemContextSwitchesAndInterrupts,
+                    // panels.systemThreads,
+                    // panels.systemExceptions,
                     g.panel.row.new('Time'),
-                    panels.osTimezone { gridPos+: { w: 3, h: 3 } },
-                    g.panel.timeSeries.new('NTP status') { gridPos+: { w: 21, h: 3 } },
-                    panels.networkPacketsPerSec { gridPos+: { w: 24, h: 7 } },
+                    panels.osTimezone { gridPos+: { w: 3, h: 4 } },
+                    panels.timeNtpStatus { gridPos+: { x: 0, y: 0, w: 21, h: 4 } },
+                    panels.timeNtpDelay { gridPos+: { w: 24, h: 7 } },
                   ], 12, 7
                 )
               )
