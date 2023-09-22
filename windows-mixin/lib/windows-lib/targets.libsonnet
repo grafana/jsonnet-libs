@@ -167,6 +167,25 @@ local lokiQuery = g.query.loki;
         'irate(windows_system_context_switches_total{%(queriesSelector)s}[$__rate_interval])' % variables,
       )
       + prometheusQuery.withLegendFormat('Context switches'),
+    windowsSystemThreads:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'windows_system_threads{%(queriesSelector)s}' % variables,
+      )
+      + prometheusQuery.withLegendFormat('System threads'),
+    windowsSystemExceptions:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'irate(windows_system_exception_dispatches_total{%(queriesSelector)s}[$__rate_interval])' % variables,
+      )
+      + prometheusQuery.withLegendFormat('System exceptions dispatched'),
+    windowsSystemCalls:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'irate(windows_system_system_calls_total{%(queriesSelector)s}[$__rate_interval])' % variables,
+      )
+      + prometheusQuery.withLegendFormat('System calls'),
+
     systemInterrupts:
       prometheusQuery.new(
         '${' + this.variables.datasources.prometheus.name + '}',
@@ -180,6 +199,27 @@ local lokiQuery = g.query.loki;
         'clamp_max(windows_time_ntp_client_time_sources{%(queriesSelector)s}, 1)' % variables,
       )
       + prometheusQuery.withLegendFormat('NTP status'),
+    timeNtpDelay:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'windows_time_ntp_round_trip_delay_seconds{%(queriesSelector)s}' % variables,
+      )
+      + prometheusQuery.withLegendFormat('NTP trip delay'),
+
+    timeOffset:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'windows_time_computed_time_offset_seconds{%(queriesSelector)s}' % variables,
+      )
+      + prometheusQuery.withLegendFormat('Time offset'),
+
+    // Total adjustment made to the local system clock frequency by W32Time in parts per billion (PPB) units. 1 PPB adjustment implies the system clock was adjusted at a rate of 1 nanosecond per second (1 ns/s). The smallest possible adjustment can vary and is expected to be in the order of 100's of PPB.
+    timeAdjustments:
+      prometheusQuery.new(
+        '${' + this.variables.datasources.prometheus.name + '}',
+        'rate(windows_time_clock_frequency_adjustment_ppb_total{%(queriesSelector)s}[$__rate_interval])' % variables,
+      )
+      + prometheusQuery.withLegendFormat('Time adjustments'),
 
 
     networkOutBitPerSec:

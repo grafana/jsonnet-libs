@@ -162,9 +162,40 @@ local commonlib = import 'common/main.libsonnet';
             A high number of context switches or interrupts can indicate that the system is overloaded or that there are problems with specific devices or processes.
           |||
         ),
-      // TODO:
-      // timeNtpStatus: commonlib. targets=[t.timeNtpStatus,
-      // description=
+      systemExceptions:
+        commonlib.panels.all.timeSeries.base.new(
+          'System calls and exceptions',
+          targets=[
+            t.windowsSystemExceptions,
+            t.windowsSystemCalls,
+          ],
+        ),
+      systemThreads:
+        commonlib.panels.all.timeSeries.base.new(
+          'System threads',
+          targets=[
+            t.windowsSystemThreads,
+          ],
+        ),
+      timeNtpStatus: commonlib.panels.system.statusHistory.ntp.new(
+        'NTP status',
+        targets=[t.timeNtpStatus],
+        description=''
+      ),
+      timeNtpDelay: commonlib.panels.all.timeSeries.base.new(
+                      'NTP delay',
+                      targets=[
+                        t.timeNtpDelay,
+                        t.timeOffset,
+                      ],
+                      description=|||
+                        NTP trip delay: Total roundtrip delay experienced by the NTP client in receiving a response from the server for the most recent request,
+                        in seconds. This is the time elapsed on the NTP client between transmitting a request to the NTP server and receiving a valid response from the server.
+
+                        Time offset: Absolute time offset between the system clock and the chosen time source, in seconds.
+                      |||
+                    )
+                    + g.panel.timeSeries.standardOptions.withUnit('seconds'),
       cpuCount: commonlib.panels.cpu.stat.count.new(targets=[t.cpuCount]),
       cpuUsageTs: commonlib.panels.cpu.timeSeries.utilization.new(targets=[t.cpuUsage]),
       cpuUsageTopk: commonlib.panels.all.timeSeries.topkPercentage.new(

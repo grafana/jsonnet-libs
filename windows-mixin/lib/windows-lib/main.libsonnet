@@ -41,30 +41,35 @@ local commonlib = import 'common/main.libsonnet';
 
     targets: targets.new(this),
 
-    annotations: {
-                   reboot: commonlib.annotations.reboot.new(
-                             title='Reboot',
-                             target=this.targets.reboot,
-                             instanceLabels=std.join(',', instanceLabels),
-                           )
-                           + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level'])),
-                 }
-                 +
-                 if this.config.enableLokiLogs then
-                   {
-                     serviceFailed: commonlib.annotations.serviceFailed.new(
-                                      title='Service failed',
-                                      target=this.targets.serviceFailed,
-                                    )
-                                    + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level']))
-                                    + commonlib.annotations.base.withTextFormat('{{message}}'),
-                     criticalEvents: commonlib.annotations.fatal.new(
-                                       title='Critical system event',
-                                       target=this.targets.criticalEvents,
-                                     )
-                                     + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level']))
-                                     + commonlib.annotations.base.withTextFormat('{{message}}'),
-                   } else {},
+    annotations:
+      {
+        reboot: commonlib.annotations.reboot.new(
+                  title='Reboot',
+                  target=this.targets.reboot,
+                  instanceLabels=std.join(',', instanceLabels),
+                )
+                + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level'])),
+      }
+      +
+      if
+        this.config.enableLokiLogs
+      then
+        {
+          serviceFailed: commonlib.annotations.serviceFailed.new(
+                           title='Service failed',
+                           target=this.targets.serviceFailed,
+                         )
+                         + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level']))
+                         + commonlib.annotations.base.withTextFormat('{{message}}'),
+          criticalEvents: commonlib.annotations.fatal.new(
+                            title='Critical system event',
+                            target=this.targets.criticalEvents,
+                          )
+                          + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level']))
+                          + commonlib.annotations.base.withTextFormat('{{message}}'),
+        }
+      else
+        {},
 
     // common links here
     links: {
