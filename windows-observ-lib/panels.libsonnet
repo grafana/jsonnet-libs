@@ -290,8 +290,6 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
                   { options+: { reduceOptions+: { fields: '/^timezone$/' } } },
       hostname: commonlib.panels.all.stat.info.new('Hostname', targets=[t.osInfo])
                 { options+: { reduceOptions+: { fields: '/^hostname$/' } } },
-      networkInterfacesOverview: g.panel.table.new('Network interfaces overview'),
-      networkInterfaceCarrierStatus: g.panel.statusHistory.new('Network Interfaces Carrier Status'),
       networkErrorsAndDroppedPerSec:
         commonlib.panels.network.timeSeries.errors.new(
           'Network errors and dropped packets',
@@ -326,7 +324,5 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
                               targets=[t.networkInPacketsPerSec, t.networkOutPacketsPerSec]
                             )
                             + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
-      // networkMulticast: commonlib.panels.network.timeSeries.multicast.new(targets=[t.networkMulticast])
-      //                   + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
     },
 }

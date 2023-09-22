@@ -73,6 +73,15 @@ local config = (import 'config.libsonnet')._config;
     alertDiskUsageThresholdCritical: '90',
     // set to false to disable logs dashboard and logs annotations
     enableLokiLogs: true,
+    extraLogLabels: ['channel', 'source', 'keywords', 'level'],
+    logsVolumeGroupBy: 'level',
+    showLogsVolume: true,
+    logsExtraFilters:
+    |||
+        | label_format timestamp="{{__timestamp__}}"
+        | drop channel_extracted,source_extracted,computer_extracted,level_extracted,keywords_extracted
+        | line_format `{{ if eq "[[instance]]" ".*" }}{{ alignLeft 25 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 25 .source}}| {{ .message }}`
+    |||,
   },
 }
 

@@ -35,13 +35,24 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
       dashboardTags: dashboardTags,
       uid: uid,
       dashboardNamePrefix: dashboardNamePrefix,
-      enableLokiLogs: true,
+
       alertsCPUThresholdWarning: '90',
       alertMemoryUsageThresholdCritical: '90',
       alertDiskUsageThresholdCritical: '90',
       dashboardPeriod: 'now-1h',
       dashboardTimezone: 'default',
       dashboardRefresh: '1m',
+
+      enableLokiLogs: true,
+      extraLogLabels: ['channel', 'source', 'keywords', 'level'],
+      logsVolumeGroupBy: 'level',
+      showLogsVolume: true,
+      logsExtraFilters:
+        |||
+          | label_format timestamp="{{__timestamp__}}"
+          | drop channel_extracted,source_extracted,computer_extracted,level_extracted,keywords_extracted
+          | line_format `{{ if eq "[[instance]]" ".*" }}{{ alignLeft 25 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 25 .source}}| {{ .message }}`
+        |||,
     },
 
     variables: variables.new(this),
