@@ -1,6 +1,7 @@
 local g = import './g.libsonnet';
 local var = g.dashboard.variable;
-local winlib = import './windows-observ-lib/main.libsonnet';
+local winlib = import 'github.com/grafana/jsonnet-libs/windows-observ-lib/main.libsonnet';
+
 {
   local windows =
     winlib.new(
@@ -10,7 +11,7 @@ local winlib = import './windows-observ-lib/main.libsonnet';
     )
     +
     {
-      config+: $._config,
+      config+: (import 'config.libsonnet')._config,
     },
   prometheusAlerts+:: windows.alerts,
   grafanaDashboards+::
@@ -18,11 +19,9 @@ local winlib = import './windows-observ-lib/main.libsonnet';
        variables+: {
          datasources+: {
            loki+: var.datasource.withRegex('Loki|.+logs'),
-           prometheus+: var.datasource.withRegex('Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
+           prometheus+: var.datasource.withRegex('Victoria|Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
          },
        },
      })
     .dashboards,
 }
-+
-(import 'config.libsonnet')
