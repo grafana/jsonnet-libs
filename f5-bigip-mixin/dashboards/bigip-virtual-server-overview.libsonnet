@@ -31,7 +31,7 @@ local availabilityStatusPanel = {
         mode: 'fixed',
       },
       custom: {
-        align: 'center',
+        align: 'left',
         cellOptions: {
           type: 'color-text',
         },
