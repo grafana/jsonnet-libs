@@ -856,7 +856,7 @@ local getMatcher(cfg) = '%(cassandraSelector)s, instance=~"$instance", keyspace=
             template.new(
               'instance',
               promDatasource,
-              'label_values(cassandra_up_endpoint_count{%(cassandraSelector)s, cassandra_cluster="$cassandra_cluster"' % $._config +
+              'label_values(cassandra_up_endpoint_count{%(cassandraSelector)s, cassandra_cluster=~"$cassandra_cluster"' % $._config +
               if $._config.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if $._config.enableRackLabel then
                 ', rack=~"$rack"' else '' + '}, instance)',
               label='Instance',
@@ -869,8 +869,8 @@ local getMatcher(cfg) = '%(cassandraSelector)s, instance=~"$instance", keyspace=
             template.new(
               'keyspace',
               promDatasource,
-              'label_values(cassandra_keyspace_caspreparelatency_seconds{%(cassandraSelector)s, cassandra_cluster="$cassandra_cluster",' % $._config +
-              'instance="$instance"}, keyspace)',
+              'label_values(cassandra_keyspace_caspreparelatency_seconds{%(cassandraSelector)s, cassandra_cluster=~"$cassandra_cluster",' % $._config +
+              'instance=~"$instance"}, keyspace)',
               label='Keyspace',
               refresh=1,
               includeAll=true,
