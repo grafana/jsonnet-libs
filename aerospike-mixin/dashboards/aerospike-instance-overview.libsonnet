@@ -839,6 +839,8 @@ local cacheReadUtilizationPanel(matcher) = {
         },
       },
       mappings: [],
+      min: 0,
+      max: 100,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -897,7 +899,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
               promDatasourceName,
               'prometheus',
               null,
-              label='Data Source',
+              label='Data source',
               refresh='load'
             ),
           ],
@@ -910,7 +912,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
               refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
@@ -921,7 +923,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
               refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.*',
               hide=if $._config.enableMultiCluster then '' else 'variable',
               sort=0
             ),
@@ -944,7 +946,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
               refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0,
             ),
           ],

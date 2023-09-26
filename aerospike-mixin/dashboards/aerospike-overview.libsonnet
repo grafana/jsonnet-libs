@@ -1202,7 +1202,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Data source',
             refresh='load'
           ),
           template.new(
@@ -1211,9 +1211,9 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             'label_values(aerospike_namespace_ns_cluster_size,job)',
             label='Job',
             refresh=2,
-            includeAll=false,
-            multi=false,
-            allValues='',
+            includeAll=true,
+            multi=true,
+            allValues='.+',
             sort=0
           ),
           template.new(
@@ -1224,7 +1224,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
