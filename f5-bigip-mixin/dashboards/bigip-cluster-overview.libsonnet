@@ -14,7 +14,7 @@ local nodeAvailabilityPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 * sum by(partition, instance, job) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance"})  / clamp_min(count by(partition, instance, job) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
+      '100 * sum by(partition, instance, job) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"})  / clamp_min(count by(partition, instance, job) (bigip_node_status_availability_state{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}),1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -75,7 +75,7 @@ local poolAvailabilityPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 * sum by(partition, instance, job) (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"}) / clamp_min(count by(partition, instance, job)  (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
+      '100 * sum by(partition, instance, job) (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}) / clamp_min(count by(partition, instance, job)  (bigip_pool_status_availability_state{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}),1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -136,7 +136,7 @@ local virtualServerAvailabilityPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 * sum by(partition, instance, job) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"}) / clamp_min(count by(partition, instance, job) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"}),1)',
+      '100 * sum by(partition, instance, job) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}) / clamp_min(count by(partition, instance, job) (bigip_vs_status_availability_state{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}),1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -197,7 +197,7 @@ local topActiveServersideNodesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, bigip_node_serverside_cur_conns{job=~"$job", instance=~"$instance"})',
+      'topk($k, bigip_node_serverside_cur_conns{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"})',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
       format='time_series',
@@ -248,7 +248,7 @@ local topOutboundTrafficNodesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, increase(bigip_node_serverside_bytes_out{job=~"$job", instance=~"$instance"}[$__interval:]))',
+      'topk($k, increase(bigip_node_serverside_bytes_out{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
       format='time_series',
@@ -300,7 +300,7 @@ local topActiveMembersInPoolsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, bigip_pool_active_member_cnt{job=~"$job", instance=~"$instance"})',
+      'topk($k, bigip_pool_active_member_cnt{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"})',
       datasource=promDatasource,
       legendFormat='{{pool}} - {{instance}}',
       format='time_series',
@@ -351,7 +351,7 @@ local topRequestedPoolsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, increase(bigip_pool_tot_requests{job=~"$job", instance=~"$instance"}[$__interval:]))',
+      'topk($k, increase(bigip_pool_tot_requests{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{pool}} - {{instance}}',
       format='time_series',
@@ -403,7 +403,7 @@ local topQueueDepthPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, bigip_pool_connq_depth{job=~"$job", instance=~"$instance"})',
+      'topk($k, bigip_pool_connq_depth{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"})',
       datasource=promDatasource,
       legendFormat='{{pool}} - {{instance}}',
       format='time_series',
@@ -454,7 +454,7 @@ local topUtilizedVirtualServersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, increase(bigip_vs_clientside_bytes_in{job=~"$job", instance=~"$instance"}[$__interval:])) + topk(5, increase(bigip_vs_clientside_bytes_out{job=~"$job", instance=~"$instance"}[$__interval:]))',
+      'topk($k, increase(bigip_vs_clientside_bytes_in{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}[$__interval:])) + topk(5, increase(bigip_vs_clientside_bytes_out{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
@@ -506,7 +506,7 @@ local topLatencyVirtualServersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, bigip_vs_cs_mean_conn_dur{job=~"$job", instance=~"$instance"})',
+      'topk($k, bigip_vs_cs_mean_conn_dur{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"})',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
@@ -612,6 +612,17 @@ local topLatencyVirtualServersPanel = {
             includeAll=false,
             multi=false,
             allValues='',
+          ),
+          template.new(
+            'bigip_partition',
+            promDatasource,
+            'label_values(bigip_node_status_availability_state{job=~"$job", instance=~"$instance", partition=~"$bigip_partition"},partition)',
+            label='BIG-IP partition',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='.+',
+            sort=1
           ),
         ]
       )

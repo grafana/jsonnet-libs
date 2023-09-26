@@ -15,7 +15,7 @@ local availabilityStatusPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_node_status_availability_state{job=~"$job", instance=~"$instance", node=~"$bigip_node"}',
+      'bigip_node_status_availability_state{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       intervalFactor=2,
       instant=true,
@@ -172,7 +172,7 @@ local activeSessionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_node_cur_sessions{job=~"$job", instance=~"$instance", node=~"$bigip_node"}',
+      'bigip_node_cur_sessions{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
       format='time_series',
@@ -249,7 +249,7 @@ local requests__intervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_node_tot_requests{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__interval:])',
+      'increase(bigip_node_tot_requests{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
       format='time_series',
@@ -327,13 +327,13 @@ local connectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_node_serverside_cur_conns{job=~"$job", instance=~"$instance", node=~"$bigip_node"}',
+      'bigip_node_serverside_cur_conns{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}} - current',
       format='time_series',
     ),
     prometheus.target(
-      'bigip_node_serverside_max_conns{job=~"$job", instance=~"$instance", node=~"$bigip_node"}',
+      'bigip_node_serverside_max_conns{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}} - max',
       format='time_series',
@@ -414,7 +414,7 @@ local trafficInboundPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(bigip_node_serverside_bytes_in{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__rate_interval])',
+      'rate(bigip_node_serverside_bytes_in{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
       format='time_series',
@@ -490,7 +490,7 @@ local trafficOutboundPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(bigip_node_serverside_bytes_out{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__rate_interval])',
+      'rate(bigip_node_serverside_bytes_out{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
     ),
@@ -566,7 +566,7 @@ local packetsInboundIntervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_node_serverside_pkts_in{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__interval:])',
+      'increase(bigip_node_serverside_pkts_in{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
       format='time_series',
@@ -644,7 +644,7 @@ local packetsOutboundIntervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_node_serverside_pkts_out{job=~"$job", instance=~"$instance", node=~"$bigip_node"}[$__interval:])',
+      'increase(bigip_node_serverside_pkts_out{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
       interval='1m',
@@ -775,6 +775,17 @@ local packetsOutboundIntervalPanel = {
               promDatasource,
               'label_values(bigip_node_status_availability_state{job=~"$job", instance=~"$instance"},node)',
               label='BIG-IP node',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.+',
+              sort=1
+            ),
+            template.new(
+              'bigip_partition',
+              promDatasource,
+              'label_values(bigip_node_status_availability_state{job=~"$job", instance=~"$instance"},partition)',
+              label='BIG-IP partition',
               refresh=2,
               includeAll=true,
               multi=true,

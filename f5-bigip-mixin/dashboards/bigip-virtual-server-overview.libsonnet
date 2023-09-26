@@ -14,7 +14,7 @@ local availabilityStatusPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_vs_status_availability_state{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      'bigip_vs_status_availability_state{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       intervalFactor=2,
@@ -171,7 +171,7 @@ local requests__intervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_vs_tot_requests{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
+      'increase(bigip_vs_tot_requests{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
@@ -249,19 +249,19 @@ local connectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_vs_clientside_cur_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      'bigip_vs_clientside_cur_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}} - current',
       format='time_series',
     ),
     prometheus.target(
-      'bigip_vs_clientside_max_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      'bigip_vs_clientside_max_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}} - maximum',
       format='time_series',
     ),
     prometheus.target(
-      'bigip_vs_clientside_evicted_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      'bigip_vs_clientside_evicted_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}} - evicted',
     ),
@@ -341,17 +341,17 @@ local ephemeralConnectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_vs_ephemeral_cur_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      'bigip_vs_ephemeral_cur_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}} - current',
     ),
     prometheus.target(
-      'bigip_vs_ephemeral_max_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      'bigip_vs_ephemeral_max_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}} - maximum',
     ),
     prometheus.target(
-      'bigip_vs_ephemeral_evicted_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      'bigip_vs_ephemeral_evicted_conns{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}} - evicted',
     ),
@@ -431,7 +431,7 @@ local averageConnectionDurationPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bigip_vs_cs_mean_conn_dur{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}',
+      'bigip_vs_cs_mean_conn_dur{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
@@ -508,7 +508,7 @@ local trafficInboundPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(bigip_vs_clientside_bytes_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
+      'rate(bigip_vs_clientside_bytes_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
@@ -585,7 +585,7 @@ local trafficOutboundPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(bigip_vs_clientside_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
+      'rate(bigip_vs_clientside_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
     ),
@@ -661,7 +661,7 @@ local trafficInboundEphemeralPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(bigip_vs_ephemeral_bytes_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
+      'rate(bigip_vs_ephemeral_bytes_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
@@ -738,7 +738,7 @@ local trafficOutboundEphemeralPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(bigip_vs_ephemeral_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__rate_interval])',
+      'rate(bigip_vs_ephemeral_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
     ),
@@ -814,7 +814,7 @@ local packetsInboundIntervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_vs_clientside_pkts_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
+      'increase(bigip_vs_clientside_pkts_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
@@ -892,7 +892,7 @@ local packetsOutboundIntervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_vs_clientside_pkts_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
+      'increase(bigip_vs_clientside_pkts_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       interval='1m',
@@ -969,7 +969,7 @@ local packetsEphemeralInboundntervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_vs_ephemeral_pkts_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
+      'increase(bigip_vs_ephemeral_pkts_in{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
@@ -1047,7 +1047,7 @@ local packetsEphemeralOutboundIntervalPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(bigip_vs_ephemeral_pkts_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server"}[$__interval:])',
+      'increase(bigip_vs_ephemeral_pkts_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       interval='1m',
@@ -1178,6 +1178,17 @@ local packetsEphemeralOutboundIntervalPanel = {
               promDatasource,
               'label_values(bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"},vs)',
               label='BIG-IP virtual server',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.+',
+              sort=1
+            ),
+            template.new(
+              'bigip_partition',
+              promDatasource,
+              'label_values(bigip_vs_status_availability_state{job=~"$job", instance=~"$instance"},partition)',
+              label='BIG-IP partition',
               refresh=2,
               includeAll=true,
               multi=true,
