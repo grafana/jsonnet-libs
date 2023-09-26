@@ -294,17 +294,17 @@ local clientReadsPanel(matcher) = {
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_success{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - success',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - success',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_error{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - error',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - error',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_filtered_out{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - filtered',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - filtered',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_timeout{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
@@ -314,7 +314,7 @@ local clientReadsPanel(matcher) = {
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_not_found{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - not found',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - not found',
     ),
   ],
   type: 'timeseries',
@@ -382,7 +382,7 @@ local clientReadsPanel(matcher) = {
         'max',
       ],
       displayMode: 'table',
-      placement: 'right',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -398,22 +398,22 @@ local clientWritesPanel(matcher) = {
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_write_success{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - success',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - success',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_write_error{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - error',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - error',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_write_filtered_out{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - filtered',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - filtered',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_write_timeout{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - timeout',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - timeout',
     ),
   ],
   type: 'timeseries',
@@ -481,7 +481,7 @@ local clientWritesPanel(matcher) = {
         'max',
       ],
       displayMode: 'table',
-      placement: 'right',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -497,22 +497,22 @@ local clientUDFTransactionsPanel(matcher) = {
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_udf_complete{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - complete',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - complete',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_udf_error{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - error',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - error',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_udf_filtered_out{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - filtered',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - filtered',
     ),
     prometheus.target(
       'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_udf_timeout{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - timeout',
+      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - timeout',
     ),
   ],
   type: 'timeseries',
@@ -579,7 +579,7 @@ local clientUDFTransactionsPanel(matcher) = {
         'max',
       ],
       displayMode: 'table',
-      placement: 'right',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -638,6 +638,8 @@ local cacheReadUtilizationPanel(matcher) = {
         },
       },
       mappings: [],
+      min: 0,
+      max: 100,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -695,7 +697,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Data source',
             refresh='load'
           ),
           template.new(
@@ -704,9 +706,9 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             'label_values(aerospike_namespace_ns_cluster_size,job)',
             label='Job',
             refresh=2,
-            includeAll=false,
-            multi=false,
-            allValues='',
+            includeAll=true,
+            multi=true,
+            allValues='.+',
             sort=0
           ),
           template.new(
@@ -717,7 +719,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
@@ -740,7 +742,7 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(
