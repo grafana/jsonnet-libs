@@ -1312,13 +1312,18 @@ local crossnodeLatencyPanel(matcher) = {
   },
 };
 
-local systemLogsPanel(matcher) = {
+local getMatcher(cfg) = '%(cassandraSelector)s, cassandra_cluster=~"$cassandra_cluster", instance=~"$instance"' % cfg +
+                        if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
+
+local getApplyFilename(cfg) = if cfg.enableMultiCluster then '{' + getMatcher(cfg) + '} |= ``' else '{filename="/var/log/cassandra/system.log", ' + getMatcher(cfg) + '} |= ``';
+
+local systemLogsPanel(cfg, matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/cassandra/system.log", ' + matcher + '} |= ``',
+      expr: getApplyFilename(cfg),
       queryType: 'range',
       refId: 'A',
     },
@@ -1337,9 +1342,6 @@ local systemLogsPanel(matcher) = {
     wrapLogMessage: false,
   },
 };
-
-local getMatcher(cfg) = '%(cassandraSelector)s, cassandra_cluster=~"$cassandra_cluster", instance=~"$instance"' % cfg +
-                        if cfg.enableDatacenterLabel then ', datacenter=~"$datacenter"' else '' + if cfg.enableRackLabel then ', rack=~"$rack"' else '';
 
 {
   grafanaDashboards+:: {
@@ -1479,7 +1481,7 @@ local getMatcher(cfg) = '%(cassandraSelector)s, cassandra_cluster=~"$cassandra_c
             crossnodeLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 16, y: 30 } },
           ],
           if $._config.enableLokiLogs then [
-            systemLogsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 36 } },
+            systemLogsPanel($._config, getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 36 } },
           ] else [],
         ])
       ),
