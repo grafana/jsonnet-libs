@@ -11,7 +11,7 @@
     alertsCriticalHighRequestRate: 150,  // %
     alertsCriticalHighConnectionQueueDepth: 75,  // %
 
-    enableLokiLogs: true,
+    enableLokiLogs: false,
     filterSelector: 'job=~"syslog"',
   },
 }
