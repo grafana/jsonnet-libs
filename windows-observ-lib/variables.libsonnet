@@ -43,7 +43,7 @@ local utils = import './utils.libsonnet';
            + var.datasource.generalOptions.withLabel('Data source'),
          loki:
            var.datasource.new('loki_datasource', 'loki')
-           + var.datasource.generalOptions.withLabel('Logs data source')
+           + var.datasource.generalOptions.withLabel('Loki data source')
            + var.datasource.generalOptions.showOnDashboard.withNothing(),
        },
        multiInstance:
