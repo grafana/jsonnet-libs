@@ -1,5 +1,5 @@
 local g = import './g.libsonnet';
-local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main.libsonnet';
+local utils = import './utils.libsonnet';
 
 {
   new(this):
@@ -68,7 +68,7 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
                                 url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}' % [this.dashboards.overview.uid, instanceLabel, instanceLabel],
                               },
                             ]),
-                            fieldOverride.byRegexp.new(std.join('|', this.config.groupLabels))
+                            fieldOverride.byRegexp.new(std.join('|', std.map(utils.toSentenceCase, this.config.groupLabels)))
                             + fieldOverride.byRegexp.withProperty('custom.filterable', true)
                             + fieldOverride.byRegexp.withProperty('links', [
                               {
@@ -136,13 +136,22 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
                                     'Value #OS Info': true,
                                   },
                                   indexByName: {},
-                                  renameByName: {
+                                  renameByName:
+                                    {
                                     product: 'Product',
-                                    [instanceLabel]: 'Instance',
+                                      [instanceLabel]: utils.toSentenceCase(instanceLabel),
                                     hostname: 'Hostname',
-                                  },
+                                    }
+                                    +
+                                    // group labels are named as 'job 1' and so on.
+                                    {
+                                      [label + ' 1']: utils.toSentenceCase(label)
+                                      for label in this.config.groupLabels
+                                    },
+
                                 },
                               },
+
                               {
                                 id: 'renameByRegex',
                                 options: {

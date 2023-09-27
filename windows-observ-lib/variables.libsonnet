@@ -21,7 +21,7 @@ local utils = import './utils.libsonnet';
              chainVar.label,
              '%s{%s}' % [varMetric, chainVar.chainSelector],
            )
-
+           + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
            + var.query.selectionOptions.withIncludeAll(
              value=if (!multiInstance && std.member(instanceLabels, chainVar.label)) then false else true,
              customAllValue=if index > 0 then '.+' else null,
