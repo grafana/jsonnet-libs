@@ -3,10 +3,11 @@ local base = import './base.libsonnet';
 local stat = g.panel.stat;
 // Uptime panel. expects duration in seconds as input
 base {
-  new(title='Uptime', targets, description=''):
+  new(title='Uptime', targets, description='The duration of time that has passed since the last reboot or system start.'):
     super.new(title, targets, description)
     + stat.options.withReduceOptions({})
-    + stat.options.reduceOptions.withCalcsMixin([
+    + stat.options.reduceOptions.withCalcsMixin(
+      [
         'lastNotNull',
       ]
     )
@@ -26,5 +27,5 @@ base {
         stat.thresholdStep.withColor('text')
         + stat.thresholdStep.withValue(600),
       ]
-    )
+    ),
 }

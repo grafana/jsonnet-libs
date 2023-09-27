@@ -5,12 +5,14 @@ local fieldOverride = g.panel.timeSeries.fieldOverride;
 local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
-commonTimeSeries + {
+commonTimeSeries {
   new(
     title='Memory usage',
     targets,
-    description=''
+    description=|||
+      RAM (random-access memory) currently in use by the operating system and running applications, in percent.
+    |||
   ):
     super.new(title=title, targets=targets, description=description)
-     + commonTimeSeries.percentage.stylize()
+    + commonTimeSeries.percentage.stylize(),
 }

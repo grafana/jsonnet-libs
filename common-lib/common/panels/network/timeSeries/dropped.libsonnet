@@ -9,8 +9,14 @@ base {
   new(
     title='Dropped packets',
     targets,
-    description='',
+    description=|||
+      Dropped packets occur when data packets traveling through a network are intentionally discarded or lost due to congestion, resource limitations, or network configuration issues. 
+
+      Common causes include network congestion, buffer overflows, QoS settings, and network errors, as corrupted or incomplete packets may be discarded by receiving devices.
+
+      Dropped packets can impact network performance and lead to issues such as degraded voice or video quality in real-time applications.
+    |||,
   ):
     super.new(title, targets, description)
-    + timeSeries.standardOptions.withNoValue("No dropped packets"),
+    + timeSeries.standardOptions.withNoValue('No dropped packets'),
 }

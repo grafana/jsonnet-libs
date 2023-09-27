@@ -9,7 +9,7 @@ base {
   new(
     title='Multicast packets',
     targets,
-    description='',
+    description='Packets sent from one source to multiple recipients simultaneously, allowing efficient one-to-many communication in a network.',
   ):
     super.new(title, targets, description),
 }

@@ -9,11 +9,17 @@ base {
   new(
     title='CPU usage',
     targets,
-    description=''
+    description=|||
+      Total CPU utilization percent is a metric that indicates the overall level of central processing unit (CPU) usage in a computer system.
+      It represents the combined load placed on all CPU cores or processors.
+
+      For instance, if the total CPU utilization percent is 50%, it means that,
+      on average, half of the CPU's processing capacity is being used to execute tasks. A higher percentage indicates that the CPU is working more intensively, potentially leading to system slowdowns if it remains consistently high.
+    |||
   ):
     super.new(title, targets, description)
     + self.stylize(),
 
   stylize():
-    base.percentage.stylize()
+    base.percentage.stylize(),
 }

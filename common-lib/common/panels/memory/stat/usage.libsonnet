@@ -5,12 +5,12 @@ local fieldOverride = g.panel.stat.fieldOverride;
 local custom = stat.fieldConfig.defaults.custom;
 local defaults = stat.fieldConfig.defaults;
 local options = stat.options;
-base + {
+base {
   new(
     title='Memory usage',
     targets,
-    description=''
+    description='RAM (random-access memory) currently in use by the operating system and running applications, in percent.'
   ):
     super.new(title=title, targets=targets, description=description)
-     + stat.standardOptions.withUnit("percent")
+    + stat.standardOptions.withUnit('percent'),
 }

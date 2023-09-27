@@ -9,7 +9,7 @@ base {
   new(
     title='Network packets',
     targets,
-    description='',
+    description='Network packet count tracks the number of data packets transmitted and received over a network connection, providing insight into network activity and performance.',
   ):
     super.new(title, targets, description),
 }

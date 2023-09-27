@@ -9,7 +9,9 @@ base {
   new(
     title='Filesystem space used',
     targets,
-    description='',
+    description=|||
+      Disk space usage is the amount of storage being used on a device's hard drive or storage medium, in bytes.
+    |||,
   ):
     super.new(title, targets, description)
     + timeSeries.standardOptions.withUnit('bytes'),

@@ -9,8 +9,14 @@ base {
   new(
     title='Network errors',
     targets,
-    description='',
+    description=|||
+      Network errors refer to issues that occur during the transmission of data across a network. 
+
+      These errors can result from various factors, including physical issues, jitter, collisions, noise and interference.
+
+      Monitoring network errors is essential for diagnosing and resolving issues, as they can indicate problems with network hardware or environmental factors affecting network quality.
+    |||,
   ):
     super.new(title, targets, description)
-    + timeSeries.standardOptions.withNoValue("No errors"),
+    + timeSeries.standardOptions.withNoValue('No errors'),
 }
