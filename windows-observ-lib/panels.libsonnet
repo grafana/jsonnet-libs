@@ -260,14 +260,14 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
       ),
       memoryUsageTsBytes: commonlib.panels.memory.timeSeries.usageBytes.new(targets=[t.memoryUsedBytes, t.memoryTotalBytes]),
       diskTotalC:
-        commonlib.panels.filesystem.stat.total.new(
+        commonlib.panels.disk.stat.total.new(
           'Disk C: size',
           targets=[t.diskTotalC],
           description=|||
             Total storage capacity on the primary hard drive (usually the system drive) of a computer running a Windows operating system.
           |||
         ),
-      diskUsage: commonlib.panels.filesystem.table.usage.new(
+      diskUsage: commonlib.panels.disk.table.usage.new(
         totalTarget=
         (t.diskTotal
          + g.query.prometheus.withFormat('table')
@@ -277,7 +277,7 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
                     + g.query.prometheus.withInstant(true),
         groupLabel='volume'
       ),
-      diskUsagePercent: commonlib.panels.filesystem.timeSeries.usagePercent.new(
+      diskUsagePercent: commonlib.panels.disk.timeSeries.usagePercent.new(
         targets=[t.diskUsagePercent]
       ),
       diskUsagePercentTopK: commonlib.panels.all.timeSeries.topkPercentage.new(
