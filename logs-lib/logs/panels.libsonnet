@@ -9,6 +9,7 @@ local fieldConfig = timeSeries.fieldConfig;
 function(
   logsVolumeTarget,
   logsTarget,
+  logsVolumeGroupBy,
 )
 
   {
@@ -17,12 +18,19 @@ function(
     logsVolumeInit(targets, title='Logs volume')::
       timeSeries.new(title)
       + timeSeries.queryOptions.withTargets(targets)
+      + timeSeries.panelOptions.withDescription('Logs volume grouped by "%s" label.' % logsVolumeGroupBy)
+      // set type to first target's type
+      + timeSeries.queryOptions.withDatasource(
+        logsVolumeTarget.datasource.type, logsVolumeTarget.datasource.uid
+      )
       + custom.withDrawStyle('bars')
       + custom.stacking.withMode('normal')
       + custom.withFillOpacity(50)
-      + timeSeries.queryOptions.withInterval('30s')  // must be set , otherwise interval is around 1ms
+      // should be set, otherwise interval is around 1s by default
+      + timeSeries.queryOptions.withInterval('30s')
       + options.tooltip.withMode('multi')
       + options.tooltip.withSort('desc')
+      + timeSeries.standardOptions.withUnit('none')
       + timeSeries.queryOptions.withTransformationsMixin(
         {
           id: 'renameByRegex',

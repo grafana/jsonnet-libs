@@ -10,7 +10,7 @@ function(
   formatParser:: if formatParser != null then '| %s | __error__=``' % formatParser else '',
   logsTarget::
     lokiQuery.new(
-      datasource='$' + variables.datasource.name,
+      datasource='${' + variables.datasource.name + '}',
       expr=|||
         {%s} 
         |~ "$regex_search"
@@ -25,7 +25,7 @@ function(
 
   logsVolumeTarget::
     lokiQuery.new(
-      datasource='$' + variables.datasource.name,
+      datasource='${' + variables.datasource.name + '}',
       expr=|||
         sum by (%s) (count_over_time({%s}
         |~ "$regex_search"
