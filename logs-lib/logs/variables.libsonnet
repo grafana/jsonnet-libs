@@ -3,6 +3,7 @@ local g = import './g.libsonnet';
 local var = g.dashboard.variable;
 function(
   datasourceName,
+  datasourceLabel,
   datasourceRegex,
   filterSelector,
   labels,
@@ -13,6 +14,7 @@ function(
       local chainVarProto(chainVar) =
         var.query.new(chainVar.label)
         + var.query.withDatasourceFromVariable(this.datasource)
+        + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
         + var.query.queryTypes.withLabelValues(
           chainVar.label,
           '{%s}' % chainVar.chainSelector,
@@ -37,10 +39,12 @@ function(
 
     datasource:
       var.datasource.new(datasourceName, 'loki')
-      + var.datasource.withRegex(datasourceRegex),
+      + var.datasource.withRegex(datasourceRegex)
+      + var.query.generalOptions.withLabel(datasourceLabel),
 
     regex_search:
-      var.textbox.new('regex_search', default=''),
+      var.textbox.new('regex_search', default='')
+      + var.query.generalOptions.withLabel('Regex search'),
 
     toArray:
       [self.datasource]

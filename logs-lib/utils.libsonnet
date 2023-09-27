@@ -10,6 +10,9 @@
 
   labelsToPanelLegend(labels): std.join('/', ['{{%s}}' % [label] for label in labels]),
 
+  toSentenceCase(string)::
+    std.asciiUpper(string[0]) + std.slice(string, 1, std.length(string), 1),
+
   // Generate a chain of labels. Useful to create chained variables
   chainLabels(labels, additionalFilters=[]):
     local last(arr) = std.reverse(arr)[0];
