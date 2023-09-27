@@ -11,6 +11,7 @@ local variables = import './variables.libsonnet';
     labels,
     datasourceRegex,
     datasourceName='loki_datasource',
+    datasourceLabel='Loki data source',
     formatParser=null,
     showLogsVolume=true,
     logsVolumeGroupBy='level',
@@ -20,6 +21,7 @@ local variables = import './variables.libsonnet';
     local this = self,
     variables: variables(
       datasourceName,
+      datasourceLabel,
       datasourceRegex,
       filterSelector,
       labels,
@@ -35,6 +37,7 @@ local variables = import './variables.libsonnet';
     panels: panels(
       this.targets.logsVolumeTarget,
       this.targets.logsTarget,
+      logsVolumeGroupBy,
     ),
 
     dashboards: dashboards(
