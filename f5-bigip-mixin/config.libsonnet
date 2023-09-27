@@ -4,6 +4,7 @@
     dashboardPeriod: 'now-30m',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
+    defaultRateInterval: '1m',
 
     // alerts thresholds
     alertsCriticalNodeAvailability: 95,  // %

@@ -410,7 +410,7 @@ local connectionsPanel = {
   },
 };
 
-local trafficInboundPanel = {
+local trafficInboundPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -418,7 +418,7 @@ local trafficInboundPanel = {
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
       format='time_series',
-      interval='1m',
+      interval=cfg.defaultRateInterval,
     ),
   ],
   type: 'timeseries',
@@ -487,14 +487,14 @@ local trafficInboundPanel = {
     },
   },
 };
-local trafficOutboundPanel = {
+local trafficOutboundPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'rate(bigip_node_serverside_bytes_out{job=~"$job", instance=~"$instance", node=~"$bigip_node", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{node}} - {{instance}}',
-      interval='1m',
+      interval=cfg.defaultRateInterval,
     ),
   ],
   type: 'timeseries',
@@ -804,8 +804,8 @@ local packetsOutboundIntervalPanel = {
             requests__intervalPanel { gridPos: { h: 5, w: 8, x: 8, y: 0 } },
             activeSessionsPanel { gridPos: { h: 5, w: 8, x: 16, y: 0 } },
             connectionsPanel { gridPos: { h: 5, w: 24, x: 0, y: 5 } },
-            trafficInboundPanel { gridPos: { h: 5, w: 12, x: 0, y: 10 } },
-            trafficOutboundPanel { gridPos: { h: 5, w: 12, x: 12, y: 10 } },
+            trafficInboundPanel($._config) { gridPos: { h: 5, w: 12, x: 0, y: 10 } },
+            trafficOutboundPanel($._config) { gridPos: { h: 5, w: 12, x: 12, y: 10 } },
             packetsInboundIntervalPanel { gridPos: { h: 5, w: 12, x: 0, y: 15 } },
             packetsOutboundIntervalPanel { gridPos: { h: 5, w: 12, x: 12, y: 15 } },
           ],

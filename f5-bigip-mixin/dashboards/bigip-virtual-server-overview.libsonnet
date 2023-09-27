@@ -504,7 +504,7 @@ local averageConnectionDurationPanel = {
   },
 };
 
-local trafficInboundPanel = {
+local trafficInboundPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -512,7 +512,7 @@ local trafficInboundPanel = {
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
-      interval='1m',
+      interval=cfg.defaultRateInterval,
     ),
   ],
   type: 'timeseries',
@@ -582,14 +582,14 @@ local trafficInboundPanel = {
   },
 };
 
-local trafficOutboundPanel = {
+local trafficOutboundPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'rate(bigip_vs_clientside_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
-      interval='1m',
+      interval=cfg.defaultRateInterval,
     ),
   ],
   type: 'timeseries',
@@ -659,7 +659,7 @@ local trafficOutboundPanel = {
   },
 };
 
-local trafficInboundEphemeralPanel = {
+local trafficInboundEphemeralPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -667,7 +667,7 @@ local trafficInboundEphemeralPanel = {
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
       format='time_series',
-      interval='1m',
+      interval=cfg.defaultRateInterval,
     ),
   ],
   type: 'timeseries',
@@ -737,14 +737,14 @@ local trafficInboundEphemeralPanel = {
   },
 };
 
-local trafficOutboundEphemeralPanel = {
+local trafficOutboundEphemeralPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'rate(bigip_vs_ephemeral_bytes_out{job=~"$job", instance=~"$instance", vs=~"$bigip_virtual_server", partition=~"$bigip_partition"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{vs}} - {{instance}}',
-      interval='1m',
+      interval=cfg.defaultRateInterval,
     ),
   ],
   type: 'timeseries',
@@ -1210,10 +1210,10 @@ local packetsEphemeralOutboundIntervalPanel = {
             averageConnectionDurationPanel { gridPos: { h: 5, w: 8, x: 16, y: 0 } },
             connectionsPanel { gridPos: { h: 5, w: 24, x: 0, y: 5 } },
             ephemeralConnectionsPanel { gridPos: { h: 5, w: 24, x: 0, y: 10 } },
-            trafficInboundPanel { gridPos: { h: 5, w: 12, x: 0, y: 15 } },
-            trafficOutboundPanel { gridPos: { h: 5, w: 12, x: 12, y: 15 } },
-            trafficInboundEphemeralPanel { gridPos: { h: 5, w: 12, x: 0, y: 20 } },
-            trafficOutboundEphemeralPanel { gridPos: { h: 5, w: 12, x: 12, y: 20 } },
+            trafficInboundPanel($._config) { gridPos: { h: 5, w: 12, x: 0, y: 15 } },
+            trafficOutboundPanel($._config) { gridPos: { h: 5, w: 12, x: 12, y: 15 } },
+            trafficInboundEphemeralPanel($._config) { gridPos: { h: 5, w: 12, x: 0, y: 20 } },
+            trafficOutboundEphemeralPanel($._config) { gridPos: { h: 5, w: 12, x: 12, y: 20 } },
             packetsInboundIntervalPanel { gridPos: { h: 5, w: 12, x: 0, y: 25 } },
             packetsOutboundIntervalPanel { gridPos: { h: 5, w: 12, x: 12, y: 25 } },
             packetsEphemeralInboundntervalPanel { gridPos: { h: 5, w: 12, x: 0, y: 30 } },
