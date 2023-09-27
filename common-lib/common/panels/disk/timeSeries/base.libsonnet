@@ -14,7 +14,7 @@ base {
     super.base.new(title, targets, description)
     // Decrease opacity (would look better with too many timeseries)
     + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(1),
-
+  stylize(): {},
   withNegateOutPackets(regexp='/write|written/'):
     defaults.custom.withAxisLabel('write(-) | read(+)')
     + defaults.custom.withAxisCenteredZero(true)
@@ -24,4 +24,5 @@ base {
         defaults.custom.withTransform('negative-Y')
       )
     ),
+
 }

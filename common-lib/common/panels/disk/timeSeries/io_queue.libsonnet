@@ -11,7 +11,8 @@ base {
     targets,
     description='Disk average IO queue.',
   ):
-    super.new(title, targets, description),
+    super.new(title, targets, description)
+    + self.stylize(),
   stylize():
     super.stylize()
     + super.withNegateOutPackets(),

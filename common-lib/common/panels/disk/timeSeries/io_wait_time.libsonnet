@@ -14,7 +14,8 @@ base {
       This includes the time spent by the requests in queue and the time spent servicing them.'
     |||
   ):
-    super.new(title, targets, description),
+    super.new(title, targets, description)
+    + self.stylize(),
   stylize():
     super.stylize()
     + timeSeries.standardOptions.withUnit('s')

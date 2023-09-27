@@ -13,7 +13,8 @@ base {
       The number of I/O requests per second for the device/volume.
     |||
   ):
-    super.new(title, targets, description),
+    super.new(title, targets, description)
+    + self.stylize(),
   stylize():
     super.stylize()
     + timeSeries.standardOptions.withUnit('iops')
