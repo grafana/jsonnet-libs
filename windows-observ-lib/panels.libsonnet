@@ -8,8 +8,10 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
       local table = g.panel.table,
       local fieldOverride = g.panel.table.fieldOverride,
       local instanceLabel = this.config.instanceLabels[0],
-      fleetOverviewTable: g.panel.table.new('Fleet overview')
-                          + table.queryOptions.withTargets([
+      fleetOverviewTable: commonlib.panels.all.table.base.new(
+                            'Fleet overview',
+                            targets=
+                            [
                             t.osInfo
                             + g.query.prometheus.withFormat('table')
                             + g.query.prometheus.withInstant(true)
@@ -50,7 +52,9 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
                             + g.query.prometheus.withFormat('table')
                             + g.query.prometheus.withInstant(true)
                             + g.query.prometheus.withRefId('WARNING'),
-                          ])
+                            ],
+                            description="All Windows instances' perfomance at a glance."
+                          )
                           + commonlib.panels.system.table.uptime.stylizeByName('Uptime')
                           + table.standardOptions.withOverridesMixin([
                             fieldOverride.byRegexp.new('Product|^Hostname$')
@@ -214,9 +218,29 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
       ),
       // TODO add why it is important, consider alert
       // https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc940375(v=technet.10)
-      cpuQueue: commonlib.panels.all.timeSeries.base.new('CPU average queue', targets=[t.cpuQueue]),
+      cpuQueue: commonlib.panels.all.timeSeries.base.new(
+        'CPU average queue size',
+        targets=[t.cpuQueue],
+        description=|||
+          The CPU average queue size in Windows, often referred to as the "Processor Queue Length" or "CPU Queue Length," is a metric that measures the number of threads or tasks waiting to be processed by the central processing unit (CPU) at a given moment.
+          It is an essential performance indicator that reflects the workload and responsiveness of the CPU.
+          When the CPU queue length is high, it indicates that there are more tasks in line for processing than the CPU can handle immediately.
+
+          This can lead to system slowdowns, decreased responsiveness, and potential performance issues. High CPU queue lengths are often associated with CPU saturation, where the CPU is struggling to keep up with the demands placed on it.
+        |||
+      ),
       memoryTotalBytes: commonlib.panels.memory.stat.total.new(targets=[t.memoryTotalBytes]),
-      memoryPageTotalBytes: commonlib.panels.memory.stat.total.new('Pagefile size', targets=[t.memoryPageTotalBytes]),
+      memoryPageTotalBytes:
+        commonlib.panels.memory.stat.total.new(
+          'Pagefile size',
+          targets=[t.memoryPageTotalBytes],
+          description=|||
+            A page file (also known as a "paging file") is an optional, hidden system file on a hard disk.
+            Page files enable the system to remove infrequently accessed modified pages from physical memory to let the system use physical memory more efficiently for more frequently accessed pages.
+
+            https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/introduction-to-the-page-file
+          |||
+        ),
       memoryUsageStatPercent: commonlib.panels.memory.stat.usage.new(targets=[t.memoryUsagePercent]),
       memotyUsageTopKPercent: commonlib.panels.all.timeSeries.topkPercentage.new(
         title='Memory usage',
@@ -226,7 +250,14 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
         drillDownDashboardUid=this.dashboards.overview.uid,
       ),
       memoryUsageTsBytes: commonlib.panels.memory.timeSeries.usageBytes.new(targets=[t.memoryUsedBytes, t.memoryTotalBytes]),
-      diskTotalC: commonlib.panels.filesystem.stat.total.new('Disk C: size', targets=[t.diskTotalC]),
+      diskTotalC:
+        commonlib.panels.filesystem.stat.total.new(
+          'Disk C: size',
+          targets=[t.diskTotalC],
+          description=|||
+            Total storage capacity on the primary hard drive (usually the system drive) of a computer running a Windows operating system.
+          |||
+        ),
       diskUsage: commonlib.panels.filesystem.table.usage.new(
         totalTarget=
         (t.diskTotal
@@ -282,13 +313,28 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
         ]
       )
       ,
-      osInfo: commonlib.panels.all.stat.info.new('OS family', targets=[t.osInfo])
+      osInfo: commonlib.panels.all.stat.info.new(
+        'OS family',
+        targets=[t.osInfo],
+        description='OS family includes various versions and editions of the Windows operating system.'
+      )
               { options+: { reduceOptions+: { fields: '/^product$/' } } },
-      osVersion: commonlib.panels.all.stat.info.new('OS version', targets=[t.osInfo])
+      osVersion:
+        commonlib.panels.all.stat.info.new('OS version',
+                                           targets=[t.osInfo],
+                                           description='Version of Windows operating system.')
                  { options+: { reduceOptions+: { fields: '/^version$/' } } },
-      osTimezone: commonlib.panels.all.stat.info.new('Timezone', targets=[t.osTimezone])
+      osTimezone:
+        commonlib.panels.all.stat.info.new(
+          'Timezone', targets=[t.osTimezone], description='Current system timezone.'
+        )
                   { options+: { reduceOptions+: { fields: '/^timezone$/' } } },
-      hostname: commonlib.panels.all.stat.info.new('Hostname', targets=[t.osInfo])
+      hostname:
+        commonlib.panels.all.stat.info.new(
+          'Hostname',
+          targets=[t.osInfo],
+          description="System's hostname."
+        )
                 { options+: { reduceOptions+: { fields: '/^hostname$/' } } },
       networkErrorsAndDroppedPerSec:
         commonlib.panels.network.timeSeries.errors.new(
@@ -306,7 +352,24 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
               t.networkOutDroppedPerSec,
               t.networkInDroppedPerSec,
             ]
-          )
+          ),
+          description=|||
+            **Network errors**:
+
+            Network errors refer to issues that occur during the transmission of data across a network. 
+
+            These errors can result from various factors, including physical issues, jitter, collisions, noise and interference.
+
+            Monitoring network errors is essential for diagnosing and resolving issues, as they can indicate problems with network hardware or environmental factors affecting network quality.
+
+            **Dropped packets**:
+
+            Dropped packets occur when data packets traveling through a network are intentionally discarded or lost due to congestion, resource limitations, or network configuration issues. 
+
+            Common causes include network congestion, buffer overflows, QoS settings, and network errors, as corrupted or incomplete packets may be discarded by receiving devices.
+
+            Dropped packets can impact network performance and lead to issues such as degraded voice or video quality in real-time applications.
+          |||
         ),
 
       networkErrorsPerSec: commonlib.panels.network.timeSeries.errors.new('Network errors',
