@@ -3,10 +3,6 @@ local base = import './base.libsonnet';
 local stat = g.panel.stat;
 //simple info panel with text or count
 base {
-  // TODO remove new
-  new(title, targets, description=''):
-    super.new(title, targets, description)
-    + self.stylize(),
   stylize():
     // Style choice: No color for simple text panels by default
     stat.options.withColorMode('fixed')

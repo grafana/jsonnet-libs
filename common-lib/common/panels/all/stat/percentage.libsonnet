@@ -4,9 +4,6 @@ local stat = g.panel.stat;
 // Panels to display metrics that can go from 0 to 100%.
 // (cpu utilization, memory utilization etc).
 base {
-  new(title, targets, description=''):
-    super.new(title, targets, description)
-    + self.stylize(),
   stylize():
     stat.standardOptions.withDecimals(1)
     + stat.standardOptions.withUnit('percent')
@@ -16,10 +13,10 @@ base {
     + stat.standardOptions.withMin(0)
     // Show last value by default, not mean.
     + stat.options.withReduceOptions({})
-    + stat.options.reduceOptions.withCalcsMixin([
+    + stat.options.reduceOptions.withCalcsMixin(
+      [
         'lastNotNull',
       ]
-    )
-    
+    ),
 
 }
