@@ -1318,7 +1318,7 @@ local systemLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/cassandra/system.log", ' + matcher + '} |= ``',
+      expr: '{' + matcher + '} |= ``',
       queryType: 'range',
       refId: 'A',
     },
