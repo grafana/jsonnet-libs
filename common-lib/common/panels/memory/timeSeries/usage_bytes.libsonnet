@@ -6,16 +6,19 @@ local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 base {
+  totalRegexp:: '.*(T|t)otal.*',
   new(
     title='Memory usage',
     targets,
     description=|||
       RAM (random-access memory) currently in use by the operating system and running applications, in bytes.
     |||,
-    totalRegexp='.*(T|t)otal.*',
+    totalRegexp=self.totalRegexp,
   ):
     super.base.new(title=title, targets=targets, description=description)
-    + timeSeries.standardOptions.withUnit('bytes')
+    + self.stylize(totalRegexp),
+  stylize(totalRegexp=self.totalRegexp):
+    timeSeries.standardOptions.withUnit('bytes')
     + timeSeries.standardOptions.withMin(0)
     + base.threshold.stylizeByRegexp(totalRegexp),
 }
