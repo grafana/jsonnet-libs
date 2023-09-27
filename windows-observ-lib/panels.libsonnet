@@ -1,6 +1,6 @@
 local g = import './g.libsonnet';
 local utils = import './utils.libsonnet';
-
+local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main.libsonnet';
 {
   new(this):
     {
@@ -12,46 +12,46 @@ local utils = import './utils.libsonnet';
                             'Fleet overview',
                             targets=
                             [
-                            t.osInfo
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('OS Info'),
-                            t.uptime
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('Uptime'),
-                            t.cpuCount
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('CPU count'),
-                            t.cpuUsage
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('CPU usage'),
-                            t.memoryTotalBytes
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('Memory total'),
-                            t.memoryUsagePercent
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('Memory usage'),
-                            t.diskTotalC
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('Disk C: total'),
-                            t.diskUsageCPercent
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('Disk C: used'),
-                            t.alertsCritical
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('CRITICAL'),
-                            t.alertsWarning
-                            + g.query.prometheus.withFormat('table')
-                            + g.query.prometheus.withInstant(true)
-                            + g.query.prometheus.withRefId('WARNING'),
+                              t.osInfo
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('OS Info'),
+                              t.uptime
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('Uptime'),
+                              t.cpuCount
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('CPU count'),
+                              t.cpuUsage
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('CPU usage'),
+                              t.memoryTotalBytes
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('Memory total'),
+                              t.memoryUsagePercent
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('Memory usage'),
+                              t.diskTotalC
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('Disk C: total'),
+                              t.diskUsageCPercent
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('Disk C: used'),
+                              t.alertsCritical
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('CRITICAL'),
+                              t.alertsWarning
+                              + g.query.prometheus.withFormat('table')
+                              + g.query.prometheus.withInstant(true)
+                              + g.query.prometheus.withRefId('WARNING'),
                             ],
                             description="All Windows instances' perfomance at a glance."
                           )
@@ -138,9 +138,9 @@ local utils = import './utils.libsonnet';
                                   indexByName: {},
                                   renameByName:
                                     {
-                                    product: 'Product',
+                                      product: 'Product',
                                       [instanceLabel]: utils.toSentenceCase(instanceLabel),
-                                    hostname: 'Hostname',
+                                      hostname: 'Hostname',
                                     }
                                     +
                                     // group labels are named as 'job 1' and so on.
@@ -332,19 +332,19 @@ local utils = import './utils.libsonnet';
         commonlib.panels.all.stat.info.new('OS version',
                                            targets=[t.osInfo],
                                            description='Version of Windows operating system.')
-                 { options+: { reduceOptions+: { fields: '/^version$/' } } },
+        { options+: { reduceOptions+: { fields: '/^version$/' } } },
       osTimezone:
         commonlib.panels.all.stat.info.new(
           'Timezone', targets=[t.osTimezone], description='Current system timezone.'
         )
-                  { options+: { reduceOptions+: { fields: '/^timezone$/' } } },
+        { options+: { reduceOptions+: { fields: '/^timezone$/' } } },
       hostname:
         commonlib.panels.all.stat.info.new(
           'Hostname',
           targets=[t.osInfo],
           description="System's hostname."
         )
-                { options+: { reduceOptions+: { fields: '/^hostname$/' } } },
+        { options+: { reduceOptions+: { fields: '/^hostname$/' } } },
       networkErrorsAndDroppedPerSec:
         commonlib.panels.network.timeSeries.errors.new(
           'Network errors and dropped packets',
