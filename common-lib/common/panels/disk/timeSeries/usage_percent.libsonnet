@@ -7,7 +7,7 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 base {
   new(
-    title='Filesystem space used, %',
+    title='Disk space used, %',
     targets,
     description=|||
       Disk space usage is the amount of storage being used on a device's hard drive or storage medium, in percent.
