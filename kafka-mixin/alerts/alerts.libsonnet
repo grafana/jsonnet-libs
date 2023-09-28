@@ -116,8 +116,8 @@
               description: 'Kafka cluster {{ $labels.kafka_cluster }} Zookeeper Sync Disconected.',
             },
           },
-        ]
-      }
-    ]
-  }
+        ],
+      },
+    ],
+  },
 }
