@@ -1,6 +1,6 @@
 local g = import './g.libsonnet';
 local utils = import './utils.libsonnet';
-local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main.libsonnet';
+local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this):
     {
@@ -8,159 +8,160 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
       local table = g.panel.table,
       local fieldOverride = g.panel.table.fieldOverride,
       local instanceLabel = this.config.instanceLabels[0],
-      fleetOverviewTable: commonlib.panels.all.table.base.new(
-                            'Fleet overview',
-                            targets=
-                            [
-                              t.osInfo
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('OS Info'),
-                              t.uptime
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('Uptime'),
-                              t.cpuCount
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('CPU count'),
-                              t.cpuUsage
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('CPU usage'),
-                              t.memoryTotalBytes
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('Memory total'),
-                              t.memoryUsagePercent
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('Memory usage'),
-                              t.diskTotalC
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('Disk C: total'),
-                              t.diskUsageCPercent
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('Disk C: used'),
-                              t.alertsCritical
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('CRITICAL'),
-                              t.alertsWarning
-                              + g.query.prometheus.withFormat('table')
-                              + g.query.prometheus.withInstant(true)
-                              + g.query.prometheus.withRefId('WARNING'),
-                            ],
-                            description="All Windows instances' perfomance at a glance."
-                          )
-                          + commonlib.panels.system.table.uptime.stylizeByName('Uptime')
-                          + table.standardOptions.withOverridesMixin([
-                            fieldOverride.byRegexp.new('Product|^Hostname$')
-                            + fieldOverride.byRegexp.withProperty('custom.filterable', true),
-                            fieldOverride.byName.new('Instance')
-                            + fieldOverride.byName.withProperty('custom.filterable', true)
-                            + fieldOverride.byName.withProperty('links', [
-                              {
-                                targetBlank: false,
-                                title: 'Drill down to ${__field.name} ${__value.text}',
-                                url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}' % [this.dashboards.overview.uid, instanceLabel, instanceLabel],
-                              },
-                            ]),
-                            fieldOverride.byRegexp.new(std.join('|', std.map(utils.toSentenceCase, this.config.groupLabels)))
-                            + fieldOverride.byRegexp.withProperty('custom.filterable', true)
-                            + fieldOverride.byRegexp.withProperty('links', [
-                              {
-                                targetBlank: false,
-                                title: 'Filter by ${__field.name}',
-                                url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}' % [this.dashboards.fleet.uid],
-                              },
-                            ]),
-                            fieldOverride.byName.new('CPU count')
-                            + fieldOverride.byName.withProperty('custom.width', '120'),
-                            fieldOverride.byName.new('CPU usage')
-                            + fieldOverride.byName.withProperty('custom.width', '120')
-                            + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
-                            + fieldOverride.byName.withPropertiesFromOptions(
-                              commonlib.panels.cpu.timeSeries.utilization.stylize()
-                            ),
-                            fieldOverride.byName.new('Memory total')
-                            + fieldOverride.byName.withProperty('custom.width', '120')
-                            + fieldOverride.byName.withPropertiesFromOptions(
-                              table.standardOptions.withUnit('bytes')
-                            ),
-                            fieldOverride.byName.new('Memory usage')
-                            + fieldOverride.byName.withProperty('custom.width', '120')
-                            + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
-                            + fieldOverride.byName.withPropertiesFromOptions(
-                              commonlib.panels.cpu.timeSeries.utilization.stylize()
-                            ),
-                            fieldOverride.byName.new('Disk C: total')
-                            + fieldOverride.byName.withProperty('custom.width', '120')
-                            + fieldOverride.byName.withPropertiesFromOptions(
-                              table.standardOptions.withUnit('bytes')
-                            ),
-                            fieldOverride.byName.new('Disk C: used')
-                            + fieldOverride.byName.withProperty('custom.width', '120')
-                            + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
-                            + fieldOverride.byName.withPropertiesFromOptions(
-                              table.standardOptions.withUnit('percent')
-                            )
-                            + fieldOverride.byName.withPropertiesFromOptions(
-                              commonlib.panels.cpu.timeSeries.utilization.stylize()
-                            ),
-                          ])
-                          + table.queryOptions.withTransformationsMixin(
-                            [
-                              {
-                                id: 'joinByField',
-                                options: {
-                                  byField: instanceLabel,
-                                  mode: 'outer',
-                                },
-                              },
-                              {
-                                id: 'filterFieldsByName',
-                                options: {
-                                  include: {
-                                    //' 1' - would only match first occurence of group label, so no duplicates
-                                    pattern: std.join(' 1|', this.config.groupLabels) + ' 1|' + instanceLabel + '|product|^hostname$|Value.+',
-                                  },
-                                },
-                              },
-                              {
-                                id: 'organize',
-                                options: {
-                                  excludeByName: {
-                                    'Value #OS Info': true,
-                                  },
-                                  indexByName: {},
-                                  renameByName:
-                                    {
-                                      product: 'Product',
-                                      [instanceLabel]: utils.toSentenceCase(instanceLabel),
-                                      hostname: 'Hostname',
-                                    }
-                                    +
-                                    // group labels are named as 'job 1' and so on.
-                                    {
-                                      [label + ' 1']: utils.toSentenceCase(label)
-                                      for label in this.config.groupLabels
-                                    },
+      fleetOverviewTable:
+        commonlib.panels.all.table.base.new(
+          'Fleet overview',
+          targets=
+          [
+            t.osInfo
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('OS Info'),
+            t.uptime
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('Uptime'),
+            t.cpuCount
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('CPU count'),
+            t.cpuUsage
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('CPU usage'),
+            t.memoryTotalBytes
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('Memory total'),
+            t.memoryUsagePercent
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('Memory usage'),
+            t.diskTotalC
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('Disk C: total'),
+            t.diskUsageCPercent
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('Disk C: used'),
+            t.alertsCritical
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('CRITICAL'),
+            t.alertsWarning
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('WARNING'),
+          ],
+          description="All Windows instances' perfomance at a glance."
+        )
+        + commonlib.panels.system.table.uptime.stylizeByName('Uptime')
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byRegexp.new('Product|^Hostname$')
+          + fieldOverride.byRegexp.withProperty('custom.filterable', true),
+          fieldOverride.byName.new('Instance')
+          + fieldOverride.byName.withProperty('custom.filterable', true)
+          + fieldOverride.byName.withProperty('links', [
+            {
+              targetBlank: false,
+              title: 'Drill down to ${__field.name} ${__value.text}',
+              url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}' % [this.dashboards.overview.uid, instanceLabel, instanceLabel],
+            },
+          ]),
+          fieldOverride.byRegexp.new(std.join('|', std.map(utils.toSentenceCase, this.config.groupLabels)))
+          + fieldOverride.byRegexp.withProperty('custom.filterable', true)
+          + fieldOverride.byRegexp.withProperty('links', [
+            {
+              targetBlank: false,
+              title: 'Filter by ${__field.name}',
+              url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}' % [this.dashboards.fleet.uid],
+            },
+          ]),
+          fieldOverride.byName.new('CPU count')
+          + fieldOverride.byName.withProperty('custom.width', '120'),
+          fieldOverride.byName.new('CPU usage')
+          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            commonlib.panels.cpu.timeSeries.utilization.stylize()
+          ),
+          fieldOverride.byName.new('Memory total')
+          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('bytes')
+          ),
+          fieldOverride.byName.new('Memory usage')
+          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            commonlib.panels.cpu.timeSeries.utilization.stylize()
+          ),
+          fieldOverride.byName.new('Disk C: total')
+          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('bytes')
+          ),
+          fieldOverride.byName.new('Disk C: used')
+          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percent')
+          )
+          + fieldOverride.byName.withPropertiesFromOptions(
+            commonlib.panels.cpu.timeSeries.utilization.stylize()
+          ),
+        ])
+        + table.queryOptions.withTransformationsMixin(
+          [
+            {
+              id: 'joinByField',
+              options: {
+                byField: instanceLabel,
+                mode: 'outer',
+              },
+            },
+            {
+              id: 'filterFieldsByName',
+              options: {
+                include: {
+                  //' 1' - would only match first occurence of group label, so no duplicates
+                  pattern: std.join(' 1|', this.config.groupLabels) + ' 1|' + instanceLabel + '|product|^hostname$|Value.+',
+                },
+              },
+            },
+            {
+              id: 'organize',
+              options: {
+                excludeByName: {
+                  'Value #OS Info': true,
+                },
+                indexByName: {},
+                renameByName:
+                  {
+                    product: 'Product',
+                    [instanceLabel]: utils.toSentenceCase(instanceLabel),
+                    hostname: 'Hostname',
+                  }
+                  +
+                  // group labels are named as 'job 1' and so on.
+                  {
+                    [label + ' 1']: utils.toSentenceCase(label)
+                    for label in this.config.groupLabels
+                  },
 
-                                },
-                              },
+              },
+            },
 
-                              {
-                                id: 'renameByRegex',
-                                options: {
-                                  regex: 'Value #(.*)',
-                                  renamePattern: '$1',
-                                },
-                              },
-                            ]
-                          ),
+            {
+              id: 'renameByRegex',
+              options: {
+                regex: 'Value #(.*)',
+                renamePattern: '$1',
+              },
+            },
+          ]
+        ),
       uptime: commonlib.panels.system.stat.uptime.new(targets=[t.uptime]),
       systemContextSwitchesAndInterrupts:
         commonlib.panels.all.timeSeries.base.new(
