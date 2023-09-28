@@ -97,7 +97,7 @@ base {
         {
           id: 'calculateField',
           options: {
-            alias: 'Used',
+            alias: 'Free',
             binary: {
               left: 'Value #TOTAL (lastNotNull)',
               operator: '-',
@@ -115,7 +115,7 @@ base {
           options: {
             alias: 'Used, %',
             binary: {
-              left: 'Used',
+              left: 'Value #USAGE (lastNotNull)',
               operator: '/',
               reducer: 'sum',
               right: 'Value #TOTAL (lastNotNull)',
