@@ -1,5 +1,6 @@
 {
-    _config+:: {        
+    _config+:: {
+        FilterSelector: "job=\"integrations/kafka\"",
         JobSelector: "job=~\"$job\"",
         KafkaClusterSelector: "kafka_cluster=~\"$kafka_cluster\"",
         InstanceSelector: "instance=~\"$instance\"",        
