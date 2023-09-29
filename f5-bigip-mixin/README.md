@@ -50,7 +50,7 @@ The BIG-IP virtual server overview dashboard provides virtual server specific me
 
 ## ### BIG-IP Logs Overview
 
-The Logs Overview dashboard monitors server, high availability and audit logs using a logs volume and the raw logs panel. To collect BIG-IP logs, several actions must be taken such as, enabling logs on F5 BIG-IP, forward logs with a[syslog-forward-converter](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup), and forwarding logs to Loki Using [Promtail](https://grafana.com/docs/loki/latest/setup/install/).
+The Logs Overview dashboard actively tracks server, high-availability and audit logs through both a logs volume and raw logs panel. To successfully collect BIG-IP logs, you'll need to complete several key steps: enable logs on the F5 BIG-IP system, forward these logs using a [syslog-forward-converter](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup), and finally, route them to Loki via [Promtail](https://grafana.com/docs/loki/latest/setup/install/).
 
 ### Enabling Logs on F5 BIG-IP
 
