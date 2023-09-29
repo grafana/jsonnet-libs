@@ -7,21 +7,21 @@
           {
             alert: 'KafkaOfflinePartitonCount',
             expr: |||
-              sum without(kafka_cluster) (kafka_controller_KafkaController_OfflinePartitionsCount{%(FilterSelector)s}) > 0
+              sum by(kafka_cluster, instance) (kafka_controller_KafkaController_OfflinePartitionsCount{%(FilterSelector)s}) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
-              severity: 'critical',
+              severity: 'warning',
             },
             annotations: {
               summary: 'Kafka has offline partitons.',
-              description: 'Kafka cluster {{ $labels.kafka_cluster }} has {{ $value }} offline partitions. After successful leader election, if the leader for partition dies, then the partition moves to the OfflinePartition state. Offline partitions are not available for reading and writing. Restart the brokers, if needed, and check the logs for errors.',
+              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} has {{ $value }} offline partitions. After successful leader election, if the leader for partition dies, then the partition moves to the OfflinePartition state. Offline partitions are not available for reading and writing. Restart the brokers, if needed, and check the logs for errors.',
             },
           },
           {
             alert: 'KafkaUnderReplicatedPartitionCount',
             expr: |||
-              sum without(kafka_cluster) (kafka_server_ReplicaManager_UnderReplicatedPartitions{%(FilterSelector)s}) > 0
+              sum without(kafka_cluster, instance) (kafka_server_ReplicaManager_UnderReplicatedPartitions{%(FilterSelector)s}) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -29,13 +29,13 @@
             },
             annotations: {
               summary: 'Kafka has under replicated partitons.',
-              description: 'Kafka cluster {{ $labels.kafka_cluster }} has {{ $value }} under replicated partitons',
+              description: 'Kafka instance {{ $labels.instance }} in cluster has {{ $value }} under replicated partitons',
             },
           },
           {
             alert: 'KafkaActiveController',
             expr: |||
-              sum without(kafka_cluster) (kafka_controller_KafkaController_ActiveControllerCount{%(FilterSelector)s}) != 1
+              sum by(kafka_clusterm) (kafka_controller_KafkaController_ActiveControllerCount{%(FilterSelector)s}) != 1
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -49,7 +49,7 @@
           {
             alert: 'KafkaUncleanLeaderElection',
             expr: |||
-              max without(kafka_cluster) (rate(kafka_controller_ControllerStats_UncleanLeaderElectionsPerSec{%(FilterSelector)s}[5m])) != 0
+              max by(kafka_cluster) (rate(kafka_controller_ControllerStats_UncleanLeaderElectionsPerSec{%(FilterSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -63,7 +63,7 @@
           {
             alert: 'KafkaISRExpandRate',
             expr: |||
-              sum without(instance, kafka_cluster) (rate(kafka_server_ReplicaManager_IsrExpandsPerSec{%(FilterSelector)s}[5m])) != 0
+              sum by(instance, kafka_cluster) (rate(kafka_server_ReplicaManager_IsrExpandsPerSec{%(FilterSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -77,7 +77,7 @@
           {
             alert: 'KafkaISRShrinkRate',
             expr: |||
-              sum without(instance, kafka_cluster) (rate(kafka_server_ReplicaManager_IsrShrinksPerSec{%(FilterSelector)s}[5m])) != 0
+              sum by(instance, kafka_cluster) (rate(kafka_server_ReplicaManager_IsrShrinksPerSec{%(FilterSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -91,7 +91,7 @@
           {
             alert: 'KafkaBrokerCount',
             expr: |||
-              count without(kafka_cluster) (kafka_server_KafkaServer_BrokerState{job="integrations/kafka"}) == 0
+              count by(kafka_cluster) (kafka_server_KafkaServer_BrokerState{job="integrations/kafka"}) == 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -105,7 +105,7 @@
           {
             alert: 'KafkaZookeeperSyncConnect',
             expr: |||
-              avg without(kafka_cluster) (kafka_server_SessionExpireListener_ZooKeeperSyncConnectsPerSec{job="integrations/kafka"}) < 0
+              avg by(kafka_cluster, instance) (kafka_server_SessionExpireListener_ZooKeeperSyncConnectsPerSec{job="integrations/kafka"}) < 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -113,7 +113,7 @@
             },
             annotations: {
               summary: 'Kafka Zookeeper Sync Disconected.',
-              description: 'Kafka cluster {{ $labels.kafka_cluster }} Zookeeper Sync Disconected.',
+              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} Zookeeper Sync Disconected.',
             },
           },
         ],
