@@ -692,6 +692,40 @@ local queueSummaryPanel(matcher) = {
           },
         ],
       },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'ActiveMQ Cluster',
+        },
+        properties: [
+          {
+            id: 'links',
+            value: [
+              {
+                title: 'Cluster link',
+                url: 'd/apache-activemq-cluster-overview?var-activemq_cluster=${__data.fields.activemq_cluster}&${__url_time_range}&var-datasource=${datasource}',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        matcher: {
+          id: 'byName',
+          options: 'Instance',
+        },
+        properties: [
+          {
+            id: 'links',
+            value: [
+              {
+                title: 'Instance link',
+                url: 'd/apache-activemq-instance-overview?var-instance=${__data.fields.instance}&${__url_time_range}&var-datasource=${datasource}',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   options: {
@@ -705,12 +739,7 @@ local queueSummaryPanel(matcher) = {
       show: false,
     },
     showHeader: true,
-    sortBy: [
-      {
-        desc: false,
-        displayName: '{activemq_cluster="cluster-a", destination="TEST", instance="localhost:12345", job="integrations/activemq"}',
-      },
-    ],
+    sortBy: [],
   },
   pluginVersion: '10.2.0-60139',
   transformations: [
@@ -785,7 +814,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Data source',
             refresh='load'
           ),
           template.new(
@@ -796,7 +825,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(
@@ -807,7 +836,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
@@ -819,7 +848,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(
@@ -830,7 +859,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.custom(

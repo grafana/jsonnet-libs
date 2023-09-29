@@ -832,15 +832,15 @@ local garbageCollectionDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (instance, activemq_cluster) (increase(jvm_gc_collection_seconds_count{' + matcher + ', instance=~"$instance"}[$__interval:])) / clamp_min(sum by (instance, activemq_cluster ) (increase(java_lang_g1_young_generation_collectioncount{' + matcher + ', instance=~"$instance"}[$__interval:])), 1)',
+      'jvm_gc_duration_seconds{' + matcher + ', instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Garbage collection duration / $__interval',
-  description: 'The average time spent performing recent garbage collections',
+  title: 'Garbage collection duration,
+  description: 'The time spent performing recent garbage collections',
   fieldConfig: {
     defaults: {
       color: {
@@ -909,7 +909,7 @@ local garbageCollectionCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(java_lang_g1_young_generation_collectioncount{' + matcher + ', instance=~"$instance"}[$__interval:])',
+      'increase(jvm_gc_collection_count{' + matcher + ', instance=~"$instance", name="G1 Young Generation"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
       interval='1m',
@@ -1030,7 +1030,7 @@ local getAlertsMatcher(cfg) = '%(activemqAlertsSelector)s, activemq_cluster=~"${
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Data source',
             refresh='load'
           ),
           template.new(
@@ -1041,7 +1041,7 @@ local getAlertsMatcher(cfg) = '%(activemqAlertsSelector)s, activemq_cluster=~"${
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(
@@ -1052,7 +1052,7 @@ local getAlertsMatcher(cfg) = '%(activemqAlertsSelector)s, activemq_cluster=~"${
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
@@ -1064,7 +1064,7 @@ local getAlertsMatcher(cfg) = '%(activemqAlertsSelector)s, activemq_cluster=~"${
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(
@@ -1075,7 +1075,7 @@ local getAlertsMatcher(cfg) = '%(activemqAlertsSelector)s, activemq_cluster=~"${
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
         ]
