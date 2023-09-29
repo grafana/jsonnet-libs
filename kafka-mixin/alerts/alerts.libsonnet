@@ -6,12 +6,12 @@
         rules: [
           {
             alert: 'KafkaOfflinePartitonCount',
-            expr: 
+            expr:
               'sum without(' + std.join(',', $._config.instanceLabels) + ') (kafka_controller_kafkacontroller_offlinepartitionscount{%(kafkaFilteringSelector)s}) > 0' % $._config,
-            
+
             'for': '5m',
             labels: {
-              severity: 'warning',
+              severity: 'critical',
             },
             annotations: {
               summary: 'Kafka has offline partitons.',
