@@ -48,12 +48,14 @@ The BIG-IP virtual server overview dashboard provides virtual server specific me
 
 ![BIG-IP Virtual Server Overview 2 Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-virtual-server-overview-2.png)
 
+## ### BIG-IP Logs Overview
 
-## BIG-IP Log Overview
+The Logs Overview dashboard monitors server, high availability and audit logs using a logs volume and the raw logs panel. To collect BIG-IP logs, several actions must be taken such as, enabling logs on F5 BIG-IP, forward logs with a[syslog-forward-converter](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup), and forwarding logs to Loki Using [Promtail](https://grafana.com/docs/loki/latest/setup/install/).
 
-The BIG-IP log overview dashboard collects BIG-IP [syslog which are forwarded to grafana loki via promtail](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup). The dashboard can be used to monitor server, high availability, and audit logs using a logs volume and the raw logs panel. This dashboard includes query labels to filter logs such as job, host, syslog_facility, level and a regex search. The syslog_facility collects [enabled logs](https://my.f5.com/manage/s/article/K35284961) on the BIG-IP system which may include auth, authpriv, daemon, local0 and local6. Additional logs can be enabled depending on the users need.
+### Enabling Logs on F5 BIG-IP
 
-The logs dashboard can be used to select a syslog_facility which are created when enabling different [log sources](https://clouddocs.f5.com/api/icontrol-soap/Log__Filter__Source.html) in BIG-IP. Some useful categorizes to enable are: 
+Start by enabling logs on your F5 BIG-IP system. The Logs Overview dashboard monitors server, high availability and audit logs. These logs must first be [enabled](https://my.f5.com/manage/s/article/K35284961) on the BIG-IP system which may include auth, authpriv, daemon, local0 and local6 files as recommended in the the table below. The logs dashboard can be used to select a syslog_facility which are created when enabling different [log sources](https://clouddocs.f5.com/api/icontrol-soap/Log__Filter__Source.html) in BIG-IP. Additional logs can be enabled depending on the users need. 
+
 
 | Log category          | log source                  | log description                                                                   | Syslog Facility files        |
 |-----------------------|-----------------------------|-----------------------------------------------------------------------------------|------------------------------|
@@ -67,18 +69,42 @@ The logs dashboard can be used to select a syslog_facility which are created whe
 | Audit logs            | LOG_SOURCE_MCPD(58)         | The MCP daemon logs.                                                              | `daemon`, `local0`           |
 | Audit logs            | LOG_SOURCE_SHELL(79)        | Shell commands logs.                                                              | `user`, `local0`             |
 
+### Forwarding Logs From F5 BIG-IP To A Dedicated Host
 
-BIG-IP logs are disabled by default in the `config.libsonnet` and can be updated by setting `enableLokiLogs` to `true`. Then run `make` again to regenerate the dashboard:
+After logs are enabled, the next step is to securely forward them to a dedicated host. Using a dedicated host provides an extra layer of security by reducing direct access to the F5 BIG-IP system. 
 
+Configuration: Navigate to System > Log > Remote Logging on the F5 BIG-IP interface. Enter the IP address of the dedicated host.
+
+### Processing Logs With Rsyslog
+
+To forward logs to Promtail, you must use [Rsyslog](https://www.rsyslog.com/doc/master/installation/index.html) as an intermediate log forwarder. Below are the steps:
+
+1. Install Rsyslog: If not already installed, get it from the package manager of your choice.
+2. Configure Rsyslog: Edit `/etc/rsyslog.conf` or create a new configuration file in `/etc/rsyslog.d/`. Add the following:
+
+```bash
+module(load="imudp")
+module(load="imtcp")
+
+input(type="imudp" port="50514")
+input(type="imtcp" port="50514")
+
+*.*  action(type="omfwd"
+      protocol="tcp" target="127.0.0.1" port="40514"
+      Template="RSYSLOG_SyslogProtocol23Format"
+      TCP_Framing="octet-counted" KeepAlive="on"
+      action.resumeRetryCount="-1"
+      queue.type="linkedlist" queue.size="50000")
 ```
-{
-  _config+:: {
-    enableLokiLogs: true,
-  },
-}
+3. Restart Rsyslog: Apply the new settings with the following command:
 ```
+sudo systemctl restart rsyslog
+```
+4. Verify Operation: Check `/var/log/syslog`` for any Rsyslog errors.
 
-To collect logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. Logs are being forwarded using promtail which requires the following config with credentials:
+### Forwarding Logs To Loki Using Promtail
+
+Finally, configure [Promtail](https://grafana.com/docs/loki/latest/setup/install/) to forward logs to Loki. The Promtail YAML configuration should look similar too the one below:
 
 ```yaml
 server:
@@ -95,9 +121,7 @@ scrape_configs:
   - job_name: syslog
     syslog:
       listen_address: 0.0.0.0:40514
-      # Don't disconnect the forwarder
       idle_timeout: 12h
-      # use_incoming_timestamp: true
       listen_protocol: "udp"
       labels:
         job: "syslog"
@@ -110,6 +134,18 @@ scrape_configs:
         target_label: syslog_facility
       - source_labels: ['__syslog_message_app_name']
         target_label: syslog_identifier
+```
+
+### Enable Logs For The Mixin
+
+BIG-IP logs are disabled by default in the `config.libsonnet` and can be updated by setting `enableLokiLogs` to `true`. Then run `make` again to regenerate the dashboard:
+
+```
+{
+  _config+:: {
+    enableLokiLogs: true,
+  },
+}
 ```
 
 ![BIG-IP Logs Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-logs-overview.png)
