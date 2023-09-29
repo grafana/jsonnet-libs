@@ -48,7 +48,7 @@ The BIG-IP virtual server overview dashboard provides virtual server specific me
 
 ![BIG-IP Virtual Server Overview 2 Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/f5-bigip/screenshots/bigip-virtual-server-overview-2.png)
 
-## ### BIG-IP Logs Overview
+## BIG-IP Log Overview
 
 The Logs Overview dashboard actively tracks server, high-availability and audit logs through both a logs volume and raw logs panel. To successfully collect BIG-IP logs, you'll need to complete several key steps: enable logs on the F5 BIG-IP system, forward these logs using a [syslog-forward-converter](https://utcc.utoronto.ca/~cks/space/blog/sysadmin/PromtailRsyslogForwarderSetup), and finally, route them to Loki via [Promtail](https://grafana.com/docs/loki/latest/setup/install/).
 
@@ -100,7 +100,7 @@ input(type="imtcp" port="50514")
 ```
 sudo systemctl restart rsyslog
 ```
-4. Verify Operation: Check `/var/log/syslog`` for any Rsyslog errors.
+4. Verify Operation: Check `/var/log/syslog` for any Rsyslog errors.
 
 ### Forwarding Logs To Loki Using Promtail
 
