@@ -5,7 +5,7 @@ local utils = import '../utils.libsonnet';
 local commonvars = var.new(
   varMetric='ksql_ksql_engine_query_stats_liveness_indicator',
   filteringSelector=config._config.ksqldbFilteringSelector,
-  groupLabels=config._config.groupLabels + ['ksql_cluster'],
+  groupLabels=config._config.groupLabels,
   instanceLabels=config._config.instanceLabels,
 );
 
@@ -109,7 +109,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'avg(ksql_ksql_engine_query_stats_num_active_queries{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '})',
+            expr: 'avg(ksql_ksql_engine_query_stats_num_active_queries{' + commonvars.queriesSelector + '})',
             instant: true,
             interval: '',
             legendFormat: '',
@@ -185,7 +185,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'avg(ksql_ksql_engine_query_stats_running_queries{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '})',
+            expr: 'avg(ksql_ksql_engine_query_stats_running_queries{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -260,7 +260,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'avg(ksql_ksql_engine_query_stats_num_persistent_queries{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '})',
+            expr: 'avg(ksql_ksql_engine_query_stats_num_persistent_queries{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -335,7 +335,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(ksql_ksql_engine_query_stats_rebalancing_queries{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '})',
+            expr: 'sum(ksql_ksql_engine_query_stats_rebalancing_queries{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -410,7 +410,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'avg(ksql_ksql_engine_query_stats_error_queries{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '})',
+            expr: 'avg(ksql_ksql_engine_query_stats_error_queries{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -485,7 +485,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(ksql_ksql_engine_query_stats_num_idle_queries{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '})',
+            expr: 'sum(ksql_ksql_engine_query_stats_num_idle_queries{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -561,7 +561,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'ksql_ksql_metrics_ksql_queries_query_status{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '}',
+            expr: 'ksql_ksql_metrics_ksql_queries_query_status{' + commonvars.queriesSelector + '}',
             format: 'table',
             instant: true,
             interval: '',
@@ -661,7 +661,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(ksql_ksql_engine_query_stats_not_running_queries{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '})',
+            expr: 'sum(ksql_ksql_engine_query_stats_not_running_queries{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -736,7 +736,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(ksql_ksql_engine_query_stats_pending_shutdown_queries{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '})',
+            expr: 'sum(ksql_ksql_engine_query_stats_pending_shutdown_queries{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -801,7 +801,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'ksql_ksql_engine_query_stats_liveness_indicator{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '}',
+            expr: 'ksql_ksql_engine_query_stats_liveness_indicator{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
@@ -898,7 +898,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'ksql_ksql_engine_query_stats_messages_consumed_per_sec{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '}',
+            expr: 'ksql_ksql_engine_query_stats_messages_consumed_per_sec{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
@@ -995,7 +995,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'irate(ksql_ksql_engine_query_stats_messages_produced_per_sec{ksql_cluster="$clusterid", ' + commonvars.queriesSelector + '}[$__rate_interval])',
+            expr: 'irate(ksql_ksql_engine_query_stats_messages_produced_per_sec{' + commonvars.queriesSelector + '}[$__rate_interval])',
             interval: '',
             legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
@@ -1422,7 +1422,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_thread_metrics_poll_latency_avg{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_thread_metrics_poll_latency_avg{' + commonvars.queriesSelector + '}',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -1523,7 +1523,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_thread_metrics_poll_latency_max{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_thread_metrics_poll_latency_max{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}_max',
             refId: 'B',
@@ -1621,7 +1621,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_thread_metrics_process_latency_avg{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_thread_metrics_process_latency_avg{' + commonvars.queriesSelector + '}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -1721,7 +1721,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_thread_metrics_process_latency_max{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_thread_metrics_process_latency_max{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}_max',
             refId: 'B',
@@ -1819,7 +1819,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_thread_metrics_commit_latency_avg{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_thread_metrics_commit_latency_avg{' + commonvars.queriesSelector + '}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -1919,7 +1919,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_thread_metrics_commit_latency_max{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_thread_metrics_commit_latency_max{' + commonvars.queriesSelector + '}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -2019,7 +2019,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_thread_metrics_punctuate_latency_avg{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_thread_metrics_punctuate_latency_avg{' + commonvars.queriesSelector + '}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -2126,7 +2126,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_thread_metrics_punctuate_latency_max{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_thread_metrics_punctuate_latency_max{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}_max',
             refId: 'B',
@@ -2239,7 +2239,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_put_rate{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_state_metrics_put_rate{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -2338,7 +2338,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_put_latency_avg{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_put_latency_avg{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -2437,7 +2437,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_put_latency_max{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_put_latency_max{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -2536,7 +2536,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_put_if_absent_rate_rate{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_state_metrics_put_if_absent_rate_rate{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -2635,7 +2635,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_put_if_absent_latency_avg{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_put_if_absent_latency_avg{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -2734,7 +2734,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_put_if_absent_latency_max{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_put_if_absent_latency_max{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -2833,7 +2833,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_fetch_rate{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_state_metrics_fetch_rate{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -2932,7 +2932,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_fetch_latency_avg{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_fetch_latency_avg{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -3031,7 +3031,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_put_latency_max{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_put_latency_max{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -3130,7 +3130,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_delete_rate{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_state_metrics_delete_rate{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -3229,7 +3229,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_delete_latency_avg{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_delete_latency_avg{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -3328,7 +3328,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_delete_latency_max{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_delete_latency_max{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -3427,7 +3427,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_restore_rate{thread_id=~".+$clusterid.+", ' + commonvars.queriesSelector + '}',
+            expr: 'kafka_streams_stream_state_metrics_restore_rate{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -3526,7 +3526,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_restore_latency_avg{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_restore_latency_avg{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
@@ -3625,7 +3625,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_streams_stream_state_metrics_restore_latency_max{' + commonvars.queriesSelector + ',thread_id=~".+$clusterid.+"}',
+            expr: 'kafka_streams_stream_state_metrics_restore_latency_max{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{thread_id}}',
             refId: 'B',
