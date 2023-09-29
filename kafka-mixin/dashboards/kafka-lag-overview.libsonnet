@@ -1,8 +1,12 @@
 local config = (import '../config.libsonnet');
-local filterSelector = 'job="integrations/kafka"';
-local hostSelector = config._config.HostSelector;
-local jobSelector = config._config.JobSelector;
-local kafkaClusterSelector = config._config.KafkaClusterSelector;
+local g = import '../g.libsonnet';
+local var = import '../variables.libsonnet';
+local commonvars = var.new(
+  varMetric='kafka_topic_partition_current_offset',
+  filteringSelector=config._config.kafkaFilteringSelector,
+  groupLabels=config._config.groupLabels,
+  instanceLabels=config._config.instanceLabels,
+);
 
 local dashboard =
   {
@@ -126,7 +130,7 @@ local dashboard =
               uid: '${datasource}',
             },
             exemplar: true,
-            expr: 'sum(rate(kafka_topic_partition_current_offset{' + hostSelector + ', topic=~"$topic"}[$__rate_interval])) by (topic)',
+            expr: 'sum(rate(kafka_topic_partition_current_offset{' + commonvars.queriesSelector + ', topic=~"$topic"}[$__rate_interval])) by (topic)',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -225,7 +229,7 @@ local dashboard =
               uid: '${datasource}',
             },
             exemplar: true,
-            expr: 'sum(increase(kafka_topic_partition_current_offset{' + hostSelector + ',  topic=~"$topic"}[5m])/5) by (topic)',
+            expr: 'sum(increase(kafka_topic_partition_current_offset{' + commonvars.queriesSelector + ',  topic=~"$topic"}[5m])/5) by (topic)',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -322,7 +326,7 @@ local dashboard =
               uid: '$datasource',
             },
             exemplar: true,
-            expr: 'sum(rate(kafka_consumergroup_current_offset{' + hostSelector + ', topic=~"$topic"}[$__rate_interval])) by (consumergroup, topic)',
+            expr: 'sum(rate(kafka_consumergroup_current_offset{' + commonvars.queriesSelector + ', topic=~"$topic"}[$__rate_interval])) by (consumergroup, topic)',
             interval: '',
             legendFormat: '{{consumergroup}} (topic: {{topic}})',
             refId: 'A',
@@ -419,7 +423,7 @@ local dashboard =
               uid: '${datasource}',
             },
             exemplar: true,
-            expr: 'sum(increase(kafka_consumergroup_current_offset{' + hostSelector + ', topic=~"$topic"}[5m])/5) by (consumergroup, topic)',
+            expr: 'sum(increase(kafka_consumergroup_current_offset{' + commonvars.queriesSelector + ', topic=~"$topic"}[5m])/5) by (consumergroup, topic)',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -516,7 +520,7 @@ local dashboard =
               uid: '$datasource',
             },
             exemplar: true,
-            expr: 'avg(kafka_consumer_lag_millis{' + hostSelector + ', topic=~"$topic"}/1000) by (consumergroup, topic)',
+            expr: 'avg(kafka_consumer_lag_millis{' + commonvars.queriesSelector + ', topic=~"$topic"}/1000) by (consumergroup, topic)',
             interval: '',
             legendFormat: '{{consumergroup}} (topic: {{topic}})',
             refId: 'A',
@@ -614,7 +618,7 @@ local dashboard =
               uid: '${datasource}',
             },
             exemplar: true,
-            expr: 'avg(kafka_consumergroup_uncommitted_offsets{' + hostSelector + ', topic=~"$topic"}) by (consumergroup, topic)',
+            expr: 'avg(kafka_consumergroup_uncommitted_offsets{' + commonvars.queriesSelector + ', topic=~"$topic"}) by (consumergroup, topic)',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -701,7 +705,7 @@ local dashboard =
               uid: '$datasource',
             },
             exemplar: true,
-            expr: 'sum by(topic) (kafka_topic_partitions{' + hostSelector + ', topic=~"$topic"})',
+            expr: 'sum by(topic) (kafka_topic_partitions{' + commonvars.queriesSelector + ', topic=~"$topic"})',
             format: 'table',
             instant: true,
             interval: '',
@@ -720,137 +724,6 @@ local dashboard =
     tags: [
       'kafka-integration',
     ],
-    templating: {
-      list: [
-        {
-          hide: 0,
-          includeAll: false,
-          label: 'Data source',
-          multi: false,
-          name: 'datasource',
-          options: [],
-          query: 'prometheus',
-          queryValue: '',
-          refresh: 1,
-          regex: '',
-          skipUrlSync: false,
-          type: 'datasource',
-        },
-        {
-          allValue: '.+',
-          datasource: {
-            uid: '$datasource',
-          },
-          definition: 'label_values(kafka_topic_partition_current_offset{' + filterSelector + '}, job)',
-          hide: 0,
-          includeAll: true,
-          label: 'Job',
-          multi: true,
-          name: 'job',
-          options: [],
-          query: {
-            query: 'label_values(kafka_topic_partition_current_offset{' + filterSelector + '}, job)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 1,
-          tagValuesQuery: '',
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          datasource: {
-            uid: '$datasource',
-          },
-          definition: 'label_values(kafka_topic_partition_current_offset{' + jobSelector + '}, kafka_cluster)',
-          hide: 0,
-          includeAll: true,
-          label: 'Kafka Cluster',
-          multi: true,
-          name: 'kafka_cluster',
-          options: [],
-          query: {
-            query: 'label_values(kafka_topic_partition_current_offset{' + jobSelector + '}, kafka_cluster)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 1,
-          tagValuesQuery: '',
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {
-            selected: true,
-            text: [
-              'All',
-            ],
-            value: [
-              '$__all',
-            ],
-          },
-          datasource: {
-            uid: '${datasource}',
-          },
-          definition: 'label_values(kafka_topic_partition_current_offset{' + jobSelector + ', ' + kafkaClusterSelector + '}, instance)',
-          hide: 0,
-          includeAll: true,
-          label: 'Instance',
-          multi: true,
-          name: 'instance',
-          options: [],
-          query: {
-            query: 'label_values(kafka_topic_partition_current_offset{' + jobSelector + ', ' + kafkaClusterSelector + '}, instance)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 1,
-          tagValuesQuery: '',
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {
-            selected: false,
-            text: 'All',
-            value: '$__all',
-          },
-          datasource: {
-            uid: '${datasource}',
-          },
-          definition: 'label_values(kafka_topic_partition_current_offset{' + hostSelector + ", topic!='__consumer_offsets',topic!='--kafka'}, topic)",
-          hide: 0,
-          includeAll: true,
-          label: 'Topic',
-          multi: true,
-          name: 'topic',
-          options: [],
-          query: {
-            query: 'label_values(kafka_topic_partition_current_offset{' + hostSelector + ", topic!='__consumer_offsets',topic!='--kafka'}, topic)",
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 1,
-          tagValuesQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-      ],
-    },
     time: {
       from: 'now-1h',
       to: 'now',
@@ -884,7 +757,45 @@ local dashboard =
     title: 'Kafka lag overview',
     uid: 'jwPKIsniz',
     version: 6,
-  };
+  }
+  +
+  g.dashboard.withVariables(
+    // multiInstance: allow multiple selector for instance labels
+    commonvars.multiInstance
+    +
+    [
+      {
+        allValue: '.+',
+        current: {
+          selected: false,
+          text: 'All',
+          value: '$__all',
+        },
+        datasource: {
+          uid: '${datasource}',
+        },
+        definition: 'label_values(kafka_topic_partition_current_offset{' + commonvars.queriesSelector + ", topic!='__consumer_offsets',topic!='--kafka'}, topic)",
+        hide: 0,
+        includeAll: true,
+        label: 'Topic',
+        multi: true,
+        name: 'topic',
+        options: [],
+        query: {
+          query: 'label_values(kafka_topic_partition_current_offset{' + commonvars.queriesSelector + ", topic!='__consumer_offsets',topic!='--kafka'}, topic)",
+          refId: 'StandardVariableQuery',
+        },
+        refresh: 2,
+        regex: '',
+        skipUrlSync: false,
+        sort: 1,
+        tagValuesQuery: '',
+        type: 'query',
+        useTags: false,
+      },
+    ]
+  );
+
 
 {
   grafanaDashboards+::

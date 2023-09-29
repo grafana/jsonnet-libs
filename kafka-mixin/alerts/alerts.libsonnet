@@ -7,7 +7,7 @@
           {
             alert: 'KafkaOfflinePartitonCount',
             expr: |||
-              sum by(kafka_cluster, instance) (kafka_controller_KafkaController_OfflinePartitionsCount{%(FilterSelector)s}) > 0
+              sum by(kafka_cluster, instance) (kafka_controller_KafkaController_OfflinePartitionsCount{%(kafkaFilteringSelector)s}) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -21,7 +21,7 @@
           {
             alert: 'KafkaUnderReplicatedPartitionCount',
             expr: |||
-              sum without(kafka_cluster, instance) (kafka_server_ReplicaManager_UnderReplicatedPartitions{%(FilterSelector)s}) > 0
+              sum without(kafka_cluster, instance) (kafka_server_ReplicaManager_UnderReplicatedPartitions{%(kafkaFilteringSelector)s}) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -35,7 +35,7 @@
           {
             alert: 'KafkaActiveController',
             expr: |||
-              sum by(kafka_clusterm) (kafka_controller_KafkaController_ActiveControllerCount{%(FilterSelector)s}) != 1
+              sum by(kafka_cluster) (kafka_controller_KafkaController_ActiveControllerCount{%(kafkaFilteringSelector)s}) != 1
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -49,7 +49,7 @@
           {
             alert: 'KafkaUncleanLeaderElection',
             expr: |||
-              max by(kafka_cluster) (rate(kafka_controller_ControllerStats_UncleanLeaderElectionsPerSec{%(FilterSelector)s}[5m])) != 0
+              max by(kafka_cluster) (rate(kafka_controller_ControllerStats_UncleanLeaderElectionsPerSec{%(kafkaFilteringSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -63,7 +63,7 @@
           {
             alert: 'KafkaISRExpandRate',
             expr: |||
-              sum by(instance, kafka_cluster) (rate(kafka_server_ReplicaManager_IsrExpandsPerSec{%(FilterSelector)s}[5m])) != 0
+              sum by(instance, kafka_cluster) (rate(kafka_server_ReplicaManager_IsrExpandsPerSec{%(kafkaFilteringSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -77,7 +77,7 @@
           {
             alert: 'KafkaISRShrinkRate',
             expr: |||
-              sum by(instance, kafka_cluster) (rate(kafka_server_ReplicaManager_IsrShrinksPerSec{%(FilterSelector)s}[5m])) != 0
+              sum by(instance, kafka_cluster) (rate(kafka_server_ReplicaManager_IsrShrinksPerSec{%(kafkaFilteringSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -91,7 +91,7 @@
           {
             alert: 'KafkaBrokerCount',
             expr: |||
-              count by(kafka_cluster) (kafka_server_KafkaServer_BrokerState{job="integrations/kafka"}) == 0
+              count by(kafka_cluster) (kafka_server_KafkaServer_BrokerState{%(kafkaFilteringSelector)s}) == 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -105,7 +105,7 @@
           {
             alert: 'KafkaZookeeperSyncConnect',
             expr: |||
-              avg by(kafka_cluster, instance) (kafka_server_SessionExpireListener_ZooKeeperSyncConnectsPerSec{job="integrations/kafka"}) < 0
+              avg by(kafka_cluster, instance) (kafka_server_SessionExpireListener_ZooKeeperSyncConnectsPerSec{%(kafkaFilteringSelector)s}) < 0
             ||| % $._config,
             'for': '5m',
             labels: {
