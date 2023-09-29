@@ -1,8 +1,13 @@
 local config = (import '../config.libsonnet');
-local filterSelector = 'job=~"integrations/kafka-schemaregistry|integrations/kafka"';
-local hostSelector = config._config.HostSelector;
-local jobSelector = config._config.JobSelector;
-local kafkaClusterSelector = config._config.KafkaClusterSelector;
+local g = import '../g.libsonnet';
+local var = import '../variables.libsonnet';
+local utils = import '../utils.libsonnet';
+local commonvars = var.new(
+  varMetric='kafka_schema_registry_registered_count',
+  filteringSelector=config._config.schemaRegistryFilteringSelector,
+  groupLabels=config._config.groupLabels,
+  instanceLabels=config._config.instanceLabels,
+);
 
 local dashboard =
   {
@@ -87,7 +92,7 @@ local dashboard =
         targets: [
           {
             exemplar: true,
-            expr: 'avg(kafka_schema_registry_registered_count{' + hostSelector + '})',
+            expr: 'avg(kafka_schema_registry_registered_count{' + commonvars.queriesSelector + '})',
             instant: true,
             interval: '',
             legendFormat: '',
@@ -146,7 +151,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'avg by(schema_type) (kafka_schema_registry_schemas_created{' + hostSelector + '})',
+            expr: 'avg by(schema_type) (kafka_schema_registry_schemas_created{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '{{schema_type}}',
             refId: 'A',
@@ -247,7 +252,7 @@ local dashboard =
         pluginVersion: '7.3.4',
         targets: [
           {
-            expr: 'avg by(schema_type)(kafka_schema_registry_schemas_created{' + hostSelector + '})',
+            expr: 'avg by(schema_type)(kafka_schema_registry_schemas_created{' + commonvars.queriesSelector + '})',
             instant: true,
             interval: '',
             legendFormat: '{{schema_type}}',
@@ -313,7 +318,7 @@ local dashboard =
         pluginVersion: '7.3.4',
         targets: [
           {
-            expr: 'avg by(schema_type)(kafka_schema_registry_schemas_deleted{' + hostSelector + '})',
+            expr: 'avg by(schema_type)(kafka_schema_registry_schemas_deleted{' + commonvars.queriesSelector + '})',
             instant: true,
             interval: '',
             legendFormat: '{{schema_type}}',
@@ -389,9 +394,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'irate(process_cpu_seconds_total{' + hostSelector + '}[$__rate_interval])*100',
+            expr: 'irate(process_cpu_seconds_total{' + commonvars.queriesSelector + '}[$__rate_interval])*100',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -486,15 +491,15 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(area)(jvm_memory_bytes_used{' + hostSelector + '})',
+            expr: 'sum without(area)(jvm_memory_bytes_used{' + commonvars.queriesSelector + '})',
             interval: '',
-            legendFormat: 'Used:{{instance}}',
+            legendFormat: 'Used:' + utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
           {
-            expr: 'jvm_memory_bytes_max{' + hostSelector + ',area="heap"}',
+            expr: 'jvm_memory_bytes_max{' + commonvars.queriesSelector + ',area="heap"}',
             interval: '',
-            legendFormat: 'Max:{{instance}}',
+            legendFormat: 'Max:' + utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'B',
           },
         ],
@@ -589,9 +594,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(gc)(rate(jvm_gc_collection_seconds_sum{' + hostSelector + '}[$__rate_interval]))',
+            expr: 'sum without(gc)(rate(jvm_gc_collection_seconds_sum{' + commonvars.queriesSelector + '}[$__rate_interval]))',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -696,9 +701,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_schema_registry_jetty_metrics_connections_active{' + hostSelector + '}',
+            expr: 'kafka_schema_registry_jetty_metrics_connections_active{' + commonvars.queriesSelector + '}',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -790,9 +795,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_schema_registry_jersey_metrics_request_rate{' + hostSelector + '}',
+            expr: 'kafka_schema_registry_jersey_metrics_request_rate{' + commonvars.queriesSelector + '}',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -884,9 +889,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_schema_registry_jersey_metrics_request_latency_99{' + hostSelector + '}',
+            expr: 'kafka_schema_registry_jersey_metrics_request_latency_99{' + commonvars.queriesSelector + '}',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -936,111 +941,6 @@ local dashboard =
     schemaVersion: 27,
     style: 'dark',
     tags: [],
-    templating: {
-      list: [
-        {
-          current: {
-            selected: false,
-            text: 'Prometheus',
-            value: 'Prometheus',
-          },
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: false,
-          label: 'Data source',
-          multi: false,
-          name: 'datasource',
-          options: [],
-          query: 'prometheus',
-          refresh: 1,
-          regex: '',
-          skipUrlSync: false,
-          type: 'datasource',
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '$datasource',
-          definition: 'label_values(kafka_schema_registry_registered_count{' + filterSelector + '}, job)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Job',
-          multi: true,
-          name: 'job',
-          options: [],
-          query: {
-            query: 'label_values(kafka_schema_registry_registered_count{' + filterSelector + '}, job)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_schema_registry_registered_count{' + jobSelector + '}, kafka_cluster)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Kafka Cluster',
-          multi: true,
-          name: 'kafka_cluster',
-          options: [],
-          query: {
-            query: 'label_values(kafka_schema_registry_registered_count{' + jobSelector + '}, kafka_cluster)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_schema_registry_registered_count{' + jobSelector + ', ' + kafkaClusterSelector + '},instance)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Instance',
-          multi: true,
-          name: 'instance',
-          options: [],
-          query: {
-            query: 'label_values(kafka_schema_registry_registered_count{' + jobSelector + ', ' + kafkaClusterSelector + '},instance)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-      ],
-    },
     time: {
       from: 'now-5m',
       to: 'now',
@@ -1050,7 +950,12 @@ local dashboard =
     title: 'Schema Registry Overview',
     uid: '9ixzve-Mk',
     version: 3,
-  };
+  }
+  +
+  g.dashboard.withVariables(
+    // multiInstance: allow multiple selector for instance labels
+    commonvars.multiInstance
+  );
 
 {
   grafanaDashboards+::

@@ -1,8 +1,13 @@
 local config = (import '../config.libsonnet');
-local filterSelector = 'job=~"integrations/kafka-zookeeper|integrations/kafka"';
-local hostSelector = config._config.HostSelector;
-local jobSelector = config._config.JobSelector;
-local kafkaClusterSelector = config._config.KafkaClusterSelector;
+local g = import '../g.libsonnet';
+local var = import '../variables.libsonnet';
+local utils = import '../utils.libsonnet';
+local commonvars = var.new(
+  varMetric='zookeeper_outstandingrequests',
+  filteringSelector=config._config.zookeeperFilteringSelector,
+  groupLabels=config._config.groupLabels,
+  instanceLabels=config._config.instanceLabels,
+);
 
 local dashboard =
   {
@@ -53,7 +58,7 @@ local dashboard =
           {
             datasource: {
               type: 'prometheus',
-              uid: 'PC7A11E9A55DE2B14',
+              uid: '${datasource}',
             },
             refId: 'A',
           },
@@ -135,7 +140,7 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: '# kafka operator case\ncount(zookeeper_quorumsize{' + hostSelector + '})\n# kafka grafana cloud integration case\nor count(zookeeper_status_quorumsize{' + hostSelector + '})\n# or single instance case (non-cluster)\nor count(up{' + hostSelector + '} == 1)',
+            expr: '# kafka operator case\ncount(zookeeper_quorumsize{' + commonvars.queriesSelector + '})\n# kafka grafana cloud integration case\nor count(zookeeper_status_quorumsize{' + commonvars.queriesSelector + '})\n# or single instance case (non-cluster)\nor count(up{' + commonvars.queriesSelector + '} == 1)',
             interval: '',
             legendFormat: '',
             range: true,
@@ -219,7 +224,7 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: 'sum(zookeeper_numaliveconnections{' + hostSelector + '})',
+            expr: 'sum(zookeeper_numaliveconnections{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             range: true,
@@ -322,9 +327,9 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: 'zookeeper_outstandingrequests{' + hostSelector + '}',
+            expr: 'zookeeper_outstandingrequests{' + commonvars.queriesSelector + '}',
             interval: '',
-            legendFormat: '{{server_name}}:({{instance}})',
+            legendFormat: '{{server_name}}/' + utils.labelsToPanelLegend(config._config.instanceLabels),
             range: true,
             refId: 'A',
           },
@@ -400,7 +405,7 @@ local dashboard =
               uid: '${datasource}',
             },
             exemplar: true,
-            expr: 'avg(zookeeper_inmemorydatatree_nodecount{' + hostSelector + '})',
+            expr: 'avg(zookeeper_inmemorydatatree_nodecount{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -481,7 +486,7 @@ local dashboard =
               uid: '${datasource}',
             },
             exemplar: true,
-            expr: 'sum(zookeeper_inmemorydatatree_watchcount{' + hostSelector + '})',
+            expr: 'sum(zookeeper_inmemorydatatree_watchcount{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -493,7 +498,7 @@ local dashboard =
       {
         datasource: {
           type: 'prometheus',
-          uid: 'PC7A11E9A55DE2B14',
+          uid: '${datasource}',
         },
         gridPos: {
           h: 1,
@@ -506,7 +511,7 @@ local dashboard =
           {
             datasource: {
               type: 'prometheus',
-              uid: 'PC7A11E9A55DE2B14',
+              uid: '${datasource}',
             },
             refId: 'A',
           },
@@ -605,9 +610,9 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: '# for strimzi operator: remove kafka container java metrics \nirate(process_cpu_seconds_total{' + hostSelector + ', container!="kafka"}[$__rate_interval])*100',
+            expr: '# for strimzi operator: remove kafka container java metrics \nirate(process_cpu_seconds_total{' + commonvars.queriesSelector + ', container!="kafka"}[$__rate_interval])*100',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             range: true,
             refId: 'A',
           },
@@ -707,9 +712,9 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: 'sum without(area)(jvm_memory_bytes_used{' + hostSelector + ', container!="kafka"})',
+            expr: 'sum without(area)(jvm_memory_bytes_used{' + commonvars.queriesSelector + ', container!="kafka"})',
             interval: '',
-            legendFormat: 'Used:{{instance}}',
+            legendFormat: 'Used:' + utils.labelsToPanelLegend(config._config.instanceLabels),
             range: true,
             refId: 'A',
           },
@@ -719,9 +724,9 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: 'jvm_memory_bytes_max{' + hostSelector + ',area="heap", container!="kafka"}',
+            expr: 'jvm_memory_bytes_max{' + commonvars.queriesSelector + ',area="heap", container!="kafka"}',
             interval: '',
-            legendFormat: 'Max:{{instance}}',
+            legendFormat: 'Max:' + utils.labelsToPanelLegend(config._config.instanceLabels),
             range: true,
             refId: 'B',
           },
@@ -822,9 +827,9 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: '# for strimzi operator: remove kafka container java metrics\nsum without(gc)(rate(jvm_gc_collection_seconds_sum{' + hostSelector + ', container!="kafka" }[$__rate_interval]))',
+            expr: '# for strimzi operator: remove kafka container java metrics\nsum without(gc)(rate(jvm_gc_collection_seconds_sum{' + commonvars.queriesSelector + ', container!="kafka" }[$__rate_interval]))',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             range: true,
             refId: 'A',
           },
@@ -836,7 +841,7 @@ local dashboard =
         collapsed: false,
         datasource: {
           type: 'prometheus',
-          uid: 'PC7A11E9A55DE2B14',
+          uid: '${datasource}',
         },
         gridPos: {
           h: 1,
@@ -850,7 +855,7 @@ local dashboard =
           {
             datasource: {
               type: 'prometheus',
-              uid: 'PC7A11E9A55DE2B14',
+              uid: '${datasource}',
             },
             refId: 'A',
           },
@@ -947,9 +952,9 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: 'zookeeper_minrequestlatency{' + hostSelector + '} * ignoring (minrequestlatency,ticktime)zookeeper_ticktime{' + hostSelector + '}',
+            expr: 'zookeeper_minrequestlatency{' + commonvars.queriesSelector + '} * ignoring (minrequestlatency,ticktime)zookeeper_ticktime{' + commonvars.queriesSelector + '}',
             interval: '',
-            legendFormat: '{{server_name}}:({{instance}})',
+            legendFormat: '{{server_name}}:' + utils.labelsToPanelLegend(config._config.instanceLabels),
             range: true,
             refId: 'A',
           },
@@ -1046,9 +1051,9 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: 'zookeeper_avgrequestlatency{' + hostSelector + '} * ignoring (avgrequestlatency,ticktime) zookeeper_ticktime{' + hostSelector + '}',
+            expr: 'zookeeper_avgrequestlatency{' + commonvars.queriesSelector + '} * ignoring (avgrequestlatency,ticktime) zookeeper_ticktime{' + commonvars.queriesSelector + '}',
             interval: '',
-            legendFormat: '{{server_name}}:({{instance}})',
+            legendFormat: '{{server_name}}:' + utils.labelsToPanelLegend(config._config.instanceLabels),
             range: true,
             refId: 'A',
           },
@@ -1144,9 +1149,9 @@ local dashboard =
             },
             editorMode: 'code',
             exemplar: true,
-            expr: 'zookeeper_maxrequestlatency{' + hostSelector + '} * ignoring (maxrequestlatency,ticktime)\n zookeeper_ticktime{' + hostSelector + '}',
+            expr: 'zookeeper_maxrequestlatency{' + commonvars.queriesSelector + '} * ignoring (maxrequestlatency,ticktime)\n zookeeper_ticktime{' + commonvars.queriesSelector + '}',
             interval: '',
-            legendFormat: '{{server_name}}:({{instance}})',
+            legendFormat: '{{server_name}}:' + utils.labelsToPanelLegend(config._config.instanceLabels),
             range: true,
             refId: 'A',
           },
@@ -1162,109 +1167,6 @@ local dashboard =
     tags: [
       'kafka',
     ],
-    templating: {
-      list: [
-        {
-          hide: 0,
-          includeAll: false,
-          label: 'Data source',
-          multi: false,
-          name: 'datasource',
-          options: [],
-          query: 'prometheus',
-          refresh: 1,
-          regex: '.+',
-          skipUrlSync: false,
-          type: 'datasource',
-        },
-        {
-          allValue: '.+',
-          datasource: {
-            uid: '$datasource',
-          },
-          definition: 'label_values(zookeeper_outstandingrequests{' + filterSelector + '}, job)',
-          hide: 0,
-          includeAll: false,
-          label: 'Job',
-          multi: true,
-          name: 'job',
-          options: [],
-          query: {
-            query: 'label_values(zookeeper_outstandingrequests{' + filterSelector + '}, job)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(zookeeper_outstandingrequests{' + jobSelector + '}, kafka_cluster)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Kafka Cluster',
-          multi: true,
-          name: 'kafka_cluster',
-          options: [],
-          query: {
-            query: 'label_values(zookeeper_outstandingrequests{' + jobSelector + '}, kafka_cluster)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {
-            selected: true,
-            text: [
-              'All',
-            ],
-            value: [
-              '$__all',
-            ],
-          },
-          datasource: {
-            uid: '${datasource}',
-          },
-          definition: 'label_values(zookeeper_outstandingrequests{' + jobSelector + ', ' + kafkaClusterSelector + '},instance)',
-          hide: 0,
-          includeAll: true,
-          label: 'Instance',
-          multi: true,
-          name: 'instance',
-          options: [],
-          query: {
-            query: 'label_values(zookeeper_outstandingrequests{' + jobSelector + ', ' + kafkaClusterSelector + '},instance)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-      ],
-    },
     time: {
       from: 'now-1h',
       to: 'now',
@@ -1287,8 +1189,12 @@ local dashboard =
     uid: 'H4xS98vWk',
     version: 12,
     weekStart: '',
-  };
-
+  }
+  +
+  g.dashboard.withVariables(
+    // multiInstance: allow multiple selector for instance labels
+    commonvars.multiInstance
+  );
 {
   grafanaDashboards+::
     {

@@ -1,8 +1,13 @@
 local config = (import '../config.libsonnet');
-local filterSelector = 'job=~"integrations/kafka*"';
-local hostSelector = config._config.HostSelector;
-local jobSelector = config._config.JobSelector;
-local kafkaClusterSelector = config._config.KafkaClusterSelector;
+local g = import '../g.libsonnet';
+local var = import '../variables.libsonnet';
+local utils = import '../utils.libsonnet';
+local commonvars = var.new(
+  varMetric='kafka_server_kafkaserver_brokerstate',
+  filteringSelector=config._config.kafkaFilteringSelector,
+  groupLabels=config._config.groupLabels,
+  instanceLabels=config._config.instanceLabels,
+);
 
 local dashboard =
   {
@@ -109,7 +114,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_controller_kafkacontroller_activecontrollercount{' + hostSelector + '})',
+            expr: 'sum(kafka_controller_kafkacontroller_activecontrollercount{' + commonvars.queriesSelector + '})',
             format: 'time_series',
             intervalFactor: 1,
             refId: 'A',
@@ -191,7 +196,7 @@ local dashboard =
         repeatDirection: 'h',
         targets: [
           {
-            expr: 'count(kafka_server_replicamanager_leadercount{' + hostSelector + '})',
+            expr: 'count(kafka_server_replicamanager_leadercount{' + commonvars.queriesSelector + '})',
             format: 'time_series',
             intervalFactor: 1,
             legendFormat: '',
@@ -269,7 +274,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_controller_controllerstats_uncleanleaderelectionspersec{' + hostSelector + '})',
+            expr: 'sum(kafka_controller_controllerstats_uncleanleaderelectionspersec{' + commonvars.queriesSelector + '})',
             format: 'time_series',
             intervalFactor: 1,
             refId: 'A',
@@ -346,7 +351,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_controller_kafkacontroller_preferredreplicaimbalancecount{' + hostSelector + '})',
+            expr: 'sum(kafka_controller_kafkacontroller_preferredreplicaimbalancecount{' + commonvars.queriesSelector + '})',
             format: 'time_series',
             intervalFactor: 1,
             refId: 'A',
@@ -408,7 +413,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(rate(kafka_server_brokertopicmetrics_bytesinpersec{' + hostSelector + ',topic!=""}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_server_brokertopicmetrics_bytesinpersec{' + commonvars.queriesSelector + ',topic!=""}[$__rate_interval]))',
             format: 'time_series',
             intervalFactor: 2,
             legendFormat: 'Bytes in',
@@ -417,7 +422,7 @@ local dashboard =
             step: 4,
           },
           {
-            expr: 'sum(rate(kafka_server_brokertopicmetrics_bytesoutpersec{' + hostSelector + ',topic!=""}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_server_brokertopicmetrics_bytesoutpersec{' + commonvars.queriesSelector + ',topic!=""}[$__rate_interval]))',
             format: 'time_series',
             hide: false,
             interval: '',
@@ -535,7 +540,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_controller_kafkacontroller_offlinepartitionscount{' + hostSelector + '})',
+            expr: 'sum(kafka_controller_kafkacontroller_offlinepartitionscount{' + commonvars.queriesSelector + '})',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -615,7 +620,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_server_replicamanager_underreplicatedpartitions{' + hostSelector + '})',
+            expr: 'sum(kafka_server_replicamanager_underreplicatedpartitions{' + commonvars.queriesSelector + '})',
             format: 'time_series',
             hide: false,
             intervalFactor: 2,
@@ -690,7 +695,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_cluster_partition_underminisr{' + hostSelector + '})',
+            expr: 'sum(kafka_cluster_partition_underminisr{' + commonvars.queriesSelector + '})',
             format: 'time_series',
             hide: false,
             interval: '',
@@ -771,7 +776,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_server_replicamanager_partitioncount{' + hostSelector + '})',
+            expr: 'sum(kafka_server_replicamanager_partitioncount{' + commonvars.queriesSelector + '})',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -851,10 +856,10 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'irate(process_cpu_seconds_total{' + hostSelector + '}[$__rate_interval])*100',
+            expr: 'irate(process_cpu_seconds_total{' + commonvars.queriesSelector + '}[$__rate_interval])*100',
             format: 'time_series',
             intervalFactor: 2,
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             metric: 'process_cpu_secondspersec',
             refId: 'A',
             step: 4,
@@ -957,9 +962,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(area)(jvm_memory_bytes_used{' + hostSelector + '})',
+            expr: 'sum without(area)(jvm_memory_bytes_used{' + commonvars.queriesSelector + '})',
             intervalFactor: 2,
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             metric: 'jvm_memory_bytes_used',
             refId: 'A',
             step: 4,
@@ -1062,9 +1067,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(gc)(rate(jvm_gc_collection_seconds_sum{' + hostSelector + '}[$__rate_interval]))',
+            expr: 'sum without(gc)(rate(jvm_gc_collection_seconds_sum{' + commonvars.queriesSelector + '}[$__rate_interval]))',
             intervalFactor: 2,
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             metric: 'jvm_gc_collection_seconds_sum',
             refId: 'A',
             step: 4,
@@ -1179,7 +1184,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(instance)(rate(kafka_server_brokertopicmetrics_messagesinpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(instance)(rate(kafka_server_brokertopicmetrics_messagesinpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             interval: '',
             intervalFactor: 2,
             legendFormat: '{{topic}}',
@@ -1283,7 +1288,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesinpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesinpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             format: 'time_series',
             interval: '',
             intervalFactor: 2,
@@ -1388,7 +1393,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesoutpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(instance)(rate(kafka_server_brokertopicmetrics_bytesoutpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             interval: '',
             intervalFactor: 2,
             legendFormat: '{{topic}}',
@@ -1492,11 +1497,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(topic)(rate(kafka_server_brokertopicmetrics_messagesinpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(topic)(rate(kafka_server_brokertopicmetrics_messagesinpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             format: 'time_series',
             interval: '',
             intervalFactor: 2,
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             metric: 'kafka_server_brokertopicmetrics_messagesinpersec',
             refId: 'A',
             step: 4,
@@ -1597,11 +1602,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesinpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesinpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             format: 'time_series',
             interval: '',
             intervalFactor: 2,
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             metric: 'kafka_server_brokertopicmetrics_bytesinpersec',
             refId: 'A',
             step: 4,
@@ -1698,11 +1703,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesoutpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(topic)(rate(kafka_server_brokertopicmetrics_bytesoutpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -1810,7 +1815,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_server_replicamanager_partitioncount{' + hostSelector + '})',
+            expr: 'sum(kafka_server_replicamanager_partitioncount{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -1906,7 +1911,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_controller_kafkacontroller_offlinepartitionscount{' + hostSelector + '})',
+            expr: 'sum(kafka_controller_kafkacontroller_offlinepartitionscount{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -2002,7 +2007,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_cluster_partition_underreplicated{' + hostSelector + '})',
+            expr: 'sum(kafka_cluster_partition_underreplicated{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -2098,7 +2103,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_cluster_partition_underminisr{' + hostSelector + '})',
+            expr: 'sum(kafka_cluster_partition_underminisr{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -2208,8 +2213,8 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_socketserver_networkprocessoravgidlepercent{' + hostSelector + '}',
-            legendFormat: '{{instance}}',
+            expr: 'kafka_network_socketserver_networkprocessoravgidlepercent{' + commonvars.queriesSelector + '}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -2303,8 +2308,8 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent_total{' + hostSelector + '}',
-            legendFormat: '{{instance}}',
+            expr: 'kafka_server_kafkarequesthandlerpool_requesthandleravgidlepercent_total{' + commonvars.queriesSelector + '}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -2397,9 +2402,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestchannel_requestqueuesize{' + hostSelector + '}',
+            expr: 'kafka_network_requestchannel_requestqueuesize{' + commonvars.queriesSelector + '}',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -2492,9 +2497,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestchannel_responsequeuesize{' + hostSelector + ',processor=""}',
+            expr: 'kafka_network_requestchannel_responsequeuesize{' + commonvars.queriesSelector + ',processor=""}',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -2602,7 +2607,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms{' + hostSelector + ',quantile=~"$percentile"}',
+            expr: 'kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms{' + commonvars.queriesSelector + ',quantile=~"$percentile"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -2698,11 +2703,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'rate(kafka_server_sessionexpirelistener_zookeepersyncconnectspersec{' + hostSelector + '}[$__rate_interval])',
+            expr: 'rate(kafka_server_sessionexpirelistener_zookeepersyncconnectspersec{' + commonvars.queriesSelector + '}[$__rate_interval])',
             hide: false,
             instant: false,
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -2796,10 +2801,10 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'rate(kafka_server_sessionexpirelistener_zookeeperexpirespersec{' + hostSelector + '}[$__rate_interval])',
+            expr: 'rate(kafka_server_sessionexpirelistener_zookeeperexpirespersec{' + commonvars.queriesSelector + '}[$__rate_interval])',
             hide: false,
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -2893,10 +2898,10 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'rate(kafka_server_sessionexpirelistener_zookeeperdisconnectspersec{' + hostSelector + '}[$__rate_interval])',
+            expr: 'rate(kafka_server_sessionexpirelistener_zookeeperdisconnectspersec{' + commonvars.queriesSelector + '}[$__rate_interval])',
             hide: false,
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -2990,10 +2995,10 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'rate(kafka_server_sessionexpirelistener_zookeeperauthfailurespersec{' + hostSelector + '}[$__rate_interval])',
+            expr: 'rate(kafka_server_sessionexpirelistener_zookeeperauthfailurespersec{' + commonvars.queriesSelector + '}[$__rate_interval])',
             hide: false,
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -3101,8 +3106,8 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_server_replicamanager_isrshrinkspersec{' + hostSelector + '}',
-            legendFormat: '{{instance}}',
+            expr: 'kafka_server_replicamanager_isrshrinkspersec{' + commonvars.queriesSelector + '}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -3196,9 +3201,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_server_replicamanager_isrexpandspersec{' + hostSelector + '}',
+            expr: 'kafka_server_replicamanager_isrexpandspersec{' + commonvars.queriesSelector + '}',
             hide: false,
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -3305,7 +3310,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_log_log_size{' + hostSelector + ',topic=~"$topic"}) by (topic)',
+            expr: 'sum(kafka_log_log_size{' + commonvars.queriesSelector + ',topic=~"$topic"}) by (topic)',
             interval: '',
             legendFormat: '{{topic}}',
             refId: 'A',
@@ -3400,9 +3405,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_log_log_size{' + hostSelector + ',topic=~"$topic"}) by (instance)',
+            expr: 'sum(kafka_log_log_size{' + commonvars.queriesSelector + ',topic=~"$topic"}) by (instance)',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -3510,7 +3515,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_requestqueuetimems{' + hostSelector + ',quantile=~"$percentile",request="Produce"}',
+            expr: 'kafka_network_requestmetrics_requestqueuetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Produce"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -3606,7 +3611,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_localtimems{' + hostSelector + ',quantile=~"$percentile",request="Produce"}',
+            expr: 'kafka_network_requestmetrics_localtimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Produce"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -3702,7 +3707,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_remotetimems{' + hostSelector + ',quantile=~"$percentile",request="Produce"}',
+            expr: 'kafka_network_requestmetrics_remotetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Produce"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -3798,7 +3803,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_responsequeuetimems{' + hostSelector + ',quantile=~"$percentile",request="Produce"}',
+            expr: 'kafka_network_requestmetrics_responsequeuetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Produce"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -3894,7 +3899,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_responsesendtimems{' + hostSelector + ',quantile=~"$percentile",request="Produce"}',
+            expr: 'kafka_network_requestmetrics_responsesendtimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Produce"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4004,7 +4009,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_requestqueuetimems{' + hostSelector + ',quantile=~"$percentile",request="Fetch"}',
+            expr: 'kafka_network_requestmetrics_requestqueuetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Fetch"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4100,7 +4105,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_localtimems{' + hostSelector + ',quantile=~"$percentile",request="Fetch"}',
+            expr: 'kafka_network_requestmetrics_localtimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Fetch"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4196,7 +4201,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_remotetimems{' + hostSelector + ',quantile=~"$percentile",request="Fetch"}',
+            expr: 'kafka_network_requestmetrics_remotetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Fetch"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4292,7 +4297,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_responsequeuetimems{' + hostSelector + ',quantile=~"$percentile",request="Fetch"}',
+            expr: 'kafka_network_requestmetrics_responsequeuetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Fetch"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4388,7 +4393,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_responsesendtimems{' + hostSelector + ',quantile=~"$percentile",request="Fetch"}',
+            expr: 'kafka_network_requestmetrics_responsesendtimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="Fetch"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4498,7 +4503,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_requestqueuetimems{' + hostSelector + ',quantile=~"$percentile",request="FetchFollower"}',
+            expr: 'kafka_network_requestmetrics_requestqueuetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="FetchFollower"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4594,7 +4599,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_localtimems{' + hostSelector + ',quantile=~"$percentile",request="FetchFollower"}',
+            expr: 'kafka_network_requestmetrics_localtimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="FetchFollower"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4690,7 +4695,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_remotetimems{' + hostSelector + ',quantile=~"$percentile",request="FetchFollower"}',
+            expr: 'kafka_network_requestmetrics_remotetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="FetchFollower"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4786,7 +4791,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_responsequeuetimems{' + hostSelector + ',quantile=~"$percentile",request="FetchFollower"}',
+            expr: 'kafka_network_requestmetrics_responsequeuetimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="FetchFollower"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4882,7 +4887,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_requestmetrics_responsesendtimems{' + hostSelector + ',quantile=~"$percentile",request="FetchFollower"}',
+            expr: 'kafka_network_requestmetrics_responsesendtimems{' + commonvars.queriesSelector + ',quantile=~"$percentile",request="FetchFollower"}',
             hide: false,
             legendFormat: '{{instance}} - {{quantile}}',
             refId: 'A',
@@ -4992,10 +4997,10 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_coordinator_group_groupmetadatamanager_numgroups{' + hostSelector + '}',
+            expr: 'kafka_coordinator_group_groupmetadatamanager_numgroups{' + commonvars.queriesSelector + '}',
             instant: false,
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -5089,32 +5094,32 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupsstable{' + hostSelector + '})',
+            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupsstable{' + commonvars.queriesSelector + '})',
             instant: false,
             interval: '',
             legendFormat: 'stable',
             refId: 'A',
           },
           {
-            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupspreparingrebalance{' + hostSelector + '})',
+            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupspreparingrebalance{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: 'preparing-rebalance',
             refId: 'B',
           },
           {
-            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupsdead{' + hostSelector + '})',
+            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupsdead{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: 'dead',
             refId: 'C',
           },
           {
-            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupscompletingrebalance{' + hostSelector + '})',
+            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupscompletingrebalance{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: 'completing-rebalance',
             refId: 'D',
           },
           {
-            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupsempty{' + hostSelector + '})',
+            expr: 'sum(kafka_coordinator_group_groupmetadatamanager_numgroupsempty{' + commonvars.queriesSelector + '})',
             interval: '',
             legendFormat: 'empty',
             refId: 'E',
@@ -5223,7 +5228,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_server_socketservermetrics_connection_count{' + hostSelector + '}) by (listener)',
+            expr: 'sum(kafka_server_socketservermetrics_connection_count{' + commonvars.queriesSelector + '}) by (listener)',
             interval: '',
             legendFormat: '{{listener}}',
             refId: 'A',
@@ -5318,9 +5323,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_server_socketservermetrics_connection_count{' + hostSelector + '}) by (instance)',
+            expr: 'sum(kafka_server_socketservermetrics_connection_count{' + commonvars.queriesSelector + '}) by (instance)',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -5413,7 +5418,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_server_socketservermetrics_connection_creation_rate{' + hostSelector + '}) by (listener)',
+            expr: 'sum(kafka_server_socketservermetrics_connection_creation_rate{' + commonvars.queriesSelector + '}) by (listener)',
             interval: '',
             legendFormat: '{{listener}}',
             refId: 'A',
@@ -5508,9 +5513,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_server_socketservermetrics_connection_creation_rate{' + hostSelector + '}) by (instance)',
+            expr: 'sum(kafka_server_socketservermetrics_connection_creation_rate{' + commonvars.queriesSelector + '}) by (instance)',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -5603,7 +5608,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_server_socketservermetrics_connection_close_rate{' + hostSelector + '}) by (listener)',
+            expr: 'sum(kafka_server_socketservermetrics_connection_close_rate{' + commonvars.queriesSelector + '}) by (listener)',
             interval: '',
             legendFormat: '{{listener}}',
             refId: 'A',
@@ -5698,9 +5703,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_server_socketservermetrics_connection_close_rate{' + hostSelector + '}) by (instance)',
+            expr: 'sum(kafka_server_socketservermetrics_connection_close_rate{' + commonvars.queriesSelector + '}) by (instance)',
             interval: '',
-            legendFormat: '{{instance}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -5794,7 +5799,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_network_acceptor_acceptorblockedpercent{' + hostSelector + '}',
+            expr: 'kafka_network_acceptor_acceptorblockedpercent{' + commonvars.queriesSelector + '}',
             interval: '',
             legendFormat: '{{instance}} - {{listener}}',
             refId: 'A',
@@ -5889,7 +5894,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_server_socketservermetrics_connections{' + hostSelector + '}) by (client_software_name, client_software_version)',
+            expr: 'sum(kafka_server_socketservermetrics_connections{' + commonvars.queriesSelector + '}) by (client_software_name, client_software_version)',
             interval: '',
             legendFormat: '{{client_software_name}} {{client_software_version}}',
             refId: 'A',
@@ -6011,7 +6016,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + hostSelector + '}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + commonvars.queriesSelector + '}[$__rate_interval]))',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -6083,7 +6088,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + hostSelector + ',request="Produce"}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + commonvars.queriesSelector + ',request="Produce"}[$__rate_interval]))',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -6155,7 +6160,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + hostSelector + ',request="FetchConsumer"}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + commonvars.queriesSelector + ',request="FetchConsumer"}[$__rate_interval]))',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -6227,7 +6232,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + hostSelector + ',request="OffsetCommit"}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + commonvars.queriesSelector + ',request="OffsetCommit"}[$__rate_interval]))',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -6299,7 +6304,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + hostSelector + ',request="Metadata"}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_network_requestmetrics_requestspersec{' + commonvars.queriesSelector + ',request="Metadata"}[$__rate_interval]))',
             interval: '',
             legendFormat: '',
             refId: 'A',
@@ -6359,7 +6364,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(rate(kafka_server_brokertopicmetrics_totalproducerequestspersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval])) by (topic)',
+            expr: 'sum(rate(kafka_server_brokertopicmetrics_totalproducerequestspersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval])) by (topic)',
             interval: '',
             legendFormat: '{{topic}}',
             refId: 'A',
@@ -6455,7 +6460,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(rate(kafka_server_brokertopicmetrics_totalfetchrequestspersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval])) by (topic)',
+            expr: 'sum(rate(kafka_server_brokertopicmetrics_totalfetchrequestspersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval])) by (topic)',
             interval: '',
             legendFormat: '{{topic}}',
             refId: 'A',
@@ -6565,7 +6570,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(rate(kafka_server_brokertopicmetrics_producemessageconversionspersec{' + hostSelector + '}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_server_brokertopicmetrics_producemessageconversionspersec{' + commonvars.queriesSelector + '}[$__rate_interval]))',
             hide: false,
             interval: '',
             legendFormat: '',
@@ -6662,7 +6667,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(rate(kafka_server_brokertopicmetrics_fetchmessageconversionspersec{' + hostSelector + '}[$__rate_interval]))',
+            expr: 'sum(rate(kafka_server_brokertopicmetrics_fetchmessageconversionspersec{' + commonvars.queriesSelector + '}[$__rate_interval]))',
             hide: false,
             interval: '',
             legendFormat: '{{topic}}',
@@ -6764,7 +6769,7 @@ local dashboard =
         },
         targets: [
           {
-            expr: 'sum(kafka_server_socketservermetrics_connections{' + hostSelector + '}) by (client_software_name, client_software_version) ',
+            expr: 'sum(kafka_server_socketservermetrics_connections{' + commonvars.queriesSelector + '}) by (client_software_name, client_software_version) ',
             interval: '',
             legendFormat: '{{client_software_name}} - {{client_software_version}}',
             refId: 'A',
@@ -6782,169 +6787,6 @@ local dashboard =
     tags: [
       'kafka-integration',
     ],
-    templating: {
-      list: [
-        {
-          current: {},
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: false,
-          label: 'Data source',
-          multi: false,
-          name: 'datasource',
-          options: [],
-          query: 'prometheus',
-          refresh: 1,
-          regex: '',
-          skipUrlSync: false,
-          type: 'datasource',
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '$datasource',
-          definition: 'label_values(kafka_server_kafkaserver_brokerstate{' + filterSelector + '}, job)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Job',
-          multi: true,
-          name: 'job',
-          options: [],
-          query: {
-            query: 'label_values(kafka_server_kafkaserver_brokerstate{' + filterSelector + '}, job)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_server_kafkaserver_brokerstate{' + jobSelector + '}, kafka_cluster)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Kafka Cluster',
-          multi: true,
-          name: 'kafka_cluster',
-          options: [],
-          query: {
-            query: 'label_values(kafka_server_kafkaserver_brokerstate{' + jobSelector + '}, kafka_cluster)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_server_kafkaserver_brokerstate{' + jobSelector + ', ' + kafkaClusterSelector + '}, instance)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Instance',
-          multi: true,
-          name: 'instance',
-          options: [],
-          query: {
-            query: 'label_values(kafka_server_kafkaserver_brokerstate{' + jobSelector + ', ' + kafkaClusterSelector + '}, instance)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {
-            selected: false,
-            text: [
-              '0.99',
-            ],
-            value: [
-              '0.99',
-            ],
-          },
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_network_requestmetrics_requestqueuetimems{' + hostSelector + '}, quantile)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Percentile',
-          multi: true,
-          name: 'percentile',
-          options: [],
-          query: {
-            query: 'label_values(kafka_network_requestmetrics_requestqueuetimems{' + hostSelector + '}, quantile)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_log_log_size{' + hostSelector + '},topic)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Topic',
-          multi: true,
-          name: 'topic',
-          options: [],
-          query: {
-            query: 'label_values(kafka_log_log_size{' + hostSelector + '},topic)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-      ],
-    },
     time: {
       from: 'now-30m',
       to: 'now',
@@ -6977,8 +6819,76 @@ local dashboard =
     title: 'Kafka Overview',
     uid: 'qu-QZdfZz',
     version: 1,
-  };
-
+  }
+  +
+  g.dashboard.withVariables(
+    // multiInstance: allow multiple selector for instance labels
+    commonvars.multiInstance
+    + [
+      {
+        allValue: '.+',
+        current: {
+          selected: false,
+          text: [
+            '0.99',
+          ],
+          value: [
+            '0.99',
+          ],
+        },
+        datasource: '${datasource}',
+        definition: 'label_values(kafka_network_requestmetrics_requestqueuetimems{' + commonvars.queriesSelector + '}, quantile)',
+        description: null,
+        'error': null,
+        hide: 0,
+        includeAll: true,
+        label: 'Percentile',
+        multi: true,
+        name: 'percentile',
+        options: [],
+        query: {
+          query: 'label_values(kafka_network_requestmetrics_requestqueuetimems{' + commonvars.queriesSelector + '}, quantile)',
+          refId: 'StandardVariableQuery',
+        },
+        refresh: 2,
+        regex: '',
+        skipUrlSync: false,
+        sort: 0,
+        tagValuesQuery: '',
+        tags: [],
+        tagsQuery: '',
+        type: 'query',
+        useTags: false,
+      },
+      {
+        allValue: '.+',
+        current: {},
+        datasource: '${datasource}',
+        definition: 'label_values(kafka_log_log_size{' + commonvars.queriesSelector + '},topic)',
+        description: null,
+        'error': null,
+        hide: 0,
+        includeAll: true,
+        label: 'Topic',
+        multi: true,
+        name: 'topic',
+        options: [],
+        query: {
+          query: 'label_values(kafka_log_log_size{' + commonvars.queriesSelector + '},topic)',
+          refId: 'StandardVariableQuery',
+        },
+        refresh: 2,
+        regex: '',
+        skipUrlSync: false,
+        sort: 0,
+        tagValuesQuery: '',
+        tags: [],
+        tagsQuery: '',
+        type: 'query',
+        useTags: false,
+      },
+    ]
+  );
 {
   grafanaDashboards+::
     {

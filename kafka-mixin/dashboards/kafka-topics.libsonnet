@@ -1,8 +1,12 @@
 local config = (import '../config.libsonnet');
-local filterSelector = 'job=~"integrations/kafka"';
-local hostSelector = config._config.HostSelector;
-local jobSelector = config._config.JobSelector;
-local kafkaClusterSelector = config._config.KafkaClusterSelector;
+local g = import '../g.libsonnet';
+local var = import '../variables.libsonnet';
+local commonvars = var.new(
+  varMetric='kafka_log_log_size',
+  filteringSelector=config._config.kafkaFilteringSelector,
+  groupLabels=config._config.groupLabels,
+  instanceLabels=config._config.instanceLabels,
+);
 
 local dashboard =
   {
@@ -76,7 +80,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(instance) (rate(kafka_server_brokertopicmetrics_messagesinpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(instance) (rate(kafka_server_brokertopicmetrics_messagesinpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             interval: '',
             legendFormat: '{{topic}}',
             refId: 'A',
@@ -172,7 +176,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesinpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesinpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             interval: '',
             legendFormat: '{{topic}}',
             refId: 'A',
@@ -269,7 +273,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesoutpersec{' + hostSelector + ',topic=~"$topic"}[$__rate_interval]))',
+            expr: 'sum without(instance) (rate(kafka_server_brokertopicmetrics_bytesoutpersec{' + commonvars.queriesSelector + ',topic=~"$topic"}[$__rate_interval]))',
             interval: '',
             legendFormat: '{{topic}}',
             refId: 'A',
@@ -386,7 +390,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'kafka_log_log_logstartoffset{' + hostSelector + ',topic=~"$topic"}',
+            expr: 'kafka_log_log_logstartoffset{' + commonvars.queriesSelector + ',topic=~"$topic"}',
             format: 'table',
             instant: true,
             interval: '',
@@ -496,7 +500,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'kafka_log_log_logendoffset{' + hostSelector + ',topic=~"$topic"}',
+            expr: 'kafka_log_log_logendoffset{' + commonvars.queriesSelector + ',topic=~"$topic"}',
             format: 'table',
             instant: true,
             interval: '',
@@ -541,134 +545,6 @@ local dashboard =
     schemaVersion: 27,
     style: 'dark',
     tags: [],
-    templating: {
-      list: [
-        {
-          current: {},
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: false,
-          label: 'Data source',
-          multi: false,
-          name: 'datasource',
-          options: [],
-          query: 'prometheus',
-          refresh: 1,
-          regex: '',
-          skipUrlSync: false,
-          type: 'datasource',
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '$datasource',
-          definition: 'label_values(kafka_log_log_size{' + filterSelector + '}, job)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Job',
-          multi: true,
-          name: 'job',
-          options: [],
-          query: {
-            query: 'label_values(kafka_log_log_size{' + filterSelector + '}, job)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_log_log_size{' + jobSelector + '}, kafka_cluster)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Kafka Cluster',
-          multi: true,
-          name: 'kafka_cluster',
-          options: [],
-          query: {
-            query: 'label_values(kafka_log_log_size{' + jobSelector + '}, kafka_cluster)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_log_log_size{' + jobSelector + ', ' + kafkaClusterSelector + '},instance)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Instance',
-          multi: true,
-          name: 'instance',
-          options: [],
-          query: {
-            query: 'label_values(kafka_log_log_size{' + jobSelector + ', ' + kafkaClusterSelector + '},instance)',
-            refId: 'Cortex-instance-Variable-Query',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_log_log_size{' + jobSelector + ', ' + kafkaClusterSelector + '},topic)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Topic name',
-          multi: true,
-          name: 'topic',
-          options: [],
-          query: {
-            query: 'label_values(kafka_log_log_size{' + jobSelector + ', ' + kafkaClusterSelector + '},topic)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-      ],
-    },
     time: {
       from: 'now-6h',
       to: 'now',
@@ -678,7 +554,42 @@ local dashboard =
     title: 'Kafka Topics',
     uid: 'vQT4b1-Mz',
     version: 4,
-  };
+  }
+  +
+  g.dashboard.withVariables(
+    // multiInstance: allow multiple selector for instance labels
+    commonvars.multiInstance
+    +
+    [
+      {
+        allValue: '.+',
+        current: {},
+        datasource: '${datasource}',
+        definition: 'label_values(kafka_log_log_size{' + commonvars.queriesSelector + '},topic)',
+        description: null,
+        'error': null,
+        hide: 0,
+        includeAll: true,
+        label: 'Topic name',
+        multi: true,
+        name: 'topic',
+        options: [],
+        query: {
+          query: 'label_values(kafka_log_log_size{' + commonvars.queriesSelector + '},topic)',
+          refId: 'StandardVariableQuery',
+        },
+        refresh: 2,
+        regex: '',
+        skipUrlSync: false,
+        sort: 0,
+        tagValuesQuery: '',
+        tags: [],
+        tagsQuery: '',
+        type: 'query',
+        useTags: false,
+      },
+    ]
+  );
 
 {
   grafanaDashboards+::

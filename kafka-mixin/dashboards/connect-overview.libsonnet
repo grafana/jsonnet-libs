@@ -1,8 +1,14 @@
 local config = (import '../config.libsonnet');
-local filterSelector = 'job=~"integrations/kafka-connect|integrations/kafka"';
-local hostSelector = config._config.HostSelector;
-local jobSelector = config._config.JobSelector;
-local kafkaClusterSelector = config._config.KafkaClusterSelector;
+
+local g = import '../g.libsonnet';
+local var = import '../variables.libsonnet';
+local utils = import '../utils.libsonnet';
+local commonvars = var.new(
+  varMetric='kafka_connect_app_info',
+  filteringSelector=config._config.kafkaConnectSelector,
+  groupLabels=config._config.groupLabels,
+  instanceLabels=config._config.instanceLabels,
+);
 
 local dashboard =
   {
@@ -85,7 +91,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_total_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_total_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: '',
@@ -141,7 +147,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_running_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_running_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: '',
@@ -201,7 +207,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: '',
@@ -262,7 +268,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: '',
@@ -323,7 +329,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: '',
@@ -384,7 +390,7 @@ local dashboard =
         pluginVersion: '7.5.6',
         targets: [
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: '',
@@ -453,21 +459,21 @@ local dashboard =
         pluginVersion: '7.0.5',
         targets: [
           {
-            expr: 'sum (kafka_connect_connector_metrics{' + hostSelector + ',connector=~"$connector",status="running"})',
+            expr: 'sum (kafka_connect_connector_metrics{' + commonvars.queriesSelector + ',connector=~"$connector",status="running"})',
             instant: true,
             interval: '',
             legendFormat: 'running',
             refId: 'B',
           },
           {
-            expr: 'sum (kafka_connect_connector_metrics{' + hostSelector + ',connector=~"$connector",status="stopped"})',
+            expr: 'sum (kafka_connect_connector_metrics{' + commonvars.queriesSelector + ',connector=~"$connector",status="stopped"})',
             instant: true,
             interval: '',
             legendFormat: 'stopped',
             refId: 'A',
           },
           {
-            expr: 'sum (kafka_connect_connector_metrics{' + hostSelector + ',connector=~"$connector",status="paused"})',
+            expr: 'sum (kafka_connect_connector_metrics{' + commonvars.queriesSelector + ',connector=~"$connector",status="paused"})',
             instant: true,
             interval: '',
             legendFormat: 'paused',
@@ -535,35 +541,35 @@ local dashboard =
         pluginVersion: '7.0.5',
         targets: [
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_running_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_running_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: 'running',
             refId: 'A',
           },
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: 'failed',
             refId: 'B',
           },
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: 'paused',
             refId: 'C',
           },
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: 'unassigned',
             refId: 'D',
           },
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             instant: true,
             interval: '',
             legendFormat: 'destroyed',
@@ -642,7 +648,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum (kafka_connect_connector_metrics{' + hostSelector + ',connector=~"$connector",status!=""}) by (status) ',
+            expr: 'sum (kafka_connect_connector_metrics{' + commonvars.queriesSelector + ',connector=~"$connector",status!=""}) by (status) ',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -753,7 +759,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_running_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_running_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -763,7 +769,7 @@ local dashboard =
             refId: 'A',
           },
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_failed_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -773,7 +779,7 @@ local dashboard =
             refId: 'B',
           },
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_paused_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -783,7 +789,7 @@ local dashboard =
             refId: 'C',
           },
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_destroyed_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -793,7 +799,7 @@ local dashboard =
             refId: 'D',
           },
           {
-            expr: 'sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum(kafka_connect_connect_worker_metrics_connector_unassigned_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -908,9 +914,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'rate(process_cpu_seconds_total{' + hostSelector + '}[$__rate_interval])',
+            expr: 'rate(process_cpu_seconds_total{' + commonvars.queriesSelector + '}[$__rate_interval])',
             interval: '',
-            legendFormat: '{{cluster}}-{{instance}}',
+            legendFormat: '{{cluster}}/' + utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -1004,15 +1010,15 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(area)(jvm_memory_bytes_used{' + hostSelector + '})',
+            expr: 'sum without(area)(jvm_memory_bytes_used{' + commonvars.queriesSelector + '})',
             interval: '',
-            legendFormat: '{{cluster}}-{{instance}}',
+            legendFormat: '{{cluster}}/' + utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
           {
-            expr: 'jvm_memory_bytes_max{' + hostSelector + ',area="heap"}',
+            expr: 'jvm_memory_bytes_max{' + commonvars.queriesSelector + ',area="heap"}',
             interval: '',
-            legendFormat: '{{cluster}}-{{instance}}',
+            legendFormat: '{{cluster}}/' + utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'B',
           },
         ],
@@ -1107,9 +1113,9 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'sum without(gc)(rate(jvm_gc_collection_seconds_sum{' + hostSelector + '}[$__rate_interval]))',
+            expr: 'sum without(gc)(rate(jvm_gc_collection_seconds_sum{' + commonvars.queriesSelector + '}[$__rate_interval]))',
             interval: '',
-            legendFormat: '{{cluster}}-{{instance}}',
+            legendFormat: '{{cluster}}/' + utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -1559,7 +1565,7 @@ local dashboard =
         ],
         targets: [
           {
-            expr: 'kafka_connect_app_info{' + hostSelector + ',client_id!="",start_time_ms!=""}',
+            expr: 'kafka_connect_app_info{' + commonvars.queriesSelector + ',client_id!="",start_time_ms!=""}',
             format: 'table',
             hide: false,
             instant: true,
@@ -1568,7 +1574,7 @@ local dashboard =
             refId: 'B',
           },
           {
-            expr: 'kafka_connect_app_info{' + hostSelector + ',client_id!="",version!=""}',
+            expr: 'kafka_connect_app_info{' + commonvars.queriesSelector + ',client_id!="",version!=""}',
             format: 'table',
             instant: true,
             interval: '',
@@ -1576,7 +1582,7 @@ local dashboard =
             refId: 'A',
           },
           {
-            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_connector_count{' + hostSelector + '})',
+            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_connector_count{' + commonvars.queriesSelector + '})',
             format: 'table',
             instant: true,
             interval: '',
@@ -1584,7 +1590,7 @@ local dashboard =
             refId: 'C',
           },
           {
-            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_connector_startup_success_total{' + hostSelector + '})',
+            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_connector_startup_success_total{' + commonvars.queriesSelector + '})',
             format: 'table',
             instant: true,
             interval: '',
@@ -1592,7 +1598,7 @@ local dashboard =
             refId: 'D',
           },
           {
-            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_connector_startup_failure_total{' + hostSelector + '})',
+            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_connector_startup_failure_total{' + commonvars.queriesSelector + '})',
             format: 'table',
             instant: true,
             interval: '',
@@ -1600,7 +1606,7 @@ local dashboard =
             refId: 'E',
           },
           {
-            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_task_count{' + hostSelector + '})',
+            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_task_count{' + commonvars.queriesSelector + '})',
             format: 'table',
             instant: true,
             interval: '',
@@ -1608,7 +1614,7 @@ local dashboard =
             refId: 'I',
           },
           {
-            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_task_startup_success_total{' + hostSelector + '})',
+            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_task_startup_success_total{' + commonvars.queriesSelector + '})',
             format: 'table',
             instant: true,
             interval: '',
@@ -1616,7 +1622,7 @@ local dashboard =
             refId: 'J',
           },
           {
-            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_task_startup_failure_total{' + hostSelector + '})',
+            expr: 'sum by (instance) (kafka_connect_connect_worker_metrics_task_startup_failure_total{' + commonvars.queriesSelector + '})',
             format: 'table',
             instant: true,
             interval: '',
@@ -1681,12 +1687,12 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_network_io_rate{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_network_io_rate{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -1781,11 +1787,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_incoming_byte_rate{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_incoming_byte_rate{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -1880,11 +1886,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_outgoing_byte_rate{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_outgoing_byte_rate{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -1979,12 +1985,12 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_connection_count{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_connection_count{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -2080,12 +2086,12 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_failed_authentication_total{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_failed_authentication_total{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -2181,12 +2187,12 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_successful_authentication_rate{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_successful_authentication_rate{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -2282,11 +2288,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_request_rate{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_request_rate{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -2381,11 +2387,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_response_rate{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_response_rate{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -2480,11 +2486,11 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_metrics_io_ratio{' + hostSelector + ',client_id!=""}',
+            expr: 'kafka_connect_connect_metrics_io_ratio{' + commonvars.queriesSelector + ',client_id!=""}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{instance}}-{{client_id}}',
+            legendFormat: utils.labelsToPanelLegend(config._config.instanceLabels) + '/{{client_id}}',
             refId: 'A',
           },
         ],
@@ -2970,7 +2976,7 @@ local dashboard =
         ],
         targets: [
           {
-            expr: 'label_replace(label_replace(label_replace(kafka_connect_connector_info{' + hostSelector + ',connector=~"$connector",status!=""}, "status", "1", "status", "running"), "status", "2", "status", "paused"), "status", "3", "status", "stopped")',
+            expr: 'label_replace(label_replace(label_replace(kafka_connect_connector_info{' + commonvars.queriesSelector + ',connector=~"$connector",status!=""}, "status", "1", "status", "running"), "status", "2", "status", "paused"), "status", "3", "status", "stopped")',
             format: 'table',
             hide: false,
             instant: true,
@@ -2979,7 +2985,7 @@ local dashboard =
             refId: 'I',
           },
           {
-            expr: 'kafka_connect_connector_info{' + hostSelector + ',connector=~"$connector",connector_type!=""}',
+            expr: 'kafka_connect_connector_info{' + commonvars.queriesSelector + ',connector=~"$connector",connector_type!=""}',
             format: 'table',
             instant: true,
             interval: '',
@@ -2987,7 +2993,7 @@ local dashboard =
             refId: 'A',
           },
           {
-            expr: 'kafka_connect_connector_info{' + hostSelector + ',connector=~"$connector",connector_version!=""}',
+            expr: 'kafka_connect_connector_info{' + commonvars.queriesSelector + ',connector=~"$connector",connector_version!=""}',
             format: 'table',
             hide: false,
             instant: true,
@@ -2996,7 +3002,7 @@ local dashboard =
             refId: 'C',
           },
           {
-            expr: 'kafka_connect_connector_info{' + hostSelector + ',connector=~"$connector",connector_class!=""}',
+            expr: 'kafka_connect_connector_info{' + commonvars.queriesSelector + ',connector=~"$connector",connector_class!=""}',
             format: 'table',
             instant: true,
             interval: '',
@@ -3004,7 +3010,7 @@ local dashboard =
             refId: 'D',
           },
           {
-            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_total_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_total_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'table',
             hide: false,
             instant: true,
@@ -3013,7 +3019,7 @@ local dashboard =
             refId: 'E',
           },
           {
-            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_running_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_running_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'table',
             instant: true,
             interval: '',
@@ -3021,7 +3027,7 @@ local dashboard =
             refId: 'F',
           },
           {
-            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_failed_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_failed_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'table',
             instant: true,
             interval: '',
@@ -3029,7 +3035,7 @@ local dashboard =
             refId: 'G',
           },
           {
-            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_paused_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_paused_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'table',
             instant: true,
             interval: '',
@@ -3037,7 +3043,7 @@ local dashboard =
             refId: 'H',
           },
           {
-            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_destroyed_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_destroyed_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'table',
             instant: true,
             interval: '',
@@ -3045,7 +3051,7 @@ local dashboard =
             refId: 'B',
           },
           {
-            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_unassigned_task_count{' + hostSelector + ',connector=~"$connector"})',
+            expr: 'sum by (connector) (kafka_connect_connect_worker_metrics_connector_unassigned_task_count{' + commonvars.queriesSelector + ',connector=~"$connector"})',
             format: 'table',
             instant: true,
             interval: '',
@@ -3127,13 +3133,13 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connect_worker_rebalance_metrics_rebalance_avg_time_ms{' + hostSelector + '}',
+            expr: 'kafka_connect_connect_worker_rebalance_metrics_rebalance_avg_time_ms{' + commonvars.queriesSelector + '}',
             format: 'time_series',
             hide: false,
             instant: false,
             interval: '',
             intervalFactor: 1,
-            legendFormat: '{{cluster}}-{{instance}}',
+            legendFormat: '{{cluster}}/' + utils.labelsToPanelLegend(config._config.instanceLabels),
             refId: 'A',
           },
         ],
@@ -3249,7 +3255,7 @@ local dashboard =
         },
         targets: [
           {
-            expr: 'kafka_connect_connect_worker_rebalance_metrics_time_since_last_rebalance_ms{' + hostSelector + '} >= 0',
+            expr: 'kafka_connect_connect_worker_rebalance_metrics_time_since_last_rebalance_ms{' + commonvars.queriesSelector + '} >= 0',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -3325,7 +3331,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connector_task_metrics_batch_size_avg{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_connector_task_metrics_batch_size_avg{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -3424,7 +3430,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connector_task_metrics_batch_size_max{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_connector_task_metrics_batch_size_max{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -3523,7 +3529,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connector_task_metrics_offset_commit_success_percentage{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_connector_task_metrics_offset_commit_success_percentage{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -3622,7 +3628,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connector_task_metrics_offset_commit_avg_time_ms{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_connector_task_metrics_offset_commit_avg_time_ms{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -3721,7 +3727,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_connector_task_metrics_running_ratio{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_connector_task_metrics_running_ratio{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             hide: false,
             interval: '',
@@ -3835,7 +3841,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_task_error_metrics_total_record_failures{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_task_error_metrics_total_record_failures{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -3935,7 +3941,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_task_error_metrics_total_record_errors{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_task_error_metrics_total_record_errors{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -4035,7 +4041,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_task_error_metrics_total_records_skipped{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_task_error_metrics_total_records_skipped{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -4135,7 +4141,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_task_error_metrics_total_errors_logged{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_task_error_metrics_total_errors_logged{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -4235,7 +4241,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_task_error_metrics_total_retries{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_task_error_metrics_total_retries{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -4335,7 +4341,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_task_error_metrics_deadletterqueue_produce_requests{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_task_error_metrics_deadletterqueue_produce_requests{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -4436,7 +4442,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_task_error_metrics_deadletterqueue_produce_requests{' + hostSelector + ',connector=~"$connector"}',
+            expr: 'kafka_connect_task_error_metrics_deadletterqueue_produce_requests{' + commonvars.queriesSelector + ',connector=~"$connector"}',
             format: 'time_series',
             interval: '',
             intervalFactor: 1,
@@ -4551,7 +4557,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_source_task_metrics_poll_batch_avg_time_ms{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_source_task_metrics_poll_batch_avg_time_ms{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -4651,7 +4657,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_source_task_metrics_poll_batch_max_time_ms{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_source_task_metrics_poll_batch_max_time_ms{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -4752,7 +4758,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_source_task_metrics_source_record_poll_rate{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_source_task_metrics_source_record_poll_rate{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -4852,7 +4858,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_source_task_metrics_source_record_write_rate{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_source_task_metrics_source_record_write_rate{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -4952,7 +4958,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_source_task_metrics_source_record_active_count_avg{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_source_task_metrics_source_record_active_count_avg{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -5052,7 +5058,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_source_task_metrics_source_record_active_count_max{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_source_task_metrics_source_record_active_count_max{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -5166,7 +5172,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_sink_task_metrics_partition_count{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_sink_task_metrics_partition_count{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             instant: false,
             interval: '',
@@ -5267,7 +5273,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_sink_task_metrics_put_batch_avg_time_ms{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_sink_task_metrics_put_batch_avg_time_ms{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -5368,7 +5374,7 @@ local dashboard =
         steppedLine: false,
         targets: [
           {
-            expr: 'kafka_connect_sink_task_metrics_put_batch_max_time_ms{' + hostSelector + ',connector=~"$connector",task!=""}',
+            expr: 'kafka_connect_sink_task_metrics_put_batch_max_time_ms{' + commonvars.queriesSelector + ',connector=~"$connector",task!=""}',
             format: 'time_series',
             hide: false,
             instant: false,
@@ -5424,134 +5430,6 @@ local dashboard =
     schemaVersion: 27,
     style: 'dark',
     tags: [],
-    templating: {
-      list: [
-        {
-          current: {},
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: false,
-          label: 'Data source',
-          multi: false,
-          name: 'datasource',
-          options: [],
-          query: 'prometheus',
-          refresh: 1,
-          regex: '',
-          skipUrlSync: false,
-          type: 'datasource',
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '$datasource',
-          definition: 'label_values(kafka_connect_app_info{' + filterSelector + '}, job)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Job',
-          multi: true,
-          name: 'job',
-          options: [],
-          query: {
-            query: 'label_values(kafka_connect_app_info{' + filterSelector + '}, job)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_connect_app_info{' + jobSelector + '}, kafka_cluster)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'kafka cluster',
-          multi: true,
-          name: 'kafka_cluster',
-          options: [],
-          query: {
-            query: 'label_values(kafka_connect_app_info{' + jobSelector + '}, kafka_cluster)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_connect_app_info{' + jobSelector + ', ' + kafkaClusterSelector + '},instance)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Instance',
-          multi: true,
-          name: 'instance',
-          options: [],
-          query: {
-            query: 'label_values(kafka_connect_app_info{' + jobSelector + ', ' + kafkaClusterSelector + '},instance)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-        {
-          allValue: '.+',
-          current: {},
-          datasource: '${datasource}',
-          definition: 'label_values(kafka_connect_connector_task_metrics_pause_ratio{' + hostSelector + '},connector)',
-          description: null,
-          'error': null,
-          hide: 0,
-          includeAll: true,
-          label: 'Connector',
-          multi: true,
-          name: 'connector',
-          options: [],
-          query: {
-            query: 'label_values(kafka_connect_connector_task_metrics_pause_ratio{' + hostSelector + '},connector)',
-            refId: 'StandardVariableQuery',
-          },
-          refresh: 2,
-          regex: '',
-          skipUrlSync: false,
-          sort: 0,
-          tagValuesQuery: '',
-          tags: [],
-          tagsQuery: '',
-          type: 'query',
-          useTags: false,
-        },
-      ],
-    },
     time: {
       from: 'now-1h',
       to: 'now',
@@ -5585,7 +5463,42 @@ local dashboard =
     title: 'Kafka Connect Overview',
     uid: 'AEaSQ97mz',
     version: 6,
-  };
+  }
+  +
+  g.dashboard.withVariables(
+    // multiInstance: allow multiple selector for instance labels
+    commonvars.multiInstance
+    +
+    [
+      {
+        allValue: '.+',
+        current: {},
+        datasource: '${datasource}',
+        definition: 'label_values(kafka_connect_connector_task_metrics_pause_ratio{' + commonvars.queriesSelector + '},connector)',
+        description: null,
+        'error': null,
+        hide: 0,
+        includeAll: true,
+        label: 'Connector',
+        multi: true,
+        name: 'connector',
+        options: [],
+        query: {
+          query: 'label_values(kafka_connect_connector_task_metrics_pause_ratio{' + commonvars.queriesSelector + '},connector)',
+          refId: 'StandardVariableQuery',
+        },
+        refresh: 2,
+        regex: '',
+        skipUrlSync: false,
+        sort: 0,
+        tagValuesQuery: '',
+        tags: [],
+        tagsQuery: '',
+        type: 'query',
+        useTags: false,
+      },
+    ]
+  );
 
 {
   grafanaDashboards+::
