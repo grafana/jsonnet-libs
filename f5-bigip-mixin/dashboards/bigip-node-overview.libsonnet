@@ -496,7 +496,7 @@ local trafficOutboundPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Traffic ountbound',
+  title: 'Traffic outbound',
   description: 'The rate of data sent from the pool by the node.',
   fieldConfig: {
     defaults: {
