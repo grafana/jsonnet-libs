@@ -16,9 +16,9 @@ local unavailablePartitionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'aerospike_namespace_unavailable_partitions{' + matcher + ', instance=~"$instance", ns=~"$ns"}',
+      'aerospike_namespace_unavailable_partitions{' + matcher + ', ns=~"$ns"}',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{ns}}',
+      legendFormat='{{aerospike_cluster}} - {{ns}}',
     ),
   ],
   type: 'bargauge',
@@ -72,9 +72,9 @@ local diskUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 - aerospike_namespace_device_free_pct{' + matcher + ', instance=~"$instance", ns=~"$ns"}',
+      '100 - aerospike_namespace_device_free_pct{' + matcher + ', ns=~"$ns"}',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{ns}}',
+      legendFormat='{{aerospike_cluster}} - {{ns}}',
     ),
   ],
   type: 'timeseries',
@@ -154,9 +154,9 @@ local deadPartitionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'aerospike_namespace_dead_partitions{' + matcher + ', instance=~"$instance", ns=~"$ns"}',
+      'aerospike_namespace_dead_partitions{' + matcher + ', ns=~"$ns"}',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{ns}}',
+      legendFormat='{{aerospike_cluster}} - {{ns}}',
     ),
   ],
   type: 'bargauge',
@@ -210,9 +210,9 @@ local memoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 - aerospike_namespace_memory_free_pct{' + matcher + ', instance=~"$instance", ns=~"$ns"}',
+      '100 - aerospike_namespace_memory_free_pct{' + matcher + ', ns=~"$ns"}',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{ns}}',
+      legendFormat='{{aerospike_cluster}} - {{ns}}',
     ),
   ],
   type: 'timeseries',
@@ -292,29 +292,29 @@ local clientReadsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_success{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_read_success{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - success',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - success',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_error{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_read_error{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - error',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - error',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_filtered_out{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_read_filtered_out{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - filtered',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - filtered',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_timeout{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_read_timeout{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{ns}} - timeout',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - timeout',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_read_not_found{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_read_not_found{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - not found',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - not found',
     ),
   ],
   type: 'timeseries',
@@ -396,24 +396,24 @@ local clientWritesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_write_success{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_write_success{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - success',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - success',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_write_error{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_write_error{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - error',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - error',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_write_filtered_out{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_write_filtered_out{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - filtered',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - filtered',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_write_timeout{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_write_timeout{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - timeout',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - timeout',
     ),
   ],
   type: 'timeseries',
@@ -495,24 +495,24 @@ local clientUDFTransactionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_udf_complete{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_udf_complete{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - complete',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - complete',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_udf_error{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_udf_error{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - error',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - error',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_udf_filtered_out{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_udf_filtered_out{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - filtered',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - filtered',
     ),
     prometheus.target(
-      'sum by(aerospike_cluster, job, instance, ns) (rate(aerospike_namespace_client_udf_timeout{' + matcher + ', instance=~"$instance", ns=~"$ns"}[$__rate_interval]))',
+      'sum by(aerospike_cluster, job, ns) (rate(aerospike_namespace_client_udf_timeout{' + matcher + ', ns=~"$ns"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{aerospike_cluster}} - {{instance}} - {{ns}} - timeout',
+      legendFormat='{{aerospike_cluster}} - {{ns}} - timeout',
     ),
   ],
   type: 'timeseries',
@@ -593,9 +593,9 @@ local cacheReadUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'aerospike_namespace_cache_read_pct{' + matcher + ', instance=~"$instance", ns=~"$ns"}',
+      'aerospike_namespace_cache_read_pct{' + matcher + ', ns=~"$ns"}',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{ns}}',
+      legendFormat='{{aerospike_cluster}} - {{ns}}',
     ),
   ],
   type: 'timeseries',
