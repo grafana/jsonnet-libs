@@ -15,13 +15,13 @@
             },
             annotations: {
               summary: 'Kafka has offline partitons.',
-              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} has {{ $value }} offline partitions. After successful leader election, if the leader for partition dies, then the partition moves to the OfflinePartition state. Offline partitions are not available for reading and writing. Restart the brokers, if needed, and check the logs for errors.',
+              description: 'Kafka cluster {{ $labels.kafka_cluster }} has {{ $value }} offline partitions. After successful leader election, if the leader for partition dies, then the partition moves to the OfflinePartition state. Offline partitions are not available for reading and writing. Restart the brokers, if needed, and check the logs for errors.',
             },
           },
           {
             alert: 'KafkaUnderReplicatedPartitionCount',
             expr: |||
-              sum (kafka_server_replicamanager_underreplicatedpartitions{%(kafkaFilteringSelector)s}) > 0
+              sum without() (kafka_server_replicamanager_underreplicatedpartitions{%(kafkaFilteringSelector)s}) > 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -59,7 +59,7 @@
           {
             alert: 'KafkaISRExpandRate',
             expr: |||
-              sum (rate(kafka_server_replicamanager_isrexpandspersec{%(kafkaFilteringSelector)s}[5m])) != 0
+              sum without() (rate(kafka_server_replicamanager_isrexpandspersec{%(kafkaFilteringSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -73,7 +73,7 @@
           {
             alert: 'KafkaISRShrinkRate',
             expr: |||
-              sum (rate(kafka_server_replicamanager_isrshrinkspersec{%(kafkaFilteringSelector)s}[5m])) != 0
+              sum without() (rate(kafka_server_replicamanager_isrshrinkspersec{%(kafkaFilteringSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -99,7 +99,7 @@
           {
             alert: 'KafkaZookeeperSyncConnect',
             expr: |||
-              avg (kafka_server_sessionexpirelistener_zooKeepersyncconnectspersec{%(kafkaFilteringSelector)s}) < 0
+              avg without() (kafka_server_sessionexpirelistener_zookeepersyncconnectspersec{%(kafkaFilteringSelector)s}) < 0
             ||| % $._config,
             'for': '5m',
             labels: {
