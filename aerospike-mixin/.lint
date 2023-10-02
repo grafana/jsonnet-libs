@@ -11,6 +11,7 @@ exclusions:
     reason: "The dashboard is a 'cluster' dashboard where the instance refers to nodes, this dashboard focuses only on the cluster view."
     entries:
       - dashboard: "Aerospike overview"
+      - dashboard: "Aerospike namespace overview"
   target-promql-rule:
     reason: "Linter does not support selector variable value as a scalar in top-k PromQL queries."
   template-label-promql-rule:
