@@ -735,20 +735,9 @@ local getMatcher(cfg) = '%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_c
             sort=0
           ),
           template.new(
-            'instance',
-            promDatasource,
-            'label_values(aerospike_namespace_ns_cluster_size{%(aerospikeSelector)s, aerospike_cluster=~"$aerospike_cluster"}, instance)' % $._config,
-            label='Instance',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=0
-          ),
-          template.new(
             'ns',
             promDatasource,
-            'label_values(aerospike_namespace_xmem_id{%(aerospikeSelector)s, instance=~"$instance"}, ns)' % $._config,
+            'label_values(aerospike_namespace_xmem_id{%(aerospikeSelector)s}, ns)' % $._config,
             label='Namespace',
             refresh=2,
             includeAll=true,
