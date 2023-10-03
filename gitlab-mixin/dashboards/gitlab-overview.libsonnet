@@ -5,7 +5,8 @@ local template = grafana.template;
 local prometheus = grafana.prometheus;
 
 local dashboardUid = 'gitlab-overview';
-local matcher = 'job=~"$job", instance=~"$instance"';
+local getMatcher(cfg) = '%(gitlabSelector)s' % cfg;
+local logExpr(cfg) = '%(logExpr)s' %cfg;
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
@@ -18,19 +19,19 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local rowOverviewPanel = {
+local rowOverviewPanel(matcher) = {
   collapsed: false,
   title: 'Overview',
   type: 'row',
 };
 
-local rowPipelineActivityPanel = {
+local rowPipelineActivityPanel(matcher) = {
   collapsed: false,
   title: 'Pipeline Activity',
   type: 'row',
 };
 
-local trafficByResponseCodePanel = {
+local trafficByResponseCodePanel(matcher) = {
   datasource: promDatasource,
   description: 'Rate of HTTP traffic over time, grouped by status.',
   fieldConfig: {
@@ -97,7 +98,7 @@ local trafficByResponseCodePanel = {
   type: 'timeseries',
 };
 
-local userSessionsPanel = {
+local userSessionsPanel(matcher) = {
   datasource: promDatasource,
   description: 'The rate of user logins.',
   fieldConfig: {
@@ -163,7 +164,7 @@ local userSessionsPanel = {
   type: 'timeseries',
 };
 
-local avgRequestLatencyPanel = {
+local avgRequestLatencyPanel(matcher) = {
   datasource: promDatasource,
   description: 'Average latency of inbound HTTP requests.',
   fieldConfig: {
@@ -229,7 +230,7 @@ local avgRequestLatencyPanel = {
   type: 'timeseries',
 };
 
-local top5ReqTypesPanel = {
+local top5ReqTypesPanel(matcher) = {
   datasource: promDatasource,
   description: 'Top 5 types of requests to the server.',
   fieldConfig: {
@@ -349,7 +350,7 @@ local top5ReqTypesPanel = {
   type: 'table',
 };
 
-local errorLogsPanel(dashboardRailsExceptionFilename) = {
+local errorLogsPanel(cfg) = {
   datasource: lokiDatasource,
   description: 'The GitLab rails error logs.',
   options: {
@@ -366,7 +367,9 @@ local errorLogsPanel(dashboardRailsExceptionFilename) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="%s", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % [dashboardRailsExceptionFilename, matcher],
+      // expr: '{filename="%s", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % [cfg.dashboardRailsExceptionFilename, "job=~\"$job\", instance=~\"$instance\""],
+      // expr: '{filename="%s", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % [cfg.dashboardRailsExceptionFilename, getMatcher(cfg.matcher)],
+      expr: logExpr(cfg.logExpression),
       legendFormat: '',
       queryType: 'range',
       refId: 'A',
@@ -377,7 +380,7 @@ local errorLogsPanel(dashboardRailsExceptionFilename) = {
   type: 'logs',
 };
 
-local jobActivationsPanel = {
+local jobActivationsPanel(matcher) = {
   datasource: promDatasource,
   description: 'The number of jobs activated per second.',
   fieldConfig: {
@@ -443,7 +446,7 @@ local jobActivationsPanel = {
   type: 'timeseries',
 };
 
-local pipelinesCreatedPanel = {
+local pipelinesCreatedPanel(matcher) = {
   datasource: promDatasource,
   description: 'Rate of pipeline instances created.',
   fieldConfig: {
@@ -509,7 +512,7 @@ local pipelinesCreatedPanel = {
   type: 'timeseries',
 };
 
-local pipelineBuildsCreatedPanel = {
+local pipelineBuildsCreatedPanel(matcher) = {
   datasource: promDatasource,
   description: 'The number of builds created within a pipeline per second, grouped by source.',
   fieldConfig: {
@@ -575,7 +578,7 @@ local pipelineBuildsCreatedPanel = {
   type: 'timeseries',
 };
 
-local buildTraceOperationsPanel = {
+local buildTraceOperationsPanel(matcher) = {
   datasource: promDatasource,
   description: 'The rate of build trace operations performed, grouped by source.',
   fieldConfig: {
@@ -694,27 +697,27 @@ local buildTraceOperationsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            rowOverviewPanel { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
+            rowOverviewPanel(getMatcher($._config)) { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
             // Row 1
-            trafficByResponseCodePanel { gridPos: { h: 9, w: 24, x: 0, y: 1 } },
+            trafficByResponseCodePanel(getMatcher($._config)) { gridPos: { h: 9, w: 24, x: 0, y: 1 } },
             // Row 2
-            userSessionsPanel { gridPos: { h: 9, w: 8, x: 0, y: 10 } },
-            avgRequestLatencyPanel { gridPos: { h: 9, w: 8, x: 8, y: 10 } },
-            top5ReqTypesPanel { gridPos: { h: 9, w: 8, x: 16, y: 10 } },
+            userSessionsPanel(getMatcher($._config)) { gridPos: { h: 9, w: 8, x: 0, y: 10 } },
+            avgRequestLatencyPanel(getMatcher($._config)) { gridPos: { h: 9, w: 8, x: 8, y: 10 } },
+            top5ReqTypesPanel(getMatcher($._config)) { gridPos: { h: 9, w: 8, x: 16, y: 10 } },
           ],
           if $._config.enableLokiLogs then [
             // Optional Row 3
-            errorLogsPanel($._config.dashboardRailsExceptionFilename) { gridPos: { h: 8, w: 24, x: 0, y: 19 } },
+            errorLogsPanel($._config) { gridPos: { h: 8, w: 24, x: 0, y: 19 } },
           ] else [],
           [
-            rowPipelineActivityPanel { gridPos: { h: 1, w: 24, x: 0, y: 27 } },
+            rowPipelineActivityPanel(getMatcher($._config)) { gridPos: { h: 1, w: 24, x: 0, y: 27 } },
             // Row 1
-            jobActivationsPanel { gridPos: { h: 9, w: 24, x: 0, y: 28 } },
+            jobActivationsPanel(getMatcher($._config)) { gridPos: { h: 9, w: 24, x: 0, y: 28 } },
             // Row 2
-            pipelinesCreatedPanel { gridPos: { h: 8, w: 12, x: 0, y: 37 } },
-            pipelineBuildsCreatedPanel { gridPos: { h: 8, w: 12, x: 12, y: 37 } },
+            pipelinesCreatedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 37 } },
+            pipelineBuildsCreatedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 37 } },
             // Row 3
-            buildTraceOperationsPanel { gridPos: { h: 8, w: 24, x: 0, y: 45 } },
+            buildTraceOperationsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 45 } },
           ],
         ])
       ),

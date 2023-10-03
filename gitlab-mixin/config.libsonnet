@@ -1,5 +1,9 @@
 {
   _config+:: {
+    enableMultiCluster: false,
+    gitlabSelector: if self.enableMultiCluster then 'job=~"$job", instance=~"$instance", cluster=~"$cluster"' else 'job=~"$job", instance=~"$instance", ',
+    logExpression: if self.enableMultiCluster then 'job=~"$job", instance=~"$instance", cluster=~"$cluster"' else '{filename="'+ self.dashboardRailsExceptionFilename +'", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"',
+
     dashboardTags: ['gitlab-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
