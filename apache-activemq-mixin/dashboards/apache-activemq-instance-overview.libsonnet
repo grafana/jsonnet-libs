@@ -839,7 +839,7 @@ local garbageCollectionDurationPanel(matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Garbage collection duration,
+  title: 'Garbage collection duration',
   description: 'The time spent performing recent garbage collections',
   fieldConfig: {
     defaults: {
@@ -991,7 +991,7 @@ local activemqAlertsPanel(matcher) = {
   options: {
     alertName: '',
     dashboardAlerts: false,
-    alertInstanceLabelFilter: '{' + matcher + ', instance=~"${instance:regex}", destination!~"ActiveMQ.Advisory.*"}',
+    alertInstanceLabelFilter: '{' + matcher + ', instance=~"${instance:regex}"}',
     datasource: promDatasource,
     groupBy: [],
     groupMode: 'default',

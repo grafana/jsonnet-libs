@@ -7,7 +7,7 @@
           {
             alert: 'ApacheActiveMQHighTopicMemoryUsage',
             expr: |||
-              sum (activemq_topic_memory_percent_usage{destination!~"ActiveMQ.Advisory.*"}) > %(alertsHighTopicMemoryUsage)s
+              sum without (destination) (activemq_topic_memory_percent_usage{destination!~"ActiveMQ.Advisory.*"}) > %(alertsHighTopicMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -25,7 +25,7 @@
           {
             alert: 'ApacheActiveMQHighQueueMemoryUsage',
             expr: |||
-              sum (activemq_queue_memory_percent_usage) > %(alertsHighQueueMemoryUsage)s
+              sum without (destination) (activemq_queue_memory_percent_usage) > %(alertsHighQueueMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
