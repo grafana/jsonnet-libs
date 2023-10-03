@@ -19,7 +19,7 @@
       },
       "version": "main"
     },
-		{
+    {
       "source": {
         "git": {
           "remote": "https://github.com/grafana/jsonnet-libs.git",

@@ -18,6 +18,6 @@
     alertsHighTemporaryMemoryUsage: 70,  // %
 
     enableLokiLogs: true,
-    filterSelector: 'job=~"integrations/activemq"',
+    filterSelector: 'job=~"integrations/apache-activemq"',
   },
 }
