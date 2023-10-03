@@ -683,6 +683,18 @@ local buildTraceOperationsPanel(matcher) = {
             label='Instance',
             refresh='time'
           ),
+          template.new(
+            'cluster',
+            promDatasource,
+            'label_values(gitlab_rails_boot_time_seconds{job=~"$job"}, cluster)',
+            label='Cluster',
+            refresh=1,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
         ],
         if $._config.enableLokiLogs then [
           template.datasource(
