@@ -70,7 +70,7 @@ local brokerCountPanel(matcher) = {
     ),
   ],
   type: 'stat',
-  title: 'Broker',
+  title: 'Brokers',
   description: 'Number of broker instances across clusters.',
   fieldConfig: {
     defaults: {
@@ -379,6 +379,8 @@ local averageTemporaryMemoryUsagePanel(matcher) = {
         mode: 'thresholds',
       },
       mappings: [],
+      max: 1,
+      min: 0,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -437,6 +439,8 @@ local averageStoreMemoryUsagePanel(matcher) = {
         mode: 'thresholds',
       },
       mappings: [],
+      max: 1,
+      min: 0,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -494,6 +498,8 @@ local averageBrokerMemoryUsagePanel(matcher) = {
         mode: 'thresholds',
       },
       mappings: [],
+      max: 1,
+      min: 0,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -554,7 +560,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Data source',
             refresh='load'
           ),
           template.new(
@@ -565,7 +571,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(
@@ -576,7 +582,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
@@ -588,7 +594,7 @@ local getMatcher(cfg) = '%(activemqSelector)s, activemq_cluster=~"$activemq_clus
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
         ]

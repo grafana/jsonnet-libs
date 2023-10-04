@@ -20,28 +20,27 @@ and the following alerts:
 ## Apache ActiveMQ cluster overview
 
 The Apache ActiveMQ cluster overview provides cluster level statistics showing cluster count, broker count, producer counts, consumer counts, overall memory level usage, and a general look into enqueue/dequeue counts.
-![Screenshot of the Apache ActiveMQ cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_cluster_overview.png)
+![Screenshot of the Apache ActiveMQ cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_cluster_overview.png)
 
 ## Apache ActiveMQ instance overview
 
 The Apache ActiveMQ instance overview provides instance level statistics showing memory levels, producer counts, consumer counts, queue sizes, enqueue/dequeue counts, average enqueue times, expired message counts, jvm garabage collection info, and alerts.
-![First screenshot of the Apache ActiveMQ instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_instance_overview_1.png)
-![Second screenshot of the Apache ActiveMQ instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_instance_overview_2.png)
+![First screenshot of the Apache ActiveMQ instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_instance_overview_1.png)
+![Second screenshot of the Apache ActiveMQ instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_instance_overview_2.png)
 
 ## Apache ActiveMQ queue overview
 
 The Apache ActiveMQ queue overview provides queue level statistics showing number of queues, message size, producer counts, consumer counts, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
-![Screenshot of the Apache ActiveMQ queue overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_queue_overview.png)
+![Screenshot of the Apache ActiveMQ queue overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_queue_overview.png)
 
 ## Apache ActiveMQ queue overview
 
 The Apache ActiveMQ topic overview provides queue level statistics showing number of topics, message size, producer counts, consumer counts, enqueue/dequeue rates, average enqueue times, expired message rates, and average size of messages.
-![Screenshot of the Apache ActiveMQ topic overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_topic_overview.png)
+![Screenshot of the Apache ActiveMQ topic overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_topic_overview.png)
 
 ## Apache ActiveMQ logs overview
 
-The Apache ActiveMQ logs overview provides logs of the ActiveMQ environment that is able to be parsed by severity.
-#![Screenshot of the Apache ActiveMQ logs overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/aerospike/screenshots/apache_activemq_logs_overview.png)
+The Apache ActiveMQ logs overview provides logs of the ActiveMQ environment that is able to be parsed by severity. #![Screenshot of the Apache ActiveMQ logs overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-activemq/screenshots/apache_activemq_logs_overview.png)
 
 ## Alerts Overview
 
@@ -67,11 +66,13 @@ Default thresholds can be configured in `config.libsonnet`.
     alertsHighTemporaryMemoryUsage: 70,  // %
 
     enableLokiLogs: false,
-    filterSelector: 'job=~"integrations/activemq"',
+    filterSelector: 'job=~"integrations/apache-activemq"',
   },
 }
 ```
+
 ## Logs configuration
+
 In order to get logs parsing multiple lines and levels correctly you will need to add the following lines to your grafana-agent.yaml file in the logs section
 
 ```yaml
@@ -84,6 +85,7 @@ pipeline_stages:
         - labels:
             level:
 ```
+
 ## Install tools
 
 ```bash
