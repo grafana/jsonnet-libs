@@ -745,7 +745,7 @@ local topicSummaryPanel(matcher) = {
       {
         matcher: {
           id: 'byName',
-          options: 'ActiveMQ Cluster',
+          options: 'ActiveMQ cluster',
         },
         properties: [
           {
@@ -816,20 +816,20 @@ local topicSummaryPanel(matcher) = {
       },
     },
     {
-id: "filterFieldsByName",
-          options: {
-            include: {
-              names: [
-                "ActiveMQ cluster",
-                "Instance",
-                "Enqueue rate",
-                "Dequeue rate",
-                "Average enqueue time",
-                "Average message size",
-                "Destination"
-              ]
-            }
-          }
+      id: 'filterFieldsByName',
+      options: {
+        include: {
+          names: [
+            'ActiveMQ cluster',
+            'Instance',
+            'Enqueue rate',
+            'Dequeue rate',
+            'Average enqueue time',
+            'Average message size',
+            'Destination',
+          ],
+        },
+      },
     },
   ],
 };
