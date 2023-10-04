@@ -16,9 +16,9 @@ local numberOfQueuesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by(instance, activemq_cluster, job) (activemq_queue_queue_size{' + matcher + ', instance=~"$instance"})',
+      'count (activemq_queue_queue_size{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -64,9 +64,9 @@ local queueSizePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (instance, activemq_cluster, job) (activemq_queue_queue_size{' + matcher + ', instance=~"$instance"})',
+      'sum (activemq_queue_queue_size{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -111,9 +111,9 @@ local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_queue_producer_count{' + matcher + ', instance=~"$instance"})',
+      'sum (activemq_queue_producer_count{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -159,9 +159,9 @@ local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance,activemq_cluster, job) (activemq_queue_consumer_count{' + matcher + ', instance=~"$instance"})',
+      'sum (activemq_queue_consumer_count{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -695,7 +695,7 @@ local queueSummaryPanel(matcher) = {
       {
         matcher: {
           id: 'byName',
-          options: 'ActiveMQ Cluster',
+          options: 'ActiveMQ cluster',
         },
         properties: [
           {
@@ -753,30 +753,6 @@ local queueSummaryPanel(matcher) = {
     {
       id: 'organize',
       options: {
-        excludeByName: {
-          'Time 1': true,
-          'Time 2': true,
-          'Time 3': true,
-          'Time 4': true,
-          '__name__ 1': true,
-          '__name__ 2': true,
-          'activemq_cluster 1': false,
-          'activemq_cluster 2': true,
-          'activemq_cluster 3': true,
-          'activemq_cluster 4': true,
-          'cluster 1': true,
-          'cluster 2': true,
-          'cluster 3': true,
-          'cluster 4': true,
-          'instance 1': false,
-          'instance 2': true,
-          'instance 3': true,
-          'instance 4': true,
-          'job 1': true,
-          'job 2': true,
-          'job 3': true,
-          'job 4': true,
-        },
         indexByName: {},
         renameByName: {
           'Time 1': '',
@@ -784,9 +760,25 @@ local queueSummaryPanel(matcher) = {
           'Value #B': 'Dequeue rate',
           'Value #C': 'Average enqueue time',
           'Value #D': 'Average message size',
-          'activemq_cluster 1': 'ActiveMQ Cluster',
+          'activemq_cluster 1': 'ActiveMQ cluster',
           destination: 'Destination',
           'instance 1': 'Instance',
+        },
+      },
+    },
+    {
+      id: 'filterFieldsByName',
+      options: {
+        include: {
+          names: [
+            'ActiveMQ cluster',
+            'Instance',
+            'Enqueue rate',
+            'Dequeue rate',
+            'Average enqueue time',
+            'Average message size',
+            'Destination',
+          ],
         },
       },
     },

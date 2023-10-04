@@ -16,7 +16,7 @@ local averageBrokerMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, activemq_cluster) (activemq_memory_usage_ratio{' + matcher + ', instance=~"$instance"})',
+      'avg (activemq_memory_usage_ratio{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{activemq_cluster}} - {{instance}}',
     ),
@@ -72,9 +72,9 @@ local averageStoreMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, activemq_cluster, job) (activemq_store_usage_ratio{' + matcher + ', instance=~"$instance"})',
+      'avg (activemq_store_usage_ratio{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'gauge',
@@ -128,9 +128,9 @@ local averageTemporaryMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, activemq_cluster, job) (activemq_temp_usage_ratio{' + matcher + ', instance=~"$instance"})',
+      'avg (activemq_temp_usage_ratio{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'gauge',
@@ -184,9 +184,9 @@ local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_queue_producer_count{' + matcher + ', instance=~"$instance"}) + sum by(instance, activemq_cluster, job) (activemq_topic_producer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
+      'sum (activemq_queue_producer_count{' + matcher + ', instance=~"$instance"}) + sum (activemq_topic_producer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -232,9 +232,9 @@ local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, activemq_cluster, job) (activemq_queue_consumer_count{' + matcher + ', instance=~"$instance"}) + sum by(instance, activemq_cluster, job) (activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
+      'sum (activemq_queue_consumer_count{' + matcher + ', instance=~"$instance"}) + sum (activemq_topic_consumer_count{' + matcher + ', instance=~"$instance", destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -280,9 +280,9 @@ local unacknowledgedMessagesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (instance, activemq_cluster, job) (increase(activemq_message_total{' + matcher + ', instance=~"$instance"}[$__interval:]))',
+      'sum (increase(activemq_message_total{' + matcher + ', instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}} - {{instance}}',
+      legendFormat='__auto',
       interval='1m',
     ),
   ],
