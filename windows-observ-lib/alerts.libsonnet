@@ -89,6 +89,38 @@
               ||| % this.config,
             },
           },
+          {
+            alert: 'NTPClientDelay',
+            expr: |||
+              windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s} > 1
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'NTP client delay.',
+              description: |||
+                'RTT for NTP client for instance {{ $labels.instance }} is greater than 1 second. Delay = {{ $value }}sec. LABELS: {{ $labels }}.'
+              ||| % this.config,
+            },
+          },
+          {
+            alert: 'NTPClientNotRunning',
+            expr: |||
+              absent(windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s}) or windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s} == 0
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'NTP client is not running.',
+              description: |||
+                'RTT for NTP client for instance {{ $labels.instance }} is not running. LABELS: {{ $labels }}.'
+              ||| % this.config,
+            },
+          },
         ],
       },
     ],
