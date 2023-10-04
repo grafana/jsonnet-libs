@@ -367,8 +367,6 @@ local errorLogsPanel(cfg) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      // expr: '{filename="%s", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % [cfg.dashboardRailsExceptionFilename, "job=~\"$job\", instance=~\"$instance\""],
-      // expr: '{filename="%s", %s} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' % [cfg.dashboardRailsExceptionFilename, getMatcher(cfg.matcher)],
       expr: logExpr(cfg.logExpression),
       legendFormat: '',
       queryType: 'range',
