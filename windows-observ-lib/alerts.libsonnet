@@ -101,7 +101,7 @@
             annotations: {
               summary: 'NTP client delay.',
               description: |||
-                'RTT for NTP client for instance {{ $labels.instance }} is greater than 1 second. Delay = {{ $value }}sec. LABELS: {{ $labels }}.'
+                'Round-trip time of NTP client on instance {{ $labels.instance }} is greater than 1 second. Delay is {{ $value }} sec.'
               ||| % this.config,
             },
           },
@@ -115,9 +115,9 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'NTP client delay.',
+              summary: 'NTP time offset is too large'
               description: |||
-                'NTP time offset for instance {{ $labels.instance }} is greater than 1 second. Delay = {{ $value }}sec. LABELS: {{ $labels }}.'
+                'NTP time offset for instance {{ $labels.instance }} is greater than 1 second. Offset is {{ $value }} sec.'
               ||| % this.config,
             },
           },
@@ -133,7 +133,7 @@
             annotations: {
               summary: 'NTP client is not running.',
               description: |||
-                'RTT for NTP client for instance {{ $labels.instance }} is not running. LABELS: {{ $labels }}.'
+                'NTP client on instance {{ $labels.instance }} is not running.'
               ||| % this.config,
             },
           },
