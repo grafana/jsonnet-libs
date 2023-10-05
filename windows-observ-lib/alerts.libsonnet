@@ -115,25 +115,9 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'NTP time offset is too large'
+              summary: 'NTP time offset is too large',
               description: |||
                 'NTP time offset for instance {{ $labels.instance }} is greater than 1 second. Offset is {{ $value }} sec.'
-              ||| % this.config,
-            },
-          },
-          {
-            alert: 'WindowsNTPClientNotRunning',
-            expr: |||
-              absent(windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s}) or windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s} == 0
-            ||| % this.config,
-            'for': '5m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              summary: 'NTP client is not running.',
-              description: |||
-                'NTP client on instance {{ $labels.instance }} is not running.'
               ||| % this.config,
             },
           },
