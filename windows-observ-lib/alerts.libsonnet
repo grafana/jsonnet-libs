@@ -90,7 +90,7 @@
             },
           },
           {
-            alert: 'NTPClientDelay',
+            alert: 'WindowsNTPClientDelay',
             expr: |||
               windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s} > 1
             ||| % this.config,
@@ -106,7 +106,23 @@
             },
           },
           {
-            alert: 'NTPClientNotRunning',
+            alert: 'WindowsNTPTimeOffset',
+            expr: |||
+              windows_time_computed_time_offset_seconds{%(filteringSelector)s} > 1
+            ||| % this.config,
+            'for': '5m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'NTP client delay.',
+              description: |||
+                'NTP time offset for instance {{ $labels.instance }} is greater than 1 second. Delay = {{ $value }}sec. LABELS: {{ $labels }}.'
+              ||| % this.config,
+            },
+          },
+          {
+            alert: 'WindowsNTPClientNotRunning',
             expr: |||
               absent(windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s}) or windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s} == 0
             ||| % this.config,
