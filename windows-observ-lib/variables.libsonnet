@@ -47,9 +47,11 @@ local utils = commonlib.utils;
            + var.datasource.generalOptions.withLabel('Loki data source')
            + var.datasource.generalOptions.showOnDashboard.withNothing(),
        },
+       // Use on dashboards where multiple entities can be selected, like fleet dashboards
        multiInstance:
          [root.datasources.prometheus]
          + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
+       // Use on dashboards where only single entity can be selected
        singleInstance:
          [root.datasources.prometheus]
          + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
