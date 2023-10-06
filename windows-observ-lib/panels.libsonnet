@@ -230,8 +230,6 @@ local utils = commonlib.utils;
           CPU usage by different modes.
         |||
       ),
-      // TODO add why it is important, consider alert
-      // https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-2000-server/cc940375(v=technet.10)
       cpuQueue: commonlib.panels.all.timeSeries.base.new(
         'CPU average queue size',
         targets=[t.cpuQueue],

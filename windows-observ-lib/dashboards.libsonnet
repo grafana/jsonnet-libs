@@ -65,6 +65,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                   )
                 )
                 + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
+
       // add TODO advanced memory dashboard (must enable memory collector)
       // memory:
 

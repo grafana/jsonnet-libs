@@ -1,7 +1,6 @@
 {
   new(this): {
-    // TODO: add scheduled tasks failed alerts,
-    // time alerts, ntp delay alerts, disk running out of space predict alerts
+
     groups: [
       {
         name: 'windows-alerts-' + this.config.uid,
