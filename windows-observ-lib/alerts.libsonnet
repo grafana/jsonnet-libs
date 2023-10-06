@@ -115,7 +115,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'NTP time offset is too large',
+              summary: 'NTP time offset is too large.',
               description: |||
                 'NTP time offset for instance {{ $labels.instance }} is greater than 1 second. Offset is {{ $value }} sec.'
               ||| % this.config,
