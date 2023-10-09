@@ -1061,6 +1061,7 @@ local tablespaceSizePanel = {
         uid=dashboardUid,
       )
       .addTemplates(
+        std.flattenArrays([
         [
           {
             hide: 0,
@@ -1071,6 +1072,9 @@ local tablespaceSizePanel = {
             regex: '',
             type: 'datasource',
           },
+        ],
+        if $._config.enableLokiLogs then
+        [        
           {
             hide: 0,
             label: 'Loki datasource',
@@ -1080,6 +1084,8 @@ local tablespaceSizePanel = {
             regex: '',
             type: 'datasource',
           },
+        ] else [],
+        [
           template.new(
             'job',
             promDatasource,
@@ -1114,8 +1120,8 @@ local tablespaceSizePanel = {
             allValues='.+',
             sort=1
           ),
-        ],
-      )
+        ]],      
+      ))
       .addPanels(
         std.flattenArrays([
           [
