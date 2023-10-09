@@ -8,5 +8,6 @@
     //alert thresholds
     alertsCriticalCpuUsage5m: 80,  //percent
     alertsCriticalMemUsage5m: 100,  //kilo bytes per active series
+    enableLokiLogs: true,
   },
 }

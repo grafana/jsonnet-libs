@@ -208,7 +208,9 @@ local log_full_panel =
 
 // Manifested stuff starts here
 {
-  grafanaDashboards+:: {
+  grafanaDashboards+:: 
+  if $._config.enableLokiLogs then
+  {    
     'grafana-agent-logs.json':
       grafana.dashboard.new(
         'Grafana Agent Logs',
@@ -282,5 +284,6 @@ local log_full_panel =
         .addPanel(log_full_panel, gridPos={ x: 0, y: 36, w: 24, h: 8 }),
         gridPos={ x: 0, y: 28, w: 0, h: 0 }
       ),
-  },
+  }
+  else {},
 }
