@@ -1,7 +1,15 @@
+local config = (import 'config.libsonnet');
+
 {
-  grafanaDashboards: {
+  grafanaDashboards: 
+  if config._config.enableLokiLogs then
+  {
     'asterisk-overview.json': (import 'dashboards/asterisk-overview.json'),
-    'asterisk-logs.json': (import 'dashboards/asterisk-logs.json'),
+    'asterisk-logs.json': (import 'dashboards/asterisk-logs.json')  
+  }
+  else
+  {
+    'asterisk-overview.json': (import 'dashboards/asterisk-overview.json'),
   },
 
   // Helper function to ensure that we don't override other rules, by forcing
