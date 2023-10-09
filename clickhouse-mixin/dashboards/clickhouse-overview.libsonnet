@@ -845,6 +845,7 @@ local errorLogsPanel =
         keepTime=true,
         tags=($._config.dashboardTags),
       )).addTemplates(
+        std.flattenArrays([
         [
           {
             hide: 0,
@@ -855,6 +856,8 @@ local errorLogsPanel =
             regex: '',
             type: 'datasource',
           },
+        ],
+        if $._config.enableLokiLogs then [          
           {
             hide: 0,
             label: 'Loki datasource',
@@ -864,6 +867,8 @@ local errorLogsPanel =
             regex: '',
             type: 'datasource',
           },
+        ] else [],
+        [
           template.new(
             name='job',
             label='job',
@@ -886,7 +891,7 @@ local errorLogsPanel =
             includeAll=false,
             sort=1
           ),
-        ]
+        ]]),        
       )
       .addPanels(
         std.flattenArrays([
