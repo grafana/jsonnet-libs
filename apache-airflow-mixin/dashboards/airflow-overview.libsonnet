@@ -1119,6 +1119,9 @@ local schedulerLogsPanel = {
               allValues='.+',
               sort=0
             ),
+
+          ],
+          if $._config.enableLokiLogs then [
             template.new(
               'dag_file',
               lokiDatasource,
@@ -1130,7 +1133,7 @@ local schedulerLogsPanel = {
               allValues='.+',
               sort=0
             ),
-          ],
+          ] else [],
         ])
       )
       .addPanels(
