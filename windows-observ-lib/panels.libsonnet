@@ -164,7 +164,7 @@ local utils = commonlib.utils;
         ),
       uptime: commonlib.panels.system.stat.uptime.new(targets=[t.uptime]),
       systemContextSwitchesAndInterrupts:
-        commonlib.panels.all.timeSeries.base.new(
+        commonlib.panels.generic.timeSeries.base.new(
           'Context switches/Interrupts',
           targets=[
             t.systemContextSwitches,
@@ -177,7 +177,7 @@ local utils = commonlib.utils;
           |||
         ),
       systemExceptions:
-        commonlib.panels.all.timeSeries.base.new(
+        commonlib.panels.generic.timeSeries.base.new(
           'System calls and exceptions',
           targets=[
             t.windowsSystemExceptions,
@@ -185,7 +185,7 @@ local utils = commonlib.utils;
           ],
         ),
       systemThreads:
-        commonlib.panels.all.timeSeries.base.new(
+        commonlib.panels.generic.timeSeries.base.new(
           'System threads',
           targets=[
             t.windowsSystemThreads,
@@ -199,7 +199,7 @@ local utils = commonlib.utils;
         )
         + g.panel.timeSeries.standardOptions.withNoValue('No data. Please check that "time" collector is enabled.'),
       timeNtpDelay:
-        commonlib.panels.all.timeSeries.base.new(
+        commonlib.panels.generic.timeSeries.base.new(
           'NTP delay',
           targets=[
             t.timeNtpDelay,
@@ -216,7 +216,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withNoValue('No data. Please check that "time" collector is enabled.'),
       cpuCount: commonlib.panels.cpu.stat.count.new(targets=[t.cpuCount]),
       cpuUsageTs: commonlib.panels.cpu.timeSeries.utilization.new(targets=[t.cpuUsage]),
-      cpuUsageTopk: commonlib.panels.all.timeSeries.topkPercentage.new(
+      cpuUsageTopk: commonlib.panels.generic.timeSeries.topkPercentage.new(
         title='CPU usage',
         target=t.cpuUsage,
         topk=25,
@@ -230,7 +230,7 @@ local utils = commonlib.utils;
           CPU usage by different modes.
         |||
       ),
-      cpuQueue: commonlib.panels.all.timeSeries.base.new(
+      cpuQueue: commonlib.panels.generic.timeSeries.base.new(
         'CPU average queue size',
         targets=[t.cpuQueue],
         description=|||
@@ -254,7 +254,7 @@ local utils = commonlib.utils;
           |||
         ),
       memoryUsageStatPercent: commonlib.panels.memory.stat.usage.new(targets=[t.memoryUsagePercent]),
-      memotyUsageTopKPercent: commonlib.panels.all.timeSeries.topkPercentage.new(
+      memotyUsageTopKPercent: commonlib.panels.generic.timeSeries.topkPercentage.new(
         title='Memory usage',
         target=t.memoryUsagePercent,
         topk=25,
@@ -283,7 +283,7 @@ local utils = commonlib.utils;
       diskUsagePercent: commonlib.panels.disk.timeSeries.usagePercent.new(
         targets=[t.diskUsagePercent]
       ),
-      diskUsagePercentTopK: commonlib.panels.all.timeSeries.topkPercentage.new(
+      diskUsagePercentTopK: commonlib.panels.generic.timeSeries.topkPercentage.new(
         title='Disk space usage',
         target=t.diskUsagePercent,
         topk=25,
@@ -294,7 +294,7 @@ local utils = commonlib.utils;
         targets=[t.diskIOreadBytesPerSec, t.diskIOwriteBytesPerSec, t.diskIOutilization]
       ),
       diskIOutilPercentTopK:
-        commonlib.panels.all.timeSeries.topkPercentage.new(
+        commonlib.panels.generic.timeSeries.topkPercentage.new(
           title='Disk IO',
           target=t.diskIOutilization,
           topk=25,
@@ -325,24 +325,24 @@ local utils = commonlib.utils;
         ]
       )
       ,
-      osInfo: commonlib.panels.all.stat.info.new(
+      osInfo: commonlib.panels.generic.stat.info.new(
         'OS family',
         targets=[t.osInfo],
         description='OS family includes various versions and editions of the Windows operating system.'
       )
               { options+: { reduceOptions+: { fields: '/^product$/' } } },
       osVersion:
-        commonlib.panels.all.stat.info.new('OS version',
-                                           targets=[t.osInfo],
-                                           description='Version of Windows operating system.')
+        commonlib.panels.generic.stat.info.new('OS version',
+                                               targets=[t.osInfo],
+                                               description='Version of Windows operating system.')
         { options+: { reduceOptions+: { fields: '/^version$/' } } },
       osTimezone:
-        commonlib.panels.all.stat.info.new(
+        commonlib.panels.generic.stat.info.new(
           'Timezone', targets=[t.osTimezone], description='Current system timezone.'
         )
         { options+: { reduceOptions+: { fields: '/^timezone$/' } } },
       hostname:
-        commonlib.panels.all.stat.info.new(
+        commonlib.panels.generic.stat.info.new(
           'Hostname',
           targets=[t.osInfo],
           description="System's hostname."
