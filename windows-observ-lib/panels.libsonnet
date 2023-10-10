@@ -9,7 +9,7 @@ local utils = commonlib.utils;
       local fieldOverride = g.panel.table.fieldOverride,
       local instanceLabel = this.config.instanceLabels[0],
       fleetOverviewTable:
-        commonlib.panels.all.table.base.new(
+        commonlib.panels.generic.table.base.new(
           'Fleet overview',
           targets=
           [
