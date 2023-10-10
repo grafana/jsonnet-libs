@@ -7,8 +7,5 @@
 
     // for alerts
     alertsReplicasMaxQueueSize: '99',
-
-    // enable Loki logs
-    enableLokiLogs: true,
   },
 }
