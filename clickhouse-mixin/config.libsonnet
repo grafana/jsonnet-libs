@@ -7,5 +7,9 @@
 
     // for alerts
     alertsReplicasMaxQueueSize: '99',
+
+    filterSelector: 'job=~"clickhouse"',
+
+    enableLokiLogs: true,
   },
 }
