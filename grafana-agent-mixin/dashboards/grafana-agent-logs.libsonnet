@@ -208,82 +208,82 @@ local log_full_panel =
 
 // Manifested stuff starts here
 {
-  grafanaDashboards+:: 
-  if $._config.enableLokiLogs then
-  {    
-    'grafana-agent-logs.json':
-      grafana.dashboard.new(
-        'Grafana Agent Logs',
-        time_from='%s' % $._config.dashboardPeriod,
-        editable=false,
-        tags=($._config.dashboardTags),
-        timezone='%s' % $._config.dashboardTimezone,
-        refresh='%s' % $._config.dashboardRefresh,
-        uid='integration-grafana-agent-logs'
-      )
+  grafanaDashboards+::
+    if $._config.enableLokiLogs then
+      {
+        'grafana-agent-logs.json':
+          grafana.dashboard.new(
+            'Grafana Agent Logs',
+            time_from='%s' % $._config.dashboardPeriod,
+            editable=false,
+            tags=($._config.dashboardTags),
+            timezone='%s' % $._config.dashboardTimezone,
+            refresh='%s' % $._config.dashboardRefresh,
+            uid='integration-grafana-agent-logs'
+          )
 
-      .addTemplates([
-        prometheus_template,
-        loki_template,
-        job_template,
-        instance_template,
-        text_filter_template,
-      ])
+          .addTemplates([
+            prometheus_template,
+            loki_template,
+            job_template,
+            instance_template,
+            text_filter_template,
+          ])
 
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Grafana Agent Dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
+          .addLink(grafana.link.dashboards(
+            asDropdown=false,
+            title='Grafana Agent Dashboards',
+            includeVars=true,
+            keepTime=true,
+            tags=($._config.dashboardTags),
+          ))
 
-      // Overview Row
-      .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
-      // Total Log Lines
-      .addPanel(total_log_lines_panel, gridPos={ x: 0, y: 2, w: 4, h: 4 })
-      // Warnings
-      .addPanel(total_log_warnings_panel, gridPos={ x: 4, y: 2, w: 4, h: 4 })
-      // Errors
-      .addPanel(total_log_errors_panel, gridPos={ x: 8, y: 2, w: 4, h: 4 })
-      // Error Percentage
-      .addPanel(error_percentage_panel, gridPos={ x: 12, y: 2, w: 4, h: 4 })
-      // Bytes Used
-      .addPanel(total_bytes_panel, gridPos={ x: 16, y: 2, w: 4, h: 4 })
-      // Historical Logs / Warnings / Errors
-      .addPanel(historical_logs_errors_warnings_panel, gridPos={ x: 0, y: 6, w: 24, h: 6 })
+          // Overview Row
+          .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })
+          // Total Log Lines
+          .addPanel(total_log_lines_panel, gridPos={ x: 0, y: 2, w: 4, h: 4 })
+          // Warnings
+          .addPanel(total_log_warnings_panel, gridPos={ x: 4, y: 2, w: 4, h: 4 })
+          // Errors
+          .addPanel(total_log_errors_panel, gridPos={ x: 8, y: 2, w: 4, h: 4 })
+          // Error Percentage
+          .addPanel(error_percentage_panel, gridPos={ x: 12, y: 2, w: 4, h: 4 })
+          // Bytes Used
+          .addPanel(total_bytes_panel, gridPos={ x: 16, y: 2, w: 4, h: 4 })
+          // Historical Logs / Warnings / Errors
+          .addPanel(historical_logs_errors_warnings_panel, gridPos={ x: 0, y: 6, w: 24, h: 6 })
 
-      // Info Row
-      .addPanel(
-        grafana.row.new(title='Info', collapse=true)
-        // Info
-        .addPanel(log_info_panel, gridPos={ x: 0, y: 12, w: 24, h: 8 }),
-        gridPos={ x: 0, y: 12, w: 0, h: 0 }
-      )
+          // Info Row
+          .addPanel(
+            grafana.row.new(title='Info', collapse=true)
+            // Info
+            .addPanel(log_info_panel, gridPos={ x: 0, y: 12, w: 24, h: 8 }),
+            gridPos={ x: 0, y: 12, w: 0, h: 0 }
+          )
 
-      // Errors Row
-      .addPanel(
-        grafana.row.new(title='Errors', collapse=true)
-        // Errors
-        .addPanel(log_errors_panel, gridPos={ x: 0, y: 20, w: 24, h: 8 }),
-        gridPos={ x: 0, y: 12, w: 0, h: 0 }
-      )
+          // Errors Row
+          .addPanel(
+            grafana.row.new(title='Errors', collapse=true)
+            // Errors
+            .addPanel(log_errors_panel, gridPos={ x: 0, y: 20, w: 24, h: 8 }),
+            gridPos={ x: 0, y: 12, w: 0, h: 0 }
+          )
 
-      // Warnings Row
-      .addPanel(
-        grafana.row.new(title='Warnings', collapse=true)
-        // Warnings
-        .addPanel(log_warnings_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
-        gridPos={ x: 0, y: 20, w: 0, h: 0 }
-      )
+          // Warnings Row
+          .addPanel(
+            grafana.row.new(title='Warnings', collapse=true)
+            // Warnings
+            .addPanel(log_warnings_panel, gridPos={ x: 0, y: 28, w: 24, h: 8 }),
+            gridPos={ x: 0, y: 20, w: 0, h: 0 }
+          )
 
-      // Complete Log File
-      .addPanel(
-        grafana.row.new(title='Complete Log File', collapse=true)
-        // Full Log File
-        .addPanel(log_full_panel, gridPos={ x: 0, y: 36, w: 24, h: 8 }),
-        gridPos={ x: 0, y: 28, w: 0, h: 0 }
-      ),
-  }
-  else {},
+          // Complete Log File
+          .addPanel(
+            grafana.row.new(title='Complete Log File', collapse=true)
+            // Full Log File
+            .addPanel(log_full_panel, gridPos={ x: 0, y: 36, w: 24, h: 8 }),
+            gridPos={ x: 0, y: 28, w: 0, h: 0 }
+          ),
+      }
+    else {},
 }

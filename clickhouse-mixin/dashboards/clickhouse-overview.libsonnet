@@ -813,41 +813,42 @@ local networkTransmittedPanel =
         tags=($._config.dashboardTags),
       )).addTemplates(
         std.flattenArrays([
-        [
-          {
-            hide: 0,
-            label: 'Data source',
-            name: 'prometheus_datasource',
-            query: 'prometheus',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
-        ],        
-        [
-          template.new(
-            name='job',
-            label='job',
-            datasource='$prometheus_datasource',
-            query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
-            current='',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=1
-          ),
-          template.new(
-            name='instance',
-            label='instance',
-            datasource='$prometheus_datasource',
-            query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
-            current='',
-            refresh=2,
-            includeAll=false,
-            sort=1
-          ),
-        ]]),        
+          [
+            {
+              hide: 0,
+              label: 'Data source',
+              name: 'prometheus_datasource',
+              query: 'prometheus',
+              refresh: 1,
+              regex: '',
+              type: 'datasource',
+            },
+          ],
+          [
+            template.new(
+              name='job',
+              label='job',
+              datasource='$prometheus_datasource',
+              query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
+              current='',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.+',
+              sort=1
+            ),
+            template.new(
+              name='instance',
+              label='instance',
+              datasource='$prometheus_datasource',
+              query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
+              current='',
+              refresh=2,
+              includeAll=false,
+              sort=1
+            ),
+          ],
+        ]),
       )
       .addPanels(
         std.flattenArrays([
@@ -872,7 +873,7 @@ local networkTransmittedPanel =
           [
             networkReceivedPanel { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
             networkTransmittedPanel { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
-          ],          
+          ],
         ])
       ),
   },

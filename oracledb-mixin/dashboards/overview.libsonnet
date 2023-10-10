@@ -1061,67 +1061,70 @@ local tablespaceSizePanel = {
         uid=dashboardUid,
       )
       .addTemplates(
-        std.flattenArrays([
-        [
-          {
-            hide: 0,
-            label: 'Data source',
-            name: promDatasourceName,
-            query: 'prometheus',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
-        ],
-        if $._config.enableLokiLogs then
-        [        
-          {
-            hide: 0,
-            label: 'Loki datasource',
-            name: 'loki_datasource',
-            query: 'loki',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
-        ] else [],
-        [
-          template.new(
-            'job',
-            promDatasource,
-            query='label_values(oracledb_up, job)',
-            label='Job',
-            refresh='time',
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=1
-          ),
-          template.new(
-            name='instance',
-            label='Instance',
-            datasource='$prometheus_datasource',
-            query='label_values(oracledb_up, instance)',
-            current='',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=1
-          ),
-          template.new(
-            'tablespace',
-            promDatasource,
-            query='label_values(oracledb_tablespace_bytes{' + matcher + '}, tablespace)',
-            label='Tablespace',
-            refresh='time',
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=1
-          ),
-        ]],      
-      ))
+        std.flattenArrays(
+          [
+            [
+              {
+                hide: 0,
+                label: 'Data source',
+                name: promDatasourceName,
+                query: 'prometheus',
+                refresh: 1,
+                regex: '',
+                type: 'datasource',
+              },
+            ],
+            if $._config.enableLokiLogs then
+              [
+                {
+                  hide: 0,
+                  label: 'Loki datasource',
+                  name: 'loki_datasource',
+                  query: 'loki',
+                  refresh: 1,
+                  regex: '',
+                  type: 'datasource',
+                },
+              ] else [],
+            [
+              template.new(
+                'job',
+                promDatasource,
+                query='label_values(oracledb_up, job)',
+                label='Job',
+                refresh='time',
+                includeAll=true,
+                multi=true,
+                allValues='.+',
+                sort=1
+              ),
+              template.new(
+                name='instance',
+                label='Instance',
+                datasource='$prometheus_datasource',
+                query='label_values(oracledb_up, instance)',
+                current='',
+                refresh=2,
+                includeAll=true,
+                multi=true,
+                allValues='.+',
+                sort=1
+              ),
+              template.new(
+                'tablespace',
+                promDatasource,
+                query='label_values(oracledb_tablespace_bytes{' + matcher + '}, tablespace)',
+                label='Tablespace',
+                refresh='time',
+                includeAll=true,
+                multi=true,
+                allValues='.+',
+                sort=1
+              ),
+            ],
+          ],
+        )
+      )
       .addPanels(
         std.flattenArrays([
           [

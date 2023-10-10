@@ -207,8 +207,8 @@ local log_full_panel =
 
 // Manifested stuff starts here
 {
-  grafanaDashboards+:: 
-    if $._config.enableLokiLogs then {    
+  grafanaDashboards+::
+    if $._config.enableLokiLogs then {
       'docker-logs.json':
         grafana.dashboard.new(
           'Docker Logs',

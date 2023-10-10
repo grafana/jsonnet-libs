@@ -1119,7 +1119,7 @@ local schedulerLogsPanel = {
               allValues='.+',
               sort=0
             ),
-            
+
           ],
           if $._config.enableLokiLogs then [
             template.new(
