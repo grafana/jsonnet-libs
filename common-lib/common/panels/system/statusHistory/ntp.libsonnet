@@ -1,5 +1,5 @@
 local g = import '../../../g.libsonnet';
-local base = import '../../all/statusHistory/base.libsonnet';
+local base = import '../../generic/statusHistory/base.libsonnet';
 local statusHistory = g.panel.statusHistory;
 base {
   new(title='NTP status', targets, description=''):

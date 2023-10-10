@@ -1,5 +1,5 @@
 local g = import '../../../g.libsonnet';
-local generic = import '../../all/timeSeries/main.libsonnet';
+local generic = import '../../generic/timeSeries/main.libsonnet';
 local base = import './base.libsonnet';
 base {
   new(

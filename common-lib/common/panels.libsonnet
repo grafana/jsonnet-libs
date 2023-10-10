@@ -1,11 +1,11 @@
 local g = import './g.libsonnet';
 
 {
-  all: {
-    stat: import './panels/all/stat/main.libsonnet',
-    timeSeries: import './panels/all/timeSeries/main.libsonnet',
-    table: import './panels/all/table/main.libsonnet',
-    statusHistory: import './panels/all/statusHistory/main.libsonnet',
+  generic: {
+    stat: import './panels/generic/stat/main.libsonnet',
+    timeSeries: import './panels/generic/timeSeries/main.libsonnet',
+    table: import './panels/generic/table/main.libsonnet',
+    statusHistory: import './panels/generic/statusHistory/main.libsonnet',
   },
   network: {
     timeSeries: import './panels/network/timeSeries/main.libsonnet',

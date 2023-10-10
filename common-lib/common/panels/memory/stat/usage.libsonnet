@@ -1,5 +1,5 @@
 local g = import '../../../g.libsonnet';
-local generic = import '../../all/stat/main.libsonnet';
+local generic = import '../../generic/stat/main.libsonnet';
 local base = import './base.libsonnet';
 local stat = g.panel.stat;
 local fieldOverride = g.panel.stat.fieldOverride;

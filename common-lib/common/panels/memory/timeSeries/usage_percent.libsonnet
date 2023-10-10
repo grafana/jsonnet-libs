@@ -1,5 +1,5 @@
 local g = import '../../../g.libsonnet';
-local base = import '../../all/timeSeries/main.libsonnet';
+local base = import '../../generic/timeSeries/main.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local custom = timeSeries.fieldConfig.defaults.custom;
