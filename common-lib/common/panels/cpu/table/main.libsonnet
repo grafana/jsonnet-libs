@@ -1,3 +1,0 @@
-{
-  utilization: import './utilization.libsonnet',
-}

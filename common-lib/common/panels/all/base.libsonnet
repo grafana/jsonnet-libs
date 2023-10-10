@@ -16,5 +16,6 @@ local options = timeSeries.options;
       timeSeries.queryOptions.withDatasource(
         targets[0].datasource.type, targets[0].datasource.uid
       ) else {},
-  stylize(): {},
+  stylize():
+    {},
 }

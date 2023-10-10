@@ -8,18 +8,18 @@ local fieldConfig = g.panel.timeSeries.fieldConfig;
   local this = self,
 
   stylize()::
-      fieldConfig.defaults.custom.withLineStyleMixin(
-        {
-          fill: 'dash',
-          dash: [10,10],
-        }
-      )
-      + fieldConfig.defaults.custom.withFillOpacity(0)
-      + timeSeries.standardOptions.color.withMode('fixed')
-      + timeSeries.standardOptions.color.withFixedColor('light-orange'),
+    fieldConfig.defaults.custom.withLineStyleMixin(
+      {
+        fill: 'dash',
+        dash: [10, 10],
+      }
+    )
+    + fieldConfig.defaults.custom.withFillOpacity(0)
+    + timeSeries.standardOptions.color.withMode('fixed')
+    + timeSeries.standardOptions.color.withFixedColor('light-orange'),
   stylizeByRegexp(regexp):
     timeSeries.standardOptions.withOverrides(
       fieldOverride.byRegexp.new(regexp)
       + fieldOverride.byRegexp.withPropertiesFromOptions(this.stylize())
-  ),
+    ),
 }

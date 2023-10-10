@@ -1,5 +1,6 @@
 local g = import '../../../g.libsonnet';
-local base = import './main.libsonnet';
+local base = import './base.libsonnet';
+local generic = import './main.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local fieldConfig = g.panel.timeSeries.fieldConfig;
@@ -23,7 +24,7 @@ base {
     local meanTarget = target
                        { expr: 'avg(' + target.expr + ')' }
                        + g.query.prometheus.withLegendFormat('Mean');
-    super.base.new(title, targets=[topTarget, meanTarget], description=description)
+    super.new(title, targets=[topTarget, meanTarget], description=description)
     + self.stylize()
     + self.withDataLink(instanceLabels, drillDownDashboardUid),
   withDataLink(instanceLabels, drillDownDashboardUid):
@@ -34,7 +35,7 @@ base {
       }
     ),
   stylize():
-    base.percentage.stylize()
+    generic.percentage.stylize()
     // make dots cloud
     // + fieldConfig.defaults.custom.withLineStyleMixin(
     // {

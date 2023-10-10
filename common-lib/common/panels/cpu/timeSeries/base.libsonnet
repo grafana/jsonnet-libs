@@ -1,11 +1,11 @@
 local g = import '../../../g.libsonnet';
-local timeSeries = import '../../all/timeSeries/main.libsonnet';
+local base = import '../../all/timeSeries/base.libsonnet';
 
-timeSeries {
+base {
   new(
     title,
     targets,
     description=''
   ):
-    super.base.new(title, targets, description)
+    super.new(title, targets, description),
 }

@@ -12,7 +12,10 @@ base {
     description=''
   ):
     super.new(title, targets, description)
-    + timeSeries.standardOptions.withDecimals(1)
+    + self.stylize(),
+
+  stylize():
+    timeSeries.standardOptions.withDecimals(1)
     + timeSeries.standardOptions.withUnit('pps'),
 
   withNegateOutPackets(regexp='/transmit|tx|out/'):

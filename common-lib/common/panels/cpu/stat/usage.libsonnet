@@ -1,4 +1,5 @@
 local g = import '../../../g.libsonnet';
+local generic = import '../../all/stat/main.libsonnet';
 local base = import './base.libsonnet';
 local stat = g.panel.stat;
 
@@ -15,5 +16,5 @@ base {
     |||
   ):
     super.new(title, targets, description)
-    + base.percentage.stylize(),
+    + generic.percentage.stylize(),
 }

@@ -1,9 +1,11 @@
 local g = import '../../../g.libsonnet';
-local base = import './base.libsonnet';
 local stat = g.panel.stat;
 // Panels to display metrics that can go from 0 to 100%.
 // (cpu utilization, memory utilization etc).
-base {
+{
+  new(title, targets, description=''):
+    super.new(title, targets, description)
+    + self.stylize(),
   stylize():
     stat.standardOptions.withDecimals(1)
     + stat.standardOptions.withUnit('percent')
@@ -18,5 +20,4 @@ base {
         'lastNotNull',
       ]
     ),
-
 }

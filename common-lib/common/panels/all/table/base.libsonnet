@@ -13,22 +13,21 @@ base {
     + super.new(title, targets, description)
     + self.stylize(),
 
-  stylize():
-    super.stylize(),
-  
+  stylize(): {},
+
   transformations+: {
     sortBy(field, desc=false):
       {
-        "id": "sortBy",
-        "options": {
-          "fields": {},
-          "sort": [
+        id: 'sortBy',
+        options: {
+          fields: {},
+          sort: [
             {
-              "field": field,
-              "desc": desc,
-            }
-          ]
-        }
-      }
-  }
+              field: field,
+              desc: desc,
+            },
+          ],
+        },
+      },
+  },
 }

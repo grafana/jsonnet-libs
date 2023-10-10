@@ -18,5 +18,7 @@ base {
     |||,
   ):
     super.new(title, targets, description)
-    + timeSeries.standardOptions.withNoValue('No dropped packets'),
+    + self.stylize(),
+  stylize():
+    timeSeries.standardOptions.withNoValue('No dropped packets'),
 }

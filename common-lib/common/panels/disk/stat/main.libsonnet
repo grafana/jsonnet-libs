@@ -1,3 +1,4 @@
 {
-    total: import './total.libsonnet',
+  base: import './base.libsonnet',
+  total: import './total.libsonnet',
 }

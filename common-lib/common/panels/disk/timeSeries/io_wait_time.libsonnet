@@ -17,7 +17,6 @@ base {
     super.new(title, targets, description)
     + self.stylize(),
   stylize():
-    super.stylize()
-    + timeSeries.standardOptions.withUnit('s')
-    + super.withNegateOutPackets(),
+    timeSeries.standardOptions.withUnit('s')
+    + self.withNegateOutPackets(),
 }

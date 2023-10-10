@@ -12,5 +12,7 @@ base {
     description='Network traffic (bits per sec) measures data transmitted and received.',
   ):
     super.new(title, targets, description)
-    + timeSeries.standardOptions.withUnit('bps'),
+    + self.stylize(),
+  stylize():
+    timeSeries.standardOptions.withUnit('bps'),
 }

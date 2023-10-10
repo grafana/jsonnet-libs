@@ -1,4 +1,5 @@
 local g = import '../../../g.libsonnet';
+local generic = import '../../all/stat/main.libsonnet';
 local base = import './base.libsonnet';
 local stat = g.panel.stat;
 // Uptime panel. expects duration in seconds as input

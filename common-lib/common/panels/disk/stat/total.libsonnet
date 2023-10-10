@@ -1,16 +1,15 @@
 local g = import '../../../g.libsonnet';
-local base = import '../../all/stat/info.libsonnet';
+local generic = import '../../all/stat/main.libsonnet';
+local base = import './base.libsonnet';
 local stat = g.panel.stat;
-local fieldOverride = g.panel.stat.fieldOverride;
-local custom = stat.fieldConfig.defaults.custom;
-local defaults = stat.fieldConfig.defaults;
-local options = stat.options;
-base + {
+
+base {
   new(
     title,
     targets,
     description=''
   ):
     super.new(title=title, targets=targets, description=description)
-     + stat.standardOptions.withUnit("bytes")
+    + generic.info.stylize()
+    + stat.standardOptions.withUnit('bytes'),
 }
