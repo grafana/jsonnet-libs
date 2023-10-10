@@ -3,13 +3,18 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local dashboardUid = 'clickhouse-replica';
-local matcher = 'job=~"$job", instance=~"$instance"';
+local promDatasourceName = 'prometheus_datasource';
+local getMatcher(cfg) = '%(clickhouseSelector)s' % cfg;
 
-local interserverConnectionsPanel =
+local promDatasource = {
+  uid: '${%s}' % promDatasourceName,
+};
+
+local interserverConnectionsPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Number of connections due to interserver communication',
     fieldConfig: {
@@ -80,7 +85,7 @@ local interserverConnectionsPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'ClickHouseMetrics_InterserverConnection{' + matcher + '}',
@@ -92,11 +97,11 @@ local interserverConnectionsPanel =
     title: 'Interserver connections',
     type: 'timeseries',
   };
-local replicaQueueSizePanel =
+local replicaQueueSizePanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Number of replica tasks in queue',
     fieldConfig: {
@@ -167,7 +172,7 @@ local replicaQueueSizePanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'ClickHouseAsyncMetrics_ReplicasMaxQueueSize{' + matcher + '}',
@@ -179,11 +184,11 @@ local replicaQueueSizePanel =
     title: 'Replica queue size',
     type: 'timeseries',
   };
-local replicaOperationsPanel =
+local replicaOperationsPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Replica Operations over time to other nodes',
     fieldConfig: {
@@ -255,7 +260,7 @@ local replicaOperationsPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'rate(ClickHouseProfileEvents_ReplicatedPartFetches{' + matcher + '}[$__rate_interval])',
@@ -266,7 +271,7 @@ local replicaOperationsPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'rate(ClickHouseProfileEvents_ReplicatedPartMerges{' + matcher + '}[$__rate_interval])',
@@ -278,7 +283,7 @@ local replicaOperationsPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'rate(ClickHouseProfileEvents_ReplicatedPartMutations{' + matcher + '}[$__rate_interval])',
@@ -290,7 +295,7 @@ local replicaOperationsPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'rate(ClickHouseProfileEvents_ReplicatedPartChecks{' + matcher + '}[$__rate_interval])',
@@ -303,11 +308,11 @@ local replicaOperationsPanel =
     title: 'Replica operations',
     type: 'timeseries',
   };
-local replicaReadOnlyPanel =
+local replicaReadOnlyPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Shows replicas in read-only state over time',
     fieldConfig: {
@@ -378,7 +383,7 @@ local replicaReadOnlyPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'ClickHouseMetrics_ReadonlyReplica{' + matcher + '}',
@@ -390,11 +395,11 @@ local replicaReadOnlyPanel =
     title: 'Replica read only',
     type: 'timeseries',
   };
-local zooKeeperWatchesPanel =
+local zooKeeperWatchesPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Current number of watches in ZooKeeper',
     fieldConfig: {
@@ -465,7 +470,7 @@ local zooKeeperWatchesPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'ClickHouseMetrics_ZooKeeperWatch{' + matcher + '}',
@@ -477,11 +482,11 @@ local zooKeeperWatchesPanel =
     title: 'Zookeeper watches',
     type: 'timeseries',
   };
-local zooKeeperSessionsPanel =
+local zooKeeperSessionsPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Current number of sessions to ZooKeeper',
     fieldConfig: {
@@ -552,7 +557,7 @@ local zooKeeperSessionsPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'ClickHouseMetrics_ZooKeeperSession{' + matcher + '}',
@@ -564,11 +569,11 @@ local zooKeeperSessionsPanel =
     title: 'Zookeeper sessions',
     type: 'timeseries',
   };
-local zooKeeperRequestsPanel =
+local zooKeeperRequestsPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Current number of active requests to ZooKeeper',
     fieldConfig: {
@@ -639,7 +644,7 @@ local zooKeeperRequestsPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'code',
         expr: 'ClickHouseMetrics_ZooKeeperRequest{' + matcher + '}',
@@ -673,19 +678,17 @@ local zooKeeperRequestsPanel =
         tags=($._config.dashboardTags),
       )).addTemplates(
         [
-          {
-            hide: 0,
-            label: 'Data source',
-            name: 'prometheus_datasource',
-            query: 'prometheus',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
+          template.datasource(
+            promDatasourceName,
+            'prometheus',
+            null,
+            label='Data Source',
+            refresh='load'
+          ),
           template.new(
             name='job',
             label='job',
-            datasource='$prometheus_datasource',
+            datasource=promDatasource,
             query='label_values(ClickHouseMetrics_InterserverConnection,job)',
             current='',
             refresh=2,
@@ -697,34 +700,46 @@ local zooKeeperRequestsPanel =
           template.new(
             name='instance',
             label='instance',
-            datasource='$prometheus_datasource',
+            datasource=promDatasource,
             query='label_values(ClickHouseMetrics_InterserverConnection{job=~"$job"}, instance)',
             current='',
             refresh=2,
             includeAll=false,
             sort=1
           ),
+          template.new(
+            'cluster',
+            promDatasource,
+            'label_values(ClickHouseMetrics_InterserverConnection{job=~"$job"}, cluster)',
+            label='Cluster',
+            refresh=1,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
         ]
       )
       .addPanels(
         std.flattenArrays([
           [
-            interserverConnectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-            replicaQueueSizePanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+            interserverConnectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            replicaQueueSizePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
           ],
           //next row
           [
-            replicaOperationsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            replicaReadOnlyPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            replicaOperationsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            replicaReadOnlyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           ],
           //next row
           [
-            zooKeeperWatchesPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-            zooKeeperSessionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+            zooKeeperWatchesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
+            zooKeeperSessionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
           ],
           //next row
           [
-            zooKeeperRequestsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
+            zooKeeperRequestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
           ],
         ])
       ),

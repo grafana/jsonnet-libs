@@ -3,13 +3,18 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local dashboardUid = 'clickhouse-latency';
-local matcher = 'job=~"$job", instance=~"$instance"';
+local promDatasourceName = 'prometheus_datasource';
+local getMatcher(cfg) = '%(clickhouseSelector)s' % cfg;
 
-local diskReadLatencyPanel =
+local promDatasource = {
+  uid: '${%s}' % promDatasourceName,
+};
+
+local diskReadLatencyPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Time spent waiting for read syscall',
     fieldConfig: {
@@ -81,7 +86,7 @@ local diskReadLatencyPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
@@ -94,11 +99,11 @@ local diskReadLatencyPanel =
     type: 'timeseries',
   };
 
-local diskWriteLatencyPanel =
+local diskWriteLatencyPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Time spent waiting for write syscall',
     fieldConfig: {
@@ -170,7 +175,7 @@ local diskWriteLatencyPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
@@ -183,11 +188,11 @@ local diskWriteLatencyPanel =
     type: 'timeseries',
   };
 
-local networkTransmitLatencyPanel =
+local networkTransmitLatencyPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Latency of inbound network traffic',
     fieldConfig: {
@@ -259,7 +264,7 @@ local networkTransmitLatencyPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
@@ -272,11 +277,11 @@ local networkTransmitLatencyPanel =
     type: 'timeseries',
   };
 
-local networkTransmitLatencyPanel =
+local networkTransmitLatencyPanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Latency of outbound network traffic',
     fieldConfig: {
@@ -348,7 +353,7 @@ local networkTransmitLatencyPanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
@@ -361,11 +366,11 @@ local networkTransmitLatencyPanel =
     type: 'timeseries',
   };
 
-local zooKeeperWaitTimePanel =
+local zooKeeperWaitTimePanel(matcher) =
   {
     datasource: {
       type: 'prometheus',
-      uid: '${prometheus_datasource}',
+      uid: promDatasource,
     },
     description: 'Time spent waiting for ZooKeeper request to process',
     fieldConfig: {
@@ -437,7 +442,7 @@ local zooKeeperWaitTimePanel =
       {
         datasource: {
           type: 'prometheus',
-          uid: '${prometheus_datasource}',
+          uid: promDatasource,
         },
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{' + matcher + '}[$__rate_interval])',
@@ -483,7 +488,7 @@ local zooKeeperWaitTimePanel =
           template.new(
             name='job',
             label='job',
-            datasource='$prometheus_datasource',
+            datasource=promDatasource,
             query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
             current='',
             refresh=2,
@@ -495,29 +500,41 @@ local zooKeeperWaitTimePanel =
           template.new(
             name='instance',
             label='instance',
-            datasource='$prometheus_datasource',
+            datasource=promDatasource,
             query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~"$job"}, instance)',
             current='',
             refresh=2,
             includeAll=false,
             sort=1
           ),
+          template.new(
+            'cluster',
+            promDatasource,
+            'label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~"$job"}, cluster)',
+            label='Cluster',
+            refresh=1,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
         ]
       )
       .addPanels(
         std.flattenArrays([
           [
-            diskReadLatencyPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-            diskWriteLatencyPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+            diskReadLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            diskWriteLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
           ],
           //next row
           [
-            networkTransmitLatencyPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            networkTransmitLatencyPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            networkTransmitLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            networkTransmitLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           ],
           //next row
           [
-            zooKeeperWaitTimePanel { gridPos: { h: 8, w: 24, x: 0, y: 16 } },
+            zooKeeperWaitTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 16 } },
           ],
         ])
       ),
