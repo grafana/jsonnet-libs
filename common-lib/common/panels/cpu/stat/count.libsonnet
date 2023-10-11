@@ -12,7 +12,10 @@ base {
       determining its processing capability and ability to handle tasks concurrently.
     |||
   ):
-    super.new(title, targets, description)
-    + generic.info.stylize(),
+    super.new(title, targets, description),
+
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {})
+    + generic.info.stylize(allLayers=false),
 
 }

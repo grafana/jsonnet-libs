@@ -15,6 +15,8 @@ base {
       on average, half of the CPU's processing capacity is being used to execute tasks. A higher percentage indicates that the CPU is working more intensively, potentially leading to system slowdowns if it remains consistently high.
     |||
   ):
-    super.new(title, targets, description)
-    + generic.percentage.stylize(),
+    super.new(title, targets, description),
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {})
+    + generic.percentage.stylize(allLayers=false),
 }

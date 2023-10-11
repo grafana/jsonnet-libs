@@ -1,13 +1,13 @@
 local g = import '../../../g.libsonnet';
 local stat = g.panel.stat;
+local base = import './base.libsonnet';
 // This panel can be used to display gauge metrics with possible values range 0-100%.
 // Examples: cpu utilization, memory utilization etc.
-{
-  new(title, targets, description=''):
-    super.new(title, targets, description)
-    + self.stylize(),
-  stylize():
-    stat.standardOptions.withDecimals(1)
+base {
+
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {})
+    + stat.standardOptions.withDecimals(1)
     + stat.standardOptions.withUnit('percent')
     + stat.options.withColorMode('value')
     // Change color from blue(cold) to red(hot)

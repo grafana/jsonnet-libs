@@ -3,13 +3,11 @@ local base = import './base.libsonnet';
 local stat = g.panel.stat;
 // Simple info panel prototype with text or count of things.
 base {
-  new(title, targets, description=''):
-    super.new(title, targets, description)
-    + self.stylize(),
 
-  stylize():
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {})
     // Style choice: No color for simple text panels by default
-    stat.options.withColorMode('fixed')
+    + stat.options.withColorMode('fixed')
     + stat.standardOptions.color.withFixedColor('text')
     // Style choice: No graph
     + stat.options.withGraphMode('none')

@@ -12,7 +12,13 @@ base {
     targets,
     description='RAM (random-access memory) currently in use by the operating system and running applications, in percent.'
   ):
-    super.new(title=title, targets=targets, description=description)
-    + generic.percentage.stylize()
+    super.new(title=title, targets=targets, description=description),
+
+  stylize(allLayers=true):
+
+    (if allLayers then super.stylize() else {})
+
+    + generic.percentage.stylize(allLayers=false)
     + stat.standardOptions.withUnit('percent'),
+
 }

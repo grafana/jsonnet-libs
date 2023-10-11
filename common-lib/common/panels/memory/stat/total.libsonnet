@@ -16,7 +16,12 @@ base {
       A higher memory total generally leads to better system performance and the ability to run more demanding applications and processes simultaneously.
     |||
   ):
-    super.new(title=title, targets=targets, description=description)
-    + generic.info.stylize()
+    super.new(title=title, targets=targets, description=description),
+
+  stylize(allLayers=true):
+
+    (if allLayers then super.stylize() else {})
+
+    + generic.info.stylize(allLayers=false)
     + stat.standardOptions.withUnit('bytes'),
 }

@@ -6,4 +6,7 @@ base {
   new(title, targets, description=''):
     stat.new(title)
     + super.new(title, targets, description),
+
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {}),
 }

@@ -13,8 +13,9 @@ base {
       ]
     )
     + self.stylize(),
-  stylize():
-    stat.standardOptions.withDecimals(1)
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {})
+    + stat.standardOptions.withDecimals(1)
     + stat.standardOptions.withUnit('dtdurations')
     + stat.options.withColorMode('value')
     + stat.options.withGraphMode('none')
