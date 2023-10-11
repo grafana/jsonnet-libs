@@ -12,10 +12,7 @@ local promDatasource = {
 
 local interserverConnectionsPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Number of connections due to interserver communication',
     fieldConfig: {
       defaults: {
@@ -83,10 +80,7 @@ local interserverConnectionsPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'ClickHouseMetrics_InterserverConnection{' + matcher + '}',
         legendFormat: 'Interserver connections',
@@ -99,10 +93,7 @@ local interserverConnectionsPanel(matcher) =
   };
 local replicaQueueSizePanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Number of replica tasks in queue',
     fieldConfig: {
       defaults: {
@@ -170,10 +161,7 @@ local replicaQueueSizePanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'ClickHouseAsyncMetrics_ReplicasMaxQueueSize{' + matcher + '}',
         legendFormat: 'Max queue size',
@@ -186,10 +174,7 @@ local replicaQueueSizePanel(matcher) =
   };
 local replicaOperationsPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Replica Operations over time to other nodes',
     fieldConfig: {
       defaults: {
@@ -258,10 +243,7 @@ local replicaOperationsPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'rate(ClickHouseProfileEvents_ReplicatedPartFetches{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Part fetches',
@@ -269,10 +251,7 @@ local replicaOperationsPanel(matcher) =
         refId: 'A',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'rate(ClickHouseProfileEvents_ReplicatedPartMerges{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -281,10 +260,7 @@ local replicaOperationsPanel(matcher) =
         refId: 'B',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'rate(ClickHouseProfileEvents_ReplicatedPartMutations{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -293,10 +269,7 @@ local replicaOperationsPanel(matcher) =
         refId: 'C',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'rate(ClickHouseProfileEvents_ReplicatedPartChecks{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -310,10 +283,7 @@ local replicaOperationsPanel(matcher) =
   };
 local replicaReadOnlyPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Shows replicas in read-only state over time',
     fieldConfig: {
       defaults: {
@@ -381,10 +351,7 @@ local replicaReadOnlyPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'ClickHouseMetrics_ReadonlyReplica{' + matcher + '}',
         legendFormat: 'Read only',
@@ -397,10 +364,7 @@ local replicaReadOnlyPanel(matcher) =
   };
 local zooKeeperWatchesPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Current number of watches in ZooKeeper',
     fieldConfig: {
       defaults: {
@@ -468,10 +432,7 @@ local zooKeeperWatchesPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'ClickHouseMetrics_ZooKeeperWatch{' + matcher + '}',
         legendFormat: 'Zookeeper watch',
@@ -484,10 +445,7 @@ local zooKeeperWatchesPanel(matcher) =
   };
 local zooKeeperSessionsPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Current number of sessions to ZooKeeper',
     fieldConfig: {
       defaults: {
@@ -555,10 +513,7 @@ local zooKeeperSessionsPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'ClickHouseMetrics_ZooKeeperSession{' + matcher + '}',
         legendFormat: 'Zookeeper session',
@@ -571,10 +526,7 @@ local zooKeeperSessionsPanel(matcher) =
   };
 local zooKeeperRequestsPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Current number of active requests to ZooKeeper',
     fieldConfig: {
       defaults: {
@@ -642,10 +594,7 @@ local zooKeeperRequestsPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: 'ClickHouseMetrics_ZooKeeperRequest{' + matcher + '}',
         legendFormat: 'Zookeeper request',
@@ -682,7 +631,7 @@ local zooKeeperRequestsPanel(matcher) =
             promDatasourceName,
             'prometheus',
             null,
-            label='Data Source',
+            label='Data source',
             refresh='load'
           ),
           template.new(

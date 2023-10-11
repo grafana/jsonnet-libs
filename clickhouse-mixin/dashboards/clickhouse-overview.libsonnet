@@ -13,10 +13,7 @@ local promDatasource = {
 
 local successfulQueriesPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Rate of successful queries per second',
     fieldConfig: {
       defaults: {
@@ -85,10 +82,7 @@ local successfulQueriesPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_Query{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Query',
@@ -96,10 +90,7 @@ local successfulQueriesPanel(matcher) =
         refId: 'A',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_SelectQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -108,10 +99,7 @@ local successfulQueriesPanel(matcher) =
         refId: 'B',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_InsertQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -120,10 +108,7 @@ local successfulQueriesPanel(matcher) =
         refId: 'C',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_AsyncInsertQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -138,10 +123,7 @@ local successfulQueriesPanel(matcher) =
 
 local failedQueriesPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Rate of failed queries per second',
     fieldConfig: {
       defaults: {
@@ -210,10 +192,7 @@ local failedQueriesPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_FailedQuery{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Failed query',
@@ -221,10 +200,7 @@ local failedQueriesPanel(matcher) =
         refId: 'A',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_FailedSelectQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -233,10 +209,7 @@ local failedQueriesPanel(matcher) =
         refId: 'B',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_FailedInsertQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -251,10 +224,7 @@ local failedQueriesPanel(matcher) =
 
 local rejectedInsertsPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Number of rejected inserts per second',
     fieldConfig: {
       defaults: {
@@ -323,10 +293,7 @@ local rejectedInsertsPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_RejectedInserts{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Rejected inserts',
@@ -340,10 +307,7 @@ local rejectedInsertsPanel(matcher) =
 
 local memoryUsagePanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Memory usage over time',
     fieldConfig: {
       defaults: {
@@ -412,10 +376,7 @@ local memoryUsagePanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_MemoryTracking{' + matcher + '}',
         legendFormat: 'Memory tracking',
@@ -429,10 +390,7 @@ local memoryUsagePanel(matcher) =
 
 local memoryUsageGaugePanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Percentage of memory allocated by ClickHouse compared to OS total',
     fieldConfig: {
       defaults: {
@@ -479,10 +437,7 @@ local memoryUsageGaugePanel(matcher) =
     pluginVersion: '9.1.6',
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: '(ClickHouseMetrics_MemoryTracking{' + matcher + '} / ClickHouseAsyncMetrics_OSMemoryTotal{' + matcher + '}) * 100',
         hide: false,
@@ -497,10 +452,7 @@ local memoryUsageGaugePanel(matcher) =
 
 local activeConnectionsPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Current number of connections to ClickHouse',
     fieldConfig: {
       defaults: {
@@ -570,10 +522,7 @@ local activeConnectionsPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_TCPConnection{' + matcher + '}',
         legendFormat: 'TCP connection',
@@ -581,10 +530,7 @@ local activeConnectionsPanel(matcher) =
         refId: 'A',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_HTTPConnection{' + matcher + '}',
         hide: false,
@@ -593,10 +539,7 @@ local activeConnectionsPanel(matcher) =
         refId: 'B',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_MySQLConnection{' + matcher + '}',
         hide: false,
@@ -605,10 +548,7 @@ local activeConnectionsPanel(matcher) =
         refId: 'C',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_PostgreSQLConnection{' + matcher + '}',
         hide: false,
@@ -623,10 +563,7 @@ local activeConnectionsPanel(matcher) =
 
 local networkReceivedPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Received network throughput',
     fieldConfig: {
       defaults: {
@@ -694,10 +631,7 @@ local networkReceivedPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_NetworkReceiveBytes{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Network receive bytes',
@@ -711,10 +645,7 @@ local networkReceivedPanel(matcher) =
 
 local networkTransmittedPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Transmitted network throughput',
     fieldConfig: {
       defaults: {
@@ -782,10 +713,7 @@ local networkTransmittedPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_NetworkSendBytes{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Network send bytes',

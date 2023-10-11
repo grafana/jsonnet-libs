@@ -12,10 +12,7 @@ local promDatasource = {
 
 local diskReadLatencyPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Time spent waiting for read syscall',
     fieldConfig: {
       defaults: {
@@ -84,10 +81,7 @@ local diskReadLatencyPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Disk read elapsed',
@@ -101,10 +95,7 @@ local diskReadLatencyPanel(matcher) =
 
 local diskWriteLatencyPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Time spent waiting for write syscall',
     fieldConfig: {
       defaults: {
@@ -173,10 +164,7 @@ local diskWriteLatencyPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Disk write elapsed',
@@ -190,10 +178,7 @@ local diskWriteLatencyPanel(matcher) =
 
 local networkTransmitLatencyPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Latency of inbound network traffic',
     fieldConfig: {
       defaults: {
@@ -262,10 +247,7 @@ local networkTransmitLatencyPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Network receive elapsed',
@@ -279,10 +261,7 @@ local networkTransmitLatencyPanel(matcher) =
 
 local networkTransmitLatencyPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Latency of outbound network traffic',
     fieldConfig: {
       defaults: {
@@ -351,10 +330,7 @@ local networkTransmitLatencyPanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Network send elapsed',
@@ -368,10 +344,7 @@ local networkTransmitLatencyPanel(matcher) =
 
 local zooKeeperWaitTimePanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: promDatasource,
-    },
+    datasource: promDatasource,
     description: 'Time spent waiting for ZooKeeper request to process',
     fieldConfig: {
       defaults: {
@@ -440,10 +413,7 @@ local zooKeeperWaitTimePanel(matcher) =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: promDatasource,
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{' + matcher + '}[$__rate_interval])',
         legendFormat: 'ZooKeeper wait',
@@ -476,15 +446,13 @@ local zooKeeperWaitTimePanel(matcher) =
         tags=($._config.dashboardTags),
       )).addTemplates(
         [
-          {
-            hide: 0,
-            label: 'Data source',
-            name: 'prometheus_datasource',
-            query: 'prometheus',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
+          template.datasource(
+            promDatasourceName,
+            'prometheus',
+            null,
+            label='Data source',
+            refresh='load'
+          ),
           template.new(
             name='job',
             label='job',
