@@ -13,8 +13,12 @@ base {
   ):
     super.new(title, targets, description)
     + self.stylize(),
-  stylize():
-    timeSeries.standardOptions.withUnit('Bps')
+
+  stylize(allLayers=true):
+
+    (if allLayers == true then super.stylize() else {})
+
+    + timeSeries.standardOptions.withUnit('Bps')
     // move 'IO busy time' to second axis if found
     + timeSeries.standardOptions.withOverrides(
       fieldOverride.byRegexp.new('/time|used|busy|util/')

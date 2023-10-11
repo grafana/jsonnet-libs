@@ -4,12 +4,10 @@ local base = import './base.libsonnet';
 // This panel can be used to display gauge metrics with possible values range 0-100%.
 // Examples: cpu utilization, memory utilization etc.
 base {
-  // new(title, targets, description=''):
-  //   super.new(title, targets, description)
-  //   + self.stylize(),
-
-  stylize():
-    timeSeries.standardOptions.withDecimals(1)
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {})
+    // (if allLayers then super.stylize() else {})
+    + timeSeries.standardOptions.withDecimals(1)
     + timeSeries.standardOptions.withUnit('percent')
     // Change color from blue(cold) to red(hot)
     + timeSeries.standardOptions.color.withMode('continuous-BlYlRd')

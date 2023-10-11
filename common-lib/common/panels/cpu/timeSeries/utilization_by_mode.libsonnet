@@ -9,10 +9,13 @@ base {
     super.new(title, targets, description)
     + self.stylize(),
 
-  stylize():
+  stylize(allLayers=true):
     local timeSeries = g.panel.timeSeries;
     local fieldOverride = g.panel.timeSeries.fieldOverride;
-    timeSeries.standardOptions.withUnit('percent')
+
+    (if allLayers == true then super.stylize() else {})
+
+    + timeSeries.standardOptions.withUnit('percent')
     + timeSeries.fieldConfig.defaults.custom.withFillOpacity(80)
     + timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
     + timeSeries.standardOptions.withOverrides(

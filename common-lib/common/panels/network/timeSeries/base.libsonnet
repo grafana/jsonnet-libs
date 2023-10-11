@@ -6,16 +6,12 @@ local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 base {
-  new(
-    title,
-    targets,
-    description=''
-  ):
-    super.new(title, targets, description)
-    + self.stylize(),
 
-  stylize():
-    timeSeries.standardOptions.withDecimals(1)
+  stylize(allLayers=true):
+
+    (if allLayers == true then super.stylize() else {})
+
+    + timeSeries.standardOptions.withDecimals(1)
     + timeSeries.standardOptions.withUnit('pps'),
 
   withNegateOutPackets(regexp='/transmit|tx|out/'):

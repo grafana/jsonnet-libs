@@ -16,7 +16,10 @@ base {
   ):
     super.new(title, targets, description)
     + self.stylize(),
-  stylize():
-    timeSeries.standardOptions.withUnit('s')
+
+  stylize(allLayers=true):
+
+    (if allLayers == true then super.stylize() else {})
+    + timeSeries.standardOptions.withUnit('s')
     + self.withNegateOutPackets(),
 }

@@ -15,5 +15,5 @@ base {
     |||
   ):
     super.new(title=title, targets=targets, description=description)
-    + generic.percentage.stylize(),
+    + generic.percentage.stylizeLast(),
 }

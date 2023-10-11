@@ -7,15 +7,15 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 local base = import '../base.libsonnet';
 base {
-
   new(title, targets, description=''):
     timeSeries.new(title)
     + super.new(title, targets, description)
     + self.stylize(),
 
-  stylize():
+  stylize(allLayers=true):
+    (if allLayers == true then super.stylize() else {})
     // Style choice: Make lines more thick
-    custom.withLineWidth(2)
+    + custom.withLineWidth(2)
     // Style choice: Opacity level
     + custom.withFillOpacity(30)
     // Style choice: Don't show points on lines
@@ -30,4 +30,5 @@ base {
     // Style choice: Use simple legend without any values (cleaner look)
     + options.legend.withDisplayMode('list')
     + options.legend.withCalcs([]),
+
 }

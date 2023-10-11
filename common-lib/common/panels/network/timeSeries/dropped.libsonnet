@@ -19,6 +19,10 @@ base {
   ):
     super.new(title, targets, description)
     + self.stylize(),
-  stylize():
-    timeSeries.standardOptions.withNoValue('No dropped packets'),
+
+  stylize(allLayers=true):
+
+    (if allLayers == true then super.stylize() else {})
+
+    + timeSeries.standardOptions.withNoValue('No dropped packets'),
 }

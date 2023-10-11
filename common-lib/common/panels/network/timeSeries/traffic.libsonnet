@@ -13,6 +13,9 @@ base {
   ):
     super.new(title, targets, description)
     + self.stylize(),
-  stylize():
-    timeSeries.standardOptions.withUnit('bps'),
+
+  stylize(allLayers=true):
+
+    (if allLayers == true then super.stylize() else {})
+    + timeSeries.standardOptions.withUnit('bps'),
 }

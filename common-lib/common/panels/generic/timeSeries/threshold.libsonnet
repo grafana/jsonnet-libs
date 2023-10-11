@@ -7,7 +7,7 @@ local fieldConfig = g.panel.timeSeries.fieldConfig;
 {
   local this = self,
 
-  stylize()::
+  stylize():
     fieldConfig.defaults.custom.withLineStyleMixin(
       {
         fill: 'dash',

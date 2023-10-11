@@ -12,6 +12,12 @@ base {
     description='',
   ):
     super.new(title, targets, description)
+    + self.stylize(),
+
+  stylize(allLayers=true):
+
+    (if allLayers == true then super.stylize() else {})
+
     + timeSeries.standardOptions.withUnit('bytes')
     + timeSeries.standardOptions.withMin(0),
 }

@@ -14,6 +14,10 @@ base {
   ):
     super.new(title, targets, description)
     + self.stylize(),
-  stylize():
-    self.withNegateOutPackets(),
+
+  stylize(allLayers=true):
+
+    (if allLayers == true then super.stylize() else {})
+
+    + self.withNegateOutPackets(),
 }

@@ -35,8 +35,9 @@ base {
         title: 'Drill down to this instance',
       }
     ),
-  stylize():
-    generic.percentage.stylize()
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {})
+    + generic.percentage.stylize(allLayers=false)
     // make dots cloud
     // + fieldConfig.defaults.custom.withLineStyleMixin(
     // {
