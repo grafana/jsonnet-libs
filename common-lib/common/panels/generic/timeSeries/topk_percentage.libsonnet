@@ -5,7 +5,8 @@ local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local fieldConfig = g.panel.timeSeries.fieldConfig;
 local standardOptions = g.panel.timeSeries.standardOptions;
-// Styly to display Top K metrics that can go from 0 to 100%.
+// Style to display Top K metrics that can go from 0 to 100%.
+// It constructs mean baseline automatically.
 base {
   new(
     title,

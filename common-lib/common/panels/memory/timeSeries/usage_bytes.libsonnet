@@ -1,4 +1,5 @@
 local g = import '../../../g.libsonnet';
+local generic = import '../../generic/timeSeries/main.libsonnet';
 local base = import './base.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
@@ -15,10 +16,11 @@ base {
     |||,
     totalRegexp=self.totalRegexp,
   ):
-    super.base.new(title=title, targets=targets, description=description)
+    super.new(title=title, targets=targets, description=description)
     + self.stylize(totalRegexp),
   stylize(totalRegexp=self.totalRegexp):
-    timeSeries.standardOptions.withUnit('bytes')
+    super.stylize()
+    + timeSeries.standardOptions.withUnit('bytes')
     + timeSeries.standardOptions.withMin(0)
-    + base.threshold.stylizeByRegexp(totalRegexp),
+    + generic.threshold.stylizeByRegexp(totalRegexp),
 }

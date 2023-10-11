@@ -7,15 +7,15 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 local base = import '../base.libsonnet';
 base {
+
   new(title, targets, description=''):
     timeSeries.new(title)
     + super.new(title, targets, description)
     + self.stylize(),
 
   stylize():
-    super.stylize()
-    // Style choice: Make line more thick
-    + custom.withLineWidth(2)
+    // Style choice: Make lines more thick
+    custom.withLineWidth(2)
     // Style choice: Opacity level
     + custom.withFillOpacity(30)
     // Style choice: Don't show points on lines

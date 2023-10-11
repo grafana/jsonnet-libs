@@ -1,7 +1,7 @@
 local g = import '../../../g.libsonnet';
 local base = import './base.libsonnet';
 local stat = g.panel.stat;
-//simple info panel with text or count
+// Simple info panel prototype with text or count of things.
 base {
   new(title, targets, description=''):
     super.new(title, targets, description)

@@ -5,6 +5,8 @@ local fieldOverride = g.panel.timeSeries.fieldOverride;
 local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
+
+// This is base of all panels in the common lib
 {
   new(title, targets, description=''):
     timeSeries.queryOptions.withTargets(targets)
@@ -16,6 +18,5 @@ local options = timeSeries.options;
       timeSeries.queryOptions.withDatasource(
         targets[0].datasource.type, targets[0].datasource.uid
       ) else {},
-  stylize():
-    {},
+
 }

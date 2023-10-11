@@ -1,8 +1,8 @@
-# Common lib
+# Grafana integrations common lib
 
-This common lib can be used to generate dashboards using [grafonnet](https://github.com/grafana/grafonnet).
+This common library can be used to quickly create dashboards' `panels` and `annotations`.
 
-This enforces 'common style' to different panels.
+By using this common library we can 'enforce' common style choices across multiple dashboards and mixins.
 
 ## Import
 
@@ -10,3 +10,17 @@ This enforces 'common style' to different panels.
 jb init
 jb install https://github.com/grafana/jsonnet-libs/common-lib
 ```
+
+## Use
+
+```jsonnet
+
+local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main.libsonnet';
+
+local panels = {
+  cpuUsage: commonlib.panels.cpu.timeSeries.utilization.new(targets=[targets.cpuUsage]),
+}
+
+```
+
+See [windows-observ-lib](./windows-observ-lib) for full example.

@@ -1,5 +1,6 @@
 local g = import '../../../g.libsonnet';
-local base = import '../../generic/timeSeries/main.libsonnet';
+local generic = import '../../generic/timeSeries/main.libsonnet';
+local base = import './base.libsonnet';
 local timeSeries = g.panel.timeSeries;
 local fieldOverride = g.panel.timeSeries.fieldOverride;
 local custom = timeSeries.fieldConfig.defaults.custom;
@@ -14,5 +15,5 @@ base {
     |||
   ):
     super.new(title=title, targets=targets, description=description)
-    + base.percentage.stylize(),
+    + generic.percentage.stylize(),
 }
