@@ -8,7 +8,7 @@ local options = timeSeries.options;
 
 // This is base of ALL panels in the common lib
 {
-  new(title, targets, description=''):
+  new(targets, description=''):
     // hidden field to hold styles modifiers
 
     timeSeries.queryOptions.withTargets(targets)

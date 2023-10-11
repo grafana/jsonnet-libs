@@ -5,7 +5,7 @@ local base = import '../base.libsonnet';
 base {
   new(title, targets, description=''):
     stat.new(title)
-    + super.new(title, targets, description),
+    + super.new(targets, description),
 
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {}),

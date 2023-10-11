@@ -9,7 +9,7 @@ base {
 
   new(title, targets, description=''):
     statusHistory.new(title)
-    + super.new(title, targets, description)
+    + super.new(targets, description)
     // Minimize number of points to avoid 'Too many data points' error on large time intervals
     + statusHistory.queryOptions.withMaxDataPoints(50),
 
