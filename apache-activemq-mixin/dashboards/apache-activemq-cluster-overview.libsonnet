@@ -16,9 +16,9 @@ local clusterCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by (activemq_cluster, job) (activemq_memory_usage_ratio{' + matcher + '})',
+      'count (activemq_memory_usage_ratio{' + matcher + '})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -64,9 +64,9 @@ local brokerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count by (instance, activemq_cluster, job) (activemq_memory_usage_ratio{' + matcher + '})',
+      'count (activemq_memory_usage_ratio{' + matcher + '})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -112,9 +112,9 @@ local producerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (activemq_queue_producer_count{' + matcher + '}) + sum by (activemq_cluster, job) (activemq_topic_producer_count{' + matcher + ',destination!~"ActiveMQ.Advisory.*"})',
+      'sum (activemq_queue_producer_count{' + matcher + '}) + sum (activemq_topic_producer_count{' + matcher + ',destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',
@@ -160,9 +160,9 @@ local consumerCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (activemq_cluster, job) (activemq_queue_consumer_count{' + matcher + '}) + sum by (activemq_cluster, job) (activemq_topic_consumer_count{' + matcher + ',destination!~"ActiveMQ.Advisory.*"})',
+      'sum (activemq_queue_consumer_count{' + matcher + '}) + sum (activemq_topic_consumer_count{' + matcher + ',destination!~"ActiveMQ.Advisory.*"})',
       datasource=promDatasource,
-      legendFormat='{{activemq_cluster}}',
+      legendFormat='__auto',
     ),
   ],
   type: 'stat',

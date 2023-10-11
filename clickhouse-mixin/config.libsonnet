@@ -8,7 +8,8 @@
     // for alerts
     alertsReplicasMaxQueueSize: '99',
 
-    // enable Loki logs
+    filterSelector: 'job=~"clickhouse"',
+
     enableLokiLogs: true,
   },
 }
