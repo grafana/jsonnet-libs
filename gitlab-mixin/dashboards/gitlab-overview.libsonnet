@@ -6,7 +6,7 @@ local prometheus = grafana.prometheus;
 
 local dashboardUid = 'gitlab-overview';
 local getMatcher(cfg) = '%(gitlabSelector)s' % cfg;
-local logExpr(cfg) = '%(logExpr)s' %cfg;
+local logExpr(cfg) = '%(logExpr)s' % cfg;
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';

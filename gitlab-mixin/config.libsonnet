@@ -8,9 +8,9 @@
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
     dashboardRailsExceptionFilename: '/var/log/gitlab/gitlab-rails/exceptions_json.log',
-    logExpression: if self.enableMultiCluster then '{job=~"$job", instance=~"$instance", cluster=~"$cluster"} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"' 
-      else '{filename="'+ self.dashboardRailsExceptionFilename +'", job=~"$job", instance=~"$instance"} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"',
-    
+    logExpression: if self.enableMultiCluster then '{job=~"$job", instance=~"$instance", cluster=~"$cluster"} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"'
+    else '{filename="' + self.dashboardRailsExceptionFilename + '", job=~"$job", instance=~"$instance"} | json | line_format "{{.severity}} {{.exception_class}} - {{.exception_message}}"',
+
     // for alerts
     alertsWarningRegistrationFailures: '10',  // %
     alertsWarningRunnerAuthFailures: '10',  // %
