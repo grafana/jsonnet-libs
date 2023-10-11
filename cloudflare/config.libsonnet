@@ -6,6 +6,6 @@
     dashboardRefresh: '1m',
 
     // alerts thresholds
-   
+   TODO
   },
 }

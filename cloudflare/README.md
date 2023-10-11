@@ -1,32 +1,49 @@
 # Cloudflare Mixin
-The Cloudflare mixin is a set of configurable Grafana dashboards and alerts.
+The Cloudflare mixin is a set of configurable Grafana dashboards and alerts. The metrics analyzed here are a part of `Cloudflare Analytics - account and zone analytics` found [here](https://developers.cloudflare.com/analytics/account-and-zone-analytics/).
 
 The Cloudflare mixin contains the following dashboards:
 
-- 
+- Cloudflare zone overview
+- Cloudflare GeoMap overview
+- Cloudflare worker overview
 
 and the following alerts:
 
-- 
+- CloudflareHighThreatCount
+- CloudflareHighRequestRate
+- CloudflareHighHTTPErrorCodes
+- CloudflareUnhealthyPools
+- CloudflareMetricsDown
 
 ## Cloudflare zone overview
-TODO
+The Cloudflare zone overview dashboard provides a detailed look into the performance of the zones in your Cloudflare account. Metrics analyzed include requests, cached requests, various bandwidth numbers, page views, request status, colocations, and pool status.
+
+![First screenshot of Cloudflare zone overview dashboard]()
+![Second screenshot of Cloudflare zone overview dashboard]()
 
 ## Cloudflare GeoMap overview
-TODO 
+The Cloudflare GeoMap overview dashboard utilizes a GeoMap panel to visualize specific metrics on a global map. The metrics utilized here are requests, bandwidth, threats, non-cached requests, and edge requests.
+
+![Screenshot of Cloudflare GeoMap overview dashboard]()
 
 ## Cloudflare worker overview
-TODO
+The Cloudflare worker overview dashboard provides a look into Cloudflare Worker performance on a per script basis. Metrics include CPU time quantiles, script duration quantiles, requests, and errors.
+
+![Screenshot of Cloudflare worker overview dashboard]()
 
 ## Alerts overview
 
-- 
+- CloudflareHighThreatCount: There are detected threats targeting the zone.
+- CloudflareHighRequestRate: A high spike in requests is occurring which may indicate an attack or unexpected load.
+- CloudflareHighHTTPErrorCodes: A high number of 4xx or 5xx HTTP status codes are occurring.
+- CloudflareUnhealthyPools: There are unhealthy pools.
+- CloudflareMetricsDown: Cloudflare metrics are down.
 
 Default thresholds can be configured in `config.libsonnet`.
 ```js
 {
   _config+:: {
-    
+    TODO
   },
 }
 ```
