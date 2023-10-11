@@ -1,5 +1,7 @@
 # Cloudflare Mixin
-The Cloudflare mixin is a set of configurable Grafana dashboards and alerts. The metrics analyzed here are a part of `Cloudflare Analytics - account and zone analytics` found [here](https://developers.cloudflare.com/analytics/account-and-zone-analytics/).
+The Cloudflare mixin is a set of configurable Grafana dashboards and alerts. 
+
+The metrics analyzed here are a part of `Cloudflare Analytics - account and zone analytics` found [here](https://developers.cloudflare.com/analytics/account-and-zone-analytics/). Pool and worker metrics will not appear until your Cloudflare instance has been configured to utilize them.
 
 The Cloudflare mixin contains the following dashboards:
 
