@@ -12,7 +12,7 @@ base {
     + super.new(title, targets, description),
 
   stylize(allLayers=true):
-    (if allLayers == true then super.stylize() else {})
+    (if allLayers then super.stylize() else {})
     // Style choice: Make lines more thick
     + custom.withLineWidth(2)
     // Style choice: Opacity level

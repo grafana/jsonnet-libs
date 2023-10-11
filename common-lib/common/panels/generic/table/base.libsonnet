@@ -10,10 +10,10 @@ local base = import '../base.libsonnet';
 base {
   new(title, targets, description=''):
     table.new(title)
-    + super.new(title, targets, description)
-    + self.stylize(),
+    + super.new(title, targets, description),
 
-  stylize(): {},
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {}),
 
   transformations+: {
     sortBy(field, desc=false):
