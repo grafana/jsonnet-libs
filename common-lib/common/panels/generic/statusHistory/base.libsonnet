@@ -13,5 +13,6 @@ base {
     // Minimize number of points to avoid 'Too many data points' error on large time intervals
     + statusHistory.queryOptions.withMaxDataPoints(50),
 
-  stylize(): {},
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {}),
 }

@@ -1,12 +1,13 @@
 local g = import '../../../g.libsonnet';
-local base = import '../../generic/statusHistory/base.libsonnet';
+local base = import './base.libsonnet';
 local statusHistory = g.panel.statusHistory;
 base {
   new(title='NTP status', targets, description=''):
-    super.new(title, targets, description)
-    + self.stylize(),
-  stylize():
-    statusHistory.standardOptions.color.withMode('fixed')
+    super.new(title, targets, description),
+
+  stylize(allLayers=true):
+    (if allLayers then super.stylize() else {})
+    + statusHistory.standardOptions.color.withMode('fixed')
     + statusHistory.standardOptions.withMappings(
       {
         type: 'value',
