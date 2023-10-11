@@ -8,25 +8,25 @@ local annotation = g.dashboard.annotation;
     annotation.withEnable(true)
     + annotation.withName(title)
     + annotation.withDatasourceMixin(target.datasource)
-     { 
-        "titleFormat": title,
-        "expr":  target.expr,
-        
-    }
-    + (if std.objectHas(target, "interval") then {"step": target.interval} else {}),
+      {
+      titleFormat: title,
+      expr: target.expr,
 
-    withTagKeys(value):
-        { 
-            "tagKeys": value,
-        },
-    withValueForTime(value=false):
-        { 
-            "useValueForTime": value,
-        },
-    withTextFormat(value=''):
-        { 
-            "textFormat": value,
-        }
+    }
+    + (if std.objectHas(target, 'interval') then { step: target.interval } else {}),
+
+  withTagKeys(value):
+    {
+      tagKeys: value,
+    },
+  withValueForTime(value=false):
+    {
+      useValueForTime: value,
+    },
+  withTextFormat(value=''):
+    {
+      textFormat: value,
+    },
 
 
 }
