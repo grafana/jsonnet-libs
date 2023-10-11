@@ -780,60 +780,55 @@ local errorLogsPanel(cfg) =
         keepTime=true,
         tags=($._config.dashboardTags),
       )).addTemplates(
-        [
-          {
-            hide: 0,
-            label: 'Data source',
-            name: 'prometheus_datasource',
-            query: 'prometheus',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
-          {
-            hide: 0,
-            label: 'Loki datasource',
-            name: 'loki_datasource',
-            query: 'loki',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
-          template.new(
-            name='job',
-            label='job',
-            datasource=promDatasource,
-            query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
-            current='',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=1
-          ),
-          template.new(
-            name='instance',
-            label='instance',
-            datasource=promDatasource,
-            query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
-            current='',
-            refresh=2,
-            includeAll=false,
-            sort=1
-          ),
-          template.new(
-            'cluster',
-            promDatasource,
-            'label_values(ClickHouseProfileEvents_Query{job=~"$job"}, cluster)',
-            label='Cluster',
-            refresh=1,
-            includeAll=true,
-            multi=true,
-            allValues='',
-            hide=if $._config.enableMultiCluster then '' else 'variable',
-            sort=0
-          ),
-        ]
+        std.flattenArrays([
+          [
+            {
+              hide: 0,
+              label: 'Data source',
+              name: 'prometheus_datasource',
+              query: 'prometheus',
+              refresh: 1,
+              regex: '',
+              type: 'datasource',
+            },
+          ],
+          [
+            template.new(
+              name='job',
+              label='job',
+              datasource='$prometheus_datasource',
+              query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
+              current='',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.+',
+              sort=1
+            ),
+            template.new(
+              name='instance',
+              label='instance',
+              datasource='$prometheus_datasource',
+              query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
+              current='',
+              refresh=2,
+              includeAll=false,
+              sort=1
+            ),
+            template.new(
+              'cluster',
+              promDatasource,
+              'label_values(ClickHouseProfileEvents_Query{job=~"$job"}, cluster)',
+              label='Cluster',
+              refresh=1,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+          ],
+        ]),
       )
       .addPanels(
         std.flattenArrays([
@@ -859,10 +854,6 @@ local errorLogsPanel(cfg) =
             networkReceivedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
             networkTransmittedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
           ],
-          //next row
-          if $._config.enableLokiLogs then [
-            errorLogsPanel($._config) { gridPos: { h: 8, w: 24, x: 0, y: 40 } },
-          ] else [],
         ])
       ),
   },
