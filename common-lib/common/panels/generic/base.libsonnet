@@ -6,17 +6,22 @@ local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 
-// This is base of all panels in the common lib
+// This is base of ALL panels in the common lib
 {
   new(title, targets, description=''):
+    // hidden field to hold styles modifiers
+
     timeSeries.queryOptions.withTargets(targets)
+    + timeSeries.panelOptions.withDescription(description)
     // set first target's datasource
     // to panel's datasource if only sinlge type of
     // datasoures are used accross all targets:
-    + timeSeries.panelOptions.withDescription(description)
-    + if std.length(std.set(targets, function(t) t.datasource.type)) == 1 then
-      timeSeries.queryOptions.withDatasource(
-        targets[0].datasource.type, targets[0].datasource.uid
-      ) else {},
+    + (if std.length(std.set(targets, function(t) t.datasource.type)) == 1 then
+         timeSeries.queryOptions.withDatasource(
+           targets[0].datasource.type, targets[0].datasource.uid
+         ) else {})
+    + self.stylize(),
+
+  stylize(): {},
 
 }

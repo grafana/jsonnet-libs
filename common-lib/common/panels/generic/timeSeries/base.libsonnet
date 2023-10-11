@@ -9,8 +9,7 @@ local base = import '../base.libsonnet';
 base {
   new(title, targets, description=''):
     timeSeries.new(title)
-    + super.new(title, targets, description)
-    + self.stylize(),
+    + super.new(title, targets, description),
 
   stylize(allLayers=true):
     (if allLayers == true then super.stylize() else {})

@@ -16,13 +16,10 @@ base {
     |||,
     totalRegexp=self.totalRegexp,
   ):
-    super.new(title=title, targets=targets, description=description)
-    + self.stylize(true, totalRegexp),
+    super.new(title=title, targets=targets, description=description),
 
   stylize(allLayers=true, totalRegexp=self.totalRegexp):
-
-    (if allLayers == true then super.stylize() else {})
-
+    (if allLayers then super.stylize() else {})
     + timeSeries.standardOptions.withUnit('bytes')
     + timeSeries.standardOptions.withMin(0)
     + generic.threshold.stylizeByRegexp(totalRegexp),

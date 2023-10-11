@@ -17,6 +17,6 @@ base {
     + self.stylize(),
 
   stylize(allLayers=true):
-    (if allLayers == true then super.stylize() else {})
+    (if allLayers then super.stylize() else {})
     + generic.percentage.stylize(allLayers=false),
 }
