@@ -749,7 +749,6 @@ local errorLogsPanel(cfg) =
           uid: '${loki_datasource}',
         },
         editorMode: 'builder',
-        // expr: '{filename="/var/log/clickhouse-server/clickhouse-server.err.log", %s}' % matcher,
         expr: logExpr(cfg.logExpression),
         legendFormat: '',
         queryType: 'range',
