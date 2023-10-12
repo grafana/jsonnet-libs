@@ -6,6 +6,8 @@
     dashboardRefresh: '1m',
 
     // alerts thresholds
-   TODO
+    alertsHighThreatCount: 3,  // count
+    alertsHighRequestRate: 150,  // percentage
+    alertsHighHTTPErrorCodeCount: 100,  // count
   },
 }

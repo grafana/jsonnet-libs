@@ -45,7 +45,15 @@ Default thresholds can be configured in `config.libsonnet`.
 ```js
 {
   _config+:: {
-    TODO
+    dashboardTags: ['cloudflare-mixin'],
+    dashboardPeriod: 'now-30m',
+    dashboardTimezone: 'default',
+    dashboardRefresh: '1m',
+
+    // alerts thresholds
+    alertsHighThreatCount: 3, // count
+    alertsHighRequestRate: 150, // percentage
+    alertsHighHTTPErrorCodeCount: 100, // count
   },
 }
 ```
