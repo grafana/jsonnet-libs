@@ -66,7 +66,7 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
                   target=this.targets.reboot,
                   instanceLabels=std.join(',', instanceLabels),
                 )
-                + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level'])),
+                + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels)),
       }
       +
       if
