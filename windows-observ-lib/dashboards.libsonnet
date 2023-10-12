@@ -36,7 +36,6 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
         // hide link to self
         + root.applyCommon(vars.multiInstance, uid + '-fleet', tags, links { backToFleet+:: {}, backToOverview+:: {} }, annotations, timezone, refresh, period),
       overview: g.dashboard.new(prefix + 'Windows overview')
-                + g.dashboard.withUid('overview')
                 + g.dashboard.withPanels(
                   g.util.grid.wrapPanels(
                     [
