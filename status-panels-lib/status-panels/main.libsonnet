@@ -17,6 +17,7 @@ local variables = import './variables.libsonnet';
     panelsWidth=8,
     rowPositionY=0,
     dateTimeUnit='dateTimeFromNow',
+    withRow=true,
   ): {
 
     local this = self,
@@ -39,7 +40,7 @@ local variables = import './variables.libsonnet';
       panelsWidth,
       rowPositionY,
       dateTimeUnit,
-      withRow=true,
+      withRow,
     ),
   },
 
