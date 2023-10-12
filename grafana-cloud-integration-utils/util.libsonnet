@@ -259,7 +259,8 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
                panelsHeight=config.statusPanelsGridPos[0],
                panelsWidth=config.statusPanelsGridPos[1],
                rowPositionY=config.statusPanelsGridPos[3],
-             )).panels.statusPanelsWithRow,
+               withRow=config.statusPanelsAddRow,
+             )).panels.statusPanels,
             [
               panel {
                 gridPos+: {

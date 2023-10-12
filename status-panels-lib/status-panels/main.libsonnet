@@ -39,6 +39,7 @@ local variables = import './variables.libsonnet';
       panelsWidth,
       rowPositionY,
       dateTimeUnit,
+      withRow=true,
     ),
   },
 
