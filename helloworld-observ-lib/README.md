@@ -1,6 +1,6 @@
 # Hello world observ lib
 
-This lib can be used as a starter of modular observ lib.
+This lib can be used as a starter template of modular observ lib.
 
 
 ## Import
@@ -10,7 +10,7 @@ jb init
 jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
 ```
 
-## Structure
+## Modular observability lib format
 
 ```jsonnet
 
@@ -75,6 +75,37 @@ jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
 }
 
 ```
+
+## Pros of using modular observabilty format
+
+- Uses (grafonnet)[https://monitoring.mixins.dev]
+- Highly customizable and flexible:
+
+Any object like `panel`, `target` (query) can be easily referenced by key and then overriden before output of the lib is provided by using jsonnet (patching)[https://tanka.dev/tutorial/environments#patching] technique:
+
+```jsonnet
+local helloworldlib = import './main.libsonnet';
+
+local helloworld =
+  helloworldlib.new(
+    filteringSelector='job="integrations/helloworld"',
+    uid='myhelloworld',
+    groupLabels=['environment', 'cluster'],
+    instanceLabels=['host'],
+  )
+  + 
+  {
+    grafana+: {
+      panels+: {
+        panel1+: 
+          g.panel.timeSeries.withDescription("My new description for panel1")
+      }
+    }
+  };
+```
+
+- Due to high decomposition level, not only dashboards but single panels can be imported ('cherry-picked) from the library to be used in other dashboards
+- Format introduces mandatory arguments that each library should have: `filteringSelector`, `instanceLabels`, `groupLabels`, `uid`. Proper use of those parameters ensures library can be used to instantiate multiple copies of the observability package in the same enviroment without `ids` conflicts or timeSeries overlapping.
 
 ## Examples
 
