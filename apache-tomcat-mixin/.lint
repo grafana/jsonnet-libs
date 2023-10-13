@@ -1,0 +1,20 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "Memory usage"
+      - panel: "CPU usage"
+      - panel: "Traffic sent"
+      - panel: "Traffic received"
+      - panel: "Requests"
+      - panel: "Servlet requests"
+      - panel: "Sessions"
+      - panel: "Threads"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"

@@ -782,7 +782,7 @@ local stack = {
   grafanaDashboards+:: {
     'ubnt-edgrouterx-overview.json':
       dashboard.new(
-        'UBNT EdgeRouter X Overview',
+        'Ubiquiti EdgeRouter Overview',
         time_from='now-1h',
         uid=std.md5('ubnt-edgrouterx-overview.json'),
       ).addTemplates([

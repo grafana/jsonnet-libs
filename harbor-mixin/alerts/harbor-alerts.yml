@@ -1,0 +1,29 @@
+groups:
+  - name: Harbor
+    rules:
+      - alert: HarborComponentStatus
+        expr: |
+          harbor_up == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: 'Harbor Component is Down.'
+          description: 'Harbor {{ $labels.component }} has been down for more than 5 minutes'
+      - alert: HarborProjectQuataExceeded
+        expr: |
+          harbor_project_quota_usage_byte > harbor_project_quota_byte and on(harbor_project_quota_usage_byte) harbor_project_quota_byte != -1
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Harbor project exceeds disk usage quota.'
+          description: 'Harbor project {{ $labels.project_name }} has exceeded the configured disk usage quota for the past 15 minutes'
+      - alert: HarborHighErrorRate
+        expr: sum(rate(harbor_core_http_request_total{code=~"4..|5.."}[5m]))/sum(rate(harbor_core_http_request_total[5m])) > 0.15
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Harbor high error rate.
+          description: HTTP Requests of {{ $labels.instance }} are having a high Error rate

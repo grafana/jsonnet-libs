@@ -1,0 +1,11 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "CPUs available"
+      - panel: "GPUs available"
+      - panel: "Events in queue"
+      - panel: "Messages"
+      - panel: "Registrar log recovered"
+      - panel: "Allocation runs"
+      - panel: "Event queue dispatches"

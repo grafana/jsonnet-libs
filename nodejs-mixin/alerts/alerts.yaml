@@ -8,4 +8,4 @@ groups:
           severity: critical
         annotations:
           description: 'Node.js {{$labels.job}} on {{$labels.instance}} is not up.'
-          summary: Node.js not up
+          summary: Node.js not up.

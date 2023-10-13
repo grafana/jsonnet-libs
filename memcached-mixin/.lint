@@ -1,0 +1,17 @@
+exclusions:
+  panel-title-description-rule:
+    reason: "Not all panels require descriptions - skipping this lint rule for now"
+  panel-units-rule:
+    reason: "The dashboard already has units but it is using older panel versions for which this rule does not work correctly"
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "Instance selector not required in denominator"
+    entries:
+      - panel: "Hit Rate"

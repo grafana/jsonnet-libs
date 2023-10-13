@@ -1,0 +1,20 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "Successful queries"
+      - panel: "Failed queries"
+      - panel: "Rejected inserts"
+      - panel: "Interserver connections"
+      - panel: "Replica queue size"
+      - panel: "Replica operations"
+      - panel: "Replica read only"
+      - panel: "Zookeeper watches"
+      - panel: "Zookeeper sessions"
+      - panel: "Zookeeper requests"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"

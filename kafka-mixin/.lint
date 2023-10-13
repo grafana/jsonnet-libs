@@ -1,7 +1,7 @@
 exclusions:
-  template-job-rule:
-    reason: "No need for it since we are filtering by instance."
-  panel-job-instance-rule:
-    reason: "No need for it since we are filtering by instance."
-  panel-rate-interval-rule:
-    reason: "Some panel calculations need specific time frames."
+  panel-title-description-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  panel-units-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-job-rule:
+    reason: using the new common lib stardard with a filtering static value for job

@@ -80,67 +80,14 @@ local container_template = grafana.template.new(
 );
 
 // Panels
-local integration_status_panel =
-  grafana.statPanel.new(
-    'Integration Status',
-    datasource='$prometheus_datasource',
-    colorMode='background',
-    graphMode='none',
-    noValue='No Data',
-    reducerFunction='lastNotNull'
-  )
-  .addMappings(
-    [
-      {
-        options: {
-          from: 1,
-          result: {
-            color: 'green',
-            index: 0,
-            text: 'Agent Configured - Sending Metrics',
-          },
-          to: 10000000000000,
-        },
-        type: 'range',
-      },
-      {
-        options: {
-          from: 0,
-          result: {
-            color: 'red',
-            index: 1,
-            text: 'No Data',
-          },
-          to: 0,
-        },
-        type: 'range',
-      },
-    ]
-  )
-  .addTarget(
-    grafana.prometheus.target(queries.total_containers)
-  );
-
-local latest_metric_panel =
-  grafana.statPanel.new(
-    'Latest Metric Received',
-    datasource='$prometheus_datasource',
-    colorMode='background',
-    fields='Time',
-    graphMode='none',
-    noValue='No Data',
-    reducerFunction='lastNotNull'
-  )
-  .addTarget(
-    grafana.prometheus.target(queries.total_containers)
-  );
-
 local total_containers_panel =
   grafana.statPanel.new(
     'Total Containers',
+    description='Total number of running containers last seen by the exporter.',
     datasource='$prometheus_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull'
+    reducerFunction='lastNotNull',
+    unit='short',
   )
   .addTarget(
     grafana.prometheus.target(queries.total_containers)
@@ -149,9 +96,11 @@ local total_containers_panel =
 local total_images_panel =
   grafana.statPanel.new(
     'Total Images',
+    description='Total number of distinct images found across running containers',
     datasource='$prometheus_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull'
+    reducerFunction='lastNotNull',
+    unit='short'
   )
   .addTarget(
     grafana.prometheus.target(queries.total_images)
@@ -160,12 +109,13 @@ local total_images_panel =
 local cpu_usage_panel =
   grafana.singlestat.new(
     'CPU Utilization by Containers',
+    description='Cumulative cpu time consumed in seconds.',
     format='percentunit',
     gaugeShow=true,
     thresholds='.80,.90',
     span=2,
     datasource='$prometheus_datasource',
-    gaugeMaxValue=1,
+    gaugeMaxValue=1
   )
   .addTarget(
     grafana.prometheus.target(queries.cpu_usage)
@@ -174,6 +124,7 @@ local cpu_usage_panel =
 local mem_reserved_panel =
   grafana.singlestat.new(
     'Memory Reserved by Containers',
+    description='Memory reserved by the containers on the machine.',
     format='percentunit',
     gaugeShow=true,
     thresholds='.80,.90',
@@ -188,6 +139,7 @@ local mem_reserved_panel =
 local mem_usage_panel =
   grafana.singlestat.new(
     'Memory Utilization by Containers',
+    description='Current memory usage in bytes, including all memory regardless of when it was accessed.',
     format='percentunit',
     gaugeShow=true,
     thresholds='.80,.90',
@@ -202,6 +154,7 @@ local mem_usage_panel =
 local cpu_by_container_panel =
   grafana.graphPanel.new(
     'CPU',
+    description='Cpu time consumed in seconds by container.',
     span=6,
     datasource='$prometheus_datasource',
   ) +
@@ -218,6 +171,7 @@ local cpu_by_container_panel =
 local mem_by_container_panel =
   grafana.graphPanel.new(
     'Memory',
+    description='Current memory usage in bytes, including all memory regardless of when it was accessed by container.',
     span=6,
     datasource='$prometheus_datasource',
   ) +
@@ -232,6 +186,7 @@ local mem_by_container_panel =
 local net_throughput_panel =
   grafana.graphPanel.new(
     'Bandwidth',
+    description='Cumulative count of bytes transmitted.',
     span=6,
     datasource='$prometheus_datasource',
   ) +
@@ -250,6 +205,7 @@ local net_throughput_panel =
 local tcp_socket_by_state_panel =
   grafana.graphPanel.new(
     'TCP Sockets By State',
+    description='TCP sockets on containers by state.',
     datasource='$prometheus_datasource',
     span=6,
   ) +
@@ -298,13 +254,6 @@ local disk_usage_panel =
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
-
-      // Status Row
-      .addPanel(grafana.row.new(title='Integration Status'), gridPos={ x: 0, y: 0, w: 0, h: 0 })
-      // Integration status
-      .addPanel(integration_status_panel, gridPos={ x: 0, y: 0, w: 8, h: 2 })
-      // Latest metric received
-      .addPanel(latest_metric_panel, gridPos={ x: 8, y: 0, w: 8, h: 2 })
 
       // Overview Row
       .addPanel(grafana.row.new(title='Overview'), gridPos={ x: 0, y: 2, w: 0, h: 0 })

@@ -44,12 +44,7 @@
       "type": "text"
     },
     {
-      "aliasColors": {
-        "localhost:9005": "light-red",
-        "localhost:9005 - PrometheusReporter": "semi-dark-green",
-        "localhost:9090": "semi-dark-green",
-        "localhost:9990": "semi-dark-blue"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -97,9 +92,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "up{instance=~\"$instance\"}",
+          "expr": "up{job=~\"integrations/wso2-streaming-integrator\", instance=~\"$instance\"}",
           "instant": false,
-          "legendFormat": "{{instance}} - {{job}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -225,7 +220,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(count by (app,instance) (siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"})))",
+          "expr": "sum(count(count by (app,instance) (siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"})))",
           "instant": true,
           "refId": "A"
         }
@@ -510,7 +505,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_source_throughput_total{instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"}) by (instance)",
+          "expr": "sum(siddhi_source_throughput_total{job=~\"$job\", instance=~\"$instance\",type=\"source\",operation!=\"inMemory\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -520,7 +515,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(jvm_os_system_load_average{instance=~\"$instance\"}) by (instance)",
+          "expr": "sum(jvm_os_system_load_average{job=~\"$job\", instance=~\"$instance\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -530,7 +525,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(jvm_os_cpu_load_system{instance=~\"$instance\"}) by (insance)",
+          "expr": "sum(jvm_os_cpu_load_system{job=~\"$job\", instance=~\"$instance\"}) by (insance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -540,7 +535,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(jvm_memory_heap_usage{instance=~\"$instance\"}) by (instance)",
+          "expr": "sum(jvm_memory_heap_usage{job=~\"$job\", instance=~\"$instance\"}) by (instance)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -570,12 +565,7 @@
       "type": "table"
     },
     {
-      "aliasColors": {
-        "jvm_os_cpu_load_system{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "light-red",
-        "overall throughput{instance=\"instance\" }": "semi-dark-green",
-        "overall throughput{instance=\"localhost:9005\" }": "semi-dark-green",
-        "sum(siddhi_source_throughput_total{type=\"source\",operation!=\"inMemory\"})": "semi-dark-green"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -622,7 +612,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(siddhi_source_throughput_total{type=\"source\",operation!=\"inMemory\",instance=~\"$instance\"})",
+          "expr": "sum(siddhi_source_throughput_total{type=\"source\",operation!=\"inMemory\",job=~\"$job\", instance=~\"$instance\"})",
           "instant": false,
           "legendFormat": "overall throughput{instance=\"{{instance}}\" }",
           "refId": "A"
@@ -659,10 +649,7 @@
       }
     },
     {
-      "aliasColors": {
-        "jvm_os_system_load_average{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "light-red",
-        "system load average{instance=\"localhost:9005\" }": "light-red"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -709,7 +696,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "jvm_os_system_load_average{instance=~\"$instance\"}",
+          "expr": "jvm_os_system_load_average{job=~\"$job\", instance=~\"$instance\"}",
           "legendFormat": "system load average{instance=\"{{instance}}\" }",
           "refId": "A"
         }
@@ -745,10 +732,7 @@
       }
     },
     {
-      "aliasColors": {
-        "cpu process load{instance=\"localhost:9005\" }": "semi-dark-blue",
-        "jvm_os_cpu_load_process{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "semi-dark-blue"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -797,7 +781,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "jvm_os_cpu_load_process{instance=~\"$instance\"}",
+          "expr": "jvm_os_cpu_load_process{job=~\"$job\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "cpu process load{instance=\"{{instance}}\" }",
           "refId": "A"
@@ -834,11 +818,7 @@
       }
     },
     {
-      "aliasColors": {
-        "jvm_memory_heap_usage{instance=\"localhost:9005\",job=\"PrometheusReporter\"}": "semi-dark-yellow",
-        "memory heap usage{instance=\"localhost:9005\" }": "semi-dark-yellow",
-        "memory heap usage{instance=\"localhost:9990\" }": "semi-dark-green"
-      },
+      "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -887,7 +867,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "jvm_memory_heap_usage{instance=~\"$instance\"}",
+          "expr": "jvm_memory_heap_usage{job=~\"$job\", instance=~\"$instance\"}",
           "interval": "",
           "legendFormat": "memory heap usage{instance=\"{{instance}}\" }",
           "refId": "A"
@@ -984,7 +964,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(jvm_threads_count{instance=~\"$instance\"})",
+          "expr": "sum(jvm_threads_count{job=~\"$job\", instance=~\"$instance\"})",
           "format": "time_series",
           "instant": false,
           "refId": "A"
@@ -1054,7 +1034,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(jvm_threads_blocked_count{instance=~\"$instance\"})",
+          "expr": "sum(jvm_threads_blocked_count{job=~\"$job\", instance=~\"$instance\"})",
           "format": "time_series",
           "instant": false,
           "refId": "A"
@@ -1124,7 +1104,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(jvm_memory_heap_used{instance=~\"$instance\"})",
+          "expr": "sum(jvm_memory_heap_used{job=~\"$job\", instance=~\"$instance\"})",
           "format": "time_series",
           "instant": false,
           "refId": "A"
@@ -1195,7 +1175,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(jvm_os_file_descriptor_open_count{instance=~\"$instance\"})",
+          "expr": "sum(jvm_os_file_descriptor_open_count{job=~\"$job\", instance=~\"$instance\"})",
           "instant": false,
           "intervalFactor": 1,
           "refId": "A"
@@ -1361,7 +1341,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1476,7 +1456,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_stream_throughput_total{instance=~\"$instance\",app=~\"$application\"}))",
+          "expr": "sum(count(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -1672,7 +1652,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_query_memory{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_query_memory{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1682,7 +1662,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_query_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_query_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1797,7 +1777,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_query_memory{instance=~\"$instance\",app=~\"$application\"}))",
+          "expr": "sum(count(siddhi_query_memory{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -2035,7 +2015,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_sourcemapper_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation,operationType)",
+          "expr": "sum(siddhi_sourcemapper_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation,operationType)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2045,7 +2025,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_source_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
+          "expr": "sum(siddhi_source_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2166,7 +2146,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_source_throughput_total{instance=~\"$instance\",app=~\"$application\"}))",
+          "expr": "sum(count(siddhi_source_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -2404,7 +2384,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_sinkmapper_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation,operationType)",
+          "expr": "sum(siddhi_sinkmapper_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation,operationType)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2414,7 +2394,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_sink_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_sink_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2535,7 +2515,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(siddhi_sink_throughput_total{instance=~\"$instance\",app=~\"$application\"}))",
+          "expr": "sum(count(siddhi_sink_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}))",
           "instant": true,
           "refId": "A"
         }
@@ -2750,7 +2730,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_table_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
+          "expr": "sum(siddhi_table_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2760,7 +2740,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_table_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
+          "expr": "sum(siddhi_table_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element,operation)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -2871,7 +2851,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(count by (element) (siddhi_table_latency{instance=~\"$instance\",app=~\"$application\",element!~\".*SECONDS|.*MINUTES|.*HOURS|.*DAYS|.*MONTHS|.*YEARS\"})))",
+          "expr": "sum(count(count by (element) (siddhi_table_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element!~\".*SECONDS|.*MINUTES|.*HOURS|.*DAYS|.*MONTHS|.*YEARS\"})))",
           "instant": true,
           "refId": "A"
         }
@@ -3090,7 +3070,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_memory{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_aggregation_memory{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3100,7 +3080,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3110,7 +3090,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
+          "expr": "sum(siddhi_aggregation_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3231,7 +3211,7 @@
       "pluginVersion": "8.3.3",
       "targets": [
         {
-          "expr": "sum(count(count by (element) (siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\"})))",
+          "expr": "sum(count(count by (element) (siddhi_aggregation_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"})))",
           "instant": true,
           "refId": "A"
         }
@@ -3400,7 +3380,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_ondemandquery_latency{instance=~\"$instance\",app=~\"$application\"}) by (app)",
+          "expr": "sum(siddhi_ondemandquery_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"}) by (app)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -3494,15 +3474,44 @@
           "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total,instance)",
+        "definition": "label_values(siddhi_stream_throughput_total,job)",
+        "hide": 2,
+        "includeAll": true,
+        "allValue":".+",
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_stream_throughput_total,job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": "$datasource",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "allValue":".+",
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total,instance)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"},instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -3525,15 +3534,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_stream_throughput_total,app)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"},app)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Application",
         "multi": true,
         "name": "application",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_stream_throughput_total,app)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"},app)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -3552,15 +3562,16 @@
           "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(type)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, type)",
         "hide": 2,
         "includeAll": true,
+        "allValue":".+",
         "label": "Type",
         "multi": true,
         "name": "type",
         "options": [],
         "query": {
-          "query": "label_values(type)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, type)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -3579,15 +3590,16 @@
           "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(metrics)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, metrics)",
         "hide": 2,
         "includeAll": true,
+        "allValue":".+",
         "label": "Metrics",
         "multi": true,
         "name": "metrics",
         "options": [],
         "query": {
-          "query": "label_values(metrics)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, metrics)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -3606,15 +3618,16 @@
           "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(element)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, element)",
         "hide": 2,
         "includeAll": true,
+        "allValue":".+",
         "label": "Element",
         "multi": true,
         "name": "element",
         "options": [],
         "query": {
-          "query": "label_values(element)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, element)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -3633,15 +3646,16 @@
           "value": "0"
         },
         "datasource": "$datasource",
-        "definition": "label_values(quantile)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, quantile)",
         "hide": 2,
         "includeAll": true,
+        "allValue":".+",
         "label": "Quantile",
         "multi": true,
         "name": "quantile",
         "options": [],
         "query": {
-          "query": "label_values(quantile)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, quantile)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -3660,7 +3674,7 @@
           "value": "contains"
         },
         "datasource": "$datasource",
-        "definition": "label_values(operation)",
+        "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, operation)",
         "hide": 2,
         "includeAll": true,
         "label": "Operation",
@@ -3668,7 +3682,7 @@
         "name": "operation",
         "options": [],
         "query": {
-          "query": "label_values(operation)",
+          "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\", instance=~\"$instance\"}, operation)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -3679,34 +3693,7 @@
         "tagsQuery": "",
         "type": "query",
         "useTags": false
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": "$datasource",
-        "definition": "label_values(job)",
-        "hide": 2,
-        "includeAll": true,
-        "label": "Job",
-        "multi": true,
-        "name": "job",
-        "options": [],
-        "query": {
-          "query": "label_values(job)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      }
+      }      
     ]
   },
   "time": {

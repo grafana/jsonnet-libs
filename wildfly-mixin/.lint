@@ -1,0 +1,16 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "Active sessions"
+      - panel: "Expired sessions"
+      - panel: "Rejected sessions"
+      - panel: "Active connections"
+      - panel: "Idle connections"
+      - panel: "Created transactions"
+      - panel: "In-flight transactions"
+      - panel: "Aborted transactions"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"

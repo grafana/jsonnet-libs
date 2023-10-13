@@ -12,8 +12,4 @@
     'StreamingIntegrator_apps.json': (import 'dashboards/StreamingIntegrator_apps.json'),
     'StreamingIntegrator_overall.json': (import 'dashboards/StreamingIntegrator_overall.json'),
   },
-  local importRules(rules) = {
-    groups+: std.native('parseYaml')(rules)[0].groups,
-  },
-
 }

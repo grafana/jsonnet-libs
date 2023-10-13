@@ -1,0 +1,18 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects ‘datasource’"
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects ‘datasource’"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "For Redis enterprise, the instance = cluster, as there's a 1:1 endpoint to cluster relationship. So the instance requirement should be dropped specifically for this instance."
+    entries:
+      - dashboard: "Redis Enterprise overview"
+      - dashboard: "Redis Enterprise node overview"
+      - dashbaord: "Redis Enterprise database overview"

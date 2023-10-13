@@ -44,8 +44,8 @@ g.dashboard.new() + {
   templating: {
     list: [
       d.templates.datasource,
-      d.templates.instance,
       d.templates.job,
+      d.templates.instance,
       d.templates.backend,
     ],
   },

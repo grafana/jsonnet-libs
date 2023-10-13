@@ -220,7 +220,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_memory{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}) by (instance,app,element,operation,quantile)",
+          "expr": "sum(siddhi_aggregation_memory{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}) by (instance,app,element,operation,quantile)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -230,7 +230,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}) by (instance,app,element,operation,quantile)",
+          "expr": "sum(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}) by (instance,app,element,operation,quantile)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -240,7 +240,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}) by (instance,app,element)",
+          "expr": "sum(siddhi_aggregation_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=~\"$element\"}) by (instance,app,element)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -376,7 +376,7 @@
         {
           "datasource": "$datasource",
           "exemplar": false,
-          "expr": "sum(count(count by (element) (siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\"})))",
+          "expr": "sum(count(count by (element) (siddhi_aggregation_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"})))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -462,7 +462,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "siddhi_aggregation_memory{instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\"}",
+          "expr": "siddhi_aggregation_memory{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=~\"$element\",operation=~\"$operation\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -549,7 +549,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\",element=\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}",
+          "expr": "siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=\"$element\",operation=~\"$operation\",quantile=~\"$quantile\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -636,7 +636,7 @@
         {
           "datasource": "$datasource",
           "exemplar": true,
-          "expr": "siddhi_aggregation_throughput_total{instance=~\"$instance\",app=~\"$application\",element=\"$element\",operation=~\"$operation\"}",
+          "expr": "siddhi_aggregation_throughput_total{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=\"$element\",operation=~\"$operation\"}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -686,10 +686,43 @@
           ]
         },
         "datasource": "$datasource",
+        "definition": "label_values(siddhi_aggregation_latency,job)",
+        "hide": 0,
+        "includeAll": true,
+        "allValue":".+",
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(siddhi_aggregation_latency,job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "$datasource",
         "definition": "label_values(siddhi_aggregation_latency,instance)",
         "hide": 0,
         "includeAll": true,
-        "label": "Instance",
+        "allValue":".+",
+        "label": "instance",
         "multi": true,
         "name": "instance",
         "options": [],
@@ -717,15 +750,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_aggregation_latency{instance=~\"$instance\"},app)",
+        "definition": "label_values(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\"},app)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Application",
         "multi": true,
         "name": "application",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_aggregation_latency{instance=~\"$instance\"},app)",
+          "query": "label_values(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\"},app)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -748,15 +782,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\"},element)",
+        "definition": "label_values(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"},element)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Element",
         "multi": true,
         "name": "element",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\"},element)",
+          "query": "label_values(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\"},element)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -776,15 +811,16 @@
           ]
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"},operation)",
+        "definition": "label_values(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=~\"$element\"},operation)",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Operation",
         "multi": true,
         "name": "operation",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_aggregation_latency{instance=~\"$instance\",app=~\"$application\",element=~\"$element\"},operation)",
+          "query": "label_values(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\",app=~\"$application\",element=~\"$element\"},operation)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -800,16 +836,17 @@
           "value": "$__all"
         },
         "datasource": "$datasource",
-        "definition": "label_values(siddhi_aggregation_latency{instance=~\"$instance\"},quantile)",
+        "definition": "label_values(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\"},quantile)",
         "description": "",
         "hide": 0,
         "includeAll": true,
+        "allValue":".+",
         "label": "Quantile",
         "multi": true,
         "name": "quantile",
         "options": [],
         "query": {
-          "query": "label_values(siddhi_aggregation_latency{instance=~\"$instance\"},quantile)",
+          "query": "label_values(siddhi_aggregation_latency{job=~\"$job\", instance=~\"$instance\"},quantile)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,

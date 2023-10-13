@@ -1,0 +1,27 @@
+exclusions:
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
+  panel-datasource-rule:
+    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+    - panel: "Logs volume"
+    - panel: "Availability status"
+    - panel: "Active sessions"
+    - panel: "Requests / $__interval"
+    - panel: "Connections"
+    - panel: "Ephemeral connections"
+    - panel: "Packets inbound / $__interval"
+    - panel: "Packets outbound / $__interval"
+    - panel: "Ephemeral packets inbound / $__interval"
+    - panel: "Ephemeral packets outbound / $__interval"
+    - panel: "Members"
+    - panel: "Connection queue depth"
+    - panel: "Connection queue serviced / $__interval"
+  panel-title-description-rule:
+    reason: "Not required for logs volume"

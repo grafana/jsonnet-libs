@@ -1,0 +1,24 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "Unread blocks evicted"
+      - panel: "Blocks removed"
+      - panel: "Volume failures"
+      - panel: "Total blocks"
+      - panel: "Missing blocks"
+      - panel: "Under-replicated blocks"
+      - panel: "Transactions since last checkpoint"
+      - panel: "Volume failures"
+      - panel: "Total files"
+      - panel: "Total load"
+      - panel: "Applications running"
+      - panel: "Allocated containers"
+      - panel: "Garbage collection count"
+      - panel: "Containers state"
+      - panel: "Containers available virtual cores"
+      - panel: "Applications state"
+      - panel: "Available virtual cores"
+      - panel: "Garbage collection count"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
