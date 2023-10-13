@@ -117,7 +117,7 @@ function(
       [
         self.row,
       ],
-      self.statusPanels,
+      self.statusPanelsWithOutRow,
     ]),
 
     statusPanels: if withRow then

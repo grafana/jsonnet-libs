@@ -259,7 +259,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
                panelsHeight=config.statusPanelsGridPos[0],
                panelsWidth=config.statusPanelsGridPos[1],
                rowPositionY=config.statusPanelsGridPos[3],
-               withRow=if config.statusPanelsWithRow then config.statusPanelsWithRow else true,
+               withRow=(if std.objectHas(config, 'statusPanelsWithRow') then config.statusPanelsWithRow else true),
              )).panels.statusPanels,
             [
               panel {
