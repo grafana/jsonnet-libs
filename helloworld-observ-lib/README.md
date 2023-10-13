@@ -6,14 +6,14 @@ This lib can be used as a starter of modular observ lib.
 
 ```sh
 jb init
-jb install https://github.com/grafana/jsonnet-libs/hello-world-lib
+jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
 ```
 
 ## Examples
 
-### Basic example
+### Monitoring-Mixin example
 
-You can use lib to fill in monitoring-mixin structure:
+You can use lib to fill in [monitoring-mixin](https://monitoring.mixins.dev/) structure:
 
 ```jsonnet
 // mixin.libsonnet file
