@@ -2,11 +2,78 @@
 
 This lib can be used as a starter of modular observ lib.
 
+
 ## Import
 
 ```sh
 jb init
 jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
+```
+
+## Structure
+
+```jsonnet
+
+{
+  config: {
+    //common options
+  },
+
+  grafana: {
+   
+   // grafana templated variables to reuse across mutltiple dashboards
+   variables: {
+      datasources: {
+        prometheus: {},
+        loki: {},
+      },
+      multiInstance: [],
+      singleInstace: [],
+  	  queriesSelector: "",
+   },
+
+   // grafana targets (queries) to attach to panels
+   targets: {
+    target1: <target1>,
+    target3: <target2>,
+    ...
+    targetN: <targetN>,
+   },
+
+   // grafana panels
+   panels: {
+    panel1: <panel1>,
+    panel2: <panel2>,
+    ...
+    panelN: <panelN>,
+   },
+
+   // grafana dashboards
+   dashboards: {
+    dashboard1: <dashboard1>,
+    dashboard2: <dashboard2>,
+    ...
+    dashboardN: <dashboardN>,
+   },
+
+   // grafana annotations
+   annotations: {
+    annotation1: <annotation1>,
+    ...
+   },
+   
+   // grafana dashboard links
+   links: {
+      //common dashobard links
+   },
+ },
+
+ prometheus: {
+  alerts: {},
+  rules: {},
+ },
+}
+
 ```
 
 ## Examples
