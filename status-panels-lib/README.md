@@ -36,7 +36,7 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
   panelsWidth=8,
   rowPositionY=10,
   withRow=true,
-)).panels.statusPanelsWithRow
+)).panels.statusPanels
 ```
 
 ## Logs
@@ -53,7 +53,7 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
   panelsWidth=8,
   rowPositionY=10,
   withRow=true,
-)).panels.statusPanelsWithRow
+)).panels.statusPanels
 ```
 
 ## Only panels without row
@@ -69,7 +69,7 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
   panelsHeight=2,
   panelsWidth=8,
   rowPositionY=10,
-  withRow=true,
+  withRow=false,
 )).panels.statusPanels
 ```
 
@@ -156,7 +156,8 @@ local title = 'Status Panel Example';
             panelsHeight=2,
             panelsWidth=8,
             rowPositionY=10,
-          )).panels.statusPanelsWithRow
+            withRow=true,
+          )).panels.statusPanels
         )
   }
 }
