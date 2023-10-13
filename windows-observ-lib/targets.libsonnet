@@ -4,7 +4,7 @@ local lokiQuery = g.query.loki;
 
 {
   new(this): {
-    local variables = this.variables,
+    local variables = this.grafana.variables,
     local config = this.config,
     uptimeQuery:: 'windows_system_system_up_time',
 

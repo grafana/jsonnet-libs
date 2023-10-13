@@ -13,15 +13,17 @@ local config = (import 'config.libsonnet')._config;
     {
       config+: config,
     },
-  prometheusAlerts+:: windows.alerts,
+  prometheusAlerts+:: windows.prometheus.alerts,
   grafanaDashboards+::
     (windows {
-       variables+: {
-         datasources+: {
-           loki+: var.datasource.withRegex('Loki|.+logs'),
-           prometheus+: var.datasource.withRegex('Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
+       grafana+: {
+         variables+: {
+           datasources+: {
+             loki+: var.datasource.withRegex('Loki|.+logs'),
+             prometheus+: var.datasource.withRegex('Victoria|Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
+           },
          },
        },
      })
-    .dashboards,
+    .grafana.dashboards,
 }

@@ -41,10 +41,12 @@ local utils = commonlib.utils;
        datasources: {
          prometheus:
            var.datasource.new('datasource', 'prometheus')
-           + var.datasource.generalOptions.withLabel('Data source'),
+           + var.datasource.generalOptions.withLabel('Data source')
+           + var.datasource.withRegex(''),
          loki:
            var.datasource.new('loki_datasource', 'loki')
            + var.datasource.generalOptions.withLabel('Loki data source')
+           + var.datasource.withRegex('')
            + var.datasource.generalOptions.showOnDashboard.withNothing(),
        },
        // Use on dashboards where multiple entities can be selected, like fleet dashboards
@@ -64,7 +66,7 @@ local utils = commonlib.utils;
      }
      + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
   withLokiLogs(this): {
-    multiInstance+: [this.variables.datasources.loki],
-    singleInstance+: [this.variables.datasources.loki],
+    multiInstance+: [this.grafana.variables.datasources.loki],
+    singleInstance+: [this.grafana.variables.datasources.loki],
   },
 }

@@ -2,19 +2,17 @@ local g = import './g.libsonnet';
 local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 {
   local root = self,
-  new(
-    this
-  ):
+  new(this):
     local prefix = this.config.dashboardNamePrefix;
-    local links = this.links;
+    local links = this.grafana.links;
     local tags = this.config.dashboardTags;
     local uid = g.util.string.slugify(this.config.uid);
-    local vars = this.variables;
-    local annotations = this.annotations;
+    local vars = this.grafana.variables;
+    local annotations = this.grafana.annotations;
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
-    local panels = this.panels;
+    local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
       fleet:
@@ -110,16 +108,17 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     then
       {
         logs:
-
-          logslib.new(prefix + 'Windows logs',
-                      datasourceName=this.variables.datasources.loki.name,
-                      datasourceRegex=this.variables.datasources.loki.regex,
-                      filterSelector=this.config.filteringSelector,
-                      labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
-                      formatParser='json',
-                      showLogsVolume=this.config.showLogsVolume,
-                      logsVolumeGroupBy=this.config.logsVolumeGroupBy,
-                      extraFilters=this.config.logsExtraFilters)
+          logslib.new(
+            prefix + 'Windows logs',
+            datasourceName=this.grafana.variables.datasources.loki.name,
+            datasourceRegex=this.grafana.variables.datasources.loki.regex,
+            filterSelector=this.config.filteringSelector,
+            labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
+            formatParser='json',
+            showLogsVolume=this.config.showLogsVolume,
+            logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+            extraFilters=this.config.logsExtraFilters
+          )
           {
             dashboards+:
               {
@@ -138,7 +137,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
             variables+: {
               // add prometheus datasource for annotations processing
               toArray+: [
-                this.variables.datasources.prometheus { hide: 2 },
+                this.grafana.variables.datasources.prometheus { hide: 2 },
               ],
             },
           }.dashboards.logs,

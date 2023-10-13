@@ -4,7 +4,7 @@ local utils = commonlib.utils;
 {
   new(this):
     {
-      local t = this.targets,
+      local t = this.grafana.targets,
       local table = g.panel.table,
       local fieldOverride = g.panel.table.fieldOverride,
       local instanceLabel = this.config.instanceLabels[0],
@@ -66,7 +66,7 @@ local utils = commonlib.utils;
             {
               targetBlank: false,
               title: 'Drill down to ${__field.name} ${__value.text}',
-              url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}' % [this.dashboards.overview.uid, instanceLabel, instanceLabel],
+              url: 'd/%s?var-%s=${__data.fields.%s}&${__url_time_range}' % [this.grafana.dashboards.overview.uid, instanceLabel, instanceLabel],
             },
           ]),
           fieldOverride.byRegexp.new(std.join('|', std.map(utils.toSentenceCase, this.config.groupLabels)))
@@ -75,7 +75,7 @@ local utils = commonlib.utils;
             {
               targetBlank: false,
               title: 'Filter by ${__field.name}',
-              url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}' % [this.dashboards.fleet.uid],
+              url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}' % [this.grafana.dashboards.fleet.uid],
             },
           ]),
           fieldOverride.byName.new('CPU count')
@@ -221,7 +221,7 @@ local utils = commonlib.utils;
         target=t.cpuUsage,
         topk=25,
         instanceLabels=this.config.instanceLabels,
-        drillDownDashboardUid=this.dashboards.overview.uid,
+        drillDownDashboardUid=this.grafana.dashboards.overview.uid,
       ),
       cpuUsageStat: commonlib.panels.cpu.stat.usage.new(targets=[t.cpuUsage]),
       cpuUsageByMode: commonlib.panels.cpu.timeSeries.utilizationByMode.new(
@@ -259,7 +259,7 @@ local utils = commonlib.utils;
         target=t.memoryUsagePercent,
         topk=25,
         instanceLabels=this.config.instanceLabels,
-        drillDownDashboardUid=this.dashboards.overview.uid,
+        drillDownDashboardUid=this.grafana.dashboards.overview.uid,
       ),
       memoryUsageTsBytes: commonlib.panels.memory.timeSeries.usageBytes.new(targets=[t.memoryUsedBytes, t.memoryTotalBytes]),
       diskTotalC:
@@ -288,7 +288,7 @@ local utils = commonlib.utils;
         target=t.diskUsagePercent,
         topk=25,
         instanceLabels=this.config.instanceLabels + ['volume'],
-        drillDownDashboardUid=this.dashboards.overview.uid,
+        drillDownDashboardUid=this.grafana.dashboards.overview.uid,
       ),
       diskIOBytesPerSec: commonlib.panels.disk.timeSeries.ioBytesPerSec.new(
         targets=[t.diskIOreadBytesPerSec, t.diskIOwriteBytesPerSec, t.diskIOutilization]
@@ -299,7 +299,7 @@ local utils = commonlib.utils;
           target=t.diskIOutilization,
           topk=25,
           instanceLabels=this.config.instanceLabels + ['volume'],
-          drillDownDashboardUid=this.dashboards.overview.uid,
+          drillDownDashboardUid=this.grafana.dashboards.overview.uid,
         ),
       diskIOps:
         commonlib.panels.disk.timeSeries.iops.new(
