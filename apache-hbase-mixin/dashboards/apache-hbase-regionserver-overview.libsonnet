@@ -12,22 +12,26 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local regionCountPanel = {
+
+local regionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'server_region_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'stat',
-  title: 'Region count',
+  title: 'Regions',
   description: 'The number of regions hosted by the RegionServer.',
   fieldConfig: {
     defaults: {
       color: {
         mode: 'thresholds',
       },
+      decimals: 0,
       mappings: [],
       thresholds: {
         mode: 'absolute',
@@ -35,6 +39,10 @@ local regionCountPanel = {
           {
             color: 'green',
             value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
           },
         ],
       },
@@ -59,22 +67,25 @@ local regionCountPanel = {
   pluginVersion: '10.2.0-61719',
 };
 
-local storeFileCountPanel = {
+local storeFilesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'server_store_file_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'stat',
-  title: 'Store file count',
+  title: 'Store files',
   description: 'The number of store files on disk currently managed by the RegionServer.',
   fieldConfig: {
     defaults: {
       color: {
         mode: 'thresholds',
       },
+      decimals: 0,
       mappings: [],
       thresholds: {
         mode: 'absolute',
@@ -82,6 +93,10 @@ local storeFileCountPanel = {
           {
             color: 'green',
             value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
           },
         ],
       },
@@ -106,13 +121,14 @@ local storeFileCountPanel = {
   pluginVersion: '10.2.0-61719',
 };
 
-local storeFileSizePanel = {
+local storeFileSizesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'server_store_file_size{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'bargauge',
@@ -124,7 +140,6 @@ local storeFileSizePanel = {
         mode: 'thresholds',
       },
       mappings: [],
-      min: 0,
       thresholds: {
         mode: 'absolute',
         steps: [
@@ -143,7 +158,7 @@ local storeFileSizePanel = {
     minVizHeight: 10,
     minVizWidth: 0,
     namePlacement: 'auto',
-    orientation: 'horizontal',
+    orientation: 'auto',
     reduceOptions: {
       calcs: [
         'lastNotNull',
@@ -163,11 +178,13 @@ local rpcConnectionsPanel = {
     prometheus.target(
       'region_server_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
+      legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'stat',
   title: 'RPC connections',
-  description: 'The number of open connections at the RPC layer.',
+  description: 'The number of open connections to the RegionServer.',
   fieldConfig: {
     defaults: {
       color: {
@@ -211,11 +228,13 @@ local jvmMemoryUsagePanel = {
       'jvm_metrics_mem_non_heap_used_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"} / clamp_min(jvm_metrics_mem_non_heap_committed_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"}, 1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - non-heap',
+      format='time_series',
     ),
     prometheus.target(
       'jvm_metrics_mem_heap_used_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"}, 1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - heap',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -299,6 +318,7 @@ local requestsReceivedPanel = {
       'rate(server_total_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -380,46 +400,55 @@ local requestsOverviewPanel = {
       'rate(server_read_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - read',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_write_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - write',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_cp_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - cp',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_filtered_read_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - filtered read',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_rpc_get_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - rpc get',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_rpc_scan_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - rpc scan',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_rpc_full_scan_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - rpc full scan',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_rpc_mutate_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - rpc mutate',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_rpc_multi_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - rpc multi',
+      format='time_series',
     ),
   ],
   type: 'piechart',
@@ -470,6 +499,7 @@ local regionCountPanel = {
       'server_region_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -519,6 +549,7 @@ local regionCountPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -544,17 +575,18 @@ local regionCountPanel = {
   },
 };
 
-local rpcConnectionsPanel = {
+local rpcConnectionCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'region_server_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'RPC connections',
+  title: 'RPC connection count',
   description: 'The number of open connections to the RegionServer.',
   fieldConfig: {
     defaults: {
@@ -599,6 +631,7 @@ local rpcConnectionsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -631,6 +664,7 @@ local storeFileCountPanel = {
       'server_store_file_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -680,6 +714,7 @@ local storeFileCountPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -712,6 +747,7 @@ local storeFileSizePanel = {
       'server_store_file_size{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -760,6 +796,7 @@ local storeFileSizePanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -792,31 +829,37 @@ local queuedCallsPanel = {
       'region_server_num_calls_in_general_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - general',
+      format='time_series',
     ),
     prometheus.target(
       'region_server_num_calls_in_replication_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - replication',
+      format='time_series',
     ),
     prometheus.target(
       'region_server_num_calls_in_read_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - read',
+      format='time_series',
     ),
     prometheus.target(
       'region_server_num_calls_in_write_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - write',
+      format='time_series',
     ),
     prometheus.target(
       'region_server_num_calls_in_scan_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - scan',
+      format='time_series',
     ),
     prometheus.target(
       'region_server_num_calls_in_priority_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - priority',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -865,6 +908,7 @@ local queuedCallsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -901,26 +945,31 @@ local slowOperationsPanel = {
       'rate(server_slow_append_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - append',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_slow_put_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - put',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_slow_delete_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - delete',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_slow_get_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - get',
+      format='time_series',
     ),
     prometheus.target(
       'rate(server_slow_increment_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - increment',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -969,6 +1018,7 @@ local slowOperationsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -1005,6 +1055,7 @@ local cacheHitPercentagePanel = {
       'server_block_cache_express_hit_percent{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -1055,6 +1106,7 @@ local cacheHitPercentagePanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -1087,11 +1139,13 @@ local authenticationsPanel = {
       'rate(region_server_authentication_successes{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - success',
+      format='time_series',
     ),
     prometheus.target(
       'rate(region_server_authentication_failures{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - failure',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -1140,6 +1194,7 @@ local authenticationsPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
           {
             color: 'red',
@@ -1168,6 +1223,7 @@ local authenticationsPanel = {
     },
   },
 };
+
 
 {
   grafanaDashboards+:: {
@@ -1234,15 +1290,15 @@ local authenticationsPanel = {
       )
       .addPanels(
         [
-          regionCountPanel { gridPos: { h: 8, w: 6, x: 0, y: 0 } },
-          storeFileCountPanel { gridPos: { h: 8, w: 6, x: 6, y: 0 } },
-          storeFileSizePanel { gridPos: { h: 8, w: 6, x: 12, y: 0 } },
+          regionsPanel { gridPos: { h: 8, w: 6, x: 0, y: 0 } },
+          storeFilesPanel { gridPos: { h: 8, w: 6, x: 6, y: 0 } },
+          storeFileSizesPanel { gridPos: { h: 8, w: 6, x: 12, y: 0 } },
           rpcConnectionsPanel { gridPos: { h: 8, w: 6, x: 18, y: 0 } },
           jvmMemoryUsagePanel { gridPos: { h: 9, w: 24, x: 0, y: 8 } },
           requestsReceivedPanel { gridPos: { h: 8, w: 16, x: 0, y: 17 } },
           requestsOverviewPanel { gridPos: { h: 8, w: 8, x: 16, y: 17 } },
           regionCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
-          rpcConnectionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
+          rpcConnectionCountPanel { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
           storeFileCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
           storeFileSizePanel { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
           queuedCallsPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
