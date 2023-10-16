@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local deadRegionServersPanel = {
   datasource: promDatasource,
   targets: [
@@ -297,7 +296,7 @@ local alertsPanel = {
   title: 'Alerts',
   description: 'Panel to report on the status of integration alerts.',
   options: {
-    alertInstanceLabelFilter: '{job=~"integrations/apache-hbase"}',
+    alertInstanceLabelFilter: '{job="integrations/apache-hbase"}',
     alertName: '',
     dashboardAlerts: false,
     folder: '',
@@ -961,7 +960,6 @@ local oldestRegionInTransitionPanel = {
     },
   },
 };
-
 
 {
   grafanaDashboards+:: {

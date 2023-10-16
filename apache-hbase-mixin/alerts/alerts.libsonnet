@@ -92,7 +92,7 @@
           {
             alert: 'HighRSAuthFailRate',
             expr: |||
-              100 * rate(region_server_authentication_failures[5m]) / (clamp_min(rate(region_server_authentication_successes[5m] + clamp_min(rate(region_server_authentication_failures[5m]), 1)))) > %(alertsHighRSAuthFailRate)s
+              100 * rate(region_server_authentication_failures[5m]) / (clamp_min(rate(region_server_authentication_successes[5m]), 1) + clamp_min(rate(region_server_authentication_failures[5m]), 1)) > %(alertsHighRSAuthFailRate)s
             ||| % $._config,
             'for': '5m',
             labels: {
