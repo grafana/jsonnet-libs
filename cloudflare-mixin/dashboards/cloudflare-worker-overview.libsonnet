@@ -19,6 +19,7 @@ local workerCPUTimeQuantilesPanel = {
       'cloudflare_worker_cpu_time{job=~"$job", instance=~"$instance", script_name=~"$script_name"}',
       datasource=promDatasource,
       legendFormat='{{script_name}} - {{quantile}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -79,7 +80,7 @@ local workerCPUTimeQuantilesPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -96,6 +97,7 @@ local workerDurationQuantilesPanel = {
       'cloudflare_worker_duration{job=~"$job", instance=~"$instance", script_name=~"$script_name"}',
       datasource=promDatasource,
       legendFormat='{{script_name}} - {{quantile}}',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -156,7 +158,7 @@ local workerDurationQuantilesPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'bottom',
+      placement: 'right',
       showLegend: true,
     },
     tooltip: {
@@ -170,15 +172,15 @@ local workerRequestsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(cloudflare_worker_requests_count{job=~"$job", instance=~"$instance", script_name=~"$script_name"}[$__interval:])',
+      'rate(cloudflare_worker_requests_count{job=~"$job", instance=~"$instance", script_name=~"$script_name"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{script_name}}',
-      interval='1m',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Worker requests / $__interval',
-  description: 'The number of worker requests.',
+  title: 'Worker requests',
+  description: 'The rate of worker requests.',
   fieldConfig: {
     defaults: {
       color: {
@@ -226,7 +228,7 @@ local workerRequestsPanel = {
           },
         ],
       },
-      unit: 'none',
+      unit: 'reqps',
     },
     overrides: [],
   },
@@ -251,6 +253,7 @@ local workerErrorsPanel = {
       'increase(cloudflare_worker_errors_count{job=~"$job", instance=~"$instance", script_name=~"$script_name"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{script_name}}',
+      format='time_series',
       interval='1m',
     ),
   ],
