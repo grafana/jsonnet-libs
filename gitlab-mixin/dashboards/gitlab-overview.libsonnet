@@ -686,7 +686,7 @@ local buildTraceOperationsPanel(matcher) = {
             promDatasource,
             'label_values(gitlab_rails_boot_time_seconds{job=~"$job"}, cluster)',
             label='Cluster',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
