@@ -17,7 +17,7 @@
               summary: 'There is a limited amount of heap memory available to the JVM.',
               description:
                 (
-                  'The heap memory usage for the JVM on instance {{$labels.instance}} in cluster {{$labels.hbase_cluster}} is {{printf "%%.0f" $labels.value}} percent, which is above the threshold of %(alertsHighHeapMemUsage)s'
+                  'The heap memory usage for the JVM on instance {{$labels.instance}} in cluster {{$labels.hbase_cluster}} is {{printf "%%.0f" $labels.value}} percent, which is above the threshold of %(alertsHighHeapMemUsage)s percent'
                 ) % $._config,
             },
           },
@@ -34,7 +34,7 @@
               summary: 'There is a limited amount of non-heap memory available to the JVM.',
               description:
                 (
-                  'The non-heap memory usage for the JVM on instance {{$labels.instance}} in cluster {{$labels.hbase_cluster}} is {{printf "%%.0f" $labels.value}} percent, which is above the threshold of %(alertsHighNonHeapMemUsage)s'
+                  'The non-heap memory usage for the JVM on instance {{$labels.instance}} in cluster {{$labels.hbase_cluster}} is {{printf "%%.0f" $labels.value}} percent, which is above the threshold of %(alertsHighNonHeapMemUsage)s percent'
                 ) % $._config,
             },
           },
@@ -85,7 +85,7 @@
               summary: 'A high percentage of authentication attempts to the master are failing.',
               description:
                 (
-                  '{{printf "%%.0f" $labels.value}} percent of authentication attempts to the master are failing in cluster {{$labels.hbase_cluster}}, which is above the threshold of %(alertsHighMasterAuthFailRate)s'
+                  '{{printf "%%.0f" $labels.value}} percent of authentication attempts to the master are failing in cluster {{$labels.hbase_cluster}}, which is above the threshold of %(alertsHighMasterAuthFailRate)s percent'
                 ) % $._config,
             },
           },
@@ -102,7 +102,7 @@
               summary: 'A high percentage of authentication attempts to a RegionServer are failing.',
               description:
                 (
-                  '{{printf "%%.0f" $labels.value}} percent of authentication attempts to the RegionServer {{$labels.instance}} are failing in cluster {{$labels.hbase_cluster}}, which is above the threshold of %(alertsHighRSAuthFailRate)s'
+                  '{{printf "%%.0f" $labels.value}} percent of authentication attempts to the RegionServer {{$labels.instance}} are failing in cluster {{$labels.hbase_cluster}}, which is above the threshold of %(alertsHighRSAuthFailRate)s percent'
                 ) % $._config,
             },
           },
