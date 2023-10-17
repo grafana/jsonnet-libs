@@ -23,8 +23,6 @@ base {
           if !(std.objectHas(totalTarget, 'instant') && std.assertEqual(totalTarget.instant, true)) then error 'totalTarget must be type instant',
           if !(std.objectHas(usageTarget, 'format') && std.assertEqual(usageTarget.format, 'table')) then error 'usageTarget format must be "table"',
           if !(std.objectHas(usageTarget, 'instant') && std.assertEqual(usageTarget.instant, true)) then error 'usageTarget must be type instant',
-          // if std.length(std.findSubstr(groupLabel, totalTarget.expr)) == 0 then error 'totalTarget expression must be grouped by groupLabel "%s", current expression is %s' % [groupLabel, totalTarget.expr],
-          // if std.length(std.findSubstr(groupLabel, usageTarget.expr)) == 0 then error 'usageTarget expression must be grouped by groupLabel "%s", current expression is %s' % [groupLabel, totalTarget.expr],
         ],
       }
     ) +

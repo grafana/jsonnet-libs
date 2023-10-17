@@ -37,12 +37,6 @@ base {
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
     + generic.percentage.stylize(allLayers=false)
-    // make dots cloud
-    // + fieldConfig.defaults.custom.withLineStyleMixin(
-    // {
-    //   fill: 'dot',
-    //   dash: [0,40],
-    // })
     + fieldConfig.defaults.custom.withFillOpacity(1)
     + fieldConfig.defaults.custom.withLineWidth(1)
     + timeSeries.options.legend.withDisplayMode('table')
