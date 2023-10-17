@@ -679,7 +679,11 @@ local buildTraceOperationsPanel(matcher) = {
             promDatasource,
             'label_values(gitlab_rails_boot_time_seconds{job=~"$job"}, instance)',
             label='Instance',
-            refresh='time'
+            refresh='time',
+            includeAll=true,
+            multi=true,
+            allValues='.+',
+            sort=1
           ),
           template.new(
             'cluster',
