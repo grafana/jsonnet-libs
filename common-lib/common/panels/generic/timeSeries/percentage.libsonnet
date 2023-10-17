@@ -6,7 +6,6 @@ local base = import './base.libsonnet';
 base {
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
-    // (if allLayers then super.stylize() else {})
     + timeSeries.standardOptions.withDecimals(1)
     + timeSeries.standardOptions.withUnit('percent')
     // Change color from blue(cold) to red(hot)
