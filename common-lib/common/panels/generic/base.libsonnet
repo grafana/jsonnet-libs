@@ -14,7 +14,7 @@ local options = timeSeries.options;
     timeSeries.queryOptions.withTargets(targets)
     + timeSeries.panelOptions.withDescription(description)
     // set first target's datasource
-    // to panel's datasource if only sinlge type of
+    // to panel's datasource if only single type of
     // datasoures are used accross all targets:
     + (if std.length(std.set(targets, function(t) t.datasource.type)) == 1 then
          timeSeries.queryOptions.withDatasource(
