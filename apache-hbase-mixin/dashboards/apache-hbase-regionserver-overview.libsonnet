@@ -12,6 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local regionsPanel = {
   datasource: promDatasource,
   targets: [
@@ -63,7 +64,7 @@ local regionsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local storeFilesPanel = {
@@ -117,10 +118,10 @@ local storeFilesPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
-local storeFileSizesPanel = {
+local storeFileSizePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -157,7 +158,7 @@ local storeFileSizesPanel = {
     minVizHeight: 10,
     minVizWidth: 0,
     namePlacement: 'auto',
-    orientation: 'auto',
+    orientation: 'horizontal',
     reduceOptions: {
       calcs: [
         'lastNotNull',
@@ -168,7 +169,7 @@ local storeFileSizesPanel = {
     showUnfilled: true,
     valueMode: 'color',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local rpcConnectionsPanel = {
@@ -217,7 +218,7 @@ local rpcConnectionsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local jvmMemoryUsagePanel = {
@@ -624,6 +625,7 @@ local rpcConnectionCountPanel = {
           mode: 'off',
         },
       },
+      decimals: 0,
       mappings: [],
       thresholds: {
         mode: 'absolute',
@@ -631,10 +633,6 @@ local rpcConnectionCountPanel = {
           {
             color: 'green',
             value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
           },
         ],
       },
@@ -1223,6 +1221,7 @@ local authenticationsPanel = {
   },
 };
 
+
 {
   grafanaDashboards+:: {
     'apache-hbase-regionserver-overview.json':
@@ -1290,7 +1289,7 @@ local authenticationsPanel = {
         [
           regionsPanel { gridPos: { h: 8, w: 6, x: 0, y: 0 } },
           storeFilesPanel { gridPos: { h: 8, w: 6, x: 6, y: 0 } },
-          storeFileSizesPanel { gridPos: { h: 8, w: 6, x: 12, y: 0 } },
+          storeFileSizePanel { gridPos: { h: 8, w: 6, x: 12, y: 0 } },
           rpcConnectionsPanel { gridPos: { h: 8, w: 6, x: 18, y: 0 } },
           jvmMemoryUsagePanel { gridPos: { h: 9, w: 24, x: 0, y: 8 } },
           requestsReceivedPanel { gridPos: { h: 8, w: 16, x: 0, y: 17 } },

@@ -7,7 +7,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
         logsDashboard.new(
           'Apache HBase logs overview',
           datasourceName='loki_datasource',
-          datasourceRegex='',
+          datasourceRegex='(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+',
           filterSelector=$._config.filterSelector,
           labels=['job', 'hbase_cluster', 'instance', 'context', 'level'],
           formatParser=null,

@@ -12,6 +12,7 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+
 local deadRegionServersPanel = {
   datasource: promDatasource,
   targets: [
@@ -61,7 +62,7 @@ local deadRegionServersPanel = {
     },
     textMode: 'value',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local liveRegionServersPanel = {
@@ -109,7 +110,7 @@ local liveRegionServersPanel = {
     },
     textMode: 'value',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local regionserversPanel = {
@@ -124,6 +125,7 @@ local regionserversPanel = {
     prometheus.target(
       'server_num_reference_files{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
       datasource=promDatasource,
+      legendFormat='',
       format='table',
     ),
   ],
@@ -203,7 +205,7 @@ local regionserversPanel = {
     showHeader: true,
     sortBy: [],
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
   transformations: [
     {
       id: 'merge',
@@ -228,7 +230,7 @@ local regionserversPanel = {
           context: true,
           'context 1': true,
           'context 2': true,
-          hbase_cluster: true,
+          hbase_cluster: false,
           'hbase_cluster 1': true,
           'hbase_cluster 2': true,
           instance: false,
@@ -251,13 +253,13 @@ local regionserversPanel = {
           'zookeeperquorum 2': true,
         },
         indexByName: {
-          Time: 4,
+          Time: 5,
           'Value #A': 12,
           'Value #B': 13,
-          __name__: 5,
+          __name__: 6,
           clusterid: 7,
           context: 8,
-          hbase_cluster: 6,
+          hbase_cluster: 4,
           hostname: 1,
           instance: 2,
           isactivemaster: 3,
@@ -269,6 +271,7 @@ local regionserversPanel = {
         renameByName: {
           Time: '',
           deadregionservers: 'Dead server name',
+          hbase_cluster: 'Cluster',
           hostname: 'Hostname',
           instance: 'Instance',
           'instance 1': '',
@@ -296,8 +299,8 @@ local alertsPanel = {
   title: 'Alerts',
   description: 'Panel to report on the status of integration alerts.',
   options: {
-    alertInstanceLabelFilter: '{job="integrations/apache-hbase"}',
-    alertName: '',
+    alertInstanceLabelFilter: '',
+    alertName: 'HighNonHeapMemUsage',
     dashboardAlerts: false,
     folder: '',
     groupBy: [],
@@ -847,6 +850,7 @@ local regionsInTransitionPanel = {
           mode: 'off',
         },
       },
+      decimals: 0,
       mappings: [],
       thresholds: {
         mode: 'absolute',
@@ -961,6 +965,7 @@ local oldestRegionInTransitionPanel = {
   },
 };
 
+
 {
   grafanaDashboards+:: {
     'apache-hbase-cluster-overview.json':
@@ -1015,17 +1020,17 @@ local oldestRegionInTransitionPanel = {
       )
       .addPanels(
         [
-          deadRegionServersPanel { gridPos: { h: 8, w: 3, x: 0, y: 0 } },
-          liveRegionServersPanel { gridPos: { h: 8, w: 3, x: 3, y: 0 } },
-          regionserversPanel { gridPos: { h: 8, w: 9, x: 6, y: 0 } },
-          alertsPanel { gridPos: { h: 8, w: 9, x: 15, y: 0 } },
-          jvmMemoryUsagePanel { gridPos: { h: 9, w: 24, x: 0, y: 8 } },
-          connectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
-          authenticationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
-          masterQueueSizePanel { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
-          masterQueuedCallsPanel { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
-          regionsInTransitionPanel { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
-          oldestRegionInTransitionPanel { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
+          deadRegionServersPanel { gridPos: { h: 8, w: 5, x: 0, y: 0 } },
+          liveRegionServersPanel { gridPos: { h: 8, w: 5, x: 5, y: 0 } },
+          regionserversPanel { gridPos: { h: 8, w: 14, x: 10, y: 0 } },
+          alertsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+          jvmMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+          connectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
+          authenticationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+          masterQueueSizePanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
+          masterQueuedCallsPanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
+          regionsInTransitionPanel { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
+          oldestRegionInTransitionPanel { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
         ]
       ),
   },

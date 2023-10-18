@@ -68,7 +68,7 @@
               summary: 'RegionServers are in transition for longer than expected.',
               description:
                 (
-                  '{{printf "%%.0f" $labels.value}} percent of RegionServers in transition in cluster {{$labels.hbase_cluster}} are transitioning for longer than expected, which is above the threshold of %(alertsOldRegionsInTransition)s'
+                  '{{printf "%%.0f" $labels.value}} percent of RegionServers in transition in cluster {{$labels.hbase_cluster}} are transitioning for longer than expected, which is above the threshold of %(alertsOldRegionsInTransition)s percent'
                 ) % $._config,
             },
           },
