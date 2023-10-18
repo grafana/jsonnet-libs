@@ -532,7 +532,6 @@ local cpuTimeConsumedPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -610,7 +609,6 @@ local cpuInputThroughputOverOneMinutePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -693,7 +691,6 @@ local memoryPoolPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -776,7 +773,6 @@ local errorFailuresPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -862,7 +858,6 @@ local garbageCollectionCount = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -940,7 +935,6 @@ local garbageCollectionDurationPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1023,7 +1017,6 @@ local memoryUsedPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1106,7 +1099,6 @@ local memoryCommittedPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -1178,8 +1170,8 @@ local memoryCommittedPanel = {
             'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job"},presto_cluster)',
             label='Presto cluster',
             refresh=2,
-            includeAll=true,
-            multi=true,
+            includeAll=false,
+            multi=false,
             allValues='.*',
             sort=0
           ),

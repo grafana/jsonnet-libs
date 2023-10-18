@@ -58,7 +58,7 @@ local activeResourceManagersPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local activeCoordinatorsPanel = {
@@ -107,7 +107,7 @@ local activeCoordinatorsPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local activeWorkersPanel = {
@@ -156,7 +156,7 @@ local activeWorkersPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local inactiveWorkersPanel = {
@@ -205,7 +205,7 @@ local inactiveWorkersPanel = {
     },
     textMode: 'auto',
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
 };
 
 local completedQueries = {
@@ -425,7 +425,7 @@ local userErrorFailuresPanel = {
           },
         ],
       },
-      unit: 'err / s',
+      unit: 'err/s',
     },
     overrides: [],
   },
@@ -503,7 +503,7 @@ local internalErrorFailuresPanel = {
           },
         ],
       },
-      unit: 'err / s',
+      unit: 'err/s',
     },
     overrides: [],
   },
@@ -528,9 +528,10 @@ local alertsPanel = {
   title: 'Alerts',
   description: 'Reports firing alerts.',
   options: {
-    alertInstanceLabelFilter: '',
+    alertInstanceLabelFilter: '{job=~"${job:regex}", presto_cluster=~"${presto_cluster:regex}", instance=~"${instance:regex}"}',
     alertName: '',
     dashboardAlerts: false,
+    datasource: 'Prometheus',
     groupBy: [],
     groupMode: 'default',
     maxItems: 20,
@@ -680,7 +681,6 @@ local blockedNodesPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -763,7 +763,6 @@ local distributedBytesPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -846,7 +845,6 @@ local dataThroughputPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },

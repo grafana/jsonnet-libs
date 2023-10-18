@@ -648,7 +648,6 @@ local memoryUsedPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -731,7 +730,6 @@ local memoryCommittedPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -792,8 +790,8 @@ local memoryCommittedPanel = {
             'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job", cluster=~"$cluster"},cluster)',
             label='Cluster',
             refresh=2,
-            includeAll=true,
-            multi=true,
+            includeAll=false,
+            multi=false,
             allValues='.*',
             sort=0
           ),

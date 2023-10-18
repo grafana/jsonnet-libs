@@ -20,7 +20,7 @@ and the following alerts:
 - PrestoHighFailedQueriesCritical
 
 ## Presto overview
-The Presto cluster overview dashboard provides details on integration status/alerts, workers/coordinators, error failures, data throughput, blocked nodes, and distributed bytes.
+The Presto overview dashboard provides details on integration status/alerts, workers/coordinators, error failures, data throughput, blocked nodes, and distributed bytes.
 ![First screenshot of the Presto cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_overview_1.png)
 ![Second screenshot of the Presto cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_overview_2.png)
 
