@@ -169,9 +169,9 @@ local GeoMetricByCountryPanel = {
             'label_values(cloudflare_zone_requests_total,job)',
             label='Job',
             refresh=2,
-            includeAll=false,
-            multi=false,
-            allValues='',
+            includeAll=true,
+            multi=true,
+            allValues='.+',
             sort=0
           ),
           template.new(
@@ -180,9 +180,9 @@ local GeoMetricByCountryPanel = {
             'label_values(cloudflare_zone_requests_total{job="$job"},instance)',
             label='Instance',
             refresh=2,
-            includeAll=false,
+            includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(

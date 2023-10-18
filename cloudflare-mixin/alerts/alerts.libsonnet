@@ -85,7 +85,7 @@
               summary: 'Cloudflare metrics are down.',
               description:
                 (
-                  'Grafana is no longer receiving metrics for the Cloudflare integration.'
+                  'Grafana is no longer receiving metrics for the Cloudflare integration from instance {{$labels.instance}}.'
                 ) % $._config,
             },
           },
