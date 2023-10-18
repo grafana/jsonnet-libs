@@ -24,7 +24,7 @@ local regionsPanel = {
   ],
   type: 'stat',
   title: 'Regions',
-  description: 'The number of regions hosted by the RegionServer.',
+  description: 'The number of regions hosted by the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -78,7 +78,7 @@ local storeFilesPanel = {
   ],
   type: 'stat',
   title: 'Store files',
-  description: 'The number of store files on disk currently managed by the RegionServer.',
+  description: 'The number of store files on disk currently managed by the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -132,7 +132,7 @@ local storeFileSizePanel = {
   ],
   type: 'bargauge',
   title: 'Store file size',
-  description: 'The total size of the store files on disk managed by the RegionServer.',
+  description: 'The total size of the store files on disk managed by the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -183,7 +183,7 @@ local rpcConnectionsPanel = {
   ],
   type: 'stat',
   title: 'RPC connections',
-  description: 'The number of open connections to the RegionServer.',
+  description: 'The number of open connections to the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -322,7 +322,7 @@ local requestsReceivedPanel = {
   ],
   type: 'timeseries',
   title: 'Requests received',
-  description: 'The rate of requests received by the RegionServer.',
+  description: 'The rate of requests received by the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -452,7 +452,7 @@ local requestsOverviewPanel = {
   ],
   type: 'piechart',
   title: 'Requests overview',
-  description: 'Requests received by the RegionServer, broken down by type.',
+  description: 'Requests received by the Region Server, broken down by type.',
   fieldConfig: {
     defaults: {
       color: {
@@ -503,7 +503,7 @@ local regionCountPanel = {
   ],
   type: 'timeseries',
   title: 'Region count',
-  description: 'The number of regions hosted by the RegionServer.',
+  description: 'The number of regions hosted by the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -586,7 +586,7 @@ local rpcConnectionCountPanel = {
   ],
   type: 'timeseries',
   title: 'RPC connection count',
-  description: 'The number of open connections to the RegionServer.',
+  description: 'The number of open connections to the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -665,7 +665,7 @@ local storeFileCountPanel = {
   ],
   type: 'timeseries',
   title: 'Store file count',
-  description: 'The number of store files on disk currently managed by the RegionServer.',
+  description: 'The number of store files on disk currently managed by the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -748,7 +748,7 @@ local storeFileSizePanel = {
   ],
   type: 'timeseries',
   title: 'Store file size',
-  description: 'The total size of the store files on disk managed by the RegionServer.',
+  description: 'The total size of the store files on disk managed by the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -860,7 +860,7 @@ local queuedCallsPanel = {
   ],
   type: 'timeseries',
   title: 'Queued calls',
-  description: 'The number of calls waiting to be processed by the RegionServer.',
+  description: 'The number of calls waiting to be processed by the Region Server.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1256,7 +1256,7 @@ local authenticationsPanel = {
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(

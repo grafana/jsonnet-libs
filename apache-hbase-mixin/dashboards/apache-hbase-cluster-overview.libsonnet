@@ -1000,7 +1000,7 @@ local oldestRegionInTransitionPanel = {
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.+',
             sort=0
           ),
           template.new(
