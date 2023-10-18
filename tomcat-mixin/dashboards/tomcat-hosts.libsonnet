@@ -428,11 +428,11 @@ local servletProcessingTimePanel(matcher) = {
             promDatasource,
             'label_values(tomcat_bytesreceived_total, instance)',
             label='Instance',
-            refresh=1,
-            includeAll=false,
-            multi=false,
-            allValues='',
-            sort=0
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='.+',
+            sort=1
           ),
           template.new(
             'host',
@@ -465,6 +465,18 @@ local servletProcessingTimePanel(matcher) = {
             includeAll=true,
             multi=true,
             allValues='',
+            sort=0
+          ),
+          template.new(
+            'cluster',
+            promDatasource,
+            'label_values(tomcat_servlet_requestcount_total{job=~"$job"}, cluster)',
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
         ]
