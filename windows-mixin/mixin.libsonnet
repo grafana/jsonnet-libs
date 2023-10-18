@@ -20,7 +20,7 @@ local config = (import 'config.libsonnet')._config;
          variables+: {
            datasources+: {
              loki+: var.datasource.withRegex('Loki|.+logs'),
-             prometheus+: var.datasource.withRegex('Victoria|Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
+             prometheus+: var.datasource.withRegex('Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
            },
          },
        },
