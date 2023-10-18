@@ -1,7 +1,7 @@
 // variables.libsonnet
 local g = import './g.libsonnet';
 local var = g.dashboard.variable;
-local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main.libsonnet';
+local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
 
 {
