@@ -35,7 +35,8 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
   panelsHeight=2,
   panelsWidth=8,
   rowPositionY=10,
-)).panels.statusPanelsWithRow
+  withRow=true,
+)).panels.statusPanels
 ```
 
 ## Logs
@@ -51,7 +52,8 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
   panelsHeight=2,
   panelsWidth=8,
   rowPositionY=10,
-)).panels.statusPanelsWithRow
+  withRow=true,
+)).panels.statusPanels
 ```
 
 ## Only panels without row
@@ -67,6 +69,7 @@ jb install https://github.com/grafana/jsonnet-libs/status-panels-lib
   panelsHeight=2,
   panelsWidth=8,
   rowPositionY=10,
+  withRow=false,
 )).panels.statusPanels
 ```
 
@@ -123,6 +126,10 @@ Position (Default `0`)
 
 Override the datetime unit for panels (Default `dateTimeFromNow`)
 
+### withRow
+
+Whether to add a separate row for the status panels (Default `true`)
+
 ## Sample Dashboard
 
 `status-panel-dashboard.libsonnet`
@@ -149,7 +156,8 @@ local title = 'Status Panel Example';
             panelsHeight=2,
             panelsWidth=8,
             rowPositionY=10,
-          )).panels.statusPanelsWithRow
+            withRow=true,
+          )).panels.statusPanels
         )
   }
 }
