@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local deadRegionServersPanel = {
   datasource: promDatasource,
   targets: [
@@ -964,7 +963,6 @@ local oldestRegionInTransitionPanel = {
     },
   },
 };
-
 
 {
   grafanaDashboards+:: {

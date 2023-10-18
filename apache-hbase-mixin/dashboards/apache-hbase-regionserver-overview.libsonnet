@@ -12,7 +12,6 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local regionsPanel = {
   datasource: promDatasource,
   targets: [
@@ -1220,7 +1219,6 @@ local authenticationsPanel = {
     },
   },
 };
-
 
 {
   grafanaDashboards+:: {
