@@ -1132,7 +1132,13 @@ local memoryCommittedPanel = {
         description='',
         uid=dashboardUid,
       )
-
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Presto dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addTemplates(
         [
           template.datasource(

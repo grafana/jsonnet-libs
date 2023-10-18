@@ -523,7 +523,13 @@ local internalErrorFailuresPanel = {
 
 local alertsPanel = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      '',
+      datasource=promDatasource,
+      legendFormat='',
+    ),
+  ],
   type: 'alertlist',
   title: 'Alerts',
   description: 'Reports firing alerts.',
@@ -715,6 +721,7 @@ local distributedBytesPanel = {
       'sum by (presto_cluster) (com_facebook_presto_memory_ClusterMemoryPool_ReservedDistributedBytes{job=~"$job", presto_cluster=~"$presto_cluster"})',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - reserved',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -797,6 +804,7 @@ local dataThroughputPanel = {
       'rate(com_facebook_presto_execution_TaskManager_OutputDataSize_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - output',
+      format='time_series',
     ),
   ],
   type: 'timeseries',
@@ -878,7 +886,13 @@ local dataThroughputPanel = {
         description='',
         uid=dashboardUid,
       )
-
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Presto dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
       .addTemplates(
         [
           template.datasource(
