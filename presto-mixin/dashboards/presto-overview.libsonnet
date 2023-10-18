@@ -208,7 +208,7 @@ local inactiveWorkersPanel = {
   pluginVersion: '10.2.0-61719',
 };
 
-local completedQueriesPanel = {
+local completedQueries = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -287,7 +287,7 @@ local completedQueriesPanel = {
   },
 };
 
-local queuedQueriesPanel = {
+local queuedQueries = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -636,7 +636,7 @@ local blockedNodesPanel = {
   ],
   type: 'timeseries',
   title: 'Blocked nodes',
-  description: 'The rate that failures are occurring due to insufficient resources.',
+  description: 'The number of nodes that are blocked due to memory restrictions.',
   fieldConfig: {
     defaults: {
       color: {
@@ -680,6 +680,7 @@ local blockedNodesPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -762,6 +763,7 @@ local distributedBytesPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -844,6 +846,7 @@ local dataThroughputPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -928,8 +931,8 @@ local dataThroughputPanel = {
           activeCoordinatorsPanel { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
           activeWorkersPanel { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
           inactiveWorkersPanel { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
-          completedQueriesPanel { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
-          queuedQueriesPanel { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
+          completedQueries { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
+          queuedQueries { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
           userErrorFailuresPanel { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
           internalErrorFailuresPanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
           alertsPanel { gridPos: { h: 8, w: 12, x: 0, y: 20 } },

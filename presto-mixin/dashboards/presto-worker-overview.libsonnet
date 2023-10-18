@@ -259,7 +259,7 @@ local outputPositionsPanel = {
   ],
   type: 'timeseries',
   title: 'Output positions',
-  description: 'The number of rows (or records) produced by an operation.',
+  description: 'The rate of rows (or records) produced by an operation.',
   fieldConfig: {
     defaults: {
       color: {
@@ -347,7 +347,7 @@ local executorPoolSizePanel = {
   ],
   type: 'timeseries',
   title: 'Executor pool size',
-  description: 'The pool size of the task notification executor, and process executor.',
+  description: 'The pool size of the task notification executor and process executor.',
   fieldConfig: {
     defaults: {
       color: {
@@ -648,6 +648,7 @@ local memoryUsedPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -730,6 +731,7 @@ local memoryCommittedPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
