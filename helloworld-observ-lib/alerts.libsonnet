@@ -35,7 +35,7 @@
             annotations: {
               summary: 'Something else detected.',
               description: |||
-                Something else detected on {{ $labels.instance }}, is above %(alertsThreshold2)s%%. The currect value is {{ $value | printf "%%.2f" }}.
+                Something else detected on {{ $labels.instance }}, is above %(alertsThreshold2)s%%. The current value is {{ $value | printf "%%.2f" }}.
               ||| % this.config,
             },
           },
