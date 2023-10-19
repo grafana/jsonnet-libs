@@ -208,18 +208,18 @@ local inactiveWorkersPanel = {
   pluginVersion: '10.2.0-62263',
 };
 
-local completedQueries = {
+local completedQueriesOneMinuteCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(com_facebook_presto_execution_QueryManager_CompletedQueries_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster"}[$__interval:])',
+      'com_facebook_presto_execution_QueryManager_CompletedQueries_OneMinute_Count{job=~"$job", presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Completed queries / $__interval',
+  title: 'Completed queries - one minute count',
   description: 'The number of completed queries.',
   fieldConfig: {
     defaults: {
@@ -287,18 +287,18 @@ local completedQueries = {
   },
 };
 
-local queuedQueries = {
+local queuedQueriesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(com_facebook_presto_execution_QueryManager_QueuedQueries{job=~"$job", presto_cluster=~"$presto_cluster"}[$__interval:])',
+      'com_facebook_presto_execution_QueryManager_QueuedQueries{job=~"$job", presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Queued queries / $__interval',
+  title: 'Queued queries',
   description: 'The number of queued queries.',
   fieldConfig: {
     defaults: {
@@ -365,18 +365,18 @@ local queuedQueries = {
   },
 };
 
-local userErrorFailuresPanel = {
+local userErrorFailuresOneMinuteRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_QueryManager_UserErrorFailures_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'com_facebook_presto_execution_QueryManager_UserErrorFailures_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'User error failures',
+  title: 'User error failures - one minute rate',
   description: 'The rate of user error failures occurring across the clusters.',
   fieldConfig: {
     defaults: {
@@ -443,18 +443,18 @@ local userErrorFailuresPanel = {
   },
 };
 
-local internalErrorFailuresPanel = {
+local internalErrorFailuresOneMinuteRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_QueryManager_InternalFailures_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'com_facebook_presto_execution_QueryManager_InternalFailures_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Internal error failures',
+  title: 'Internal error failures - one minute rate',
   description: 'The rate of internal failures occurring across the clusters.',
   fieldConfig: {
     defaults: {
@@ -528,6 +528,7 @@ local alertsPanel = {
       '',
       datasource=promDatasource,
       legendFormat='',
+      format='time_series',
     ),
   ],
   type: 'alertlist',
@@ -553,18 +554,18 @@ local alertsPanel = {
   },
 };
 
-local InsufficientResourceFailuresPanel = {
+local InsufficientResourceFailuresOneMinuteRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_QueryManager_InsufficientResourcesFailures_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'com_facebook_presto_execution_QueryManager_InsufficientResourcesFailures_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: ' Insufficient resource failures',
+  title: ' Insufficient resource failures - one minute rate',
   description: 'The rate that failures are occurring due to insufficient resources.',
   fieldConfig: {
     defaults: {
@@ -687,6 +688,7 @@ local blockedNodesPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -770,6 +772,7 @@ local distributedBytesPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -853,6 +856,7 @@ local dataThroughputPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -943,12 +947,12 @@ local dataThroughputPanel = {
           activeCoordinatorsPanel { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
           activeWorkersPanel { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
           inactiveWorkersPanel { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
-          completedQueries { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
-          queuedQueries { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
-          userErrorFailuresPanel { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
-          internalErrorFailuresPanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
+          completedQueriesOneMinuteCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
+          queuedQueriesPanel { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
+          userErrorFailuresOneMinuteRatePanel { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
+          internalErrorFailuresOneMinuteRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
           alertsPanel { gridPos: { h: 8, w: 12, x: 0, y: 20 } },
-          InsufficientResourceFailuresPanel { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
+          InsufficientResourceFailuresOneMinuteRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
           blockedNodesPanel { gridPos: { h: 8, w: 12, x: 0, y: 28 } },
           distributedBytesPanel { gridPos: { h: 8, w: 12, x: 12, y: 28 } },
           dataThroughputPanel { gridPos: { h: 9, w: 24, x: 0, y: 36 } },

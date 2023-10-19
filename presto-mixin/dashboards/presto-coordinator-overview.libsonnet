@@ -12,7 +12,119 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local normalQueryCountPanel = {
+local nonheapMemoryUsagePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'java_lang_Memory_NonHeapMemoryUsage_used{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"} / clamp_min((java_lang_Memory_NonHeapMemoryUsage_used{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"} + java_lang_Memory_NonHeapMemoryUsage_committed{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}),1)',
+      datasource=promDatasource,
+      legendFormat='{{presto_cluster}} - {{instance}}',
+    ),
+  ],
+  type: 'gauge',
+  title: 'Non-heap memory usage',
+  description: "An average gauge of the JVM's non-heap memory usage across coordinators.",
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: '#EAB839',
+            value: 0.7,
+          },
+          {
+            color: 'red',
+            value: 0.8,
+          },
+        ],
+      },
+      unit: 'percentunit',
+    },
+    overrides: [],
+  },
+  options: {
+    minVizHeight: 75,
+    minVizWidth: 75,
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    showThresholdLabels: false,
+    showThresholdMarkers: true,
+  },
+  pluginVersion: '10.2.0-62263',
+};
+
+local heapMemoryUsagePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'avg (java_lang_Memory_HeapMemoryUsage_used{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"} / clamp_min((java_lang_Memory_HeapMemoryUsage_used{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"} + java_lang_Memory_HeapMemoryUsage_committed{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}),1))',
+      datasource=promDatasource,
+      legendFormat='{{presto_cluster}} - {{instance}}',
+    ),
+  ],
+  type: 'gauge',
+  title: 'Heap memory usage',
+  description: "An average gauge of the JVM's heap memory usage across coordinators.",
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: '#EAB839',
+            value: 0.7,
+          },
+          {
+            color: 'red',
+            value: 0.8,
+          },
+        ],
+      },
+      unit: 'percentunit',
+    },
+    overrides: [],
+  },
+  options: {
+    minVizHeight: 75,
+    minVizWidth: 75,
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    showThresholdLabels: false,
+    showThresholdMarkers: true,
+  },
+  pluginVersion: '10.2.0-62263',
+};
+
+local normalQueryOneMinuteCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -33,7 +145,7 @@ local normalQueryCountPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Normal query count',
+  title: 'Normal query - one minute count',
   description: 'A count of completed, running, and started queries.',
   fieldConfig: {
     defaults: {
@@ -105,7 +217,7 @@ local normalQueryCountPanel = {
   },
 };
 
-local abnormalQueryCountPanel = {
+local abnormalQueryOneMinuteCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -126,7 +238,7 @@ local abnormalQueryCountPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Abnormal query count',
+  title: 'Abnormal query - one minute count',
   description: 'A count of failed, abandoned, and canceled queries.',
   fieldConfig: {
     defaults: {
@@ -142,7 +254,7 @@ local abnormalQueryCountPanel = {
         axisPlacement: 'left',
         barAlignment: 0,
         drawStyle: 'bars',
-        fillOpacity: 25,
+        fillOpacity: 20,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -198,28 +310,28 @@ local abnormalQueryCountPanel = {
   },
 };
 
-local normalQueryRatesPanel = {
+local normalQueryOneMinuteRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_QueryManager_CompletedQueries_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}[$__rate_interval])',
+      'com_facebook_presto_execution_QueryManager_CompletedQueries_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - {{instance}} - completed',
       format='time_series',
     ),
     prometheus.target(
-      'rate(com_facebook_presto_execution_QueryManager_RunningQueries{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}[$__rate_interval])',
+      'com_facebook_presto_execution_QueryManager_RunningQueries{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - {{instance}} - running',
     ),
     prometheus.target(
-      'rate(com_facebook_presto_execution_QueryManager_StartedQueries_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}[$__rate_interval])',
+      'com_facebook_presto_execution_QueryManager_StartedQueries_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - {{instance}} - started',
     ),
   ],
   type: 'timeseries',
-  title: 'Normal query rates',
+  title: 'Normal query - one minute rate',
   description: 'The rate of normally operating queries such as the completed, running, and started queries.',
   fieldConfig: {
     defaults: {
@@ -291,7 +403,7 @@ local normalQueryRatesPanel = {
   },
 };
 
-local abnormalQueryRatesPanel = {
+local abnormalQueryOneMinuteRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -312,7 +424,7 @@ local abnormalQueryRatesPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Abnormal query rates',
+  title: 'Abnormal query - one minute rate',
   description: 'The rate of abnormal queries such as the failed, abandoned, and canceled queries.',
   fieldConfig: {
     defaults: {
@@ -384,7 +496,7 @@ local abnormalQueryRatesPanel = {
   },
 };
 
-local queryExecutionTimeOverOneMinutePanel = {
+local queryExecutionTimeOneMinuteCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -403,9 +515,14 @@ local queryExecutionTimeOverOneMinutePanel = {
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - {{instance}} - p99',
     ),
+    prometheus.target(
+      'com_facebook_presto_execution_QueryManager_ExecutionTime_OneMinute_P50{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
+      datasource=promDatasource,
+      legendFormat='{{presto_cluster}} - {{instance}} - p99',
+    ),
   ],
   type: 'timeseries',
-  title: 'Query execution time over one minute',
+  title: 'Query execution time - one minute count',
   description: 'The time it took to run queries over the past one minute period.\n',
   fieldConfig: {
     defaults: {
@@ -476,18 +593,18 @@ local queryExecutionTimeOverOneMinutePanel = {
   },
 };
 
-local cpuTimeConsumedPanel = {
+local cpuTimeConsumedOneMinuteRatePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_QueryManager_ConsumedCpuTimeSecs_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}[$__rate_interval])',
+      'com_facebook_presto_execution_QueryManager_ConsumedCpuTimeSecs_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - {{instance}} ',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'CPU time consumed',
+  title: 'CPU time consumed - one minute rate',
   description: 'The rate at which queries are consuming CPU time.',
   fieldConfig: {
     defaults: {
@@ -532,6 +649,7 @@ local cpuTimeConsumedPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -553,7 +671,7 @@ local cpuTimeConsumedPanel = {
   },
 };
 
-local cpuInputThroughputOverOneMinutePanel = {
+local cpuInputThroughputOneMinuteCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -564,7 +682,7 @@ local cpuInputThroughputOverOneMinutePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'CPU input throughput over one minute',
+  title: 'CPU input throughput - one minute count',
   description: 'The rate at which input data is being read and processed by the CPU.',
   fieldConfig: {
     defaults: {
@@ -609,6 +727,7 @@ local cpuInputThroughputOverOneMinutePanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -691,6 +810,7 @@ local memoryPoolPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -712,23 +832,23 @@ local memoryPoolPanel = {
   },
 };
 
-local errorFailuresPanel = {
+local errorFailuresOneMinuteCountPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_InternalFailures_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
+      'com_facebook_presto_execution_QueryManager_InternalFailures_OneMinute_Count{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - {{instance}} - internal',
       format='time_series',
     ),
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_UserErrorFailures_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
+      'com_facebook_presto_execution_QueryManager_UserErrorFailures_OneMinute_Count{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}',
       datasource=promDatasource,
       legendFormat='{{presto_cluster}} - {{instance}} - user',
     ),
   ],
   type: 'timeseries',
-  title: 'Error failures',
+  title: 'Error failures - one minute count',
   description: 'The number of internal and user error failures occurring on the instance.',
   fieldConfig: {
     defaults: {
@@ -773,6 +893,7 @@ local errorFailuresPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -858,6 +979,7 @@ local garbageCollectionCount = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -935,6 +1057,7 @@ local garbageCollectionDurationPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -1017,6 +1140,7 @@ local memoryUsedPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -1099,6 +1223,7 @@ local memoryCommittedPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -1196,20 +1321,22 @@ local memoryCommittedPanel = {
       )
       .addPanels(
         [
-          normalQueryCountPanel { gridPos: { h: 9, w: 12, x: 0, y: 0 } },
-          abnormalQueryCountPanel { gridPos: { h: 9, w: 12, x: 12, y: 0 } },
-          normalQueryRatesPanel { gridPos: { h: 9, w: 12, x: 0, y: 9 } },
-          abnormalQueryRatesPanel { gridPos: { h: 9, w: 12, x: 12, y: 9 } },
-          queryExecutionTimeOverOneMinutePanel { gridPos: { h: 8, w: 24, x: 0, y: 18 } },
-          cpuTimeConsumedPanel { gridPos: { h: 8, w: 12, x: 0, y: 26 } },
-          cpuInputThroughputOverOneMinutePanel { gridPos: { h: 8, w: 12, x: 12, y: 26 } },
-          memoryPoolPanel { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
-          errorFailuresPanel { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
-          jvmMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 42 } },
-          garbageCollectionCount { gridPos: { h: 8, w: 12, x: 0, y: 43 } },
-          garbageCollectionDurationPanel { gridPos: { h: 8, w: 12, x: 12, y: 43 } },
-          memoryUsedPanel { gridPos: { h: 8, w: 12, x: 0, y: 51 } },
-          memoryCommittedPanel { gridPos: { h: 8, w: 12, x: 12, y: 51 } },
+          nonheapMemoryUsagePanel { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
+          heapMemoryUsagePanel { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
+          normalQueryOneMinuteCountPanel { gridPos: { h: 9, w: 12, x: 0, y: 6 } },
+          abnormalQueryOneMinuteCountPanel { gridPos: { h: 9, w: 12, x: 12, y: 6 } },
+          normalQueryOneMinuteRatePanel { gridPos: { h: 9, w: 12, x: 0, y: 15 } },
+          abnormalQueryOneMinuteRatePanel { gridPos: { h: 9, w: 12, x: 12, y: 15 } },
+          queryExecutionTimeOneMinuteCountPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
+          cpuTimeConsumedOneMinuteRatePanel { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
+          cpuInputThroughputOneMinuteCountPanel { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
+          memoryPoolPanel { gridPos: { h: 8, w: 12, x: 0, y: 40 } },
+          errorFailuresOneMinuteCountPanel { gridPos: { h: 8, w: 12, x: 12, y: 40 } },
+          jvmMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 48 } },
+          garbageCollectionCount { gridPos: { h: 8, w: 12, x: 0, y: 49 } },
+          garbageCollectionDurationPanel { gridPos: { h: 8, w: 12, x: 12, y: 49 } },
+          memoryUsedPanel { gridPos: { h: 8, w: 12, x: 0, y: 57 } },
+          memoryCommittedPanel { gridPos: { h: 8, w: 12, x: 12, y: 57 } },
         ]
       ),
   },

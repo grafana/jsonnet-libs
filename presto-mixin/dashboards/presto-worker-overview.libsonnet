@@ -12,6 +12,116 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+local nonheapMemoryUsagePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'java_lang_Memory_NonHeapMemoryUsage_used{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"} / clamp_min((java_lang_Memory_NonHeapMemoryUsage_used{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"} + java_lang_Memory_NonHeapMemoryUsage_committed{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}),1)',
+      datasource=promDatasource,
+    ),
+  ],
+  type: 'gauge',
+  title: 'Non-heap memory usage',
+  description: "An average gauge of the JVM's non-heap memory usage across coordinators.",
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: '#EAB839',
+            value: 0.7,
+          },
+          {
+            color: 'red',
+            value: 0.8,
+          },
+        ],
+      },
+      unit: 'percentunit',
+    },
+    overrides: [],
+  },
+  options: {
+    minVizHeight: 75,
+    minVizWidth: 75,
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    showThresholdLabels: false,
+    showThresholdMarkers: true,
+  },
+  pluginVersion: '10.2.0-62263',
+};
+
+local heapMemoryUsagePanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'avg (java_lang_Memory_HeapMemoryUsage_used{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"} / clamp_min((java_lang_Memory_HeapMemoryUsage_used{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"} + java_lang_Memory_HeapMemoryUsage_committed{job=~"$job", presto_cluster=~"$presto_cluster", instance=~"$instance"}),1))',
+      datasource=promDatasource,
+    ),
+  ],
+  type: 'gauge',
+  title: 'Heap memory usage',
+  description: "An average gauge of the JVM's heap memory usage across workers.",
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: '#EAB839',
+            value: 0.7,
+          },
+          {
+            color: 'red',
+            value: 0.8,
+          },
+        ],
+      },
+      unit: 'percentunit',
+    },
+    overrides: [],
+  },
+  options: {
+    minVizHeight: 75,
+    minVizWidth: 75,
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    showThresholdLabels: false,
+    showThresholdMarkers: true,
+  },
+  pluginVersion: '10.2.0-62263',
+};
+
 local queuedTasksPanel = {
   datasource: promDatasource,
   targets: [
@@ -39,7 +149,7 @@ local queuedTasksPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -73,7 +183,7 @@ local queuedTasksPanel = {
           },
         ],
       },
-      unit: 'cps',
+      unit: 'ops',
     },
     overrides: [],
   },
@@ -117,7 +227,7 @@ local failedTasksPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -151,7 +261,7 @@ local failedTasksPanel = {
           },
         ],
       },
-      unit: 'cps',
+      unit: 'ops',
     },
     overrides: [],
   },
@@ -195,7 +305,7 @@ local completedTasksPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -229,7 +339,7 @@ local completedTasksPanel = {
           },
         ],
       },
-      unit: 'cps',
+      unit: 'ops',
     },
     overrides: [],
   },
@@ -273,7 +383,7 @@ local outputPositionsPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -361,7 +471,7 @@ local executorPoolSizePanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -444,7 +554,7 @@ local memoryPoolPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -527,7 +637,7 @@ local dataThroughputPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -618,7 +728,7 @@ local memoryUsedPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -648,6 +758,7 @@ local memoryUsedPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -700,7 +811,7 @@ local memoryCommittedPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -730,6 +841,7 @@ local memoryCommittedPanel = {
         steps: [
           {
             color: 'green',
+            value: null,
           },
         ],
       },
@@ -827,16 +939,18 @@ local memoryCommittedPanel = {
       )
       .addPanels(
         [
-          queuedTasksPanel { gridPos: { h: 8, w: 8, x: 0, y: 0 } },
-          failedTasksPanel { gridPos: { h: 8, w: 8, x: 8, y: 0 } },
-          completedTasksPanel { gridPos: { h: 8, w: 8, x: 16, y: 0 } },
-          outputPositionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-          executorPoolSizePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-          memoryPoolPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          dataThroughputPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-          jvmMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
-          memoryUsedPanel { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
-          memoryCommittedPanel { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
+          nonheapMemoryUsagePanel { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
+          heapMemoryUsagePanel { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
+          queuedTasksPanel { gridPos: { h: 8, w: 8, x: 0, y: 6 } },
+          failedTasksPanel { gridPos: { h: 8, w: 8, x: 8, y: 6 } },
+          completedTasksPanel { gridPos: { h: 8, w: 8, x: 16, y: 6 } },
+          outputPositionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 14 } },
+          executorPoolSizePanel { gridPos: { h: 8, w: 12, x: 12, y: 14 } },
+          memoryPoolPanel { gridPos: { h: 8, w: 12, x: 0, y: 22 } },
+          dataThroughputPanel { gridPos: { h: 8, w: 12, x: 12, y: 22 } },
+          jvmMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 30 } },
+          memoryUsedPanel { gridPos: { h: 8, w: 12, x: 0, y: 31 } },
+          memoryCommittedPanel { gridPos: { h: 8, w: 12, x: 12, y: 31 } },
         ]
       ),
   },
