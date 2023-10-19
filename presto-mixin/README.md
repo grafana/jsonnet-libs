@@ -11,7 +11,7 @@ The Presto mixin contains the following dashboards:
 
 and the following alerts:
 
-- PrestoHighInsufficientFailures
+- PrestoHighInsufficientResources
 - PrestoHighTaskFailuresWarning
 - PrestoHighTaskFailuresCritical
 - PrestoHighQueuedTaskCount

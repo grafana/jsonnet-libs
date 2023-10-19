@@ -5,7 +5,7 @@
         name: 'presto-alerts',
         rules: [
           {
-            alert: 'PrestoHighInsufficientFailures',
+            alert: 'PrestoHighInsufficientResources',
             expr: |||
               increase(com_facebook_presto_execution_QueryManager_InsufficientResourcesFailures_TotalCount[5m]) > %(alertsHighInsufficientResourceErrors)s
             ||| % $._config,
@@ -58,7 +58,7 @@
           {
             alert: 'PrestoHighQueuedTaskCount',
             expr: |||
-              increase(com_facebook_presto_execution_QueryManager_QueuedTaskCount[5m]) > %(alertsHighQueuedTaskCount)s
+              increase(com_facebook_presto_execution_QueryExecution_Executor_QueuedTaskCount[5m]) > %(alertsHighQueuedTaskCount)s
             ||| % $._config,
             'for': '5m',
             labels: {
