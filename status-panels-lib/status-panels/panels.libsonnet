@@ -13,6 +13,7 @@ function(
   panelsWidth,
   rowPositionY,
   dateTimeUnit,
+  withRow,
 )
 
   {
@@ -95,7 +96,7 @@ function(
     latestMetricReceivedLogs:: self.latestMetricReceivedInit(statusPanelsTargetLogs, 'logs'),
     integrationVersion:: self.integrationVersionInit(integrationVersion),
 
-    statusPanels: utils.join([
+    statusPanelsWithOutRow: utils.join([
       if type == 'metrics' || type == 'both' then
         [
           self.integrationStatusMetrics,
@@ -116,6 +117,11 @@ function(
       [
         self.row,
       ],
-      self.statusPanels,
+      self.statusPanelsWithOutRow,
     ]),
+
+    statusPanels: if withRow then
+      self.statusPanelsWithRow
+    else
+      self.statusPanelsWithOutRow,
   }
