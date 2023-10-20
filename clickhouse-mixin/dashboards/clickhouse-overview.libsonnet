@@ -819,7 +819,7 @@ local errorLogsPanel(cfg) =
               promDatasource,
               'label_values(ClickHouseProfileEvents_Query{job=~"$job"}, cluster)',
               label='Cluster',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
               allValues='',

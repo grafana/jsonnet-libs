@@ -661,7 +661,7 @@ local zooKeeperRequestsPanel(matcher) =
             promDatasource,
             'label_values(ClickHouseMetrics_InterserverConnection{job=~"$job"}, cluster)',
             label='Cluster',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',

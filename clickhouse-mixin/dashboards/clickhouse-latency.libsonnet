@@ -480,7 +480,7 @@ local zooKeeperWaitTimePanel(matcher) =
             promDatasource,
             'label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~"$job"}, cluster)',
             label='Cluster',
-            refresh=1,
+            refresh=2,
             includeAll=true,
             multi=true,
             allValues='',
