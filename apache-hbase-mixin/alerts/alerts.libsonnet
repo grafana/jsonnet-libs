@@ -5,9 +5,9 @@
         name: 'apache-hbase-alerts',
         rules: [
           {
-            alert: 'HighHeapMemUsage',
+            alert: 'HBaseHighHeapMemUsage',
             expr: |||
-              100 * sum without(context, hostname, processname) (jvm_metrics_mem_heap_used_m / clamp_min(jvm_metrics_mem_heap_committed_m, 1))  > %(alertsHighHeapMemUsage)s
+              100 * sum without(context, hostname, processname) (jvm_metrics_mem_heap_used_m{$._config.filterSelector} / clamp_min(jvm_metrics_mem_heap_committed_m{$._config.filterSelector}, 1))  > %(alertsHighHeapMemUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -22,24 +22,7 @@
             },
           },
           {
-            alert: 'HighNonHeapMemUsage',
-            expr: |||
-              100 * sum without(context, hostname, processname) (jvm_metrics_mem_non_heap_used_m / clamp_min(jvm_metrics_mem_non_heap_committed_m, 1))  > %(alertsHighNonHeapMemUsage)s
-            ||| % $._config,
-            'for': '5m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              summary: 'There is a limited amount of non-heap memory available to the JVM.',
-              description:
-                (
-                  'The non-heap memory usage for the JVM on instance {{$labels.instance}} in cluster {{$labels.hbase_cluster}} is {{printf "%%.0f" $labels.value}} percent, which is above the threshold of %(alertsHighNonHeapMemUsage)s percent'
-                ) % $._config,
-            },
-          },
-          {
-            alert: 'DeadRegionServer',
+            alert: 'HBaseDeadRegionServer',
             expr: |||
               server_num_dead_region_servers > %(alertsDeadRegionServer)s
             ||| % $._config,
@@ -56,7 +39,7 @@
             },
           },
           {
-            alert: 'OldRegionsInTransition',
+            alert: 'HBaseOldRegionsInTransition',
             expr: |||
               100 * assignment_manager_rit_count_over_threshold / clamp_min(assignment_manager_rit_count, 1) > %(alertsOldRegionsInTransition)s
             ||| % $._config,
@@ -73,7 +56,7 @@
             },
           },
           {
-            alert: 'HighMasterAuthFailRate',
+            alert: 'HBaseHighMasterAuthFailRate',
             expr: |||
               100 * rate(master_authentication_failures[5m]) / (clamp_min(rate(master_authentication_successes[5m]), 1) + clamp_min(rate(master_authentication_failures[5m]), 1)) > %(alertsHighMasterAuthFailRate)s
             ||| % $._config,
@@ -90,7 +73,7 @@
             },
           },
           {
-            alert: 'HighRSAuthFailRate',
+            alert: 'HBaseHighRSAuthFailRate',
             expr: |||
               100 * rate(region_server_authentication_failures[5m]) / (clamp_min(rate(region_server_authentication_successes[5m]), 1) + clamp_min(rate(region_server_authentication_failures[5m]), 1)) > %(alertsHighRSAuthFailRate)s
             ||| % $._config,

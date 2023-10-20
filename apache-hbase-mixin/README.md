@@ -10,12 +10,12 @@ The Apache HBase mixin contains the following dashboards:
 
 and the following alerts:
 
-- ApacheHBaseHighHeapMemUsage
-- ApacheHBaseHighNonHeapMemUsage
-- ApacheHBaseDeadRegionServer
-- ApacheHBaseOldRegionsInTransition
-- ApacheHBaseHighMasterAuthFailureRate
-- ApacheHBaseHighRSAuthFailureRate
+- HBaseHighHeapMemUsage
+- HBaseHighNonHeapMemUsage
+- HBaseDeadRegionServer
+- HBaseOldRegionsInTransition
+- HBaseHighMasterAuthFailureRate
+- HBaseHighRSAuthFailureRate
 
 ## Apache HBase overview
 The Apache HBase cluster overview dashboard provides details on integration status/alerts, current RegionServers, JVM memory usage, cluster connections, master queue performance, and transitioning regions.

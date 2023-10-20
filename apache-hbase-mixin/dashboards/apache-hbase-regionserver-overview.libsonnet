@@ -220,15 +220,9 @@ local rpcConnectionsPanel = {
   pluginVersion: '10.2.0-62263',
 };
 
-local jvmMemoryUsagePanel = {
+local jvmHeapMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'jvm_metrics_mem_non_heap_used_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"} / clamp_min(jvm_metrics_mem_non_heap_committed_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"}, 1)',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - non-heap',
-      format='time_series',
-    ),
     prometheus.target(
       'jvm_metrics_mem_heap_used_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"}, 1)',
       datasource=promDatasource,
@@ -237,8 +231,8 @@ local jvmMemoryUsagePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'JVM memory usage',
-  description: 'Memory usage for the JVM.',
+  title: 'JVM heap memory usage',
+  description: 'Heap memory usage for the JVM.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1273,7 +1267,7 @@ local authenticationsPanel = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(server_region_count{hbase_cluster=~"$hbase_cluster"},instance)',
+            'label_values(server_region_count{job=~"$job", hbase_cluster=~"$hbase_cluster"},instance)',
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -1289,7 +1283,7 @@ local authenticationsPanel = {
           storeFilesPanel { gridPos: { h: 8, w: 6, x: 6, y: 0 } },
           storeFileSizePanel { gridPos: { h: 8, w: 6, x: 12, y: 0 } },
           rpcConnectionsPanel { gridPos: { h: 8, w: 6, x: 18, y: 0 } },
-          jvmMemoryUsagePanel { gridPos: { h: 9, w: 24, x: 0, y: 8 } },
+          jvmHeapMemoryUsagePanel { gridPos: { h: 9, w: 24, x: 0, y: 8 } },
           requestsReceivedPanel { gridPos: { h: 8, w: 16, x: 0, y: 17 } },
           requestsOverviewPanel { gridPos: { h: 8, w: 8, x: 16, y: 17 } },
           regionCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 25 } },

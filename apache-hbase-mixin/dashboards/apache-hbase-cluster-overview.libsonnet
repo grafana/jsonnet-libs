@@ -12,6 +12,54 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
+local liveRegionServersPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      datasource=promDatasource,
+      legendFormat='{{hbase_cluster}}',
+      format='time_series',
+    ),
+  ],
+  type: 'stat',
+  title: 'Live RegionServers',
+  description: 'Number of RegionServers that are currently live.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'value',
+  },
+  pluginVersion: '10.2.0-62263',
+};
+
 local deadRegionServersPanel = {
   datasource: promDatasource,
   targets: [
@@ -41,54 +89,6 @@ local deadRegionServersPanel = {
           {
             color: 'red',
             value: 1,
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'value',
-  },
-  pluginVersion: '10.2.0-62263',
-};
-
-local liveRegionServersPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
-      datasource=promDatasource,
-      legendFormat='{{hbase_cluster}}',
-      format='time_series',
-    ),
-  ],
-  type: 'stat',
-  title: 'Live RegionServers',
-  description: 'Number of RegionServers that are currently live.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'thresholds',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
           },
         ],
       },
@@ -167,7 +167,7 @@ local regionserversPanel = {
             value: [
               {
                 title: '',
-                url: '/d/apache-hbase-regionserver-overview',
+                url: '/d/apache-hbase-regionserver-overview?from=${__from}&to=${__to}&var-instance=${__data.fields.Instance}',
               },
             ],
           },
@@ -286,19 +286,12 @@ local regionserversPanel = {
 
 local alertsPanel = {
   datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'master_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
-      datasource=promDatasource,
-      legendFormat='{{hbase_cluster}}',
-      format='time_series',
-    ),
-  ],
+  targets: [],
   type: 'alertlist',
   title: 'Alerts',
   description: 'Panel to report on the status of integration alerts.',
   options: {
-    alertInstanceLabelFilter: '{job=~"${job:regex}", activemq_cluster=~"${activemq_cluster:regex}", instance=~"${instance:regex}"}',
+    alertInstanceLabelFilter: '{job=~"${job:regex}", hbase_cluster=~"${hbase_cluster:regex}", instance=~"${instance:regex}"}',
     alertName: '',
     dashboardAlerts: false,
     folder: '',
@@ -317,15 +310,9 @@ local alertsPanel = {
   },
 };
 
-local jvmMemoryUsagePanel = {
+local jvmHeapMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
-    prometheus.target(
-      'jvm_metrics_mem_non_heap_used_m{job=~"$job", hbase_cluster=~"$hbase_cluster", processname=~"Master"} / clamp_min(jvm_metrics_mem_non_heap_committed_m{job=~"$job", hbase_cluster=~"$hbase_cluster", processname=~"Master"}, 1)',
-      datasource=promDatasource,
-      legendFormat='{{hbase_cluster}} - non-heap',
-      format='time_series',
-    ),
     prometheus.target(
       'jvm_metrics_mem_heap_used_m{job=~"$job", hbase_cluster=~"$hbase_cluster", processname=~"Master"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~"$job", hbase_cluster=~"$hbase_cluster", processname=~"Master"}, 1)',
       datasource=promDatasource,
@@ -334,8 +321,8 @@ local jvmMemoryUsagePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'JVM memory usage',
-  description: 'Memory usage for the JVM.',
+  title: 'JVM heap memory usage',
+  description: 'Heap memory usage for the JVM.',
   fieldConfig: {
     defaults: {
       color: {
@@ -463,6 +450,7 @@ local connectionsPanel = {
           mode: 'off',
         },
       },
+      decimals: 0,
       mappings: [],
       thresholds: {
         mode: 'absolute',
@@ -1022,7 +1010,7 @@ local oldestRegionInTransitionPanel = {
           liveRegionServersPanel { gridPos: { h: 8, w: 5, x: 5, y: 0 } },
           regionserversPanel { gridPos: { h: 8, w: 14, x: 10, y: 0 } },
           alertsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-          jvmMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+          jvmHeapMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           connectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
           authenticationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
           masterQueueSizePanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
