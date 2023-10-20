@@ -1219,10 +1219,10 @@ local authenticationsPanel = {
     'apache-hbase-regionserver-overview.json':
       dashboard.new(
         'Apache HBase RegionServer overview',
-        time_from='%s' % $._config.dashboardPeriod,
+        time_from=$._config.dashboardPeriod,
         tags=($._config.dashboardTags),
-        timezone='%s' % $._config.dashboardTimezone,
-        refresh='%s' % $._config.dashboardRefresh,
+        timezone=$._config.dashboardTimezone,
+        refresh=$._config.dashboardRefresh,
         description='',
         uid=dashboardUid,
       )
