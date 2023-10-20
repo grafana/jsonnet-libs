@@ -12,22 +12,25 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local GeoMetricByCountryPanel = {
+local GeoMetricByCountryGeomapPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '$geo_metric{job=~"$job", instance=~"$instance", zone=~"$zone"}',
+      'increase($geo_metric{job=~"$job", instance=~"$instance", zone=~"$zone"}[$__interval:] offset -$__interval)',
       datasource=promDatasource,
+      legendFormat='',
       format='table',
+      interval='1m',
     ),
   ],
   type: 'geomap',
   title: '$geo_metric by country',
-  description: 'GeoMap panel currently showing $geo_metric for the zone.',
+  id: 3,
+  description: 'Geomap panel currently showing $geo_metric for the zone.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds',
+        mode: 'continuous-BlPu',
       },
       custom: {
         hideFrom: {
@@ -73,6 +76,7 @@ local GeoMetricByCountryPanel = {
           showLegend: true,
           style: {
             color: {
+              field: 'Total',
               fixed: 'dark-green',
             },
             opacity: 0.4,
@@ -83,9 +87,10 @@ local GeoMetricByCountryPanel = {
               mode: 'mod',
             },
             size: {
+              field: 'Total',
               fixed: 5,
               max: 15,
-              min: 2,
+              min: 7,
             },
             symbol: {
               fixed: 'img/icons/marker/circle.svg',
@@ -104,16 +109,12 @@ local GeoMetricByCountryPanel = {
             },
           },
         },
-        filterData: {
-          id: 'byRefId',
-          options: 'A',
-        },
         location: {
           gazetteer: 'public/gazetteer/countries.json',
           lookup: 'country',
           mode: 'lookup',
         },
-        name: 'Country',
+        name: 'Total',
         tooltip: true,
         type: 'markers',
       },
@@ -130,14 +131,167 @@ local GeoMetricByCountryPanel = {
       zoom: 1,
     },
   },
-  pluginVersion: '10.2.0-61719',
+  pluginVersion: '10.2.0-62263',
+  transformations: [
+    {
+      id: 'groupBy',
+      options: {
+        fields: {
+          Value: {
+            aggregations: [
+              'sum',
+              'mean',
+              'lastNotNull',
+            ],
+            operation: 'aggregate',
+          },
+          country: {
+            aggregations: [],
+            operation: 'groupby',
+          },
+          host: {
+            aggregations: [],
+          },
+          instance: {
+            aggregations: [],
+            operation: 'groupby',
+          },
+          job: {
+            aggregations: [],
+            operation: 'groupby',
+          },
+          region: {
+            aggregations: [],
+            operation: 'groupby',
+          },
+          status: {
+            aggregations: [],
+            operation: 'groupby',
+          },
+          zone: {
+            aggregations: [],
+          },
+        },
+      },
+    },
+    {
+      id: 'organize',
+      options: {
+        excludeByName: {},
+        indexByName: {},
+        renameByName: {
+          'Value (lastNotNull)': 'Last',
+          'Value (mean)': 'Mean',
+          'Value (sum)': 'Total',
+          country: 'Country',
+          instance: 'Instance',
+          job: 'Job',
+          region: 'Region',
+          status: 'Status',
+          zone: 'Zone',
+        },
+      },
+    },
+  ],
+};
+
+local GeoMetricByCountryTablePanel = {
+  datasource: {
+    type: 'datasource',
+    uid: '-- Dashboard --',
+  },
+  targets: [
+    {
+      datasource: {
+        type: 'datasource',
+        uid: '-- Dashboard --',
+      },
+      panelId: GeoMetricByCountryGeomapPanel.id,
+      refId: 'A',
+      withTransforms: true,
+    },
+  ],
+  type: 'table',
+  title: '$geo_metric by country',
+  description: 'Table currently showing $geo_metric for the zone.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      custom: {
+        align: 'auto',
+        cellOptions: {
+          type: 'auto',
+        },
+        inspect: false,
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+    },
+    overrides: [
+      {
+        matcher: {
+          id: 'byRegexp',
+          options: '/Total|Mean|Last/',
+        },
+        properties: [
+          {
+            id: 'custom.cellOptions',
+            value: {
+              mode: 'basic',
+              type: 'gauge',
+              valueDisplayMode: 'text',
+            },
+          },
+          {
+            id: 'color',
+            value: {
+              mode: 'continuous-BlPu',
+            },
+          },
+        ],
+      },
+    ],
+  },
+  options: {
+    cellHeight: 'sm',
+    footer: {
+      countRows: false,
+      fields: '',
+      reducer: [
+        'sum',
+      ],
+      show: false,
+    },
+    showHeader: true,
+    sortBy: [
+      {
+        desc: true,
+        displayName: 'Total',
+      },
+    ],
+  },
+  pluginVersion: '10.2.0-62263',
 };
 
 {
   grafanaDashboards+:: {
     'cloudflare-geomap-overview.json':
       dashboard.new(
-        'Cloudflare GeoMap overview',
+        'Cloudflare Geomap overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -145,14 +299,6 @@ local GeoMetricByCountryPanel = {
         description='',
         uid=dashboardUid,
       )
-
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Other Cloudflare dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
 
       .addTemplates(
         [
@@ -169,9 +315,9 @@ local GeoMetricByCountryPanel = {
             'label_values(cloudflare_zone_requests_total,job)',
             label='Job',
             refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='.+',
+            includeAll=false,
+            multi=false,
+            allValues='',
             sort=0
           ),
           template.new(
@@ -180,9 +326,9 @@ local GeoMetricByCountryPanel = {
             'label_values(cloudflare_zone_requests_total{job="$job"},instance)',
             label='Instance',
             refresh=2,
-            includeAll=true,
+            includeAll=false,
             multi=true,
-            allValues='.+',
+            allValues='',
             sort=0
           ),
           template.new(
@@ -198,11 +344,11 @@ local GeoMetricByCountryPanel = {
           ),
           template.custom(
             'geo_metric',
-            query='cloudflare_zone_requests_country,cloudflare_zone_bandwidth_country,cloudflare_zone_threats_country,cloudflare_zone_requests_origin_status_country_host,cloudflare_zone_requests_status_country_host',
+            query='cloudflare_zone_requests_country,cloudflare_zone_bandwidth_country,cloudflare_zone_threats_country',
             current='Requests',
             refresh='never',
-            label='GeoMap metric',
-            valuelabels={ cloudflare_zone_requests_country: 'Requests', cloudflare_zone_bandwidth_country: 'Bandwidth', cloudflare_zone_threats_country: 'Threats', cloudflare_zone_requests_origin_status_country_host: 'Non-cache requests', cloudflare_zone_requests_status_country_host: 'Edge requests' },
+            label='Geomap metric',
+            valuelabels={},
             includeAll=false,
             multi=false,
             allValues='',
@@ -211,7 +357,8 @@ local GeoMetricByCountryPanel = {
       )
       .addPanels(
         [
-          GeoMetricByCountryPanel { gridPos: { h: 24, w: 24, x: 0, y: 0 } },
+          GeoMetricByCountryTablePanel { gridPos: { h: 7, w: 24, x: 0, y: 0 } },
+          GeoMetricByCountryGeomapPanel { gridPos: { h: 24, w: 24, x: 0, y: 7 } },
         ]
       ),
   },

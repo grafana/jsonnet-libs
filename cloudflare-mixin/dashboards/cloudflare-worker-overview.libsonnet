@@ -369,7 +369,7 @@ local workerErrorsPanel = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(cloudflare_zone_requests_total{job="$job"},instance)',
+            'label_values(cloudflare_zone_requests_total{job=~"$job"},instance)',
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -380,7 +380,7 @@ local workerErrorsPanel = {
           template.new(
             'script_name',
             promDatasource,
-            'label_values(cloudflare_worker_requests_count{instance="$instance"},script_name)',
+            'label_values(cloudflare_worker_requests_count{job=~"$job", instance=~"$instance"},script_name)',
             label='Script',
             refresh=2,
             includeAll=true,

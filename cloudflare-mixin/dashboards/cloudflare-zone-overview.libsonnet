@@ -18,7 +18,7 @@ local alertsPanel = {
   type: 'alertlist',
   title: 'Alerts',
   options: {
-    alertInstanceLabelFilter: '{job=~"integrations/cloudflare"}',
+    alertInstanceLabelFilter: '{job=~"${job:regex}", instance=~"${instance:regex}"}',
     alertName: '',
     dashboardAlerts: false,
     groupBy: [],
@@ -1055,7 +1055,7 @@ local colocationRequestsPanel = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(cloudflare_zone_requests_total{job="$job"},instance)',
+            'label_values(cloudflare_zone_requests_total{job=~"$job"},instance)',
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -1066,7 +1066,7 @@ local colocationRequestsPanel = {
           template.new(
             'zone',
             promDatasource,
-            'label_values(cloudflare_zone_requests_total{instance="$instance"},zone)',
+            'label_values(cloudflare_zone_requests_total{job=~"$job", instance=~"$instance"},zone)',
             label='Zone',
             refresh=2,
             includeAll=true,

@@ -41,6 +41,8 @@ The Cloudflare worker overview dashboard provides a look into Cloudflare Worker 
 - CloudflareUnhealthyPools: There are unhealthy pools.
 - CloudflareMetricsDown: Cloudflare metrics are down.
 
+Be sure to set `alertsMetricsDownJobName` to match your environment if using a different `Job` label than the default.
+
 Default thresholds can be configured in `config.libsonnet`.
 ```js
 {
@@ -49,6 +51,9 @@ Default thresholds can be configured in `config.libsonnet`.
     dashboardPeriod: 'now-30m',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
+
+    // CloudflareMetricsDown alert filter variable
+    alertsMetricsDownJobName: 'integrations/cloudflare',
 
     // alerts thresholds
     alertsHighThreatCount: 3, // count

@@ -75,7 +75,7 @@
           {
             alert: 'CloudflareMetricsDown',
             expr: |||
-              up{job="integrations/cloudflare"} == 0
+              up{job="%(alertsMetricsDownJobName)s"} == 0
             ||| % $._config,
             'for': '5m',
             labels: {
