@@ -54,8 +54,8 @@ scrape_configs:
       - targets: [localhost]
         labels:
           job: integrations/apache-hbase
+          hbase_cluster: "<your-cluster-name>"
           instance: "<your-instance-name>"
-          apache_hbase_cluster: "<your-cluster-name>"
           __path__: {hbase-home}/logs/*.log
     pipeline_stages:
         - multiline:
@@ -64,7 +64,7 @@ scrape_configs:
             expression: '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2},\d{3} (?P<level>\w+)  \[(?P<context>.*)\] (?P<message>(?s:.*))$'
         - labels:
             level:
-            context:
+            logger:
 ```
 
 ## Alerts overview

@@ -7,7 +7,7 @@
           {
             alert: 'HBaseHighHeapMemUsage',
             expr: |||
-              100 * sum without(context, hostname, processname) (jvm_metrics_mem_heap_used_m{$._config.filterSelector} / clamp_min(jvm_metrics_mem_heap_committed_m{$._config.filterSelector}, 1))  > %(alertsHighHeapMemUsage)s
+              100 * sum without(context, hostname, processname) (jvm_metrics_mem_heap_used_m{%(filterSelector)s} / clamp_min(jvm_metrics_mem_heap_committed_m{%(filterSelector)s}, 1))  > %(alertsHighHeapMemUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
