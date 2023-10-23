@@ -1,4 +1,4 @@
-# Cloudflare Mixin
+# Cloudflare mixin
 The Cloudflare mixin is a set of configurable Grafana dashboards and alerts. 
 
 The metrics analyzed here are a part of `Cloudflare Analytics - account and zone analytics` found [here](https://developers.cloudflare.com/analytics/account-and-zone-analytics/). Pool and worker metrics will not appear until your Cloudflare instance has been configured to utilize them.
@@ -23,8 +23,8 @@ The Cloudflare zone overview dashboard provides a detailed look into the perform
 ![First screenshot of Cloudflare zone overview dashboard]()
 ![Second screenshot of Cloudflare zone overview dashboard]()
 
-## Cloudflare GeoMap overview
-The Cloudflare GeoMap overview dashboard utilizes a GeoMap panel to visualize specific metrics on a global map. The metrics utilized here are requests, bandwidth, threats, non-cached requests, and edge requests.
+## Cloudflare Geomap overview
+The Cloudflare Geomap overview dashboard utilizes a GeoMap panel to visualize specific metrics on a global map. The metrics utilized here are requests, bandwidth, threats, non-cached requests, and edge requests.
 
 ![Screenshot of Cloudflare GeoMap overview dashboard]()
 

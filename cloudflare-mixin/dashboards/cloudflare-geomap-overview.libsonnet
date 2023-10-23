@@ -300,6 +300,14 @@ local GeoMetricByCountryTablePanel = {
         uid=dashboardUid,
       )
 
+      .addLink(grafana.link.dashboards(
+        asDropdown=false,
+        title='Other Cloudflare dashboards',
+        includeVars=true,
+        keepTime=true,
+        tags=($._config.dashboardTags),
+      ))
+
       .addTemplates(
         [
           template.datasource(
