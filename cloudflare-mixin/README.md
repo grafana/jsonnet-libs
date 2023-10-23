@@ -26,7 +26,7 @@ The Cloudflare zone overview dashboard provides a detailed look into the perform
 ## Cloudflare Geomap overview
 The Cloudflare Geomap overview dashboard utilizes a GeoMap panel to visualize specific metrics on a global map. The metrics utilized here are requests, bandwidth, threats, non-cached requests, and edge requests.
 
-![Screenshot of Cloudflare GeoMap overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/cloudflare/screenshots/cloudflare-geomap-overview.png)
+![Screenshot of Cloudflare Geomap overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/cloudflare/screenshots/cloudflare-geomap-overview.png)
 
 ## Cloudflare worker overview
 The Cloudflare worker overview dashboard provides a look into Cloudflare Worker performance on a per script basis. Metrics include CPU time quantiles, script duration quantiles, requests, and errors.
