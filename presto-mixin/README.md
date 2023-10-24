@@ -5,9 +5,9 @@ The Presto mixin is a set of configurable Grafana dashboards and alerts.
 The Presto mixin contains the following dashboards:
 
 - Presto overview
-- Presto coordinator overview
-- Presto worker overview
-- Presto logs overview
+- Presto coordinator
+- Presto worker
+- Presto logs
 
 and the following alerts:
 
@@ -20,24 +20,25 @@ and the following alerts:
 - PrestoHighFailedQueriesCritical
 
 ## Presto overview
+
 The Presto overview dashboard provides details on integration status/alerts, workers/coordinators, error failures, data throughput, blocked nodes, and distributed bytes.
-![First screenshot of the Presto cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_overview_1.png)
-![Second screenshot of the Presto cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_overview_2.png)
+![Presto overview dashboard]()
 
 ## Presto coordinator overview
+
 The Presto coordinator overview dashboard provides details on various query counts and rates, query execution time, CPU time consumed, CPU input throughput, error failures, JVM metrics, and memory pool information.
-![First screenshot of the Presto coordinator overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_coordinator_overview_1.png)
-![Second screenshot of the Presto coordinator overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_coordinator_overview_2.png)
+![Presto coordinator dashboard]()
 
 ## Presto worker overview
+
 The Presto worker overview dashboard provides details on various task rates, pool sizes, output positions, data throughput, JVM metrics, and memory pool information
-![First screenshot of the Presto coordinator overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_worker_overview_1.png)
-![Second screenshot of the Presto coordinator overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_worker_overview_2.png)
+![Presto worker dashboard]()
 
 ## Presto logs
+
 The Presto logs dashboard provides details on incoming system logs.
 
-![First screenshot of the Presto logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_logs_overview.png)
+![Presto logs dashboard]()
 
 Presto system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -62,12 +63,12 @@ scrape_configs:
           presto_cluster: "<your-cluster-name>"
           __path__: /var/presto/logs/*.log
     pipeline_stages:
-        - multiline:
-            firstline: '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}'
-        - regex:
-            expression: '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\s+(?P<level>\w+)(?P<message>.+)'
-        - labels:
-            level:
+      - multiline:
+          firstline: '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}'
+      - regex:
+          expression: '\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\s+(?P<level>\w+)(?P<message>.+)'
+      - labels:
+          level:
 ```
 
 ## Alerts overview

@@ -1,4 +1,4 @@
 (import 'presto-overview.libsonnet') +
-(import 'presto-coordinator-overview.libsonnet') +
-(import 'presto-worker-overview.libsonnet') +
+(import 'presto-coordinator.libsonnet') +
+(import 'presto-worker.libsonnet') +
 (import 'presto-logs-overview.libsonnet')

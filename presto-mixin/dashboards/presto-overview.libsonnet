@@ -7,18 +7,20 @@ local prometheus = grafana.prometheus;
 local dashboardUid = 'presto-overview';
 
 local promDatasourceName = 'prometheus_datasource';
-
+local getMatcher(cfg) = '%(prestoOverviewSelector)s' % cfg;
+local getLegendMatcher(cfg) = '%(prestoOverviewLegendSelector)s' % cfg;
+local getAlertMatcher(cfg) = '%(prestoAlertSelector)s' % cfg;
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local activeResourceManagersPanel = {
+local activeResourceManagersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{job=~"$job", presto_cluster=~"$presto_cluster"}',
+      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
@@ -28,7 +30,7 @@ local activeResourceManagersPanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'fixed',
+        mode: 'thresholds',
       },
       mappings: [],
       thresholds: {
@@ -38,6 +40,14 @@ local activeResourceManagersPanel = {
             color: 'green',
             value: null,
           },
+          {
+            color: 'text',
+            value: 0,
+          },
+          {
+            color: 'green',
+            value: 1,
+          },
         ],
       },
       unit: 'none',
@@ -45,7 +55,7 @@ local activeResourceManagersPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'none',
+    colorMode: 'value',
     graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -61,13 +71,13 @@ local activeResourceManagersPanel = {
   pluginVersion: '10.2.0-62263',
 };
 
-local activeCoordinatorsPanel = {
+local activeCoordinatorsPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{job=~"$job", presto_cluster=~"$presto_cluster"}',
+      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
@@ -77,7 +87,7 @@ local activeCoordinatorsPanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'fixed',
+        mode: 'thresholds',
       },
       mappings: [],
       thresholds: {
@@ -87,6 +97,14 @@ local activeCoordinatorsPanel = {
             color: 'green',
             value: null,
           },
+          {
+            color: 'red',
+            value: 0,
+          },
+          {
+            color: 'green',
+            value: 1,
+          },
         ],
       },
       unit: 'none',
@@ -94,7 +112,7 @@ local activeCoordinatorsPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'none',
+    colorMode: 'value',
     graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -110,13 +128,13 @@ local activeCoordinatorsPanel = {
   pluginVersion: '10.2.0-62263',
 };
 
-local activeWorkersPanel = {
+local activeWorkersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~"$job", presto_cluster=~"$presto_cluster"}',
+      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
@@ -126,7 +144,7 @@ local activeWorkersPanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'fixed',
+        mode: 'thresholds',
       },
       mappings: [],
       thresholds: {
@@ -136,6 +154,14 @@ local activeWorkersPanel = {
             color: 'green',
             value: null,
           },
+          {
+            color: 'red',
+            value: 0,
+          },
+          {
+            color: 'green',
+            value: 1,
+          },
         ],
       },
       unit: 'none',
@@ -143,7 +169,7 @@ local activeWorkersPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'none',
+    colorMode: 'value',
     graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -159,13 +185,13 @@ local activeWorkersPanel = {
   pluginVersion: '10.2.0-62263',
 };
 
-local inactiveWorkersPanel = {
+local inactiveWorkersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_metadata_DiscoveryNodeManager_InactiveNodeCount{job=~"$job", presto_cluster=~"$presto_cluster"}',
+      'com_facebook_presto_metadata_DiscoveryNodeManager_InactiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
@@ -175,7 +201,7 @@ local inactiveWorkersPanel = {
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'fixed',
+        mode: 'thresholds',
       },
       mappings: [],
       thresholds: {
@@ -185,6 +211,10 @@ local inactiveWorkersPanel = {
             color: 'green',
             value: null,
           },
+          {
+            color: 'red',
+            value: 3,
+          },
         ],
       },
       unit: 'none',
@@ -192,7 +222,7 @@ local inactiveWorkersPanel = {
     overrides: [],
   },
   options: {
-    colorMode: 'none',
+    colorMode: 'value',
     graphMode: 'area',
     justifyMode: 'auto',
     orientation: 'auto',
@@ -208,13 +238,13 @@ local inactiveWorkersPanel = {
   pluginVersion: '10.2.0-62263',
 };
 
-local completedQueriesOneMinuteCountPanel = {
+local completedQueriesOneMinuteCountPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_CompletedQueries_OneMinute_Count{job=~"$job", presto_cluster=~"$presto_cluster"}',
+      'com_facebook_presto_execution_QueryManager_CompletedQueries_OneMinute_Count{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
@@ -234,8 +264,8 @@ local completedQueriesOneMinuteCountPanel = {
         axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
-        drawStyle: 'bars',
-        fillOpacity: 20,
+        drawStyle: 'line',
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -243,7 +273,7 @@ local completedQueriesOneMinuteCountPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'smooth',
+        lineInterpolation: 'stepBefore',
         lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
@@ -287,91 +317,46 @@ local completedQueriesOneMinuteCountPanel = {
   },
 };
 
-local queuedQueriesPanel = {
+local alertsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_QueuedQueries{job=~"$job", presto_cluster=~"$presto_cluster"}',
+      '',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='',
       format='time_series',
     ),
   ],
-  type: 'timeseries',
-  title: 'Queued queries',
-  description: 'The number of queued queries.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'bars',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'smooth',
-        lineWidth: 2,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
+  type: 'alertlist',
+  title: 'Alerts',
+  description: 'Reports firing alerts.',
   options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
+    alertInstanceLabelFilter: '{' + matcher + ', presto_cluster=~"${presto_cluster:regex}", instance=~"${instance:regex}"}',
+    alertName: '',
+    dashboardAlerts: false,
+    datasource: 'Prometheus',
+    groupBy: [],
+    groupMode: 'default',
+    maxItems: 20,
+    sortOrder: 1,
+    stateFilter: {
+      'error': true,
+      firing: true,
+      noData: false,
+      normal: true,
+      pending: true,
     },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
+    viewMode: 'list',
   },
 };
 
-local userErrorFailuresOneMinuteRatePanel = {
+local userErrorFailuresOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_UserErrorFailures_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster"}',
+      'com_facebook_presto_execution_QueryManager_UserErrorFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
@@ -391,7 +376,7 @@ local userErrorFailuresOneMinuteRatePanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -399,7 +384,7 @@ local userErrorFailuresOneMinuteRatePanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'smooth',
+        lineInterpolation: 'stepBefore',
         lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
@@ -443,19 +428,19 @@ local userErrorFailuresOneMinuteRatePanel = {
   },
 };
 
-local internalErrorFailuresOneMinuteRatePanel = {
+local queuedQueriesPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_InternalFailures_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster"}',
+      'com_facebook_presto_execution_QueryManager_QueuedQueries{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Internal error failures - one minute rate',
-  description: 'The rate of internal failures occurring across the clusters.',
+  title: 'Queued queries',
+  description: 'The number of queued queries.',
   fieldConfig: {
     defaults: {
       color: {
@@ -468,8 +453,8 @@ local internalErrorFailuresOneMinuteRatePanel = {
         axisLabel: '',
         axisPlacement: 'auto',
         barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 25,
+        drawStyle: 'bars',
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -503,7 +488,7 @@ local internalErrorFailuresOneMinuteRatePanel = {
           },
         ],
       },
-      unit: 'err/s',
+      unit: 'none',
     },
     overrides: [],
   },
@@ -521,124 +506,13 @@ local internalErrorFailuresOneMinuteRatePanel = {
   },
 };
 
-local alertsPanel = {
+local blockedNodesPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '',
+      'com_facebook_presto_memory_ClusterMemoryPool_BlockedNodes{' + matcher + ', presto_cluster=~"$presto_cluster", name="general"}',
       datasource=promDatasource,
-      legendFormat='',
-      format='time_series',
-    ),
-  ],
-  type: 'alertlist',
-  title: 'Alerts',
-  description: 'Reports firing alerts.',
-  options: {
-    alertInstanceLabelFilter: '{job=~"${job:regex}", presto_cluster=~"${presto_cluster:regex}", instance=~"${instance:regex}"}',
-    alertName: '',
-    dashboardAlerts: false,
-    datasource: 'Prometheus',
-    groupBy: [],
-    groupMode: 'default',
-    maxItems: 20,
-    sortOrder: 1,
-    stateFilter: {
-      'error': true,
-      firing: true,
-      noData: false,
-      normal: false,
-      pending: true,
-    },
-    viewMode: 'list',
-  },
-};
-
-local InsufficientResourceFailuresOneMinuteRatePanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'com_facebook_presto_execution_QueryManager_InsufficientResourcesFailures_OneMinute_Rate{job=~"$job", presto_cluster=~"$presto_cluster"}',
-      datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
-      format='time_series',
-    ),
-  ],
-  type: 'timeseries',
-  title: ' Insufficient resource failures - one minute rate',
-  description: 'The rate that failures are occurring due to insufficient resources.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 25,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'smooth',
-        lineWidth: 2,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'cps',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local blockedNodesPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'com_facebook_presto_memory_ClusterMemoryPool_BlockedNodes{job=~"$job", presto_cluster=~"$presto_cluster", name="general"}',
-      datasource=promDatasource,
-      legendFormat='{{presto_cluster}}',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
@@ -658,7 +532,7 @@ local blockedNodesPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -666,7 +540,7 @@ local blockedNodesPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'smooth',
+        lineInterpolation: 'stepBefore',
         lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
@@ -710,24 +584,102 @@ local blockedNodesPanel = {
   },
 };
 
-local distributedBytesPanel = {
+local internalErrorFailuresOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (presto_cluster) (com_facebook_presto_memory_ClusterMemoryPool_FreeDistributedBytes{job=~"$job", presto_cluster=~"$presto_cluster"})',
+      'com_facebook_presto_execution_QueryManager_InternalFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}} - free',
-      format='time_series',
-    ),
-    prometheus.target(
-      'sum by (presto_cluster) (com_facebook_presto_memory_ClusterMemoryPool_ReservedDistributedBytes{job=~"$job", presto_cluster=~"$presto_cluster"})',
-      datasource=promDatasource,
-      legendFormat='{{presto_cluster}} - reserved',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Distributed bytes',
+  title: 'Internal error failures - one minute rate',
+  description: 'The rate of internal failures occurring across the clusters.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisBorderShow: false,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 15,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'stepBefore',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'err/s',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local clusterMemoryDistributedBytesPanel(legendMatcher, matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'sum by (presto_cluster) (com_facebook_presto_memory_ClusterMemoryPool_FreeDistributedBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
+      datasource=promDatasource,
+      legendFormat='' + legendMatcher + ' - free',
+      format='time_series',
+    ),
+    prometheus.target(
+      'sum by (presto_cluster) (com_facebook_presto_memory_ClusterMemoryPool_ReservedDistributedBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
+      datasource=promDatasource,
+      legendFormat='' + legendMatcher + ' - reserved',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Cluster memory distributed bytes',
   description: 'The amount of memory available across the clusters.',
   fieldConfig: {
     defaults: {
@@ -742,7 +694,7 @@ local distributedBytesPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -794,24 +746,102 @@ local distributedBytesPanel = {
   },
 };
 
-local dataThroughputPanel = {
+local InsufficientResourceFailuresOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_TaskManager_InputDataSize_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'com_facebook_presto_execution_QueryManager_InsufficientResourcesFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{presto_cluster}} - input',
-      format='time_series',
-    ),
-    prometheus.target(
-      'rate(com_facebook_presto_execution_TaskManager_OutputDataSize_TotalCount{job=~"$job", presto_cluster=~"$presto_cluster"}[$__rate_interval])',
-      datasource=promDatasource,
-      legendFormat='{{presto_cluster}} - output',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Data throughput',
+  title: ' Insufficient resource failures - one minute rate',
+  description: 'The rate that failures are occurring due to insufficient resources.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisBorderShow: false,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 15,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'stepBefore',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'err/s',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'com_facebook_presto_execution_TaskManager_InputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      datasource=promDatasource,
+      legendFormat='' + legendMatcher + ' - input',
+      format='time_series',
+    ),
+    prometheus.target(
+      'com_facebook_presto_execution_TaskManager_OutputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      datasource=promDatasource,
+      legendFormat='' + legendMatcher + ' - output',
+      format='time_series',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Input/Output data size - one minute rate',
   description: 'The rate at which volumes of data are being processed',
   fieldConfig: {
     defaults: {
@@ -826,7 +856,7 @@ local dataThroughputPanel = {
         axisPlacement: 'auto',
         barAlignment: 0,
         drawStyle: 'line',
-        fillOpacity: 25,
+        fillOpacity: 15,
         gradientMode: 'none',
         hideFrom: {
           legend: false,
@@ -834,7 +864,7 @@ local dataThroughputPanel = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'smooth',
+        lineInterpolation: 'stepBefore',
         lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
@@ -868,7 +898,7 @@ local dataThroughputPanel = {
     legend: {
       calcs: [],
       displayMode: 'list',
-      placement: 'right',
+      placement: 'bottom',
       showLegend: true,
     },
     tooltip: {
@@ -920,12 +950,13 @@ local dataThroughputPanel = {
           template.new(
             'cluster',
             promDatasource,
-            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job", cluster=~"$cluster"},cluster)',
+            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job"}, cluster)',
             label='Cluster',
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='.*',
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
           template.new(
@@ -943,19 +974,19 @@ local dataThroughputPanel = {
       )
       .addPanels(
         [
-          activeResourceManagersPanel { gridPos: { h: 4, w: 6, x: 0, y: 0 } },
-          activeCoordinatorsPanel { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
-          activeWorkersPanel { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
-          inactiveWorkersPanel { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
-          completedQueriesOneMinuteCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
-          queuedQueriesPanel { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
-          userErrorFailuresOneMinuteRatePanel { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
-          internalErrorFailuresOneMinuteRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
-          alertsPanel { gridPos: { h: 8, w: 12, x: 0, y: 20 } },
-          InsufficientResourceFailuresOneMinuteRatePanel { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
-          blockedNodesPanel { gridPos: { h: 8, w: 12, x: 0, y: 28 } },
-          distributedBytesPanel { gridPos: { h: 8, w: 12, x: 12, y: 28 } },
-          dataThroughputPanel { gridPos: { h: 9, w: 24, x: 0, y: 36 } },
+          activeResourceManagersPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 0, y: 0 } },
+          activeCoordinatorsPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 6, y: 0 } },
+          activeWorkersPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 12, y: 0 } },
+          inactiveWorkersPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 4, w: 6, x: 18, y: 0 } },
+          completedQueriesOneMinuteCountPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
+          alertsPanel(getAlertMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
+          userErrorFailuresOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
+          queuedQueriesPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
+          blockedNodesPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 20 } },
+          internalErrorFailuresOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
+          clusterMemoryDistributedBytesPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 28 } },
+          InsufficientResourceFailuresOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 28 } },
+          inputoutputDataSizeOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 9, w: 24, x: 0, y: 36 } },
         ]
       ),
   },
