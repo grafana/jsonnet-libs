@@ -241,7 +241,7 @@ local serversPanel = {
             value: [
               {
                 title: '',
-                url: '/d/apache-hbase-regionserver-overview?from=${__from}&to=${__to}&var-instance=${__data.fields.Instance}',
+                url: '/d/apache-hbase-regionserver-overview?from=${__from}&to=${__to}&var-instance=${__data.fields["RegionServer"]}',
               },
             ],
           },
