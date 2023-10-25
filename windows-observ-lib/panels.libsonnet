@@ -271,13 +271,12 @@ local utils = commonlib.utils;
           |||
         ),
       diskUsage: commonlib.panels.disk.table.usage.new(
-        totalTarget=
-        (t.diskTotal
-         + g.query.prometheus.withFormat('table')
-         + g.query.prometheus.withInstant(true)),
-        usageTarget=t.diskUsage
+        totalTarget=t.diskTotal
                     + g.query.prometheus.withFormat('table')
                     + g.query.prometheus.withInstant(true),
+        freeTarget=t.diskFree
+                   + g.query.prometheus.withFormat('table')
+                   + g.query.prometheus.withInstant(true),
         groupLabel='volume'
       ),
       diskUsagePercent: commonlib.panels.disk.timeSeries.usagePercent.new(
