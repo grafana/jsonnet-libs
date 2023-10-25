@@ -12,59 +12,88 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local liveRegionServersPanel = {
+local masterStatusHistoryPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'max without (clusterid,deadregionservers,liveregionservers,servername,zookeeperquorum,isactivemaster) (server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster", isactivemaster="true"} * 0  + 1 )',
       datasource=promDatasource,
-      legendFormat='{{hbase_cluster}}',
-      format='time_series',
+      legendFormat='{{instance}}',
+    ),
+    prometheus.target(
+      '(max without (clusterid,deadregionservers,liveregionservers,servername,zookeeperquorum,isactivemaster) (server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster", isactivemaster="false"}) * 0)',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
     ),
   ],
-  type: 'stat',
-  title: 'Live RegionServers',
-  description: 'Number of RegionServers that are currently live.',
+  type: 'status-history',
+  title: 'Master status history',
+  description: 'Displays the current active and backup masters.',
   fieldConfig: {
     defaults: {
       color: {
         mode: 'thresholds',
       },
-      mappings: [],
+      custom: {
+        fillOpacity: 70,
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineWidth: 1,
+      },
+      mappings: [
+        {
+          options: {
+            '0': {
+              color: 'yellow',
+              index: 1,
+              text: 'Backup',
+            },
+            '1': {
+              color: 'blue',
+              index: 0,
+              text: 'Active',
+            },
+          },
+          type: 'value',
+        },
+      ],
       thresholds: {
         mode: 'absolute',
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
     },
     overrides: [],
   },
+  maxDataPoints: 100,
   options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
+    colWidth: 0.9,
+    legend: {
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
     },
-    textMode: 'value',
+    rowHeight: 0.9,
+    showValue: 'never',
+    tooltip: {
+      mode: 'multi',
+      sort: 'none',
+    },
   },
-  pluginVersion: '10.2.0-62263',
+  transformations: [],
 };
 
 local deadRegionServersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'server_num_dead_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'server_num_dead_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster", isactivemaster="true"}',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}}',
       format='time_series',
@@ -84,7 +113,6 @@ local deadRegionServersPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -109,28 +137,75 @@ local deadRegionServersPanel = {
     },
     textMode: 'value',
   },
-  pluginVersion: '10.2.0-62263',
+  pluginVersion: '10.3.0-62488',
 };
 
-local regionserversPanel = {
+local liveRegionServersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster", isactivemaster="true"}',
+      datasource=promDatasource,
+      legendFormat='{{hbase_cluster}}',
+      format='time_series',
+    ),
+  ],
+  type: 'stat',
+  title: 'Live RegionServers',
+  description: 'Number of RegionServers that are currently live.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+        ],
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'value',
+  },
+  pluginVersion: '10.3.0-62488',
+};
+
+local serversPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'label_replace(server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster"}, "master_instance", "$1", "instance", "(.+)")',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}}',
       format='table',
     ),
     prometheus.target(
-      'server_num_reference_files{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'label_replace(server_num_reference_files{job=~"$job", hbase_cluster=~"$hbase_cluster"}, "region_server_instance", "$1", "instance", "(.+)")',
       datasource=promDatasource,
       legendFormat='',
       format='table',
     ),
   ],
   type: 'table',
-  title: 'RegionServers',
-  description: 'RegionServers for a cluster.',
+  title: 'Servers',
+  description: 'Servers for a cluster.',
   fieldConfig: {
     defaults: {
       color: {
@@ -150,7 +225,6 @@ local regionserversPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -159,7 +233,7 @@ local regionserversPanel = {
       {
         matcher: {
           id: 'byName',
-          options: 'Instance',
+          options: 'RegionServer',
         },
         properties: [
           {
@@ -180,12 +254,31 @@ local regionserversPanel = {
       {
         matcher: {
           id: 'byName',
-          options: 'Is master',
+          options: 'Role',
         },
         properties: [
           {
             id: 'noValue',
-            value: 'false',
+            value: 'RegionServer',
+          },
+          {
+            id: 'mappings',
+            value: [
+              {
+                options: {
+                  'false': {
+                    index: 1,
+                    text: 'backup master',
+                  },
+                  'true': {
+                    color: 'text',
+                    index: 0,
+                    text: 'active master',
+                  },
+                },
+                type: 'value',
+              },
+            ],
           },
         ],
       },
@@ -204,7 +297,7 @@ local regionserversPanel = {
     showHeader: true,
     sortBy: [],
   },
-  pluginVersion: '10.2.0-62263',
+  pluginVersion: '10.3.0-62488',
   transformations: [
     {
       id: 'merge',
@@ -232,7 +325,7 @@ local regionserversPanel = {
           hbase_cluster: false,
           'hbase_cluster 1': true,
           'hbase_cluster 2': true,
-          instance: false,
+          instance: true,
           'instance 1': false,
           'instance 2': true,
           isactivemaster: false,
@@ -269,13 +362,15 @@ local regionserversPanel = {
         },
         renameByName: {
           Time: '',
-          deadregionservers: 'Dead server name',
+          deadregionservers: 'Dead server',
           hbase_cluster: 'Cluster',
           hostname: 'Hostname',
           instance: 'Instance',
           'instance 1': '',
-          isactivemaster: 'Is master',
+          isactivemaster: 'Role',
           'isactivemaster 1': 'Master',
+          master_instance: 'Master',
+          region_server_instance: 'RegionServer',
           servername: 'Servername',
           'servername 1': 'Servername',
         },
@@ -286,13 +381,20 @@ local regionserversPanel = {
 
 local alertsPanel = {
   datasource: promDatasource,
-  targets: [],
+  targets: [
+    prometheus.target(
+      'master_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      datasource=promDatasource,
+      legendFormat='{{hbase_cluster}}',
+      format='time_series',
+    ),
+  ],
   type: 'alertlist',
   title: 'Alerts',
   description: 'Panel to report on the status of integration alerts.',
   options: {
-    alertInstanceLabelFilter: '{job=~"${job:regex}", hbase_cluster=~"${hbase_cluster:regex}", instance=~"${instance:regex}"}',
-    alertName: '',
+    alertInstanceLabelFilter: '',
+    alertName: 'HighNonHeapMemUsage',
     dashboardAlerts: false,
     folder: '',
     groupBy: [],
@@ -310,19 +412,19 @@ local alertsPanel = {
   },
 };
 
-local jvmHeapMemoryUsagePanel = {
+local jvmMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
       'jvm_metrics_mem_heap_used_m{job=~"$job", hbase_cluster=~"$hbase_cluster", processname=~"Master"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~"$job", hbase_cluster=~"$hbase_cluster", processname=~"Master"}, 1)',
       datasource=promDatasource,
-      legendFormat='{{hbase_cluster}} - heap',
+      legendFormat='{{hbase_cluster}} - {{instance}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'JVM heap memory usage',
-  description: 'Heap memory usage for the JVM.',
+  title: 'JVM memory usage',
+  description: 'Memory usage for the JVM.',
   fieldConfig: {
     defaults: {
       color: {
@@ -368,7 +470,6 @@ local jvmHeapMemoryUsagePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -398,13 +499,13 @@ local connectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'master_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'sum by(job, hbase_cluster) (master_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster"})',
       datasource=promDatasource,
-      legendFormat='{{hbase_cluster}} - master',
+      legendFormat='{{hbase_cluster}} - masters',
       format='time_series',
     ),
     prometheus.target(
-      'region_server_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'sum by(job, hbase_cluster) (region_server_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster"})',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - RegionServers',
       format='time_series',
@@ -457,7 +558,6 @@ local connectionsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
         ],
       },
@@ -483,25 +583,25 @@ local authenticationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(master_authentication_successes{job=~"$job", hbase_cluster=~"$hbase_cluster"}[$__rate_interval])',
+      'sum by(job, hbase_cluster) (rate(master_authentication_successes{job=~"$job", hbase_cluster=~"$hbase_cluster"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{hbase_cluster}} - master success',
+      legendFormat='{{hbase_cluster}} - masters success',
       format='time_series',
     ),
     prometheus.target(
-      'rate(master_authentication_failures{job=~"$job", hbase_cluster=~"$hbase_cluster"}[$__rate_interval])',
+      'sum by(job, hbase_cluster) (rate(master_authentication_failures{job=~"$job", hbase_cluster=~"$hbase_cluster"}[$__rate_interval]))',
       datasource=promDatasource,
-      legendFormat='{{hbase_cluster}} - master failure',
+      legendFormat='{{hbase_cluster}} - masters failure',
       format='time_series',
     ),
     prometheus.target(
-      'rate(region_server_authentication_successes{job=~"$job", hbase_cluster=~"$hbase_cluster"}[$__rate_interval])',
+      'sum by(job, hbase_cluster) (rate(region_server_authentication_successes{job=~"$job", hbase_cluster=~"$hbase_cluster"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - rs success',
       format='time_series',
     ),
     prometheus.target(
-      'rate(region_server_authentication_failures{job=~"$job", hbase_cluster=~"$hbase_cluster"}[$__rate_interval])',
+      'sum by(job, hbase_cluster) (rate(region_server_authentication_failures{job=~"$job", hbase_cluster=~"$hbase_cluster"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - rs failure',
       format='time_series',
@@ -553,7 +653,6 @@ local authenticationsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -589,7 +688,7 @@ local masterQueueSizePanel = {
     prometheus.target(
       'master_queue_size{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{hbase_cluster}}',
+      legendFormat='{{hbase_cluster}} - {{instance}}',
       format='time_series',
     ),
   ],
@@ -639,7 +738,6 @@ local masterQueueSizePanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -669,37 +767,37 @@ local masterQueuedCallsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'master_num_calls_in_general_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'sum by(job, hbase_cluster) (master_num_calls_in_general_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"})',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - general',
       format='time_series',
     ),
     prometheus.target(
-      'master_num_calls_in_replication_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'sum by(job, hbase_cluster) (master_num_calls_in_replication_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"})',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - replication',
       format='time_series',
     ),
     prometheus.target(
-      'master_num_calls_in_read_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'sum by(job, hbase_cluster) (master_num_calls_in_read_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"})',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - read',
       format='time_series',
     ),
     prometheus.target(
-      'master_num_calls_in_write_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'sum by(job, hbase_cluster) (master_num_calls_in_write_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"})',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - write',
       format='time_series',
     ),
     prometheus.target(
-      'master_num_calls_in_scan_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'sum by(job, hbase_cluster) (master_num_calls_in_scan_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"})',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - scan',
       format='time_series',
     ),
     prometheus.target(
-      'master_num_calls_in_priority_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"}',
+      'sum by(job, hbase_cluster) (master_num_calls_in_priority_queue{job=~"$job", hbase_cluster=~"$hbase_cluster"})',
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}} - priority',
       format='time_series',
@@ -751,7 +849,6 @@ local masterQueuedCallsPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -844,7 +941,6 @@ local regionsInTransitionPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -926,7 +1022,6 @@ local oldestRegionInTransitionPanel = {
         steps: [
           {
             color: 'green',
-            value: null,
           },
           {
             color: 'red',
@@ -966,8 +1061,8 @@ local oldestRegionInTransitionPanel = {
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other Apache HBase dashboards',
-        includeVars=true,
+        title='Other Apache HBase Dashboards',
+        includeVars=false,
         keepTime=true,
         tags=($._config.dashboardTags),
       ))
@@ -988,7 +1083,7 @@ local oldestRegionInTransitionPanel = {
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='.+',
+            allValues='',
             sort=0
           ),
           template.new(
@@ -1006,17 +1101,18 @@ local oldestRegionInTransitionPanel = {
       )
       .addPanels(
         [
-          deadRegionServersPanel { gridPos: { h: 8, w: 5, x: 0, y: 0 } },
-          liveRegionServersPanel { gridPos: { h: 8, w: 5, x: 5, y: 0 } },
-          regionserversPanel { gridPos: { h: 8, w: 14, x: 10, y: 0 } },
-          alertsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-          jvmHeapMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-          connectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          authenticationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-          masterQueueSizePanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
-          masterQueuedCallsPanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
-          regionsInTransitionPanel { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
-          oldestRegionInTransitionPanel { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
+          masterStatusHistoryPanel { gridPos: { h: 6, w: 24, x: 0, y: 0 } },
+          deadRegionServersPanel { gridPos: { h: 8, w: 5, x: 0, y: 6 } },
+          liveRegionServersPanel { gridPos: { h: 8, w: 5, x: 5, y: 6 } },
+          serversPanel { gridPos: { h: 8, w: 14, x: 10, y: 6 } },
+          alertsPanel { gridPos: { h: 8, w: 12, x: 0, y: 14 } },
+          jvmMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 14 } },
+          connectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 22 } },
+          authenticationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 22 } },
+          masterQueueSizePanel { gridPos: { h: 8, w: 12, x: 0, y: 30 } },
+          masterQueuedCallsPanel { gridPos: { h: 8, w: 12, x: 12, y: 30 } },
+          regionsInTransitionPanel { gridPos: { h: 8, w: 12, x: 0, y: 38 } },
+          oldestRegionInTransitionPanel { gridPos: { h: 8, w: 12, x: 12, y: 38 } },
         ]
       ),
   },
