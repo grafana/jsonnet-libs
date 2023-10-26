@@ -4,5 +4,11 @@
 /consul*/ @grafana/mimir-maintainers @grafana/loki-team
 /etcd-operator/ @grafana/mimir-maintainers
 /memcached*/ @grafana/mimir-maintainers @grafana/loki-team
-/prometheus-ksonnet/ @grafana/mimir-maintainers @grafana/cloud-platform
+/prometheus-ksonnet/ @grafana/mimir-maintainers
 /enterprise-metrics/ @grafana/backend-enterprise
+/*-mixin/ @grafana/cloud-integrations
+/common-lib/ @grafana/cloud-integrations
+/grafana-cloud-integration-utils/ @grafana/cloud-integrations
+/logs-lib/ @grafana/cloud-integrations
+/status-panels-lib/ @grafana/cloud-integrations
+/windows-observe-lib/ @grafana/cloud-integrations
