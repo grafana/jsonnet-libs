@@ -16,7 +16,7 @@ local regionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (server_region_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (server_region_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -70,7 +70,7 @@ local storeFilesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (server_store_file_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (server_store_file_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -124,7 +124,7 @@ local storeFileSizePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (server_store_file_size{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (server_store_file_size{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -175,7 +175,7 @@ local rpcConnectionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (region_server_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (region_server_num_open_connections{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       format='time_series',
@@ -390,55 +390,55 @@ local requestsOverviewPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_read_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_read_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='read',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_write_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_write_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='write',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_cp_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_cp_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='copy',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_filtered_read_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_filtered_read_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='filtered read',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_rpc_get_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_rpc_get_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='rpc get',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_rpc_scan_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_rpc_scan_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='rpc scan',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_rpc_full_scan_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_rpc_full_scan_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='rpc full scan',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_rpc_mutate_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_rpc_mutate_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='rpc mutate',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_rpc_multi_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_rpc_multi_request_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='rpc multi',
       format='time_series',
@@ -816,37 +816,37 @@ local queuedCallsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (region_server_num_calls_in_general_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (region_server_num_calls_in_general_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='general',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (region_server_num_calls_in_replication_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (region_server_num_calls_in_replication_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='replication',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (region_server_num_calls_in_read_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (region_server_num_calls_in_read_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='read',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (region_server_num_calls_in_write_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (region_server_num_calls_in_write_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='write',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (region_server_num_calls_in_scan_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (region_server_num_calls_in_scan_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='scan',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (region_server_num_calls_in_priority_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
+      'sum by(job, hbase_cluster) (region_server_num_calls_in_priority_queue{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='priority',
       format='time_series',
@@ -932,31 +932,31 @@ local slowOperationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_slow_append_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_slow_append_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='append',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_slow_put_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_slow_put_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='put',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_slow_delete_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_slow_delete_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='delete',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_slow_get_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_slow_get_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='get',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(server_slow_increment_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(server_slow_increment_count{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='increment',
       format='time_series',
@@ -1126,13 +1126,13 @@ local authenticationsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(region_server_authentication_successes{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(region_server_authentication_successes{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='success',
       format='time_series',
     ),
     prometheus.target(
-      'sum by(job, hbase_cluster, instance) (rate(region_server_authentication_failures{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, hbase_cluster) (rate(region_server_authentication_failures{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='failure',
       format='time_series',
