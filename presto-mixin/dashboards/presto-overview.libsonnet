@@ -18,7 +18,7 @@ local activeResourceManagersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -56,7 +56,7 @@ local activeResourceManagersPanel(legendMatcher, matcher) = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -75,7 +75,7 @@ local activeCoordinatorsPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -113,7 +113,7 @@ local activeCoordinatorsPanel(legendMatcher, matcher) = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -132,7 +132,7 @@ local activeWorkersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_metadata_DiscoveryNodeManager_ActiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_metadata_DiscoveryNodeManager_ActiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -170,7 +170,7 @@ local activeWorkersPanel(legendMatcher, matcher) = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -189,7 +189,7 @@ local inactiveWorkersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_metadata_DiscoveryNodeManager_InactiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_metadata_DiscoveryNodeManager_InactiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -223,7 +223,7 @@ local inactiveWorkersPanel(legendMatcher, matcher) = {
   },
   options: {
     colorMode: 'value',
-    graphMode: 'area',
+    graphMode: 'none',
     justifyMode: 'auto',
     orientation: 'auto',
     reduceOptions: {
@@ -242,7 +242,7 @@ local completedQueriesOneMinuteCountPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_CompletedQueries_OneMinute_Count{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_QueryManager_CompletedQueries_OneMinute_Count{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -354,7 +354,7 @@ local userErrorFailuresOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_UserErrorFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_QueryManager_UserErrorFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -432,7 +432,7 @@ local queuedQueriesPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_QueuedQueries{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_QueryManager_QueuedQueries{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -510,7 +510,7 @@ local blockedNodesPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_memory_ClusterMemoryPool_BlockedNodes{' + matcher + ', presto_cluster=~"$presto_cluster", name="general"}',
+      'presto_ClusterMemoryPool_general_BlockedNodes{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -588,7 +588,7 @@ local internalErrorFailuresOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_InternalFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_QueryManager_InternalFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -666,13 +666,13 @@ local clusterMemoryDistributedBytesPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (presto_cluster) (com_facebook_presto_memory_ClusterMemoryPool_FreeDistributedBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
+      'sum by (presto_cluster) (presto_ClusterMemoryPool_general_FreeDistributedBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - free',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (presto_cluster) (com_facebook_presto_memory_ClusterMemoryPool_ReservedDistributedBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
+      'sum by (presto_cluster) (presto_ClusterMemoryPool_reserved_FreeDistributedBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - reserved',
       format='time_series',
@@ -750,7 +750,7 @@ local InsufficientResourceFailuresOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_QueryManager_InsufficientResourcesFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_QueryManager_InsufficientResourcesFailures_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -828,13 +828,13 @@ local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_TaskManager_InputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_TaskManager_InputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - input',
       format='time_series',
     ),
     prometheus.target(
-      'com_facebook_presto_execution_TaskManager_OutputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_TaskManager_OutputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - output',
       format='time_series',
@@ -939,7 +939,7 @@ local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
           template.new(
             'job',
             promDatasource,
-            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount,job)',
+            'label_values(presto_HeartbeatDetector_ActiveCount,job)',
             label='Job',
             refresh=2,
             includeAll=true,
@@ -950,7 +950,7 @@ local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
           template.new(
             'cluster',
             promDatasource,
-            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job"}, cluster)',
+            'label_values(presto_HeartbeatDetector_ActiveCount{job=~"$job"}, cluster)',
             label='Cluster',
             refresh=2,
             includeAll=true,
@@ -962,7 +962,7 @@ local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
           template.new(
             'presto_cluster',
             promDatasource,
-            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job"},presto_cluster)',
+            'label_values(presto_HeartbeatDetector_ActiveCount{job=~"$job"},presto_cluster)',
             label='Presto cluster',
             refresh=2,
             includeAll=true,

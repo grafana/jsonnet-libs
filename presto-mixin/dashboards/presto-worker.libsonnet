@@ -17,7 +17,7 @@ local nonheapMemoryUsagePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'java_lang_Memory_NonHeapMemoryUsage_used{' + matcher + ', presto_cluster=~"$presto_cluster"} / clamp_min((java_lang_Memory_NonHeapMemoryUsage_used{' + matcher + ', presto_cluster=~"$presto_cluster"} + java_lang_Memory_NonHeapMemoryUsage_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}),1)',
+      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"} / clamp_min((jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"} + jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}),1)',
       datasource=promDatasource,
     ),
   ],
@@ -72,7 +72,7 @@ local heapMemoryUsagePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg (java_lang_Memory_HeapMemoryUsage_used{' + matcher + ', presto_cluster=~"$presto_cluster"} / clamp_min((java_lang_Memory_HeapMemoryUsage_used{' + matcher + ', presto_cluster=~"$presto_cluster"} + java_lang_Memory_HeapMemoryUsage_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}),1))',
+      'avg (jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"} / clamp_min((jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"} + jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}),1))',
       datasource=promDatasource,
     ),
   ],
@@ -127,7 +127,7 @@ local queuedTasksPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_executor_TaskExecutor_ProcessorExecutor_QueuedTaskCount{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'rate(presto_TaskExecutor_ProcessorExecutor_QueuedTaskCount{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -206,13 +206,13 @@ local failedCompletedTasksPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_TaskManager_FailedTasks_TotalCount{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'rate(presto_TaskManager_FailedTasks_TotalCount{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - failed',
       format='time_series',
     ),
     prometheus.target(
-      'rate(com_facebook_presto_execution_executor_TaskExecutor_ProcessorExecutor_CompletedTaskCount{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'rate(presto_TaskExecutor_ProcessorExecutor_CompletedTaskCount{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - completed',
     ),
@@ -328,14 +328,14 @@ local outputPositionsPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(com_facebook_presto_execution_TaskManager_OutputPositions_OneMinute_Count{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'presto_TaskManager_OutputPositions_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Output positions',
+  title: 'Output positions - one minute rate',
   description: 'The rate of rows (or records) produced by an operation.',
   fieldConfig: {
     defaults: {
@@ -358,7 +358,7 @@ local outputPositionsPanel(legendMatcher, matcher) = {
           viz: false,
         },
         insertNulls: false,
-        lineInterpolation: 'smooth',
+        lineInterpolation: 'stepBefore',
         lineWidth: 2,
         pointSize: 5,
         scaleDistribution: {
@@ -406,18 +406,18 @@ local executorPoolSizePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_TaskManager_TaskNotificationExecutor_PoolSize{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_TaskManager_TaskNotificationExecutor_PoolSize{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - task notification',
       format='time_series',
     ),
     prometheus.target(
-      'com_facebook_presto_execution_executor_TaskExecutor_ProcessorExecutor_CorePoolSize{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_TaskExecutor_ProcessorExecutor_CorePoolSize{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - process executor core',
     ),
     prometheus.target(
-      'com_facebook_presto_execution_executor_TaskExecutor_ProcessorExecutor_PoolSize{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_TaskExecutor_ProcessorExecutor_PoolSize{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - process executor',
     ),
@@ -494,13 +494,13 @@ local memoryPoolPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (instance, presto_cluster) (com_facebook_presto_memory_MemoryPool_FreeBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
+      'sum by (instance, presto_cluster) (presto_MemoryPool_general_FreeBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - free',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (instance, presto_cluster) (com_facebook_presto_memory_MemoryPool_ReservedBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
+      'sum by (instance, presto_cluster) (presto_MemoryPool_reserved_FreeBytes{' + matcher + ', presto_cluster=~"$presto_cluster"})',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - reserved',
     ),
@@ -577,13 +577,13 @@ local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'com_facebook_presto_execution_TaskManager_InputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_TaskManager_InputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - input',
       format='time_series',
     ),
     prometheus.target(
-      'com_facebook_presto_execution_TaskManager_OutputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'presto_TaskManager_OutputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - output',
     ),
@@ -668,7 +668,7 @@ local garbageCollectionCount(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(java_lang_G1_Young_Generation_CollectionCount{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__interval:])',
+      'increase(jvm_gc_collection_count{' + matcher + ', presto_cluster=~"$presto_cluster", name="G1 Young Generation"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -746,9 +746,9 @@ local garbageCollectionDurationPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'java_lang_G1_Young_Generation_LastGcInfo_duration{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'jvm_gc_duration{' + matcher + ', presto_cluster=~"$presto_cluster", name="G1 Young Generation"}',
       datasource=promDatasource,
-      legendFormat='' + legendMatcher + ' - non heap',
+      legendFormat='' + legendMatcher + '',
       format='time_series',
     ),
   ],
@@ -824,13 +824,13 @@ local memoryUsedPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'java_lang_Memory_NonHeapMemoryUsage_used{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - non heap',
       format='time_series',
     ),
     prometheus.target(
-      'java_lang_Memory_HeapMemoryUsage_used{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - heap',
     ),
@@ -907,13 +907,13 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'java_lang_Memory_HeapMemoryUsage_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - heap',
       format='time_series',
     ),
     prometheus.target(
-      'java_lang_Memory_NonHeapMemoryUsage_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - non heap',
     ),
@@ -1017,7 +1017,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           template.new(
             'job',
             promDatasource,
-            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount,job)',
+            'label_values(presto_HeartbeatDetector_ActiveCount,job)',
             label='Job',
             refresh=2,
             includeAll=true,
@@ -1028,7 +1028,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           template.new(
             'cluster',
             promDatasource,
-            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job"}, cluster)',
+            'label_values(presto_HeartbeatDetector_ActiveCount{job=~"$job"}, cluster)',
             label='Cluster',
             refresh=2,
             includeAll=true,
@@ -1040,7 +1040,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           template.new(
             'presto_cluster',
             promDatasource,
-            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job"},presto_cluster)',
+            'label_values(presto_HeartbeatDetector_ActiveCount{job=~"$job"},presto_cluster)',
             label='Presto cluster',
             refresh=2,
             includeAll=false,
@@ -1051,7 +1051,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(com_facebook_presto_failureDetector_HeartbeatFailureDetector_ActiveCount{job=~"$job", presto_cluster=~"$presto_cluster"},instance)',
+            'label_values(presto_HeartbeatDetector_ActiveCount{job=~"$job", presto_cluster=~"$presto_cluster"},instance)',
             label='Instance',
             refresh=2,
             includeAll=false,
