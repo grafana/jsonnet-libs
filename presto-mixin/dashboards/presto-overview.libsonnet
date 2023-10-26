@@ -331,7 +331,7 @@ local alertsPanel(matcher) = {
   title: 'Alerts',
   description: 'Reports firing alerts.',
   options: {
-    alertInstanceLabelFilter: '{' + matcher + ', presto_cluster=~"${presto_cluster:regex}", instance=~"${instance:regex}"}',
+    alertInstanceLabelFilter: '{' + matcher + ', presto_cluster=~"${presto_cluster:regex}"}',
     alertName: '',
     dashboardAlerts: false,
     datasource: 'Prometheus',

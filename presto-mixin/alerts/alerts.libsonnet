@@ -7,7 +7,7 @@
           {
             alert: 'PrestoHighInsufficientResources',
             expr: |||
-              increase(com_facebook_presto_execution_QueryManager_InsufficientResourcesFailures_TotalCount[5m]) > %(alertsHighInsufficientResourceErrors)s
+              increase(presto_QueryManager_InsufficientResourcesFailures_TotalCount[5m]) > %(alertsHighInsufficientResourceErrors)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -24,7 +24,7 @@
           {
             alert: 'PrestoHighTaskFailuresWarning',
             expr: |||
-              increase(com_facebook_presto_execution_TaskManager_FailedTasks_TotalCount[5m]) > %(alertsHighTaskFailuresWarning)s
+              increase(presto_TaskManager_FailedTasks_TotalCount[5m]) > %(alertsHighTaskFailuresWarning)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -41,7 +41,7 @@
           {
             alert: 'PrestoHighTaskFailuresCritical',
             expr: |||
-              increase(com_facebook_presto_execution_TaskManager_FailedTasks_TotalCount[5m]) / clamp_min(increase(com_facebook_presto_execution_TaskManager_FailedTasks_TotalCount[10m]), 1) * 100 > %(alertsHighTaskFailuresCritical)s
+              increase(presto_TaskManager_FailedTasks_TotalCount[5m]) / clamp_min(increase(presto_TaskManager_FailedTasks_TotalCount[10m]), 1) * 100 > %(alertsHighTaskFailuresCritical)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -58,7 +58,7 @@
           {
             alert: 'PrestoHighQueuedTaskCount',
             expr: |||
-              increase(com_facebook_presto_execution_QueryExecution_Executor_QueuedTaskCount[5m]) > %(alertsHighQueuedTaskCount)s
+              increase(presto_QueryExecution_Executor_QueuedTaskCount[5m]) > %(alertsHighQueuedTaskCount)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -75,7 +75,7 @@
           {
             alert: 'PrestoHighBlockedNodes',
             expr: |||
-              increase(com_facebook_presto_memory_ClusterMemoryPool_BlockedNodes[5m]) > %(alertsHighBlockedNodesCount)s
+              increase(presto_ClusterMemoryPool_general_BlockedNodes[5m]) > %(alertsHighBlockedNodesCount)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -92,7 +92,7 @@
           {
             alert: 'PrestoHighFailedQueriesWarning',
             expr: |||
-              increase(com_facebook_presto_execution_QueryManager_FailedQueries_TotalCount[5m]) > %(alertsHighFailedQueryCountWarning)s
+              increase(presto_QueryManager_FailedQueries_TotalCount[5m]) > %(alertsHighFailedQueryCountWarning)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -109,7 +109,7 @@
           {
             alert: 'PrestoHighFailedQueriesCritical',
             expr: |||
-              increase(com_facebook_presto_execution_QueryManager_FailedQueries_TotalCount[5m]) / clamp_min(increase(com_facebook_presto_execution_QueryManager_FailedQueries_TotalCount[10m]), 1) * 100 > %(alertsHighFailedQueryCountCritical)s
+              increase(presto_QueryManager_FailedQueries_TotalCount[5m]) / clamp_min(increase(presto_QueryManager_FailedQueries_TotalCount[10m]), 1) * 100 > %(alertsHighFailedQueryCountCritical)s
             ||| % $._config,
             'for': '5m',
             labels: {
