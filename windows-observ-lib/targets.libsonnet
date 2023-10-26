@@ -120,6 +120,12 @@ local lokiQuery = g.query.loki;
         '${' + variables.datasources.prometheus.name + '}',
         '100 - windows_logical_disk_free_bytes{volume="C:", %(queriesSelector)s}/windows_logical_disk_size_bytes{volume="C:", %(queriesSelector)s}*100' % variables
       ),
+    diskFree:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        'windows_logical_disk_free_bytes{volume!~"%(ignoreVolumes)s", %(queriesSelector)s}' % variables { ignoreVolumes: config.ignoreVolumes }
+      )
+      + prometheusQuery.withLegendFormat('{{ volume }} available'),
     diskUsage:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
