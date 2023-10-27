@@ -824,7 +824,7 @@ local InsufficientResourceFailuresOneMinuteRatePanel(legendMatcher, matcher) = {
   },
 };
 
-local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
+local dataProcessingThroughputOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -841,7 +841,7 @@ local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Input/Output data size - one minute rate',
+  title: 'Data processing throughput - one minute rate',
   description: 'The rate at which volumes of data are being processed',
   fieldConfig: {
     defaults: {
@@ -986,7 +986,7 @@ local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
           internalErrorFailuresOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 20 } },
           clusterMemoryDistributedBytesPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 28 } },
           InsufficientResourceFailuresOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 28 } },
-          inputoutputDataSizeOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 9, w: 24, x: 0, y: 36 } },
+          dataProcessingThroughputOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 9, w: 24, x: 0, y: 36 } },
         ]
       ),
   },

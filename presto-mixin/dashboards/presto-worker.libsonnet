@@ -573,7 +573,7 @@ local memoryPoolPanel(legendMatcher, matcher) = {
   },
 };
 
-local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
+local dataProcessingThroughputOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -589,7 +589,7 @@ local inputoutputDataSizeOneMinuteRatePanel(legendMatcher, matcher) = {
     ),
   ],
   type: 'timeseries',
-  title: 'Input/Output data size - one minute rate',
+  title: 'Data processing throughput - one minute rate',
   description: 'The rate at which volumes of data are being processed',
   fieldConfig: {
     defaults: {
@@ -1070,7 +1070,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           outputPositionsPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
           executorPoolSizePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           memoryPoolPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          inputoutputDataSizeOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+          dataProcessingThroughputOneMinuteRatePanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
           jvmMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
           garbageCollectionCount(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
           garbageCollectionDurationPanel(getLegendMatcher($._config), getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
