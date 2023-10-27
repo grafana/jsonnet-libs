@@ -7,5 +7,5 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     local groupLabels = this.config.groupLabels;
     {
 
-    }
+    },
 }

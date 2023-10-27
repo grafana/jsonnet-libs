@@ -28,7 +28,7 @@ local lokiQuery = g.query.loki;
         'azure_microsoft_cognitiveservices_accounts_successfulcalls_total_count{%(queriesSelector)s}' % vars
       ),
     successRate:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_successrate_average_percent{%(queriesSelector)s}' % vars
       ),
@@ -38,57 +38,57 @@ local lokiQuery = g.query.loki;
         'azure_microsoft_cognitiveservices_accounts_totalerrors_total_count{%(queriesSelector)s}' % vars
       ),
     errorsRate:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         '( azure_microsoft_cognitiveservices_accounts_totalerrors_total_count{%(queriesSelector)s} / azure_microsoft_cognitiveservices_accounts_successfulcalls_total_count{%(queriesSelector)s} ) * 100' % vars
       ),
     generatedTokens:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_generatedtokens_total_count{%(queriesSelector)s}' % vars
       ),
     tokenTransactions:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_tokentransaction_total_count{%(queriesSelector)s}' % vars
       ),
     processedPromptTokens:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_processedprompttokens_total_count{%(queriesSelector)s}' % vars
       ),
     processedInferenceTokens:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_processedprompttokens_total_count{%(queriesSelector)s}' % vars
       ),
     rateLimitedCalls:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_ratelimit_total_count{%(queriesSelector)s}' % vars
       ),
     blockedCalls:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_blockedcalls_total_count{%(queriesSelector)s}' % vars
       ),
     clientErrors:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_clienterrors_total_count{%(queriesSelector)s}' % vars
       ),
     fineTunedTrainingHours:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_blockedcalls_total_count{%(queriesSelector)s}' % vars
       ),
     dataIn:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_datain_total_bytes{%(queriesSelector)s}' % vars
       ),
     dataOut:
-    prometheusQuery.new(
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'azure_microsoft_cognitiveservices_accounts_dataout_total_bytes{%(queriesSelector)s}' % vars
       ),
