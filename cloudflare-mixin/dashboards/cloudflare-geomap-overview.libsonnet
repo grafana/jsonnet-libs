@@ -353,7 +353,7 @@ local GeoMetricByCountryTablePanel = {
           template.custom(
             'geo_metric',
             query='cloudflare_zone_requests_country,cloudflare_zone_bandwidth_country,cloudflare_zone_threats_country',
-            current='Requests',
+            current='cloudflare_zone_requests_country',
             refresh='never',
             label='Geomap metric',
             valuelabels={},
