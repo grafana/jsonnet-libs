@@ -31,8 +31,8 @@ local variables = import './variables.libsonnet';
 
       // additional params can be added if needed
       criticalEvents: '90',
-      alertsThreshold1: '90',
-      alertsThreshold2: '75',
+      alertsThresholdLatency: '10',
+      alertsThresholdErrorRate: '5',
       dashboardPeriod: 'now-1h',
       dashboardTimezone: 'default',
       dashboardRefresh: '1m',

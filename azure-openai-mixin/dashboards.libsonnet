@@ -15,7 +15,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
-      "overview.json":
+      "azure-openai-overview.json":
         g.dashboard.new(prefix + 'Overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
