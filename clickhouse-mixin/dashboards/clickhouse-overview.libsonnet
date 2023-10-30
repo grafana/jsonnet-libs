@@ -811,7 +811,7 @@ local errorLogsPanel(cfg) =
               query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
               current='',
               refresh=2,
-              includeAll=false,
+              includeAll=true,
               sort=1
             ),
             template.new(

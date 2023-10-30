@@ -472,7 +472,7 @@ local zooKeeperWaitTimePanel(matcher) =
             query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~"$job"}, instance)',
             current='',
             refresh=2,
-            includeAll=false,
+            includeAll=true,
             sort=1
           ),
           template.new(

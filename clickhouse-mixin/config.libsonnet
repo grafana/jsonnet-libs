@@ -13,7 +13,7 @@
     // for alerts
     alertsReplicasMaxQueueSize: '99',
 
-    filterSelector: 'job=~"clickhouse"',
+    filterSelector: 'job=~".*/clickhouse.*"',
 
     enableLokiLogs: true,
   },
