@@ -34,7 +34,7 @@
               summary: 'A high spike in requests is occurring which may indicate an attack or unexpected load.',
               description:
                 (
-                  'The rate of requests to {{$labels.zone}} is {{ printf "%%.0f" $value }}%%s of the prior 50 minute baseline which is above the threshold of %(alertsHighRequestRate)s%%s.'
+                  'The rate of requests to {{$labels.zone}} is {{ printf "%%.0f" $value }}%% of the prior 50 minute baseline which is above the threshold of %(alertsHighRequestRate)s%%.'
                 ) % $._config,
             },
           },
