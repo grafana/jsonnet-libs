@@ -653,7 +653,7 @@ local zooKeeperRequestsPanel(matcher) =
             query='label_values(ClickHouseMetrics_InterserverConnection{job=~"$job"}, instance)',
             current='',
             refresh=2,
-            includeAll=false,
+            includeAll=true,
             sort=1
           ),
           template.new(
