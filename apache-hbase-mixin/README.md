@@ -11,7 +11,6 @@ The Apache HBase mixin contains the following dashboards:
 and the following alerts:
 
 - HBaseHighHeapMemUsage
-- HBaseHighNonHeapMemUsage
 - HBaseDeadRegionServer
 - HBaseOldRegionsInTransition
 - HBaseHighMasterAuthFailureRate
@@ -28,12 +27,13 @@ The Apache HBase RegionServer overview dashboard provides details on data region
 
 ![First screenshot of the Apache HBase RegionServer overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hbase/screenshots/apache_hbase_region_server_overview_1.png)
 ![Second screenshot of the Apache HBase RegionServer overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hbase/screenshots/apache_hbase_region_server_overview_2.png)
+![Third screenshot of the Apache HBase RegionServer overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hbase/screenshots/apache_hbase_region_server_overview_3.png)
 
 
 ## Apache HBase logs
 The Apache HBase logs dashboard provides details on incoming system logs.
 
-![First screenshot of the Apache HBase logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hbase/screenshots/apache_hbase_logs_1.png)
+![First screenshot of the Apache HBase logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-hbase/screenshots/apache_hbase_logs_overview_1.png)
 
 Apache HBase system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -70,7 +70,6 @@ scrape_configs:
 ## Alerts overview
 
 - ApacheHBaseHighHeapMemUsage: There is a limited amount of heap memory available to the JVM.
-- ApacheHBaseHighNonHeapMemUsage: There is a limited amount of non-heap memory available to the JVM.
 - ApacheHBaseDeadRegionServer: One or more RegionServer(s) has become unresponsive.
 - ApacheHBaseOldRegionsInTransition: RegionServers are in transition for longer than expected.
 - ApacheHBaseHighMasterAuthFailureRate: A high percentage of authentication attempts to the master are failing.
@@ -82,7 +81,6 @@ Default thresholds can be configured in `config.libsonnet`.
 {
   _config+:: {
     alertsHighHeapMemUsage: 80        // percentage
-    alertsHighNonHeapMemUsage: 80     // percentage
     alertsDeadRegionServer: 0         // count
     alertsOldRegionsInTransition: 50  // percentage
     alertsHighMasterAuthFailRate: 35  // percentage

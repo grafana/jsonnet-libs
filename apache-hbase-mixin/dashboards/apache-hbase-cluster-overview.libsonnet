@@ -89,6 +89,53 @@ local masterStatusHistoryPanel = {
   transformations: [],
 };
 
+local liveRegionServersPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster", isactivemaster="true"}',
+      datasource=promDatasource,
+      legendFormat='{{hbase_cluster}}',
+      format='time_series',
+    ),
+  ],
+  type: 'stat',
+  title: 'Live RegionServers',
+  description: 'Number of RegionServers that are currently live.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+          },
+        ],
+      },
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'value',
+  },
+  pluginVersion: '10.3.0-62488',
+};
+
 local deadRegionServersPanel = {
   datasource: promDatasource,
   targets: [
@@ -140,53 +187,6 @@ local deadRegionServersPanel = {
   pluginVersion: '10.3.0-62488',
 };
 
-local liveRegionServersPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'server_num_region_servers{job=~"$job", hbase_cluster=~"$hbase_cluster", isactivemaster="true"}',
-      datasource=promDatasource,
-      legendFormat='{{hbase_cluster}}',
-      format='time_series',
-    ),
-  ],
-  type: 'stat',
-  title: 'Live RegionServers',
-  description: 'Number of RegionServers that are currently live.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'thresholds',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-          },
-        ],
-      },
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'value',
-  },
-  pluginVersion: '10.3.0-62488',
-};
-
 local serversPanel = {
   datasource: promDatasource,
   targets: [
@@ -195,12 +195,14 @@ local serversPanel = {
       datasource=promDatasource,
       legendFormat='{{hbase_cluster}}',
       format='table',
+      instant=true,
     ),
     prometheus.target(
       'label_replace(server_num_reference_files{job=~"$job", hbase_cluster=~"$hbase_cluster"}, "region_server_instance", "$1", "instance", "(.+)")',
       datasource=promDatasource,
-      legendFormat='',
+      legendFormat='{{hbase_cluster}}',
       format='table',
+      instant=true,
     ),
   ],
   type: 'table',
@@ -412,7 +414,7 @@ local alertsPanel = {
   },
 };
 
-local jvmMemoryUsagePanel = {
+local jvmHeapMemoryUsagePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -423,8 +425,8 @@ local jvmMemoryUsagePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'JVM memory usage',
-  description: 'Memory usage for the JVM.',
+  title: 'JVM heap memory usage',
+  description: 'Heap memory usage for the JVM.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1102,11 +1104,11 @@ local oldestRegionInTransitionPanel = {
       .addPanels(
         [
           masterStatusHistoryPanel { gridPos: { h: 6, w: 24, x: 0, y: 0 } },
-          deadRegionServersPanel { gridPos: { h: 8, w: 5, x: 0, y: 6 } },
-          liveRegionServersPanel { gridPos: { h: 8, w: 5, x: 5, y: 6 } },
+          liveRegionServersPanel { gridPos: { h: 8, w: 5, x: 0, y: 6 } },
+          deadRegionServersPanel { gridPos: { h: 8, w: 5, x: 5, y: 6 } },
           serversPanel { gridPos: { h: 8, w: 14, x: 10, y: 6 } },
           alertsPanel { gridPos: { h: 8, w: 12, x: 0, y: 14 } },
-          jvmMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 14 } },
+          jvmHeapMemoryUsagePanel { gridPos: { h: 8, w: 12, x: 12, y: 14 } },
           connectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 22 } },
           authenticationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 22 } },
           masterQueueSizePanel { gridPos: { h: 8, w: 12, x: 0, y: 30 } },

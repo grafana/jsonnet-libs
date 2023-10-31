@@ -157,7 +157,7 @@ local storeFileSizePanel = {
     minVizHeight: 10,
     minVizWidth: 0,
     namePlacement: 'auto',
-    orientation: 'horizontal',
+    orientation: 'vertical',
     reduceOptions: {
       calcs: [
         'lastNotNull',
@@ -226,7 +226,7 @@ local jvmHeapMemoryUsagePanel = {
     prometheus.target(
       'jvm_metrics_mem_heap_used_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"} / clamp_min(jvm_metrics_mem_heap_committed_m{job=~"$job", hbase_cluster=~"$hbase_cluster", instance=~"$instance", processname="RegionServer"}, 1)',
       datasource=promDatasource,
-      legendFormat='{{instance}} - heap',
+      legendFormat='{{instance}}',
       format='time_series',
     ),
   ],
@@ -730,7 +730,7 @@ local storeFileCountPanel = {
   },
 };
 
-local storeFileSizePanel = {
+local storeFileSizeTimeseriesPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -1289,7 +1289,7 @@ local authenticationsPanel = {
           regionCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
           rpcConnectionCountPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
           storeFileCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
-          storeFileSizePanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
+          storeFileSizeTimeseriesPanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
           queuedCallsPanel { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
           slowOperationsPanel { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
           cacheHitPercentagePanel { gridPos: { h: 8, w: 12, x: 0, y: 40 } },
