@@ -31,11 +31,11 @@ test.suite({
   },
 
   // parse_rfc3339 test cases
-  'test parse_rfc3339 1970-01-01T00:00:00': {
+  'test parse_rfc3339 1970-01-01T00:00:00Z': {
     actual: date.parse_rfc3339('1970-01-01T00:00:00Z'),
     expect: { year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0 },
   },
-  'test parse_rfc3339 2020-01-02 03:04:05': {
+  'test parse_rfc3339 2020-01-02T03:04:05Z': {
     actual: date.parse_rfc3339('2020-01-02T03:04:05Z'),
     expect: { year: 2020, month: 1, day: 2, hour: 3, minute: 4, second: 5 },
   },
