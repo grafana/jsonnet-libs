@@ -18,9 +18,9 @@ local activeResourceManagersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'sum (max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{' + matcher + ', presto_cluster=~"$presto_cluster"}))',
       datasource=promDatasource,
-      legendFormat='' + legendMatcher + '',
+      legendFormat='Resource manager',
       format='time_series',
     ),
   ],
@@ -75,9 +75,9 @@ local activeCoordinatorsPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{' + matcher + ', presto_cluster=~"$presto_cluster"}))',
       datasource=promDatasource,
-      legendFormat='' + legendMatcher + '',
+      legendFormat='Coordinator',
       format='time_series',
     ),
   ],
@@ -132,9 +132,9 @@ local activeWorkersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'presto_metadata_DiscoveryNodeManager_ActiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}) - max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveCoordinatorCount{' + matcher + ', presto_cluster=~"$presto_cluster"}) - max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_ActiveResourceManagerCount{' + matcher + ', presto_cluster=~"$presto_cluster"}))',
       datasource=promDatasource,
-      legendFormat='' + legendMatcher + '',
+      legendFormat='Worker',
       format='time_series',
     ),
   ],
@@ -189,9 +189,9 @@ local inactiveWorkersPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'presto_metadata_DiscoveryNodeManager_InactiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'sum(max by (presto_cluster) (presto_metadata_DiscoveryNodeManager_InactiveNodeCount{' + matcher + ', presto_cluster=~"$presto_cluster"}))',
       datasource=promDatasource,
-      legendFormat='' + legendMatcher + '',
+      legendFormat='Worker',
       format='time_series',
     ),
   ],
@@ -828,13 +828,13 @@ local dataProcessingThroughputOneMinuteRatePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'presto_TaskManager_InputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'sum by (presto_cluster) (presto_TaskManager_InputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"})',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - input',
       format='time_series',
     ),
     prometheus.target(
-      'presto_TaskManager_OutputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"}',
+      'sum by (presto_cluster) (presto_TaskManager_OutputDataSize_OneMinute_Rate{' + matcher + ', presto_cluster=~"$presto_cluster"})',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - output',
       format='time_series',

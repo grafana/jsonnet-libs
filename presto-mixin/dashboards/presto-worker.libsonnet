@@ -17,7 +17,7 @@ local nonheapMemoryUsagePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"} / clamp_min((jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"} + jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}),1)',
+      'avg (jvm_nonheap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"} / clamp_min((jvm_nonheap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"} + jvm_nonheap_memory_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}),1))',
       datasource=promDatasource,
     ),
   ],
@@ -72,7 +72,7 @@ local heapMemoryUsagePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg (jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"} / clamp_min((jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"} + jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}),1))',
+      'avg (jvm_heap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"} / clamp_min((jvm_heap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"} + jvm_heap_memory_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}),1))',
       datasource=promDatasource,
     ),
   ],
@@ -127,7 +127,7 @@ local queuedTasksPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(presto_TaskExecutor_ProcessorExecutor_QueuedTaskCount{' + matcher + ', presto_cluster=~"$presto_cluster"}[$__rate_interval])',
+      'presto_TaskExecutor_ProcessorExecutor_QueuedTaskCount{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
       format='time_series',
@@ -135,7 +135,7 @@ local queuedTasksPanel(legendMatcher, matcher) = {
   ],
   type: 'timeseries',
   title: 'Queued tasks',
-  description: 'The rate at which tasks are being queued by the task executor.',
+  description: 'The number of tasks that are being queued by the task executor.',
   fieldConfig: {
     defaults: {
       color: {
@@ -184,7 +184,7 @@ local queuedTasksPanel(legendMatcher, matcher) = {
           },
         ],
       },
-      unit: 'ops',
+      unit: 'none',
     },
     overrides: [],
   },
@@ -671,6 +671,7 @@ local garbageCollectionCount(legendMatcher, matcher) = {
       'increase(jvm_gc_collection_count{' + matcher + ', presto_cluster=~"$presto_cluster", name="G1 Young Generation"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
+      interval='1m',
       format='time_series',
     ),
   ],
@@ -724,7 +725,7 @@ local garbageCollectionCount(legendMatcher, matcher) = {
           },
         ],
       },
-      unit: 'decbytes',
+      unit: 'none',
     },
     overrides: [],
   },
@@ -824,13 +825,13 @@ local memoryUsedPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}',
+      'jvm_nonheap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - non heap',
       format='time_series',
     ),
     prometheus.target(
-      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}',
+      'jvm_heap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - heap',
     ),
@@ -907,13 +908,13 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}',
+      'jvm_heap_memory_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - heap',
       format='time_series',
     ),
     prometheus.target(
-      'jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}',
+      'jvm_nonheap_memory_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - non heap',
     ),
@@ -1017,7 +1018,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           template.new(
             'job',
             promDatasource,
-            'label_values(presto_HeartbeatDetector_ActiveCount,job)',
+            'label_values(presto_metadata_DiscoveryNodeManager_ActiveNodeCount,job)',
             label='Job',
             refresh=2,
             includeAll=true,
@@ -1028,7 +1029,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           template.new(
             'cluster',
             promDatasource,
-            'label_values(presto_HeartbeatDetector_ActiveCount{job=~"$job"}, cluster)',
+            'label_values(presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~"$job"}, cluster)',
             label='Cluster',
             refresh=2,
             includeAll=true,
@@ -1040,7 +1041,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           template.new(
             'presto_cluster',
             promDatasource,
-            'label_values(presto_HeartbeatDetector_ActiveCount{job=~"$job"},presto_cluster)',
+            'label_values(presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~"$job"},presto_cluster)',
             label='Presto cluster',
             refresh=2,
             includeAll=false,
@@ -1051,7 +1052,7 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(presto_HeartbeatDetector_ActiveCount{job=~"$job", presto_cluster=~"$presto_cluster"},instance)',
+            'label_values(presto_metadata_DiscoveryNodeManager_ActiveNodeCount{job=~"$job", presto_cluster=~"$presto_cluster"},instance)',
             label='Instance',
             refresh=2,
             includeAll=false,

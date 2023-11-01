@@ -17,7 +17,7 @@ local nonheapMemoryUsagePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"} / clamp_min((jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"} + jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}),1)',
+      'avg (jvm_nonheap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"} / clamp_min((jvm_nonheap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"} + jvm_nonheap_memory_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}),1))',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
     ),
@@ -73,7 +73,7 @@ local heapMemoryUsagePanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg (jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"} / clamp_min((jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"} + jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}),1))',
+      'avg (jvm_heap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"} / clamp_min((jvm_heap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"} + jvm_heap_memory_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}),1))',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + '',
     ),
@@ -586,7 +586,7 @@ local queryExecutionTimeOneMinuteCountPanel(legendMatcher, matcher) = {
     prometheus.target(
       'presto_QueryManager_ExecutionTime_OneMinute_P50{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
-      legendFormat='' + legendMatcher + ' - p99',
+      legendFormat='' + legendMatcher + ' - p50',
     ),
   ],
   type: 'timeseries',
@@ -828,6 +828,7 @@ local garbageCollectionCount(legendMatcher, matcher) = {
       'increase(jvm_gc_collection_count{' + matcher + ', presto_cluster=~"$presto_cluster", name="G1 Young Generation"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' ',
+      interval='1m',
       format='time_series',
     ),
   ],
@@ -981,13 +982,13 @@ local memoryUsedPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}',
+      'jvm_nonheap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - non heap',
       format='time_series',
     ),
     prometheus.target(
-      'jvm_memory_bytes_used{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}',
+      'jvm_heap_memory_used{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - heap',
     ),
@@ -1064,13 +1065,13 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="heap"}',
+      'jvm_heap_memory_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - heap',
       format='time_series',
     ),
     prometheus.target(
-      'jvm_memory_bytes_committed{' + matcher + ', presto_cluster=~"$presto_cluster", area="nonheap"}',
+      'jvm_nonheap_memory_committed{' + matcher + ', presto_cluster=~"$presto_cluster"}',
       datasource=promDatasource,
       legendFormat='' + legendMatcher + ' - non heap',
     ),
@@ -1177,8 +1178,8 @@ local memoryCommittedPanel(legendMatcher, matcher) = {
             'label_values(presto_HeartbeatDetector_ActiveCount,job)',
             label='Job',
             refresh=2,
-            includeAll=false,
-            multi=false,
+            includeAll=true,
+            multi=true,
             allValues='.+',
             sort=0
           ),
