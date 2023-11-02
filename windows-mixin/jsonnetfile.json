@@ -3,12 +3,20 @@
   "dependencies": [
     {
       "source": {
-        "git": {
-          "remote": "https://github.com/grafana/grafonnet-lib.git",
-          "subdir": "grafonnet"
+        "local": {
+          "directory": "../windows-observ-lib"
         }
       },
-      "version": "master"
+      "version": ""
+    },
+    {
+      "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-v10.0.0"
+        }
+      },
+      "version": "main"
     }
   ],
   "legacyImports": true
