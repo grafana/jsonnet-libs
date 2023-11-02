@@ -22,23 +22,25 @@ and the following alerts:
 ## Presto overview
 
 The Presto overview dashboard provides details on integration status/alerts, workers/coordinators, error failures, data throughput, blocked nodes, and distributed bytes.
-![Presto overview dashboard]()
+![Presto overview dashboard (queries)](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_overview_1.png)
+![Presto overview dashboard (processing)](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_overview_1.png)
 
 ## Presto coordinator overview
 
 The Presto coordinator overview dashboard provides details on various query counts and rates, query execution time, CPU time consumed, CPU input throughput, error failures, JVM metrics, and memory pool information.
-![Presto coordinator dashboard]()
+![Presto coordinator dashboard (queries)](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_coordinator_1.png)
+![Presto coordinator dashboard (JVM)](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_coordinator_2.png)
 
 ## Presto worker overview
 
-The Presto worker overview dashboard provides details on various task rates, pool sizes, output positions, data throughput, JVM metrics, and memory pool information
-![Presto worker dashboard]()
+The Presto worker overview dashboard provides details on various task rates, pool sizes, output positions, data throughput, JVM metrics, and memory pool information.
+![Presto worker dashboard (tasks)](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_worker_1.png)
+![Presto worker dashboard (JVM)](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_worker_2.png)
 
 ## Presto logs
 
 The Presto logs dashboard provides details on incoming system logs.
-
-![Presto logs dashboard]()
+![Presto logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/presto/screenshots/presto_logs_overview.png)
 
 Presto system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
