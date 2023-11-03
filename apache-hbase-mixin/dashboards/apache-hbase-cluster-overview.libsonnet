@@ -395,7 +395,7 @@ local alertsPanel = {
   title: 'Alerts',
   description: 'Panel to report on the status of integration alerts.',
   options: {
-    alertInstanceLabelFilter: '{job=~"${job:regex}", hbase_cluster=~"${hbase_cluster:regex}", instance=~"${instance:regex}"}',
+    alertInstanceLabelFilter: '{job=~"${job:regex}", hbase_cluster=~"${hbase_cluster:regex}"}',
     alertName: '',
     dashboardAlerts: false,
     folder: '',
