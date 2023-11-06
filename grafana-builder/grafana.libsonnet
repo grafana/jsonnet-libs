@@ -430,6 +430,7 @@
       '3xx': '#6ED0E0',
       '4xx': '#EF843C',
       '5xx': '#E24D42',
+      OK: '#7EB26D',
       success: '#7EB26D',
       'error': '#E24D42',
       cancel: '#A9A9A9',
@@ -441,7 +442,7 @@
             sum by (status) (
               label_replace(label_replace(rate(%s[$__rate_interval]),
               "status", "${1}xx", "%s", "([0-9]).."),
-              "status", "${1}", "%s", "([a-z]+)"))
+              "status", "${1}", "%s", "([a-zA-Z]+)"))
           ||| % [selector, statusLabelName, statusLabelName],
         format: 'time_series',
         intervalFactor: 2,
