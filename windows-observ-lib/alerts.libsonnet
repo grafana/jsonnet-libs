@@ -17,7 +17,7 @@
             annotations: {
               summary: 'High CPU usage on Windows host.',
               description: |||
-                CPU usage on host {{ $labels.instance }} is above %(alertsCPUThresholdWarning)s%%. The currect value is {{ $value | printf "%%.2f" }}%%.
+                CPU usage on host {{ $labels.instance }} is above %(alertsCPUThresholdWarning)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
               ||| % this.config,
             },
           },
@@ -35,7 +35,7 @@
             annotations: {
               summary: 'High memory usage on Windows host.',
               description: |||
-                Memory usage on host {{ $labels.instance }} is above %(alertMemoryUsageThresholdCritical)s%%. The currect value is {{ $value | printf "%%.2f" }}%%.
+                Memory usage on host {{ $labels.instance }} is above %(alertMemoryUsageThresholdCritical)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
               ||| % this.config,
             },
           },
@@ -51,7 +51,7 @@
             annotations: {
               summary: 'Disk is almost full on Windows host.',
               description: |||
-                Volume {{ $labels.volume }} is almost full on host {{ $labels.instance }}, more than %(alertDiskUsageThresholdCritical)s%% of space is used. The currect volume utilization is {{ $value | printf "%%.2f" }}%%.
+                Volume {{ $labels.volume }} is almost full on host {{ $labels.instance }}, more than %(alertDiskUsageThresholdCritical)s%% of space is used. The current volume utilization is {{ $value | printf "%%.2f" }}%%.
               ||| % this.config,
             },
           },
