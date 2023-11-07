@@ -37,8 +37,8 @@ local utils = commonlib.utils;
         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
       datasources: {
         prometheus:
-          var.datasource.new('datasource', 'prometheus')
-          + var.datasource.generalOptions.withLabel('Data source')
+          var.datasource.new('prometheus_datasource', 'prometheus')
+          + var.datasource.generalOptions.withLabel('Prometheus data source')
           + var.datasource.withRegex(''),
         loki:
           var.datasource.new('loki_datasource', 'loki')
@@ -58,8 +58,8 @@ local utils = commonlib.utils;
 
       queriesSelector:
         '%s,%s' % [
-          filteringSelector,
           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
+          filteringSelector,
         ],
     }
     + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
