@@ -17,7 +17,7 @@
             annotations: {
               summary: 'Something bad happened.',
               description: |||
-                Something bad happened on {{ $labels.instance }} and now above %(alertsThreshold1)s%%. The currect value is {{ $value | printf "%%.2f" }}.
+                Something bad happened on {{ $labels.instance }} and now above %(alertsThreshold1)s%%. The current value is {{ $value | printf "%%.2f" }}.
               ||| % this.config,
             },
           },
