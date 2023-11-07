@@ -416,18 +416,102 @@ local osMemoryUsagePanel = {
   },
 };
 
-local memoryUtilizationPanel = {
+local memoryManagerPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_memory_utilization_percentage{instance=~"$instance", job=~"$job"}',
+      'mssql_server_total_memory_bytes{instance=~"$instance", job=~"$job"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - total',
+    ),
+    prometheus.target(
+      'mssql_server_target_memory_bytes{instance=~"$instance", job=~"$job"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}} - target',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Memory manager',
+  description: 'The committed memory and target committed memory for the SQL Server memory manager. See https://learn.microsoft.com/en-us/sql/relational-databases/performance-monitor/monitor-memory-usage?view=sql-server-ver16#isolating-memory-used-by-',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 51,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        lineInterpolation: 'linear',
+        lineStyle: {
+          fill: 'solid',
+        },
+        lineWidth: 1,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'auto',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'normal',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      min: 0,
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'bytes',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'none',
+    },
+  },
+};
+
+local committedMemoryUtilizationPanel = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      '100 * mssql_server_total_memory_bytes{instance=~"$instance", job=~"$job"} / clamp_min(mssql_available_commit_memory_bytes{instance=~"$instance", job=~"$job"},1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
   ],
   type: 'gauge',
-  title: 'Memory utilization',
-  description: 'Utilization of memory being used from the working set.',
+  title: 'Committed memory utilization',
+  description: 'The committed memomry utilization',
   fieldConfig: {
     defaults: {
       color: {
@@ -813,17 +897,18 @@ local transactionLogExpansionsPanel = {
             batchRequestsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
             severeErrorsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
             deadlocksPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-            osMemoryUsagePanel { gridPos: { h: 8, w: 16, x: 0, y: 16 } },
-            memoryUtilizationPanel { gridPos: { h: 8, w: 8, x: 16, y: 16 } },
+            osMemoryUsagePanel { gridPos: { h: 8, w: 24, x: 0, y: 16 } },
+            memoryManagerPanel { gridPos: { h: 8, w: 16, x: 0, y: 24 } },
+            committedMemoryUtilizationPanel { gridPos: { h: 8, w: 8, x: 16, y: 24 } },
           ],
           if $._config.enableLokiLogs then [
-            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
+            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 32 } },
           ] else [],
           [
-            databaseRow { gridPos: { h: 1, w: 24, x: 0, y: 32 } },
-            databaseWriteStallDurationPanel { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
-            databaseReadStallDurationPanel { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
-            transactionLogExpansionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 41 } },
+            databaseRow { gridPos: { h: 1, w: 24, x: 0, y: 40 } },
+            databaseWriteStallDurationPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
+            databaseReadStallDurationPanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
+            transactionLogExpansionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 49 } },
           ],
         ])
       ),
