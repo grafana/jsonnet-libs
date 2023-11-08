@@ -4,7 +4,10 @@
     list: [
       {
         builtIn: 1,
-        datasource: '-- Grafana --',
+        datasource: {
+          'type': 'datasource',
+          'uid': 'grafana'
+        },
         enable: true,
         hide: true,
         iconColor: 'rgba(0, 211, 255, 1)',
@@ -29,620 +32,707 @@
   links: [],
   panels: [
     {
-      aliasColors: {},
-      bars: false,
-      dashLength: 10,
-      dashes: false,
-      datasource: '$datasource',
-      fill: 1,
-      fillGradient: 0,
-      gridPos: {
-        h: 11,
-        w: 12,
-        x: 0,
-        y: 0,
+      'datasource': {
+        'uid': '$datasource'
       },
-      hiddenSeries: false,
-      id: 2,
-      legend: {
-        avg: false,
-        current: false,
-        max: false,
-        min: false,
-        show: false,
-        total: false,
-        values: false,
-      },
-      lines: true,
-      linewidth: 2,
-      nullPointMode: 'null',
-      options: {
-        alertThreshold: true,
-      },
-      percentage: false,
-      pluginVersion: '8.1.4',
-      pointradius: 2,
-      points: false,
-      renderer: 'flot',
-      seriesOverrides: [],
-      spaceLength: 10,
-      stack: false,
-      steppedLine: false,
-      targets: [
-        {
-          expr: 'sum(rate(caddy_http_requests_total{' + matcher + '}[$__rate_interval])) by (handler)',
-          interval: '',
-          legendFormat: '{{handler}}',
-          refId: 'A',
+      'fieldConfig': {
+        'defaults': {
+          'color': {
+            'mode': 'palette-classic'
+          },
+          'custom': {
+            'axisBorderShow': false,
+            'axisCenteredZero': false,
+            'axisColorMode': 'text',
+            'axisLabel': '',
+            'axisPlacement': 'auto',
+            'barAlignment': 0,
+            'drawStyle': 'line',
+            'fillOpacity': 10,
+            'gradientMode': 'none',
+            'hideFrom': {
+              'legend': false,
+              'tooltip': false,
+              'viz': false
+            },
+            'insertNulls': false,
+            'lineInterpolation': 'linear',
+            'lineWidth': 2,
+            'pointSize': 5,
+            'scaleDistribution': {
+              'log': 10,
+              'type': 'log'
+            },
+            'showPoints': 'never',
+            'spanNulls': false,
+            'stacking': {
+              'group': 'A',
+              'mode': 'none'
+            },
+            'thresholdsStyle': {
+              'mode': 'off'
+            }
+          },
+          'mappings': [],
+          'thresholds': {
+            'mode': 'absolute',
+            'steps': [
+              {
+                'color': 'green',
+                'value': null
+              },
+              {
+                'color': 'red',
+                'value': 80
+              }
+            ]
+          },
+          'unit': 'short'
         },
+        'overrides': []
+      },
+      'gridPos': {
+        'h': 11,
+        'w': 12,
+        'x': 0,
+        'y': 0
+      },
+      'id': 2,
+      'options': {
+        'legend': {
+          'calcs': [],
+          'displayMode': 'list',
+          'placement': 'bottom',
+          'showLegend': false
+        },
+        'tooltip': {
+          'mode': 'multi',
+          'sort': 'none'
+        }
+      },
+      'pluginVersion': '10.2.0',
+      'targets': [
+        {
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'sum(rate(caddy_http_requests_total{' + matcher + '}[$__rate_interval])) by (handler)',
+          'interval': '',
+          'legendFormat': '{{handler}}',
+          'refId': 'A'
+        }
       ],
-      thresholds: [],
-      timeFrom: null,
-      timeRegions: [],
-      timeShift: null,
-      title: 'Requests',
-      tooltip: {
-        shared: true,
-        sort: 0,
-        value_type: 'individual',
-      },
-      type: 'graph',
-      xaxis: {
-        buckets: null,
-        mode: 'time',
-        name: null,
-        show: true,
-        values: [],
-      },
-      yaxes: [
-        {
-          format: 'short',
-          label: null,
-          logBase: 10,
-          max: null,
-          min: null,
-          show: true,
-        },
-        {
-          format: 'short',
-          label: null,
-          logBase: 1,
-          max: null,
-          min: null,
-          show: false,
-        },
-      ],
-      yaxis: {
-        align: false,
-        alignLevel: null,
-      },
+      'title': 'Requests',
+      'type': 'timeseries'
     },
     {
-      aliasColors: {},
-      bars: false,
-      dashLength: 10,
-      dashes: false,
-      datasource: '$datasource',
-      description: '',
-      fill: 1,
-      fillGradient: 0,
-      gridPos: {
-        h: 11,
-        w: 12,
-        x: 12,
-        y: 0,
+      'datasource': {
+        'uid': '$datasource'
       },
-      hiddenSeries: false,
-      id: 7,
-      legend: {
-        alignAsTable: false,
-        avg: false,
-        current: false,
-        max: false,
-        min: false,
-        rightSide: false,
-        show: true,
-        total: false,
-        values: false,
-      },
-      lines: true,
-      linewidth: 2,
-      nullPointMode: 'null',
-      options: {
-        alertThreshold: true,
-      },
-      percentage: false,
-      pluginVersion: '8.1.4',
-      pointradius: 2,
-      points: false,
-      renderer: 'flot',
-      seriesOverrides: [],
-      spaceLength: 10,
-      stack: true,
-      steppedLine: false,
-      targets: [
-        {
-          expr: 'sum(irate(caddy_http_request_duration_seconds_count{' + matcher + '}[$__rate_interval])) by (code)',
-          interval: '',
-          legendFormat: '{{code}}',
-          refId: 'A',
+      'description': '',
+      'fieldConfig': {
+        'defaults': {
+          'color': {
+            'mode': 'palette-classic'
+          },
+          'custom': {
+            'axisBorderShow': false,
+            'axisCenteredZero': false,
+            'axisColorMode': 'text',
+            'axisLabel': '',
+            'axisPlacement': 'auto',
+            'barAlignment': 0,
+            'drawStyle': 'line',
+            'fillOpacity': 10,
+            'gradientMode': 'none',
+            'hideFrom': {
+              'legend': false,
+              'tooltip': false,
+              'viz': false
+            },
+            'insertNulls': false,
+            'lineInterpolation': 'linear',
+            'lineWidth': 2,
+            'pointSize': 5,
+            'scaleDistribution': {
+              'type': 'linear'
+            },
+            'showPoints': 'never',
+            'spanNulls': false,
+            'stacking': {
+              'group': 'A',
+              'mode': 'normal'
+            },
+            'thresholdsStyle': {
+              'mode': 'off'
+            }
+          },
+          'mappings': [],
+          'thresholds': {
+            'mode': 'absolute',
+            'steps': [
+              {
+                'color': 'green',
+                'value': null
+              },
+              {
+                'color': 'red',
+                'value': 80
+              }
+            ]
+          },
+          'unit': 'short'
         },
+        'overrides': []
+      },
+      'gridPos': {
+        'h': 11,
+        'w': 12,
+        'x': 12,
+        'y': 0
+      },
+      'id': 7,
+      'options': {
+        'legend': {
+          'calcs': [],
+          'displayMode': 'list',
+          'placement': 'bottom',
+          'showLegend': true
+        },
+        'tooltip': {
+          'mode': 'multi',
+          'sort': 'none'
+        }
+      },
+      'pluginVersion': '10.2.0',
+      'targets': [
+        {
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'sum(irate(caddy_http_request_duration_seconds_count{' + matcher + '}[$__rate_interval])) by (code)',
+          'interval': '',
+          'legendFormat': '{{code}}',
+          'refId': 'A'
+        }
       ],
-      thresholds: [],
-      timeFrom: null,
-      timeRegions: [],
-      timeShift: null,
-      title: 'Requests by Response Code',
-      tooltip: {
-        shared: true,
-        sort: 0,
-        value_type: 'individual',
-      },
-      type: 'graph',
-      xaxis: {
-        buckets: null,
-        mode: 'time',
-        name: null,
-        show: true,
-        values: [],
-      },
-      yaxes: [
-        {
-          decimals: null,
-          format: 'short',
-          label: '',
-          logBase: 1,
-          max: null,
-          min: null,
-          show: true,
-        },
-        {
-          format: 'short',
-          label: null,
-          logBase: 1,
-          max: null,
-          min: null,
-          show: false,
-        },
-      ],
-      yaxis: {
-        align: false,
-        alignLevel: null,
-      },
+      'title': 'Requests by Response Code',
+      'type': 'timeseries'
     },
     {
-      aliasColors: {},
-      bars: false,
-      dashLength: 10,
-      dashes: false,
-      datasource: '$datasource',
-      fill: 1,
-      fillGradient: 0,
-      gridPos: {
-        h: 9,
-        w: 12,
-        x: 0,
-        y: 11,
+      'datasource': {
+        'uid': '$datasource'
       },
-      hiddenSeries: false,
-      id: 8,
-      legend: {
-        avg: false,
-        current: false,
-        max: false,
-        min: false,
-        show: false,
-        total: false,
-        values: false,
-      },
-      lines: true,
-      linewidth: 2,
-      nullPointMode: 'null',
-      options: {
-        alertThreshold: true,
-      },
-      percentage: false,
-      pluginVersion: '8.1.4',
-      pointradius: 2,
-      points: false,
-      renderer: 'flot',
-      seriesOverrides: [],
-      spaceLength: 10,
-      stack: false,
-      steppedLine: false,
-      targets: [
-        {
-          expr: 'avg(avg_over_time(caddy_http_requests_in_flight{' + matcher + '}[$__rate_interval])) by (handler)',
-          hide: false,
-          interval: '',
-          legendFormat: '{{handler}}',
-          refId: 'E',
+      'fieldConfig': {
+        'defaults': {
+          'color': {
+            'mode': 'palette-classic'
+          },
+          'custom': {
+            'axisBorderShow': false,
+            'axisCenteredZero': false,
+            'axisColorMode': 'text',
+            'axisLabel': '',
+            'axisPlacement': 'auto',
+            'barAlignment': 0,
+            'drawStyle': 'line',
+            'fillOpacity': 10,
+            'gradientMode': 'none',
+            'hideFrom': {
+              'legend': false,
+              'tooltip': false,
+              'viz': false
+            },
+            'insertNulls': false,
+            'lineInterpolation': 'linear',
+            'lineWidth': 2,
+            'pointSize': 5,
+            'scaleDistribution': {
+              'type': 'linear'
+            },
+            'showPoints': 'never',
+            'spanNulls': false,
+            'stacking': {
+              'group': 'A',
+              'mode': 'none'
+            },
+            'thresholdsStyle': {
+              'mode': 'off'
+            }
+          },
+          'mappings': [],
+          'thresholds': {
+            'mode': 'absolute',
+            'steps': [
+              {
+                'color': 'green',
+                'value': null
+              },
+              {
+                'color': 'red',
+                'value': 80
+              }
+            ]
+          },
+          'unit': 'short'
         },
+        'overrides': []
+      },
+      'gridPos': {
+        'h': 9,
+        'w': 12,
+        'x': 0,
+        'y': 11
+      },
+      'id': 8,
+      'options': {
+        'legend': {
+          'calcs': [],
+          'displayMode': 'list',
+          'placement': 'bottom',
+          'showLegend': false
+        },
+        'tooltip': {
+          'mode': 'multi',
+          'sort': 'none'
+        }
+      },
+      'pluginVersion': '10.2.0',
+      'targets': [
+        {
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'avg(avg_over_time(caddy_http_requests_in_flight{' + matcher + '}[$__rate_interval])) by (handler)',
+          'hide': false,
+          'interval': '',
+          'legendFormat': '{{handler}}',
+          'refId': 'E'
+        }
       ],
-      thresholds: [],
-      timeFrom: null,
-      timeRegions: [],
-      timeShift: null,
-      title: 'Requests In Flight',
-      tooltip: {
-        shared: true,
-        sort: 0,
-        value_type: 'individual',
-      },
-      type: 'graph',
-      xaxis: {
-        buckets: null,
-        mode: 'time',
-        name: null,
-        show: true,
-        values: [],
-      },
-      yaxes: [
-        {
-          format: 'short',
-          label: null,
-          logBase: 1,
-          max: null,
-          min: null,
-          show: true,
-        },
-        {
-          format: 'short',
-          label: null,
-          logBase: 1,
-          max: null,
-          min: null,
-          show: false,
-        },
-      ],
-      yaxis: {
-        align: false,
-        alignLevel: null,
-      },
+      'title': 'Requests In Flight',
+      'type': 'timeseries'
     },
     {
-      aliasColors: {},
-      bars: true,
-      dashLength: 10,
-      dashes: false,
-      datasource: '$datasource',
-      description: '',
-      fill: 1,
-      fillGradient: 0,
-      gridPos: {
-        h: 9,
-        w: 12,
-        x: 12,
-        y: 11,
+      'datasource': {
+        'uid': '$datasource'
       },
-      hiddenSeries: false,
-      id: 5,
-      legend: {
-        alignAsTable: false,
-        avg: false,
-        current: false,
-        max: false,
-        min: false,
-        rightSide: false,
-        show: true,
-        total: false,
-        values: false,
-      },
-      lines: false,
-      linewidth: 2,
-      nullPointMode: 'null',
-      options: {
-        alertThreshold: true,
-      },
-      percentage: true,
-      pluginVersion: '8.1.4',
-      pointradius: 2,
-      points: false,
-      renderer: 'flot',
-      seriesOverrides: [],
-      spaceLength: 10,
-      stack: true,
-      steppedLine: false,
-      targets: [
-        {
-          expr: 'sum(irate(caddy_http_request_duration_seconds_count{' + matcher + '}[$__rate_interval])) by (code)',
-          interval: '',
-          legendFormat: '{{code}}',
-          refId: 'A',
+      'description': '',
+      'fieldConfig': {
+        'defaults': {
+          'color': {
+            'mode': 'palette-classic'
+          },
+          'custom': {
+            'axisBorderShow': false,
+            'axisCenteredZero': false,
+            'axisColorMode': 'text',
+            'axisLabel': '',
+            'axisPlacement': 'auto',
+            'barAlignment': 0,
+            'drawStyle': 'bars',
+            'fillOpacity': 100,
+            'gradientMode': 'none',
+            'hideFrom': {
+              'legend': false,
+              'tooltip': false,
+              'viz': false
+            },
+            'insertNulls': false,
+            'lineInterpolation': 'linear',
+            'lineWidth': 2,
+            'pointSize': 5,
+            'scaleDistribution': {
+              'type': 'linear'
+            },
+            'showPoints': 'never',
+            'spanNulls': false,
+            'stacking': {
+              'group': 'A',
+              'mode': 'normal'
+            },
+            'thresholdsStyle': {
+              'mode': 'off'
+            }
+          },
+          'mappings': [],
+          'min': 0,
+          'thresholds': {
+            'mode': 'absolute',
+            'steps': [
+              {
+                'color': 'green',
+                'value': null
+              },
+              {
+                'color': 'red',
+                'value': 80
+              }
+            ]
+          },
+          'unit': 'none'
         },
+        'overrides': []
+      },
+      'gridPos': {
+        'h': 9,
+        'w': 12,
+        'x': 12,
+        'y': 11
+      },
+      'id': 5,
+      'options': {
+        'legend': {
+          'calcs': [],
+          'displayMode': 'list',
+          'placement': 'bottom',
+          'showLegend': true
+        },
+        'tooltip': {
+          'mode': 'multi',
+          'sort': 'none'
+        }
+      },
+      'pluginVersion': '10.2.0',
+      'targets': [
+        {
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'sum(irate(caddy_http_request_duration_seconds_count{' + matcher + '}[$__rate_interval])) by (code)',
+          'interval': '',
+          'legendFormat': '{{code}}',
+          'refId': 'A'
+        }
       ],
-      thresholds: [],
-      timeFrom: null,
-      timeRegions: [],
-      timeShift: null,
-      title: 'Requests by Response Code (%)',
-      tooltip: {
-        shared: true,
-        sort: 0,
-        value_type: 'individual',
-      },
-      type: 'graph',
-      xaxis: {
-        buckets: null,
-        mode: 'time',
-        name: null,
-        show: true,
-        values: [],
-      },
-      yaxes: [
-        {
-          decimals: null,
-          format: 'none',
-          label: null,
-          logBase: 1,
-          max: null,
-          min: '0',
-          show: true,
-        },
-        {
-          format: 'short',
-          label: null,
-          logBase: 1,
-          max: null,
-          min: null,
-          show: false,
-        },
-      ],
-      yaxis: {
-        align: false,
-        alignLevel: null,
-      },
+      'title': 'Requests by Response Code (%)',
+      'type': 'timeseries'
     },
     {
-      aliasColors: {},
-      bars: false,
-      dashLength: 10,
-      dashes: false,
-      datasource: '$datasource',
-      fill: 1,
-      fillGradient: 0,
-      gridPos: {
-        h: 9,
-        w: 12,
-        x: 0,
-        y: 20,
+      'datasource': {
+        'uid': '$datasource'
       },
-      hiddenSeries: false,
-      id: 4,
-      legend: {
-        avg: false,
-        current: false,
-        max: false,
-        min: false,
-        show: true,
-        total: false,
-        values: false,
+      'fieldConfig': {
+        'defaults': {
+          'color': {
+            'mode': 'palette-classic'
+          },
+          'custom': {
+            'axisBorderShow': false,
+            'axisCenteredZero': false,
+            'axisColorMode': 'text',
+            'axisLabel': '',
+            'axisPlacement': 'auto',
+            'barAlignment': 0,
+            'drawStyle': 'line',
+            'fillOpacity': 10,
+            'gradientMode': 'none',
+            'hideFrom': {
+              'legend': false,
+              'tooltip': false,
+              'viz': false
+            },
+            'insertNulls': false,
+            'lineInterpolation': 'linear',
+            'lineWidth': 2,
+            'pointSize': 5,
+            'scaleDistribution': {
+              'log': 2,
+              'type': 'log'
+            },
+            'showPoints': 'never',
+            'spanNulls': false,
+            'stacking': {
+              'group': 'A',
+              'mode': 'none'
+            },
+            'thresholdsStyle': {
+              'mode': 'off'
+            }
+          },
+          'mappings': [],
+          'thresholds': {
+            'mode': 'absolute',
+            'steps': [
+              {
+                'color': 'green',
+                'value': null
+              },
+              {
+                'color': 'red',
+                'value': 80
+              }
+            ]
+          },
+          'unit': 's'
+        },
+        'overrides': []
       },
-      lines: true,
-      linewidth: 2,
-      nullPointMode: 'null',
-      options: {
-        alertThreshold: true,
+      'gridPos': {
+        'h': 9,
+        'w': 12,
+        'x': 0,
+        'y': 20
       },
-      percentage: true,
-      pluginVersion: '8.1.4',
-      pointradius: 2,
-      points: false,
-      renderer: 'flot',
-      seriesOverrides: [],
-      spaceLength: 10,
-      stack: false,
-      steppedLine: false,
-      targets: [
+      'id': 4,
+      'options': {
+        'legend': {
+          'calcs': [],
+          'displayMode': 'list',
+          'placement': 'bottom',
+          'showLegend': true
+        },
+        'tooltip': {
+          'mode': 'multi',
+          'sort': 'none'
+        }
+      },
+      'pluginVersion': '10.2.0',
+      'targets': [
         {
-          expr: 'histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
-          interval: '',
-          legendFormat: 'p99',
-          refId: 'A',
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
+          'interval': '',
+          'legendFormat': 'p99',
+          'refId': 'A'
         },
         {
-          expr: 'histogram_quantile(0.95, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
-          interval: '',
-          legendFormat: 'p95',
-          refId: 'B',
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'histogram_quantile(0.95, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
+          'interval': '',
+          'legendFormat': 'p95',
+          'refId': 'B'
         },
         {
-          expr: 'histogram_quantile(0.90, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
-          interval: '',
-          legendFormat: 'p90',
-          refId: 'C',
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'histogram_quantile(0.90, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
+          'interval': '',
+          'legendFormat': 'p90',
+          'refId': 'C'
         },
         {
-          expr: 'histogram_quantile(0.75, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
-          interval: '',
-          legendFormat: 'p75',
-          refId: 'D',
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'histogram_quantile(0.75, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
+          'interval': '',
+          'legendFormat': 'p75',
+          'refId': 'D'
         },
         {
-          expr: 'histogram_quantile(0.5, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
-          interval: '',
-          legendFormat: 'p50',
-          refId: 'E',
-        },
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'histogram_quantile(0.5, sum(rate(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le))',
+          'interval': '',
+          'legendFormat': 'p50',
+          'refId': 'E'
+        }
       ],
-      thresholds: [],
-      timeFrom: null,
-      timeRegions: [],
-      timeShift: null,
-      title: 'Request Duration (percentile)',
-      tooltip: {
-        shared: true,
-        sort: 0,
-        value_type: 'individual',
-      },
-      type: 'graph',
-      xaxis: {
-        buckets: null,
-        mode: 'time',
-        name: null,
-        show: true,
-        values: [],
-      },
-      yaxes: [
-        {
-          format: 's',
-          label: null,
-          logBase: 2,
-          max: null,
-          min: null,
-          show: true,
-        },
-        {
-          format: 'short',
-          label: null,
-          logBase: 1,
-          max: null,
-          min: null,
-          show: false,
-        },
-      ],
-      yaxis: {
-        align: false,
-        alignLevel: null,
-      },
+      'title': 'Request Duration (percentile)',
+      'type': 'timeseries'
     },
     {
-      cards: {
-        cardPadding: null,
-        cardRound: null,
+      'cards': {},
+      'color': {
+        'cardColor': '#b4ff00',
+        'colorScale': 'linear',
+        'colorScheme': 'interpolateInferno',
+        'exponent': 0.5,
+        'mode': 'spectrum'
       },
-      color: {
-        cardColor: '#b4ff00',
-        colorScale: 'linear',
-        colorScheme: 'interpolateInferno',
-        exponent: 0.5,
-        mode: 'spectrum',
+      'dataFormat': 'tsbuckets',
+      'datasource': {
+        'uid': '$datasource'
       },
-      dataFormat: 'tsbuckets',
-      datasource: '$datasource',
-      gridPos: {
-        h: 9,
-        w: 12,
-        x: 12,
-        y: 20,
-      },
-      heatmap: {},
-      hideZeroBuckets: true,
-      highlightCards: true,
-      id: 6,
-      interval: '',
-      legend: {
-        show: true,
-      },
-      maxDataPoints: 25,
-      pluginVersion: '7.1.0',
-      reverseYBuckets: false,
-      targets: [
-        {
-          expr: 'sum(increase(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le)',
-          format: 'heatmap',
-          interval: '',
-          legendFormat: '{{le}}',
-          refId: 'A',
+      'fieldConfig': {
+        'defaults': {
+          'custom': {
+            'hideFrom': {
+              'legend': false,
+              'tooltip': false,
+              'viz': false
+            },
+            'scaleDistribution': {
+              'type': 'linear'
+            }
+          }
         },
+        'overrides': []
+      },
+      'gridPos': {
+        'h': 9,
+        'w': 12,
+        'x': 12,
+        'y': 20
+      },
+      'heatmap': {},
+      'hideZeroBuckets': true,
+      'highlightCards': true,
+      'id': 6,
+      'interval': '',
+      'legend': {
+        'show': true
+      },
+      'maxDataPoints': 25,
+      'options': {
+        'calculate': false,
+        'calculation': {},
+        'cellGap': 2,
+        'cellValues': {},
+        'color': {
+          'exponent': 0.5,
+          'fill': '#b4ff00',
+          'mode': 'scheme',
+          'reverse': false,
+          'scale': 'exponential',
+          'scheme': 'Inferno',
+          'steps': 128
+        },
+        'exemplars': {
+          'color': 'rgba(255,0,255,0.7)'
+        },
+        'filterValues': {
+          'le': 1e-9
+        },
+        'legend': {
+          'show': true
+        },
+        'rowsFrame': {
+          'layout': 'auto'
+        },
+        'showValue': 'never',
+        'tooltip': {
+          'show': true,
+          'yHistogram': false
+        },
+        'yAxis': {
+          'axisPlacement': 'left',
+          'reverse': false,
+          'unit': 's'
+        }
+      },
+      'pluginVersion': '10.2.0',
+      'reverseYBuckets': false,
+      'targets': [
+        {
+          'datasource': {
+            'uid': '$datasource'
+          },
+          'expr': 'sum(increase(caddy_http_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])) by (le)',
+          'format': 'heatmap',
+          'interval': '',
+          'legendFormat': '{{le}}',
+          'refId': 'A'
+        }
       ],
-      timeFrom: null,
-      timeShift: null,
-      title: 'Request Duration (heatmap)',
-      tooltip: {
-        show: true,
-        showHistogram: false,
+      'title': 'Request Duration (heatmap)',
+      'tooltip': {
+        'show': true,
+        'showHistogram': false
       },
-      type: 'heatmap',
-      xAxis: {
-        show: true,
+      'type': 'heatmap',
+      'xAxis': {
+        'show': true
       },
-      xBucketNumber: null,
-      xBucketSize: null,
-      yAxis: {
-        decimals: null,
-        format: 's',
-        logBase: 1,
-        max: null,
-        min: null,
-        show: true,
-        splitFactor: null,
+      'yAxis': {
+        'format': 's',
+        'logBase': 1,
+        'show': true
       },
-      yBucketBound: 'auto',
-      yBucketNumber: null,
-      yBucketSize: null,
-    },
+      'yBucketBound': 'auto'
+    }
   ],
   refresh: '30s',
-  schemaVersion: 30,
+  schemaVersion: 38,
   style: 'dark',
   tags: [
     'caddy-integration',
   ],
-  templating: {
-    list: [
+  'templating': {
+    'list': [
       {
-        current: {
-          selected: false,
-          text: 'Prometheus',
-          value: 'Prometheus',
+        'current': {
+          'selected': false,
+          'text': 'Prometheus',
+          'value': 'Prometheus'
         },
-        description: null,
-        'error': null,
-        hide: 0,
-        includeAll: false,
-        label: 'Data Source',
-        multi: false,
-        name: 'datasource',
-        options: [],
-        query: 'prometheus',
-        queryValue: '',
-        refresh: 1,
-        regex: '',
-        skipUrlSync: false,
-        type: 'datasource',
+        'hide': 0,
+        'includeAll': false,
+        'label': 'Data Source',
+        'multi': false,
+        'name': 'datasource',
+        'options': [],
+        'query': 'prometheus',
+        'queryValue': '',
+        'refresh': 1,
+        'regex': '(?!grafanacloud-usage|grafanacloud-ml-metrics).+',
+        'skipUrlSync': false,
+        'type': 'datasource'
       },
       {
-        allValue: '.+',
-        current: {},
-        datasource: '$datasource',
-        hide: 0,
-        includeAll: true,
-        label: 'job',
-        multi: true,
-        name: 'job',
-        options: [],
-        query: 'label_values(caddy_http_requests_total, job)',
-        refresh: 1,
-        regex: '',
-        sort: 1,
-        tagValuesQuery: '',
-        tags: [],
-        tagsQuery: '',
-        type: 'query',
-        useTags: false,
+        'allValue': '.+',
+        'current': {
+          'selected': false,
+          'text': 'All',
+          'value': '$__all'
+        },
+        'datasource': {
+          'uid': '$datasource'
+        },
+        'definition': '',
+        'hide': 0,
+        'includeAll': true,
+        'label': 'job',
+        'multi': true,
+        'name': 'job',
+        'options': [],
+        'query': 'label_values(caddy_http_requests_total, job)',
+        'refresh': 2,
+        'regex': '',
+        'skipUrlSync': false,
+        'sort': 1,
+        'tagValuesQuery': '',
+        'tags': [],
+        'tagsQuery': '',
+        'type': 'query',
+        'useTags': false
       },
       {
-        allValue: '.+',
-        current: {},
-        datasource: '$datasource',
-        hide: 0,
-        includeAll: true,
-        label: 'instance',
-        multi: true,
-        name: 'instance',
-        options: [],
-        query: 'label_values(caddy_http_requests_total{job=~"$job"}, instance)',
-        refresh: 1,
-        regex: '',
-        sort: 1,
-        tagValuesQuery: '',
-        tags: [],
-        tagsQuery: '',
-        type: 'query',
-        useTags: false,
-      },
-    ],
+        'allValue': '.+',
+        'current': {
+          'selected': false,
+          'text': 'All',
+          'value': '$__all'
+        },
+        'datasource': {
+          'uid': '$datasource'
+        },
+        'definition': '',
+        'hide': 0,
+        'includeAll': true,
+        'label': 'instance',
+        'multi': true,
+        'name': 'instance',
+        'options': [],
+        'query': 'label_values(caddy_http_requests_total{job=~\'$job\'}, instance)',
+        'refresh': 2,
+        'regex': '',
+        'skipUrlSync': false,
+        'sort': 1,
+        'tagValuesQuery': '',
+        'tags': [],
+        'tagsQuery': '',
+        'type': 'query',
+        'useTags': false
+      }
+    ]
   },
   time: {
     from: 'now-30m',
