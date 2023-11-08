@@ -18,6 +18,11 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       fleet:
         g.dashboard.new(prefix + 'Helloworld fleet')
         + g.dashboard.withPanels(
+
+          // wrapPanels returns an array of panels organized in a grid,
+          // wrapping up to next 'row' if total width exceeds full grid of 24 columns.
+          // 'panelHeight' and 'panelWidth' are used unless panels already have height and width defined.
+          // https://grafana.github.io/grafonnet/API/util.html#fn-gridwrappanels
           g.util.grid.wrapPanels(
             [
               g.panel.row.new('Row 1'),
