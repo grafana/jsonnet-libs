@@ -9,11 +9,13 @@ local g = import './g.libsonnet';
   },
   network: {
     timeSeries: import './panels/network/timeSeries/main.libsonnet',
+    statusHistory: import './panels/network/statusHistory/main.libsonnet',
   },
   system: {
     stat: import './panels/system/stat/main.libsonnet',
     table: import './panels/system/table/main.libsonnet',
     statusHistory: import './panels/system/statusHistory/main.libsonnet',
+    timeSeries: import './panels/system/timeSeries/main.libsonnet',
   },
   cpu: {
     stat: import './panels/cpu/stat/main.libsonnet',
