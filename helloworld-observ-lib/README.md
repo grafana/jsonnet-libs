@@ -1,6 +1,6 @@
 # Hello world observ lib
 
-This lib can be used as a starter template of modular observ lib.
+This lib can be used as a starter template of modular observ lib. Modular observ libs are highly reusable observability package containing grafana dashboards and prometheus alerts/rules. They can be used in as a replacement or in conjuction to monitoring-mixins format.
 
 
 ## Import
@@ -63,9 +63,7 @@ jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
    },
    
    // grafana dashboard links
-   links: {
-      //common dashobard links
-   },
+   links: {},
  },
 
  prometheus: {
@@ -78,7 +76,7 @@ jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
 
 ## Pros of using modular observabilty format
 
-- Uses (grafonnet)[https://monitoring.mixins.dev]
+- Uses (jsonnet)[https://jsonnet.org/learning/tutorial.html], jsonnet-bundler, and grafonnet[https://github.com/grafana/grafonnet]
 - Highly customizable and flexible:
 
 Any object like `panel`, `target` (query) can be easily referenced by key and then overriden before output of the lib is provided by using jsonnet (patching)[https://tanka.dev/tutorial/environments#patching] technique:
@@ -109,14 +107,14 @@ local helloworld =
 
 ## Examples
 
-### Monitoring-Mixin example
+### Example 1: Monitoring-Mixin example
 
 You can use lib to fill in [monitoring-mixin](https://monitoring.mixins.dev/) structure:
 
 ```jsonnet
 // mixin.libsonnet file
 
-local helloworldlib = import './main.libsonnet';
+local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
 
 local helloworld =
   helloworldlib.new(
@@ -134,14 +132,49 @@ local helloworld =
 }
 ```
 
-### Logs collection
+### Example 2: Changing specific panel before rendering dashboards
 
-Grafana Loki is used to populate logs dashboard and also for quering annotations.
+We can point to any object (i.e grafana.panels.panel1) and modify it by using (jsonnnet mixins)[https://jsonnet.org/learning/tutorial.html].
+
+For example, let's modify panel's default draw style to bars by mutating it with (grafonnet)[https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-fieldconfigdefaultscustomwithdrawstyle]
+
+```
+local g = import './g.libsonnet';
+local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
+
+local helloworld =
+  helloworldlib.new(
+    filteringSelector='job="integrations/helloworld"',
+    uid='myhelloworld',
+    groupLabels=['environment', 'cluster'],
+    instanceLabels=['host'],
+  )
+  + {
+    grafana+: {
+      panels+: {
+        networkSockstatAll+:
+          + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
+      }
+    }
+  };
+
+// populate monitoring-mixin:
+{
+  grafanaDashboards+:: helloworld.grafana.dashboards,
+  prometheusAlerts+:: helloworld.prometheus.alerts,
+  prometheusRules+:: helloworld.prometheus.recordingRules,
+}
+
+```
+
+### Example 3: Optional logs collection
+
+Grafana Loki datasource is used to populate logs dashboard and also for quering annotations.
 
 To opt-out, you can set `enableLokiLogs: false` in config:
 
 ```
-local helloworldlib = import './main.libsonnet';
+local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
 
 local helloworld =
   helloworldlib.new(
@@ -164,3 +197,10 @@ local helloworld =
   prometheusRules+:: helloworld.prometheus.recordingRules,
 }
 ```
+
+## Recommended dev environment
+
+To speed up developing observability libs as-code, we recommend to work in the following dev enviroment:
+
+- Setup Vscode with [Jsonnet Language Server][https://marketplace.visualstudio.com/items?itemName=Grafana.vscode-jsonnet]
+- Setup format on save in vscode to lint jsonnet automatically.
