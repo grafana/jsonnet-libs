@@ -24,7 +24,7 @@ local utils = commonlib.utils;
             t.cpuCount
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('CPU count'),
+            + g.query.prometheus.withRefId('Cores'),
             t.cpuUsage
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
@@ -56,6 +56,18 @@ local utils = commonlib.utils;
           ],
           description="All Windows instances' perfomance at a glance."
         )
+        + g.panel.table.options.withFooter(
+          value={
+            reducer: ['sum'],
+            show: true,
+            fields: [
+              'Value #Cores',
+              'Value #Load 1',
+              'Value #Memory total',
+              'Value #Disk C: total',
+            ],
+          }
+        )
         + commonlib.panels.system.table.uptime.stylizeByName('Uptime')
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byRegexp.new('Product|^Hostname$')
@@ -78,7 +90,7 @@ local utils = commonlib.utils;
               url: 'd/%s?var-${__field.name}=${__value.text}&${__url_time_range}' % [this.grafana.dashboards.fleet.uid],
             },
           ]),
-          fieldOverride.byName.new('CPU count')
+          fieldOverride.byName.new('Cores')
           + fieldOverride.byName.withProperty('custom.width', '120'),
           fieldOverride.byName.new('CPU usage')
           + fieldOverride.byName.withProperty('custom.width', '120')
@@ -195,7 +207,7 @@ local utils = commonlib.utils;
         commonlib.panels.system.statusHistory.ntp.new(
           'NTP status',
           targets=[t.timeNtpStatus],
-          description=''
+          description='Status of time synchronization.'
         )
         + g.panel.timeSeries.standardOptions.withNoValue('No data. Please check that "time" collector is enabled.'),
       timeNtpDelay:
@@ -279,9 +291,14 @@ local utils = commonlib.utils;
                    + g.query.prometheus.withInstant(true),
         groupLabel='volume'
       ),
-      diskUsagePercent: commonlib.panels.disk.timeSeries.usagePercent.new(
-        targets=[t.diskUsagePercent]
-      ),
+      diskFreeTs:
+        commonlib.panels.disk.timeSeries.available.new(
+          'Filesystem space availabe',
+          targets=[
+            t.diskFree,
+          ],
+          description='Filesystem space utilisation in bytes.'
+        ),
       diskUsagePercentTopK: commonlib.panels.generic.timeSeries.topkPercentage.new(
         title='Disk space usage',
         target=t.diskUsagePercent,
@@ -350,20 +367,14 @@ local utils = commonlib.utils;
       networkErrorsAndDroppedPerSec:
         commonlib.panels.network.timeSeries.errors.new(
           'Network errors and dropped packets',
-          targets=std.map(
-            function(t) t
-                        {
-              expr: '(' + t.expr + ')>0.5',
-              legendFormat: '{{' + this.config.instanceLabels[0] + '}}: ' + std.get(t, 'legendFormat', '{{ nic }}'),
-            },
-            [
-              t.networkOutErrorsPerSec,
-              t.networkInErrorsPerSec,
-              t.networkInUknownPerSec,
-              t.networkOutDroppedPerSec,
-              t.networkInDroppedPerSec,
-            ]
-          ),
+          targets=
+          [
+            t.networkOutErrorsPerSec,
+            t.networkInErrorsPerSec,
+            t.networkInUknownPerSec,
+            t.networkOutDroppedPerSec,
+            t.networkInDroppedPerSec,
+          ],
           description=|||
             **Network errors**:
 
@@ -381,7 +392,47 @@ local utils = commonlib.utils;
 
             Dropped packets can impact network performance and lead to issues such as degraded voice or video quality in real-time applications.
           |||
-        ),
+        )
+        + commonlib.panels.network.timeSeries.errors.withNegateOutPackets(),
+      networkErrorsAndDroppedPerSecTopK:
+        commonlib.panels.network.timeSeries.errors.new(
+          'Network errors and dropped packets',
+          targets=std.map(
+            function(t) t
+                        {
+              expr: 'topk(25, ' + t.expr + ')>0.5',
+              legendFormat: '{{' + this.config.instanceLabels[0] + '}}: ' + std.get(t, 'legendFormat', '{{ nic }}'),
+            },
+            [
+              t.networkOutErrorsPerSec,
+              t.networkInErrorsPerSec,
+              t.networkInUknownPerSec,
+              t.networkOutDroppedPerSec,
+              t.networkInDroppedPerSec,
+            ]
+          ),
+          description=|||
+            Top 25.
+
+            **Network errors**:
+
+            Network errors refer to issues that occur during the transmission of data across a network. 
+
+            These errors can result from various factors, including physical issues, jitter, collisions, noise and interference.
+
+            Monitoring network errors is essential for diagnosing and resolving issues, as they can indicate problems with network hardware or environmental factors affecting network quality.
+
+            **Dropped packets**:
+
+            Dropped packets occur when data packets traveling through a network are intentionally discarded or lost due to congestion, resource limitations, or network configuration issues. 
+
+            Common causes include network congestion, buffer overflows, QoS settings, and network errors, as corrupted or incomplete packets may be discarded by receiving devices.
+
+            Dropped packets can impact network performance and lead to issues such as degraded voice or video quality in real-time applications.
+          |||
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('points')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withPointSize(5),
 
       networkErrorsPerSec: commonlib.panels.network.timeSeries.errors.new('Network errors',
                                                                           targets=[t.networkInErrorsPerSec, t.networkOutErrorsPerSec, t.networkInUknownPerSec])
