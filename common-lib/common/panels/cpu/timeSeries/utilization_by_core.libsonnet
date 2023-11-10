@@ -7,7 +7,7 @@ base {
     targets,
     description=|||
       CPU utilization percent by core is a metric that indicates level of central processing unit (CPU) usage in a computer system.
-      It represents the load placed on eaxch CPU core or processors.
+      It represents the load placed on each CPU core or processors.
     |||
   ):
     super.new(title, targets, description)
