@@ -102,7 +102,7 @@ local helloworld =
   };
 ```
 
-- Due to high decomposition level, not only dashboards but single panels can be imported ('cherry-picked) from the library to be used in other dashboards
+- Due to high decomposition level, not only dashboards but single panels can be imported ('cherry-picked') from the library to be used in other dashboards
 - Format introduces mandatory arguments that each library should have: `filteringSelector`, `instanceLabels`, `groupLabels`, `uid`. Proper use of those parameters ensures library can be used to instantiate multiple copies of the observability package in the same enviroment without `ids` conflicts or timeSeries overlapping.
 
 ## Examples
