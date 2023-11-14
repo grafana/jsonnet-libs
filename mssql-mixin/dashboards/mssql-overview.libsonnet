@@ -511,7 +511,7 @@ local committedMemoryUtilizationPanel = {
   ],
   type: 'gauge',
   title: 'Committed memory utilization',
-  description: 'The committed memomry utilization',
+  description: 'The committed memory utilization',
   fieldConfig: {
     defaults: {
       color: {
