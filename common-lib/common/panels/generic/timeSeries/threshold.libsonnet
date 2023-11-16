@@ -18,7 +18,7 @@ local fieldConfig = g.panel.timeSeries.fieldConfig;
     + timeSeries.standardOptions.color.withMode('fixed')
     + timeSeries.standardOptions.color.withFixedColor('light-orange'),
   stylizeByRegexp(regexp):
-    timeSeries.standardOptions.withOverrides(
+    timeSeries.standardOptions.withOverridesMixin(
       fieldOverride.byRegexp.new(regexp)
       + fieldOverride.byRegexp.withPropertiesFromOptions(this.stylize())
     ),
