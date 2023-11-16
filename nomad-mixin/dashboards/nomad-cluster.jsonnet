@@ -32,876 +32,910 @@
         liveNow: false,
         panels: [
           {
-            datasource: {
-              type: 'prometheus',
-              uid: 'grafanacloud-prom',
+            'collapsed': false,
+            'datasource': {
+              'type': 'prometheus',
+              'uid': '$datasource'
             },
-            gridPos: {
-              h: 1,
-              w: 24,
-              x: 0,
-              y: 0,
+            'gridPos': {
+              'h': 1,
+              'w': 24,
+              'x': 0,
+              'y': 0
             },
-            id: 24,
-            targets: [
+            'id': 24,
+            'panels': [],
+            'targets': [
               {
-                datasource: {
-                  type: 'prometheus',
-                  uid: 'grafanacloud-prom',
+                'datasource': {
+                  'type': 'prometheus',
+                  'uid': '$datasource'
                 },
-                refId: 'A',
-              },
+                'refId': 'A'
+              }
             ],
-            title: 'Allocations',
-            type: 'row',
+            'title': 'Allocations',
+            'type': 'row'
           },
           {
-            datasource: {
-              uid: '$datasource',
+            'datasource': {
+              'uid': '$datasource'
             },
-            description: 'CPU allocated on $instance',
-            fieldConfig: {
-              defaults: {
-                color: {
-                  mode: 'thresholds',
+            'description': 'CPU allocated on $instance',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'thresholds'
                 },
-                mappings: [],
-                max: 100,
-                min: 0,
-                thresholds: {
-                  mode: 'absolute',
-                  steps: [
+                'mappings': [],
+                'max': 100,
+                'min': 0,
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
                     {
-                      color: 'green',
-                      value: null,
+                      'color': 'green',
+                      'value': null
                     },
                     {
-                      color: 'yellow',
-                      value: 80,
+                      'color': 'yellow',
+                      'value': 80
                     },
                     {
-                      color: 'red',
-                      value: 90,
-                    },
-                  ],
+                      'color': 'red',
+                      'value': 90
+                    }
+                  ]
                 },
-                unit: 'percent',
+                'unit': 'percent'
               },
-              overrides: [],
+              'overrides': []
             },
-            gridPos: {
-              h: 5,
-              w: 5,
-              x: 0,
-              y: 1,
+            'gridPos': {
+              'h': 5,
+              'w': 5,
+              'x': 0,
+              'y': 1
             },
-            id: 33,
-            links: [],
-            maxDataPoints: 100,
-            options: {
-              orientation: 'horizontal',
-              reduceOptions: {
-                calcs: [
-                  'lastNotNull',
+            'id': 33,
+            'links': [],
+            'maxDataPoints': 100,
+            'options': {
+              'minVizHeight': 75,
+              'minVizWidth': 75,
+              'orientation': 'horizontal',
+              'reduceOptions': {
+                'calcs': [
+                  'lastNotNull'
                 ],
-                fields: '',
-                values: false,
+                'fields': '',
+                'values': false
               },
-              showThresholdLabels: false,
-              showThresholdMarkers: true,
-              text: {},
+              'showThresholdLabels': false,
+              'showThresholdMarkers': true,
+              'text': {}
             },
-            pluginVersion: '9.3.2',
-            repeat: 'instance',
-            repeatDirection: 'v',
-            targets: [
+            'pluginVersion': '10.2.1',
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
               {
-                datasource: {
-                  uid: '$datasource',
+                'datasource': {
+                  'uid': '$datasource'
                 },
-                expr: 'nomad_client_allocated_cpu{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}/(nomad_client_unallocated_cpu{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}+nomad_client_allocated_cpu{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})*100',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: '',
-                refId: 'A',
-              },
+                'expr': 'nomad_client_allocated_cpu{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}/(nomad_client_unallocated_cpu{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}+nomad_client_allocated_cpu{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})*100',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': '',
+                'refId': 'A'
+              }
             ],
-            title: 'CPU allocated',
-            type: 'gauge',
+            'title': 'CPU allocated',
+            'type': 'gauge'
           },
           {
-            datasource: {
-              uid: '$datasource',
+            'datasource': {
+              'uid': '$datasource'
             },
-            description: 'Memory allocated on $instance',
-            fieldConfig: {
-              defaults: {
-                color: {
-                  mode: 'thresholds',
+            'description': 'Memory allocated on $instance',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'thresholds'
                 },
-                mappings: [],
-                max: 100,
-                min: 0,
-                thresholds: {
-                  mode: 'absolute',
-                  steps: [
+                'mappings': [],
+                'max': 100,
+                'min': 0,
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
                     {
-                      color: 'green',
-                      value: null,
+                      'color': 'green',
+                      'value': null
                     },
                     {
-                      color: 'yellow',
-                      value: 80,
+                      'color': 'yellow',
+                      'value': 80
                     },
                     {
-                      color: 'red',
-                      value: 90,
-                    },
-                  ],
+                      'color': 'red',
+                      'value': 90
+                    }
+                  ]
                 },
-                unit: 'percent',
+                'unit': 'percent'
               },
-              overrides: [],
+              'overrides': []
             },
-            gridPos: {
-              h: 5,
-              w: 5,
-              x: 5,
-              y: 1,
+            'gridPos': {
+              'h': 5,
+              'w': 5,
+              'x': 5,
+              'y': 1
             },
-            id: 40,
-            links: [],
-            maxDataPoints: 100,
-            options: {
-              orientation: 'horizontal',
-              reduceOptions: {
-                calcs: [
-                  'lastNotNull',
+            'id': 40,
+            'links': [],
+            'maxDataPoints': 100,
+            'options': {
+              'minVizHeight': 75,
+              'minVizWidth': 75,
+              'orientation': 'horizontal',
+              'reduceOptions': {
+                'calcs': [
+                  'lastNotNull'
                 ],
-                fields: '',
-                values: false,
+                'fields': '',
+                'values': false
               },
-              showThresholdLabels: false,
-              showThresholdMarkers: true,
-              text: {},
+              'showThresholdLabels': false,
+              'showThresholdMarkers': true,
+              'text': {}
             },
-            pluginVersion: '9.3.2',
-            repeat: 'instance',
-            repeatDirection: 'v',
-            targets: [
+            'pluginVersion': '10.2.1',
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
               {
-                datasource: {
-                  uid: '$datasource',
+                'datasource': {
+                  'uid': '$datasource'
                 },
-                expr: 'nomad_client_allocated_memory{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}/(nomad_client_unallocated_memory{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}+nomad_client_allocated_memory{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})*100',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: '',
-                refId: 'A',
-              },
+                'expr': 'nomad_client_allocated_memory{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}/(nomad_client_unallocated_memory{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}+nomad_client_allocated_memory{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})*100',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': '',
+                'refId': 'A'
+              }
             ],
-            title: 'Memory allocated',
-            type: 'gauge',
+            'title': 'Memory allocated',
+            'type': 'gauge'
           },
           {
-            datasource: {
-              uid: '$datasource',
+            'datasource': {
+              'uid': '$datasource'
             },
-            description: 'Disk allocated on $instance',
-            fieldConfig: {
-              defaults: {
-                color: {
-                  mode: 'thresholds',
+            'description': 'Disk allocated on $instance',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'thresholds'
                 },
-                decimals: 2,
-                mappings: [],
-                max: 100,
-                min: 0,
-                thresholds: {
-                  mode: 'absolute',
-                  steps: [
+                'decimals': 2,
+                'mappings': [],
+                'max': 100,
+                'min': 0,
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
                     {
-                      color: 'green',
-                      value: null,
+                      'color': 'green',
+                      'value': null
                     },
                     {
-                      color: 'yellow',
-                      value: 80,
+                      'color': 'yellow',
+                      'value': 80
                     },
                     {
-                      color: 'red',
-                      value: 90,
-                    },
-                  ],
+                      'color': 'red',
+                      'value': 90
+                    }
+                  ]
                 },
-                unit: 'percent',
+                'unit': 'percent'
               },
-              overrides: [],
+              'overrides': []
             },
-            gridPos: {
-              h: 5,
-              w: 5,
-              x: 10,
-              y: 1,
+            'gridPos': {
+              'h': 5,
+              'w': 5,
+              'x': 10,
+              'y': 1
             },
-            id: 48,
-            links: [],
-            maxDataPoints: 100,
-            options: {
-              orientation: 'horizontal',
-              reduceOptions: {
-                calcs: [
-                  'lastNotNull',
+            'id': 48,
+            'links': [],
+            'maxDataPoints': 100,
+            'options': {
+              'minVizHeight': 75,
+              'minVizWidth': 75,
+              'orientation': 'horizontal',
+              'reduceOptions': {
+                'calcs': [
+                  'lastNotNull'
                 ],
-                fields: '',
-                values: false,
+                'fields': '',
+                'values': false
               },
-              showThresholdLabels: false,
-              showThresholdMarkers: true,
-              text: {},
+              'showThresholdLabels': false,
+              'showThresholdMarkers': true,
+              'text': {}
             },
-            pluginVersion: '9.3.2',
-            repeat: 'instance',
-            repeatDirection: 'v',
-            targets: [
+            'pluginVersion': '10.2.1',
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
               {
-                datasource: {
-                  uid: '$datasource',
+                'datasource': {
+                  'uid': '$datasource'
                 },
-                expr: 'nomad_client_allocated_disk{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}/(nomad_client_unallocated_disk{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}+nomad_client_allocated_disk{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})*100',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: '',
-                refId: 'A',
-              },
+                'expr': 'nomad_client_allocated_disk{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}/(nomad_client_unallocated_disk{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}+nomad_client_allocated_disk{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})*100',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': '',
+                'refId': 'A'
+              }
             ],
-            title: 'Disk allocated',
-            type: 'gauge',
+            'title': 'Disk allocated',
+            'type': 'gauge'
           },
           {
-            datasource: {
-              type: 'prometheus',
-              uid: '${datasource}',
+            'datasource': {
+              'type': 'prometheus',
+              'uid': '${datasource}'
             },
-            fieldConfig: {
-              defaults: {
-                color: {
-                  mode: 'continuous-GrYlRd',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'continuous-GrYlRd'
                 },
-                custom: {
-                  fillOpacity: 70,
-                  lineWidth: 1,
-                  spanNulls: false,
+                'custom': {
+                  'fillOpacity': 70,
+                  'hideFrom': {
+                    'legend': false,
+                    'tooltip': false,
+                    'viz': false
+                  },
+                  'insertNulls': false,
+                  'lineWidth': 1,
+                  'spanNulls': false
                 },
-                mappings: [],
-                thresholds: {
-                  mode: 'absolute',
-                  steps: [
+                'mappings': [],
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
                     {
-                      color: 'green',
-                      value: null,
-                    },
-                  ],
+                      'color': 'green',
+                      'value': null
+                    }
+                  ]
                 },
-                unit: 'allocs',
+                'unit': 'allocs'
               },
-              overrides: [],
+              'overrides': []
             },
-            gridPos: {
-              h: 5,
-              w: 9,
-              x: 15,
-              y: 1,
+            'gridPos': {
+              'h': 5,
+              'w': 9,
+              'x': 15,
+              'y': 1
             },
-            id: 58,
-            links: [],
-            options: {
-              alignValue: 'left',
-              legend: {
-                displayMode: 'list',
-                placement: 'bottom',
-                showLegend: false,
+            'id': 58,
+            'links': [],
+            'options': {
+              'alignValue': 'left',
+              'legend': {
+                'displayMode': 'list',
+                'placement': 'bottom',
+                'showLegend': false
               },
-              mergeValues: true,
-              rowHeight: 0.95,
-              showValue: 'auto',
-              tooltip: {
-                mode: 'single',
-                sort: 'none',
-              },
+              'mergeValues': true,
+              'rowHeight': 0.95,
+              'showValue': 'auto',
+              'tooltip': {
+                'mode': 'single',
+                'sort': 'none'
+              }
             },
-            repeat: 'instance',
-            repeatDirection: 'v',
-            targets: [
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
               {
-                datasource: {
-                  type: 'prometheus',
-                  uid: '${datasource}',
+                'datasource': {
+                  'type': 'prometheus',
+                  'uid': '${datasource}'
                 },
-                exemplar: true,
-                expr: 'sum by (datacenter) (nomad_client_allocations_migrating{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Migrating',
-                refId: 'A',
+                'exemplar': true,
+                'expr': 'sum by (datacenter) (nomad_client_allocations_migrating{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Migrating',
+                'refId': 'A'
               },
               {
-                datasource: {
-                  type: 'prometheus',
-                  uid: '${datasource}',
+                'datasource': {
+                  'type': 'prometheus',
+                  'uid': '${datasource}'
                 },
-                exemplar: true,
-                expr: 'sum by (datacenter) (nomad_client_allocations_blocked{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Blocked',
-                refId: 'B',
+                'exemplar': true,
+                'expr': 'sum by (datacenter) (nomad_client_allocations_blocked{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Blocked',
+                'refId': 'B'
               },
               {
-                datasource: {
-                  type: 'prometheus',
-                  uid: '${datasource}',
+                'datasource': {
+                  'type': 'prometheus',
+                  'uid': '${datasource}'
                 },
-                exemplar: true,
-                expr: 'sum by (datacenter) (nomad_client_allocations_pending{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Pending',
-                refId: 'C',
+                'exemplar': true,
+                'expr': 'sum by (datacenter) (nomad_client_allocations_pending{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Pending',
+                'refId': 'C'
               },
               {
-                datasource: {
-                  type: 'prometheus',
-                  uid: '${datasource}',
+                'datasource': {
+                  'type': 'prometheus',
+                  'uid': '${datasource}'
                 },
-                exemplar: true,
-                expr: 'sum by (datacenter)  (nomad_client_allocations_running{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Running',
-                refId: 'D',
+                'exemplar': true,
+                'expr': 'sum by (datacenter)  (nomad_client_allocations_running{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Running',
+                'refId': 'D'
               },
               {
-                datasource: {
-                  type: 'prometheus',
-                  uid: '${datasource}',
+                'datasource': {
+                  'type': 'prometheus',
+                  'uid': '${datasource}'
                 },
-                exemplar: true,
-                expr: 'sum by (datacenter)  (nomad_client_allocations_terminal{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Terminal',
-                refId: 'E',
-              },
+                'exemplar': true,
+                'expr': 'sum by (datacenter)  (nomad_client_allocations_terminal{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Terminal',
+                'refId': 'E'
+              }
             ],
-            title: 'Summary',
-            type: 'state-timeline',
+            'title': 'Summary',
+            'type': 'state-timeline'
           },
           {
-            datasource: {
-              type: 'prometheus',
-              uid: 'grafanacloud-prom',
+            'collapsed': false,
+            'datasource': {
+              'type': 'prometheus',
+              'uid': '$datasource'
             },
-            gridPos: {
-              h: 1,
-              w: 24,
-              x: 0,
-              y: 6,
+            'gridPos': {
+              'h': 1,
+              'w': 24,
+              'x': 0,
+              'y': 6
             },
-            id: 2,
-            targets: [
+            'id': 2,
+            'panels': [],
+            'targets': [
               {
-                datasource: {
-                  type: 'prometheus',
-                  uid: 'grafanacloud-prom',
+                'datasource': {
+                  'type': 'prometheus',
+                  'uid': '$datasource'
                 },
-                refId: 'A',
-              },
+                'refId': 'A'
+              }
             ],
-            title: 'Nomad clients',
-            type: 'row',
+            'title': 'Nomad clients',
+            'type': 'row'
           },
           {
-            datasource: {
-              uid: '$datasource',
+            'datasource': {
+              'uid': '$datasource'
             },
-            fieldConfig: {
-              defaults: {
-                color: {
-                  mode: 'thresholds',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'thresholds'
                 },
-                decimals: 1,
-                mappings: [],
-                thresholds: {
-                  mode: 'absolute',
-                  steps: [
+                'decimals': 1,
+                'mappings': [],
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
                     {
-                      color: 'green',
-                      value: null,
+                      'color': 'green',
+                      'value': null
                     },
                     {
-                      color: 'red',
-                      value: 80,
-                    },
-                  ],
+                      'color': 'red',
+                      'value': 80
+                    }
+                  ]
                 },
-                unit: 'dtdurations',
+                'unit': 'dtdurations'
               },
-              overrides: [],
+              'overrides': []
             },
-            gridPos: {
-              h: 5,
-              w: 4,
-              x: 0,
-              y: 7,
+            'gridPos': {
+              'h': 5,
+              'w': 4,
+              'x': 0,
+              'y': 7
             },
-            id: 4,
-            links: [],
-            maxDataPoints: 100,
-            options: {
-              colorMode: 'none',
-              graphMode: 'none',
-              justifyMode: 'auto',
-              orientation: 'horizontal',
-              reduceOptions: {
-                calcs: [
-                  'lastNotNull',
+            'id': 4,
+            'links': [],
+            'maxDataPoints': 100,
+            'options': {
+              'colorMode': 'none',
+              'graphMode': 'none',
+              'justifyMode': 'auto',
+              'orientation': 'horizontal',
+              'reduceOptions': {
+                'calcs': [
+                  'lastNotNull'
                 ],
-                fields: '',
-                values: false,
+                'fields': '',
+                'values': false
               },
-              text: {},
-              textMode: 'auto',
+              'text': {},
+              'textMode': 'auto',
+              'wideLayout': true
             },
-            pluginVersion: '9.3.2',
-            repeat: 'instance',
-            repeatDirection: 'v',
-            targets: [
+            'pluginVersion': '10.2.1',
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
               {
-                datasource: {
-                  uid: '$datasource',
+                'datasource': {
+                  'uid': '$datasource'
                 },
-                expr: 'nomad_client_uptime{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: '',
-                refId: 'A',
-              },
+                'expr': 'nomad_client_uptime{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': '',
+                'refId': 'A'
+              }
             ],
-            title: 'Uptime',
-            type: 'stat',
+            'title': 'Uptime',
+            'type': 'stat'
           },
           {
-            datasource: {
-              uid: '$datasource',
+            'datasource': {
+              'uid': '$datasource'
             },
-            fieldConfig: {
-              defaults: {
-                color: {
-                  mode: 'thresholds',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'thresholds'
                 },
-                mappings: [],
-                max: 100,
-                min: 0,
-                thresholds: {
-                  mode: 'absolute',
-                  steps: [
+                'mappings': [],
+                'max': 100,
+                'min': 0,
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
                     {
-                      color: 'green',
-                      value: null,
+                      'color': 'green',
+                      'value': null
                     },
                     {
-                      color: 'yellow',
-                      value: 80,
+                      'color': 'yellow',
+                      'value': 80
                     },
                     {
-                      color: 'red',
-                      value: 90,
-                    },
-                  ],
+                      'color': 'red',
+                      'value': 90
+                    }
+                  ]
                 },
-                unit: 'percent',
+                'unit': 'percent'
               },
-              overrides: [],
+              'overrides': []
             },
-            gridPos: {
-              h: 5,
-              w: 5,
-              x: 4,
-              y: 7,
+            'gridPos': {
+              'h': 5,
+              'w': 5,
+              'x': 4,
+              'y': 7
             },
-            id: 7,
-            links: [],
-            maxDataPoints: 100,
-            options: {
-              orientation: 'horizontal',
-              reduceOptions: {
-                calcs: [
-                  'lastNotNull',
+            'id': 7,
+            'links': [],
+            'maxDataPoints': 100,
+            'options': {
+              'minVizHeight': 75,
+              'minVizWidth': 75,
+              'orientation': 'horizontal',
+              'reduceOptions': {
+                'calcs': [
+                  'lastNotNull'
                 ],
-                fields: '',
-                values: false,
+                'fields': '',
+                'values': false
               },
-              showThresholdLabels: false,
-              showThresholdMarkers: true,
-              text: {},
+              'showThresholdLabels': false,
+              'showThresholdMarkers': true,
+              'text': {}
             },
-            pluginVersion: '9.3.2',
-            repeat: 'instance',
-            repeatDirection: 'v',
-            targets: [
+            'pluginVersion': '10.2.1',
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
               {
-                datasource: {
-                  uid: '$datasource',
+                'datasource': {
+                  'uid': '$datasource'
                 },
-                expr: '100-sum(nomad_client_host_cpu_idle{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}) / count(nomad_client_host_cpu_idle{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"})',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: '',
-                refId: 'A',
-              },
+                'expr': '100-sum(nomad_client_host_cpu_idle{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}) / count(nomad_client_host_cpu_idle{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"})',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': '',
+                'refId': 'A'
+              }
             ],
-            title: 'CPU usage',
-            type: 'gauge',
+            'title': 'CPU usage',
+            'type': 'gauge'
           },
           {
-            aliasColors: {},
-            bars: false,
-            dashLength: 10,
-            dashes: false,
-            datasource: {
-              uid: '$datasource',
+            'datasource': {
+              'uid': '$datasource'
             },
-            fieldConfig: {
-              defaults: {
-                links: [],
-              },
-              overrides: [],
-            },
-            fill: 1,
-            fillGradient: 0,
-            gridPos: {
-              h: 5,
-              w: 5,
-              x: 9,
-              y: 7,
-            },
-            hiddenSeries: false,
-            id: 11,
-            legend: {
-              avg: false,
-              current: false,
-              max: false,
-              min: false,
-              show: true,
-              total: false,
-              values: false,
-            },
-            lines: true,
-            linewidth: 1,
-            links: [],
-            nullPointMode: 'null',
-            options: {
-              alertThreshold: true,
-            },
-            percentage: false,
-            pluginVersion: '9.3.2',
-            pointradius: 5,
-            points: false,
-            renderer: 'flot',
-            repeat: 'instance',
-            repeatDirection: 'v',
-            seriesOverrides: [],
-            spaceLength: 10,
-            stack: false,
-            steppedLine: false,
-            targets: [
-              {
-                datasource: {
-                  uid: '$datasource',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'palette-classic'
                 },
-                expr: 'nomad_client_host_memory_total{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Total',
-                refId: 'B',
+                'custom': {
+                  'axisBorderShow': false,
+                  'axisCenteredZero': false,
+                  'axisColorMode': 'text',
+                  'axisLabel': '',
+                  'axisPlacement': 'auto',
+                  'barAlignment': 0,
+                  'drawStyle': 'line',
+                  'fillOpacity': 10,
+                  'gradientMode': 'none',
+                  'hideFrom': {
+                    'legend': false,
+                    'tooltip': false,
+                    'viz': false
+                  },
+                  'insertNulls': false,
+                  'lineInterpolation': 'linear',
+                  'lineWidth': 1,
+                  'pointSize': 5,
+                  'scaleDistribution': {
+                    'type': 'linear'
+                  },
+                  'showPoints': 'never',
+                  'spanNulls': false,
+                  'stacking': {
+                    'group': 'A',
+                    'mode': 'none'
+                  },
+                  'thresholdsStyle': {
+                    'mode': 'off'
+                  }
+                },
+                'links': [],
+                'mappings': [],
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
+                    {
+                      'color': 'green',
+                      'value': null
+                    },
+                    {
+                      'color': 'red',
+                      'value': 80
+                    }
+                  ]
+                },
+                'unit': 'decbytes'
+              },
+              'overrides': []
+            },
+            'gridPos': {
+              'h': 5,
+              'w': 5,
+              'x': 9,
+              'y': 7
+            },
+            'id': 11,
+            'links': [],
+            'options': {
+              'legend': {
+                'calcs': [],
+                'displayMode': 'list',
+                'placement': 'bottom',
+                'showLegend': true
+              },
+              'tooltip': {
+                'mode': 'multi',
+                'sort': 'none'
+              }
+            },
+            'pluginVersion': '10.2.1',
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
+              {
+                'datasource': {
+                  'uid': '$datasource'
+                },
+                'expr': 'nomad_client_host_memory_total{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Total',
+                'refId': 'B'
               },
               {
-                datasource: {
-                  uid: '$datasource',
+                'datasource': {
+                  'uid': '$datasource'
                 },
-                expr: 'nomad_client_host_memory_free{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
-                format: 'time_series',
-                instant: false,
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Free',
-                refId: 'A',
+                'expr': 'nomad_client_host_memory_free{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}',
+                'format': 'time_series',
+                'instant': false,
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Free',
+                'refId': 'A'
               },
               {
-                datasource: {
-                  uid: '$datasource',
+                'datasource': {
+                  'uid': '$datasource'
                 },
-                expr: 'nomad_client_host_memory_used{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Used',
-                refId: 'C',
+                'expr': 'nomad_client_host_memory_used{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Used',
+                'refId': 'C'
               },
               {
-                datasource: {
-                  uid: '$datasource',
+                'datasource': {
+                  'uid': '$datasource'
                 },
-                expr: 'nomad_client_host_memory_available{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Available',
-                refId: 'D',
-              },
+                'expr': 'nomad_client_host_memory_available{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Available',
+                'refId': 'D'
+              }
             ],
-            thresholds: [],
-            timeRegions: [],
-            title: 'Memory',
-            tooltip: {
-              shared: true,
-              sort: 0,
-              value_type: 'individual',
-            },
-            type: 'graph',
-            xaxis: {
-              mode: 'time',
-              show: true,
-              values: [],
-            },
-            yaxes: [
-              {
-                format: 'decbytes',
-                logBase: 1,
-                show: true,
-              },
-              {
-                format: 'short',
-                logBase: 1,
-                show: true,
-              },
-            ],
-            yaxis: {
-              align: false,
-            },
+            'title': 'Memory',
+            'type': 'timeseries'
           },
           {
-            aliasColors: {},
-            bars: false,
-            dashLength: 10,
-            dashes: false,
-            datasource: {
-              uid: '$datasource',
+            'datasource': {
+              'uid': '$datasource'
             },
-            fieldConfig: {
-              defaults: {
-                links: [],
-              },
-              overrides: [],
-            },
-            fill: 1,
-            fillGradient: 0,
-            gridPos: {
-              h: 5,
-              w: 5,
-              x: 14,
-              y: 7,
-            },
-            hiddenSeries: false,
-            id: 13,
-            legend: {
-              avg: false,
-              current: false,
-              max: false,
-              min: false,
-              show: true,
-              total: false,
-              values: false,
-            },
-            lines: true,
-            linewidth: 1,
-            links: [],
-            nullPointMode: 'null',
-            options: {
-              alertThreshold: true,
-            },
-            percentage: false,
-            pluginVersion: '9.3.2',
-            pointradius: 5,
-            points: false,
-            renderer: 'flot',
-            repeat: 'instance',
-            repeatDirection: 'v',
-            seriesOverrides: [],
-            spaceLength: 10,
-            stack: false,
-            steppedLine: false,
-            targets: [
-              {
-                datasource: {
-                  uid: '$datasource',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'palette-classic'
                 },
-                expr: 'max(nomad_client_host_disk_size{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}) by (disk)',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Total - {{disk}}',
-                refId: 'B',
-              },
-              {
-                datasource: {
-                  uid: '$datasource',
+                'custom': {
+                  'axisBorderShow': false,
+                  'axisCenteredZero': false,
+                  'axisColorMode': 'text',
+                  'axisLabel': '',
+                  'axisPlacement': 'auto',
+                  'barAlignment': 0,
+                  'drawStyle': 'line',
+                  'fillOpacity': 10,
+                  'gradientMode': 'none',
+                  'hideFrom': {
+                    'legend': false,
+                    'tooltip': false,
+                    'viz': false
+                  },
+                  'insertNulls': false,
+                  'lineInterpolation': 'linear',
+                  'lineWidth': 1,
+                  'pointSize': 5,
+                  'scaleDistribution': {
+                    'type': 'linear'
+                  },
+                  'showPoints': 'never',
+                  'spanNulls': false,
+                  'stacking': {
+                    'group': 'A',
+                    'mode': 'none'
+                  },
+                  'thresholdsStyle': {
+                    'mode': 'off'
+                  }
                 },
-                expr: 'avg(nomad_client_host_disk_available{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}) by (disk)',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: 'Available - {{disk}}',
-                refId: 'A',
+                'decimals': 0,
+                'links': [],
+                'mappings': [],
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
+                    {
+                      'color': 'green',
+                      'value': null
+                    },
+                    {
+                      'color': 'red',
+                      'value': 80
+                    }
+                  ]
+                },
+                'unit': 'decbytes'
               },
-            ],
-            thresholds: [],
-            timeRegions: [],
-            title: 'Disk usage',
-            tooltip: {
-              shared: true,
-              sort: 0,
-              value_type: 'individual',
+              'overrides': []
             },
-            type: 'graph',
-            xaxis: {
-              mode: 'time',
-              show: true,
-              values: [],
+            'gridPos': {
+              'h': 5,
+              'w': 5,
+              'x': 14,
+              'y': 7
             },
-            yaxes: [
+            'id': 13,
+            'links': [],
+            'options': {
+              'legend': {
+                'calcs': [],
+                'displayMode': 'list',
+                'placement': 'bottom',
+                'showLegend': true
+              },
+              'tooltip': {
+                'mode': 'multi',
+                'sort': 'none'
+              }
+            },
+            'pluginVersion': '10.2.1',
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
               {
-                decimals: 0,
-                format: 'decbytes',
-                logBase: 1,
-                show: true,
+                'datasource': {
+                  'uid': '$datasource'
+                },
+                'expr': 'max(nomad_client_host_disk_size{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}) by (disk)',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Total - {{disk}}',
+                'refId': 'B'
               },
               {
-                format: 'decbytes',
-                logBase: 1,
-                show: false,
-              },
+                'datasource': {
+                  'uid': '$datasource'
+                },
+                'expr': 'avg(nomad_client_host_disk_available{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}) by (disk)',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': 'Available - {{disk}}',
+                'refId': 'A'
+              }
             ],
-            yaxis: {
-              align: false,
-            },
+            'title': 'Disk usage',
+            'type': 'timeseries'
           },
           {
-            aliasColors: {},
-            bars: false,
-            dashLength: 10,
-            dashes: false,
-            datasource: {
-              uid: '$datasource',
+            'datasource': {
+              'uid': '$datasource'
             },
-            fieldConfig: {
-              defaults: {
-                links: [],
-              },
-              overrides: [],
-            },
-            fill: 1,
-            fillGradient: 0,
-            gridPos: {
-              h: 5,
-              w: 5,
-              x: 19,
-              y: 7,
-            },
-            hiddenSeries: false,
-            id: 15,
-            legend: {
-              avg: false,
-              current: false,
-              max: false,
-              min: false,
-              show: true,
-              total: false,
-              values: false,
-            },
-            lines: true,
-            linewidth: 1,
-            links: [],
-            nullPointMode: 'null',
-            options: {
-              alertThreshold: true,
-            },
-            percentage: false,
-            pluginVersion: '9.3.2',
-            pointradius: 5,
-            points: false,
-            renderer: 'flot',
-            repeat: 'instance',
-            repeatDirection: 'v',
-            seriesOverrides: [],
-            spaceLength: 10,
-            stack: false,
-            steppedLine: false,
-            targets: [
-              {
-                datasource: {
-                  uid: '$datasource',
+            'fieldConfig': {
+              'defaults': {
+                'color': {
+                  'mode': 'palette-classic'
                 },
-                expr: 'avg(nomad_client_host_disk_inodes_percent{job=~"$job", datacenter=~"$datacenter", instance=~"$instance"}) by (disk)',
-                format: 'time_series',
-                interval: '',
-                intervalFactor: 1,
-                legendFormat: '{{disk}}',
-                refId: 'A',
+                'custom': {
+                  'axisBorderShow': false,
+                  'axisCenteredZero': false,
+                  'axisColorMode': 'text',
+                  'axisLabel': '',
+                  'axisPlacement': 'auto',
+                  'barAlignment': 0,
+                  'drawStyle': 'line',
+                  'fillOpacity': 10,
+                  'gradientMode': 'none',
+                  'hideFrom': {
+                    'legend': false,
+                    'tooltip': false,
+                    'viz': false
+                  },
+                  'insertNulls': false,
+                  'lineInterpolation': 'linear',
+                  'lineWidth': 1,
+                  'pointSize': 5,
+                  'scaleDistribution': {
+                    'type': 'linear'
+                  },
+                  'showPoints': 'never',
+                  'spanNulls': false,
+                  'stacking': {
+                    'group': 'A',
+                    'mode': 'none'
+                  },
+                  'thresholdsStyle': {
+                    'mode': 'off'
+                  }
+                },
+                'links': [],
+                'mappings': [],
+                'thresholds': {
+                  'mode': 'absolute',
+                  'steps': [
+                    {
+                      'color': 'green',
+                      'value': null
+                    },
+                    {
+                      'color': 'red',
+                      'value': 80
+                    }
+                  ]
+                },
+                'unit': 'percent'
               },
-            ],
-            thresholds: [],
-            timeRegions: [],
-            title: 'Disk inodes',
-            tooltip: {
-              shared: true,
-              sort: 0,
-              value_type: 'individual',
+              'overrides': []
             },
-            type: 'graph',
-            xaxis: {
-              mode: 'time',
-              show: true,
-              values: [],
+            'gridPos': {
+              'h': 5,
+              'w': 5,
+              'x': 19,
+              'y': 7
             },
-            yaxes: [
+            'id': 15,
+            'links': [],
+            'options': {
+              'legend': {
+                'calcs': [],
+                'displayMode': 'list',
+                'placement': 'bottom',
+                'showLegend': true
+              },
+              'tooltip': {
+                'mode': 'multi',
+                'sort': 'none'
+              }
+            },
+            'pluginVersion': '10.2.1',
+            'repeat': 'instance',
+            'repeatDirection': 'v',
+            'targets': [
               {
-                format: 'percent',
-                logBase: 1,
-                show: true,
-              },
-              {
-                format: 'short',
-                logBase: 1,
-                show: true,
-              },
+                'datasource': {
+                  'uid': '$datasource'
+                },
+                'expr': 'avg(nomad_client_host_disk_inodes_percent{job=~\"$job\", datacenter=~\"$datacenter\", instance=~\"$instance\"}) by (disk)',
+                'format': 'time_series',
+                'interval': '',
+                'intervalFactor': 1,
+                'legendFormat': '{{disk}}',
+                'refId': 'A'
+              }
             ],
-            yaxis: {
-              align: false,
-            },
-          },
+            'title': 'Disk inodes',
+            'type': 'timeseries'
+          }
         ],
         refresh: '30s',
         schemaVersion: 37,
