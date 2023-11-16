@@ -24,7 +24,7 @@ lint-fmt:
 
 lint-mixins:
 	@RESULT=0; \
-	for d in $$(find . -name '*-mixin' -a -type d -print); do \
+	for d in $$(find . -maxdepth 1 -regex '.*-mixin\|.*-lib' -a -type d -print); do \
 		if [ -e "$$d/jsonnetfile.json" ]; then \
 			echo "Installing dependencies for $$d"; \
 			pushd "$$d" >/dev/null && jb install && popd >/dev/null; \
