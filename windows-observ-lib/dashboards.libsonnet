@@ -27,7 +27,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
               panels.memotyUsageTopKPercent { gridPos+: { w: 24 } },
               panels.diskIOutilPercentTopK { gridPos+: { w: 12 } },
               panels.diskUsagePercentTopK { gridPos+: { w: 12 } },
-              panels.networkErrorsAndDroppedPerSec { gridPos+: { w: 24 } },
+              panels.networkErrorsAndDroppedPerSecTopK { gridPos+: { w: 24 } },
             ], 12, 7
           )
         )
@@ -57,7 +57,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                       panels.diskUsage { gridPos+: { w: 12, h: 8 } },
                       g.panel.row.new('Network'),
                       panels.networkUsagePerSec { gridPos+: { w: 12, h: 8 } },
-                      panels.networkErrorsPerSec { gridPos+: { w: 12, h: 8 } },
+                      panels.networkErrorsAndDroppedPerSec { gridPos+: { w: 12, h: 8 } },
                     ], 6, 2
                   )
                 )
@@ -92,7 +92,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                g.util.grid.wrapPanels(
                  [
                    g.panel.row.new('Disk'),
-                   panels.diskUsagePercent,
+                   panels.diskFreeTs,
                    panels.diskUsage,
                    panels.diskIOBytesPerSec,
                    panels.diskIOps,
