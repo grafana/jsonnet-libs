@@ -19,7 +19,7 @@ and the following alerts:
 
 ## InfluxDB cluster overview
 
-The InfluxDB cluster overview dashboard provides details on performance of the cluster and highlights top instances. The dashboard covers all available aspects of InfluxDB performance and integration health, including golang performance, query/request load, and task scheduler activity.
+The InfluxDB cluster overview dashboard provides details on the cluster's performance and highlights top instances. The dashboard covers all available aspects of InfluxDB performance and integration health, including Golang performance, query/request load, and task scheduler activity.
 
 ![First screenshot of the InfluxDB cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/influxdb/screenshots/influxdb_cluster_overview_1.png)
 ![Second screenshot of the InfluxDB cluster overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/influxdb/screenshots/influxdb_cluster_overview_2.png)
@@ -27,7 +27,7 @@ The InfluxDB cluster overview dashboard provides details on performance of the c
 
 ## InfluxDB instance overview
 
-The InfluxDB instance overview dashboard provides details on one or more instances, including instance configuration stats, golang performance, query/request load, and task scheduler activity.
+The InfluxDB instance overview dashboard provides details on one or more instances, including instance configuration stats, Golang performance, query/request load, and task scheduler activity.
 
 ![First screenshot of the InfluxDB instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/influxdb/screenshots/influxdb_instance_overview_1.png)
 ![Second screenshot of the InfluxDB instance overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/influxdb/screenshots/influxdb_instance_overview_2.png)
@@ -36,11 +36,11 @@ The InfluxDB instance overview dashboard provides details on one or more instanc
 
 ## InfluxDB logs overview
 
-The InfluxDB logs overview dashboard allows users to view incoming system logs. The dashboards also allows users to filter logs based on level, service, engine, and custom regex.
+The InfluxDB logs overview dashboard allows users to view incoming InfluxDB logs. The dashboard also allows users to filter logs based on level, service, engine, and custom regex.
 
 ![First screenshot of the InfluxDB logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/influxdb/screenshots/influxdb_logs_overview.png)
 
-InfluxDB system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+InfluxDB system logs are enabled by default in the `config.libsonnet` and can be enabled by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -50,7 +50,7 @@ InfluxDB system logs are enabled by default in the `config.libsonnet` and can be
 }
 ```
 
-In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance`, `job`, and `influxdb_cluster` labels onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+For the selectors to properly work for InfluxDB logs ingested into your logs datasource, please also include the matching `instance`, `job`, and `influxdb_cluster` labels in the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) to match the labels for ingested metrics.
 
 ```yaml
 scrape_configs:
@@ -76,7 +76,7 @@ scrape_configs:
 ## Alerts overview
 
 - InfluxDBWarningTaskSchedulerHighFailureRate: Automated data processing tasks are failing at a high rate.
-- InfluxDBCriticalTaskSchedulerHighFailureRate: Automated data processing tasks are failing at a high rate.
+- InfluxDBCriticalTaskSchedulerHighFailureRate: Automated data processing tasks are failing at a critical rate.
 - InfluxDBHighBusyWorkerPercentage: There is a high percentage of busy workers.
 - InfluxDBHighHeapMemoryUsage: There is a high amount of heap memory being used.
 - InfluxDBHighAverageAPIRequestLatency: Average API request latency is too high. High latency will negatively affect system performance, degrading data availability and precision.

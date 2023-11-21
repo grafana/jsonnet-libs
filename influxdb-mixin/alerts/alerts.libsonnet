@@ -32,7 +32,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'Automated data processing tasks are failing at a high rate.',
+              summary: 'Automated data processing tasks are failing at a critical rate.',
               description:
                 (
                   'Task scheduler task executions for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} are failing at a rate of {{ printf "%%.0f" $value }} percent, ' +
