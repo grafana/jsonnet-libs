@@ -828,7 +828,7 @@ local topInstancesByIQLQueryRatePanel(matcher) = {
           },
         ],
       },
-      unit: 'query/s',
+      unit: 'queries/s',
     },
     overrides: [],
   },

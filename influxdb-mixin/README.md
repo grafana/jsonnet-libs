@@ -40,7 +40,7 @@ The InfluxDB logs overview dashboard allows users to view incoming InfluxDB logs
 
 ![First screenshot of the InfluxDB logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/influxdb/screenshots/influxdb_logs_overview.png)
 
-InfluxDB system logs are enabled by default in the `config.libsonnet` and can be enabled by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+InfluxDB system logs are enabled by default in the `config.libsonnet` and can be disabled by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -112,7 +112,7 @@ go install github.com/google/go-jsonnet/cmd/jsonnetfmt@latest
 ```
 
 The files in `dashboards_out` need to be imported
-into your Grafana server. The exact details will be depending on your environment.
+into your Grafana server. The exact details will depend on your environment.
 
 `prometheus_alerts.yaml` needs to be imported into Prometheus.
 
