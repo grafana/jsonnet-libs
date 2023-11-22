@@ -134,7 +134,6 @@ local template = import 'grafonnet/template.libsonnet';
       {
         expr: 'sum by (status) (label_replace(rate(' + selector + '[$__rate_interval]), "status", "${1}xx", "envoy_response_code_class", "(.*)"))',
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: '{{status}}',
         refId: 'A',
         step: 10,

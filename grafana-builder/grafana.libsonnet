@@ -289,7 +289,6 @@
         legendLink: legendLink,
         expr: ql.q,
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: ql.l,
       }
       for ql in qsandls
@@ -305,7 +304,6 @@
         expr: query,
         format: 'time_series',
         instant: true,
-        intervalFactor: 2,
         refId: 'A',
       },
     ],
@@ -368,7 +366,6 @@
         expr: qs[i],
         format: 'table',
         instant: true,
-        intervalFactor: 2,
         legendFormat: '',
         refId: std.char(65 + i),
       }
@@ -445,7 +442,6 @@
               "status", "${1}", "%s", "([a-zA-Z]+)"))
           ||| % [selector, statusLabelName, statusLabelName],
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: '{{status}}',
         refId: 'A',
       },
@@ -458,21 +454,18 @@
       {
         expr: 'histogram_quantile(0.99, sum(rate(%s_bucket%s[$__rate_interval])) by (le)) * %s' % [metricName, selector, multiplier],
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: '99th Percentile',
         refId: 'A',
       },
       {
         expr: 'histogram_quantile(0.50, sum(rate(%s_bucket%s[$__rate_interval])) by (le)) * %s' % [metricName, selector, multiplier],
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: '50th Percentile',
         refId: 'B',
       },
       {
         expr: 'sum(rate(%s_sum%s[$__rate_interval])) * %s / sum(rate(%s_count%s[$__rate_interval]))' % [metricName, selector, multiplier, metricName, selector],
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: 'Average',
         refId: 'C',
       },
