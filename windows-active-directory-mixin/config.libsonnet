@@ -6,11 +6,10 @@
     dashboardRefresh: '1m',
     filterSelector: 'job=~"integrations/windows"',
     // alerts thresholds
-    alertsWarningHighReplicationIssues: 0,  // count
-    alertsWarningHighBindOperations: 20,  // %
-    alertsWarningHighPasswordChanges: 25,  // count
-    alertsCriticalMetricsDownJobName: 'integrations/windows',
-
+    alertsHighPendingReplicationOperations: 50,  // count
+    alertsHighReplicationSyncRequestFailures: 0,
+    alertsHighPasswordChanges: 25,
+    alertsMetricsDownJobName: 'integrations/windows',
     enableLokiLogs: true,
   },
 }

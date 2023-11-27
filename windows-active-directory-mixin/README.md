@@ -8,10 +8,10 @@ The Windows Active Directory mixin contains the following dashboards:
 - Windows Active Directory logs
 
 and the following alerts:
-- alertsCriticalHighReplicationIssues 
-- alertsWarningHighBindOperations
-- alertsWarningHighPasswordChanges
-- alertsCriticalMetricsDownJobName
+- WindowsActiveDirectoryHighPendingReplicationOperations
+- WindowsActiveDirectoryHighReplicationSyncRequestFailures
+- WindowsActiveDirectoryHighPasswordChange
+- WindowsActiveDirectoryMetricsDown
 
 ## Windows Active Directory overview
 
@@ -21,10 +21,10 @@ The Windows Active Directory overview dashboard provides details on integration 
 
 # Windows Active Directory logs
 
-The Windows Active Directory logs dashboard provides details on incoming system logs.
+The Windows Active Directory logs dashboard provides details on incoming Windows Active Directory event logs.
 ![Windows Active Directory logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/windows-active-directory/screenshots/windows_active_directory_logs.png)
 
-Windows Active Directory system logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+Windows Active Directory system logs are enabled by default in the `config.libsonnet` and can be disabled by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -34,7 +34,7 @@ Windows Active Directory system logs are enabled by default in the `config.libso
 }
 ```
 
-In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `instance` and `job` labels onto the [scrape configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+For the selectors to properly work with Windows Active Directory event logs ingested into your logs datasource, please also include the matching `instance` and `job` labels in the [scrape configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
 ```yaml
     scrape_configs:
@@ -45,10 +45,13 @@ In order for the selectors to properly work for system logs ingested into your l
         use_incoming_timestamp: true
         eventlog_name: 'Application'
         bookmark_path: "./bookmarks-app.xml"
+        labels:
+            job: integrations/windows
+            instance: "<your-instance-name>"
       relabel_configs:
         - source_labels: ['computer']
           target_label: 'agent_hostname'
-      pipeline_stages:
+    
         - json:
             expressions:
               source: source
@@ -56,15 +59,14 @@ In order for the selectors to properly work for system logs ingested into your l
         - labels:
             source:
             level:
-            job: "integrations/windows"
 ```
 
 ## Alerts overview
 
-- alertsCriticalHighReplicationIssues: There is a high number of replication issues. Replication issues can cause authentication failures, outdated information across domain controllers, and potentially data loss.
-- alertsWarningHighBindOperations: There is a high percentage of bind operations. This may indicate brute force attacks or configuration issues.
-- alertsWarningHighPasswordChanges: There is a high number of password changes. This may indicate unauthorized changes or attacks.
-- alertsCriticalMetricsDownJobName: Windows Active Directory metrics are down.
+- WindowsActiveDirectoryHighPendingReplicationOperations: There is a high number of pending replication operations in Active Directory. A high number of pending operations sustained over a period of time can indicate a problem with replication.
+- WindowsActiveDirectoryHighReplicationSyncRequestFailures: There are a number of replication synchronization request failures. These can cause authentication failures, outdated information being propagated across domain controllers, and potentially data loss or inconsistencies.'
+- WindowsActiveDirectoryHighPasswordChange: There is a high number of password changes. This may indicate unauthorized changes or attacks.
+- WindowsActiveDirectoryMetricsDown: Windows Active Directory metrics are down.
 
 Default thresholds can be configured in `config.libsonnet`.
 
@@ -72,10 +74,10 @@ Default thresholds can be configured in `config.libsonnet`.
 {
     _configs+:: {
     // alerts thresholds
-    alertsCriticalHighReplicationIssues: 5, // count
-    alertsWarningHighBindOperations: 20,  // %
-    alertsWarningHighPasswordChanges: 25,  // count
-    alertsCriticalMetricsDownJobName: 'integrations/windows-active-directory',
+    alertsHighPendingReplicationOperations: 50,  // count
+    alertsHighReplicationSyncRequestFailures: 0, // count
+    alertsHighPasswordChanges: 25, //count
+    alertsMetricsDownJobName: 'integrations/windows',
     }
 }
 ```
