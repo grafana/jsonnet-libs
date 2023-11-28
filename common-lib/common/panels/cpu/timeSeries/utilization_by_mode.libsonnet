@@ -17,6 +17,8 @@ base {
 
     + timeSeries.standardOptions.withUnit('percent')
     + timeSeries.fieldConfig.defaults.custom.withFillOpacity(80)
+    + timeSeries.standardOptions.withMax(100)
+    + timeSeries.standardOptions.withMin(0)
     + timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
     + timeSeries.standardOptions.withOverrides(
       [
