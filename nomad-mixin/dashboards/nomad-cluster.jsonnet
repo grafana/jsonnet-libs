@@ -32,9 +32,10 @@
         liveNow: false,
         panels: [
           {
+            collapsed: false,
             datasource: {
               type: 'prometheus',
-              uid: 'grafanacloud-prom',
+              uid: '$datasource',
             },
             gridPos: {
               h: 1,
@@ -43,11 +44,12 @@
               y: 0,
             },
             id: 24,
+            panels: [],
             targets: [
               {
                 datasource: {
                   type: 'prometheus',
-                  uid: 'grafanacloud-prom',
+                  uid: '$datasource',
                 },
                 refId: 'A',
               },
@@ -99,6 +101,8 @@
             links: [],
             maxDataPoints: 100,
             options: {
+              minVizHeight: 75,
+              minVizWidth: 75,
               orientation: 'horizontal',
               reduceOptions: {
                 calcs: [
@@ -111,7 +115,7 @@
               showThresholdMarkers: true,
               text: {},
             },
-            pluginVersion: '9.3.2',
+            pluginVersion: '10.2.1',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
@@ -174,6 +178,8 @@
             links: [],
             maxDataPoints: 100,
             options: {
+              minVizHeight: 75,
+              minVizWidth: 75,
               orientation: 'horizontal',
               reduceOptions: {
                 calcs: [
@@ -186,7 +192,7 @@
               showThresholdMarkers: true,
               text: {},
             },
-            pluginVersion: '9.3.2',
+            pluginVersion: '10.2.1',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
@@ -250,6 +256,8 @@
             links: [],
             maxDataPoints: 100,
             options: {
+              minVizHeight: 75,
+              minVizWidth: 75,
               orientation: 'horizontal',
               reduceOptions: {
                 calcs: [
@@ -262,7 +270,7 @@
               showThresholdMarkers: true,
               text: {},
             },
-            pluginVersion: '9.3.2',
+            pluginVersion: '10.2.1',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
@@ -293,6 +301,12 @@
                 },
                 custom: {
                   fillOpacity: 70,
+                  hideFrom: {
+                    legend: false,
+                    tooltip: false,
+                    viz: false,
+                  },
+                  insertNulls: false,
                   lineWidth: 1,
                   spanNulls: false,
                 },
@@ -406,9 +420,10 @@
             type: 'state-timeline',
           },
           {
+            collapsed: false,
             datasource: {
               type: 'prometheus',
-              uid: 'grafanacloud-prom',
+              uid: '$datasource',
             },
             gridPos: {
               h: 1,
@@ -417,11 +432,12 @@
               y: 6,
             },
             id: 2,
+            panels: [],
             targets: [
               {
                 datasource: {
                   type: 'prometheus',
-                  uid: 'grafanacloud-prom',
+                  uid: '$datasource',
                 },
                 refId: 'A',
               },
@@ -480,8 +496,9 @@
               },
               text: {},
               textMode: 'auto',
+              wideLayout: true,
             },
-            pluginVersion: '9.3.2',
+            pluginVersion: '10.2.1',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
@@ -543,6 +560,8 @@
             links: [],
             maxDataPoints: 100,
             options: {
+              minVizHeight: 75,
+              minVizWidth: 75,
               orientation: 'horizontal',
               reduceOptions: {
                 calcs: [
@@ -555,7 +574,7 @@
               showThresholdMarkers: true,
               text: {},
             },
-            pluginVersion: '9.3.2',
+            pluginVersion: '10.2.1',
             repeat: 'instance',
             repeatDirection: 'v',
             targets: [
@@ -575,56 +594,88 @@
             type: 'gauge',
           },
           {
-            aliasColors: {},
-            bars: false,
-            dashLength: 10,
-            dashes: false,
             datasource: {
               uid: '$datasource',
             },
             fieldConfig: {
               defaults: {
+                color: {
+                  mode: 'palette-classic',
+                },
+                custom: {
+                  axisBorderShow: false,
+                  axisCenteredZero: false,
+                  axisColorMode: 'text',
+                  axisLabel: '',
+                  axisPlacement: 'auto',
+                  barAlignment: 0,
+                  drawStyle: 'line',
+                  fillOpacity: 10,
+                  gradientMode: 'none',
+                  hideFrom: {
+                    legend: false,
+                    tooltip: false,
+                    viz: false,
+                  },
+                  insertNulls: false,
+                  lineInterpolation: 'linear',
+                  lineWidth: 1,
+                  pointSize: 5,
+                  scaleDistribution: {
+                    type: 'linear',
+                  },
+                  showPoints: 'never',
+                  spanNulls: false,
+                  stacking: {
+                    group: 'A',
+                    mode: 'none',
+                  },
+                  thresholdsStyle: {
+                    mode: 'off',
+                  },
+                },
                 links: [],
+                mappings: [],
+                thresholds: {
+                  mode: 'absolute',
+                  steps: [
+                    {
+                      color: 'green',
+                      value: null,
+                    },
+                    {
+                      color: 'red',
+                      value: 80,
+                    },
+                  ],
+                },
+                unit: 'decbytes',
               },
               overrides: [],
             },
-            fill: 1,
-            fillGradient: 0,
             gridPos: {
               h: 5,
               w: 5,
               x: 9,
               y: 7,
             },
-            hiddenSeries: false,
             id: 11,
-            legend: {
-              avg: false,
-              current: false,
-              max: false,
-              min: false,
-              show: true,
-              total: false,
-              values: false,
-            },
-            lines: true,
-            linewidth: 1,
             links: [],
-            nullPointMode: 'null',
             options: {
-              alertThreshold: true,
+              legend: {
+                calcs: [],
+                displayMode: 'list',
+                placement: 'bottom',
+                showLegend: true,
+              },
+              tooltip: {
+                mode: 'multi',
+                sort: 'none',
+              },
             },
-            percentage: false,
-            pluginVersion: '9.3.2',
-            pointradius: 5,
-            points: false,
-            renderer: 'flot',
+            pluginVersion: '10.2.1',
             repeat: 'instance',
             repeatDirection: 'v',
-            seriesOverrides: [],
-            spaceLength: 10,
-            stack: false,
-            steppedLine: false,
             targets: [
               {
                 datasource: {
@@ -672,87 +723,93 @@
                 refId: 'D',
               },
             ],
-            thresholds: [],
-            timeRegions: [],
             title: 'Memory',
-            tooltip: {
-              shared: true,
-              sort: 0,
-              value_type: 'individual',
-            },
-            type: 'graph',
-            xaxis: {
-              mode: 'time',
-              show: true,
-              values: [],
-            },
-            yaxes: [
-              {
-                format: 'decbytes',
-                logBase: 1,
-                show: true,
-              },
-              {
-                format: 'short',
-                logBase: 1,
-                show: true,
-              },
-            ],
-            yaxis: {
-              align: false,
-            },
+            type: 'timeseries',
           },
           {
-            aliasColors: {},
-            bars: false,
-            dashLength: 10,
-            dashes: false,
             datasource: {
               uid: '$datasource',
             },
             fieldConfig: {
               defaults: {
+                color: {
+                  mode: 'palette-classic',
+                },
+                custom: {
+                  axisBorderShow: false,
+                  axisCenteredZero: false,
+                  axisColorMode: 'text',
+                  axisLabel: '',
+                  axisPlacement: 'auto',
+                  barAlignment: 0,
+                  drawStyle: 'line',
+                  fillOpacity: 10,
+                  gradientMode: 'none',
+                  hideFrom: {
+                    legend: false,
+                    tooltip: false,
+                    viz: false,
+                  },
+                  insertNulls: false,
+                  lineInterpolation: 'linear',
+                  lineWidth: 1,
+                  pointSize: 5,
+                  scaleDistribution: {
+                    type: 'linear',
+                  },
+                  showPoints: 'never',
+                  spanNulls: false,
+                  stacking: {
+                    group: 'A',
+                    mode: 'none',
+                  },
+                  thresholdsStyle: {
+                    mode: 'off',
+                  },
+                },
+                decimals: 0,
                 links: [],
+                mappings: [],
+                thresholds: {
+                  mode: 'absolute',
+                  steps: [
+                    {
+                      color: 'green',
+                      value: null,
+                    },
+                    {
+                      color: 'red',
+                      value: 80,
+                    },
+                  ],
+                },
+                unit: 'decbytes',
               },
               overrides: [],
             },
-            fill: 1,
-            fillGradient: 0,
             gridPos: {
               h: 5,
               w: 5,
               x: 14,
               y: 7,
             },
-            hiddenSeries: false,
             id: 13,
-            legend: {
-              avg: false,
-              current: false,
-              max: false,
-              min: false,
-              show: true,
-              total: false,
-              values: false,
-            },
-            lines: true,
-            linewidth: 1,
             links: [],
-            nullPointMode: 'null',
             options: {
-              alertThreshold: true,
+              legend: {
+                calcs: [],
+                displayMode: 'list',
+                placement: 'bottom',
+                showLegend: true,
+              },
+              tooltip: {
+                mode: 'multi',
+                sort: 'none',
+              },
             },
-            percentage: false,
-            pluginVersion: '9.3.2',
-            pointradius: 5,
-            points: false,
-            renderer: 'flot',
+            pluginVersion: '10.2.1',
             repeat: 'instance',
             repeatDirection: 'v',
-            seriesOverrides: [],
-            spaceLength: 10,
-            stack: false,
-            steppedLine: false,
             targets: [
               {
                 datasource: {
@@ -777,88 +834,92 @@
                 refId: 'A',
               },
             ],
-            thresholds: [],
-            timeRegions: [],
             title: 'Disk usage',
-            tooltip: {
-              shared: true,
-              sort: 0,
-              value_type: 'individual',
-            },
-            type: 'graph',
-            xaxis: {
-              mode: 'time',
-              show: true,
-              values: [],
-            },
-            yaxes: [
-              {
-                decimals: 0,
-                format: 'decbytes',
-                logBase: 1,
-                show: true,
-              },
-              {
-                format: 'decbytes',
-                logBase: 1,
-                show: false,
-              },
-            ],
-            yaxis: {
-              align: false,
-            },
+            type: 'timeseries',
           },
           {
-            aliasColors: {},
-            bars: false,
-            dashLength: 10,
-            dashes: false,
             datasource: {
               uid: '$datasource',
             },
             fieldConfig: {
               defaults: {
+                color: {
+                  mode: 'palette-classic',
+                },
+                custom: {
+                  axisBorderShow: false,
+                  axisCenteredZero: false,
+                  axisColorMode: 'text',
+                  axisLabel: '',
+                  axisPlacement: 'auto',
+                  barAlignment: 0,
+                  drawStyle: 'line',
+                  fillOpacity: 10,
+                  gradientMode: 'none',
+                  hideFrom: {
+                    legend: false,
+                    tooltip: false,
+                    viz: false,
+                  },
+                  insertNulls: false,
+                  lineInterpolation: 'linear',
+                  lineWidth: 1,
+                  pointSize: 5,
+                  scaleDistribution: {
+                    type: 'linear',
+                  },
+                  showPoints: 'never',
+                  spanNulls: false,
+                  stacking: {
+                    group: 'A',
+                    mode: 'none',
+                  },
+                  thresholdsStyle: {
+                    mode: 'off',
+                  },
+                },
                 links: [],
+                mappings: [],
+                thresholds: {
+                  mode: 'absolute',
+                  steps: [
+                    {
+                      color: 'green',
+                      value: null,
+                    },
+                    {
+                      color: 'red',
+                      value: 80,
+                    },
+                  ],
+                },
+                unit: 'percent',
               },
               overrides: [],
             },
-            fill: 1,
-            fillGradient: 0,
             gridPos: {
               h: 5,
               w: 5,
               x: 19,
               y: 7,
             },
-            hiddenSeries: false,
             id: 15,
-            legend: {
-              avg: false,
-              current: false,
-              max: false,
-              min: false,
-              show: true,
-              total: false,
-              values: false,
-            },
-            lines: true,
-            linewidth: 1,
             links: [],
-            nullPointMode: 'null',
             options: {
-              alertThreshold: true,
+              legend: {
+                calcs: [],
+                displayMode: 'list',
+                placement: 'bottom',
+                showLegend: true,
+              },
+              tooltip: {
+                mode: 'multi',
+                sort: 'none',
+              },
             },
-            percentage: false,
-            pluginVersion: '9.3.2',
-            pointradius: 5,
-            points: false,
-            renderer: 'flot',
+            pluginVersion: '10.2.1',
             repeat: 'instance',
             repeatDirection: 'v',
-            seriesOverrides: [],
-            spaceLength: 10,
-            stack: false,
-            steppedLine: false,
             targets: [
               {
                 datasource: {
@@ -872,35 +933,8 @@
                 refId: 'A',
               },
             ],
-            thresholds: [],
-            timeRegions: [],
             title: 'Disk inodes',
-            tooltip: {
-              shared: true,
-              sort: 0,
-              value_type: 'individual',
-            },
-            type: 'graph',
-            xaxis: {
-              mode: 'time',
-              show: true,
-              values: [],
-            },
-            yaxes: [
-              {
-                format: 'percent',
-                logBase: 1,
-                show: true,
-              },
-              {
-                format: 'short',
-                logBase: 1,
-                show: true,
-              },
-            ],
-            yaxis: {
-              align: false,
-            },
+            type: 'timeseries',
           },
         ],
         refresh: '30s',
@@ -914,12 +948,12 @@
             {
               current: {
                 selected: false,
-                text: 'grafanacloud-k3d-prom',
-                value: 'grafanacloud-k3d-prom',
+                text: 'default',
+                value: 'default',
               },
               hide: 0,
               includeAll: false,
-              label: 'Data Source',
+              label: 'Data source',
               multi: false,
               name: 'datasource',
               options: [],
@@ -943,7 +977,7 @@
               hide: 0,
               includeAll: true,
               allValue: '.+',
-              label: 'job',
+              label: 'Job',
               multi: true,
               name: 'job',
               options: [],
@@ -1002,7 +1036,7 @@
               hide: 0,
               includeAll: true,
               allValue: '.+',
-              label: 'instance',
+              label: 'Instance',
               multi: true,
               name: 'instance',
               options: [],

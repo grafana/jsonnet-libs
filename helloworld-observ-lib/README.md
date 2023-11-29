@@ -76,22 +76,16 @@ jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
 
 ## Pros of using modular observabilty format
 
-- Uses (jsonnet)[https://jsonnet.org/learning/tutorial.html], jsonnet-bundler, and grafonnet[https://github.com/grafana/grafonnet]
+- Uses [jsonnet](https://jsonnet.org/learning/tutorial.html), jsonnet-bundler, and [grafonnet](https://github.com/grafana/grafonnet)
 - Highly customizable and flexible:
 
-Any object like `panel`, `target` (query) can be easily referenced by key and then overriden before output of the lib is provided by using jsonnet (patching)[https://tanka.dev/tutorial/environments#patching] technique:
+Any object like `panel`, `target` (query) can be easily referenced by key and then overriden before output of the lib is provided by using jsonnet [patching](https://tanka.dev/tutorial/environments#patching) technique:
 
 ```jsonnet
 local helloworldlib = import './main.libsonnet';
 
 local helloworld =
-  helloworldlib.new(
-    filteringSelector='job="integrations/helloworld"',
-    uid='myhelloworld',
-    groupLabels=['environment', 'cluster'],
-    instanceLabels=['host'],
-  )
-  + 
+  helloworldlib.new() + 
   {
     grafana+: {
       panels+: {
@@ -117,11 +111,42 @@ You can use lib to fill in [monitoring-mixin](https://monitoring.mixins.dev/) st
 local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
 
 local helloworld =
-  helloworldlib.new(
-    filteringSelector='job="integrations/helloworld"',
-    uid='myhelloworld',
-    groupLabels=['environment', 'cluster'],
-    instanceLabels=['host'],
+  helloworldlib.new();
+
+// populate monitoring-mixin:
+{
+  grafanaDashboards+:: helloworld.grafana.dashboards,
+  prometheusAlerts+:: helloworld.prometheus.alerts,
+  prometheusRules+:: helloworld.prometheus.recordingRules,
+}
+```
+
+### Example 2: Monitoring-mixin example with custom config
+
+
+Any modular library should include as mandator configuration paramaters:
+- `filteringSelector` - Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
+- `groupLabels` - one or more labels that can be used to identify 'group' of instances. In simple cases, can be 'job' or 'cluster'.
+- `instanceLabels` - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
+- `uid` - UID to prefix all dashboards original uids
+- `dashboardNamePrefix` - Use as prefix for all Dashboards and (optional) rule groups
+
+By changing those you can install same mixin two or more times into same Grafana/Prometheus, or import them into other mixins, without any potential problem of conflicting dashboard ids or intersecting PromQL queries:
+
+First:
+
+```
+local helloworldlib = import './main.libsonnet';
+
+local helloworld =
+  helloworldlib.new()
+  + helloworldlib.withConfigMixin(
+    {
+      filteringSelector: 'job=~"integrations/first"',
+      uid: 'firsthelloworld',
+      groupLabels: ['environment', 'cluster', 'job'],
+      instanceLabels: ['instance'],
+    }
   );
 
 // populate monitoring-mixin:
@@ -132,23 +157,43 @@ local helloworld =
 }
 ```
 
-### Example 2: Changing specific panel before rendering dashboards
+Second:
 
-We can point to any object (i.e grafana.panels.panel1) and modify it by using (jsonnnet mixins)[https://jsonnet.org/learning/tutorial.html].
+```
+local helloworldlib = import './main.libsonnet';
 
-For example, let's modify panel's default draw style to bars by mutating it with (grafonnet)[https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-fieldconfigdefaultscustomwithdrawstyle]
+local helloworld =
+  helloworldlib.new()
+  + helloworldlib.withConfigMixin(
+    {
+      filteringSelector: 'job=~"integrations/second"',
+      uid: 'secondhelloworld',
+      groupLabels: ['environment', 'cluster', 'job'],
+      instanceLabels: ['instance'],
+    }
+  );
+
+// populate monitoring-mixin:
+{
+  grafanaDashboards+:: helloworld.grafana.dashboards,
+  prometheusAlerts+:: helloworld.prometheus.alerts,
+  prometheusRules+:: helloworld.prometheus.recordingRules,
+}
+```
+
+
+### Example 3: Changing specific panel before rendering dashboards
+
+We can point to any object (i.e grafana.panels.panel1) and modify it by using [jsonnnet mixins](https://jsonnet.org/learning/tutorial.html).
+
+For example, let's modify panel's default draw style to bars by mutating it with [grafonnet](https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-fieldconfigdefaultscustomwithdrawstyle):
 
 ```
 local g = import './g.libsonnet';
 local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
 
 local helloworld =
-  helloworldlib.new(
-    filteringSelector='job="integrations/helloworld"',
-    uid='myhelloworld',
-    groupLabels=['environment', 'cluster'],
-    instanceLabels=['host'],
-  )
+  helloworldlib.new()
   + {
     grafana+: {
       panels+: {
@@ -167,7 +212,7 @@ local helloworld =
 
 ```
 
-### Example 3: Optional logs collection
+### Example 4: Optional logs collection
 
 Grafana Loki datasource is used to populate logs dashboard and also for quering annotations.
 
@@ -177,12 +222,7 @@ To opt-out, you can set `enableLokiLogs: false` in config:
 local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
 
 local helloworld =
-  helloworldlib.new(
-    filteringSelector='job="integrations/helloworld"',
-    uid='myhelloworld',
-    groupLabels=['environment', 'cluster'],
-    instanceLabels=['host'],
-  )
+  helloworldlib.new()
   + helloworldlib.withConfigMixin(
     {
       // disable loki logs
@@ -202,5 +242,14 @@ local helloworld =
 
 To speed up developing observability libs as-code, we recommend to work in the following dev enviroment:
 
-- Setup Vscode with [Jsonnet Language Server][https://marketplace.visualstudio.com/items?itemName=Grafana.vscode-jsonnet]
+- Setup Vscode with [Jsonnet Language Server](https://marketplace.visualstudio.com/items?itemName=Grafana.vscode-jsonnet)
 - Setup format on save in vscode to lint jsonnet automatically.
+- use [grizzly](https://github.com/grafana/grizzly):
+  - `export GRAFANA_URL=http://localhost:3000`
+  - `grr apply -t "Dashboard/*" mixin.libsonnet` or `grr watch -t "Dashboard/*" . mixin.libsonnet`
+
+## What is generated from this example
+
+![Dashboard 1](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 1")
+![Dashboard 2](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 2")
+![Dashboard 3](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 3")
