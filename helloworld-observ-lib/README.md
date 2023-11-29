@@ -247,3 +247,9 @@ To speed up developing observability libs as-code, we recommend to work in the f
 - use [grizzly](https://github.com/grafana/grizzly):
   - `export GRAFANA_URL=http://localhost:3000`
   - `grr apply -t "Dashboard/*" mixin.libsonnet` or `grr watch -t "Dashboard/*" . mixin.libsonnet`
+
+## What is generated from this example
+
+![Dashboard 1](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 1")
+![Dashboard 2](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 2")
+![Dashboard 3](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 3")
