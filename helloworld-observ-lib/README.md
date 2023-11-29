@@ -76,10 +76,10 @@ jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
 
 ## Pros of using modular observabilty format
 
-- Uses (jsonnet)[https://jsonnet.org/learning/tutorial.html], jsonnet-bundler, and grafonnet[https://github.com/grafana/grafonnet]
+- Uses [jsonnet](https://jsonnet.org/learning/tutorial.html), jsonnet-bundler, and [grafonnet](https://github.com/grafana/grafonnet)
 - Highly customizable and flexible:
 
-Any object like `panel`, `target` (query) can be easily referenced by key and then overriden before output of the lib is provided by using jsonnet (patching)[https://tanka.dev/tutorial/environments#patching] technique:
+Any object like `panel`, `target` (query) can be easily referenced by key and then overriden before output of the lib is provided by using jsonnet [patching](https://tanka.dev/tutorial/environments#patching) technique:
 
 ```jsonnet
 local helloworldlib = import './main.libsonnet';
@@ -184,9 +184,9 @@ local helloworld =
 
 ### Example 3: Changing specific panel before rendering dashboards
 
-We can point to any object (i.e grafana.panels.panel1) and modify it by using (jsonnnet mixins)[https://jsonnet.org/learning/tutorial.html].
+We can point to any object (i.e grafana.panels.panel1) and modify it by using [jsonnnet mixins](https://jsonnet.org/learning/tutorial.html).
 
-For example, let's modify panel's default draw style to bars by mutating it with (grafonnet)[https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-fieldconfigdefaultscustomwithdrawstyle]
+For example, let's modify panel's default draw style to bars by mutating it with [grafonnet](https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-fieldconfigdefaultscustomwithdrawstyle):
 
 ```
 local g = import './g.libsonnet';
@@ -242,5 +242,8 @@ local helloworld =
 
 To speed up developing observability libs as-code, we recommend to work in the following dev enviroment:
 
-- Setup Vscode with [Jsonnet Language Server][https://marketplace.visualstudio.com/items?itemName=Grafana.vscode-jsonnet]
+- Setup Vscode with [Jsonnet Language Server](https://marketplace.visualstudio.com/items?itemName=Grafana.vscode-jsonnet)
 - Setup format on save in vscode to lint jsonnet automatically.
+- use [grizzly](https://github.com/grafana/grizzly):
+  - `export GRAFANA_URL=http://localhost:3000`
+  - `grr apply -t "Dashboard/*" mixin.libsonnet` or `grr watch -t "Dashboard/*" . mixin.libsonnet`
