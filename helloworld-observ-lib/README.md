@@ -85,13 +85,7 @@ Any object like `panel`, `target` (query) can be easily referenced by key and th
 local helloworldlib = import './main.libsonnet';
 
 local helloworld =
-  helloworldlib.new(
-    filteringSelector='job="integrations/helloworld"',
-    uid='myhelloworld',
-    groupLabels=['environment', 'cluster'],
-    instanceLabels=['host'],
-  )
-  + 
+  helloworldlib.new() + 
   {
     grafana+: {
       panels+: {
@@ -117,11 +111,42 @@ You can use lib to fill in [monitoring-mixin](https://monitoring.mixins.dev/) st
 local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
 
 local helloworld =
-  helloworldlib.new(
-    filteringSelector='job="integrations/helloworld"',
-    uid='myhelloworld',
-    groupLabels=['environment', 'cluster'],
-    instanceLabels=['host'],
+  helloworldlib.new();
+
+// populate monitoring-mixin:
+{
+  grafanaDashboards+:: helloworld.grafana.dashboards,
+  prometheusAlerts+:: helloworld.prometheus.alerts,
+  prometheusRules+:: helloworld.prometheus.recordingRules,
+}
+```
+
+### Example 2: Monitoring-mixin example with custom config
+
+
+Any modular library should include as mandator configuration paramaters:
+- `filteringSelector` - Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
+- `groupLabels` - one or more labels that can be used to identify 'group' of instances. In simple cases, can be 'job' or 'cluster'.
+- `instanceLabels` - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
+- `uid` - UID to prefix all dashboards original uids
+- `dashboardNamePrefix` - Use as prefix for all Dashboards and (optional) rule groups
+
+By changing those you can install same mixin two or more times into same Grafana/Prometheus, or import them into other mixins, without any potential problem of conflicting dashboard ids or intersecting PromQL queries:
+
+First:
+
+```
+local helloworldlib = import './main.libsonnet';
+
+local helloworld =
+  helloworldlib.new()
+  + helloworldlib.withConfigMixin(
+    {
+      filteringSelector: 'job=~"integrations/first"',
+      uid: 'firsthelloworld',
+      groupLabels: ['environment', 'cluster', 'job'],
+      instanceLabels: ['instance'],
+    }
   );
 
 // populate monitoring-mixin:
@@ -132,7 +157,32 @@ local helloworld =
 }
 ```
 
-### Example 2: Changing specific panel before rendering dashboards
+Second:
+
+```
+local helloworldlib = import './main.libsonnet';
+
+local helloworld =
+  helloworldlib.new()
+  + helloworldlib.withConfigMixin(
+    {
+      filteringSelector: 'job=~"integrations/second"',
+      uid: 'secondhelloworld',
+      groupLabels: ['environment', 'cluster', 'job'],
+      instanceLabels: ['instance'],
+    }
+  );
+
+// populate monitoring-mixin:
+{
+  grafanaDashboards+:: helloworld.grafana.dashboards,
+  prometheusAlerts+:: helloworld.prometheus.alerts,
+  prometheusRules+:: helloworld.prometheus.recordingRules,
+}
+```
+
+
+### Example 3: Changing specific panel before rendering dashboards
 
 We can point to any object (i.e grafana.panels.panel1) and modify it by using (jsonnnet mixins)[https://jsonnet.org/learning/tutorial.html].
 
@@ -143,12 +193,7 @@ local g = import './g.libsonnet';
 local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
 
 local helloworld =
-  helloworldlib.new(
-    filteringSelector='job="integrations/helloworld"',
-    uid='myhelloworld',
-    groupLabels=['environment', 'cluster'],
-    instanceLabels=['host'],
-  )
+  helloworldlib.new()
   + {
     grafana+: {
       panels+: {
@@ -167,7 +212,7 @@ local helloworld =
 
 ```
 
-### Example 3: Optional logs collection
+### Example 4: Optional logs collection
 
 Grafana Loki datasource is used to populate logs dashboard and also for quering annotations.
 
@@ -177,12 +222,7 @@ To opt-out, you can set `enableLokiLogs: false` in config:
 local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
 
 local helloworld =
-  helloworldlib.new(
-    filteringSelector='job="integrations/helloworld"',
-    uid='myhelloworld',
-    groupLabels=['environment', 'cluster'],
-    instanceLabels=['host'],
-  )
+  helloworldlib.new()
   + helloworldlib.withConfigMixin(
     {
       // disable loki logs
