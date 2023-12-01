@@ -30,4 +30,7 @@ local g = import './g.libsonnet';
     table: import './panels/disk/table/main.libsonnet',
     stat: import './panels/disk/stat/main.libsonnet',
   },
+  hardware: {
+    timeSeries: import './panels/hardware/timeSeries/main.libsonnet',
+  },
 }
