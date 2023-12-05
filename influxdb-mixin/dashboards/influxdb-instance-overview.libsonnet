@@ -65,7 +65,7 @@ local bucketsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'influxdb_buckets_total{' + matcher + ', instance=~"$instance"}',
+      'sum by(job, influxdb_cluster) (influxdb_buckets_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -114,7 +114,7 @@ local usersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'influxdb_users_total{' + matcher + ', instance=~"$instance"}',
+      'sum by(job, influxdb_cluster) (influxdb_users_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -163,7 +163,7 @@ local replicationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'influxdb_replications_total{' + matcher + ', instance=~"$instance"}',
+      'sum by(job, influxdb_cluster) (influxdb_replications_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -212,7 +212,7 @@ local remotesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'influxdb_remotes_total{' + matcher + ', instance=~"$instance"}',
+      'sum by(job, influxdb_cluster) (influxdb_remotes_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -261,7 +261,7 @@ local scrapersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'influxdb_scrapers_total{' + matcher + ', instance=~"$instance"}',
+      'sum by(job, influxdb_cluster) (influxdb_scrapers_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -310,7 +310,7 @@ local dashboardsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'influxdb_dashboards_total{' + matcher + ', instance=~"$instance"}',
+      'sum by(job, influxdb_cluster) (influxdb_dashboards_total{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -359,7 +359,7 @@ local threadsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'go_threads{' + matcher + ', instance=~"$instance"}',
+      'sum by(job, influxdb_cluster) (go_threads{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -787,7 +787,7 @@ local httpAPIRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(' + matcher + ', instance, status) (rate(http_api_requests_total{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance, status) (rate(http_api_requests_total{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{status}}',
     ),
@@ -864,17 +864,17 @@ local activeQueriesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(' + matcher + ', instance) (qc_compiling_active{' + matcher + ', instance=~"$instance"})',
+      'sum by(job, influxdb_cluster, instance) (qc_compiling_active{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}} - compiling',
     ),
     prometheus.target(
-      'sum by(' + matcher + ', instance) (qc_queueing_active{' + matcher + ', instance=~"$instance"})',
+      'sum by(job, influxdb_cluster, instance) (qc_queueing_active{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}} - queueing',
     ),
     prometheus.target(
-      'sum by(' + matcher + ', instance) (qc_executing_active{' + matcher + ', instance=~"$instance"})',
+      'sum by(job, influxdb_cluster, instance) (qc_executing_active{' + matcher + ', instance=~"$instance"})',
       datasource=promDatasource,
       legendFormat='{{instance}} - executing',
     ),
@@ -952,12 +952,12 @@ local httpOperationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(' + matcher + ', instance, status) (rate(http_query_request_count{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance, status) (rate(http_query_request_count{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - query - {{status}}',
     ),
     prometheus.target(
-      'sum by(' + matcher + ', instance, status) (rate(http_write_request_count{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance, status) (rate(http_write_request_count{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - write - {{status}}',
     ),
@@ -1034,22 +1034,22 @@ local httpOperationDataPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(' + matcher + ', instance) (rate(http_query_request_bytes{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance) (rate(http_query_request_bytes{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - query request',
     ),
     prometheus.target(
-      'sum by(' + matcher + ', instance) (rate(http_query_response_bytes{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance) (rate(http_query_response_bytes{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - query response',
     ),
     prometheus.target(
-      'sum by(' + matcher + ', instance) (rate(http_write_request_bytes{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance) (rate(http_write_request_bytes{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - write request',
     ),
     prometheus.target(
-      'sum by(' + matcher + ', instance) (rate(http_write_response_bytes{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance) (rate(http_write_response_bytes{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - write response',
     ),
@@ -1130,7 +1130,7 @@ local iqlQueryRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(' + matcher + ', instance, result) (rate(influxql_service_requests_total{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance, result) (rate(influxql_service_requests_total{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{result}}',
     ),
@@ -1207,7 +1207,7 @@ local iqlQueryResponseTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(' + matcher + ', instance, result) (increase(influxql_service_executing_duration_seconds_sum{' + matcher + ', instance=~"$instance"}[$__interval:]))',
+      'sum by(job, influxdb_cluster, instance, result) (increase(influxql_service_executing_duration_seconds_sum{' + matcher + ', instance=~"$instance"}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{result}}',
       interval='1m',
