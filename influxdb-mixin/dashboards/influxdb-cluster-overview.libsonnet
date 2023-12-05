@@ -495,7 +495,7 @@ local httpAPIRequestDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'histogram_quantile(0.95, sum by(le, ' + matcher + ') (rate(http_api_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])))',
+      'histogram_quantile(0.95, sum by(le, job, influxdb_cluster) (rate(http_api_request_duration_seconds_bucket{' + matcher + '}[$__rate_interval])))',
       datasource=promDatasource,
       legendFormat='{{influxdb_cluster}}',
     ),
