@@ -89,7 +89,7 @@
               summary: 'Average API request latency is too high. High latency will negatively affect system performance, degrading data availability and precision.',
               description:
                 (
-                  'The average API request latency for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} is {{ printf "%%.0f" $value }} seconds, which is above the threshold of %(alertsWarningHighAverageAPIRequestLatency)s seconds.'
+                  'The average API request latency for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} is {{ printf "%%.2f" $value }} seconds, which is above the threshold of %(alertsWarningHighAverageAPIRequestLatency)s seconds.'
                 ) % $._config,
             },
           },
@@ -106,7 +106,7 @@
               summary: 'InfluxQL execution times are too slow. Slow query execution times will negatively affect system performance, degrading data availability and precision.',
               description:
                 (
-                  'The average InfluxQL query execution time for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} is {{ printf "%%.0f" $value }} seconds, ' +
+                  'The average InfluxQL query execution time for instance {{$labels.instance}} on cluster {{$labels.influxdb_cluster}} is {{ printf "%%.2f" $value }} seconds, ' +
                   'which is above the threshold of %(alertsWarningSlowAverageIQLExecutionTime)s seconds.'
                 ) % $._config,
             },

@@ -15,7 +15,7 @@
     alertsCriticalTaskSchedulerHighFailureRate: 50,  // %
     alertsWarningHighBusyWorkerPercentage: 80,  // %
     alertsWarningHighHeapMemoryUsage: 80,  // %
-    alertsWarningHighAverageAPIRequestLatency: 0.1,  // count
+    alertsWarningHighAverageAPIRequestLatency: 0.3,  // count
     alertsWarningSlowAverageIQLExecutionTime: 0.1,  // count
 
     enableLokiLogs: true,
