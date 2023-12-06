@@ -38,7 +38,7 @@ The InfluxDB instance overview dashboard provides details on one or more instanc
 
 The InfluxDB logs overview dashboard allows users to view incoming InfluxDB logs. The dashboard also allows users to filter logs based on level, service, engine, and custom regex.
 
-![First screenshot of the InfluxDB logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/influxdb/screenshots/influxdb_logs_overview.png)
+![Screenshot of the InfluxDB logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/influxdb/screenshots/influxdb_logs_overview.png)
 
 InfluxDB system logs are enabled by default in the `config.libsonnet` and can be disabled by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
