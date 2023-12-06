@@ -28,6 +28,18 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
               panels.diskIOutilPercentTopK { gridPos+: { w: 12 } },
               panels.diskUsagePercentTopK { gridPos+: { w: 12 } },
               panels.networkErrorsAndDroppedPerSecTopK { gridPos+: { w: 24 } },
+							panels.replicationPendingOperations { gridPos+: { w: 6, h: 3 } },
+                  panels.directoryServiceThreads { gridPos+: { w: 6, h: 3 } },
+                  panels.replicationPendingSynchronizations { gridPos+: { w: 12, h: 3 } },
+                  panels.ldapBindRequests { gridPos+: { w: 12 } },
+                  panels.ldapOperations { gridPos+: { w: 12 } },
+                  panels.bindOperationsOverview { gridPos+: { w: 24 } },
+                  panels.intrasiteReplicationTraffic { gridPos+: { w: 12 } },
+                  panels.intersiteReplicationTraffic { gridPos+: { w: 12 } },
+                  panels.inboundReplicationUpdates { gridPos+: { w: 24 } },
+                  panels.databaseOperationsOverview { gridPos+: { w: 12 } },
+                  panels.databaseOperations { gridPos+: { w: 12 } },
+
             ], 12, 7
           )
         )
@@ -142,7 +154,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
             },
           }.dashboards.logs,
       }
-    else {},
+      else {},
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(uid)
