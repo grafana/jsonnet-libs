@@ -1,0 +1,38 @@
+groups:
+    - name: Kubescape                                              
+      rules:
+        - alert: HighRiskScore                               
+          expr: kubescape_cluster_complianceScore > 40   
+          for: 10m                                               
+          labels:                                               
+            severity: critical
+          annotations:                                          
+            summary: 'High Risk Score.' 
+            description: 'Cluster has a high risk score according to Kubescape'
+        
+        - alert: ScannedHighSeverityResource                         
+          expr: kubescape_control_count_resources_failed{severity = "High"} > 2
+          for: 2m                                               
+          labels:                                               
+            severity: critical
+          annotations:                                          
+            summary: 'High Severity Resource Detected.' 
+            description: '{{ $labels.name }} has been detected with severity {{ $labels.severity }}. Check report at {{ $labels.link }}'
+        
+        - alert: ScannedMediumSeverityResource                         
+          expr: kubescape_control_count_resources_failed{severity = "Medium"} > 2
+          for: 2m                                               
+          labels:                                               
+            severity: warning
+          annotations:                                          
+            summary: 'Medium Severity Resource Detected.' 
+            description: '{{ $labels.name }} has been detected with severity {{ $labels.severity }}. Check report at {{ $labels.link }}'
+        
+        - alert: LowComplianceScore                         
+          expr: kubescape_framework_complianceScore < 50
+          for: 2m                                               
+          labels:                                               
+            severity: warning
+          annotations:                                        
+            summary: 'Low Compliance Score.' 
+            description: 'Low Compliance score on {{ $labels.name }} framework'

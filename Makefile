@@ -2,11 +2,11 @@ JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 2 --string-style s --comment-st
 SHELL := /bin/bash
 
 install-ci-deps:
-	go install github.com/google/go-jsonnet/cmd/jsonnet@v0.18.0
-	go install github.com/google/go-jsonnet/cmd/jsonnetfmt@v0.18.0
-	go install github.com/google/go-jsonnet/cmd/jsonnet-lint@v0.18.0
-	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@ae18e31161ea
-	go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v0.4.0
+	go install github.com/google/go-jsonnet/cmd/jsonnet@v0.20.0
+	go install github.com/google/go-jsonnet/cmd/jsonnetfmt@v0.20.0
+	go install github.com/google/go-jsonnet/cmd/jsonnet-lint@v0.20.0
+	go install github.com/monitoring-mixins/mixtool/cmd/mixtool@a9e78b0942a4186162bf170efde7b4b3167d31a4
+	go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@v0.5.1
 
 fmt:
 	@find . -name '*.libsonnet' -print -o -name '*.jsonnet' -print | \
@@ -24,7 +24,7 @@ lint-fmt:
 
 lint-mixins:
 	@RESULT=0; \
-	for d in $$(find . -name '*-mixin' -a -type d -print); do \
+	for d in $$(find . -maxdepth 1 -regex '.*-mixin\|.*-lib' -a -type d -print); do \
 		if [ -e "$$d/jsonnetfile.json" ]; then \
 			echo "Installing dependencies for $$d"; \
 			pushd "$$d" >/dev/null && jb install && popd >/dev/null; \

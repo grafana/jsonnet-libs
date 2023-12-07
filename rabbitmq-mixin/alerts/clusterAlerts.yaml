@@ -1,46 +1,44 @@
 groups:
-- name: ClusterAlerts
+- name: RabbitMQClusterAlerts
   rules:
   - alert: RabbitMQMemoryHigh
     expr: rabbitmq_process_resident_memory_bytes / rabbitmq_resident_memory_limit_bytes * 100 > 90
-    for: 2m
+    for: 5m
     labels:
       severity: 'warning'
     annotations:
-      title: 'Instance {{ $labels.instance }} using too much RAM Memory'
-      summary: 'RabbitMQ memory high usage is high.'
-      description: "A node is using more than 90% of allocated RAM\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      summary: 'RabbitMQ memory usage is high.'
+      description: "A node {{ $labels.instance }} is using more than 90% of allocated RAM."
 
   - alert: RabbitMQFileDescriptorsUsage
     expr: rabbitmq_process_open_fds / rabbitmq_process_max_fds * 100 > 90
-    for: 2m
+    for: 5m
     labels:
       severity: 'warning'
     annotations:
-      title: 'Instance {{ $labels.instance }} using too much file descriptors'
       summary: 'RabbitMQ file descriptors usage is high.'
-      description: 'A node is using more than 90% of file descriptors\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}'      
+      description: 'A node {{ $labels.instance }} is using more than 90% of file descriptors.'
   
   - alert: RabbitMQUnroutableMessages
     expr: increase(rabbitmq_channel_messages_unroutable_returned_total[1m]) > 0 or increase(rabbitmq_channel_messages_unroutable_dropped_total[1m]) > 0
-    for: 2m
+    for: 5m
     labels:
       severity: warning
     annotations:
       summary: 'A RabbitMQ queue has unroutable messages.'
-      description: "A queue has unroutable messages\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      description: "A queue has unroutable messages on {{ $labels.instance }}."
   
   - alert: RabbitMQNodeNotDistributed
     expr: erlang_vm_dist_node_state < 3
-    for: 0m
+    for: 2m
     labels:
       severity: critical
     annotations:
       summary: 'RabbitMQ node not distributed, link state is down.'
-      description: "Distribution link state is not 'up'\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      description: "Distribution link state is not 'up' on {{ $labels.instance }}."
   
   - alert: RabbitMQNodeDown
-    expr: sum by (rabbitmq_cluster) (rabbitmq_identity_info)
+    expr: sum by (rabbitmq_cluster) (rabbitmq_identity_info) < 3
     for: 0m
     labels:
       severity: critical

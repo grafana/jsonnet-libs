@@ -62,7 +62,7 @@
         rules: [
           {
             alert: 'CiliumOperatorExhaustedIpamIps',
-            expr: 'sum(cilium_operator_ipam_ips{type="available"}) >= 1',
+            expr: 'sum(cilium_operator_ipam_ips{type="available"}) <= 0',
             annotations: {
               summary: 'Cilium Operator has exhausted its IPAM IPs.',
               description: 'Cilium Operator {{$labels.pod}} has exhausted its IPAM IPs. This is a critical issue which may cause Pods to fail to be scheduled.\n\nThis may be caused by number of Pods being scheduled exceeding the you cloud platforms network limits or issues with Cilium rate limiting.',
@@ -84,6 +84,18 @@
               severity: 'warning',
             },
             'for': '5m',
+          },
+          {
+            alert: 'CiliumOperatorEniIpamErrors',
+            expr: 'sum(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) / count(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) > 0.0',
+            annotations: {
+              summary: 'Cilium Operator has high error rate while trying to create/attach ENIs for IPAM.',
+              description: 'Cilium Operator {{$labels.pod}} has high error rate while trying to create/attach ENIs for IPAM.\n\nThis may be caused by exceeding Node instance ENI/Address limts, as well as errors with Cilium Operators cloud configuration.',
+            },
+            labels: {
+              severity: 'critical',
+            },
+            'for': '10m',
           },
         ],
       },
@@ -121,7 +133,7 @@
         rules: [
           {
             alert: 'CiliumAgentNatTableFull',
-            expr: 'sum(rate(cilium_drop_count_total{reason="No mapping for NAT masquerade"}[1m])) by (pod)',
+            expr: 'sum(rate(cilium_drop_count_total{reason="No mapping for NAT masquerade"}[1m])) by (pod) > 0',
             annotations: {
               summary: 'Cilium Agent Pod is dropping packets due to "No mapping for NAT masquerade" errors.',
               description: 'Cilium Agent Pod {{$labels.pod}} is dropping packets due to "No mapping for NAT masquerade" errors. This likely means that the Cilium agents NAT table is full.\nThis is a potentially critical issue that can lead to connection issues for packets leaving the cluster network.\n\nSee: https://docs.cilium.io/en/v1.9/concepts/networking/masquerading/ for more info.',
@@ -155,7 +167,7 @@
         rules: [
           {
             alert: 'CiliumAgentConntrackTableFull',
-            expr: 'sum(rate(cilium_drop_count_total{reason="CT: Map insertion failed"}[5m])) by (pod)',
+            expr: 'sum(rate(cilium_drop_count_total{reason="CT: Map insertion failed"}[5m])) by (pod) > 0',
             annotations: {
               summary: 'Ciliums conntrack map is failing on new insertions on Agent Pod.',
               description: 'Ciliums conntrack map is failing on new insertions on agent Pod {{$labels.pod}}, this likely means that the conntrack BPF map is full. This is a potentially critical issue and may result in unexpected packet drops.\n\nIf this is firing, it is recommend to look at both CPU/memory resource utilization dashboards. As well as conntrack GC run dashboards for more details on what the issue is.',
@@ -185,7 +197,7 @@
         rules: [
           {
             alert: 'CiliumAgentHighDeniedRate',
-            expr: 'sum(rate(cilium_drop_count_total{reason="Policy denied"}[1m])) by (reason, pod)',
+            expr: 'sum(rate(cilium_drop_count_total{reason="Policy denied"}[1m])) by (reason, pod) > 0',
             annotations: {
               summary: 'Cilium Agent is experiencing a high drop rate due to policy rule denies.',
               description: 'Cilium Agent Pod {{$labels.pod}} is experiencing a high drop rate due to policy rule denies. This could mean that a network policy is not configured correctly, or that a Pod is sending unexpected network traffic',
@@ -193,7 +205,7 @@
             labels: {
               severity: 'info',
             },
-            'for': '5m',
+            'for': '10m',
           },
         ],
       },

@@ -2,15 +2,15 @@ local g = import 'grafana-builder/grafana.libsonnet';
 local template = import 'grafonnet/template.libsonnet';
 
 {
-  // Manually define the "instance" variable template in order to be able to change the "refresh" setting
-  // and customise the all value.
-  local instanceTemplate =
+  // Manually define the "job" variable template in order to be able to change values more cleanly
+  local jobTemplate =
     template.new(
-      name='instance',
+      name='job',
       datasource='$datasource',
-      query='label_values(envoy_server_uptime{job="$job"}, instance)',
-      label='Data Source',
-      allValues='.*',  // Make sure to always include all instances when "All" is selected.
+      query='label_values(envoy_server_uptime, job)',
+      label='job',
+      multi=true,
+      allValues='.+',  // Make sure to always include all instances when "All" is selected.
       current='',
       hide='',
       refresh=2,  // Refresh on time range change.
@@ -18,12 +18,30 @@ local template = import 'grafonnet/template.libsonnet';
       sort=1
     ),
 
+
+  // Manually define the "instance" variable template in order to be able to change the "refresh" setting
+  // and customise the all value.
+  local instanceTemplate =
+    template.new(
+      name='instance',
+      datasource='$datasource',
+      query='label_values(envoy_server_uptime{job="$job"}, instance)',
+      label='instance',
+      multi=true,
+      allValues='.+',  // Make sure to always include all instances when "All" is selected.
+      current='',
+      hide='',
+      refresh=2,  // Refresh on time range change.
+      includeAll=true,
+      sort=1
+    ),
+
+
   // Envoy metrics:
   // - HTTP: https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#statistics
   grafanaDashboards+:: {
     'envoy-overview.json':
       g.dashboard('Envoy Overview', std.md5('20210205-envoy'))
-      .addTemplate('job', 'envoy_server_uptime', 'job')
 
       // Hidden variables to be able to repeat panels for each upstream/downstream.
       .addMultiTemplate('envoy_cluster', 'envoy_cluster_version{job=~"$job",instance=~"$instance",envoy_cluster_name!="envoy-admin"}', 'envoy_cluster_name', 2)
@@ -33,14 +51,14 @@ local template = import 'grafonnet/template.libsonnet';
         g.row('Traffic')
         .addPanel(
           g.panel('Connections / sec') +
-          g.queryPanel('sum(rate(envoy_listener_downstream_cx_total{job=~"$job",instance=~"$instance"}[$__interval]))', 'Downstream / Ingress') +
-          g.queryPanel('sum(rate(envoy_cluster_upstream_cx_total{job=~"$job",instance=~"$instance"}[$__interval]))', 'Upstream / Egress') +
+          g.queryPanel('sum(rate(envoy_listener_downstream_cx_total{job=~"$job",instance=~"$instance"}[$__rate_interval]))', 'Downstream / Ingress') +
+          g.queryPanel('sum(rate(envoy_cluster_upstream_cx_total{job=~"$job",instance=~"$instance"}[$__rate_interval]))', 'Upstream / Egress') +
           { yaxes: g.yaxes('cps') }
         )
         .addPanel(
           g.panel('QPS') +
-          g.queryPanel('sum(rate(envoy_http_downstream_rq_total{job=~"$job",instance=~"$instance"}[$__interval]))', 'Downstream / Ingress') +
-          g.queryPanel('sum(rate(envoy_cluster_upstream_rq_total{job=~"$job",instance=~"$instance"}[$__interval]))', 'Upstream / Egress') +
+          g.queryPanel('sum(rate(envoy_http_downstream_rq_total{job=~"$job",instance=~"$instance"}[$__rate_interval]))', 'Downstream / Ingress') +
+          g.queryPanel('sum(rate(envoy_cluster_upstream_rq_total{job=~"$job",instance=~"$instance"}[$__rate_interval]))', 'Upstream / Egress') +
           { yaxes: g.yaxes('rps') }
         )
       )
@@ -58,7 +76,7 @@ local template = import 'grafonnet/template.libsonnet';
         )
         .addPanel(
           g.panel('Timeouts / sec') +
-          g.queryPanel('sum(rate(envoy_cluster_upstream_rq_timeout{envoy_cluster_name="$envoy_cluster",job=~"$job",instance=~"$instance"}[$__interval]))', 'Timeouts') +
+          g.queryPanel('sum(rate(envoy_cluster_upstream_rq_timeout{envoy_cluster_name="$envoy_cluster",job=~"$job",instance=~"$instance"}[$__rate_interval]))', 'Timeouts') +
           { yaxes: g.yaxes('rps') }
         )
         .addPanel(
@@ -84,7 +102,7 @@ local template = import 'grafonnet/template.libsonnet';
         )
         .addPanel(
           g.panel('Timeouts / sec') +
-          g.queryPanel('sum(rate(envoy_http_downstream_rq_timeout{envoy_http_conn_manager_prefix="$envoy_listener_filter",job=~"$job",instance=~"$instance"}[$__interval]))', 'Timeouts') +
+          g.queryPanel('sum(rate(envoy_http_downstream_rq_timeout{envoy_http_conn_manager_prefix="$envoy_listener_filter",job=~"$job",instance=~"$instance"}[$__rate_interval]))', 'Timeouts') +
           { yaxes: g.yaxes('rps') }
         )
         .addPanel(
@@ -97,7 +115,7 @@ local template = import 'grafonnet/template.libsonnet';
         { repeat: 'envoy_listener_filter' },
       ) + {
         templating+: {
-          list+: [instanceTemplate],
+          list+: [jobTemplate, instanceTemplate],
         },
       },
   },
@@ -114,9 +132,8 @@ local template = import 'grafonnet/template.libsonnet';
     },
     targets: [
       {
-        expr: 'sum by (status) (label_replace(rate(' + selector + '[$__interval]), "status", "${1}xx", "envoy_response_code_class", "(.*)"))',
+        expr: 'sum by (status) (label_replace(rate(' + selector + '[$__rate_interval]), "status", "${1}xx", "envoy_response_code_class", "(.*)"))',
         format: 'time_series',
-        intervalFactor: 2,
         legendFormat: '{{status}}',
         refId: 'A',
         step: 10,

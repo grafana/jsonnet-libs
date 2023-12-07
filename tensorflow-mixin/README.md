@@ -1,23 +1,23 @@
-# TensorFlow Mixin
+# TensorFlow Serving Mixin
 
-The TensorFlow mixin is a set of configurable Grafana dashboards and alerts based on the metrics available from an instance of TensorFlow.
+The TensorFlow Serving mixin is a set of configurable Grafana dashboards and alerts based on the metrics available from an instance of TensorFlow Serving.
 
-The TensorFlow mixin contains the following dashboards:
-- TensorFlow Overview
+The TensorFlow Serving mixin contains the following dashboards:
+- TensorFlow Serving Overview
 
-The TensorFlow mixin contains the following alerts:
+The TensorFlow Serving mixin contains the following alerts:
 
 - TensorFlowModelRequestHighErrorRate
 - TensorFlowHighBatchQueuingLatency
 
-## TensorFlow Overview
+## TensorFlow Serving Overview
 
-The TensorFlow Overview dashboard provides details on model runs, graph builds, graph runs, batch queue, and container logs. To get TensorFlow docker container logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and [provisioned for logs with your Grafana instance](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#docker_sd_config). In addition, a label needs to be created in the Promtail config to match the Prometheus `instance` label.
+The TensorFlow Serving Overview dashboard provides details on model runs, graph builds, graph runs, batch queue, and container logs. To get TensorFlow Serving docker container logs, [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and [provisioned for logs with your Grafana instance](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#docker_sd_config). In addition, a label needs to be created in the Promtail config to match the Prometheus `instance` label.
 
 ![First screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/tensorflow/screenshots/tensorflow_overview_1.png)
 ![Second screenshot of the overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/tensorflow/screenshots/tensorflow_overview_2.png)
 
-TensorFlow container logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+TensorFlow Serving container logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -31,8 +31,8 @@ TensorFlow container logs are enabled by default in the `config.libsonnet` and c
 
 | Alert                     | Description                                                                                                                                        |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| TensorFlowModelRequestHighErrorRate | The TensorFlow requests for a model have a large percentage of failures. Could be indicative that the model for the instance is experiencing serious problems. |
-| TensorFlowHighBatchQueuingLatency | The TensorFlow queued batches are spending a long time in the queue. Could be indicative of problems with the batch queuing for the instance. |
+| TensorFlowServingModelRequestHighErrorRate | The TensorFlow Serving requests for a model have a large percentage of failures. Could be indicative that the model for the instance is experiencing serious problems. |
+| TensorFlowServingHighBatchQueuingLatency | The TensorFlow Serving queued batches are spending a long time in the queue. Could be indicative of problems with the batch queuing for the instance. |
 
 ## Generating dashboards and alerts
 

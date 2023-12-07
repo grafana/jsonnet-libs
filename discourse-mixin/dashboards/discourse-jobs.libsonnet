@@ -306,13 +306,6 @@ local scheduledJobsPanel = {
     },
     overrides: [],
   },
-  gridPos: {
-    h: 7,
-    w: 12,
-    x: 0,
-    y: 6,
-  },
-  id: 10,
   options: {
     legend: {
       calcs: [],
@@ -391,13 +384,6 @@ local sidekiqJobsPanel = {
     },
     overrides: [],
   },
-  gridPos: {
-    h: 7,
-    w: 12,
-    x: 0,
-    y: 6,
-  },
-  id: 10,
   options: {
     legend: {
       calcs: [],
@@ -746,7 +732,7 @@ local skQueuedStat = {
             current='',
             refresh=2,
             includeAll=true,
-            multi=false,
+            multi=true,
             allValues='.+',
             sort=1
           ),
@@ -757,7 +743,7 @@ local skQueuedStat = {
             label='Job',
             refresh='time',
             includeAll=true,
-            multi=false,
+            multi=true,
             allValues='.+',
             sort=1
           ),

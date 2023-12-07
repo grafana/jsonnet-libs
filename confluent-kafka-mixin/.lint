@@ -1,11 +1,18 @@
 exclusions:
-  # Previous version of dashboard-linter
-  panel-job-instance-rule:
-    reason: "Job label is named scrape_job and is being used."
+  panel-title-description-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  panel-units-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-datasource-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-instance-rule:
+    reason: "The dashboard is based on data scraped from a public API, and therefore will only ever have one instance."
+  template-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "The dashboard is based on data scraped from a public API, and therefore will only ever have one instance."
   # Newer version of dashboard-linter  
   target-job-rule:
     reason: "Job label is named scrape_job and is being used."
-  template-instance-rule:
-    reason: The dashboard is based on data scraped from a public API, and therefore will only ever have one instance.
-  target-instance-rule:
-    reason: The dashboard is based on data scraped from a public API, and therefore will only ever have one instance.

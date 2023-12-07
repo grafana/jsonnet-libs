@@ -83,9 +83,11 @@ local container_template = grafana.template.new(
 local total_containers_panel =
   grafana.statPanel.new(
     'Total Containers',
+    description='Total number of running containers last seen by the exporter.',
     datasource='$prometheus_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull'
+    reducerFunction='lastNotNull',
+    unit='short',
   )
   .addTarget(
     grafana.prometheus.target(queries.total_containers)
@@ -94,9 +96,11 @@ local total_containers_panel =
 local total_images_panel =
   grafana.statPanel.new(
     'Total Images',
+    description='Total number of distinct images found across running containers',
     datasource='$prometheus_datasource',
     graphMode='none',
-    reducerFunction='lastNotNull'
+    reducerFunction='lastNotNull',
+    unit='short'
   )
   .addTarget(
     grafana.prometheus.target(queries.total_images)
@@ -105,12 +109,13 @@ local total_images_panel =
 local cpu_usage_panel =
   grafana.singlestat.new(
     'CPU Utilization by Containers',
+    description='Cumulative cpu time consumed in seconds.',
     format='percentunit',
     gaugeShow=true,
     thresholds='.80,.90',
     span=2,
     datasource='$prometheus_datasource',
-    gaugeMaxValue=1,
+    gaugeMaxValue=1
   )
   .addTarget(
     grafana.prometheus.target(queries.cpu_usage)
@@ -119,6 +124,7 @@ local cpu_usage_panel =
 local mem_reserved_panel =
   grafana.singlestat.new(
     'Memory Reserved by Containers',
+    description='Memory reserved by the containers on the machine.',
     format='percentunit',
     gaugeShow=true,
     thresholds='.80,.90',
@@ -133,6 +139,7 @@ local mem_reserved_panel =
 local mem_usage_panel =
   grafana.singlestat.new(
     'Memory Utilization by Containers',
+    description='Current memory usage in bytes, including all memory regardless of when it was accessed.',
     format='percentunit',
     gaugeShow=true,
     thresholds='.80,.90',
@@ -147,6 +154,7 @@ local mem_usage_panel =
 local cpu_by_container_panel =
   grafana.graphPanel.new(
     'CPU',
+    description='Cpu time consumed in seconds by container.',
     span=6,
     datasource='$prometheus_datasource',
   ) +
@@ -163,6 +171,7 @@ local cpu_by_container_panel =
 local mem_by_container_panel =
   grafana.graphPanel.new(
     'Memory',
+    description='Current memory usage in bytes, including all memory regardless of when it was accessed by container.',
     span=6,
     datasource='$prometheus_datasource',
   ) +
@@ -177,6 +186,7 @@ local mem_by_container_panel =
 local net_throughput_panel =
   grafana.graphPanel.new(
     'Bandwidth',
+    description='Cumulative count of bytes transmitted.',
     span=6,
     datasource='$prometheus_datasource',
   ) +
@@ -195,6 +205,7 @@ local net_throughput_panel =
 local tcp_socket_by_state_panel =
   grafana.graphPanel.new(
     'TCP Sockets By State',
+    description='TCP sockets on containers by state.',
     datasource='$prometheus_datasource',
     span=6,
   ) +

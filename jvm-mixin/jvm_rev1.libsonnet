@@ -80,10 +80,10 @@
           steppedLine: false,
           targets: [
             {
-              expr: 'jvm_memory_bytes_used{instance=~"$instance"}',
+              expr: 'jvm_memory_bytes_used{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
               interval: '',
-              intervalFactor: 5,
+
               legendFormat: '{{area}} memory [{{instance}}]',
               metric: 'jvm_memory_bytes_used',
               refId: 'A',
@@ -170,18 +170,18 @@
           steppedLine: false,
           targets: [
             {
-              expr: 'jvm_threads_current{instance=~"$instance"}',
+              expr: 'jvm_threads_current{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
-              intervalFactor: 5,
+
               legendFormat: 'current [{{instance}}]',
               metric: 'jvm_threads_current',
               refId: 'A',
               step: 10,
             },
             {
-              expr: 'jvm_threads_daemon{instance=~"$instance"}',
+              expr: 'jvm_threads_daemon{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
-              intervalFactor: 5,
+
               legendFormat: 'daemon [{{instance}}]',
               metric: 'jvm_threads_daemon',
               refId: 'B',
@@ -257,10 +257,10 @@
           steppedLine: false,
           targets: [
             {
-              expr: 'jvm_classes_loaded{instance=~"$instance"}',
+              expr: 'jvm_classes_loaded{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
               interval: '',
-              intervalFactor: 5,
+
               legendFormat: 'loaded [{{instance}}]',
               metric: 'jvm_classes_loaded',
               refId: 'A',
@@ -348,10 +348,10 @@
           steppedLine: false,
           targets: [
             {
-              expr: 'rate(jvm_gc_collection_seconds_sum{instance=~"$instance"}[$__rate_interval])',
+              expr: 'rate(jvm_gc_collection_seconds_sum{job=~"$job", instance=~"$instance"}[$__rate_interval])',
               format: 'time_series',
               interval: '',
-              intervalFactor: 5,
+
               legendFormat: '{{gc}} [{{instance}}]',
               metric: 'jvm_gc_collection_seconds_sum',
               refId: 'A',
@@ -426,10 +426,10 @@
           steppedLine: false,
           targets: [
             {
-              expr: 'jvm_gc_collection_seconds_count{instance=~"$instance"}',
+              expr: 'jvm_gc_collection_seconds_count{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
               interval: '',
-              intervalFactor: 5,
+
               legendFormat: '{{gc}} [{{instance}}]',
               metric: '',
               refId: 'A',
@@ -491,26 +491,6 @@
   templating: {
     list: [
       {
-        allValue: '',
-        current: {},
-        datasource: '${datasource}',
-        hide: 0,
-        includeAll: true,
-        label: 'Instance',
-        multi: true,
-        name: 'instance',
-        options: [],
-        query: 'label_values(instance)',
-        refresh: 1,
-        regex: '',
-        sort: 0,
-        tagValuesQuery: '',
-        tags: [],
-        tagsQuery: '',
-        type: 'query',
-        useTags: false,
-      },
-      {
         current: {},
         hide: 0,
         includeAll: false,
@@ -524,6 +504,46 @@
         regex: '',
         skipUrlSync: false,
         type: 'datasource',
+      },
+      {
+        allValue: '.+',
+        current: {},
+        datasource: '${datasource}',
+        hide: 0,
+        includeAll: true,
+        label: 'job',
+        multi: true,
+        name: 'job',
+        options: [],
+        query: 'label_values(jvm_memory_bytes_used,job)',
+        refresh: 1,
+        regex: '',
+        sort: 0,
+        tagValuesQuery: '',
+        tags: [],
+        tagsQuery: '',
+        type: 'query',
+        useTags: false,
+      },
+      {
+        allValue: '.+',
+        current: {},
+        datasource: '${datasource}',
+        hide: 0,
+        includeAll: true,
+        label: 'instance',
+        multi: true,
+        name: 'instance',
+        options: [],
+        query: 'label_values(jvm_memory_bytes_used{job=~"$job"},instance)',
+        refresh: 1,
+        regex: '',
+        sort: 0,
+        tagValuesQuery: '',
+        tags: [],
+        tagsQuery: '',
+        type: 'query',
+        useTags: false,
       },
     ],
   },

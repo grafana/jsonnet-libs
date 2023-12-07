@@ -3,14 +3,17 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local dashboardUid = 'clickhouse-overview';
-local matcher = 'job=~"$job", instance=~"$instance"';
+local promDatasourceName = 'prometheus_datasource';
+local getMatcher(cfg) = '%(clickhouseSelector)s' % cfg;
+local logExpr(cfg) = '%(logExpr)s' % cfg;
 
-local successfulQueriesPanel =
+local promDatasource = {
+  uid: '${%s}' % promDatasourceName,
+};
+
+local successfulQueriesPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: '${prometheus_datasource}',
-    },
+    datasource: promDatasource,
     description: 'Rate of successful queries per second',
     fieldConfig: {
       defaults: {
@@ -79,10 +82,7 @@ local successfulQueriesPanel =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_Query{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Query',
@@ -90,10 +90,7 @@ local successfulQueriesPanel =
         refId: 'A',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_SelectQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -102,10 +99,7 @@ local successfulQueriesPanel =
         refId: 'B',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_InsertQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -114,10 +108,7 @@ local successfulQueriesPanel =
         refId: 'C',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_AsyncInsertQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -130,12 +121,9 @@ local successfulQueriesPanel =
     type: 'timeseries',
   };
 
-local failedQueriesPanel =
+local failedQueriesPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: '${prometheus_datasource}',
-    },
+    datasource: promDatasource,
     description: 'Rate of failed queries per second',
     fieldConfig: {
       defaults: {
@@ -204,10 +192,7 @@ local failedQueriesPanel =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_FailedQuery{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Failed query',
@@ -215,10 +200,7 @@ local failedQueriesPanel =
         refId: 'A',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_FailedSelectQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -227,10 +209,7 @@ local failedQueriesPanel =
         refId: 'B',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_FailedInsertQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
@@ -243,12 +222,9 @@ local failedQueriesPanel =
     type: 'timeseries',
   };
 
-local rejectedInsertsPanel =
+local rejectedInsertsPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: '${prometheus_datasource}',
-    },
+    datasource: promDatasource,
     description: 'Number of rejected inserts per second',
     fieldConfig: {
       defaults: {
@@ -317,10 +293,7 @@ local rejectedInsertsPanel =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_RejectedInserts{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Rejected inserts',
@@ -332,12 +305,9 @@ local rejectedInsertsPanel =
     type: 'timeseries',
   };
 
-local memoryUsagePanel =
+local memoryUsagePanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: '${prometheus_datasource}',
-    },
+    datasource: promDatasource,
     description: 'Memory usage over time',
     fieldConfig: {
       defaults: {
@@ -406,10 +376,7 @@ local memoryUsagePanel =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_MemoryTracking{' + matcher + '}',
         legendFormat: 'Memory tracking',
@@ -421,13 +388,10 @@ local memoryUsagePanel =
     type: 'timeseries',
   };
 
-local memoryUsageGaugePanel =
+local memoryUsageGaugePanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: '${prometheus_datasource}',
-    },
-    description: 'Percentage of memory allocated by Clickhouse compared to OS total',
+    datasource: promDatasource,
+    description: 'Percentage of memory allocated by ClickHouse compared to OS total',
     fieldConfig: {
       defaults: {
         color: {
@@ -473,10 +437,7 @@ local memoryUsageGaugePanel =
     pluginVersion: '9.1.6',
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'code',
         expr: '(ClickHouseMetrics_MemoryTracking{' + matcher + '} / ClickHouseAsyncMetrics_OSMemoryTotal{' + matcher + '}) * 100',
         hide: false,
@@ -489,13 +450,10 @@ local memoryUsageGaugePanel =
     type: 'gauge',
   };
 
-local activeConnectionsPanel =
+local activeConnectionsPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: '${prometheus_datasource}',
-    },
-    description: 'Current number of connections to Clickhouse',
+    datasource: promDatasource,
+    description: 'Current number of connections to ClickHouse',
     fieldConfig: {
       defaults: {
         color: {
@@ -564,10 +522,7 @@ local activeConnectionsPanel =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_TCPConnection{' + matcher + '}',
         legendFormat: 'TCP connection',
@@ -575,10 +530,7 @@ local activeConnectionsPanel =
         refId: 'A',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_HTTPConnection{' + matcher + '}',
         hide: false,
@@ -587,10 +539,7 @@ local activeConnectionsPanel =
         refId: 'B',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_MySQLConnection{' + matcher + '}',
         hide: false,
@@ -599,10 +548,7 @@ local activeConnectionsPanel =
         refId: 'C',
       },
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'ClickHouseMetrics_PostgreSQLConnection{' + matcher + '}',
         hide: false,
@@ -615,12 +561,9 @@ local activeConnectionsPanel =
     type: 'timeseries',
   };
 
-local networkReceivedPanel =
+local networkReceivedPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: '${prometheus_datasource}',
-    },
+    datasource: promDatasource,
     description: 'Received network throughput',
     fieldConfig: {
       defaults: {
@@ -688,10 +631,7 @@ local networkReceivedPanel =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_NetworkReceiveBytes{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Network receive bytes',
@@ -703,12 +643,9 @@ local networkReceivedPanel =
     type: 'timeseries',
   };
 
-local networkTransmittedPanel =
+local networkTransmittedPanel(matcher) =
   {
-    datasource: {
-      type: 'prometheus',
-      uid: '${prometheus_datasource}',
-    },
+    datasource: promDatasource,
     description: 'Transmitted network throughput',
     fieldConfig: {
       defaults: {
@@ -776,10 +713,7 @@ local networkTransmittedPanel =
     },
     targets: [
       {
-        datasource: {
-          type: 'prometheus',
-          uid: '${prometheus_datasource}',
-        },
+        datasource: promDatasource,
         editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_NetworkSendBytes{' + matcher + '}[$__rate_interval])',
         legendFormat: 'Network send bytes',
@@ -791,7 +725,7 @@ local networkTransmittedPanel =
     type: 'timeseries',
   };
 
-local errorLogsPanel =
+local errorLogsPanel(cfg) =
   {
     datasource: {
       type: 'loki',
@@ -815,7 +749,7 @@ local errorLogsPanel =
           uid: '${loki_datasource}',
         },
         editorMode: 'builder',
-        expr: '{filename="/var/log/clickhouse-server/clickhouse-server.err.log", %s}' % matcher,
+        expr: logExpr(cfg.logExpression),
         legendFormat: '',
         queryType: 'range',
         refId: 'A',
@@ -829,7 +763,7 @@ local errorLogsPanel =
 
     'clickhouse-overview.json':
       dashboard.new(
-        'Clickhouse overview',
+        'ClickHouse overview',
         time_from='%s' % $._config.dashboardPeriod,
         editable=false,
         tags=($._config.dashboardTags),
@@ -840,82 +774,85 @@ local errorLogsPanel =
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
-        title='Other clickhouse dashboards',
+        title='Other ClickHouse dashboards',
         includeVars=true,
         keepTime=true,
         tags=($._config.dashboardTags),
       )).addTemplates(
-        [
-          {
-            hide: 0,
-            label: 'Data source',
-            name: 'prometheus_datasource',
-            query: 'prometheus',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
-          {
-            hide: 0,
-            label: 'Loki datasource',
-            name: 'loki_datasource',
-            query: 'loki',
-            refresh: 1,
-            regex: '',
-            type: 'datasource',
-          },
-          template.new(
-            name='job',
-            label='job',
-            datasource='$prometheus_datasource',
-            query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
-            current='',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=1
-          ),
-          template.new(
-            name='instance',
-            label='instance',
-            datasource='$prometheus_datasource',
-            query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
-            current='',
-            refresh=2,
-            includeAll=false,
-            sort=1
-          ),
-        ]
+        std.flattenArrays([
+          [
+            {
+              hide: 0,
+              label: 'Data source',
+              name: 'prometheus_datasource',
+              query: 'prometheus',
+              refresh: 1,
+              regex: '',
+              type: 'datasource',
+            },
+          ],
+          [
+            template.new(
+              name='job',
+              label='job',
+              datasource='$prometheus_datasource',
+              query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds,job)',
+              current='',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.+',
+              sort=1
+            ),
+            template.new(
+              name='instance',
+              label='instance',
+              datasource='$prometheus_datasource',
+              query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
+              current='',
+              refresh=2,
+              includeAll=true,
+              sort=1
+            ),
+            template.new(
+              'cluster',
+              promDatasource,
+              'label_values(ClickHouseProfileEvents_Query{job=~"$job"}, cluster)',
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+          ],
+        ]),
       )
       .addPanels(
         std.flattenArrays([
           [
-            successfulQueriesPanel { gridPos: { h: 8, w: 24, x: 0, y: 0 } },
+            successfulQueriesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 0 } },
           ],
           //next row
           [
-            failedQueriesPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            rejectedInsertsPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            failedQueriesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            rejectedInsertsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           ],
           //next row
           [
-            memoryUsagePanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-            memoryUsageGaugePanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+            memoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
+            memoryUsageGaugePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
           ],
           //next row
           [
-            activeConnectionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
+            activeConnectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 24 } },
           ],
           //next row
           [
-            networkReceivedPanel { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
-            networkTransmittedPanel { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
+            networkReceivedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 32 } },
+            networkTransmittedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 32 } },
           ],
-          //next row
-          if $._config.enableLokiLogs then [
-            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 40 } },
-          ] else [],
         ])
       ),
   },

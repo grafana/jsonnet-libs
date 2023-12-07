@@ -108,7 +108,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max(time()-wso2_integration_server_up{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"})",
+          "expr": "max(time()-wso2_integration_server_up{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"})",
           "format": "time_series",
           "instant": true,
           "interval": "30s",
@@ -166,7 +166,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(wso2_integration_service_up{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"})",
+          "expr": "count(wso2_integration_service_up{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"})",
           "instant": true,
           "interval": "30s",
           "legendFormat": "Current",
@@ -234,7 +234,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(process_cpu_seconds_total{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}[$__rate_interval])",
+          "expr": "rate(process_cpu_seconds_total{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__rate_interval])",
           "interval": "1m",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -339,14 +339,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "jvm_memory_bytes_max{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\",area=\"heap\"}",
+          "expr": "jvm_memory_bytes_max{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\",area=\"heap\"}",
           "interval": "",
           "legendFormat": "Max",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "jvm_memory_bytes_used{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\", area=\"heap\"}",
+          "expr": "jvm_memory_bytes_used{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\", area=\"heap\"}",
           "interval": "",
           "legendFormat": "Used",
           "refId": "B"
@@ -525,7 +525,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by(service_name,service_type, start_time) (wso2_integration_service_up{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}*1000>0)",
+          "expr": "sum by(service_name,service_type, start_time) (wso2_integration_service_up{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}*1000>0)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -596,7 +596,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum((max_over_time({__name__ =~\"wso2_integration_.*_request_count_total\",instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}[$__range]))-  (min_over_time({__name__ =~\"wso2_integration_.*_request_count_total\",instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}[$__range])))",
+          "expr": "sum((max_over_time({__name__ =~\"wso2_integration_.*_request_count_total\",instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__range]))-  (min_over_time({__name__ =~\"wso2_integration_.*_request_count_total\",instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__range])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -663,7 +663,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum((max_over_time({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}[$__range]))- (min_over_time({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}[$__range])))",
+          "expr": "sum((max_over_time({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__range]))- (min_over_time({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__range])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -731,28 +731,28 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "jvm_threads_state{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\", state=\"RUNNABLE\"}",
+          "expr": "jvm_threads_state{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\", state=\"RUNNABLE\"}",
           "interval": "30s",
           "legendFormat": "Runnable",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "jvm_threads_state{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\", state=\"WAITING\"} ",
+          "expr": "jvm_threads_state{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\", state=\"WAITING\"} ",
           "interval": "30s",
           "legendFormat": "Waiting",
           "refId": "B"
         },
         {
           "exemplar": true,
-          "expr": "jvm_threads_state{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\", state=\"BLOCKED\"}",
+          "expr": "jvm_threads_state{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\", state=\"BLOCKED\"}",
           "interval": "30s",
           "legendFormat": "Blocked",
           "refId": "C"
         },
         {
           "exemplar": true,
-          "expr": "jvm_threads_state{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\", state=\"TIMED_WAITING\"}",
+          "expr": "jvm_threads_state{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\", state=\"TIMED_WAITING\"}",
           "interval": "",
           "legendFormat": "Timed Waiting",
           "refId": "D"
@@ -859,14 +859,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "process_open_fds{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}",
+          "expr": "process_open_fds{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}",
           "interval": "",
           "legendFormat": "Open",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "process_max_fds{instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}",
+          "expr": "process_max_fds{instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}",
           "interval": "",
           "legendFormat": "Max",
           "refId": "B"
@@ -965,7 +965,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_total\",instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}[$__rate_interval]))",
+          "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_total\",instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__rate_interval]))",
           "interval": "1m",
           "intervalFactor": 1,
           "legendFormat": "{{instance}}",
@@ -1066,7 +1066,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=\"$instance\", wso2_cluster=\"$wso2_cluster\"}[$__rate_interval]))",
+          "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_error_total\",instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__rate_interval]))",
           "interval": "1m",
           "legendFormat": "{{kubernetes_pod_name}}",
           "refId": "A"
@@ -1164,7 +1164,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.5, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", instance=\"$instance\", wso2_cluster=\"$wso2_cluster\", le=~\".+\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.5, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\", le=~\".+\"}[$__rate_interval])) by (le))",
           "format": "time_series",
           "hide": false,
           "interval": "1m",
@@ -1173,7 +1173,7 @@
         },
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.95, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", instance=\"$instance\", wso2_cluster=\"$wso2_cluster\", le=~\".+\"}[$__rate_interval])) by (le))",
+          "expr": "histogram_quantile(0.95, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", instance=~\"$instance\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\", le=~\".+\"}[$__rate_interval])) by (le))",
           "interval": "1m",
           "legendFormat": "95th Percentile",
           "refId": "B"
@@ -1230,11 +1230,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
-        },
+        "current": {},
         "description": null,
         "error": null,
         "hide": 0,
@@ -1251,25 +1247,46 @@
         "type": "datasource"
       },
       {
-        "allValue": null,
-        "current": {
-          "isNone": true,
-          "selected": false,
-          "text": "None",
-          "value": ""
-        },
-        "datasource": "${datasource}",
-        "definition": "label_values(wso2_integration_server_up, wso2_cluster)",
+        "allValue": ".+",
+        "current": {},
+        "datasource": "$datasource",
+        "definition": "label_values(wso2_integration_server_up, job)",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
-        "label": "Cluster",
-        "multi": false,
+        "includeAll": true,
+        "label": "job",
+        "multi": true,
+        "name": "job",
+        "options": [],
+        "query": {
+          "query": "label_values(wso2_integration_server_up, job)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": ".+",
+        "current": {},
+        "datasource": "${datasource}",
+        "definition": "label_values(wso2_integration_server_up{job=~\"$job\"}, wso2_cluster)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "cluster",
+        "multi": true,
         "name": "wso2_cluster",
         "options": [],
         "query": {
-          "query": "label_values(wso2_integration_server_up, wso2_cluster)",
+          "query": "label_values(wso2_integration_server_up{job=~\"$job\"}, wso2_cluster)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -1279,25 +1296,20 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {
-          "isNone": true,
-          "selected": false,
-          "text": "None",
-          "value": ""
-        },
+        "allValue": ".+",
+        "current": {},
         "datasource": "${datasource}",
-        "definition": "label_values(wso2_integration_server_up, instance)",
+        "definition": "label_values(wso2_integration_server_up{job=~\"$job\", wso2_cluster=~\"$wso2_cluster\"}, instance)",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
-        "label": "Instance",
-        "multi": false,
+        "includeAll": true,
+        "label": "instance",
+        "multi": true,
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(wso2_integration_server_up, instance)",
+          "query": "label_values(wso2_integration_server_up{job=~\"$job\", wso2_cluster=~\"$wso2_cluster\"}, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,

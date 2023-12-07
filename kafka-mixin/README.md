@@ -1,6 +1,6 @@
 # Kafka Mixin
 
-The Kafka Mixin is a set of configurable, reusable, and extensible dashboards based on the ones discussed on this [blog post from Confluent](https://www.confluent.io/blog/monitor-kafka-clusters-with-prometheus-grafana-and-confluent/), which are fed by a set of JMX Exporters configured with the config files included in this repo, and an additional Lag Overview dashboard based on this [Kafka Overview dashboard](https://grafana.com/grafana/dashboards/7589) which is fed by a [GoLang based exporter](https://github.com/davidmparrott/kafka_exporter).
+The Kafka Mixin is a set of configurable, reusable, and extensible dashboards based on the ones discussed on this [blog post from Confluent](https://www.confluent.io/blog/monitor-kafka-clusters-with-prometheus-grafana-and-confluent/), which are fed by a set of JMX Exporters configured with the config files included in [jmx](./jmx) folder, and an additional Lag Overview dashboard based on this [Kafka Overview dashboard](https://grafana.com/grafana/dashboards/7589) which is fed by a [GoLang based exporter](https://github.com/davidmparrott/kafka_exporter).
 
 This mixin includes the following dashboards:
 Kafka Overview - Gives an overview of your Kafka cluster resource usage, throughput, and general healthiness 

@@ -4,5 +4,6 @@
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
+    enableLokiLogs: true,
   },
 }

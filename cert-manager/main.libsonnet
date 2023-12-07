@@ -92,7 +92,7 @@ local helm = tanka.helm.new(std.thisFile);
 
   crds:
     if $._config.custom_crds
-    then std.native('parseYaml')(importstr 'files/00-crds.yaml')
+    then std.parseYaml(importstr 'files/00-crds.yaml')
     else {},
 } + {
   local _containers = super.labeled.deployment_cert_manager.spec.template.spec.containers,

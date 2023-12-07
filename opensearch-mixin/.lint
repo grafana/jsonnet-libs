@@ -1,0 +1,37 @@
+exclusions:
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+      - panel: "Circuit breakers"
+      - panel: "JVM threads"
+      - panel: "JVM buffer pools"
+      - panel: "JVM garbage collections"
+      - panel: "Thread pool threads"
+      - panel: "Thread pool tasks"
+      - panel: "Cluster status"
+      - panel: "Node count"
+      - panel: "Data node count"
+      - panel: "Shard count"
+      - panel: "Total documents"
+      - panel: "Pending tasks"
+      - panel: "Top nodes by ingest errors"
+      - panel: "Top indices by index rate"
+      - panel: "Top indices by index failures"
+      - panel: "Evictions"
+      - panel: "Index rate"
+      - panel: "Index failures"
+      - panel: "Translog operations"
+      - panel: "Docs deleted"
+      - panel: "Documents indexed"
+      - panel: "Segment count"
+      - panel: "Merge count"
+      - panel: "Shard count"
+      - panel: "Node open connections"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  target-instance-rule:
+    reason: "The dashboard monitors on a cluster, node or index level, not an instance level."
+    entries:
+      - dashboard: "OpenSearch cluster overview"
+      - dashboard: "OpenSearch node overview"
+      - dashboard: "OpenSearch search and index overview"
