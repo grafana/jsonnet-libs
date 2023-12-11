@@ -2,7 +2,8 @@
   _config+:: {
     // extra static selector to apply to all templated variables and alerts
     filteringSelector: 'cluster!=""',
-
+    groupLabels: ['job','cluster'],
+    instanceLabels: ['node'],
     dashboardTags: ['opensearch-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
