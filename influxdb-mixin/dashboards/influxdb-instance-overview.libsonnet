@@ -404,377 +404,6 @@ local threadsPanel(matcher) = {
   pluginVersion: '10.3.0-63516',
 };
 
-local goRow = {
-  datasource: promDatasource,
-  targets: [],
-  type: 'row',
-  title: 'Go',
-  collapsed: false,
-};
-
-local timeSinceLastGCPanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'time() - go_memstats_last_gc_time_seconds{' + matcher + ', instance=~"$instance"}',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'stat',
-  title: 'Time since last GC',
-  description: 'Amount of time since the last garbage collection cycle.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'thresholds',
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 's',
-    },
-    overrides: [],
-  },
-  options: {
-    colorMode: 'value',
-    graphMode: 'none',
-    justifyMode: 'auto',
-    orientation: 'auto',
-    reduceOptions: {
-      calcs: [
-        'lastNotNull',
-      ],
-      fields: '',
-      values: false,
-    },
-    textMode: 'auto',
-    wideLayout: true,
-  },
-  pluginVersion: '10.3.0-63516',
-};
-
-local gcTimePanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'increase(go_gc_duration_seconds_sum{' + matcher + ', instance=~"$instance"}[$__interval:])',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-      interval='1m',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'GC time / $__interval',
-  description: 'Server CPU time spent on garbage collection.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'smooth',
-        lineWidth: 2,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 's',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local gcCPUUsagePanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'go_memstats_gc_cpu_fraction{' + matcher + ', instance=~"$instance"}',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'GC CPU usage',
-  description: 'Percent of server CPU time used for garbage collection.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'continuous-BlYlRd',
-      },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'smooth',
-        lineWidth: 2,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      max: 100,
-      min: 0,
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'percent',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local heapMemoryUsagePanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'go_memstats_heap_alloc_bytes{' + matcher + ', instance=~"$instance"}/clamp_min((go_memstats_heap_idle_bytes{' + matcher + ', instance=~"$instance"} + go_memstats_heap_alloc_bytes{' + matcher + ', instance=~"$instance"}), 1)',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Heap memory usage',
-  description: 'Heap memory usage for the server.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'continuous-BlYlRd',
-      },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'smooth',
-        lineWidth: 2,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      max: 1,
-      min: 0,
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'percentunit',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local goThreadsPanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'go_threads{' + matcher + ', instance=~"$instance"}',
-      datasource=promDatasource,
-      legendFormat='{{instance}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Go threads',
-  description: 'Number of OS threads created for the server.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'palette-classic',
-      },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'smooth',
-        lineWidth: 2,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      decimals: 0,
-      mappings: [],
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'none',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
 local queriesAndOperationsRow = {
   datasource: promDatasource,
   targets: [],
@@ -1768,6 +1397,377 @@ local schedulesPanel(matcher) = {
   },
 };
 
+local goRow = {
+  datasource: promDatasource,
+  targets: [],
+  type: 'row',
+  title: 'Go',
+  collapsed: false,
+};
+
+local timeSinceLastGCPanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'time() - go_memstats_last_gc_time_seconds{' + matcher + ', instance=~"$instance"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'stat',
+  title: 'Time since last GC',
+  description: 'Amount of time since the last garbage collection cycle.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'thresholds',
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 's',
+    },
+    overrides: [],
+  },
+  options: {
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
+    },
+    textMode: 'auto',
+    wideLayout: true,
+  },
+  pluginVersion: '10.3.0-63516',
+};
+
+local gcTimePanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'increase(go_gc_duration_seconds_sum{' + matcher + ', instance=~"$instance"}[$__interval:])',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+      interval='1m',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'GC time / $__interval',
+  description: 'Server CPU time spent on garbage collection.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisBorderShow: false,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 's',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local gcCPUUsagePanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'go_memstats_gc_cpu_fraction{' + matcher + ', instance=~"$instance"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'GC CPU usage',
+  description: 'Percent of server CPU time used for garbage collection.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'continuous-BlYlRd',
+      },
+      custom: {
+        axisBorderShow: false,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      max: 100,
+      min: 0,
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'percent',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local heapMemoryUsagePanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'go_memstats_heap_alloc_bytes{' + matcher + ', instance=~"$instance"}/clamp_min((go_memstats_heap_idle_bytes{' + matcher + ', instance=~"$instance"} + go_memstats_heap_alloc_bytes{' + matcher + ', instance=~"$instance"}), 1)',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Heap memory usage',
+  description: 'Heap memory usage for the server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'continuous-BlYlRd',
+      },
+      custom: {
+        axisBorderShow: false,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      max: 1,
+      min: 0,
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'percentunit',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local goThreadsPanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'go_threads{' + matcher + ', instance=~"$instance"}',
+      datasource=promDatasource,
+      legendFormat='{{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Go threads',
+  description: 'Number of OS threads created for the server.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'palette-classic',
+      },
+      custom: {
+        axisBorderShow: false,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      decimals: 0,
+      mappings: [],
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'none',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
 local getMatcher(cfg) = '%(influxdbSelector)s, influxdb_cluster=~"$influxdb_cluster", instance=~"$instance"' % cfg;
 
 {
@@ -1855,12 +1855,6 @@ local getMatcher(cfg) = '%(influxdbSelector)s, influxdb_cluster=~"$influxdb_clus
           scrapersPanel(getMatcher($._config)) { gridPos: { h: 8, w: 3, x: 15, y: 0 } },
           dashboardsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 3, x: 18, y: 0 } },
           threadsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 3, x: 21, y: 0 } },
-          goRow { gridPos: { h: 1, w: 24, x: 0, y: 8 } },
-          timeSinceLastGCPanel(getMatcher($._config)) { gridPos: { h: 8, w: 6, x: 0, y: 9 } },
-          gcTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 9, x: 6, y: 9 } },
-          gcCPUUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 9, x: 15, y: 9 } },
-          heapMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
-          goThreadsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
           queriesAndOperationsRow { gridPos: { h: 1, w: 24, x: 0, y: 25 } },
           httpAPIRequestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 26 } },
           activeQueriesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 26 } },
@@ -1875,6 +1869,12 @@ local getMatcher(cfg) = '%(influxdbSelector)s, influxdb_cluster=~"$influxdb_clus
           workerUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 51 } },
           executionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 59 } },
           schedulesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 59 } },
+          goRow { gridPos: { h: 1, w: 24, x: 0, y: 8 } },
+          timeSinceLastGCPanel(getMatcher($._config)) { gridPos: { h: 8, w: 6, x: 0, y: 9 } },
+          gcTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 9, x: 6, y: 9 } },
+          gcCPUUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 9, x: 15, y: 9 } },
+          heapMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
+          goThreadsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
         ]
       ),
   },

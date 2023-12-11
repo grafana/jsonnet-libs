@@ -232,176 +232,6 @@ local serversPanel(matcher) = {
   ],
 };
 
-local goRow = {
-  datasource: promDatasource,
-  targets: [],
-  type: 'row',
-  title: 'Go',
-  collapsed: false,
-};
-
-local topInstancesByHeapMemoryUsagePanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'topk($k, go_memstats_heap_alloc_bytes{' + matcher + '}/clamp_min(go_memstats_heap_idle_bytes{' + matcher + '} + go_memstats_heap_alloc_bytes{' + matcher + '}, 1))',
-      datasource=promDatasource,
-      legendFormat='{{influxdb_cluster}} - {{instance}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Top instances by heap memory usage',
-  description: 'Heap memory usage for the largest instances in the cluster.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'continuous-BlYlRd',
-      },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'smooth',
-        lineWidth: 2,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      max: 1,
-      min: 0,
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-        ],
-      },
-      unit: 'percentunit',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
-local topInstancesByGCCPUUsagePanel(matcher) = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'go_memstats_gc_cpu_fraction{' + matcher + '}',
-      datasource=promDatasource,
-      legendFormat='{{influxdb_cluster}} - {{instance}}',
-    ),
-  ],
-  type: 'timeseries',
-  title: 'Top instances by GC CPU usage',
-  description: 'Fraction of CPU time used for garbage collection for the top instances in the cluster.',
-  fieldConfig: {
-    defaults: {
-      color: {
-        mode: 'continuous-BlYlRd',
-      },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisLabel: '',
-        axisPlacement: 'auto',
-        barAlignment: 0,
-        drawStyle: 'line',
-        fillOpacity: 20,
-        gradientMode: 'none',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false,
-        },
-        insertNulls: false,
-        lineInterpolation: 'smooth',
-        lineWidth: 2,
-        pointSize: 5,
-        scaleDistribution: {
-          type: 'linear',
-        },
-        showPoints: 'never',
-        spanNulls: false,
-        stacking: {
-          group: 'A',
-          mode: 'none',
-        },
-        thresholdsStyle: {
-          mode: 'off',
-        },
-      },
-      mappings: [],
-      max: 100,
-      min: 0,
-      thresholds: {
-        mode: 'absolute',
-        steps: [
-          {
-            color: 'green',
-            value: null,
-          },
-          {
-            color: 'red',
-            value: 80,
-          },
-        ],
-      },
-      unit: 'percent',
-    },
-    overrides: [],
-  },
-  options: {
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'bottom',
-      showLegend: true,
-    },
-    tooltip: {
-      mode: 'multi',
-      sort: 'desc',
-    },
-  },
-};
-
 local queriesAndOperationsRow = {
   datasource: promDatasource,
   targets: [],
@@ -1340,6 +1170,176 @@ local schedulesPanel(matcher) = {
   },
 };
 
+local goRow = {
+  datasource: promDatasource,
+  targets: [],
+  type: 'row',
+  title: 'Go',
+  collapsed: false,
+};
+
+local topInstancesByHeapMemoryUsagePanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'topk($k, go_memstats_heap_alloc_bytes{' + matcher + '}/clamp_min(go_memstats_heap_idle_bytes{' + matcher + '} + go_memstats_heap_alloc_bytes{' + matcher + '}, 1))',
+      datasource=promDatasource,
+      legendFormat='{{influxdb_cluster}} - {{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Top instances by heap memory usage',
+  description: 'Heap memory usage for the largest instances in the cluster.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'continuous-BlYlRd',
+      },
+      custom: {
+        axisBorderShow: false,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      max: 1,
+      min: 0,
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+        ],
+      },
+      unit: 'percentunit',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
+local topInstancesByGCCPUUsagePanel(matcher) = {
+  datasource: promDatasource,
+  targets: [
+    prometheus.target(
+      'go_memstats_gc_cpu_fraction{' + matcher + '}',
+      datasource=promDatasource,
+      legendFormat='{{influxdb_cluster}} - {{instance}}',
+    ),
+  ],
+  type: 'timeseries',
+  title: 'Top instances by GC CPU usage',
+  description: 'Fraction of CPU time used for garbage collection for the top instances in the cluster.',
+  fieldConfig: {
+    defaults: {
+      color: {
+        mode: 'continuous-BlYlRd',
+      },
+      custom: {
+        axisBorderShow: false,
+        axisCenteredZero: false,
+        axisColorMode: 'text',
+        axisLabel: '',
+        axisPlacement: 'auto',
+        barAlignment: 0,
+        drawStyle: 'line',
+        fillOpacity: 20,
+        gradientMode: 'none',
+        hideFrom: {
+          legend: false,
+          tooltip: false,
+          viz: false,
+        },
+        insertNulls: false,
+        lineInterpolation: 'smooth',
+        lineWidth: 2,
+        pointSize: 5,
+        scaleDistribution: {
+          type: 'linear',
+        },
+        showPoints: 'never',
+        spanNulls: false,
+        stacking: {
+          group: 'A',
+          mode: 'none',
+        },
+        thresholdsStyle: {
+          mode: 'off',
+        },
+      },
+      mappings: [],
+      max: 100,
+      min: 0,
+      thresholds: {
+        mode: 'absolute',
+        steps: [
+          {
+            color: 'green',
+            value: null,
+          },
+          {
+            color: 'red',
+            value: 80,
+          },
+        ],
+      },
+      unit: 'percent',
+    },
+    overrides: [],
+  },
+  options: {
+    legend: {
+      calcs: [],
+      displayMode: 'list',
+      placement: 'bottom',
+      showLegend: true,
+    },
+    tooltip: {
+      mode: 'multi',
+      sort: 'desc',
+    },
+  },
+};
+
 local getMatcher(cfg) = '%(influxdbSelector)s, influxdb_cluster=~"$influxdb_cluster"' % cfg;
 
 {
@@ -1420,9 +1420,6 @@ local getMatcher(cfg) = '%(influxdbSelector)s, influxdb_cluster=~"$influxdb_clus
         [
           alertsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 7, x: 0, y: 0 } },
           serversPanel(getMatcher($._config)) { gridPos: { h: 8, w: 17, x: 7, y: 0 } },
-          goRow { gridPos: { h: 1, w: 24, x: 0, y: 8 } },
-          topInstancesByHeapMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 9 } },
-          topInstancesByGCCPUUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 9 } },
           queriesAndOperationsRow { gridPos: { h: 1, w: 24, x: 0, y: 17 } },
           topInstancesByHTTPAPIRequestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 18 } },
           httpAPIRequestDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 8, y: 18 } },
@@ -1437,6 +1434,9 @@ local getMatcher(cfg) = '%(influxdbSelector)s, influxdb_cluster=~"$influxdb_clus
           activeWorkersPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 43 } },
           executionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 51 } },
           schedulesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 51 } },
+          goRow { gridPos: { h: 1, w: 24, x: 0, y: 8 } },
+          topInstancesByHeapMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 9 } },
+          topInstancesByGCCPUUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 9 } },
         ]
       ),
   },
