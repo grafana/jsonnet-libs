@@ -8,6 +8,9 @@
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
 
+    // prefix dashboards uids
+    uid: "opensearch",
+
     // alerts thresholds
     alertsWarningShardReallocations: 0,
     alertsWarningShardUnassigned: 0,

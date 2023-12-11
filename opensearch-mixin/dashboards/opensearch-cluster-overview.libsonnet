@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'opensearch-cluster-overview';
+local dashboardUidSuffix = '-cluster-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 
@@ -1541,7 +1541,7 @@ local topIndicesByIndexFailuresPanel = {
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,
         description='',
-        uid=dashboardUid,
+        uid=$._config.uid+dashboardUidSuffix,
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,

@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'node-overview';
+local dashboardUidSuffix = '-node-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
@@ -1495,7 +1495,7 @@ local errorLogsPanelPanel = {
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,
         description='',
-        uid=dashboardUid,
+        uid=$._config.uid+dashboardUidSuffix,
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,

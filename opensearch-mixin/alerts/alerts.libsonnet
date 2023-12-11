@@ -2,7 +2,7 @@
   prometheusAlerts+:: {
     groups+: [
       {
-        name: 'opensearch',
+        name: $._config.uid+'-alerts',
         rules: [
           {
             alert: 'OpenSearchYellowCluster',
@@ -24,7 +24,7 @@
           {
             alert: 'OpenSearchRedCluster',
             expr: |||
-              opensearch_cluster_status%(filteringSelector)s == 2
+              opensearch_cluster_status{%(filteringSelector)s} == 2
             ||| % $._config,
             'for': '5m',
             labels: {

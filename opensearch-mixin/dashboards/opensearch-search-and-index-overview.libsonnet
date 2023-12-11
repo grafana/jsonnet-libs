@@ -4,7 +4,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'search-and-index-overview';
+local dashboardUidSuffix = '-search-and-index-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 
@@ -1690,7 +1690,7 @@ local shardCountPanel = {
         timezone='%s' % $._config.dashboardTimezone,
         refresh='%s' % $._config.dashboardRefresh,
         description='',
-        uid=dashboardUid,
+        uid=$._config.uid+dashboardUidSuffix,
       )
       .addLink(grafana.link.dashboards(
         asDropdown=false,
