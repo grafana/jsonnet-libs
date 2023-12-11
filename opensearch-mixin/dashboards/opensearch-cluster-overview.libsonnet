@@ -1,7 +1,5 @@
-local g = (import 'grafana-builder/grafana.libsonnet');
+local g = (import '../g.libsonnet');
 local grafana = (import 'grafonnet/grafana.libsonnet');
-local dashboard = grafana.dashboard;
-local template = grafana.template;
 local prometheus = grafana.prometheus;
 local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
@@ -1660,29 +1658,22 @@ local dashboardUidSuffix = '-cluster-overview';
     },
   },
 
-
   grafanaDashboards+:: {
     'opensearch-cluster-overview.json':
-      dashboard.new(
-        'OpenSearch cluster overview',
-        time_from='%s' % $._config.dashboardPeriod,
-        tags=($._config.dashboardTags),
-        timezone='%s' % $._config.dashboardTimezone,
-        refresh='%s' % $._config.dashboardRefresh,
-        description='',
-        uid=$._config.uid + dashboardUidSuffix,
+      g.dashboard.new('OpenSearch cluster overview')
+      + g.dashboard.withTags($._config.dashboardTags)
+      + g.dashboard.time.withFrom($._config.dashboardPeriod)
+      + g.dashboard.withTimezone($._config.dashboardTimezone)
+      + g.dashboard.withRefresh($._config.dashboardRefresh)
+      + g.dashboard.withUid($._config.uid + dashboardUidSuffix)
+      + g.dashboard.link.dashboards.new(
+        'Other Opensearch dashboards',
+        $._config.dashboardTags
       )
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Other OpenSearch dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
-      .addTemplates(
-        variables.singleInstance
-      )
-      .addPanels(
+      + g.dashboard.link.dashboards.options.withIncludeVars(true)
+      + g.dashboard.link.dashboards.options.withKeepTime(true)
+      + g.dashboard.link.dashboards.options.withAsDropdown(false)
+      + g.dashboard.withPanels(
         [
           clusterStatusPanel { gridPos: { h: 4, w: 4, x: 0, y: 0 } },
           nodeCountPanel { gridPos: { h: 4, w: 5, x: 4, y: 0 } },
@@ -1708,6 +1699,7 @@ local dashboardUidSuffix = '-cluster-overview';
           topIndicesByIndexLatencyPanel { gridPos: { h: 8, w: 8, x: 8, y: 40 } },
           topIndicesByIndexFailuresPanel { gridPos: { h: 8, w: 8, x: 16, y: 40 } },
         ]
-      ),
+      )
+      + g.dashboard.withVariables(variables.singleInstance),
   },
 }
