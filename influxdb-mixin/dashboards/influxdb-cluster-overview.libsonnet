@@ -379,7 +379,7 @@ local httpAPIResponseCodesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, influxdb_cluster, response_code) (rate(http_api_requests_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, response_code) (rate(http_api_requests_total{' + matcher + '}[$__rate_interval])) > 0',
       datasource=promDatasource,
       legendFormat='{{influxdb_cluster}} - {{response_code}}',
     ),
@@ -429,12 +429,12 @@ local httpOperationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, influxdb_cluster, status) (rate(http_query_request_count{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, status) (rate(http_query_request_count{' + matcher + '}[$__rate_interval])) > 0',
       datasource=promDatasource,
       legendFormat='{{influxdb_cluster}} - query - {{status}}',
     ),
     prometheus.target(
-      'sum by(job, influxdb_cluster, status) (rate(http_write_request_count{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, status) (rate(http_write_request_count{' + matcher + '}[$__rate_interval])) > 0',
       datasource=promDatasource,
       legendFormat='{{influxdb_cluster}} - write - {{status}}',
     ),

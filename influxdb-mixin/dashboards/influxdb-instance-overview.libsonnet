@@ -581,12 +581,12 @@ local httpOperationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, influxdb_cluster, instance, status) (rate(http_query_request_count{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance, status) (rate(http_query_request_count{' + matcher + ', instance=~"$instance"}[$__rate_interval])) > 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - query - {{status}}',
     ),
     prometheus.target(
-      'sum by(job, influxdb_cluster, instance, status) (rate(http_write_request_count{' + matcher + ', instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, influxdb_cluster, instance, status) (rate(http_write_request_count{' + matcher + ', instance=~"$instance"}[$__rate_interval])) > 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - write - {{status}}',
     ),
