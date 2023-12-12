@@ -5,7 +5,7 @@ The Windows Active Directory mixin is a set of configurable Grafana dashboards a
 The Windows Active Directory mixin contains the following dashboards:
 
 - Windows Active Directory overview
-- Windows Active Directory logs
+- Windows logs
 
 and the following alerts:
 - WindowsActiveDirectoryHighPendingReplicationOperations
@@ -15,16 +15,16 @@ and the following alerts:
 
 ## Windows Active Directory overview
 
-The Windows Active Directory overview dashboard provides details on integration status/alerts, workers/coordinators, error failures, data throughput, blocked nodes, and distributed bytes.
+The Windows Active Directory overview dashboard provides details on alerts, LDAP operations and requests, bind operations, replication traffic, and database operations.
 ![Windows Active Directory overview dashboard (LDAP)](https://storage.googleapis.com/grafanalabs-integration-assets/windows-active-directory/screenshots/windows_active_directory_overview_1.png)
 ![Windows Active Directory overview dashboard (database)](https://storage.googleapis.com/grafanalabs-integration-assets/windows-active-directory/screenshots/window_active_directory_overview_2.png)
 
-# Windows Active Directory logs
+# Windows logs
 
-The Windows Active Directory logs dashboard provides details on incoming Windows Active Directory event logs.
-![Windows Active Directory logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/windows-active-directory/screenshots/windows_active_directory_logs.png)
+The Windows logs dashboard provides details on incoming Windows application, security, and system logs.
+![Windows logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/windows-active-directory/screenshots/windows_active_directory_logs.png)
 
-Windows Active Directory system logs are enabled by default in the `config.libsonnet` and can be disabled by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+Windows logs are enabled by default in the `config.libsonnet` and can be disabled by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
 ```
 {
@@ -37,21 +37,20 @@ Windows Active Directory system logs are enabled by default in the `config.libso
 For the selectors to properly work with Windows Active Directory event logs ingested into your logs datasource, please also include the matching `instance` and `job` labels in the [scrape configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
 ```yaml
-    scrape_configs:
-      # Add here any snippet that belongs to the `logs.configs.scrape_configs` section.
-      # For a correct indentation, paste snippets copied from Grafana Cloud at the beginning of the line.
-    - job_name: integrations/windows
+- job_name: integrations/windows-exporter-application
       windows_events:
         use_incoming_timestamp: true
         eventlog_name: 'Application'
         bookmark_path: "./bookmarks-app.xml"
+        xpath_query: '*'
+        locale: 1033
         labels:
-            job: integrations/windows
-            instance: "<your-instance-name>"
+           job: integrations/windows_exporter
+           instance: '<your-instance-name>' # must match instance used in windows_exporter
       relabel_configs:
         - source_labels: ['computer']
           target_label: 'agent_hostname'
-    
+      pipeline_stages:
         - json:
             expressions:
               source: source
@@ -59,6 +58,53 @@ For the selectors to properly work with Windows Active Directory event logs inge
         - labels:
             source:
             level:
+    - job_name: integrations/windows-exporter-system
+      windows_events:
+        use_incoming_timestamp: true
+        bookmark_path: "./bookmarks-sys.xml"
+        eventlog_name: "System"
+        xpath_query: '*'
+        locale: 1033
+        # - 1033 to force English language
+        # -  0 to use default Windows locale
+        labels:
+          job: integrations/windows_exporter
+          instance: '<your-instance-name>' # must match instance used in windows_exporter
+      relabel_configs:
+        - source_labels: ['computer']
+          target_label: 'agent_hostname'
+      pipeline_stages:
+        - json:
+            expressions:
+              source: source
+              level: levelText
+        - labels:
+            source:
+            level:
+    - job_name: integrations/windows-exporter-security
+      windows_events:
+        use_incoming_timestamp: true
+        bookmark_path: "./bookmarks-sys.xml"
+        eventlog_name: "Security"
+        xpath_query: '*'
+        locale: 1033
+        # - 1033 to force English language
+        # -  0 to use default Windows locale
+        labels:
+          job: integrations/windows_exporter
+          instance: '<your-instance-name>' # must match instance used in windows_exporter
+      relabel_configs:
+        - source_labels: ['computer']
+          target_label: 'agent_hostname'
+      pipeline_stages:
+        - json:
+            expressions:
+              source: source
+              level: levelText
+        - labels:
+            source:
+            level:
+
 ```
 
 ## Alerts overview
