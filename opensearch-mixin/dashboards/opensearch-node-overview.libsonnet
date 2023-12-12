@@ -1143,7 +1143,7 @@ local dashboardUidSuffix = '-node-overview';
 
   grafanaDashboards+:: {
     'node-overview.json':
-      g.dashboard.new('OpenSearch node overview')
+      g.dashboard.new($._config.dashboardNamePrefix +'OpenSearch node overview')
       + g.dashboard.withTags($._config.dashboardTags)
       + g.dashboard.time.withFrom($._config.dashboardPeriod)
       + g.dashboard.withTimezone($._config.dashboardTimezone)

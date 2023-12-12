@@ -1660,19 +1660,21 @@ local dashboardUidSuffix = '-cluster-overview';
 
   grafanaDashboards+:: {
     'opensearch-cluster-overview.json':
-      g.dashboard.new('OpenSearch cluster overview')
+      g.dashboard.new($._config.dashboardNamePrefix +'OpenSearch cluster overview')
       + g.dashboard.withTags($._config.dashboardTags)
       + g.dashboard.time.withFrom($._config.dashboardPeriod)
       + g.dashboard.withTimezone($._config.dashboardTimezone)
       + g.dashboard.withRefresh($._config.dashboardRefresh)
       + g.dashboard.withUid($._config.uid + dashboardUidSuffix)
-      + g.dashboard.link.dashboards.new(
-        'Other Opensearch dashboards',
-        $._config.dashboardTags
+      + g.dashboard.withLinks(
+        g.dashboard.link.dashboards.new(
+          'Other Opensearch dashboards',
+          $._config.dashboardTags
+        )
+        + g.dashboard.link.dashboards.options.withIncludeVars(true)
+        + g.dashboard.link.dashboards.options.withKeepTime(true)
+        + g.dashboard.link.dashboards.options.withAsDropdown(false)
       )
-      + g.dashboard.link.dashboards.options.withIncludeVars(true)
-      + g.dashboard.link.dashboards.options.withKeepTime(true)
-      + g.dashboard.link.dashboards.options.withAsDropdown(false)
       + g.dashboard.withPanels(
         [
           clusterStatusPanel { gridPos: { h: 4, w: 4, x: 0, y: 0 } },
