@@ -33,595 +33,153 @@ local dashboardUidSuffix = '-node-overview';
     collapsed: false,
   },
 
-  local nodeCPUUsagePanel = {
-    datasource: promDatasource,
-    targets: [
-      prometheus.target(
-        'opensearch_os_cpu_percent{%(queriesSelector)s}'
-        % {
-          queriesSelector: variables.queriesSelector,
-          agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
-        },
-        datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
-      ),
-    ],
-    type: 'timeseries',
-    title: 'Node CPU usage',
-    description: "CPU usage percentage of the node's Operating System.",
-    fieldConfig: {
-      defaults: {
-        color: {
-          mode: 'palette-classic',
-        },
-        custom: {
-          axisCenteredZero: false,
-          axisColorMode: 'text',
-          axisLabel: '',
-          axisPlacement: 'auto',
-          barAlignment: 0,
-          drawStyle: 'line',
-          fillOpacity: 0,
-          gradientMode: 'none',
-          hideFrom: {
-            legend: false,
-            tooltip: false,
-            viz: false,
+  local nodeCPUUsagePanel =
+    commonlib.panels.cpu.timeSeries.utilization.new(
+      'Node CPU usage',
+      targets=[
+        g.query.prometheus.new(
+          promDatasource.uid,
+          'opensearch_os_cpu_percent{%(queriesSelector)s}'
+          % {
+            queriesSelector: variables.queriesSelector,
+            agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
-          lineInterpolation: 'linear',
-          lineWidth: 1,
-          pointSize: 5,
-          scaleDistribution: {
-            type: 'linear',
-          },
-          showPoints: 'auto',
-          spanNulls: false,
-          stacking: {
-            group: 'A',
-            mode: 'none',
-          },
-          thresholdsStyle: {
-            mode: 'off',
-          },
-        },
-        mappings: [],
-        thresholds: {
-          mode: 'absolute',
-          steps: [
-            {
-              color: 'green',
-              value: null,
-            },
-          ],
-        },
-        unit: 'percent',
-      },
-      overrides: [],
-    },
-    options: {
-      legend: {
-        calcs: [],
-        displayMode: 'list',
-        placement: 'bottom',
-        showLegend: true,
-      },
-      tooltip: {
-        mode: 'single',
-        sort: 'none',
-      },
-    },
-  },
+        )
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+
+      ],
+      description="CPU usage percentage of the node's Operating System.",
+    )
+    + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(5),
 
   local nodeMemoryUsagePanel =
-    {
-      datasource: promDatasource,
-      targets: [
-        prometheus.target(
+    commonlib.panels.memory.timeSeries.usagePercent.new(
+      'Node memory usage',
+      targets=[
+        g.query.prometheus.new(
+          promDatasource.uid,
           'opensearch_os_mem_used_percent{%(queriesSelector)s}'
           % {
             queriesSelector: variables.queriesSelector,
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
-          datasource=promDatasource,
-          legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
-        ),
+        )
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
       ],
-      type: 'timeseries',
-      title: 'Node memory usage',
-      description: 'Memory usage percentage of the node for the Operating System and OpenSearch',
-      fieldConfig: {
-        defaults: {
-          color: {
-            mode: 'palette-classic',
-          },
-          custom: {
-            axisCenteredZero: false,
-            axisColorMode: 'text',
-            axisLabel: '',
-            axisPlacement: 'auto',
-            barAlignment: 0,
-            drawStyle: 'line',
-            fillOpacity: 0,
-            gradientMode: 'none',
-            hideFrom: {
-              legend: false,
-              tooltip: false,
-              viz: false,
-            },
-            lineInterpolation: 'linear',
-            lineWidth: 1,
-            pointSize: 5,
-            scaleDistribution: {
-              type: 'linear',
-            },
-            showPoints: 'auto',
-            spanNulls: false,
-            stacking: {
-              group: 'A',
-              mode: 'none',
-            },
-            thresholdsStyle: {
-              mode: 'off',
-            },
-          },
-          mappings: [],
-          max: 100,
-          min: 0,
-          thresholds: {
-            mode: 'absolute',
-            steps: [
-              {
-                color: 'green',
-                value: null,
-              },
-            ],
-          },
-          unit: 'percent',
-        },
-        overrides: [],
-      },
-      options: {
-        legend: {
-          calcs: [],
-          displayMode: 'list',
-          placement: 'bottom',
-          showLegend: true,
-        },
-        tooltip: {
-          mode: 'single',
-          sort: 'none',
-        },
-      },
-    },
+      description='Memory usage percentage of the node for the Operating System and OpenSearch',
+    )
+    + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(5),
 
-  local nodeIOPanel = {
-    datasource: promDatasource,
-    targets: [
-      prometheus.target(
-        'sum by(%(agg)s) (opensearch_fs_io_total_read_bytes{%(queriesSelector)s})'
-        % {
-          queriesSelector: variables.queriesSelector,
-          agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
-        },
-        datasource=promDatasource,
-        legendFormat='%s - read' % utils.labelsToPanelLegend($._config.instanceLabels),
-      ),
-      prometheus.target(
-        'sum by(%(agg)s) (opensearch_fs_io_total_write_bytes{%(queriesSelector)s})'
-        % {
-          queriesSelector: variables.queriesSelector,
-          agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
-        },
-        datasource=promDatasource,
-        legendFormat='%s - write' % utils.labelsToPanelLegend($._config.instanceLabels),
-      ),
-    ],
-    type: 'timeseries',
-    title: 'Node I/O',
-    description: 'Node file system read and write data.',
-    fieldConfig: {
-      defaults: {
-        color: {
-          mode: 'palette-classic',
-        },
-        custom: {
-          axisCenteredZero: false,
-          axisColorMode: 'text',
-          axisLabel: '',
-          axisPlacement: 'auto',
-          barAlignment: 0,
-          drawStyle: 'line',
-          fillOpacity: 0,
-          gradientMode: 'none',
-          hideFrom: {
-            legend: false,
-            tooltip: false,
-            viz: false,
+  local nodeIOPanel =
+    commonlib.panels.disk.timeSeries.ioBytesPerSec.new(
+      'Node I/O',
+      targets=[
+        g.query.prometheus.new(
+          promDatasource.uid,
+          'sum by(%(agg)s) (opensearch_fs_io_total_read_bytes{%(queriesSelector)s})'
+          % {
+            queriesSelector: variables.queriesSelector,
+            agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
-          lineInterpolation: 'linear',
-          lineWidth: 1,
-          pointSize: 5,
-          scaleDistribution: {
-            type: 'linear',
-          },
-          showPoints: 'auto',
-          spanNulls: false,
-          stacking: {
-            group: 'A',
-            mode: 'none',
-          },
-          thresholdsStyle: {
-            mode: 'off',
-          },
-        },
-        mappings: [],
-        thresholds: {
-          mode: 'absolute',
-          steps: [
-            {
-              color: 'green',
-              value: null,
-            },
-            {
-              color: 'red',
-              value: 80,
-            },
-          ],
-        },
-        unit: 'bytes',
-      },
-      overrides: [],
-    },
-    options: {
-      legend: {
-        calcs: [],
-        displayMode: 'list',
-        placement: 'bottom',
-        showLegend: true,
-      },
-      tooltip: {
-        mode: 'single',
-        sort: 'none',
-      },
-    },
-  },
+        )
+        + g.query.prometheus.withLegendFormat('%s - read' % utils.labelsToPanelLegend($._config.instanceLabels)),
+        g.query.prometheus.new(
+          promDatasource.uid,
 
-  local nodeOpenConnectionsPanel = {
-    datasource: promDatasource,
-    targets: [
-      prometheus.target(
-        'sum by (%(agg)s) (opensearch_transport_server_open_number{%(queriesSelector)s})'
-        % {
-          queriesSelector: variables.queriesSelector,
-          agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
-        },
-        datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
-      ),
-    ],
-    type: 'timeseries',
-    title: 'Node open connections',
-    description: 'Number of open connections for the selected node.',
-    fieldConfig: {
-      defaults: {
-        color: {
-          mode: 'palette-classic',
-        },
-        custom: {
-          axisCenteredZero: false,
-          axisColorMode: 'text',
-          axisLabel: '',
-          axisPlacement: 'auto',
-          barAlignment: 0,
-          drawStyle: 'line',
-          fillOpacity: 0,
-          gradientMode: 'none',
-          hideFrom: {
-            legend: false,
-            tooltip: false,
-            viz: false,
+          'sum by(%(agg)s) (opensearch_fs_io_total_write_bytes{%(queriesSelector)s})'
+          % {
+            queriesSelector: variables.queriesSelector,
+            agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
-          lineInterpolation: 'linear',
-          lineWidth: 1,
-          pointSize: 5,
-          scaleDistribution: {
-            type: 'linear',
-          },
-          showPoints: 'auto',
-          spanNulls: false,
-          stacking: {
-            group: 'A',
-            mode: 'none',
-          },
-          thresholdsStyle: {
-            mode: 'off',
-          },
-        },
-        mappings: [],
-        thresholds: {
-          mode: 'absolute',
-          steps: [
-            {
-              color: 'green',
-              value: null,
-            },
-          ],
-        },
-        unit: 'connections',
-      },
-      overrides: [],
-    },
-    options: {
-      legend: {
-        calcs: [],
-        displayMode: 'list',
-        placement: 'bottom',
-        showLegend: true,
-      },
-      tooltip: {
-        mode: 'single',
-        sort: 'none',
-      },
-    },
-  },
+        )
+        + g.query.prometheus.withLegendFormat('%s - write' % utils.labelsToPanelLegend($._config.instanceLabels)),
+      ],
+      description='Node file system read and write data.',
+    )
+    + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking(value='normal'),
 
-  local nodeDiskUsagePanel = {
-    datasource: promDatasource,
-    targets: [
-      prometheus.target(
-        '100 - (100 * opensearch_fs_path_free_bytes{%(queriesSelector)s} / clamp_min(opensearch_fs_path_total_bytes{%(queriesSelector)s}, 1))'
-        % {
-          queriesSelector: variables.queriesSelector,
-          agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
-        },
-        datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
-      ),
-    ],
-    type: 'timeseries',
-    title: 'Node disk usage',
-    description: 'Disk usage percentage of the selected node.',
-    fieldConfig: {
-      defaults: {
-        color: {
-          mode: 'palette-classic',
-        },
-        custom: {
-          axisCenteredZero: false,
-          axisColorMode: 'text',
-          axisLabel: '',
-          axisPlacement: 'auto',
-          barAlignment: 0,
-          drawStyle: 'line',
-          fillOpacity: 0,
-          gradientMode: 'none',
-          hideFrom: {
-            legend: false,
-            tooltip: false,
-            viz: false,
+  local nodeOpenConnectionsPanel =
+    commonlib.panels.generic.timeSeries.base.new(
+      'Node open connections',
+      targets=[
+        g.query.prometheus.new(
+          promDatasource.uid,
+          'sum by (%(agg)s) (opensearch_transport_server_open_number{%(queriesSelector)s})'
+          % {
+            queriesSelector: variables.queriesSelector,
+            agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
-          lineInterpolation: 'linear',
-          lineWidth: 1,
-          pointSize: 5,
-          scaleDistribution: {
-            type: 'linear',
-          },
-          showPoints: 'auto',
-          spanNulls: false,
-          stacking: {
-            group: 'A',
-            mode: 'none',
-          },
-          thresholdsStyle: {
-            mode: 'off',
-          },
-        },
-        mappings: [],
-        thresholds: {
-          mode: 'absolute',
-          steps: [
-            {
-              color: 'green',
-              value: null,
-            },
-            {
-              color: 'red',
-              value: 80,
-            },
-          ],
-        },
-        unit: 'percent',
-      },
-      overrides: [],
-    },
-    options: {
-      legend: {
-        calcs: [],
-        displayMode: 'list',
-        placement: 'bottom',
-        showLegend: true,
-      },
-      tooltip: {
-        mode: 'single',
-        sort: 'none',
-      },
-    },
-  },
+        )
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+      ],
+      description='Number of open connections for the selected node.',
+    )
+    + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking(value='normal')
+    + g.panel.timeSeries.standardOptions.withUnit(''),
 
-  local nodeMemorySwapPanel = {
-    datasource: promDatasource,
-    targets: [
-      prometheus.target(
-        '100 * opensearch_os_swap_used_bytes{%(queriesSelector)s} / clamp_min((opensearch_os_swap_used_bytes{%(queriesSelector)s} + opensearch_os_swap_free_bytes{%(queriesSelector)s}), 1)'
-        % {
-          queriesSelector: variables.queriesSelector,
-          agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
-        },
-        datasource=promDatasource,
-        legendFormat=utils.labelsToPanelLegend($._config.instanceLabels),
-      ),
-    ],
-    type: 'timeseries',
-    title: 'Node memory swap',
-    description: 'Percentage of swap space used by OpenSearch and the Operating System on the selected node.',
-    fieldConfig: {
-      defaults: {
-        color: {
-          mode: 'palette-classic',
-        },
-        custom: {
-          axisCenteredZero: false,
-          axisColorMode: 'text',
-          axisLabel: '',
-          axisPlacement: 'auto',
-          barAlignment: 0,
-          drawStyle: 'line',
-          fillOpacity: 0,
-          gradientMode: 'none',
-          hideFrom: {
-            legend: false,
-            tooltip: false,
-            viz: false,
+  local nodeDiskUsagePanel =
+    commonlib.panels.disk.timeSeries.usagePercent.new(
+      'Node disk usage',
+      targets=[
+        g.query.prometheus.new(
+          promDatasource.uid,
+          '100 - (100 * opensearch_fs_path_free_bytes{%(queriesSelector)s} / clamp_min(opensearch_fs_path_total_bytes{%(queriesSelector)s}, 1))'
+          % {
+            queriesSelector: variables.queriesSelector,
+            agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
-          lineInterpolation: 'linear',
-          lineWidth: 1,
-          pointSize: 5,
-          scaleDistribution: {
-            type: 'linear',
-          },
-          showPoints: 'auto',
-          spanNulls: false,
-          stacking: {
-            group: 'A',
-            mode: 'none',
-          },
-          thresholdsStyle: {
-            mode: 'off',
-          },
-        },
-        mappings: [],
-        thresholds: {
-          mode: 'absolute',
-          steps: [
-            {
-              color: 'green',
-              value: null,
-            },
-            {
-              color: 'red',
-              value: 80,
-            },
-          ],
-        },
-        unit: 'percent',
-      },
-      overrides: [],
-    },
-    options: {
-      legend: {
-        calcs: [],
-        displayMode: 'list',
-        placement: 'bottom',
-        showLegend: true,
-      },
-      tooltip: {
-        mode: 'single',
-        sort: 'none',
-      },
-    },
-  },
+        )
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+      ],
+      description='Disk usage percentage of the selected node.',
+    ),
 
-  local nodeNetworkTrafficPanel = {
-    datasource: promDatasource,
-    targets: [
-      prometheus.target(
-        'sum by (%(agg)s) (rate(opensearch_transport_tx_bytes_count{%(queriesSelector)s}[$__rate_interval]))'
-        % {
-          queriesSelector: variables.queriesSelector,
-          agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
-        },
-        datasource=promDatasource,
-        legendFormat='%s - sent' % utils.labelsToPanelLegend($._config.instanceLabels),
-      ),
-      prometheus.target(
-        'sum by (%(agg)s) (rate(opensearch_transport_rx_bytes_count{%(queriesSelector)s}[$__rate_interval]))'
-        % {
-          queriesSelector: variables.queriesSelector,
-          agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
-        },
-        datasource=promDatasource,
-        legendFormat='%s - received' % utils.labelsToPanelLegend($._config.instanceLabels),
-      ),
-    ],
-    type: 'timeseries',
-    title: 'Node network traffic',
-    description: 'Node network traffic sent and received.',
-    fieldConfig: {
-      defaults: {
-        color: {
-          mode: 'palette-classic',
-        },
-        custom: {
-          axisCenteredZero: false,
-          axisColorMode: 'text',
-          axisLabel: '',
-          axisPlacement: 'auto',
-          barAlignment: 0,
-          drawStyle: 'line',
-          fillOpacity: 0,
-          gradientMode: 'none',
-          hideFrom: {
-            legend: false,
-            tooltip: false,
-            viz: false,
+  local nodeMemorySwapPanel =
+    commonlib.panels.memory.timeSeries.usagePercent.new(
+      'Node memory swap',
+      targets=[
+        g.query.prometheus.new(
+          promDatasource.uid,
+          '100 * opensearch_os_swap_used_bytes{%(queriesSelector)s} / clamp_min((opensearch_os_swap_used_bytes{%(queriesSelector)s} + opensearch_os_swap_free_bytes{%(queriesSelector)s}), 1)'
+          % {
+            queriesSelector: variables.queriesSelector,
+            agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
-          lineInterpolation: 'linear',
-          lineWidth: 1,
-          pointSize: 5,
-          scaleDistribution: {
-            type: 'linear',
+        )
+        + g.query.prometheus.withLegendFormat(utils.labelsToPanelLegend($._config.instanceLabels)),
+      ],
+      description='Percentage of swap space used by OpenSearch and the Operating System on the selected node.',
+    )
+    + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(5),
+
+  local nodeNetworkTrafficPanel =
+    commonlib.panels.network.timeSeries.traffic.new(
+      'Node network traffic',
+      targets=[
+        g.query.prometheus.new(
+          promDatasource.uid,
+          'sum by (%(agg)s) (rate(opensearch_transport_tx_bytes_count{%(queriesSelector)s}[$__rate_interval])) * 8'
+          % {
+            queriesSelector: variables.queriesSelector,
+            agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
           },
-          showPoints: 'auto',
-          spanNulls: false,
-          stacking: {
-            group: 'A',
-            mode: 'none',
-          },
-          thresholdsStyle: {
-            mode: 'off',
-          },
-        },
-        mappings: [],
-        thresholds: {
-          mode: 'absolute',
-          steps: [
-            {
-              color: 'green',
-              value: null,
-            },
-            {
-              color: 'red',
-              value: 80,
-            },
-          ],
-        },
-        unit: 'Bps',
-      },
-      overrides: [],
-    },
-    options: {
-      legend: {
-        calcs: [],
-        displayMode: 'list',
-        placement: 'bottom',
-        showLegend: true,
-      },
-      tooltip: {
-        mode: 'single',
-        sort: 'none',
-      },
-    },
-  },
+        )
+        + g.query.prometheus.withLegendFormat('%s - sent' % utils.labelsToPanelLegend($._config.instanceLabels)),
+        g.query.prometheus.new(
+          promDatasource.uid,
+          'sum by (%(agg)s) (rate(opensearch_transport_rx_bytes_count{%(queriesSelector)s}[$__rate_interval])) * 8'
+          %
+          {
+            queriesSelector: variables.queriesSelector,
+            agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
+          }
+
+        ) + g.query.prometheus.withLegendFormat('%s - received' % utils.labelsToPanelLegend($._config.instanceLabels)),
+      ],
+      description='Node network traffic sent and received.',
+    )
+    + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets('/sent/')
+    + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(5),
 
   local circuitBreakersPanel = {
     datasource: promDatasource,
