@@ -1,4 +1,5 @@
 local windowsobservlib = import '../windows-observ-lib/main.libsonnet';
+local g = import './g.libsonnet';
 
 local activedirectorymixin =
   windowsobservlib.new(
@@ -7,16 +8,37 @@ local activedirectorymixin =
     groupLabels=['job'],
     instanceLabels=['instance'],
   )
-  +  
-    {
-			config+: {
-      enableLokiLogs: false,
-			enableADDashboard: true,
-			}
-    };
 
-{  // TODO: Alter mixin to only pull in nessesary dashboards + alerts
-  grafanaDashboards+:: activedirectorymixin.grafana.dashboards,  // add the specific dashboards here
-  prometheusAlerts+:: activedirectorymixin.prometheus.alerts,  // add the specific alerts here
+  {
+    config+: {
+      enableLokiLogs: true,
+      enableADDashboard: true,
+    },
+  }
+
+  {
+    grafana+: {
+      local link = g.dashboard.link,
+      links: {
+        backToLogs:
+          link.link.new('Windows logs', '/d/activedirectory-logs')
+          + link.link.options.withKeepTime(true),
+        backToActiveDirectoryOverview:
+          link.link.new('Active Directory overview', '/d/activedirectory')
+          + link.link.options.withKeepTime(true),
+      },
+    },
+  };
+
+local activedirectorydashboards = ['activedirectory', 'logs'];
+local selectedDashboards = {
+  [key]: activedirectorymixin.grafana.dashboards[key]
+  for key in activedirectorydashboards
+  if key in activedirectorymixin.grafana.dashboards
+};
+
+{
+  grafanaDashboards+:: selectedDashboards,
+  prometheusAlerts+:: activedirectorymixin.prometheus.alerts,
   prometheusRules+:: activedirectorymixin.prometheus.recordingRules,
 }

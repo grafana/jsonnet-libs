@@ -15,44 +15,44 @@ local utils = commonlib.utils;
           [
             t.osInfo
             + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('os info'),
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('os info'),
             t.uptime
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('uptime'),
-            t.cpucount
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('cores'),
-            t.cpuusage
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('cpu usage'),
-            t.memorytotalbytes
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('memory total'),
-            t.memoryusagepercent
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('memory usage'),
-            t.disktotalc
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('disk c: total'),
-            t.diskusagecpercent
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('disk c: used'),
-            t.alertscritical
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('critical'),
-            t.alertswarning
-            + g.query.prometheus.withformat('table')
-            + g.query.prometheus.withinstant(true)
-            + g.query.prometheus.withrefid('warning'),
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('uptime'),
+            t.cpuCount
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('cores'),
+            t.cpuUsage
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('cpu usage'),
+            t.memoryTotalBytes
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('memory total'),
+            t.memoryUsagePercent
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('memory usage'),
+            t.diskTotalC
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('disk c: total'),
+            t.diskUsageCPercent
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('disk c: used'),
+            t.alertsCritical
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('critical'),
+            t.alertsWarning
+            + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRefId('warning'),
           ],
           description="all windows instances' perfomance at a glance."
         )
@@ -449,9 +449,18 @@ local utils = commonlib.utils;
                               targets=[t.networkInPacketsPerSec, t.networkOutPacketsPerSec]
                             )
                             + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+
+      //	alertsPanel: g.panel.alertList.new(
+      //	'Windows Active Directory alerts',
+      //	targets=[t.alertsPanel],
+      // description=|||
+      //   Alerts that are actively firing in Windows Active Directory environment.
+      // |||
+      //),
+
       replicationPendingOperations: commonlib.panels.generic.stat.info.new(
         'Replication pending operations',
-        targets=[t.diskIOWaitReadTime],
+        targets=[t.replicationPendingOperations],
         description=|||
           The number of replication operations that are pending in Active Directory.
           These operations could include a variety of tasks, such as updating directory objects, processing changes made on other domain controllers, or applying new schema updates.
@@ -497,123 +506,175 @@ local utils = commonlib.utils;
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('Digest')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('DS_client')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('DS_server')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('External')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('Fast')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('LDAP')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('Negotiate')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('NTLM')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + g.panel.table.standardOptions.withOverridesMixin([
                                 fieldOverride.byName.new('Simple')
                                 + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                + fieldOverride.byName.withProperty('custom.align', 'left')
                                 + fieldOverride.byName.withPropertiesFromOptions(
                                   table.standardOptions.withUnit('ops')
-                                  + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                  + table.standardOptions.color.withMode('continuous-BlPu')
                                 ),
                               ])
                               + table.queryOptions.withTransformationsMixin(
                                 [
                                   {
-                                    id: 'joinByField',
+                                    id: 'joinByLabels',
+                                    options: {
+                                      join: [
+                                        'instance',
+                                      ],
+                                      value: 'bind_method',
+                                    },
+                                  },
+                                  {
+                                    id: 'filterFieldsByName',
                                     options: {
                                       include: {
-                                        pattern: 'digest|ds_client|ds_server|external|fast|ldap|negotiate|ntlm|simple',
+                                        pattern: 'instance|digest|ds_client|ds_server|external|fast|ldap|negotiate|ntlm|simple',
                                       },
                                     },
                                   },
                                   {
                                     id: 'organize',
-                                    renameByName:
-                                      {
-                                        digest: 'Digest',
-                                        ds_client: 'DS_client',
-                                        ds_server: 'DS_server',
-                                        external: 'External',
-                                        fast: 'Fast',
-                                        ldap: 'LDAP',
-                                        negotiate: 'Negotiate',
-                                        ntlm: 'NTLM',
-                                        simple: 'Simple',
-                                      },
+                                    options: {
+                                      renameByName:
+                                        {
+                                          instance: 'Instance',
+                                          digest: 'Digest',
+                                          ds_client: 'DS_client',
+                                          ds_server: 'DS_server',
+                                          external: 'External',
+                                          fast: 'Fast',
+                                          ldap: 'LDAP',
+                                          negotiate: 'Negotiate',
+                                          ntlm: 'NTLM',
+                                          simple: 'Simple',
+                                        },
+                                    },
+                                  },
+                                  {
+                                    id: 'reduce',
+                                    options: {
+                                      includeTimeField: false,
+                                      mode: 'reduceFields',
+                                      reducers: [
+                                        'last',
+                                      ],
+                                    },
                                   },
                                 ]
                               ),
       intrasiteReplicationTraffic: commonlib.panels.generic.timeSeries.base.new(
-        'Intrasite replication traffic',
-        targets=[t.intrasiteReplicationTraffic],
-        description=|||
-          Rate of replication traffic between servers within the same site.
-        |||
-      ),
+                                     'Intrasite replication traffic',
+                                     targets=[t.intrasiteReplicationTraffic],
+                                     description=|||
+                                       Rate of replication traffic between servers within the same site.
+                                     |||
+                                   )
+                                   + g.panel.timeSeries.options.legend.withDisplayMode('table')
+                                   + g.panel.timeSeries.options.legend.withPlacement('bottom')
+                                   + g.panel.timeSeries.options.legend.withCalcs([
+                                     'min',
+                                     'max',
+                                     'mean',
+                                   ]),
       intersiteReplicationTraffic: commonlib.panels.generic.timeSeries.base.new(
-        'Intersite replication traffic',
-        targets=[t.intersiteReplicationTraffic],
-        description=|||
-          Rate of replication traffic between servers across different sites.
-        |||
-      ),
+                                     'Intersite replication traffic',
+                                     targets=[t.intersiteReplicationTraffic],
+                                     description=|||
+                                       Rate of replication traffic between servers across different sites.
+                                     |||
+                                   )
+                                   + g.panel.timeSeries.options.legend.withDisplayMode('table')
+                                   + g.panel.timeSeries.options.legend.withPlacement('bottom')
+                                   + g.panel.timeSeries.options.legend.withCalcs([
+                                     'min',
+                                     'max',
+                                     'mean',
+                                   ]),
       inboundReplicationUpdates: commonlib.panels.generic.timeSeries.base.new(
-        'Inbound replication updates',
-        targets=[t.inboundObjectsReplicationUpdates, t.inboundPropertiesReplicationUpdates],
-        description=|||
-          The rate of traffic received from other replication partners.
-        |||
-      ),
+                                   'Inbound replication updates',
+                                   targets=[t.inboundObjectsReplicationUpdates, t.inboundPropertiesReplicationUpdates],
+                                   description=|||
+                                     The rate of traffic received from other replication partners.
+                                   |||
+                                 )
+                                 + g.panel.timeSeries.options.legend.withDisplayMode('table')
+                                 + g.panel.timeSeries.options.legend.withPlacement('right')
+                                 + g.panel.timeSeries.options.legend.withCalcs([
+                                   'min',
+                                   'max',
+                                   'mean',
+                                 ]),
       databaseOperationsOverview: commonlib.panels.generic.table.base.new(
                                     'Database operations overview',
                                     targets=[t.databaseOperationsOverview],
@@ -624,72 +685,95 @@ local utils = commonlib.utils;
                                   + g.panel.table.standardOptions.withOverridesMixin([
                                     fieldOverride.byName.new('Add')
                                     + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                    + fieldOverride.byName.withProperty('custom.align', 'left')
                                     + fieldOverride.byName.withPropertiesFromOptions(
                                       table.standardOptions.withUnit('ops')
-                                      + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                      + table.standardOptions.color.withMode('continuous-BlPu')
                                     ),
                                   ])
                                   + g.panel.table.standardOptions.withOverridesMixin([
                                     fieldOverride.byName.new('Delete')
                                     + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                    + fieldOverride.byName.withProperty('custom.align', 'left')
                                     + fieldOverride.byName.withPropertiesFromOptions(
                                       table.standardOptions.withUnit('ops')
-                                      + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                      + table.standardOptions.color.withMode('continuous-BlPu')
                                     ),
                                   ])
                                   + g.panel.table.standardOptions.withOverridesMixin([
                                     fieldOverride.byName.new('Modify')
                                     + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                    + fieldOverride.byName.withProperty('custom.align', 'left')
                                     + fieldOverride.byName.withPropertiesFromOptions(
                                       table.standardOptions.withUnit('ops')
-                                      + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                      + table.standardOptions.color.withMode('continuous-BlPu')
                                     ),
                                   ])
                                   + g.panel.table.standardOptions.withOverridesMixin([
-                                    fieldOverride.byName.new('Delete')
+                                    fieldOverride.byName.new('Recycle')
                                     + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+                                    + fieldOverride.byName.withProperty('custom.align', 'left')
                                     + fieldOverride.byName.withPropertiesFromOptions(
                                       table.standardOptions.withUnit('ops')
-                                      + table.standardOptions.color.withMode('continuous-BlYlRd')
+                                      + table.standardOptions.color.withMode('continuous-BlPu')
                                     ),
                                   ])
                                   + table.queryOptions.withTransformationsMixin(
                                     [
                                       {
-                                        id: 'joinByField',
+                                        id: 'joinByLabels',
                                         options: {
-                                          include: {
-                                            pattern: 'add|delete|modify|recycle',
-                                          },
+                                          join: [
+                                            'instance',
+                                          ],
+                                          value: 'operation',
                                         },
                                       },
                                       {
-                                        id: 'joinByLabel',
+                                        id: 'filterFieldsByName',
                                         options: {
-                                          join: [
-                                            'operation',
-                                          ],
-                                          value: 'agent_hostname',
+                                          include: {
+                                            pattern: 'instance|add|delete|modify|recycle',
+                                          },
                                         },
                                       },
                                       {
                                         id: 'organize',
-                                        renameByName:
-                                          {
-                                            add: 'Add',
-                                            delete: 'Delete',
-                                            modify: 'Modify',
-                                            recycle: 'Recycle',
-                                          },
+                                        options: {
+                                          renameByName:
+                                            {
+                                              add: 'Add',
+                                              delete: 'Delete',
+                                              modify: 'Modify',
+                                              recycle: 'Recycle',
+                                            },
+                                        },
+                                      },
+                                      {
+                                        id: 'reduce',
+                                        options: {
+                                          includeTimeField: false,
+                                          mode: 'reduceFields',
+                                          reducers: [
+                                            'last',
+                                          ],
+                                        },
                                       },
                                     ]
                                   ),
       databaseOperations: commonlib.panels.generic.timeSeries.base.new(
-        'Database operations',
-        targets=[t.databaseOperations],
-        description=|||
-          The rate of database operations.
-        |||
-      ),
+                            'Database operations',
+                            targets=[t.databaseOperations],
+                            description=|||
+                              The rate of database operations.
+                            |||
+                          )
+                          + g.panel.timeSeries.options.legend.withDisplayMode('table')
+                          + g.panel.timeSeries.options.legend.withPlacement('right')
+                          + g.panel.timeSeries.options.legend.withCalcs([
+                            'min',
+                            'max',
+                            'mean',
+                          ]),
     },
 }

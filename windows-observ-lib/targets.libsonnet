@@ -334,6 +334,13 @@ local lokiQuery = g.query.loki;
         'irate(windows_net_packets_sent_total{%(queriesSelector)s}[$__rate_interval])' % variables
       )
       + prometheusQuery.withLegendFormat('{{ nic }} transmitted'),
+
+    //alertsPanel:
+    //	prometheusQuery.new(
+    //'${' + variables.datasources.prometheus.name + '}',
+    //'job=~"${job:regex}", instance=~"${instance:regex}"' % variables
+    //),
+
     replicationPendingOperations:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
@@ -362,7 +369,7 @@ local lokiQuery = g.query.loki;
     ldapOperations:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
-        'rate({windows_ad_directory_operations_total{origin=~"ldap", %(queriesSelector)s}[$__rate_interval])' % variables
+        'rate(windows_ad_directory_operations_total{origin=~"ldap", %(queriesSelector)s}[$__rate_interval])' % variables
       )
       + prometheusQuery.withLegendFormat('{{ instance }} - {{ operation }}'),
 
