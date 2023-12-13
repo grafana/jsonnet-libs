@@ -8,6 +8,7 @@ The Windows Active Directory mixin contains the following dashboards:
 - Windows logs
 
 and the following alerts:
+
 - WindowsActiveDirectoryHighPendingReplicationOperations
 - WindowsActiveDirectoryHighReplicationSyncRequestFailures
 - WindowsActiveDirectoryHighPasswordChange
@@ -34,7 +35,7 @@ Windows logs are enabled by default in the `config.libsonnet` and can be disable
 }
 ```
 
-For the selectors to properly work with Windows Active Directory event logs ingested into your logs datasource, please also include the matching `instance` and `job` labels in the [scrape configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
+For the selectors to properly work with the Windows logs ingested into your logs datasource, please also include the matching `instance` and `job` labels in the [scrape configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) to match the labels for ingested metrics.
 
 ```yaml
 - job_name: integrations/windows-exporter-application
