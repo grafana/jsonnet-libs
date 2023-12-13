@@ -1,5 +1,4 @@
 # Windows Active Directory mixin
-
 The Windows Active Directory mixin is a set of configurable Grafana dashboards and alerts.
 
 The Windows Active Directory mixin contains the following dashboards:
@@ -15,13 +14,11 @@ and the following alerts:
 - WindowsActiveDirectoryMetricsDown
 
 ## Windows Active Directory overview
-
 The Windows Active Directory overview dashboard provides details on alerts, LDAP operations and requests, bind operations, replication traffic, and database operations.
 ![Windows Active Directory overview dashboard (LDAP)](https://storage.googleapis.com/grafanalabs-integration-assets/windows-active-directory/screenshots/windows_active_directory_overview_1.png)
 ![Windows Active Directory overview dashboard (database)](https://storage.googleapis.com/grafanalabs-integration-assets/windows-active-directory/screenshots/window_active_directory_overview_2.png)
 
 # Windows logs
-
 The Windows logs dashboard provides details on incoming Windows application, security, and system logs.
 ![Windows logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/windows-active-directory/screenshots/windows_active_directory_logs.png)
 
@@ -109,7 +106,6 @@ For the selectors to properly work with the Windows logs ingested into your logs
 ```
 
 ## Alerts overview
-
 - WindowsActiveDirectoryHighPendingReplicationOperations: There is a high number of pending replication operations in Active Directory. A high number of pending operations sustained over a period of time can indicate a problem with replication.
 - WindowsActiveDirectoryHighReplicationSyncRequestFailures: There are a number of replication synchronization request failures. These can cause authentication failures, outdated information being propagated across domain controllers, and potentially data loss or inconsistencies.'
 - WindowsActiveDirectoryHighPasswordChange: There is a high number of password changes. This may indicate unauthorized changes or attacks.
@@ -130,7 +126,6 @@ Default thresholds can be configured in `config.libsonnet`.
 ```
 
 ## Install tools
-
 ```bash
 go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
 go install github.com/monitoring-mixins/mixtool/cmd/mixtool@latest
@@ -149,7 +144,6 @@ into your Grafana server. The exact details will be depending on your environmen
 `prometheus_alerts.yaml` needs to be imported into Prometheus.
 
 ## Generate dashboards and alerts
-
 Edit `config.libsonnet` if required and then build JSON dashboard files for Grafana:
 
 ```bash
