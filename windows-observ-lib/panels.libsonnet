@@ -16,27 +16,27 @@ local utils = commonlib.utils;
             t.osInfo
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('os info'),
+            + g.query.prometheus.withRefId('OS Info'),
             t.uptime
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('uptime'),
+            + g.query.prometheus.withRefId('Uptime'),
             t.cpuCount
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('cores'),
+            + g.query.prometheus.withRefId('Cores'),
             t.cpuUsage
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('cpu usage'),
+            + g.query.prometheus.withRefId('CPU usage'),
             t.memoryTotalBytes
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('memory total'),
+            + g.query.prometheus.withRefId('Memory total'),
             t.memoryUsagePercent
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('memory usage'),
+            + g.query.prometheus.withRefId('Memory usage'),
             t.diskTotalC
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
@@ -44,17 +44,17 @@ local utils = commonlib.utils;
             t.diskUsageCPercent
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('disk c: used'),
+            + g.query.prometheus.withRefId('Disk C: used'),
             t.alertsCritical
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('critical'),
+            + g.query.prometheus.withRefId('CRITICAL'),
             t.alertsWarning
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('warning'),
+            + g.query.prometheus.withRefId('WARNING'),
           ],
-          description="all windows instances' perfomance at a glance."
+          description="All Windows instances' perfomance at a glance."
         )
         + g.panel.table.options.withFooter(
           value={
