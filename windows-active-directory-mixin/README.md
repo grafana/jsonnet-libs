@@ -35,7 +35,7 @@ Windows logs are enabled by default in the `config.libsonnet` and can be disable
 For the selectors to properly work with the Windows logs ingested into your logs datasource, please also include the matching `instance` and `job` labels in the [scrape configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) to match the labels for ingested metrics.
 
 ```yaml
-- job_name: integrations/windows-exporter-application
+    - job_name: integrations/windows-exporter-application
       windows_events:
         use_incoming_timestamp: true
         eventlog_name: 'Application'

@@ -40,7 +40,7 @@ local utils = commonlib.utils;
             t.diskTotalC
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
-            + g.query.prometheus.withRefId('disk c: total'),
+            + g.query.prometheus.withRefId('Disk C: total'),
             t.diskUsageCPercent
             + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withInstant(true)
