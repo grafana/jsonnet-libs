@@ -19,6 +19,7 @@
     alertMemoryUsageThresholdCritical: '90',
     alertDiskUsageThresholdCritical: '90',
     // set to false to disable logs dashboard and logs annotations
+    enableADDashboard: false,
     enableLokiLogs: true,
   },
 }
