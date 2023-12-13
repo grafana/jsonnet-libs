@@ -335,12 +335,6 @@ local lokiQuery = g.query.loki;
       )
       + prometheusQuery.withLegendFormat('{{ nic }} transmitted'),
 
-    //alertsPanel:
-    //	prometheusQuery.new(
-    //'${' + variables.datasources.prometheus.name + '}',
-    //'job=~"${job:regex}", instance=~"${instance:regex}"' % variables
-    //),
-
     replicationPendingOperations:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',

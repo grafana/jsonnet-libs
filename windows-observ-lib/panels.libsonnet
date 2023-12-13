@@ -450,14 +450,10 @@ local utils = commonlib.utils;
                             )
                             + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
 
-      //	alertsPanel: g.panel.alertList.new(
-      //	'Windows Active Directory alerts',
-      //	targets=[t.alertsPanel],
-      // description=|||
-      //   Alerts that are actively firing in Windows Active Directory environment.
-      // |||
-      //),
-
+      alertsPanel: g.panel.alertList.new(
+                     'Windows Active Directory alerts'
+                   )
+                   + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter('job=~"${job:regex}", instance=~"${instance:regex}"'),
       replicationPendingOperations: commonlib.panels.generic.stat.info.new(
         'Replication pending operations',
         targets=[t.replicationPendingOperations],

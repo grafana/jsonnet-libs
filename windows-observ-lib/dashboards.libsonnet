@@ -152,19 +152,19 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
            + g.dashboard.withPanels(
              g.util.grid.wrapPanels(
                [
-                 // panels.alertsPanel {gridPos+: { w: 6, h: 6 } },
                  panels.replicationPendingOperations { gridPos+: { w: 6, h: 3 } },
                  panels.directoryServiceThreads { gridPos+: { w: 6, h: 3 } },
+                 panels.alertsPanel { gridPos+: { w: 12, h: 6 } },
                  panels.replicationPendingSynchronizations { gridPos+: { w: 12, h: 3 } },
                  panels.ldapBindRequests { gridPos+: { w: 12 } },
-                 panels.ldapOperations { gridPos+: { w: 12 } },
+                 panels.ldapOperations { gridPos+: { w: 12, h: 6 } },
                  panels.bindOperationsOverview { gridPos+: { w: 24 } },
                  panels.intrasiteReplicationTraffic { gridPos+: { w: 12 } },
                  panels.intersiteReplicationTraffic { gridPos+: { w: 12 } },
                  panels.inboundReplicationUpdates { gridPos+: { w: 24 } },
                  panels.databaseOperationsOverview { gridPos+: { w: 12 } },
                  panels.databaseOperations { gridPos+: { w: 12 } },
-               ], 12, 7
+               ], 12, 6
              )
            ) + root.applyCommon(vars.multiInstance, uid, tags, links, annotations, timezone, refresh, period),
        } else {}),
