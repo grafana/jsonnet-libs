@@ -28,7 +28,6 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
               panels.diskIOutilPercentTopK { gridPos+: { w: 12 } },
               panels.diskUsagePercentTopK { gridPos+: { w: 12 } },
               panels.networkErrorsAndDroppedPerSecTopK { gridPos+: { w: 24 } },
-              panels.replicationPendingOperations { gridPos+: { w: 6, h: 3 } },
             ], 12, 7
           )
         )
