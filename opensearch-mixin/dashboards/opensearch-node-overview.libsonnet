@@ -17,6 +17,12 @@ local dashboardUidSuffix = '-node-overview';
     varMetric='opensearch_os_cpu_percent'
   ),
 
+  local panels = (import '../panels.libsonnet').new(
+    $._config.groupLabels,
+    $._config.instanceLabels,
+    variables,
+  ),
+
   local promDatasource = {
     uid: '${%s}' % variables.datasources.prometheus.name,
   },
@@ -1143,7 +1149,7 @@ local dashboardUidSuffix = '-node-overview';
 
   grafanaDashboards+:: {
     'node-overview.json':
-      g.dashboard.new($._config.dashboardNamePrefix +'OpenSearch node overview')
+      g.dashboard.new($._config.dashboardNamePrefix + 'OpenSearch node overview')
       + g.dashboard.withTags($._config.dashboardTags)
       + g.dashboard.time.withFrom($._config.dashboardPeriod)
       + g.dashboard.withTimezone($._config.dashboardTimezone)
@@ -1161,11 +1167,12 @@ local dashboardUidSuffix = '-node-overview';
       + g.dashboard.withPanels(
         std.flattenArrays([
           [
-            nodeHealthRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
-            nodeCPUUsagePanel { gridPos: { h: 7, w: 6, x: 0, y: 1 } },
-            nodeMemoryUsagePanel { gridPos: { h: 7, w: 6, x: 6, y: 1 } },
-            nodeIOPanel { gridPos: { h: 7, w: 6, x: 12, y: 1 } },
-            nodeOpenConnectionsPanel { gridPos: { h: 7, w: 6, x: 18, y: 1 } },
+            panels.osRolesTimeline { gridPos: { h: 5, w: 24, x: 0, y: 0 } },
+            nodeHealthRow { gridPos: { h: 1, w: 24, x: 0, y: 1 } },
+            nodeCPUUsagePanel { gridPos: { h: 7, w: 6, x: 0, y: 2 } },
+            nodeMemoryUsagePanel { gridPos: { h: 7, w: 6, x: 6, y: 2 } },
+            nodeIOPanel { gridPos: { h: 7, w: 6, x: 12, y: 2 } },
+            nodeOpenConnectionsPanel { gridPos: { h: 7, w: 6, x: 18, y: 2 } },
             nodeDiskUsagePanel { gridPos: { h: 7, w: 6, x: 0, y: 8 } },
             nodeMemorySwapPanel { gridPos: { h: 7, w: 6, x: 6, y: 8 } },
             nodeNetworkTrafficPanel { gridPos: { h: 7, w: 6, x: 12, y: 8 } },

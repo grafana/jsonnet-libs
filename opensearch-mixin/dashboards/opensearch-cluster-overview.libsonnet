@@ -1,5 +1,5 @@
-local g = (import '../g.libsonnet');
-local grafana = (import 'grafonnet/grafana.libsonnet');
+local g = import '../g.libsonnet';
+local grafana = import 'grafonnet/grafana.libsonnet';
 local prometheus = grafana.prometheus;
 local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
@@ -14,6 +14,12 @@ local dashboardUidSuffix = '-cluster-overview';
     groupLabels=$._config.groupLabels,
     instanceLabels=[],
     varMetric='opensearch_cluster_status'
+  ),
+
+  local panels = (import '../panels.libsonnet').new(
+    $._config.groupLabels,
+    $._config.instanceLabels,
+    variables,
   ),
 
   local promDatasource = {
@@ -1660,7 +1666,7 @@ local dashboardUidSuffix = '-cluster-overview';
 
   grafanaDashboards+:: {
     'opensearch-cluster-overview.json':
-      g.dashboard.new($._config.dashboardNamePrefix +'OpenSearch cluster overview')
+      g.dashboard.new($._config.dashboardNamePrefix + 'OpenSearch cluster overview')
       + g.dashboard.withTags($._config.dashboardTags)
       + g.dashboard.time.withFrom($._config.dashboardPeriod)
       + g.dashboard.withTimezone($._config.dashboardTimezone)
@@ -1677,11 +1683,13 @@ local dashboardUidSuffix = '-cluster-overview';
       )
       + g.dashboard.withPanels(
         [
-          clusterStatusPanel { gridPos: { h: 4, w: 4, x: 0, y: 0 } },
-          nodeCountPanel { gridPos: { h: 4, w: 5, x: 4, y: 0 } },
-          dataNodeCountPanel { gridPos: { h: 4, w: 5, x: 9, y: 0 } },
-          shardCountPanel { gridPos: { h: 4, w: 5, x: 14, y: 0 } },
-          activeShardsPercentagePanel { gridPos: { h: 4, w: 5, x: 19, y: 0 } },
+          panels.osRoles { gridPos: { h: 6, w: 24, x: 0, y: 0 } },
+          clusterStatusPanel { gridPos: { h: 5, w: 3, x: 0, y: 2 } },
+          nodeCountPanel { gridPos: { h: 5, w: 3, x: 3, y: 2 } },
+          dataNodeCountPanel { gridPos: { h: 5, w: 3, x: 6, y: 2 } },
+          shardCountPanel { gridPos: { h: 5, w: 3, x: 9, y: 2 } },
+          activeShardsPercentagePanel { gridPos: { h: 5, w: 3, x: 12, y: 2 } },
+          panels.osRolesTimeline { gridPos: { h: 5, w: 9, x: 15, y: 2 } },
           topNodesByCPUUsagePanel { gridPos: { h: 9, w: 8, x: 0, y: 4 } },
           breakersTrippedPanel { gridPos: { h: 9, w: 8, x: 8, y: 4 } },
           shardStatusPanel { gridPos: { h: 9, w: 8, x: 16, y: 4 } },
