@@ -2,7 +2,7 @@
   prometheusAlerts+:: {
     groups+: [
       {
-        name: $._config.uid+'-alerts',
+        name: $._config.uid + '-alerts',
         rules: [
           {
             alert: 'OpenSearchYellowCluster',
