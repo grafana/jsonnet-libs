@@ -2737,7 +2737,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "irate(http_server_requests_seconds_sum{instance=~\"$instance\", job=~\"$job\", application=~\"$application\", exception=\"None\", uri!~\".*actuator.*\"}[$__rate_interval]) / irate(http_server_requests_seconds_count{instance=~\"$instance\", job=~\"$job\", application=~\"$application\", exception=\"None\", uri!~\".*actuator.*\"}[$__rate_interval])",
+          "expr": "irate(http_server_requests_seconds_sum{instance=~\"$instance\", job=~\"$job\", application=~\"$application\", exception=\"none\", uri!~\".*actuator.*\"}[$__rate_interval]) / irate(http_server_requests_seconds_count{instance=~\"$instance\", job=~\"$job\", application=~\"$application\", exception=\"none\", uri!~\".*actuator.*\"}[$__rate_interval])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{method}} [{{status}}] - {{uri}}",
