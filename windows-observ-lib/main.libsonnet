@@ -19,7 +19,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     local this = self,
     config: {
-      // any modular library should inlcude as inputs:
+      // any modular library should include as inputs:
       // 'dashboardNamePrefix' - Use as prefix for all Dashboards and (optional) rule groups
       // 'filteringSelector' - Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
       // 'groupLabels' - one or more labels that can be used to identify 'group' of instances. In simple cases, can be 'job' or 'cluster'.
@@ -40,6 +40,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       dashboardPeriod: 'now-1h',
       dashboardTimezone: 'default',
       dashboardRefresh: '1m',
+
+      // optional Windows AD
+      alertsHighPendingReplicationOperations: 50,  // count
+      alertsHighReplicationSyncRequestFailures: 0,  // count
+      alertsHighPasswordChanges: 25,  // count
+      alertsMetricsDownJobName: 'integrations/windows_exporter',
+      enableADDashboard: false,
 
       // logs lib related
       enableLokiLogs: true,

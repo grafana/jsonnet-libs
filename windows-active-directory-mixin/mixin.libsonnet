@@ -1,7 +1,7 @@
 local windowsobservlib = import '../windows-observ-lib/main.libsonnet';
 local alerts = import './alerts/alerts.libsonnet';
 local g = import './g.libsonnet';
-
+local var = g.dashboard.variable;
 local activedirectorymixin =
   windowsobservlib.new(
     filteringSelector='job=~"integrations/windows_exporter"',
@@ -12,11 +12,6 @@ local activedirectorymixin =
 
   {
     config+: {
-      alertsHighPendingReplicationOperations: 50,  // count
-      alertsHighReplicationSyncRequestFailures: 0,
-      alertsHighPasswordChanges: 25,
-      alertsMetricsDownJobName: 'integrations/windows_exporter',
-      enableLokiLogs: true,
       enableADDashboard: true,
     },
   }
@@ -26,12 +21,21 @@ local activedirectorymixin =
       local link = g.dashboard.link,
       links: {
         backToLogs:
-          link.link.new('Windows logs', '/d/activedirectory-logs')
+          link.link.new('Windows logs', '/d/' + activedirectorymixin.grafana.dashboards.logs.uid)
+          + link.dashboards.options.withIncludeVars(true)
           + link.link.options.withKeepTime(true),
         backToActiveDirectoryOverview:
-          link.link.new('Active Directory overview', '/d/activedirectory')
+          link.link.new('Active Directory overview', '/d/' + activedirectorymixin.grafana.dashboards.activedirectory.uid)
+          + link.dashboards.options.withIncludeVars(true)
           + link.link.options.withKeepTime(true),
       },
+      variables+: {
+        datasources+: {
+          loki+: var.datasource.withRegex('Loki|.+logs'),
+          prometheus+: var.datasource.withRegex('Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
+        },
+      },
+
     },
   };
 
@@ -44,6 +48,6 @@ local selectedDashboards = {
 
 {
   grafanaDashboards+:: selectedDashboards,
-  prometheusAlerts+:: alerts,
+  prometheusAlerts+:: activedirectorymixin.prometheus.alerts,
   prometheusRules+:: activedirectorymixin.prometheus.recordingRules,
 }

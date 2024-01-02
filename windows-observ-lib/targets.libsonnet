@@ -1,4 +1,5 @@
 local g = import './g.libsonnet';
+local commonlib = import 'common-lib/common/main.libsonnet';
 local prometheusQuery = g.query.prometheus;
 local lokiQuery = g.query.loki;
 
@@ -358,60 +359,60 @@ local lokiQuery = g.query.loki;
         '${' + variables.datasources.prometheus.name + '}',
         'rate(windows_ad_binds_total{bind_method=~"ldap", %(queriesSelector)s}[$__rate_interval])' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }}'),
+      + prometheusQuery.withLegendFormat(commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
 
     ldapOperations:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         'rate(windows_ad_directory_operations_total{origin=~"ldap", %(queriesSelector)s}[$__rate_interval])' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }} - {{ operation }}'),
+      + prometheusQuery.withLegendFormat('%s - {{ operation }}' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
 
     bindOperationsOverview:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         'rate(windows_ad_binds_total{%(queriesSelector)s}[$__rate_interval])' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }} - {{ operation }}'),
+      + prometheusQuery.withLegendFormat('%s - {{ operation }}' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
 
     intrasiteReplicationTraffic:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
-        'rate(windows_ad_replication_data_intrasite_bytes_total{%(queriesSelector)s}[$__rate_interval])' % variables
+        'rate(windows_ad_replication_data_intrasite_bytes_total{%(queriesSelector)s}[$__rate_interval]) * 8' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }} - {{ direction }}'),
+      + prometheusQuery.withLegendFormat('%s - {{ direction }}' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
 
     intersiteReplicationTraffic:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
-        'rate(windows_ad_replication_data_intersite_bytes_total{%(queriesSelector)s}[$__rate_interval])' % variables
+        'rate(windows_ad_replication_data_intersite_bytes_total{%(queriesSelector)s}[$__rate_interval]) * 8' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }} - {{ direction }}'),
+      + prometheusQuery.withLegendFormat('%s - {{ direction }}' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
     inboundObjectsReplicationUpdates:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         'rate(windows_ad_replication_inbound_objects_updated_total{%(queriesSelector)s}[$__rate_interval])' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }} objects'),
+      + prometheusQuery.withLegendFormat('%s objects' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
     inboundPropertiesReplicationUpdates:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         'rate(windows_ad_replication_inbound_properties_updated_total{%(queriesSelector)s}[$__rate_interval])' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }} properties'),
+      + prometheusQuery.withLegendFormat('%s properties' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
     databaseOperationsOverview:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         'rate(windows_ad_database_operations_total{%(queriesSelector)s}[$__rate_interval])' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }} - {{ operation }}'),
+      + prometheusQuery.withLegendFormat('%s - {{ operation }}' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
 
     databaseOperations:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         'rate(windows_ad_database_operations_total{%(queriesSelector)s}[$__rate_interval])' % variables
       )
-      + prometheusQuery.withLegendFormat('{{ instance }} - {{ operation }}'),
+      + prometheusQuery.withLegendFormat('%s - {{ operation }}' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
 
   },
 }

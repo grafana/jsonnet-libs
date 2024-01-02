@@ -453,7 +453,7 @@ local utils = commonlib.utils;
       alertsPanel: g.panel.alertList.new(
                      'Windows Active Directory alerts'
                    )
-                   + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter('job=~"${job:regex}", instance=~"${instance:regex}"'),
+                   + g.panel.alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesSelectorAdvancedSyntax),
       replicationPendingOperations: commonlib.panels.generic.stat.info.new(
         'Replication pending operations',
         targets=[t.replicationPendingOperations],
@@ -477,20 +477,22 @@ local utils = commonlib.utils;
         |||
       ),
       ldapBindRequests: commonlib.panels.generic.timeSeries.base.new(
-        'LDAP bind requests',
-        targets=[t.ldapBindRequests],
-        description=|||
-          The rate at which LDAP bind requests are being made.
-        |||
-      ),
+                          'LDAP bind requests',
+                          targets=[t.ldapBindRequests],
+                          description=|||
+                            The rate at which LDAP bind requests are being made.
+                          |||
+                        )
+                        + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
       ldapOperations: commonlib.panels.generic.timeSeries.base.new(
-        'LDAP operations',
-        targets=[t.ldapOperations],
-        description=|||
-          The rate of LDAP read, search, and write operations.
-        |||
-      ),
+                        'LDAP operations',
+                        targets=[t.ldapOperations],
+                        description=|||
+                          The rate of LDAP read, search, and write operations.
+                        |||
+                      )
+                      + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
       bindOperationsOverview: commonlib.panels.generic.table.base.new(
                                 'Bind operations overview',
@@ -629,7 +631,7 @@ local utils = commonlib.utils;
                                   },
                                 ]
                               ),
-      intrasiteReplicationTraffic: commonlib.panels.generic.timeSeries.base.new(
+      intrasiteReplicationTraffic: commonlib.panels.network.timeSeries.traffic.new(
                                      'Intrasite replication traffic',
                                      targets=[t.intrasiteReplicationTraffic],
                                      description=|||
@@ -643,7 +645,7 @@ local utils = commonlib.utils;
                                      'max',
                                      'mean',
                                    ]),
-      intersiteReplicationTraffic: commonlib.panels.generic.timeSeries.base.new(
+      intersiteReplicationTraffic: commonlib.panels.network.timeSeries.traffic.new(
                                      'Intersite replication traffic',
                                      targets=[t.intersiteReplicationTraffic],
                                      description=|||
@@ -764,6 +766,7 @@ local utils = commonlib.utils;
                               The rate of database operations.
                             |||
                           )
+                          + g.panel.timeSeries.standardOptions.withUnit('ops')
                           + g.panel.timeSeries.options.legend.withDisplayMode('table')
                           + g.panel.timeSeries.options.legend.withPlacement('right')
                           + g.panel.timeSeries.options.legend.withCalcs([
