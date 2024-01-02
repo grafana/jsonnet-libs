@@ -11,98 +11,77 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-
 local liveNodesPanel = {
-  datasource: promDatasource,
-  targets: [
-    prometheus.target(
-      'solr_collections_live_nodes{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"}',
-      datasource=promDatasource,
-      legendFormat='{{instance}} - {{zk_host}}',
-      instant=true,
-      format='table',
-    ),
-  ],
-  type: 'barchart',
-  title: 'Live nodes',
+  datasource: {
+    type: 'prometheus',
+    uid: '${prometheus_datasource}',
+  },
   description: 'Number of live nodes in the Solr cluster.',
   fieldConfig: {
     defaults: {
       color: {
         mode: 'thresholds',
       },
-      custom: {
-        axisBorderShow: false,
-        axisCenteredZero: false,
-        axisColorMode: 'text',
-        axisGridShow: false,
-        axisLabel: '',
-        axisPlacement: 'auto',
-        fillOpacity: 30,
-        gradientMode: 'opacity',
-        hideFrom: {
-          legend: false,
-          tooltip: false,
-          viz: false
-        },
-        lineWidth: 2,
-        scaleDistribution: {
-          type: 'linear'
-        },
-        thresholdsStyle: {
-          mode: 'off'
-        }
-      },
       mappings: [],
+      min: 0,
       thresholds: {
         mode: 'absolute',
         steps: [
           {
+            color: 'red',
+            value: null,
+          },
+          {
             color: 'green',
-            value: null
-          }
-        ]
+            value: 1,
+          },
+        ],
       },
-      unit: '',
+      unit: 'none',
     },
-    overrides: []
+    overrides: [],
   },
   options: {
-    barRadius: 0,
-    barWidth: 0.97,
-    colorByField: 'instance',
-    fullHighlight: false,
-    groupWidth: 0.7,
-    legend: {
-      calcs: [],
-      displayMode: 'list',
-      placement: 'right',
-      showLegend: true,
-      width: 0
+    colorMode: 'value',
+    graphMode: 'none',
+    justifyMode: 'auto',
+    orientation: 'auto',
+    reduceOptions: {
+      calcs: [
+        'lastNotNull',
+      ],
+      fields: '',
+      values: false,
     },
-    orientation: 'horizontal',
-    showValue: 'auto',
-    stacking: 'none',
-    tooltip: {
-      mode: 'single',
-      sort: 'none'
-    },
-    xField: 'instance',
-    xTickLabelRotation: 0,
-    xTickLabelSpacing: 0
+    textMode: 'value',
+    wideLayout: true,
   },
   pluginVersion: '9.4.3',
+  targets: [
+    {
+      disableTextWrap: false,
+      expr: 'min by (job, solr_cluster) (solr_collections_live_nodes{job=~"$job", solr_cluster=~"$solr_cluster"})',
+      fullMetaSearch: false,
+      includeNullMetadata: true,
+      instant: false,
+      legendFormat: '__auto',
+      range: true,
+      useBackend: false,
+    },
+  ],
+  title: 'Live nodes',
+  type: 'stat',
 };
 
 local zookeeperStatusPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'solr_zookeeper_status{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"}',
+      'solr_zookeeper_status{job=~"$job", solr_cluster=~"$solr_cluster"}',
       datasource=promDatasource,
       intervalFactor=2,
       instant=true,
-      legendFormat='{{instance}} - {{zk_host}}',
+      legendFormat='{{zk_host}}',
       format='table',
     ),
   ],
@@ -255,9 +234,9 @@ local zookeeperEnsembleSizePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'solr_zookeeper_ensemble_size{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"}',
+      'solr_zookeeper_ensemble_size{job=~"$job", solr_cluster=~"$solr_cluster"}',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{zk_host}}',
+      legendFormat='{{zk_host}}',
       format='time_series',
     ),
   ],
@@ -309,7 +288,7 @@ local zookeeperEnsembleSizePanel = {
           },
         ],
       },
-      unit: '',
+      unit: 'none',
     },
     overrides: [],
   },
@@ -340,7 +319,7 @@ local alertsPanel = {
   title: 'Alerts',
   description: 'Panel to report on the status of firing alerts.',
   options: {
-    alertInstanceLabelFilter: '{job=~"$job", instance="$instance", solr_cluster=~"$solr_cluster"}',
+    alertInstanceLabelFilter: '{job=~"$job", solr_cluster=~"$solr_cluster"}',
     alertName: '',
     dashboardAlerts: false,
     groupBy: [],
@@ -361,13 +340,13 @@ local alertsPanel = {
 local shardStatePanel = {
   datasource: {
     type: 'prometheus',
-    uid: '${prometheus_datasource}'
+    uid: '${prometheus_datasource}',
   },
   description: 'Percent of running shards in the cluster.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds'
+        mode: 'thresholds',
       },
       mappings: [],
       max: 100,
@@ -377,21 +356,21 @@ local shardStatePanel = {
         steps: [
           {
             color: 'red',
-            value: null
+            value: null,
           },
           {
             color: 'yellow',
-            value: 80
+            value: 80,
           },
           {
             color: 'green',
-            value: 95
-          }
-        ]
+            value: 95,
+          },
+        ],
       },
-      unit: 'percent'
+      unit: 'percent',
     },
-    overrides: []
+    overrides: [],
   },
   options: {
     colorMode: 'value',
@@ -400,28 +379,28 @@ local shardStatePanel = {
     orientation: 'auto',
     reduceOptions: {
       calcs: [
-        'lastNotNull'
+        'lastNotNull',
       ],
       fields: '',
-      values: false
+      values: false,
     },
     textMode: 'value',
-    wideLayout: true
+    wideLayout: true,
   },
   pluginVersion: '9.4.3',
   targets: [
     {
       disableTextWrap: false,
-      expr: '100 * sum(solr_collections_shard_state{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"})  / count(solr_collections_shard_state{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"})',
+      expr: '100 * sum(solr_collections_shard_state{job=~"$job", solr_cluster=~"$solr_cluster"})  / count(solr_collections_shard_state{job=~"$job", solr_cluster=~"$solr_cluster"})',
       fullMetaSearch: false,
       includeNullMetadata: true,
       instant: false,
       legendFormat: '__auto',
       range: true,
-      useBackend: false
-    }
+      useBackend: false,
+    },
   ],
-  title: 'Shard state',
+  title: 'Running shards',
   type: 'stat',
 };
 
@@ -429,7 +408,7 @@ local shardStatusPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'solr_collections_shard_state{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"}',
+      'solr_collections_shard_state{job=~"$job", solr_cluster=~"$solr_cluster"}',
       datasource=promDatasource,
       intervalFactor=2,
       instant=true,
@@ -609,13 +588,13 @@ local shardStatusPanel = {
 local replicaStatePanel = {
   datasource: {
     type: 'prometheus',
-    uid: '${prometheus_datasource}'
+    uid: '${prometheus_datasource}',
   },
   description: 'Shows the total percent of running shards in the cluster.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'thresholds'
+        mode: 'thresholds',
       },
       mappings: [],
       max: 100,
@@ -625,21 +604,21 @@ local replicaStatePanel = {
         steps: [
           {
             color: 'red',
-            value: null
+            value: null,
           },
           {
             color: 'yellow',
-            value: 80
+            value: 80,
           },
           {
             color: 'green',
-            value: 95
-          }
-        ]
+            value: 95,
+          },
+        ],
       },
-      unit: 'percent'
+      unit: 'percent',
     },
-    overrides: []
+    overrides: [],
   },
   options: {
     colorMode: 'value',
@@ -648,28 +627,28 @@ local replicaStatePanel = {
     orientation: 'auto',
     reduceOptions: {
       calcs: [
-        'lastNotNull'
+        'lastNotNull',
       ],
       fields: '',
-      values: false
+      values: false,
     },
     textMode: 'value',
-    wideLayout: true
+    wideLayout: true,
   },
   pluginVersion: '9.4.3',
   targets: [
     {
       disableTextWrap: false,
-      expr: '100 * sum(solr_collections_shard_state{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"})  / count(solr_collections_shard_state{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"})',
+      expr: '100 * sum(solr_collections_replica_state{job=~"$job", solr_cluster=~"$solr_cluster"})  / count(solr_collections_replica_state{job=~"$job", solr_cluster=~"$solr_cluster"})',
       fullMetaSearch: false,
       includeNullMetadata: true,
       instant: false,
       legendFormat: '__auto',
       range: true,
-      useBackend: false
-    }
+      useBackend: false,
+    },
   ],
-  title: 'Shard state',
+  title: 'Running shards',
   type: 'stat',
 };
 
@@ -677,7 +656,7 @@ local replicaStatusPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'solr_collections_replica_state{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"}',
+      'solr_collections_replica_state{job=~"$job", solr_cluster=~"$solr_cluster"}',
       datasource=promDatasource,
       legendFormat='{{auto}}',
       instant=true,
@@ -942,7 +921,7 @@ local topNodeMetricsRow = {
   datasource: promDatasource,
   targets: [],
   type: 'row',
-  title: 'Top node metrics',
+  title: 'Top core metrics',
   collapsed: false,
 };
 
@@ -950,19 +929,19 @@ local topCPULoadByNodePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, 100 * solr_metrics_jvm_os_cpu_load{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster", item="systemCpuLoad"})',
+      'topk($k, 100 * avg by (job, base_url, solr_cluster) (solr_metrics_jvm_os_cpu_load{job=~"$job", solr_cluster=~"$solr_cluster", item="systemCpuLoad"}))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{base_url}}',
+      legendFormat='{{base_url}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
   title: 'Top CPU load by node',
-  description: 'CPU load caused by the JVM.',
+  description: 'Top CPU load caused by the JVM.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'palette-classic',
+        mode: 'continuous-BlYlRd',
       },
       custom: {
         axisCenteredZero: false,
@@ -1035,19 +1014,19 @@ local topHeapMemoryUsageByNodePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, 100 * sum without(item)(solr_metrics_jvm_memory_heap_bytes{item="used"}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{item="max"}), 1))',
+      'topk($k, 100 * avg by (job, base_url, solr_cluster) (sum without(item)(solr_metrics_jvm_memory_heap_bytes{job=~"$job", solr_cluster=~"$solr_cluster", item="used"}) / clamp_min(sum without(item)(solr_metrics_jvm_memory_heap_bytes{job=~"$job", solr_cluster=~"$solr_cluster", item="max"}), 1)))',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{base_url}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
   title: 'Top heap memory usage by node',
-  description: 'Tracks JVM heap memory usage.',
+  description: 'Top JVM heap memory usage.',
   fieldConfig: {
     defaults: {
       color: {
-        mode: 'palette-classic',
+        mode: 'continuous-BlYlRd',
       },
       custom: {
         axisCenteredZero: false,
@@ -1120,15 +1099,15 @@ local topMeanQueriesByNodePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, solr_metrics_core_query_mean_rate{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster", category="QUERY", collection=~"$solr_collection", core=~"$solr_core"})',
+      'topk($k, avg by(job, base_url, solr_cluster, collection, core, searchHandler) (solr_metrics_core_query_mean_rate{job=~"$job", solr_cluster=~"$solr_cluster", category="QUERY", collection=~"$solr_collection", core=~"$solr_core"}))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{collection}} - {{core}} - {{searchHandler}}',
+      legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Top mean queries by node',
-  description: 'Average rate of query processing in the cluster.',
+  title: 'Top mean queries by core',
+  description: 'Top average rate of query processing in the cluster by core.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1174,7 +1153,7 @@ local topMeanQueriesByNodePanel = {
           },
         ],
       },
-      unit: 'ms',
+      unit: 'reqps',
     },
     overrides: [],
   },
@@ -1196,16 +1175,16 @@ local topUpdateHandlersByNodePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, increase(solr_metrics_core_update_handler_adds_total{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core"}[$__interval:]))',
+      'topk($k, avg by (job, base_url, solr_cluster, collection, core) (increase(solr_metrics_core_update_handler_adds_total{job=~"$job", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core"}[$__interval:])))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{collection}} - {{core}}',
+      legendFormat='{{collection}} - {{core}}',
       format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Top update handlers by node / $__interval',
-  description: 'Total number of document additions in the cluster.',
+  title: 'Top update handlers by core / $__interval',
+  description: 'Top number of total document additions in the cluster by core.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1273,15 +1252,15 @@ local topIndexSizeByNodePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, solr_metrics_core_index_size_bytes{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core"})',
+      'topk($k, avg by (job, base_url, solr_cluster, collection, core) (solr_metrics_core_index_size_bytes{job=~"$job", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core"}))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{collection}} - {{core}}',
+      legendFormat='{{collection}} - {{core}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Top index size by node',
-  description: 'Size of the Solr index.',
+  title: 'Top index size by core',
+  description: 'Top size of the Solr index by core.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1349,15 +1328,15 @@ local topCacheHitRatioByNodePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bottomk($k, 100 * solr_metrics_core_searcher_cache_ratio{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core", type=~"documentCache|filterCache|queryResultCache"})',
+      'bottomk($k, 100 * avg by (job, base_url, solr_cluster, collection, core, type) (solr_metrics_core_searcher_cache_ratio{job=~"$job", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core", type=~"documentCache|filterCache|queryResultCache"}))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{collection}} - {{core}} - {{type}}',
+      legendFormat='{{collection}} - {{core}} - {{type}}',
       format='time_series',
     ),
   ],
   type: 'timeseries',
-  title: 'Top cache hit ratio by node',
-  description: 'Cache hit ratio in Solr searchers.',
+  title: 'Top cache hit ratio by core',
+  description: 'Top cache hit ratio in Solr searchers by core.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1442,16 +1421,16 @@ local topCoreErrorsByNodePanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, sum by (job, instance, solr_cluster, collection, core) (increase(solr_metrics_core_errors_total{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core"}[$__interval:])))',
+      'topk($k, avg by (job, solr_cluster, collection, core, baseurl) (increase(solr_metrics_core_errors_total{job=~"$job", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core"}[$__interval:])))',
       datasource=promDatasource,
-      legendFormat='{{instance}} - {{collection}} - {{core}}',
+      legendFormat='{{collection}} - {{core}}',
       format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Top core errors by node / $__interval',
-  description: 'Total errors in Solr cores.',
+  title: 'Top core errors by core / $__interval',
+  description: 'Top Solr core errors.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1519,16 +1498,16 @@ local topNodeErrorsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk($k, sum by (job, instance, solr_cluster, collection) (increase(solr_metrics_node_errors_total{job=~"$job", instance=~"$instance", solr_cluster=~"$solr_cluster"}[$__interval:])))',
+      'topk($k, avg by (job, base_url, solr_cluster, collection) (increase(solr_metrics_node_errors_total{job=~"$job", solr_cluster=~"$solr_cluster"}[$__interval:])))',
       datasource=promDatasource,
-      legendFormat='{{instance}}',
+      legendFormat='{{base_url}}',
       format='time_series',
       interval='1m',
     ),
   ],
   type: 'timeseries',
-  title: 'Top node errors / $__interval',
-  description: 'Total number of errors on Solr node.',
+  title: 'Top node errors by node / $__interval',
+  description: 'Top Solr node errors.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1624,17 +1603,6 @@ local topNodeErrorsPanel = {
             promDatasource,
             'label_values(solr_metrics_core_errors_total,job)',
             label='Job',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='.+',
-            sort=1
-          ),
-          template.new(
-            'instance',
-            promDatasource,
-            'label_values(solr_metrics_core_errors_total{job=~"$job"}, instance)',
-            label='Instance',
             refresh=2,
             includeAll=true,
             multi=true,
