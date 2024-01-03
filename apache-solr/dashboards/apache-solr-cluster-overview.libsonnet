@@ -936,8 +936,8 @@ local topCPULoadByNodePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Top CPU load by node',
-  description: 'Top CPU load caused by the JVM.',
+  title: 'Top nodes by CPU load',
+  description: 'Top nodes by CPU load caused by the JVM.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1021,8 +1021,8 @@ local topHeapMemoryUsageByNodePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Top heap memory usage by node',
-  description: 'Top JVM heap memory usage.',
+  title: 'Top nodes by heap memory usage',
+  description: 'Top nodes by the JVM heap memory usage.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1106,8 +1106,8 @@ local topMeanQueriesByNodePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Top mean queries by core',
-  description: 'Top average rate of query processing in the cluster by core.',
+  title: 'Top cores by mean queries',
+  description: 'Top cores by the average rate of query processing in the cluster.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1183,8 +1183,8 @@ local topUpdateHandlersByNodePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Top update handlers by core / $__interval',
-  description: 'Top number of total document additions in the cluster by core.',
+  title: 'Top cores by update handlers / $__interval',
+  description: 'Top cores by the number of total document additions in the cluster.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1259,8 +1259,8 @@ local topIndexSizeByNodePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Top index size by core',
-  description: 'Top size of the Solr index by core.',
+  title: 'Top cores by index size',
+  description: 'Top cores by the Solr index size.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1335,8 +1335,8 @@ local topCacheHitRatioByNodePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Top cache hit ratio by core',
-  description: 'Top cache hit ratio in Solr searchers by core.',
+  title: 'Top cores by cache hit ratio',
+  description: 'Top cores by the cache hit ratio in Solr searchers.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1429,8 +1429,8 @@ local topCoreErrorsByNodePanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Top core errors by core / $__interval',
-  description: 'Top Solr core errors.',
+  title: 'Top cores by core errors / $__interval',
+  description: 'Top cores by Solr core errors.',
   fieldConfig: {
     defaults: {
       color: {
@@ -1506,8 +1506,8 @@ local topNodeErrorsPanel = {
     ),
   ],
   type: 'timeseries',
-  title: 'Top node errors by node / $__interval',
-  description: 'Top Solr node errors.',
+  title: 'Top nodes by node errors / $__interval',
+  description: 'Top nodes by Solr node errors.',
   fieldConfig: {
     defaults: {
       color: {
