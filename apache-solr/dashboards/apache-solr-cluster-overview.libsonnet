@@ -648,7 +648,7 @@ local replicaStatePanel = {
       useBackend: false,
     },
   ],
-  title: 'Running shards',
+  title: 'Running replicas',
   type: 'stat',
 };
 
@@ -921,7 +921,7 @@ local topNodeMetricsRow = {
   datasource: promDatasource,
   targets: [],
   type: 'row',
-  title: 'Top core metrics',
+  title: 'Top metrics',
   collapsed: false,
 };
 
