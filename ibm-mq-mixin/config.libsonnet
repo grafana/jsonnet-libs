@@ -1,7 +1,7 @@
 {
   _config+:: {
     enableMultiCluster: false,
-    ibmmqSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job", instance=~"$instance"',
+    ibmmqSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
     dashboardTags: ['ibm-mq-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
