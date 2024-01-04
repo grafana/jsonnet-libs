@@ -1,6 +1,6 @@
 # Apache Solr Mixin
 
-Apache Solr mixin is a set of configurable Grafana dashboards and alerts.
+The Apache Solr mixin is a set of configurable Grafana dashboards and alerts.
 
 The Apache Solr mixin contains the following dashboards:
 
@@ -67,6 +67,13 @@ scrape_configs:
           instance: '<your-instance-name>'
           solr_cluster: '<your-cluster-name>'
           __path__: /var/log/logs/*.log
+    pipeline_stages:
+      - multiline:
+          firstline: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3}'
+      - regex:
+          expression: '^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{3} (?P<level>\w+)'
+      - labels:
+          level:
 ```
 
 ![Apache Solr Logs Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-logs-overview.png)

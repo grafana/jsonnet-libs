@@ -11,7 +11,7 @@ local logsDashboard = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main
             datasourceName='loki_datasource',
             datasourceRegex='(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+',
             filterSelector=$._config.filterSelector,
-            labels=['job', 'instance', 'level', 'solr_cluster', 'filename'],
+            labels=['job', 'solr_cluster', 'instance', 'level', 'filename'],
             formatParser=null,
             showLogsVolume=true
           )

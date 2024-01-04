@@ -403,7 +403,7 @@ local coreSearchAndRetrievalLocal95pQueryLatencyPanel = {
   ],
   type: 'timeseries',
   title: 'Core search and retrieval local p95 query latency',
-  description: 'Represents the 95th percentile latency for local core search and retrieval queries',
+  description: 'Represents the 95th percentile latency for local core search and retrieval queries.',
   fieldConfig: {
     defaults: {
       color: {
@@ -479,7 +479,7 @@ local coreSearchAndRetrievalLocal99pQueryLatencyPanel = {
   ],
   type: 'timeseries',
   title: 'Core search and retrieval 99p local query latency',
-  description: 'Represents the 99th percentile latency for local core search and retrieval queries',
+  description: 'Represents the 99th percentile latency for local core search and retrieval queries.',
   fieldConfig: {
     defaults: {
       color: {
