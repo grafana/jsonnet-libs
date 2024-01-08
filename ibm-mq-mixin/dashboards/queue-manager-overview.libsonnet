@@ -176,7 +176,7 @@ local estimatedMemoryUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(ibmmq_qmgr_ram_total_estimate_for_queue_manager_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}/ibmmq_qmgr_ram_total_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
+      '(ibmmq_qmgr_ram_total_estimate_for_queue_manager_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}/ibmmq_qmgr_ram_total_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -943,13 +943,13 @@ local queueOperationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqset_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
+      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqset_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQSET',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqinq_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
+      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqinq_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQINQ',
       format='time_series',
