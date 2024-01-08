@@ -1,4 +1,4 @@
 {
-  grafanaDashboardFolder: 'Envoy',
+  grafanaDashboardFolder:: 'Envoy',
 } +
 (import 'dashboards.libsonnet')
