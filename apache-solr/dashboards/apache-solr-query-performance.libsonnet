@@ -3,7 +3,7 @@ local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
 
-local dashboardUid = 'apache-solr-query-performance-overview';
+local dashboardUid = 'apache-solr-query-performance';
 
 local promDatasourceName = 'prometheus_datasource';
 
@@ -15,7 +15,7 @@ local updateHandlersPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(job, base_url, collection, core) (increase(solr_metrics_core_update_handler_adds_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core"}[$__interval:]))',
+      'avg by(job, base_url, collection, core) (increase(solr_metrics_core_update_handler_adds_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core"}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}}',
       format='time_series',
@@ -51,7 +51,7 @@ local updateHandlersPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -92,7 +92,7 @@ local coreSearchAndRetrievalQueryLoadPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -127,7 +127,7 @@ local coreSearchAndRetrievalQueryLoadPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -168,7 +168,7 @@ local coreSearchAndRetrieval95pQueryLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -203,7 +203,7 @@ local coreSearchAndRetrieval95pQueryLatencyPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -243,7 +243,7 @@ local coreSearchAndRetrieval99pQueryLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -278,7 +278,7 @@ local coreSearchAndRetrieval99pQueryLatencyPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -319,7 +319,7 @@ local coreSearchAndRetrievalLocalQueryLoadPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -354,7 +354,7 @@ local coreSearchAndRetrievalLocalQueryLoadPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -395,7 +395,7 @@ local coreSearchAndRetrievalLocal95pQueryLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -430,7 +430,7 @@ local coreSearchAndRetrievalLocal95pQueryLatencyPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -471,7 +471,7 @@ local coreSearchAndRetrievalLocal99pQueryLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/select|/query|/get", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -506,7 +506,7 @@ local coreSearchAndRetrievalLocal99pQueryLatencyPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -555,7 +555,7 @@ local specializedQueryLoadPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -590,7 +590,7 @@ local specializedQueryLoadPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -631,7 +631,7 @@ local specialized95pQueryLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -666,7 +666,7 @@ local specialized95pQueryLatencyPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -707,7 +707,7 @@ local specialized99pQueryLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -742,7 +742,7 @@ local specialized99pQueryLatencyPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -783,7 +783,7 @@ local specializedLocalQueryLoadPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_5minRate{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -818,7 +818,7 @@ local specializedLocalQueryLoadPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -859,7 +859,7 @@ local specializedLocal95pQueryLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p95_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -894,7 +894,7 @@ local specializedLocal95pQueryLatencyPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -935,7 +935,7 @@ local specializedLocal99pQueryLatencyPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",})',
+      'avg by(searchHandler, job, base_url, collection, core) (solr_metrics_core_query_local_p99_ms{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", searchHandler=~"/sql|/export|/stream", collection=~"$solr_collection", core=~"$solr_core",}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{searchHandler}}',
       format='time_series',
@@ -970,7 +970,7 @@ local specializedLocal99pQueryLatencyPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -1019,7 +1019,7 @@ local cacheEvictionsPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(type, job, base_url, collection, core) (increase(solr_metrics_core_searcher_cache{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core", type=~"documentCache|filterCache|queryResultCache", item=~"evictions"}[$__interval:]))',
+      'avg by(type, job, base_url, collection, core) (increase(solr_metrics_core_searcher_cache{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core", type=~"documentCache|filterCache|queryResultCache", item=~"evictions"}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{type}}',
       format='time_series',
@@ -1055,7 +1055,7 @@ local cacheEvictionsPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -1096,7 +1096,7 @@ local cacheHitRatioPanel = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(type, job, base_url, collection, core) (100 * solr_metrics_core_searcher_cache_ratio{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core", type=~"documentCache|filterCache|queryResultCache"})',
+      'avg by(type, job, base_url, collection, core) (100 * solr_metrics_core_searcher_cache_ratio{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", collection=~"$solr_collection", core=~"$solr_core", type=~"documentCache|filterCache|queryResultCache"}) > 0',
       datasource=promDatasource,
       legendFormat='{{collection}} - {{core}} - {{type}}',
       format='time_series',
@@ -1131,7 +1131,7 @@ local cacheHitRatioPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -1221,7 +1221,7 @@ local coreTimeoutsPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -1298,7 +1298,7 @@ local nodeTimeoutsPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -1382,7 +1382,7 @@ local queryErrorRatePanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -1458,7 +1458,7 @@ local queryClientErrorsPanel = {
           type: 'linear',
         },
         showPoints: 'never',
-        spanNulls: false,
+        spanNulls: true,
         stacking: {
           group: 'A',
           mode: 'none',
@@ -1497,9 +1497,9 @@ local queryClientErrorsPanel = {
 
 {
   grafanaDashboards+:: {
-    'apache-solr-query-performance-overview.json':
+    'apache-solr-query-performance.json':
       dashboard.new(
-        'Apache Solr query performance overview',
+        'Apache Solr query performance',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -1583,28 +1583,28 @@ local queryClientErrorsPanel = {
       .addPanels(
         [
           updateHandlersPanel { gridPos: { h: 6, w: 24, x: 0, y: 0 } },
-          coreSearchAndRetrievalQueryLoadPanel { gridPos: { h: 6, w: 8, x: 0, y: 6 } },
-          coreSearchAndRetrieval95pQueryLatencyPanel { gridPos: { h: 6, w: 8, x: 8, y: 6 } },
-          coreSearchAndRetrieval99pQueryLatencyPanel { gridPos: { h: 6, w: 8, x: 16, y: 6 } },
-          specializedQueryLoadPanel { gridPos: { h: 6, w: 8, x: 0, y: 12 } },
-          specialized95pQueryLatencyPanel { gridPos: { h: 6, w: 8, x: 8, y: 12 } },
-          specialized99pQueryLatencyPanel { gridPos: { h: 6, w: 8, x: 16, y: 12 } },
-          localQueriesRow { gridPos: { h: 1, w: 24, x: 0, y: 18 } },
-          coreSearchAndRetrievalLocalQueryLoadPanel { gridPos: { h: 6, w: 8, x: 0, y: 19 } },
-          coreSearchAndRetrievalLocal95pQueryLatencyPanel { gridPos: { h: 6, w: 8, x: 8, y: 19 } },
-          coreSearchAndRetrievalLocal99pQueryLatencyPanel { gridPos: { h: 6, w: 8, x: 16, y: 19 } },
-          specializedLocalQueryLoadPanel { gridPos: { h: 6, w: 8, x: 0, y: 25 } },
-          specializedLocal95pQueryLatencyPanel { gridPos: { h: 6, w: 8, x: 8, y: 25 } },
-          specializedLocal99pQueryLatencyPanel { gridPos: { h: 6, w: 8, x: 16, y: 25 } },
-          cacheRow { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
-          cacheEvictionsPanel { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
-          cacheHitRatioPanel { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
-          timeoutsRow { gridPos: { h: 1, w: 24, x: 0, y: 38 } },
-          coreTimeoutsPanel { gridPos: { h: 6, w: 12, x: 0, y: 44 } },
-          nodeTimeoutsPanel { gridPos: { h: 6, w: 12, x: 12, y: 44 } },
-          errorsRow { gridPos: { h: 1, w: 24, x: 0, y: 50 } },
-          queryErrorRatePanel { gridPos: { h: 6, w: 12, x: 0, y: 51 } },
-          queryClientErrorsPanel { gridPos: { h: 6, w: 12, x: 12, y: 51 } },
+          coreSearchAndRetrievalQueryLoadPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+          specializedQueryLoadPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+          coreSearchAndRetrieval95pQueryLatencyPanel { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
+          specialized95pQueryLatencyPanel { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+          coreSearchAndRetrieval99pQueryLatencyPanel { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
+          specialized99pQueryLatencyPanel { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
+          localQueriesRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
+          coreSearchAndRetrievalLocalQueryLoadPanel { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+          specializedLocalQueryLoadPanel { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+          coreSearchAndRetrievalLocal95pQueryLatencyPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
+          specializedLocal95pQueryLatencyPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
+          coreSearchAndRetrievalLocal99pQueryLatencyPanel { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
+          specializedLocal99pQueryLatencyPanel { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
+          cacheRow { gridPos: { h: 1, w: 24, x: 0, y: 43 } },
+          cacheEvictionsPanel { gridPos: { h: 6, w: 12, x: 0, y: 49 } },
+          cacheHitRatioPanel { gridPos: { h: 6, w: 12, x: 12, y: 49 } },
+          timeoutsRow { gridPos: { h: 1, w: 24, x: 0, y: 55 } },
+          coreTimeoutsPanel { gridPos: { h: 6, w: 12, x: 0, y: 61 } },
+          nodeTimeoutsPanel { gridPos: { h: 6, w: 12, x: 12, y: 61 } },
+          errorsRow { gridPos: { h: 1, w: 24, x: 0, y: 66 } },
+          queryErrorRatePanel { gridPos: { h: 6, w: 12, x: 0, y: 72 } },
+          queryClientErrorsPanel { gridPos: { h: 6, w: 12, x: 12, y: 72 } },
         ]
       ),
   },

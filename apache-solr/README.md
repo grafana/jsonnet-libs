@@ -5,8 +5,8 @@ The Apache Solr mixin is a set of configurable Grafana dashboards and alerts.
 The Apache Solr mixin contains the following dashboards:
 
 - Apache Solr cluster overview
-- Apache Solr query performance overview
-- Apache Solr resource monitoring overview
+- Apache Solr query performance
+- Apache Solr resource monitoring
 - Apache Solr logs overview
 
 and the following alerts:
@@ -27,19 +27,20 @@ The Apache Solr cluster overview dashboard provides details on cluster, shard, r
 ![Apache Solr Cluster Overview Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-cluster-1.png)
 ![Apache Solr Cluster Overview Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-cluster-2.png)
 
-## Apache Solr Query Performance Overview
+## Apache Solr Query Performance
 
-The Apache Solr query performance overview dashboard provides details on various query load and latency, update handlers, cache, timeout and error metrics.
+The Apache Solr query performance dashboard provides details on various query load and latency, update handlers, cache, timeout and error metrics.
 
-![Apache Solr Query Performance Overview Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-query-performance-1.png)
-![Apache Solr Query Performance Overview Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-query-performance-2.png)
+![Apache Solr Query Performance Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-query-performance-1.png)
+![Apache Solr Query Performance Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-query-performance-2.png)
+![Apache Solr Query Performance Dashboard 3](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-query-performance-3.png)
 
-## Apache Solr Resource Monitoring Overview
+## Apache Solr Resource Monitoring
 
-The Apache Solr resource monitoring overview dashboard provides details on connections, threads, core FS usage, as well as JVM and Jetty metrics.
+The Apache Solr resource monitoring dashboard provides details on connections, threads, core FS usage, as well as JVM and Jetty metrics.
 
-![Apache Solr Resource Monitoring Overview Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-resource-monitoring-1.png)
-![Apache Solr Resource Monitoring Overview Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-resource-monitoring-2.png)
+![Apache Solr Resource Monitoring Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-resource-monitoring-1.png)
+![Apache Solr Resource Monitoring Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/apache-solr/screenshots/apache-solr-resource-monitoring-2.png)
 
 ## Apache Solr Logs Overview
 
