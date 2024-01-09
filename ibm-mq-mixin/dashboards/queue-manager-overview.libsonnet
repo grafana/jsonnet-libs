@@ -1229,7 +1229,7 @@ local errorLogsPanel(cfg) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: logExpr(cfg.logExpression) + ', filename=~"/var/mqm/qmgrs/.*/errors/.*LOG", qmgr=~"$qmgr"} |= ``',
+      expr: '{' + logExpr(cfg.logExpression) + ', filename=~"/var/mqm/qmgrs/.*/errors/.*LOG", qmgr=~"$qmgr"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
