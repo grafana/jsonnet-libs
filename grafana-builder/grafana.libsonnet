@@ -448,6 +448,35 @@
     ],
   } + $.stack,
 
+  // Assumes that the metricName is for a histogram (as opposed to qpsPanel above)
+  qpsPanelNativeHistogram(metricName, selector, statusLabelName='status_code'):: {
+    aliasColors: {
+      '1xx': '#EAB839',
+      '2xx': '#7EB26D',
+      '3xx': '#6ED0E0',
+      '4xx': '#EF843C',
+      '5xx': '#E24D42',
+      OK: '#7EB26D',
+      success: '#7EB26D',
+      'error': '#E24D42',
+      cancel: '#A9A9A9',
+    },
+    targets: [
+      {
+        expr:
+          |||
+            sum by (status) (
+              label_replace(label_replace(histogram_count(rate(%s%s[$__rate_interval])) or rate(%s_count%s[$__rate_interval]),
+              "status", "${1}xx", "%s", "([0-9]).."),
+              "status", "${1}", "%s", "([a-zA-Z]+)"))
+          ||| % [metricName, selector, metricName, selector, statusLabelName, statusLabelName],
+        format: 'time_series',
+        legendFormat: '{{status}}',
+        refId: 'A',
+      },
+    ],
+  } + $.stack,
+
   latencyPanel(metricName, selector, multiplier='1e3'):: {
     nullPointMode: 'null as zero',
     targets: [
@@ -465,6 +494,31 @@
       },
       {
         expr: 'sum(rate(%s_sum%s[$__rate_interval])) * %s / sum(rate(%s_count%s[$__rate_interval]))' % [metricName, selector, multiplier, metricName, selector],
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C',
+      },
+    ],
+    yaxes: $.yaxes('ms'),
+  },
+
+  latencyPanelNativeHistogram(metricName, selector, multiplier='1e3'):: {
+    nullPointMode: 'null as zero',
+    targets: [
+      {
+        expr: '(histogram_quantile(0.99, sum(rate(%s%s[$__rate_interval]))) or histogram_quantile(0.99, sum(rate(%s_bucket%s[$__rate_interval])) by (le))) * %s' % [metricName, selector, metricName, selector, multiplier],
+        format: 'time_series',
+        legendFormat: '99th Percentile',
+        refId: 'A',
+      },
+      {
+        expr: '(histogram_quantile(0.50, sum(rate(%s%s[$__rate_interval]))) or histogram_quantile(0.50, sum(rate(%s_bucket%s[$__rate_interval])) by (le))) * %s' % [metricName, selector, metricName, selector, multiplier],
+        format: 'time_series',
+        legendFormat: '50th Percentile',
+        refId: 'B',
+      },
+      {
+        expr: 'sum(histogram_sum(rate(%s%s[$__rate_interval])) or rate(%s_sum%s[$__rate_interval])) * %s / sum(histogram_count(rate(%s%s[$__rate_interval])) or rate(%s_count%s[$__rate_interval]))' % [metricName, selector, metricName, selector, multiplier, metricName, selector, metricName, selector],
         format: 'time_series',
         legendFormat: 'Average',
         refId: 'C',
