@@ -20,14 +20,11 @@ local activedirectorymixin =
     grafana+: {
       local link = g.dashboard.link,
       links: {
-        backToLogs:
-          link.link.new('Windows logs', '/d/' + activedirectorymixin.grafana.dashboards.logs.uid)
+        otherDashboards:
+          link.dashboards.new('All Windows Active Directory dashboards', activedirectorymixin.config.dashboardTags)
           + link.dashboards.options.withIncludeVars(true)
-          + link.link.options.withKeepTime(true),
-        backToActiveDirectoryOverview:
-          link.link.new('Active Directory overview', '/d/' + activedirectorymixin.grafana.dashboards.activedirectory.uid)
-          + link.dashboards.options.withIncludeVars(true)
-          + link.link.options.withKeepTime(true),
+          + link.dashboards.options.withKeepTime(true)
+          + link.dashboards.options.withAsDropdown(true),
       },
       variables+: {
         datasources+: {
