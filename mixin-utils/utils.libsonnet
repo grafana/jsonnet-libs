@@ -1,6 +1,61 @@
 local g = import 'grafana-builder/grafana.libsonnet';
 
 {
+  // The classicNativeHistogramQuantile function is used to calculate histogram quantiles from native histograms or classic histograms.
+  // Metric name should be provided without _bucket suffix.
+  nativeClassicHistogramQuantile(percentile, metric, selector, sum_by=[], rate_interval='$__rate_interval')::
+    local classicSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', ['le'] + sum_by) } else ' by (le) ';
+    local nativeSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
+    {
+      classic: 'histogram_quantile(%(percentile)s, sum%(classicSumBy)s(rate(%(metric)s_bucket{%(selector)s}[%(rateInterval)s])))' % {
+        classicSumBy: classicSumBy,
+        metric: metric,
+        percentile: percentile,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+      native: 'histogram_quantile(%(percentile)s, sum%(nativeSumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s])))' % {
+        metric: metric,
+        nativeSumBy: nativeSumBy,
+        percentile: percentile,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+    },
+
+  // The classicNativeHistogramSumRate function is used to calculate the histogram sum of rate from native histograms or classic histograms.
+  // Metric name should be provided without _sum suffix.
+  nativeClassicHistogramSumRate(metric, selector, rate_interval='$__rate_interval')::
+    {
+      classic: 'rate(%(metric)s_sum{%(selector)s}[%(rateInterval)s])' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+      native: 'histogram_sum(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+    },
+
+
+  // The classicNativeHistogramCountRate function is used to calculate the histogram count of rate from native histograms or classic histograms.
+  // Metric name should be provided without _count suffix.
+  nativeClassicHistogramCountRate(metric, selector, rate_interval='$__rate_interval')::
+    {
+      classic: 'rate(%(metric)s_count{%(selector)s}[%(rateInterval)s])' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+      native: 'histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+    },
+
   histogramRules(metric, labels, interval='1m')::
     local vars = {
       metric: metric,

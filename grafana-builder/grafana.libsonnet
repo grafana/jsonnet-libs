@@ -1,3 +1,5 @@
+local utils = import 'mixin-utils/utils.libsonnet';
+
 {
   dashboard(title, uid='', datasource='default', datasource_regex=''):: {
     // Stuff that isn't materialised.
@@ -448,6 +450,55 @@
     ],
   } + $.stack,
 
+  // Assumes that the metricName is for a histogram (as opposed to qpsPanel above)
+  // Assumes that there is a dashboard variable named show_classic_histograms, values are 0 or 1
+  qpsPanelNativeHistogram(metricName, selector, statusLabelName='status_code'):: {
+    aliasColors: {
+      '1xx': '#EAB839',
+      '2xx': '#7EB26D',
+      '3xx': '#6ED0E0',
+      '4xx': '#EF843C',
+      '5xx': '#E24D42',
+      OK: '#7EB26D',
+      success: '#7EB26D',
+      'error': '#E24D42',
+      cancel: '#A9A9A9',
+    },
+    targets: [
+      {
+        expr:
+          |||
+            sum by (status) (
+              label_replace(label_replace(%(metricQuery)s,
+              "status", "${1}xx", "%(label)s", "([0-9]).."),
+              "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
+          ||| % {
+            metricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).native,
+            label: statusLabelName,
+          },
+        format: 'time_series',
+        legendFormat: '{{status}}',
+        refId: 'A',
+      },
+      {
+        expr:
+          |||
+            sum by (status) (
+              label_replace(label_replace(%(metricQuery)s,
+              "status", "${1}xx", "%(label)s", "([0-9]).."),
+              "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
+              < ($show_classic_histograms * +Inf)
+          ||| % {
+            metricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).classic,
+            label: statusLabelName,
+          },
+        format: 'time_series',
+        legendFormat: '{{status}}',
+        refId: 'A_classic',
+      },
+    ],
+  } + $.stack,
+
   latencyPanel(metricName, selector, multiplier='1e3'):: {
     nullPointMode: 'null as zero',
     targets: [
@@ -468,6 +519,78 @@
         format: 'time_series',
         legendFormat: 'Average',
         refId: 'C',
+      },
+    ],
+    yaxes: $.yaxes('ms'),
+  },
+
+  // Assumes that there is a dashboard variable named show_classic_histograms, values are 0 or 1
+  latencyPanelNativeHistogram(metricName, selector, multiplier='1e3'):: {
+    nullPointMode: 'null as zero',
+    targets: [
+      {
+        expr: '(%(metricQuery)s) * %(multiplier)s' % {
+          metricQuery: utils.nativeClassicHistogramQuantile('0.99', metricName, selector).native,
+          multiplier: multiplier,
+        },
+        format: 'time_series',
+        legendFormat: '99th percentile',
+        refId: 'A',
+      },
+      {
+        expr: '(%(metricQuery)s) * %(multiplier)s < ($show_classic_histograms * +Inf)' % {
+          metricQuery: utils.nativeClassicHistogramQuantile('0.99', metricName, selector).classic,
+          multiplier: multiplier,
+        },
+        format: 'time_series',
+        legendFormat: '99th percentile',
+        refId: 'A_classic',
+      },
+      {
+        expr: '(%(metricQuery)s) * %(multiplier)s' % {
+          metricQuery: utils.nativeClassicHistogramQuantile('0.50', metricName, selector).native,
+          multiplier: multiplier,
+        },
+        format: 'time_series',
+        legendFormat: '50th percentile',
+        refId: 'B',
+      },
+      {
+        expr: '(%(metricQuery)s) * %(multiplier)s < ($show_classic_histograms * +Inf)' % {
+          metricQuery: utils.nativeClassicHistogramQuantile('0.50', metricName, selector).classic,
+          multiplier: multiplier,
+        },
+        format: 'time_series',
+        legendFormat: '50th percentile',
+        refId: 'B_classic',
+      },
+      {
+        expr:
+          |||
+            %(multiplier)s * sum(%(sumMetricQuery)s) /
+            sum(%(countMetricQuery)s)
+          ||| % {
+            sumMetricQuery: utils.nativeClassicHistogramSumRate(metricName, selector).native,
+            countMetricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).native,
+            multiplier: multiplier,
+          },
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C',
+      },
+      {
+        expr:
+          |||
+            %(multiplier)s * sum(%(sumMetricQuery)s) /
+            sum(%(countMetricQuery)s) < ($show_classic_histograms * +Inf)
+          ||| % {
+            sumMetricQuery: utils.nativeClassicHistogramSumRate(metricName, selector).classic,
+            countMetricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).classic,
+            multiplier: multiplier,
+          },
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C_classic',
       },
     ],
     yaxes: $.yaxes('ms'),
