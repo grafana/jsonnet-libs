@@ -466,10 +466,14 @@
         expr:
           |||
             sum by (status) (
-              label_replace(label_replace(histogram_count(rate(%s%s[$__rate_interval])) or rate(%s_count%s[$__rate_interval]),
-              "status", "${1}xx", "%s", "([0-9]).."),
-              "status", "${1}", "%s", "([a-zA-Z]+)"))
-          ||| % [metricName, selector, metricName, selector, statusLabelName, statusLabelName],
+              label_replace(label_replace(histogram_count(rate(%(metric)s%(selector)s[$__rate_interval])) or rate(%(metric)s_count%(selector)s[$__rate_interval]),
+              "status", "${1}xx", "%(label)s", "([0-9]).."),
+              "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
+          ||| % {
+            metric: metricName,
+            selector: selector,
+            label: statusLabelName,
+          },
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A',
@@ -506,19 +510,44 @@
     nullPointMode: 'null as zero',
     targets: [
       {
-        expr: '(histogram_quantile(0.99, sum(rate(%s%s[$__rate_interval]))) or histogram_quantile(0.99, sum(rate(%s_bucket%s[$__rate_interval])) by (le))) * %s' % [metricName, selector, metricName, selector, multiplier],
+        expr:
+          |||
+            (histogram_quantile(0.99, sum(rate(%(metric)s%(selector)s[$__rate_interval]))) or
+             histogram_quantile(0.99, sum(rate(%(metric)s_bucket%(selector)s[$__rate_interval])) by (le))) * %(multiplier)s
+          ||| % {
+            metric: metricName,
+            selector: selector,
+            multiplier: multiplier,
+          },
         format: 'time_series',
         legendFormat: '99th Percentile',
         refId: 'A',
       },
       {
-        expr: '(histogram_quantile(0.50, sum(rate(%s%s[$__rate_interval]))) or histogram_quantile(0.50, sum(rate(%s_bucket%s[$__rate_interval])) by (le))) * %s' % [metricName, selector, metricName, selector, multiplier],
+        expr:
+          |||
+            (histogram_quantile(0.50, sum(rate(%(metric)s%(selector)s[$__rate_interval]))) or
+             histogram_quantile(0.50, sum(rate(%(metric)s_bucket%(selector)s[$__rate_interval])) by (le))) * %(multiplier)s
+          ||| % {
+            metric: metricName,
+            selector: selector,
+            multiplier: multiplier,
+          },
         format: 'time_series',
         legendFormat: '50th Percentile',
         refId: 'B',
       },
       {
-        expr: 'sum(histogram_sum(rate(%s%s[$__rate_interval])) or rate(%s_sum%s[$__rate_interval])) * %s / sum(histogram_count(rate(%s%s[$__rate_interval])) or rate(%s_count%s[$__rate_interval]))' % [metricName, selector, metricName, selector, multiplier, metricName, selector, metricName, selector],
+        expr:
+          |||
+            sum(
+              histogram_sum(rate(%(metric)s%(selector)s[$__rate_interval])) or rate(%(metric)s_sum%(selector)s[$__rate_interval])) * %(multiplier)s /
+              sum(histogram_count(rate(%(metric)s%(selector)s[$__rate_interval])) or rate(%(metric)s_count%(selector)s[$__rate_interval]))
+          ||| % {
+            metric: metricName,
+            selector: selector,
+            multiplier: multiplier,
+          },
         format: 'time_series',
         legendFormat: 'Average',
         refId: 'C',
