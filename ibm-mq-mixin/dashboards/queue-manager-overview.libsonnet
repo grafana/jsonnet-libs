@@ -3,6 +3,8 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
+local getMatcher(cfg) = '%(ibmmqSelector)s' % cfg;
+local logExpr(cfg) = '%(logExpr)s' % cfg;
 
 local dashboardUid = 'ibm-mq-queue-manager-overview';
 
@@ -17,11 +19,11 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local activeListenersPanel = {
+local activeListenersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_active_listeners{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_active_listeners{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='',
       format='time_series',
@@ -68,11 +70,11 @@ local activeListenersPanel = {
   },
 };
 
-local activeConnectionsPanel = {
+local activeConnectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_connection_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_connection_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='',
       format='time_series',
@@ -119,11 +121,11 @@ local activeConnectionsPanel = {
   },
 };
 
-local queuesPanel = {
+local queuesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_queue_depth{job=~"$job"}) by (queue, mq_cluster, qmgr))',
+      'count(count(ibmmq_queue_depth{' + matcher + '}) by (queue, mq_cluster, qmgr))',
       datasource=promDatasource,
       legendFormat='',
       format='time_series',
@@ -170,11 +172,11 @@ local queuesPanel = {
   },
 };
 
-local estimatedMemoryUtilizationPanel = {
+local estimatedMemoryUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(ibmmq_qmgr_ram_total_estimate_for_queue_manager_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}/ibmmq_qmgr_ram_total_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
+      '(ibmmq_qmgr_ram_total_estimate_for_queue_manager_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}/ibmmq_qmgr_ram_total_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -250,17 +252,17 @@ local estimatedMemoryUtilizationPanel = {
   },
 };
 
-local queueManagerStatusPanel = {
+local queueManagerStatusPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_uptime{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_uptime{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='Uptime',
       format='table',
     ),
     prometheus.target(
-      'ibmmq_qmgr_status{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_status{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='Status',
       format='time_series',
@@ -458,17 +460,17 @@ local queueManagerStatusPanel = {
   ],
 };
 
-local cpuUsagePanel = {
+local cpuUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_user_cpu_time_percentage{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_user_cpu_time_percentage{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - user',
       format='time_series',
     ),
     prometheus.target(
-      'ibmmq_qmgr_system_cpu_time_percentage{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_system_cpu_time_percentage{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - system',
       format='time_series',
@@ -544,11 +546,11 @@ local cpuUsagePanel = {
   },
 };
 
-local diskUsagePanel = {
+local diskUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_queue_manager_file_system_in_use_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_queue_manager_file_system_in_use_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -624,11 +626,11 @@ local diskUsagePanel = {
   },
 };
 
-local commitsPanel = {
+local commitsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_commit_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_commit_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -703,11 +705,11 @@ local commitsPanel = {
   },
 };
 
-local publishThroughputPanel = {
+local publishThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_published_to_subscribers_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_published_to_subscribers_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -783,11 +785,11 @@ local publishThroughputPanel = {
   },
 };
 
-local publishedMessagesPanel = {
+local publishedMessagesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_published_to_subscribers_message_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_published_to_subscribers_message_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -858,11 +860,11 @@ local publishedMessagesPanel = {
   },
 };
 
-local expiredMessagesPanel = {
+local expiredMessagesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_expired_message_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_expired_message_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -937,41 +939,41 @@ local expiredMessagesPanel = {
   },
 };
 
-local queueOperationsPanel = {
+local queueOperationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqset_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
+      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqset_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQSET',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqinq_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
+      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqinq_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQINQ',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqget_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
+      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqget_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQGET',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqopen_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
+      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqopen_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQOPEN',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqclose_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
+      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqclose_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQCLOSE',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqput_mqput1_count{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"})',
+      'sum by (mq_cluster, qmgr, job) (ibmmq_queue_mqput_mqput1_count{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"})',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}} - MQPUT/MQPUT1',
       format='time_series',
@@ -1061,11 +1063,11 @@ local logsRow = {
   collapsed: false,
 };
 
-local logLatencyPanel = {
+local logLatencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_log_write_latency_seconds{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_log_write_latency_seconds{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -1141,11 +1143,11 @@ local logLatencyPanel = {
   },
 };
 
-local logUsagePanel = {
+local logUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_log_in_use_bytes{mq_cluster=~"$mq_cluster", qmgr=~"$qmgr", job=~"$job"}',
+      'ibmmq_qmgr_log_in_use_bytes{' + matcher + ', mq_cluster=~"$mq_cluster", qmgr=~"$qmgr"}',
       datasource=promDatasource,
       legendFormat='{{mq_cluster}} - {{qmgr}}',
       format='time_series',
@@ -1221,13 +1223,13 @@ local logUsagePanel = {
   },
 };
 
-local errorLogsPanel = {
+local errorLogsPanel(cfg) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", filename=~"/var/mqm/qmgrs/.*/errors/.*LOG", qmgr=~"$qmgr"} |= ``',
+      expr: '{' + logExpr(cfg.logExpression) + ', filename=~"/var/mqm/qmgrs/.*/errors/.*LOG", qmgr=~"$qmgr"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -1314,6 +1316,19 @@ local errorLogsPanel = {
               allValues='',
               sort=0
             ),
+            template.new(
+              'cluster',
+              promDatasource,
+              'label_values(ibmmq_qmgr_commit_count{job=~"$job"}, cluster)',
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+
           ],
         ])
       )
@@ -1327,24 +1342,24 @@ local errorLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            activeListenersPanel { gridPos: { h: 7, w: 4, x: 0, y: 0 } },
-            activeConnectionsPanel { gridPos: { h: 7, w: 4, x: 4, y: 0 } },
-            queuesPanel { gridPos: { h: 7, w: 4, x: 8, y: 0 } },
-            estimatedMemoryUtilizationPanel { gridPos: { h: 7, w: 12, x: 12, y: 0 } },
-            queueManagerStatusPanel { gridPos: { h: 7, w: 8, x: 0, y: 7 } },
-            cpuUsagePanel { gridPos: { h: 7, w: 8, x: 8, y: 7 } },
-            diskUsagePanel { gridPos: { h: 7, w: 8, x: 16, y: 7 } },
-            commitsPanel { gridPos: { h: 7, w: 8, x: 0, y: 14 } },
-            publishThroughputPanel { gridPos: { h: 7, w: 8, x: 8, y: 14 } },
-            publishedMessagesPanel { gridPos: { h: 7, w: 8, x: 16, y: 14 } },
-            expiredMessagesPanel { gridPos: { h: 7, w: 8, x: 0, y: 21 } },
-            queueOperationsPanel { gridPos: { h: 7, w: 16, x: 8, y: 21 } },
+            activeListenersPanel(getMatcher($._config)) { gridPos: { h: 7, w: 4, x: 0, y: 0 } },
+            activeConnectionsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 4, x: 4, y: 0 } },
+            queuesPanel(getMatcher($._config)) { gridPos: { h: 7, w: 4, x: 8, y: 0 } },
+            estimatedMemoryUtilizationPanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 12, y: 0 } },
+            queueManagerStatusPanel(getMatcher($._config)) { gridPos: { h: 7, w: 8, x: 0, y: 7 } },
+            cpuUsagePanel(getMatcher($._config)) { gridPos: { h: 7, w: 8, x: 8, y: 7 } },
+            diskUsagePanel(getMatcher($._config)) { gridPos: { h: 7, w: 8, x: 16, y: 7 } },
+            commitsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 8, x: 0, y: 14 } },
+            publishThroughputPanel(getMatcher($._config)) { gridPos: { h: 7, w: 8, x: 8, y: 14 } },
+            publishedMessagesPanel(getMatcher($._config)) { gridPos: { h: 7, w: 8, x: 16, y: 14 } },
+            expiredMessagesPanel(getMatcher($._config)) { gridPos: { h: 7, w: 8, x: 0, y: 21 } },
+            queueOperationsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 16, x: 8, y: 21 } },
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 28 } },
-            logLatencyPanel { gridPos: { h: 7, w: 12, x: 0, y: 29 } },
-            logUsagePanel { gridPos: { h: 7, w: 12, x: 12, y: 29 } },
+            logLatencyPanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 0, y: 29 } },
+            logUsagePanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 12, y: 29 } },
           ],
           if $._config.enableLokiLogs then [
-            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 36 } },
+            errorLogsPanel($._config) { gridPos: { h: 8, w: 24, x: 0, y: 36 } },
           ] else [],
           [
           ],
