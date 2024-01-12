@@ -82,7 +82,7 @@ local dashboardUidSuffix = '-node-overview';
       targets=[
         g.query.prometheus.new(
           promDatasource.uid,
-          'sum by(%(agg)s) (rate(opensearch_fs_io_total_read_bytes{%(queriesSelector)s})[$__rate_interval])'
+          'sum by(%(agg)s) (rate(opensearch_fs_io_total_read_bytes{%(queriesSelector)s}[$__rate_interval]))'
           % {
             queriesSelector: variables.queriesSelector,
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
@@ -91,8 +91,7 @@ local dashboardUidSuffix = '-node-overview';
         + g.query.prometheus.withLegendFormat('%s - read' % utils.labelsToPanelLegend($._config.instanceLabels)),
         g.query.prometheus.new(
           promDatasource.uid,
-
-          'sum by(%(agg)s) (rate(opensearch_fs_io_total_write_bytes{%(queriesSelector)s})[$__rate_interval])'
+          'sum by(%(agg)s) (rate(opensearch_fs_io_total_write_bytes{%(queriesSelector)s}[$__rate_interval]))'
           % {
             queriesSelector: variables.queriesSelector,
             agg: std.join(',', $._config.groupLabels + $._config.instanceLabels),
