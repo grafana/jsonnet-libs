@@ -50,15 +50,6 @@
       "id": 2,
       "panels": [],
       "showTitle": true,
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "refId": "A"
-        }
-      ],
       "title": "Overview",
       "titleSize": "h6",
       "type": "row"
@@ -931,7 +922,7 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Data Source",
+        "label": "Data source",
         "multi": false,
         "name": "prometheus_datasource",
         "options": [],
