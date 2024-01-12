@@ -99,6 +99,74 @@ local g = import 'grafana-builder/grafana.libsonnet';
       ],
     },
 
+    latencyRecordingRulePanelNativeHistogram(metric, selectors, extra_selectors=[], multiplier='1e3', sum_by=[])::
+    local labels = std.join('_', [matcher.label for matcher in selectors]);
+    local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
+    local sb = ['le'];
+    local legend = std.join('', ['{{ %(lb)s }} ' % lb for lb in sum_by]);
+    // sumBy is used in the averge calculation and also for native histograms where 'le' is not used
+    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else '';
+    local sumByHisto = std.join(',', sb + sum_by);
+    {
+      nullPointMode: 'null as zero',
+      yaxes: g.yaxes('ms'),
+      targets: [
+        {
+          expr:
+            |||
+              (histogram_quantile(0.99, sum by (%(sumBy)s) (%(labels)s:%(metric)s:sum_rate%(selector)s)) or
+               histogram_quantile(0.99, sum by (%(sumByHisto)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s))) * %(multiplier)s
+            ||| % {
+            labels: labels,
+            metric: metric,
+            selector: selectorStr,
+            multiplier: multiplier,
+            sumBy: sumBy,
+            sumByHisto: sumByHisto,
+          },
+          format: 'time_series',
+          legendFormat: '%(legend)s99th percentile' % legend,
+          refId: 'A',
+          step: 10,
+        },
+        {
+          expr:
+            |||
+              (histogram_quantile(0.50, sum by (%(sumBy)s) (%(labels)s:%(metric)s:sum_rate%(selector)s)) or
+               histogram_quantile(0.50, sum by (%(sumByHisto)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s))) * %(multiplier)s
+            ||| % {
+            labels: labels,
+            metric: metric,
+            selector: selectorStr,
+            multiplier: multiplier,
+            sumBy: sumBy,
+            sumByHisto: sumByHisto,
+          },
+          format: 'time_series',
+          legendFormat: '%(legend)s50th percentile' % legend,
+          refId: 'B',
+          step: 10,
+        },
+        {
+          expr:
+            |||
+              %(multiplier)s * (histogram_sum(sum(%(labels)s:%(metric)s:sum_rate%(selector)s)%(sumBy)s) or sum(%(labels)s:%(metric)s_sum:sum_rate%(selector)s)%(sumBy)s) /
+              (histogram_count(sum(%(labels)s:%(metric)s:sum_rate%(selector)s)%(sumBy)s) or sum(%(labels)s:%(metric)s_count:sum_rate%(selector)s)%(sumBy)s)
+            ||| % {
+            labels: labels,
+            metric: metric,
+            selector: selectorStr,
+            multiplier: multiplier,
+            sumBy: sumBy,
+          },
+          format: 'time_series',
+          legendFormat: '%(legend)sAverage' % legend,
+          refId: 'C',
+          step: 10,
+        },
+      ],
+    },
+
   selector:: {
     eq(label, value):: { label: label, op: '=', value: value },
     neq(label, value):: { label: label, op: '!=', value: value },
