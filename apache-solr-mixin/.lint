@@ -1,0 +1,46 @@
+exclusions:
+  template-job-rule:
+    reason: "Prometheus datasource variable is being named as prometheus_datasource now while linter expects 'datasource'"
+  panel-datasource-rule:
+    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  target-promql-rule:
+    reason: "Linter does not support selector variable value as a scalar in top-k PromQL queries."
+  template-label-promql-rule:
+    reason: "Defining a selector for the value of top-k requires a predefined label that the linter considers invalid."
+  panel-title-description-rule:
+    reason: "Not required for logs volume"
+  panel-units-rule:
+    reason: "Custom units are used for better user experience in these panels"
+    entries:
+    - panel: "Logs volume"
+    - panel: "Live nodes"
+    - panel: "Zookeeper status"
+    - panel: "Zookeeper ensemble size"
+    - panel: "Shard status"
+    - panel: "Replica status"
+    - panel: "Top cores by update handlers / $__interval"
+    - panel: "Top cores by core errors / $__interval"
+    - panel: "Top nodes by node errors / $__interval"
+    - panel: "Update handlers / $__interval"
+    - panel: "Cache evictions / $__interval"
+    - panel: "Core timeouts / $__interval"
+    - panel: "Node timeouts / $__interval"
+    - panel: "Query error rate"
+    - panel: "Query client errors"
+    - panel: "Connections"
+    - panel: "Threads / $__interval"
+    - panel: "Garbage collections / $__interval"
+    - panel: "File descriptors"
+    - panel: "Requests  / $__interval"
+    - panel: "Responses  / $__interval"
+    - panel: "Dispatches  / $__interval"
+  target-instance-rule:
+    reason: "base_url is used instead of instance because of how cluster metrics are returned."
+    entires:
+      - dashboard: "Apache Solr cluster overview"
+      - dashboard: "Apache Solr query performance"
+      - dashboard: "Apache Solr resource monitoring"
