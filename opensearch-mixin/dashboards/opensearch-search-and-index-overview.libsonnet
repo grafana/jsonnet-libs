@@ -1852,7 +1852,7 @@ local instanceLabels = ['index'];
 
   grafanaDashboards+:: {
     'search-and-index-overview.json':
-      g.dashboard.new($._config.dashboardNamePrefix +'OpenSearch search and index overview')
+      g.dashboard.new($._config.dashboardNamePrefix + 'OpenSearch search and index overview')
       + g.dashboard.withTags($._config.dashboardTags)
       + g.dashboard.time.withFrom($._config.dashboardPeriod)
       + g.dashboard.withTimezone($._config.dashboardTimezone)

@@ -2,7 +2,7 @@
   _config+:: {
     // extra static selector to apply to all templated variables and alerts
     filteringSelector: 'cluster!=""',
-    groupLabels: ['job','cluster'],
+    groupLabels: ['job', 'cluster'],
     instanceLabels: ['node'],
     dashboardTags: ['opensearch-mixin'],
     dashboardPeriod: 'now-1h',
@@ -11,7 +11,7 @@
     dashboardNamePrefix: '',
 
     // prefix dashboards uids
-    uid: "opensearch",
+    uid: 'opensearch',
 
     // alerts thresholds
     alertsWarningShardReallocations: 0,
