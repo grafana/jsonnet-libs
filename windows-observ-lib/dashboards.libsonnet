@@ -104,45 +104,69 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
              + root.applyCommon(vars.singleInstance, uid + '-disks', tags, links, annotations, timezone, refresh, period),
     }
     +
-    if this.config.enableLokiLogs
-    then
-      {
-        logs:
-          logslib.new(
-            prefix + 'Windows logs',
-            datasourceName=this.grafana.variables.datasources.loki.name,
-            datasourceRegex=this.grafana.variables.datasources.loki.regex,
-            filterSelector=this.config.filteringSelector,
-            labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
-            formatParser='json',
-            showLogsVolume=this.config.showLogsVolume,
-            logsVolumeGroupBy=this.config.logsVolumeGroupBy,
-            extraFilters=this.config.logsExtraFilters
-          )
-          {
-            dashboards+:
-              {
-                logs+:
-                  // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
-                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
-              },
-            panels+:
-              {
-                // modify log panel
-                logs+:
-                  g.panel.logs.options.withEnableLogDetails(true)
-                  + g.panel.logs.options.withShowTime(false)
-                  + g.panel.logs.options.withWrapLogMessage(false),
-              },
-            variables+: {
-              // add prometheus datasource for annotations processing
-              toArray+: [
-                this.grafana.variables.datasources.prometheus { hide: 2 },
-              ],
-            },
-          }.dashboards.logs,
-      }
-    else {},
+
+    (if this.config.enableLokiLogs then
+       {
+         logs:
+           logslib.new(
+             prefix + 'Windows logs',
+             datasourceName=this.grafana.variables.datasources.loki.name,
+             datasourceRegex=this.grafana.variables.datasources.loki.regex,
+             filterSelector=this.config.filteringSelector,
+             labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
+             formatParser='json',
+             showLogsVolume=this.config.showLogsVolume,
+             logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+             extraFilters=this.config.logsExtraFilters
+           )
+           {
+             dashboards+:
+               {
+                 logs+:
+                   // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
+                   root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+               },
+             panels+:
+               {
+                 // modify log panel
+                 logs+:
+                   g.panel.logs.options.withEnableLogDetails(true)
+                   + g.panel.logs.options.withShowTime(false)
+                   + g.panel.logs.options.withWrapLogMessage(false),
+               },
+             variables+: {
+               // add prometheus datasource for annotations processing
+               toArray+: [
+                 this.grafana.variables.datasources.prometheus { hide: 2 },
+               ],
+             },
+           }.dashboards.logs,
+       } else {})
+    +
+    (if this.config.enableADDashboard then
+       {
+         activedirectory:
+           local title = prefix + 'Windows Active Directory overview';
+           g.dashboard.new(title)
+           + g.dashboard.withPanels(
+             g.util.grid.wrapPanels(
+               [
+                 panels.replicationPendingOperations { gridPos+: { w: 6, h: 3 } },
+                 panels.directoryServiceThreads { gridPos+: { w: 6, h: 3 } },
+                 panels.alertsPanel { gridPos+: { w: 12, h: 6 } },
+                 panels.replicationPendingSynchronizations { gridPos+: { w: 12, h: 3 } },
+                 panels.ldapBindRequests { gridPos+: { w: 12 } },
+                 panels.ldapOperations { gridPos+: { w: 12, h: 6 } },
+                 panels.bindOperationsOverview { gridPos+: { w: 24 } },
+                 panels.intrasiteReplicationTraffic { gridPos+: { w: 12 } },
+                 panels.intersiteReplicationTraffic { gridPos+: { w: 12 } },
+                 panels.inboundReplicationUpdates { gridPos+: { w: 24 } },
+                 panels.databaseOperationsOverview { gridPos+: { w: 12 } },
+                 panels.databaseOperations { gridPos+: { w: 12 } },
+               ], 12, 6
+             )
+           ) + root.applyCommon(vars.multiInstance, uid, tags, links, annotations, timezone, refresh, period),
+       } else {}),
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(uid)

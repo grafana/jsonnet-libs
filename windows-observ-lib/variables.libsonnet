@@ -2,7 +2,9 @@
 local g = import './g.libsonnet';
 local var = g.dashboard.variable;
 local commonlib = import 'common-lib/common/main.libsonnet';
-local utils = commonlib.utils;
+local utils = commonlib.utils {
+  labelsToPromQLSelectorAdvanced(labels): std.join(',', ['%s=~"${%s:regex}"' % [label, label] for label in labels]),
+};
 
 {
   new(
@@ -57,7 +59,10 @@ local utils = commonlib.utils;
        singleInstance:
          [root.datasources.prometheus]
          + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
-
+       queriesSelectorAdvancedSyntax:
+         '%s' % [
+           utils.labelsToPromQLSelectorAdvanced(groupLabels + instanceLabels),
+         ],
        queriesSelector:
          '%s,%s' % [
            filteringSelector,
