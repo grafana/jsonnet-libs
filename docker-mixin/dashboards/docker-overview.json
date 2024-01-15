@@ -35,261 +35,6 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "grafanacloud-prom"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "id": 16,
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Integration Status",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "description": "Shows if metrics are being received for the selected time range.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "fixed"
-          },
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "color": "light-red",
-                  "index": 0,
-                  "text": "Agent not running or misconfigured"
-                }
-              },
-              "type": "special"
-            },
-            {
-              "options": {
-                "from": 0,
-                "result": {
-                  "color": "light-red",
-                  "index": 1,
-                  "text": "Agent failing to collect metrics"
-                },
-                "to": 0
-              },
-              "type": "range"
-            },
-            {
-              "options": {
-                "from": 1,
-                "result": {
-                  "color": "light-green",
-                  "index": 2,
-                  "text": "Agent sending metrics"
-                },
-                "to": 1000000
-              },
-              "type": "range"
-            }
-          ],
-          "noValue": "No data",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "string"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 8,
-        "x": 0,
-        "y": 1
-      },
-      "id": 17,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$prometheus_datasource"
-          },
-          "expr": "vector(1) and on() ((count(up{job=\"integrations/docker\"} == 1) > 0) and (absent(absent(machine_scrape_error{job=\"integrations/docker\"})))) or vector(0) and on() ((count(up{job=\"integrations/docker\"}) > 0) and (absent(machine_scrape_error{job=\"integrations/docker\"})))\n",
-          "refId": "A"
-        }
-      ],
-      "title": "Metrics",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "description": "Shows the timestamp of the latest metrics received for this integration in the last 24 hours.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "noValue": "No data",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "dateTimeFromNow"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 8,
-        "x": 8,
-        "y": 1
-      },
-      "id": 18,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "Time",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$prometheus_datasource"
-          },
-          "expr": "vector(1) and on() ((count(up{job=\"integrations/docker\"} == 1) > 0) and (absent(absent(machine_scrape_error{job=\"integrations/docker\"})))) or vector(0) and on() ((count(up{job=\"integrations/docker\"}) > 0) and (absent(machine_scrape_error{job=\"integrations/docker\"})))\n",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": "now-24h",
-      "title": "Latest metrics received",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "datasource",
-        "uid": "-- Mixed --"
-      },
-      "description": "Shows the installed version of this integration.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "noValue": "0.1.0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "string"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 8,
-        "x": 16,
-        "y": 1
-      },
-      "id": 19,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": ["lastNotNull"],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "10.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "grafanacloud-prom"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Integration version",
-      "type": "stat"
-    },
-    {
       "collapse": false,
       "collapsed": false,
       "datasource": {
@@ -458,11 +203,11 @@
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
-                "value": 0.8
+                "value": 0.80000000000000004
               },
               {
                 "color": "#d44a3a",
-                "value": 0.9
+                "value": 0.90000000000000002
               }
             ]
           },
@@ -540,11 +285,11 @@
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
-                "value": 0.8
+                "value": 0.80000000000000004
               },
               {
                 "color": "#d44a3a",
-                "value": 0.9
+                "value": 0.90000000000000002
               }
             ]
           },
@@ -622,11 +367,11 @@
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
-                "value": 0.8
+                "value": 0.80000000000000004
               },
               {
                 "color": "#d44a3a",
-                "value": 0.9
+                "value": 0.90000000000000002
               }
             ]
           },
