@@ -39,7 +39,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$prometheus_datasource"
       },
       "gridPos": {
         "h": 1,
@@ -54,7 +54,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$prometheus_datasource"
           },
           "refId": "A"
         }
@@ -422,7 +422,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$prometheus_datasource"
       },
       "gridPos": {
         "h": 1,
@@ -437,7 +437,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$prometheus_datasource"
           },
           "refId": "A"
         }
@@ -645,7 +645,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$prometheus_datasource"
       },
       "gridPos": {
         "h": 1,
@@ -660,7 +660,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$prometheus_datasource"
           },
           "refId": "A"
         }
@@ -887,7 +887,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "grafanacloud-prom"
+        "uid": "$prometheus_datasource"
       },
       "gridPos": {
         "h": 1,
@@ -902,7 +902,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "grafanacloud-prom"
+            "uid": "$prometheus_datasource"
           },
           "refId": "A"
         }
