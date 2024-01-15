@@ -1,6 +1,6 @@
 {
   grafanaDashboards: {
-    'docker-overview.json': (import 'docker-overview.json'),
+    'docker.json': (import 'docker-overview.json'),
   },
 } +
 (import 'docker-logs.libsonnet')
