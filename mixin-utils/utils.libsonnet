@@ -17,9 +17,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // The classicNativeHistogramSumRate function is used to calculate the histogram sum of rate from native histograms or classic histograms.
   nativeClassicHistogramSumRate(metric, selector, rate_interval='$__rate_interval')::
     'histogram_sum(rate(%(metric)s{%(selector)s}[%(rateInterval)s])) or rate(%(metric)s_sum{%(selector)s}[%(rateInterval)s])' % {
-      classicSumBy: classicSumBy,
       metric: metric,
-      nativeSumBy: nativeSumBy,
       rateInterval: rate_interval,
       selector: selector,
     },
@@ -27,9 +25,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // The classicNativeHistogramCountRate function is used to calculate the histogram count of rate from native histograms or classic histograms.
   nativeClassicHistogramCountRate(metric, selector, rate_interval='$__rate_interval')::
     'histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s])) or rate(%(metric)s_count{%(selector)s}[%(rateInterval)s])' % {
-      classicSumBy: classicSumBy,
       metric: metric,
-      nativeSumBy: nativeSumBy,
       rateInterval: rate_interval,
       selector: selector,
     },
