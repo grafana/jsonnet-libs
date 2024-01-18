@@ -516,7 +516,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
           multiplier: multiplier,
         },
         format: 'time_series',
-        legendFormat: '99th Percentile',
+        legendFormat: '99th percentile',
         refId: 'A',
       },
       {
@@ -525,14 +525,14 @@ local utils = import 'mixin-utils/utils.libsonnet';
           multiplier: multiplier,
         },
         format: 'time_series',
-        legendFormat: '50th Percentile',
+        legendFormat: '50th percentile',
         refId: 'B',
       },
       {
         expr:
           |||
             %(multiplier)s * sum(%(sumMetricQuery)s) /
-            sum(%(countMetricQuery)s))
+            sum(%(countMetricQuery)s)
           ||| % {
             sumMetricQuery: utils.nativeClassicHistogramSumRate(metricName, selector),
             countMetricQuery: utils.nativeClassicHistogramCountRate(metricName, selector),
