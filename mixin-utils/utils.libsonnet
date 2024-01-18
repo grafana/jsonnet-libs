@@ -68,7 +68,6 @@ local g = import 'grafana-builder/grafana.libsonnet';
           format: 'time_series',
           legendFormat: '%(legend)s99th percentile' % legend,
           refId: 'A',
-          step: 10,
         },
         {
           expr: 'histogram_quantile(0.50, sum by (%(sumBy)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s)) * %(multiplier)s' % {
@@ -81,7 +80,6 @@ local g = import 'grafana-builder/grafana.libsonnet';
           format: 'time_series',
           legendFormat: '%(legend)s50th percentile' % legend,
           refId: 'B',
-          step: 10,
         },
         {
           expr: '%(multiplier)s * sum(%(labels)s:%(metric)s_sum:sum_rate%(selector)s)%(sumBy)s / sum(%(labels)s:%(metric)s_count:sum_rate%(selector)s)%(sumBy)s' % {
@@ -94,7 +92,6 @@ local g = import 'grafana-builder/grafana.libsonnet';
           format: 'time_series',
           legendFormat: '%(legend)sAverage' % legend,
           refId: 'C',
-          step: 10,
         },
       ],
     },
