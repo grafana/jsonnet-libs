@@ -1,6 +1,39 @@
 local g = import 'grafana-builder/grafana.libsonnet';
 
 {
+  // The classicNativeHistogramQuantile function is used to calculate quantiles from native histograms or classic histograms.
+  nativeClassicHistogramQuantile(percentile, metric, selector, sum_by=[], rate_interval='$__rate_interval')::
+    local classicSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', ['le'] + sum_by) } else ' by (le) ';
+    local nativeSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
+    'histogram_quantile(%(percentile)s, sum%(nativeSumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))) or histogram_quantile(%(percentile)s, sum%(classicSumBy)s(rate(%(metric)s_bucket{%(selector)s}[%(rateInterval)s])))' % {
+      classicSumBy: classicSumBy,
+      metric: metric,
+      nativeSumBy: nativeSumBy,
+      percentile: percentile,
+      rateInterval: rate_interval,
+      selector: selector,
+    },
+
+  // The classicNativeHistogramSumRate function is used to calculate the sum or rate from native histograms or classic histograms.
+  nativeClassicHistogramSumRate(metric, selector, rate_interval='$__rate_interval')::
+    'histogram_sum(rate(%(metric)s{%(selector)s}[%(rateInterval)s])) or rate(%(metric)s_sum{%(selector)s}[%(rateInterval)s])' % {
+      classicSumBy: classicSumBy,
+      metric: metric,
+      nativeSumBy: nativeSumBy,
+      rateInterval: rate_interval,
+      selector: selector,
+    },
+
+  // The classicNativeHistogramCountRate function is used to calculate the count or rate from native histograms or classic histograms.
+  nativeClassicHistogramCountRate(metric, selector, rate_interval='$__rate_interval')::
+    'histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s])) or rate(%(metric)s_count{%(selector)s}[%(rateInterval)s])' % {
+      classicSumBy: classicSumBy,
+      metric: metric,
+      nativeSumBy: nativeSumBy,
+      rateInterval: rate_interval,
+      selector: selector,
+    },
+
   histogramRules(metric, labels, interval='1m')::
     local vars = {
       metric: metric,
@@ -96,73 +129,74 @@ local g = import 'grafana-builder/grafana.libsonnet';
       ],
     },
 
-  latencyRecordingRulePanelNativeHistogram(metric, selectors, extra_selectors=[], multiplier='1e3', sum_by=[])::
-    local labels = std.join('_', [matcher.label for matcher in selectors]);
-    local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
-    local sb = ['le'];
-    local legend = std.join('', ['{{ %(lb)s }} ' % lb for lb in sum_by]);
-    // sumBy is used in the averge calculation and also for native histograms where 'le' is not used
-    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else '';
-    local sumByHisto = std.join(',', sb + sum_by);
-    {
-      nullPointMode: 'null as zero',
-      yaxes: g.yaxes('ms'),
-      targets: [
-        {
-          expr:
-            |||
-              (histogram_quantile(0.99, sum by (%(sumBy)s) (%(labels)s:%(metric)s:sum_rate%(selector)s)) or
-               histogram_quantile(0.99, sum by (%(sumByHisto)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s))) * %(multiplier)s
-            ||| % {
-              labels: labels,
-              metric: metric,
-              selector: selectorStr,
-              multiplier: multiplier,
-              sumBy: sumBy,
-              sumByHisto: sumByHisto,
-            },
-          format: 'time_series',
-          legendFormat: '%(legend)s99th percentile' % legend,
-          refId: 'A',
-          step: 10,
-        },
-        {
-          expr:
-            |||
-              (histogram_quantile(0.50, sum by (%(sumBy)s) (%(labels)s:%(metric)s:sum_rate%(selector)s)) or
-               histogram_quantile(0.50, sum by (%(sumByHisto)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s))) * %(multiplier)s
-            ||| % {
-              labels: labels,
-              metric: metric,
-              selector: selectorStr,
-              multiplier: multiplier,
-              sumBy: sumBy,
-              sumByHisto: sumByHisto,
-            },
-          format: 'time_series',
-          legendFormat: '%(legend)s50th percentile' % legend,
-          refId: 'B',
-          step: 10,
-        },
-        {
-          expr:
-            |||
-              %(multiplier)s * (histogram_sum(sum(%(labels)s:%(metric)s:sum_rate%(selector)s)%(sumBy)s) or sum(%(labels)s:%(metric)s_sum:sum_rate%(selector)s)%(sumBy)s) /
-              (histogram_count(sum(%(labels)s:%(metric)s:sum_rate%(selector)s)%(sumBy)s) or sum(%(labels)s:%(metric)s_count:sum_rate%(selector)s)%(sumBy)s)
-            ||| % {
-              labels: labels,
-              metric: metric,
-              selector: selectorStr,
-              multiplier: multiplier,
-              sumBy: sumBy,
-            },
-          format: 'time_series',
-          legendFormat: '%(legend)sAverage' % legend,
-          refId: 'C',
-          step: 10,
-        },
-      ],
-    },
+  // not in use yet
+  // latencyRecordingRulePanelNativeHistogram(metric, selectors, extra_selectors=[], multiplier='1e3', sum_by=[])::
+  //   local labels = std.join('_', [matcher.label for matcher in selectors]);
+  //   local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
+  //   local sb = ['le'];
+  //   local legend = std.join('', ['{{ %(lb)s }} ' % lb for lb in sum_by]);
+  //   // sumBy is used in the averge calculation and also for native histograms where 'le' is not used
+  //   local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else '';
+  //   local sumByHisto = std.join(',', sb + sum_by);
+  //   {
+  //     nullPointMode: 'null as zero',
+  //     yaxes: g.yaxes('ms'),
+  //     targets: [
+  //       {
+  //         expr:
+  //           |||
+  //             (histogram_quantile(0.99, sum by (%(sumBy)s) (%(labels)s:%(metric)s:sum_rate%(selector)s)) or
+  //              histogram_quantile(0.99, sum by (%(sumByHisto)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s))) * %(multiplier)s
+  //           ||| % {
+  //             labels: labels,
+  //             metric: metric,
+  //             selector: selectorStr,
+  //             multiplier: multiplier,
+  //             sumBy: sumBy,
+  //             sumByHisto: sumByHisto,
+  //           },
+  //         format: 'time_series',
+  //         legendFormat: '%(legend)s99th percentile' % legend,
+  //         refId: 'A',
+  //         step: 10,
+  //       },
+  //       {
+  //         expr:
+  //           |||
+  //             (histogram_quantile(0.50, sum by (%(sumBy)s) (%(labels)s:%(metric)s:sum_rate%(selector)s)) or
+  //              histogram_quantile(0.50, sum by (%(sumByHisto)s) (%(labels)s:%(metric)s_bucket:sum_rate%(selector)s))) * %(multiplier)s
+  //           ||| % {
+  //             labels: labels,
+  //             metric: metric,
+  //             selector: selectorStr,
+  //             multiplier: multiplier,
+  //             sumBy: sumBy,
+  //             sumByHisto: sumByHisto,
+  //           },
+  //         format: 'time_series',
+  //         legendFormat: '%(legend)s50th percentile' % legend,
+  //         refId: 'B',
+  //         step: 10,
+  //       },
+  //       {
+  //         expr:
+  //           |||
+  //             %(multiplier)s * (histogram_sum(sum(%(labels)s:%(metric)s:sum_rate%(selector)s)%(sumBy)s) or sum(%(labels)s:%(metric)s_sum:sum_rate%(selector)s)%(sumBy)s) /
+  //             (histogram_count(sum(%(labels)s:%(metric)s:sum_rate%(selector)s)%(sumBy)s) or sum(%(labels)s:%(metric)s_count:sum_rate%(selector)s)%(sumBy)s)
+  //           ||| % {
+  //             labels: labels,
+  //             metric: metric,
+  //             selector: selectorStr,
+  //             multiplier: multiplier,
+  //             sumBy: sumBy,
+  //           },
+  //         format: 'time_series',
+  //         legendFormat: '%(legend)sAverage' % legend,
+  //         refId: 'C',
+  //         step: 10,
+  //       },
+  //     ],
+  //   },
 
   selector:: {
     eq(label, value):: { label: label, op: '=', value: value },

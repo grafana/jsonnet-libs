@@ -1,3 +1,5 @@
+local utils = import 'mixin-utils/utils.libsonnet';
+
 {
   dashboard(title, uid='', datasource='default', datasource_regex=''):: {
     // Stuff that isn't materialised.
@@ -466,12 +468,11 @@
         expr:
           |||
             sum by (status) (
-              label_replace(label_replace(histogram_count(rate(%(metric)s%(selector)s[$__rate_interval])) or rate(%(metric)s_count%(selector)s[$__rate_interval]),
+              label_replace(label_replace(%(metricQuery)s),
               "status", "${1}xx", "%(label)s", "([0-9]).."),
               "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
           ||| % {
-            metric: metricName,
-            selector: selector,
+            metricQuery: utils.nativeClassicHistogramCountRate(metricName, selector),
             label: statusLabelName,
           },
         format: 'time_series',
@@ -510,29 +511,19 @@
     nullPointMode: 'null as zero',
     targets: [
       {
-        expr:
-          |||
-            (histogram_quantile(0.99, sum(rate(%(metric)s%(selector)s[$__rate_interval]))) or
-             histogram_quantile(0.99, sum(rate(%(metric)s_bucket%(selector)s[$__rate_interval])) by (le))) * %(multiplier)s
-          ||| % {
-            metric: metricName,
-            selector: selector,
-            multiplier: multiplier,
-          },
+        expr: '%(metricQuery)s * %(multiplier)s' % {
+          metricQuery: utils.nativeClassicHistogramQuantile('0.99', metricName, selector),
+          multiplier: multiplier,
+        },
         format: 'time_series',
         legendFormat: '99th Percentile',
         refId: 'A',
       },
       {
-        expr:
-          |||
-            (histogram_quantile(0.50, sum(rate(%(metric)s%(selector)s[$__rate_interval]))) or
-             histogram_quantile(0.50, sum(rate(%(metric)s_bucket%(selector)s[$__rate_interval])) by (le))) * %(multiplier)s
-          ||| % {
-            metric: metricName,
-            selector: selector,
-            multiplier: multiplier,
-          },
+        expr: '%(metricQuery)s * %(multiplier)s' % {
+          metricQuery: utils.nativeClassicHistogramQuantile('0.50', metricName, selector),
+          multiplier: multiplier,
+        },
         format: 'time_series',
         legendFormat: '50th Percentile',
         refId: 'B',
@@ -541,11 +532,11 @@
         expr:
           |||
             sum(
-              histogram_sum(rate(%(metric)s%(selector)s[$__rate_interval])) or rate(%(metric)s_sum%(selector)s[$__rate_interval])) * %(multiplier)s /
-              sum(histogram_count(rate(%(metric)s%(selector)s[$__rate_interval])) or rate(%(metric)s_count%(selector)s[$__rate_interval]))
+              (%(sumMetricQuery)s) * %(multiplier)s /
+              (%(countMetricQuery)s)
           ||| % {
-            metric: metricName,
-            selector: selector,
+            sumMetricQuery: utils.nativeClassicHistogramSumRate(metricName, selector),
+            countMetricQuery: utils.nativeClassicHistogramCountRate(metricName, selector),
             multiplier: multiplier,
           },
         format: 'time_series',
