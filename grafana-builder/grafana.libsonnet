@@ -511,7 +511,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
     nullPointMode: 'null as zero',
     targets: [
       {
-        expr: '%(metricQuery)s * %(multiplier)s' % {
+        expr: '(%(metricQuery)s) * %(multiplier)s' % {
           metricQuery: utils.nativeClassicHistogramQuantile('0.99', metricName, selector),
           multiplier: multiplier,
         },
@@ -520,7 +520,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
         refId: 'A',
       },
       {
-        expr: '%(metricQuery)s * %(multiplier)s' % {
+        expr: '(%(metricQuery)s) * %(multiplier)s' % {
           metricQuery: utils.nativeClassicHistogramQuantile('0.50', metricName, selector),
           multiplier: multiplier,
         },
@@ -531,9 +531,8 @@ local utils = import 'mixin-utils/utils.libsonnet';
       {
         expr:
           |||
-            sum(
-              (%(sumMetricQuery)s) * %(multiplier)s /
-              (%(countMetricQuery)s)
+            %(multiplier)s * sum(%(sumMetricQuery)s) /
+            sum(%(countMetricQuery)s))
           ||| % {
             sumMetricQuery: utils.nativeClassicHistogramSumRate(metricName, selector),
             countMetricQuery: utils.nativeClassicHistogramCountRate(metricName, selector),
