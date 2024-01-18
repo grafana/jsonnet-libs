@@ -2,11 +2,11 @@ local g = import 'grafana-builder/grafana.libsonnet';
 
 {
   // The classicNativeHistogramQuantile function is used to calculate histogram quantiles from native histograms or classic histograms.
-  // Metric name should be provided without _bucket suffix. Selector should have {} around it.
+  // Metric name should be provided without _bucket suffix.
   nativeClassicHistogramQuantile(percentile, metric, selector, sum_by=[], rate_interval='$__rate_interval')::
     local classicSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', ['le'] + sum_by) } else ' by (le) ';
     local nativeSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
-    'histogram_quantile(%(percentile)s, sum%(nativeSumBy)s(rate(%(metric)s%(selector)s[%(rateInterval)s]))) or histogram_quantile(%(percentile)s, sum%(classicSumBy)s(rate(%(metric)s_bucket%(selector)s[%(rateInterval)s])))' % {
+    'histogram_quantile(%(percentile)s, sum%(nativeSumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))) or histogram_quantile(%(percentile)s, sum%(classicSumBy)s(rate(%(metric)s_bucket{%(selector)s}[%(rateInterval)s])))' % {
       classicSumBy: classicSumBy,
       metric: metric,
       nativeSumBy: nativeSumBy,
@@ -16,18 +16,18 @@ local g = import 'grafana-builder/grafana.libsonnet';
     },
 
   // The classicNativeHistogramSumRate function is used to calculate the histogram sum of rate from native histograms or classic histograms.
-  // Metric name should be provided without _sum suffix. Selector should have {} around it.
+  // Metric name should be provided without _sum suffix.
   nativeClassicHistogramSumRate(metric, selector, rate_interval='$__rate_interval')::
-    'histogram_sum(rate(%(metric)s%(selector)s[%(rateInterval)s])) or rate(%(metric)s_sum%(selector)s[%(rateInterval)s])' % {
+    'histogram_sum(rate(%(metric)s{%(selector)s}[%(rateInterval)s])) or rate(%(metric)s_sum{%(selector)s}[%(rateInterval)s])' % {
       metric: metric,
       rateInterval: rate_interval,
       selector: selector,
     },
 
   // The classicNativeHistogramCountRate function is used to calculate the histogram count of rate from native histograms or classic histograms.
-  // Metric name should be provided without _count suffix. Selector should have {} around it.
+  // Metric name should be provided without _count suffix.
   nativeClassicHistogramCountRate(metric, selector, rate_interval='$__rate_interval')::
-    'histogram_count(rate(%(metric)s%(selector)s[%(rateInterval)s])) or rate(%(metric)s_count%(selector)s[%(rateInterval)s])' % {
+    'histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s])) or rate(%(metric)s_count{%(selector)s}[%(rateInterval)s])' % {
       metric: metric,
       rateInterval: rate_interval,
       selector: selector,
