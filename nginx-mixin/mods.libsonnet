@@ -11,9 +11,9 @@ local config = (import './config.libsonnet');
         list: [
           if i == 1 then
             {
-              allValue: null,
+              allValue: '.*',
               datasource: '$datasource',
-              includeAll: false,
+              includeAll: true,
               label: 'Cluster name',
               multi: false,
               name: 'cluster',
