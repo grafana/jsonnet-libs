@@ -594,6 +594,71 @@ local utils = commonlib.utils;
                                     },
                                   },
                                   {
+                                    id: 'groupBy',
+                                    options: {
+                                      fields: {
+                                        instance: {
+                                          aggregations: [],
+                                          operation: 'groupby',
+                                        },
+                                        digest: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                        ds_client: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                        ds_server: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                        external: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                        fast: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                        ldap: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                        negotiate: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                        ntlm: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                        simple: {
+                                          aggregations: [
+                                            'lastNotNull',
+                                          ],
+                                          operation: 'aggregate',
+                                        },
+                                      },
+                                    },
+                                  },
+                                  {
                                     id: 'filterFieldsByName',
                                     options: {
                                       include: {
@@ -606,27 +671,17 @@ local utils = commonlib.utils;
                                     options: {
                                       renameByName:
                                         {
-                                          instance: 'Instance',
-                                          digest: 'Digest',
-                                          ds_client: 'DS_client',
-                                          ds_server: 'DS_server',
-                                          external: 'External',
-                                          fast: 'Fast',
-                                          ldap: 'LDAP',
-                                          negotiate: 'Negotiate',
-                                          ntlm: 'NTLM',
-                                          simple: 'Simple',
+                                          'instance (lastNotNull)': 'Instance',
+                                          'digest (lastNotNull)': 'Digest',
+                                          'ds_client (lastNotNull)': 'DS_client',
+                                          'ds_server (lastNotNull)': 'DS_server',
+                                          'external (lastNotNull)': 'External',
+                                          'fast (lastNotNull)': 'Fast',
+                                          'ldap (lastNotNull)': 'LDAP',
+                                          'negotiate (lastNotNull)': 'Negotiate',
+                                          'ntlm (lastNotNull)': 'NTLM',
+                                          'simple (lastNotNull)': 'Simple',
                                         },
-                                    },
-                                  },
-                                  {
-                                    id: 'reduce',
-                                    options: {
-                                      includeTimeField: false,
-                                      mode: 'reduceFields',
-                                      reducers: [
-                                        'last',
-                                      ],
                                     },
                                   },
                                 ]
@@ -728,10 +783,37 @@ local utils = commonlib.utils;
                                         },
                                       },
                                       {
-                                        id: 'filterFieldsByName',
+                                        id: 'groupBy',
                                         options: {
-                                          include: {
-                                            pattern: 'instance|add|delete|modify|recycle',
+                                          fields: {
+                                            instance: {
+                                              aggregations: [],
+                                              operation: 'groupby',
+                                            },
+                                            add: {
+                                              aggregations: [
+                                                'lastNotNull',
+                                              ],
+                                              operation: 'aggregate',
+                                            },
+                                            delete: {
+                                              aggregations: [
+                                                'lastNotNull',
+                                              ],
+                                              operation: 'aggregate',
+                                            },
+                                            modify: {
+                                              aggregations: [
+                                                'lastNotNull',
+                                              ],
+                                              operation: 'aggregate',
+                                            },
+                                            recycle: {
+                                              aggregations: [
+                                                'lastNotNull',
+                                              ],
+                                              operation: 'aggregate',
+                                            },
                                           },
                                         },
                                       },
@@ -740,21 +822,11 @@ local utils = commonlib.utils;
                                         options: {
                                           renameByName:
                                             {
-                                              add: 'Add',
-                                              delete: 'Delete',
-                                              modify: 'Modify',
-                                              recycle: 'Recycle',
+                                              'add (lastNotNull)': 'Add',
+                                              'delete (lastNotNull)': 'Delete',
+                                              'modify (lastNotNull)': 'Modify',
+                                              'recycle (lastNotNull)': 'Recycle',
                                             },
-                                        },
-                                      },
-                                      {
-                                        id: 'reduce',
-                                        options: {
-                                          includeTimeField: false,
-                                          mode: 'reduceFields',
-                                          reducers: [
-                                            'last',
-                                          ],
                                         },
                                       },
                                     ]
