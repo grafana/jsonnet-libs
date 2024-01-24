@@ -3,6 +3,7 @@ local grafana = (import 'grafonnet/grafana.libsonnet');
 local dashboard = grafana.dashboard;
 local template = grafana.template;
 local prometheus = grafana.prometheus;
+local getMatcher(cfg) = '%(ibmmqSelector)s' % cfg;
 
 local dashboardUid = 'ibm-mq-cluster-overview';
 
@@ -12,11 +13,11 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local clustersPanel = {
+local clustersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_qmgr_commit_count{job=~"$job"}) by (mq_cluster))',
+      'count(count(ibmmq_qmgr_commit_count{' + matcher + '}) by (mq_cluster))',
       datasource=promDatasource,
       legendFormat='{{job}} - {{mq_cluster}}',
       format='time_series',
@@ -63,11 +64,11 @@ local clustersPanel = {
   },
 };
 
-local queueManagersPanel = {
+local queueManagersPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_qmgr_commit_count{job=~"$job"}) by (qmgr, mq_cluster))',
+      'count(count(ibmmq_qmgr_commit_count{' + matcher + '}) by (qmgr, mq_cluster))',
       datasource=promDatasource,
       legendFormat='',
       format='time_series',
@@ -114,11 +115,11 @@ local queueManagersPanel = {
   },
 };
 
-local topicsPanel = {
+local topicsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_topic_messages_received{job=~"$job"}) by (topic, mq_cluster))',
+      'count(count(ibmmq_topic_messages_received{' + matcher + '}) by (topic, mq_cluster))',
       datasource=promDatasource,
       legendFormat='{{job}} - {{mq_cluster}}',
       format='time_series',
@@ -165,11 +166,11 @@ local topicsPanel = {
   },
 };
 
-local queuesPanel = {
+local queuesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count(ibmmq_queue_depth{job=~"$job"}) by (queue, mq_cluster))',
+      'count(count(ibmmq_queue_depth{' + matcher + '}) by (queue, mq_cluster))',
       datasource=promDatasource,
       legendFormat='',
       format='time_series',
@@ -216,41 +217,41 @@ local queuesPanel = {
   },
 };
 
-local queueOperationsPanel = {
+local queueOperationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by (mq_cluster) (ibmmq_queue_mqset_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
+      'sum by (mq_cluster) (ibmmq_queue_mqset_count{' + matcher + ', mq_cluster=~"$mq_cluster"})',
       datasource=promDatasource,
       legendFormat='MQSET',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster) (ibmmq_queue_mqinq_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
+      'sum by (mq_cluster) (ibmmq_queue_mqinq_count{' + matcher + ', mq_cluster=~"$mq_cluster"})',
       datasource=promDatasource,
       legendFormat='MQINQ',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster) (ibmmq_queue_mqget_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
+      'sum by (mq_cluster) (ibmmq_queue_mqget_count{' + matcher + ', mq_cluster=~"$mq_cluster"})',
       datasource=promDatasource,
       legendFormat='MQGET',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster) (ibmmq_queue_mqopen_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
+      'sum by (mq_cluster) (ibmmq_queue_mqopen_count{' + matcher + ', mq_cluster=~"$mq_cluster"})',
       datasource=promDatasource,
       legendFormat='MQOPEN',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster) (ibmmq_queue_mqclose_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
+      'sum by (mq_cluster) (ibmmq_queue_mqclose_count{' + matcher + ', mq_cluster=~"$mq_cluster"})',
       datasource=promDatasource,
       legendFormat='MQCLOSE',
       format='time_series',
     ),
     prometheus.target(
-      'sum by (mq_cluster) (ibmmq_queue_mqput_mqput1_count{mq_cluster=~"$mq_cluster", job=~"$job"})',
+      'sum by (mq_cluster) (ibmmq_queue_mqput_mqput1_count{' + matcher + ', mq_cluster=~"$mq_cluster"})',
       datasource=promDatasource,
       legendFormat='MQPUT/MQPUT1',
       format='time_series',
@@ -325,11 +326,11 @@ local queueOperationsPanel = {
   },
 };
 
-local clusterStatusPanel = {
+local clusterStatusPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_cluster_suspend{mq_cluster=~"$mq_cluster", job=~"$job"}',
+      'ibmmq_cluster_suspend{' + matcher + ', mq_cluster=~"$mq_cluster"}',
       datasource=promDatasource,
       legendFormat='{{job}} - {{mq_cluster}}',
       format='time_series',
@@ -434,11 +435,11 @@ local clusterStatusPanel = {
   ],
 };
 
-local queueManagerStatusPanel = {
+local queueManagerStatusPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_qmgr_status{mq_cluster=~"$mq_cluster", job=~"$job"}',
+      'ibmmq_qmgr_status{' + matcher + ', mq_cluster=~"$mq_cluster"}',
       datasource=promDatasource,
       legendFormat='',
       format='time_series',
@@ -571,17 +572,17 @@ local queueManagerStatusPanel = {
   ],
 };
 
-local transmissionQueueTimePanel = {
+local transmissionQueueTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'ibmmq_channel_xmitq_time_short{type="SENDER",job=~"$job", mq_cluster=~"$mq_cluster"}',
+      'ibmmq_channel_xmitq_time_short{type="SENDER", ' + matcher + ', mq_cluster=~"$mq_cluster"}',
       datasource=promDatasource,
       legendFormat='{{channel}} - short',
       format='time_series',
     ),
     prometheus.target(
-      'ibmmq_channel_xmitq_time_long{type=~"SENDER", job=~"$job", mq_cluster=~"$mq_cluster"}',
+      'ibmmq_channel_xmitq_time_long{type=~"SENDER", ' + matcher + ', mq_cluster=~"$mq_cluster"}',
       datasource=promDatasource,
       legendFormat='{{channel}} - long',
       format='time_series',
@@ -701,6 +702,18 @@ local transmissionQueueTimePanel = {
             allValues='',
             sort=0
           ),
+          template.new(
+            'cluster',
+            promDatasource,
+            'label_values(ibmmq_qmgr_commit_count{job=~"$job"}, cluster)',
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
         ]
       )
       .addLink(grafana.link.dashboards(
@@ -712,14 +725,14 @@ local transmissionQueueTimePanel = {
       ))
       .addPanels(
         [
-          clustersPanel { gridPos: { h: 7, w: 4, x: 0, y: 0 } },
-          queueManagersPanel { gridPos: { h: 7, w: 4, x: 4, y: 0 } },
-          topicsPanel { gridPos: { h: 7, w: 4, x: 8, y: 0 } },
-          queuesPanel { gridPos: { h: 7, w: 4, x: 12, y: 0 } },
-          queueOperationsPanel { gridPos: { h: 15, w: 8, x: 16, y: 0 } },
-          clusterStatusPanel { gridPos: { h: 4, w: 16, x: 0, y: 7 } },
-          queueManagerStatusPanel { gridPos: { h: 4, w: 16, x: 0, y: 11 } },
-          transmissionQueueTimePanel { gridPos: { h: 8, w: 24, x: 0, y: 15 } },
+          clustersPanel(getMatcher($._config)) { gridPos: { h: 7, w: 4, x: 0, y: 0 } },
+          queueManagersPanel(getMatcher($._config)) { gridPos: { h: 7, w: 4, x: 4, y: 0 } },
+          topicsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 4, x: 8, y: 0 } },
+          queuesPanel(getMatcher($._config)) { gridPos: { h: 7, w: 4, x: 12, y: 0 } },
+          queueOperationsPanel(getMatcher($._config)) { gridPos: { h: 15, w: 8, x: 16, y: 0 } },
+          clusterStatusPanel(getMatcher($._config)) { gridPos: { h: 4, w: 16, x: 0, y: 7 } },
+          queueManagerStatusPanel(getMatcher($._config)) { gridPos: { h: 4, w: 16, x: 0, y: 11 } },
+          transmissionQueueTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 15 } },
         ]
       ),
 

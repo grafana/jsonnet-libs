@@ -1,4 +1,9 @@
 exclusions:
+  panel-datasource-rule:
+    reason: Uses --mixed-- (generated from grafonnet)
+    entries:
+      - panel: 'OpenSearch cluster overview'
+      - panel: 'Roles'
   panel-units-rule:
     reason: "Custom units are used for better user experience in these panels"
     entries:
@@ -27,6 +32,8 @@ exclusions:
       - panel: "Merge count"
       - panel: "Shard count"
       - panel: "Node open connections"
+      - panel: 'OpenSearch cluster overview'
+      - panel: 'Roles'
   template-instance-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   target-instance-rule:

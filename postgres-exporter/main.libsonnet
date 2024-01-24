@@ -4,6 +4,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
   new(
     name,
     data_source_uri='$(HOSTNAME):$(PORT)/postgres',
+    data_source_name='',
     ssl=true,
     image='quay.io/prometheuscommunity/postgres-exporter:v0.10.0',
   ):: {
@@ -28,10 +29,18 @@ local k = import 'ksonnet-util/kausal.libsonnet';
         1,
         [
           this.container
-          // Force DATA_SOURCE_URI to be declared after the variables it references
-          + container.withEnvMap({
-            DATA_SOURCE_URI: data_source_uri + ssl_suffix,
-          }),
+          // If data_source_name is not empty, use it instead of data_source_uri
+          // with variable name DATA_SOURCE_NAME
+          // Otherwise, use data_source_uri with variable name DATA_SOURCE_URI
+          + (
+            if data_source_name != ''
+            then container.withEnvMap({
+              DATA_SOURCE_NAME: data_source_name + ssl_suffix,
+            })
+            else container.withEnvMap({
+              DATA_SOURCE_URI: data_source_uri + ssl_suffix,
+            })
+          ),
         ]
       ),
   },

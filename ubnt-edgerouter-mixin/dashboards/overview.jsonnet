@@ -5,7 +5,7 @@ local prometheus = grafana.prometheus;
 
 local gBuilder = import 'grafana-builder/grafana.libsonnet';
 
-local utils = import 'snmp-mixin/lib/utils.libsonnet';
+local utils = import '../lib/utils.libsonnet';
 
 local sharedMatcher = 'job=~"$job", instance=~"$instance", snmp_target=~"$snmp_target"';
 
