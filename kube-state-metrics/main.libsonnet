@@ -13,21 +13,21 @@ local kausal = import 'github.com/grafana/jsonnet-libs/ksonnet-util/kausal.libso
         namespace: namespace,
       },
     },
-    local shared_config = {
+    local common_config = {
       image:: image,
-    } + import './shared_config.libsonnet',
-    local singleton_ksm = shared_config + import './singleton.libsonnet',
-    local sharded_ksm = shared_config {
+    } + import './common_config.libsonnet',
+    local singleton_ksm = common_config + import './singleton.libsonnet',
+    local sharded_ksm = common_config {
       replicas:: replicas,
       name:: name,
       namespace:: namespace,
     } + import './sharded.libsonnet',
 
     deployment: if sharded then {} else singleton_ksm.deployment,
-    statefulset: if sharded then sharded_ksm.statefulset else {},
-    configmaps: if sharded then sharded_ksm.configmaps else {},
+    [if sharded then 'statefulset']: sharded_ksm.statefulset,
+    [if sharded then 'configmaps']: sharded_ksm.configmaps,
 
-    rbac: shared_config.rbac,
+    rbac: common_config.rbac,
   },
 
   scrape_config: (import './scrape_config.libsonnet'),
