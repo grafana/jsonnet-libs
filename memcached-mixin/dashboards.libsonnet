@@ -7,7 +7,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
         g.dashboard('Memcached Overview') +
         { uid: '124d5222454213f748dbfaf69b77ec48' }
       )
-      .addMultiTemplate('cluster', 'memcached_commands_total', $._config.clusterLabel)
+      .addMultiTemplate('cluster', 'memcached_commands_total', $._config.clusterLabel, allValue='.*')
       .addMultiTemplate('job', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster"}', 'job')
       .addMultiTemplate('instance', 'memcached_commands_total{' + $._config.clusterLabel + '=~"$cluster",job=~"$job"}', 'instance')
       .addRow(
