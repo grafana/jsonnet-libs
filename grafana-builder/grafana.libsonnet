@@ -72,6 +72,28 @@ local utils = import 'mixin-utils/utils.libsonnet';
       },
     },
 
+    addShowHistoricDataVariable():: self {
+      templating+: {
+        list+: [{
+          current: {
+            selected: true,
+            text: 'show',
+            value: '1',
+          },
+          description: 'When setting this option to 1, panels will query and show deprecated low precision histogram metrics.',
+          hide: 0,
+          includeAll: false,
+          label: 'Show historic data',
+          multi: false,
+          name: 'show_classic_histograms',
+          query: 'hide : 0,show : 1',
+          skipUrlSync: false,
+          type: 'custom',
+          useTags: false,
+        }],
+      },
+    },
+
     dashboardLinkUrl(title, url):: self {
       links+: [
         {
