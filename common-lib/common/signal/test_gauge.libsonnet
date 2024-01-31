@@ -27,26 +27,26 @@ local gauge1 = signal.init(
   },
   asTimeSeries:
     {
-      raw: gauge1.panels.asTimeSeries(),
+      raw: gauge1.asTimeSeries(),
       testResult: test.suite({
         testTStitle: {
-          actual: gauge1.panels.asTimeSeries().title,
+          actual: gauge1.asTimeSeries().title,
           expect: 'Up metric',
         },
         testUnit: {
-          actual: gauge1.panels.asTimeSeries().fieldConfig.defaults.unit,
+          actual: gauge1.asTimeSeries().fieldConfig.defaults.unit,
           expect: 'short',
         },
         testTStype: {
-          actual: gauge1.panels.asTimeSeries().type,
+          actual: gauge1.asTimeSeries().type,
           expect: 'timeseries',
         },
         testTSversion: {
-          actual: gauge1.panels.asTimeSeries().pluginVersion,
+          actual: gauge1.asTimeSeries().pluginVersion,
           expect: 'v10.0.0',
         },
         testTSUid: {
-          actual: gauge1.panels.asTimeSeries().datasource,
+          actual: gauge1.asTimeSeries().datasource,
           expect: {
             uid: 'DS_PROMETHEUS',
             type: 'prometheus',

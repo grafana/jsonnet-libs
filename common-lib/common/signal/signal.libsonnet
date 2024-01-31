@@ -14,6 +14,7 @@ local histogram = import './histogram.libsonnet';
     //default aggregation level
     aggLevel='none',
     aggFunction='avg',
+    legendPrefix=''
   ): self {
 
     local this = self,
@@ -40,6 +41,8 @@ local histogram = import './histogram.libsonnet';
         else if aggLevel == 'instance' then utils.labelsToPanelLegend(self.instanceLabels)
         else if aggLevel == 'none' then '',
       interval: interval,
+      //extra prefix for legend
+      legendPrefix: legendPrefix,
     },
 
 
@@ -55,7 +58,6 @@ local histogram = import './histogram.libsonnet';
       description,
       expr,
       aggLevel=self.aggLevel,
-      datasource=self.datasource
     ):
 
       // validate inputs

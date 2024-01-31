@@ -23,11 +23,9 @@
       ),
 
   wrapLegend(legend, aggLevel):
-    //TODO: add p95 when histogram
-
-    if aggLevel == 'none' then legend
+    if aggLevel == 'none' then '%(legendPrefix)s' + legend
     else
-      '%(aggLegend)s: ' + legend,
+      '%(aggLegend)s%(legendPrefix)s: ' + legend,
 
   generateUnits(type, unit):
     if type == 'gauge' || type == 'histogram' then unit

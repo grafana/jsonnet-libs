@@ -30,4 +30,8 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
 local cpuPanel = oldPanel + commonlib.panels.cpu.timeSeries.utilization.stylize();
 ```
 
-See [windows-observ-lib](./windows-observ-lib) for full example.
+See [windows-observ-lib](../windows-observ-lib/README.md) for full example.
+
+### Signals
+
+See signals [README](./common/signal/README.md) here.

@@ -27,23 +27,23 @@ local signalUtils = import './utils.libsonnet';
     //Return as alert/recordingRule query
     asPromRule(): {},
 
-    panels:
-      {
-        common::
-          // override panel-wide --mixed-- datasource
-          prometheusQuery.withDatasource(datasource),
-        //Return as timeSeriesPanel
-        asTimeSeries():
-          g.panel.timeSeries.new(name)
-          + self.common
-          + g.panel.timeSeries.standardOptions.withUnit(signalUtils.generateUnits(type, unit)),
+    common::
+      // override panel-wide --mixed-- datasource
+      prometheusQuery.withDatasource(datasource),
+    //Return as timeSeriesPanel
+    asTimeSeries():
+      g.panel.timeSeries.new(name)
+      + self.common
+      + g.panel.timeSeries.standardOptions.withUnit(signalUtils.generateUnits(type, unit))
+      + g.panel.timeSeries.queryOptions.withTargets(
+        self.asTarget()
+      ),
 
-        //Return as statPanel
-        asStat(): {},
+    //Return as statPanel
+    asStat(): {},
 
-        //Return as timeSeriesPanel
-        asGauge(): {},
-      },
+    //Return as timeSeriesPanel
+    asGauge(): {},
   },
 
 }
