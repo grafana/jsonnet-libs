@@ -444,18 +444,20 @@ local utils = import 'mixin-utils/utils.libsonnet';
       },
     ],
 
+  httpStatusColors:: {
+    '1xx': '#EAB839',
+    '2xx': '#7EB26D',
+    '3xx': '#6ED0E0',
+    '4xx': '#EF843C',
+    '5xx': '#E24D42',
+    OK: '#7EB26D',
+    success: '#7EB26D',
+    'error': '#E24D42',
+    cancel: '#A9A9A9',
+  },
+
   qpsPanel(selector, statusLabelName='status_code'):: {
-    aliasColors: {
-      '1xx': '#EAB839',
-      '2xx': '#7EB26D',
-      '3xx': '#6ED0E0',
-      '4xx': '#EF843C',
-      '5xx': '#E24D42',
-      OK: '#7EB26D',
-      success: '#7EB26D',
-      'error': '#E24D42',
-      cancel: '#A9A9A9',
-    },
+    aliasColors: $.httpStatusColors,
     targets: [
       {
         expr:
@@ -474,17 +476,48 @@ local utils = import 'mixin-utils/utils.libsonnet';
 
   // Assumes that the metricName is for a histogram (as opposed to qpsPanel above)
   // Assumes that there is a dashboard variable named show_classic_histograms, values are 0 or 1
-  qpsPanelNativeHistogram(metricName, selector, statusLabelName='status_code'):: {
-    aliasColors: {
-      '1xx': '#EAB839',
-      '2xx': '#7EB26D',
-      '3xx': '#6ED0E0',
-      '4xx': '#EF843C',
-      '5xx': '#E24D42',
-      OK: '#7EB26D',
-      success: '#7EB26D',
-      'error': '#E24D42',
-      cancel: '#A9A9A9',
+  qpsPanelNativeHistogram(title, metricName, selector, statusLabelName='status_code'):: $.timeseriesPanel(title) {
+    fieldConfig+: {
+      defaults+: {
+        custom+: {
+          lineWidth: 0,
+          fillOpacity: 100,  // Get solid fill.
+        },
+        unit: 'reqps',
+        min: 0,
+      },
+      overrides+: [{
+        matcher: {
+          id: 'byRegexp',
+          options: '(historic_)?' + status,
+        },
+        properties: [
+          {
+            id: 'color',
+            value: {
+              mode: 'fixed',
+              fixedColor: $.httpStatusColors[status],
+            },
+          },
+        ],
+      } for status in std.objectFieldsAll($.httpStatusColors)] + [
+        // Make the classic histogram query results be in the backround stacked.
+        {
+          matcher: {
+            id: 'byFrameRefID',
+            options: 'A_classic',
+          },
+          properties: [
+            {
+              id: 'custom.stacking',
+              value: {
+                mode: 'normal',
+                group: 'B',
+              },
+            },
+          ],
+        },
+      ],
     },
     targets: [
       {
@@ -515,7 +548,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
             label: statusLabelName,
           },
         format: 'time_series',
-        legendFormat: '{{status}}',
+        legendFormat: 'historic_{{status}}',
         refId: 'A_classic',
       },
     ],
