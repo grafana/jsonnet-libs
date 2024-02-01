@@ -482,6 +482,10 @@ local utils = import 'mixin-utils/utils.libsonnet';
         custom+: {
           lineWidth: 0,
           fillOpacity: 100,  // Get solid fill.
+          stacking: {
+          mode: 'normal',  // This will be overridden for classic series to hide those behind.
+          group: 'A'
+        },
         },
         unit: 'reqps',
         min: 0,
