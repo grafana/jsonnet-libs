@@ -1,18 +1,16 @@
 local g = import '../g.libsonnet';
 local var = g.dashboard.variable;
-local utils = (import '../utils.libsonnet') {
-
-};
+local utils = import '../utils.libsonnet';
 
 {
   new(
-    this,
-    varMetric
+    filteringSelector,
+    groupLabels,
+    instanceLabels,
+    varMetric='up',
+    enableLokiLogs=true
   ): {
 
-       local filteringSelector = this.config.filteringSelector,
-       local groupLabels = this.config.groupLabels,
-       local instanceLabels = this.config.instanceLabels,
        local root = self,
        local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
          local chainVarProto(index, chainVar) =
@@ -66,10 +64,21 @@ local utils = (import '../utils.libsonnet') {
            filteringSelector,
            utils.labelsToPromQLSelector(groupLabels + instanceLabels),
          ],
+
      }
-     + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
-  withLokiLogs(this): {
-    multiInstance+: [this.grafana.variables.datasources.loki],
-    singleInstance+: [this.grafana.variables.datasources.loki],
+     + if enableLokiLogs then self.withLokiLogs() else {},
+
+  withLokiLogs(): {
+    datasources+: {
+      loki:
+        var.datasource.new('loki_datasource', 'loki')
+        + var.datasource.generalOptions.withLabel('Loki data source')
+        + var.datasource.withRegex('')
+        + var.datasource.generalOptions.showOnDashboard.withNothing(),
+    },
+
+    multiInstance+: [self.datasources.loki],
+    singleInstance+: [self.datasources.loki],
   },
+
 }
