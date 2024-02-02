@@ -17,7 +17,7 @@ local signalUtils = import './utils.libsonnet';
     local lokiQuery = g.query.loki,
 
     //Return as grafana panel target(query+legend)
-    asTarget():
+    asTarget()::
       prometheusQuery.new(
         datasource,
         signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel) % vars
@@ -25,13 +25,13 @@ local signalUtils = import './utils.libsonnet';
       + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel) % vars),
 
     //Return as alert/recordingRule query
-    asPromRule(): {},
+    asPromRule():: {},
 
     common::
       // override panel-wide --mixed-- datasource
       prometheusQuery.withDatasource(datasource),
     //Return as timeSeriesPanel
-    asTimeSeries():
+    asTimeSeries()::
       g.panel.timeSeries.new(name)
       + self.common
       + g.panel.timeSeries.standardOptions.withUnit(signalUtils.generateUnits(type, unit))
@@ -40,10 +40,10 @@ local signalUtils = import './utils.libsonnet';
       ),
 
     //Return as statPanel
-    asStat(): {},
+    asStat():: {},
 
     //Return as timeSeriesPanel
-    asGauge(): {},
+    asGauge():: {},
   },
 
 }
