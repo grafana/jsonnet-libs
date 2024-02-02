@@ -20,7 +20,10 @@
         local baseExpr = 'histogram_quantile(' + '%.2f' % q + ', sum(rate(' + expr + '[%(interval)s])) by (le,%(agg)s))';
         if aggLevel == 'none' then baseExpr
         else '%(aggFunction)s by (%(agg)s) (' + baseExpr + ')'
-      ),
+      )
+    else if type == 'info' || type == 'info' then
+      expr,
+
 
   wrapLegend(legend, aggLevel):
     if aggLevel == 'none' then '%(legendPrefix)s' + legend
@@ -28,7 +31,7 @@
       '%(aggLegend)s%(legendPrefix)s: ' + legend,
 
   generateUnits(type, unit):
-    if type == 'gauge' || type == 'histogram' then unit
+    if type == 'gauge' || type == 'histogram' || type == 'info' then unit
     else if type == 'counter' then
       (
         // some specific cases

@@ -4,6 +4,7 @@ local variables = import '../variables/variables.libsonnet';
 local counter = import './counter.libsonnet';
 local gauge = import './gauge.libsonnet';
 local histogram = import './histogram.libsonnet';
+local info = import './info.libsonnet';
 {
 
   init(
@@ -32,7 +33,7 @@ local histogram = import './histogram.libsonnet';
       varMetric=varMetric,
     ),
     // vars are used in templating(legend+expressions)
-    vars:: {
+    vars: {
       filteringSelector: filteringSelector,
       groupLabels: groupLabels,
       instanceLabels: instanceLabels,
@@ -53,10 +54,10 @@ local histogram = import './histogram.libsonnet';
     },
     //get Grafana Variables
     //allow multiple instance selection
-    getVariablesSingleChoice():
+    getVariablesSingleChoice()::
       grafanaVariables.singleInstance,
     //only single instance selection allowed
-    getVariablesMultiChoice():
+    getVariablesMultiChoice()::
       grafanaVariables.multiInstance,
 
     //name: metric simple name
@@ -71,6 +72,7 @@ local histogram = import './histogram.libsonnet';
       description,
       expr,
       aggLevel=self.aggLevel,
+      infoLabel=null,
     ):
 
       // validate inputs
@@ -109,6 +111,17 @@ local histogram = import './histogram.libsonnet';
           name=name,
           type=type,
           unit=unit,
+          description=description,
+          expr=expr,
+          aggLevel=aggLevel,
+          datasource=datasource,
+          vars=this.vars,
+        )
+      else if type == 'info' then
+        info.new(
+          name=name,
+          type=type,
+          infoLabel=infoLabel,
           description=description,
           expr=expr,
           aggLevel=aggLevel,
