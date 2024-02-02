@@ -25,11 +25,11 @@ lint: build
 .PHONY: tests
 tests: build
 	@RESULT=0; \
-	find . -name 'vendor' -prune -o -name 'test_*.libsonnet' -print -o -name '*.jsonnet' -print | \
-		while read f; do \
-			$(JSONNET) -J vendor "$$f"; \
+	for m in $$(find . -name 'test_*.libsonnet' -print); do \
+			echo "Testing $$m"; \
+			jsonnet -J vendor "$$m"; \
 			if [ $$? -ne 0 ]; then \
 				RESULT=1; \
 			fi; \
-		done; \
+	done; \
 	exit $$RESULT
