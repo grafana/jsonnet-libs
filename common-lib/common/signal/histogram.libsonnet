@@ -29,21 +29,27 @@ local signalUtils = import './utils.libsonnet';
 
     common::
       // override panel-wide --mixed-- datasource
-      prometheusQuery.withDatasource(datasource),
-    //Return as timeSeriesPanel
-    asTimeSeries()::
-      g.panel.timeSeries.new(name)
-      + self.common
+      prometheusQuery.withDatasource(datasource)
+      + g.panel.timeSeries.panelOptions.withDescription(description)
       + g.panel.timeSeries.standardOptions.withUnit(signalUtils.generateUnits(type, unit))
       + g.panel.timeSeries.queryOptions.withTargets(
         self.asTarget()
       ),
 
+    //Return as timeSeriesPanel
+    asTimeSeries()::
+      g.panel.timeSeries.new(name)
+      + self.common,
+
     //Return as statPanel
-    asStat():: {},
+    asStat()::
+      g.panel.stat.new(name)
+      + self.common,
 
     //Return as timeSeriesPanel
-    asGauge():: {},
+    asGauge()::
+      g.panel.gauge.new(name)
+      + self.common,
   },
 
 }

@@ -34,7 +34,12 @@ local signalUtils = import './utils.libsonnet';
 
       common::
         // override panel-wide --mixed-- datasource
-        prometheusQuery.withDatasource(datasource),
+        prometheusQuery.withDatasource(datasource)
+        + g.panel.timeSeries.panelOptions.withDescription(description)
+        + g.panel.stat.queryOptions.withTargets(
+          self.asTarget()
+        ),
+
       //Return as timeSeriesPanel
       asTimeSeries()::
         error 'asTimeSeries() is not supported for info metrics. Use asStat() instead.',
@@ -43,9 +48,6 @@ local signalUtils = import './utils.libsonnet';
       asStat()::
         g.panel.stat.new(name)
         + self.common
-        + g.panel.stat.queryOptions.withTargets(
-          self.asTarget()
-        )
         + panels.generic.stat.info.stylize()
           { options+: { reduceOptions+: { fields: '/^' + infoLabel + '$/' } } },
 
