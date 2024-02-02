@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -21,14 +24,15 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
-  "id": 80,
-  "iteration": 1642009511908,
+  "id": 8,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -37,11 +41,21 @@
       },
       "id": 23,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Overview",
       "type": "row"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -96,12 +110,15 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=~\"file|cdc|kafka|http\"}) ",
           "format": "time_series",
@@ -115,13 +132,18 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
@@ -133,6 +155,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 2,
             "pointSize": 5,
@@ -230,15 +253,20 @@
             "max"
           ],
           "displayMode": "table",
-          "placement": "bottom"
+          "placement": "bottom",
+          "showLegend": true
         },
         "tooltip": {
-          "mode": "single"
+          "mode": "single",
+          "sort": "none"
         }
       },
       "pluginVersion": "8.3.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum by (app) (rate(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval]))",
           "instant": false,
           "intervalFactor": 1,
@@ -246,6 +274,9 @@
           "refId": "B"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "rate(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=\"file\"}[$__rate_interval])",
           "hide": true,
           "instant": false,
@@ -254,6 +285,9 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum by (app) (rate(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval]))",
           "instant": false,
           "intervalFactor": 1,
@@ -261,6 +295,9 @@
           "refId": "C"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "rate(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=~\"rdbms\"}[$__rate_interval])",
           "hide": true,
           "instant": false,
@@ -273,7 +310,9 @@
       "type": "timeseries"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -329,12 +368,15 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(rate(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval]))",
           "format": "time_series",
@@ -349,7 +391,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -404,12 +448,15 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=~\"file|rdbms|kafka|http\"})",
           "format": "time_series",
@@ -424,7 +471,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -480,11 +529,15 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(rate(siddhi_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
@@ -496,7 +549,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Total errors occurred while consuming & publishing events",
       "fieldConfig": {
         "defaults": {
@@ -552,12 +607,15 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "(sum(siddhi_store_rdbms_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_file_source_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_listening_mode_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_polling_mode_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_file_sink_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_source_error_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_sink_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0))",
           "format": "time_series",
@@ -572,7 +630,9 @@
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Number of dropped events due to invalid mapping.",
       "fieldConfig": {
         "defaults": {
@@ -628,11 +688,15 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "(sum(siddhi_total_reads{job=~\"$job\",instance=~\"$instance\",app=~\"$app\", type=~\"file|cdc|kafka\"}) or vector(0)) - ((sum(siddhi_file_source_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_cdc_source_listening_mode_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) +(sum(siddhi_cdc_source_polling_mode_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0)) + (sum(siddhi_kafka_source_per_topic_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) or vector(0))) ",
           "format": "time_series",
           "hide": false,
@@ -645,7 +709,9 @@
     },
     {
       "collapsed": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -654,11 +720,21 @@
       },
       "id": 4,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Sources",
       "type": "row"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -667,15 +743,30 @@
       },
       "id": 46,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<h2><center>HTTP</center></h2>\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -683,7 +774,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -837,8 +931,11 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "custom.align"
@@ -898,7 +995,9 @@
       },
       "id": 52,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -907,10 +1006,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -921,7 +1022,9 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(rate(siddhi_http_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
           "format": "table",
@@ -932,7 +1035,9 @@
           "refId": "C"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_source_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -942,7 +1047,9 @@
           "refId": "G"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_source_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -952,7 +1059,9 @@
           "refId": "D"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_source_request_size{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name) / sum(siddhi_http_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -985,7 +1094,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -1001,15 +1112,30 @@
         }
       ],
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<h2><center>Kafka</center></h2>\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1017,7 +1143,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -1068,7 +1197,7 @@
                 "id": "custom.align"
               }
             ]
-          },         
+          },
           {
             "matcher": {
               "id": "byName",
@@ -1122,8 +1251,11 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "custom.align"
@@ -1271,8 +1403,10 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -1364,7 +1498,9 @@
       },
       "id": 45,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -1373,33 +1509,48 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_kafka_source_read_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "refId": "A"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(rate(siddhi_kafka_source_read_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (stream_id)",
           "format": "table",
           "instant": true,
           "refId": "D"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_kafka_source_per_stream_last_message_consumed_at{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
           "refId": "C"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_kafka_source_per_stream_with_partition_consumer_lag{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id) / 1000",
           "format": "table",
           "instant": true,
           "refId": "G"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_kafka_source_error_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
           "instant": true,
@@ -1428,7 +1579,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -1437,15 +1590,30 @@
       },
       "id": 50,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "<h2><center>File</center></h2>\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1453,7 +1621,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -1658,8 +1829,11 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "custom.align"
@@ -1799,8 +1973,10 @@
                 "value": "none"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -1817,7 +1993,9 @@
       },
       "id": 25,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -1826,10 +2004,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_name, mode, stream_name, file_path, app)",
           "format": "table",
@@ -1840,7 +2020,9 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_source_file_size{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -1851,7 +2033,9 @@
           "refId": "C"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_source_file_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -1862,7 +2046,9 @@
           "refId": "D"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_source_elapse_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -1873,7 +2059,9 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_source_started_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -1884,7 +2072,9 @@
           "refId": "E"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum((siddhi_file_source_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} - ignoring(file_name, mode, stream_name)siddhi_file_source_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) + siddhi_file_source_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -1917,7 +2107,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -1926,15 +2118,30 @@
       },
       "id": 28,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "\n<h2><center>CDC</center></h2>\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1942,7 +2149,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -1979,8 +2189,11 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "custom.align"
@@ -2269,8 +2482,10 @@
                 "value": "none"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -2287,7 +2502,9 @@
       },
       "id": 31,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -2296,10 +2513,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_host, app)",
           "format": "table",
@@ -2310,7 +2529,9 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(rate(siddhi_cdc_source_listening_mode_events_per_table{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (db_url)",
           "format": "table",
@@ -2321,7 +2542,9 @@
           "refId": "D"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_db_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2332,7 +2555,9 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_idle_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2343,7 +2568,9 @@
           "refId": "C"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_last_receive_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2354,7 +2581,9 @@
           "refId": "E"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_listening_mode_events_per_table{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} - ignoring(tablename)siddhi_cdc_source_listening_mode_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} + siddhi_cdc_source_listening_mode_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2387,7 +2616,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2395,7 +2626,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -2432,8 +2666,11 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "custom.align"
@@ -2605,8 +2842,10 @@
                 "value": "none"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -2740,7 +2979,9 @@
       },
       "id": 39,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -2749,10 +2990,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_host, app)",
           "format": "table",
@@ -2763,7 +3006,9 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_events_in_last_polling_interval{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2774,7 +3019,9 @@
           "refId": "D"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_db_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2785,7 +3032,9 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_idle_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2796,7 +3045,9 @@
           "refId": "F"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_last_receive_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2807,7 +3058,9 @@
           "refId": "C"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_cdc_source_polling_mode_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} - ignoring(A_db_type, B_host, C_database, D_tablename)siddhi_cdc_source_polling_mode_total_valid_events_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} + siddhi_cdc_source_polling_mode_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
@@ -2841,7 +3094,9 @@
     },
     {
       "collapsed": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2850,11 +3105,21 @@
       },
       "id": 8,
       "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Destinations",
       "type": "row"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -2863,15 +3128,30 @@
       },
       "id": 47,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "\n<h2><center>HTTP</center></h2>\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2879,7 +3159,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -3006,8 +3289,10 @@
                 "value": "locale"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -3076,8 +3361,11 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "custom.align"
@@ -3160,7 +3448,9 @@
       },
       "id": 55,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -3169,10 +3459,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3183,7 +3475,9 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3194,7 +3488,9 @@
           "refId": "D"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(rate(siddhi_http_sink_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (url, stream_name)",
           "format": "table",
@@ -3205,7 +3501,9 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3215,7 +3513,9 @@
           "refId": "C"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_request_size{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name) / sum(siddhi_http_sink_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3225,7 +3525,9 @@
           "refId": "E"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_http_sink_average_latency{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (url, stream_name)",
           "format": "table",
@@ -3257,7 +3559,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -3266,15 +3570,30 @@
       },
       "id": 35,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "\n<h2><center>Kafka</center></h2>\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3282,7 +3601,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -3349,8 +3671,10 @@
                 "value": "short"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -3372,8 +3696,10 @@
                 "value": "percentunit"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -3568,7 +3894,9 @@
       },
       "id": 49,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -3577,10 +3905,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_kafka_sink_current_offset{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3590,7 +3920,9 @@
           "refId": "F"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_kafka_sink_write_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3600,7 +3932,9 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(rate(siddhi_kafka_sink_write_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}[$__rate_interval])) by (stream_id)",
           "format": "table",
@@ -3610,7 +3944,9 @@
           "refId": "G"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "avg(siddhi_kafka_sink_per_stream_last_message_size_in_bytes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3620,7 +3956,9 @@
           "refId": "D"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "avg(siddhi_kafka_sink_per_stream_last_message_latency_in_millis{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3630,7 +3968,9 @@
           "refId": "E"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_kafka_sink_error_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id) ",
           "format": "table",
@@ -3640,7 +3980,9 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "(sum(siddhi_kafka_sink_error_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id) / sum(siddhi_kafka_sink_write_count_per_stream{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)) ",
           "format": "table",
@@ -3650,7 +3992,9 @@
           "refId": "C"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_kafka_sink_per_stream_last_message_published_at{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (stream_id)",
           "format": "table",
@@ -3682,7 +4026,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -3691,15 +4037,30 @@
       },
       "id": 53,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "\n<h2><center>File</center></h2>\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3707,7 +4068,10 @@
           },
           "custom": {
             "align": "auto",
-            "displayMode": "auto"
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -3810,7 +4174,7 @@
                 "id": "custom.align"
               }
             ]
-          },          
+          },
           {
             "matcher": {
               "id": "byName",
@@ -3922,8 +4286,11 @@
                 "value": 2
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "custom.align"
@@ -4063,8 +4430,10 @@
                 "value": "none"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-text"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
               },
               {
                 "id": "custom.align"
@@ -4081,7 +4450,9 @@
       },
       "id": 33,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -4090,10 +4461,12 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
       "targets": [
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_event_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_name, mode, stream_name, file_path,app)",
           "format": "table",
@@ -4104,7 +4477,9 @@
           "refId": "B"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_file_size{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -4115,7 +4490,9 @@
           "refId": "C"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_file_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -4126,7 +4503,9 @@
           "refId": "D"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_lines_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -4136,7 +4515,9 @@
           "refId": "A"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_elapsed_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (file_path)",
           "format": "table",
@@ -4146,7 +4527,9 @@
           "refId": "E"
         },
         {
-          "datasource": "$datasource",
+          "datasource": {
+            "uid": "$datasource"
+          },
           "exemplar": false,
           "expr": "sum(siddhi_file_sink_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} + siddhi_file_sink_dropped_events{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"} ) by (file_path)",
           "format": "table",
@@ -4178,7 +4561,9 @@
       "type": "table"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 2,
         "w": 24,
@@ -4187,17 +4572,381 @@
       },
       "id": 34,
       "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
         "content": "\n<h2><center>RDBMS</center></h2>\n",
         "mode": "html"
       },
-      "pluginVersion": "8.3.3",
+      "pluginVersion": "10.2.3",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "transparent": true,
       "type": "text"
     },
     {
-      "columns": [],
-      "datasource": "$datasource",
-      "fontSize": "120%",
+      "datasource": {
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "unit",
+                "value": "locale"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
+              },
+              {
+                "id": "custom.align"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#37872D",
+                      "value": null
+                    },
+                    {
+                      "color": "#FF780A",
+                      "value": 1
+                    },
+                    {
+                      "color": "#C4162A",
+                      "value": 2
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Changes"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "A_db_type"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Database Type"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "db_url"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Database URL"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #E"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Last Change On"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "unit",
+                "value": "time: LT MMMM D, YYYY"
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Idle Time"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "D_tablename"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Table"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "RDBMS Statistics Dashboard/$__cell_5",
+                    "url": "/d/3tPjCPgMz/wso2-streaming-integrator-rdbms-statistics?var-app=$app&orgId=1&refresh=5s&from=now-30m&to=now"
+                  }
+                ]
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "C_database"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Database"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "B_shortenUrl"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "JDBC URL"
+              },
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #D"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Processing Time"
+              },
+              {
+                "id": "unit",
+                "value": "ms"
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "app"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "short"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #F"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Total Errors"
+              },
+              {
+                "id": "unit",
+                "value": "none"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              },
+              {
+                "id": "custom.align"
+              }
+            ]
+          }
+        ]
+      },
       "gridPos": {
         "h": 8,
         "w": 24,
@@ -4205,258 +4954,24 @@
         "y": 95
       },
       "id": 37,
-      "pageSize": 5,
-      "showHeader": true,
-      "sort": {
-        "col": 2,
-        "desc": true
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
       },
-      "styles": [
-        {
-          "alias": "Status",
-          "align": "auto",
-          "colorMode": "cell",
-          "colors": [
-            "#37872D",
-            "#FF780A",
-            "#C4162A"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #B",
-          "thresholds": [
-            "1",
-            "2"
-          ],
-          "type": "string",
-          "unit": "locale",
-          "valueMaps": [
-            {
-              "text": "Processing",
-              "value": "0"
-            },
-            {
-              "text": "Idle",
-              "value": "1"
-            },
-            {
-              "text": "Error",
-              "value": "2"
-            },
-            {
-              "text": "Connected",
-              "value": "-1"
-            }
-          ]
-        },
-        {
-          "alias": "Total Changes",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "mappingType": 1,
-          "pattern": "Value #A",
-          "thresholds": [],
-          "type": "number",
-          "unit": "none"
-        },
-        {
-          "alias": "",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Time",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Database Type",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "A_db_type",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Database URL",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": false,
-          "linkTargetBlank": true,
-          "linkTooltip": "CDC Listening Mode:$__cell",
-          "linkUrl": "/d/nhe5jbqWk/siddhi-io-cdc-listening-mode?orgId=1&var-app=$app&var-db_url=$__cell&from=now-30m&to=now&refresh=5s",
-          "mappingType": 1,
-          "pattern": "db_url",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Last Change On",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "LT MMMM D, YYYY",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "Value #E",
-          "thresholds": [],
-          "type": "date",
-          "unit": "short"
-        },
-        {
-          "alias": "Idle Time",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "Value #C",
-          "preserveFormat": false,
-          "sanitize": false,
-          "thresholds": [],
-          "type": "number",
-          "unit": "ms"
-        },
-        {
-          "alias": "Table",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "link": true,
-          "linkTargetBlank": true,
-          "linkTooltip": "RDBMS Statistics Dashboard/$__cell_5",
-          "linkUrl": "/d/3tPjCPgMz/wso2-streaming-integrator-rdbms-statistics?var-app=$app&orgId=1&refresh=5s&from=now-30m&to=now",
-          "mappingType": 1,
-          "pattern": "D_tablename",
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Database",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "C_database",
-          "thresholds": [],
-          "type": "number",
-          "unit": "short"
-        },
-        {
-          "alias": "JDBC URL",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "B_shortenUrl",
-          "preserveFormat": false,
-          "sanitize": false,
-          "thresholds": [],
-          "type": "string",
-          "unit": "short"
-        },
-        {
-          "alias": "Processing Time",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "Value #D",
-          "thresholds": [],
-          "type": "number",
-          "unit": "ms"
-        },
-        {
-          "alias": "",
-          "align": "auto",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 2,
-          "mappingType": 1,
-          "pattern": "app",
-          "thresholds": [],
-          "type": "hidden",
-          "unit": "short"
-        },
-        {
-          "alias": "Total Errors",
-          "align": "auto",
-          "colorMode": "value",
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "dateFormat": "YYYY-MM-DD HH:mm:ss",
-          "decimals": 0,
-          "mappingType": 1,
-          "pattern": "Value #F",
-          "thresholds": [],
-          "type": "number",
-          "unit": "none"
-        }
-      ],
+      "pluginVersion": "10.2.3",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_store_rdbms_total_writes{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url, A_db_type, C_database, D_tablename, B_shortenUrl, app)",
           "format": "table",
           "hide": false,
@@ -4464,6 +4979,9 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_store_rdbms_db_status{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
@@ -4471,6 +4989,9 @@
           "refId": "B"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_store_rdbms_idle_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
@@ -4478,12 +4999,18 @@
           "refId": "C"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_store_rdbms_processing_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "instant": true,
           "refId": "D"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_store_rdbms_last_change_time{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
@@ -4491,6 +5018,9 @@
           "refId": "E"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(siddhi_store_rdbms_total_error_count{job=~\"$job\",instance=~\"$instance\",app=~\"$app\"}) by (db_url)",
           "format": "table",
           "hide": false,
@@ -4499,35 +5029,64 @@
         }
       ],
       "title": "RDBMS Statistics",
-      "transform": "table",
-      "type": "table-old"
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {
+            "reducers": []
+          }
+        },
+        {
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "names": [
+                "A_db_type",
+                "B_shortenUrl",
+                "C_database",
+                "D_tablename",
+                "db_url",
+                "Value #A",
+                "Value #B",
+                "Value #C",
+                "Value #D",
+                "Value #E",
+                "Value #F"
+              ]
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
-  "refresh": "5s",
-  "schemaVersion": 32,
-  "style": "dark",
-  "tags": [],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": [
+    "wso2-streaming-integrator-integration"
+  ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
+          "text": "default",
+          "value": "default"
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Data Source",
+        "label": "Data source",
         "multi": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "",
+        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
         "skipUrlSync": false,
         "type": "datasource"
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -4537,12 +5096,13 @@
             "$__all"
           ]
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "uid": "$datasource"
+        },
         "definition": "label_values(siddhi_stream_throughput_total,job)",
         "hide": 0,
         "includeAll": true,
-        "allValue":".+",
-        "label": "job",
+        "label": "Job",
         "multi": true,
         "name": "job",
         "options": [],
@@ -4560,6 +5120,7 @@
         "useTags": false
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -4569,12 +5130,13 @@
             "$__all"
           ]
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "uid": "$datasource"
+        },
         "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\"},instance)",
         "hide": 0,
         "includeAll": true,
-        "allValue":".+",
-        "label": "instance",
+        "label": "Instance",
         "multi": true,
         "name": "instance",
         "options": [],
@@ -4592,6 +5154,7 @@
         "useTags": false
       },
       {
+        "allValue": ".+",
         "current": {
           "selected": true,
           "text": [
@@ -4601,11 +5164,12 @@
             "$__all"
           ]
         },
-        "datasource": "$datasource",
+        "datasource": {
+          "uid": "$datasource"
+        },
         "definition": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"}, app)",
         "hide": 0,
         "includeAll": true,
-        "allValue":".+",
         "label": "App Name",
         "multi": true,
         "name": "app",
@@ -4614,7 +5178,7 @@
           "query": "label_values(siddhi_stream_throughput_total{job=~\"$job\",instance=~\"$instance\"}, app)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -4646,6 +5210,6 @@
   "timezone": "",
   "title": "WSO2 Streaming Integrator App Statistics",
   "uid": "JrLwmmmGz",
-  "version": 3,
+  "version": 2,
   "weekStart": ""
 }
