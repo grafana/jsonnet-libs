@@ -1,5 +1,4 @@
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 1 --string-style s --comment-style s
-JSONNET := jsonnet
 
 .PHONY: all
 all: build
