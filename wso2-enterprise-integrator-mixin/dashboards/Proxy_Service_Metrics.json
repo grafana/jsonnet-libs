@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -23,14 +26,15 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 12889,
   "graphTooltip": 0,
-  "id": 65,
-  "iteration": 1635514687282,
+  "id": 24,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "collapsed": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -40,12 +44,21 @@
       "id": 4,
       "panels": [],
       "repeat": "service",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "$service",
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -75,7 +88,8 @@
               }
             ]
           },
-          "unit": "dtdurations"
+          "unit": "dtdurations",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -86,7 +100,6 @@
         "y": 1
       },
       "id": 6,
-      "interval": null,
       "links": [],
       "maxDataPoints": 100,
       "options": {
@@ -101,12 +114,17 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.2.2-39068",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "time() - max(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"})",
           "instant": false,
           "interval": "",
@@ -114,14 +132,13 @@
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Up Time",
       "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Displays all time request count served by this proxy service. This will also include the error requests.",
       "fieldConfig": {
         "defaults": {
@@ -146,7 +163,8 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "none",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -176,26 +194,30 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.2.2-39068",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(max_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "All Request Count",
       "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Displays approximate request count received by this proxy service within the selected time range.",
       "fieldConfig": {
         "defaults": {
@@ -220,7 +242,8 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "none",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -244,18 +267,26 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.2.2-39068",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "(sum(max_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])))-(sum(max_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         },
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "(sum(max_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])))",
           "hide": true,
           "interval": "",
@@ -263,14 +294,14 @@
           "refId": "B"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Successful Request Count",
       "transformations": [],
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Displays all time error count occurred within this proxy service.",
       "fieldConfig": {
         "defaults": {
@@ -299,7 +330,8 @@
                 "value": 0
               }
             ]
-          }
+          },
+          "unitScale": true
         },
         "overrides": []
       },
@@ -323,25 +355,30 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.2.2-39068",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(max_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Error Count",
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Displays number of error requests occurred during the selected time range.",
       "fieldConfig": {
         "defaults": {
@@ -372,7 +409,8 @@
               }
             ]
           },
-          "unit": "percentunit"
+          "unit": "percentunit",
+          "unitScale": true
         },
         "overrides": []
       },
@@ -395,26 +433,31 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.2.2-39068",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(max_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range]))/sum(max_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range])-min_over_time(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__range]))",
           "interval": "30s",
           "legendFormat": "Current",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Error Percentage",
       "transformations": [],
       "type": "stat"
     },
     {
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Displays number of nodes this proxy service is deployed.",
       "fieldConfig": {
         "defaults": {
@@ -428,7 +471,8 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unitScale": true
         },
         "overrides": []
       },
@@ -452,12 +496,17 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "8.2.2-39068",
+      "pluginVersion": "10.3.1",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "count(wso2_integration_service_up{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"})",
           "instant": true,
           "interval": "",
@@ -465,61 +514,98 @@
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Deployed Node Count",
       "type": "stat"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Displays the request rate for this proxy service.",
       "fieldConfig": {
         "defaults": {
-          "links": []
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "TPS",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 0,
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps",
+          "unitScale": true
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 8,
         "x": 0,
         "y": 6
       },
-      "hiddenSeries": false,
       "id": 9,
-      "legend": {
-        "alignAsTable": false,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.2.2-39068",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "10.3.1",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(rate(wso2_integration_proxy_request_count_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__rate_interval]))",
           "interval": "70s",
           "intervalFactor": 1,
@@ -527,164 +613,137 @@
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
       "title": "Request Rate",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "$$hashKey": "object:55",
-          "decimals": 0,
-          "format": "reqps",
-          "label": "TPS",
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "$$hashKey": "object:56",
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Displays error rate of this proxy service.",
       "fieldConfig": {
         "defaults": {
-          "links": []
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "TPS",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short",
+          "unitScale": true
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 8,
         "x": 8,
         "y": 6
       },
-      "hiddenSeries": false,
       "id": 12,
       "interval": "",
-      "legend": {
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "show": false,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.2.2-39068",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
+      "pluginVersion": "10.3.1",
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum(rate(wso2_integration_proxy_request_count_error_total{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\"}[$__rate_interval]))",
           "interval": "1m",
           "legendFormat": "{{kubernetes_pod_name}}",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
       "title": "Error Rate",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "decimals": null,
-          "format": "short",
-          "label": "TPS",
-          "logBase": 1,
-          "max": null,
-          "min": "0",
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
-      "cards": {
-        "cardPadding": null,
-        "cardRound": null
-      },
+      "cards": {},
       "color": {
         "cardColor": "#b4ff00",
         "colorScale": "sqrt",
         "colorScheme": "interpolateYlOrRd",
         "exponent": 0.5,
-        "min": null,
         "mode": "spectrum"
       },
       "dataFormat": "tsbuckets",
-      "datasource": "$datasource",
+      "datasource": {
+        "uid": "$datasource"
+      },
       "description": "Displays the response time of all requests served by this proxy service in a heat map. Each tile will represent number of requests which fell in to the pre-defined time bucket during the bucket time span. If you seen any anomalies  please use the below link to view tracing information related to $service",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "scaleDistribution": {
+              "type": "linear"
+            }
+          },
+          "unitScale": true
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 8,
         "w": 8,
@@ -700,9 +759,51 @@
         "show": true
       },
       "links": [],
+      "options": {
+        "calculate": false,
+        "calculation": {},
+        "cellGap": 2,
+        "cellValues": {},
+        "color": {
+          "exponent": 0.5,
+          "fill": "#b4ff00",
+          "mode": "scheme",
+          "reverse": false,
+          "scale": "exponential",
+          "scheme": "OrRd",
+          "steps": 128
+        },
+        "exemplars": {
+          "color": "rgba(255,0,255,0.7)"
+        },
+        "filterValues": {
+          "le": 1e-9
+        },
+        "legend": {
+          "show": true
+        },
+        "rowsFrame": {
+          "layout": "ge"
+        },
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single",
+          "showColorScale": false,
+          "yHistogram": false
+        },
+        "yAxis": {
+          "axisPlacement": "left",
+          "reverse": false,
+          "unit": "s"
+        }
+      },
+      "pluginVersion": "10.3.1",
       "reverseYBuckets": false,
       "targets": [
         {
+          "datasource": {
+            "uid": "$datasource"
+          },
           "expr": "sum by (le)(increase(wso2_integration_proxy_latency_seconds{service_name=~\"$service\", instance=~\"$instance\", job=~\"$job\", le=~\".+\"}[$__rate_interval]))",
           "format": "heatmap",
           "hide": false,
@@ -711,8 +812,6 @@
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Response Time",
       "tooltip": {
         "show": true,
@@ -722,58 +821,53 @@
       "xAxis": {
         "show": true
       },
-      "xBucketNumber": null,
-      "xBucketSize": null,
       "yAxis": {
-        "decimals": null,
         "format": "s",
         "logBase": 1,
-        "max": null,
-        "min": null,
-        "show": true,
-        "splitFactor": null
+        "show": true
       },
-      "yBucketBound": "upper",
-      "yBucketNumber": null,
-      "yBucketSize": null
+      "yBucketBound": "upper"
     }
   ],
   "refresh": "30s",
-  "schemaVersion": 31,
-  "style": "dark",
-  "tags": [],
+  "schemaVersion": 39,
+  "tags": [
+    "wso2-enterprise-integrator-integration"
+  ],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "Cortex",
-          "value": "Cortex"
+          "text": "default",
+          "value": "default"
         },
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": "Data Source",
+        "label": "Data source",
         "multi": false,
         "name": "datasource",
         "options": [],
         "query": "prometheus",
         "refresh": 1,
-        "regex": "",
+        "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
         "skipUrlSync": false,
         "type": "datasource"
       },
       {
         "allValue": ".+",
-        "current": {},
-        "datasource": "$datasource",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
         "definition": "label_values(wso2_integration_service_up{service_type=\"proxy\"}, job)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "job",
+        "label": "Job",
         "multi": true,
         "name": "job",
         "options": [],
@@ -792,14 +886,18 @@
       },
       {
         "allValue": ".+",
-        "current": {},
-        "datasource": "$datasource",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
         "definition": "label_values(wso2_integration_service_up{service_type=\"proxy\", job=~\"$job\"}, service_name)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "service",
+        "label": "Service",
         "multi": true,
         "name": "service",
         "options": [],
@@ -818,14 +916,18 @@
       },
       {
         "allValue": ".+",
-        "current": {},
-        "datasource": "${datasource}",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "uid": "${datasource}"
+        },
         "definition": "label_values(wso2_integration_service_up{service_type=\"proxy\", service_name=~\"$service\", job=~\"$job\"}, instance)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
-        "label": "instance",
+        "label": "Instance",
         "multi": true,
         "name": "instance",
         "options": [],
@@ -833,7 +935,7 @@
           "query": "label_values(wso2_integration_service_up{service_type=\"proxy\", service_name=~\"$service\", job=~\"$job\"}, instance)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
@@ -861,5 +963,6 @@
   "timezone": "",
   "title": "WSO2 Proxy Service Metrics",
   "uid": "68SKM8I7z",
-  "version": 7
+  "version": 2,
+  "weekStart": ""
 }
