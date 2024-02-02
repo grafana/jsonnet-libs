@@ -8,7 +8,7 @@ local utils = import '../utils.libsonnet';
     groupLabels,
     instanceLabels,
     varMetric='up',
-    enableLokiLogs=true
+    enableLokiLogs=false,
   ): {
 
        local root = self,

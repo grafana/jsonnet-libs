@@ -1,5 +1,6 @@
 local g = import '../g.libsonnet';
 local utils = import '../utils.libsonnet';
+local variables = import '../variables/variables.libsonnet';
 local counter = import './counter.libsonnet';
 local gauge = import './gauge.libsonnet';
 local histogram = import './histogram.libsonnet';
@@ -14,22 +15,28 @@ local histogram = import './histogram.libsonnet';
     //default aggregation level
     aggLevel='none',
     aggFunction='avg',
+    //metric used in variables discovery by default
+    varMetric='up',
     legendPrefix=''
   ): self {
 
     local this = self,
     datasource:: datasource,
     aggLevel:: aggLevel,
+
+    // create vars
+    local grafanaVariables = variables.new(
+      filteringSelector[0],
+      groupLabels,
+      instanceLabels,
+      varMetric=varMetric,
+    ),
     // vars are used in templating(legend+expressions)
     vars:: {
       filteringSelector: filteringSelector,
       groupLabels: groupLabels,
       instanceLabels: instanceLabels,
-      queriesSelector:
-        std.join(',',
-                 self.filteringSelector +
-                 [utils.labelsToPromQLSelector(self.groupLabels + self.instanceLabels)]),
-
+      queriesSelector: grafanaVariables.queriesSelector,
       //used in aggregation queries
       agg: if this.aggLevel == 'group' then std.join(',', self.groupLabels + self.instanceLabels)
       else if this.aggLevel == 'instance' then std.join(',', self.instanceLabels)
@@ -44,7 +51,13 @@ local histogram = import './histogram.libsonnet';
       //extra prefix for legend
       legendPrefix: legendPrefix,
     },
-
+    //get Grafana Variables
+    //allow multiple instance selection
+    getVariablesSingleChoice():
+      grafanaVariables.singleInstance,
+    //only single instance selection allowed
+    getVariablesMultiChoice():
+      grafanaVariables.multiInstance,
 
     //name: metric simple name
     //type: counter, gauge, histogram, // TODO: info metric, status_map metric....
@@ -63,7 +76,7 @@ local histogram = import './histogram.libsonnet';
       // validate inputs
       std.prune(
         {
-          checks: [
+          checks:: [
             if (type != 'gauge' && type != 'histogram' && type != 'counter') then error "type must be one of 'gauge','histogram','counter'",
             if (aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'group','instance' or 'none'",
           ],

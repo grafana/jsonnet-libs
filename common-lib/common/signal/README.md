@@ -19,13 +19,17 @@ Workflow to generate dashboards would be as follows:
 local g = import 'g.libsonnet';
 
 # define signals
-local s = commonlib.signals.init(
-    datasource='${datasource}',
-    instanceLabels=['instance','device'],
-    groupLabels=['job'],
-    filteringSelector=['job=integrations/test'],
-    aggLevel='instance',
-),
+    local s = commonlib.signals.init(
+        datasource='${datasource}',
+        instanceLabels=['instance','device'],
+        groupLabels=['job'],
+        filteringSelector=['job=integrations/test'],
+        aggLevel='instance',
+    ),
+    
+    //prepare Grafana templated variables aligned with queriesSelector generated:
+    variables: s.getVariablesMultiChoice(),
+
     bytesIn: s.addSignal(
         name='Bytes in',
         type='counter',
@@ -46,7 +50,7 @@ local s = commonlib.signals.init(
 
 #generate dashboard
 g.dashboard.new('Device')
-+ g.dashboard.withVariables(<somevars>)
++ g.dashboard.withVariables(signals.variables)
 + g.dashboard.withPanels(
     [
     g.panel.row.new('Graph'),
