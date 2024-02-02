@@ -24,7 +24,7 @@ local m1 = signal.init(
       },
       testExpression: {
         actual: m1.asTarget().expr,
-        expect: 'avg by (job,instance) (histogram_qua2ntile(0.95, sum(rate(apiserver_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,instance)))',
+        expect: 'avg by (job,instance) (histogram_quantile(0.95, sum(rate(apiserver_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,instance)))',
       },
     }),
   },
