@@ -6,10 +6,10 @@ steps:
   - make install-ci-deps
   - make lint-fmt
   - make lint-mixins
-  - make tests
   image: golang:1.18
   name: lint-fmt
 - commands:
+  - make install-ci-deps
   - make tests
   image: golang:1.18
   name: tests
@@ -19,6 +19,6 @@ trigger:
     - pull_request
 ---
 kind: signature
-hmac: 87f057027e279509009043bb1d100de9d0b64fc610c13044b82f0067a9607a4f
+hmac: 569cd1940689a70b907683e347d832a4a2809c1dbf23035ab036acf88b72a57a
 
 ...

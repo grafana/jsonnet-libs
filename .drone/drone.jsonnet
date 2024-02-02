@@ -22,9 +22,9 @@ local run(name, commands) = {
         'make install-ci-deps',
         'make lint-fmt',
         'make lint-mixins',
-        'make tests',
       ]),
       run('tests', [
+        'make install-ci-deps',
         'make tests',
       ]),
     ]
