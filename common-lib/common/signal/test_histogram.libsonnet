@@ -15,57 +15,49 @@ local m1 = signal.init(
 );
 
 {
-  asTarget: {
-    raw: m1.asTarget(),
-    testResult: test.suite({
-      testLegend: {
-        actual: m1.asTarget().legendFormat,
-        expect: '{{job}}/{{instance}}: API server duration',
-      },
-      testExpression: {
-        actual: m1.asTarget().expr,
-        expect: 'avg by (job,instance) (histogram_quantile(0.95, sum(rate(apiserver_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,instance)))',
-      },
-    }),
-  },
-  asTimeSeries:
+  histogram:
     {
-      raw: m1.asTimeSeries(),
-      testResult: test.suite({
-        testTStitle: {
-          actual: m1.asTimeSeries().title,
-          expect: 'API server duration',
-        },
-        testUnit: {
-          actual: m1.asTimeSeries().fieldConfig.defaults.unit,
-          expect: 'seconds',
-        },
-        testTStype: {
-          actual: m1.asTimeSeries().type,
-          expect: 'timeseries',
-        },
-        testTSversion: {
-          actual: m1.asTimeSeries().pluginVersion,
-          expect: 'v10.0.0',
-        },
-        testTSUid: {
-          actual: m1.asTimeSeries().datasource,
-          expect: {
-            uid: 'DS_PROMETHEUS',
-            type: 'prometheus',
+      asTarget: {
+        raw:: m1.asTarget(),
+        testResult: test.suite({
+          testLegend: {
+            actual: m1.asTarget().legendFormat,
+            expect: '{{job}}/{{instance}}: API server duration',
           },
+          testExpression: {
+            actual: m1.asTarget().expr,
+            expect: 'avg by (job,instance) (histogram_quantile(0.95, sum(rate(apiserver_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,instance)))',
+          },
+        }),
+      },
+      asTimeSeries:
+        {
+          raw:: m1.asTimeSeries(),
+          testResult: test.suite({
+            testTStitle: {
+              actual: m1.asTimeSeries().title,
+              expect: 'API server duration',
+            },
+            testUnit: {
+              actual: m1.asTimeSeries().fieldConfig.defaults.unit,
+              expect: 'seconds',
+            },
+            testTStype: {
+              actual: m1.asTimeSeries().type,
+              expect: 'timeseries',
+            },
+            testTSversion: {
+              actual: m1.asTimeSeries().pluginVersion,
+              expect: 'v10.0.0',
+            },
+            testTSUid: {
+              actual: m1.asTimeSeries().datasource,
+              expect: {
+                uid: 'DS_PROMETsHEUS',
+                type: 'prometheus',
+              },
+            },
+          }),
         },
-      }),
     },
 }
-
-// test.suite({
-//     testIdentity: {actual: 1, expect: 1},
-//     testNeg:      {actual: "YAML", expectNot: "Markup Language"},
-//     testFact: {
-//         local fact(n) = if n == 0 then 1 else n * fact(n-1),
-
-//         actual: fact(10),
-//         expect: 3628800
-//     },
-// })

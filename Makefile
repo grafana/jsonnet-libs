@@ -1,5 +1,6 @@
 JSONNET_FMT := jsonnetfmt -n 2 --max-blank-lines 2 --string-style s --comment-style s
 SHELL := /bin/bash
+JSONNET := jsonnet
 
 install-ci-deps:
 	go install github.com/google/go-jsonnet/cmd/jsonnet@v0.20.0
@@ -38,6 +39,9 @@ lint-mixins:
 			fi; \
 	done; \
 	exit $$RESULT
+
+tests:
+	pushd . && cd ./common-lib && make vendor && make tests ; popd >/dev/null;
 
 drone:
 	drone jsonnet --stream --source .drone/drone.jsonnet --target .drone/drone.yml --format yaml
