@@ -1,7 +1,7 @@
 groups:
 - name: CephClusterAlerts
   rules:
-  - alert: CephUnhealthyWarning
+  - alert: CephUnhealthyWarining
     expr: ceph_health_status == 1
     for: 5m
     labels:
@@ -48,4 +48,4 @@ groups:
       severity: warning
     annotations:
       summary: All MDS nodes down.
-      description: There's no MDS node available.
+      description: There’s no MDS node available.
