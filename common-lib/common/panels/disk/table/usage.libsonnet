@@ -21,7 +21,7 @@ base {
     std.prune(
       {
         checks: [
-          if (usageTarget == null && freeTarget == null) then error 'Must provide at leason one of "usageTarget" or "freeTraget"',
+          if (usageTarget == null && freeTarget == null) then error 'Must provide at least one of "usageTarget" or "freeTraget"',
           if !(std.objectHas(totalTarget, 'format') && std.assertEqual(totalTarget.format, 'table')) then error 'totalTarget format must be "table"',
           if !(std.objectHas(totalTarget, 'instant') && std.assertEqual(totalTarget.instant, true)) then error 'totalTarget must have type "instant"',
           if usageTarget != null && !(std.objectHas(usageTarget, 'format') && std.assertEqual(usageTarget.format, 'table')) then error 'usageTarget format must be "table"',
