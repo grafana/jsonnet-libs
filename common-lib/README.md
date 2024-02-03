@@ -4,6 +4,8 @@ This common library can be used to quickly create dashboards' `panels` and `anno
 
 By using this common library we can 'enforce' common style choices across multiple dashboards and mixins.
 
+This library should be considered experimental.
+
 ## Import
 
 ```sh
@@ -30,8 +32,8 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
 local cpuPanel = oldPanel + commonlib.panels.cpu.timeSeries.utilization.stylize();
 ```
 
-See [windows-observ-lib](../windows-observ-lib/README.md) for full example.
+See [windows-observ-lib](../windows-observ-lib/README.md) or [helloworld-observ-lib](../helloworld-observ-lib/README.md)for full example.
 
 ### Signals
 
-See signals [README](./common/signal/README.md) here.
+Signals [README](./common/signal/README.md) here.
