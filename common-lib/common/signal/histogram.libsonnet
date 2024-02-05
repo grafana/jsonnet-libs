@@ -16,22 +16,36 @@ local signalUtils = import './utils.libsonnet';
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
 
+
+    unit:: signalUtils.generateUnits(type, unit),
     //Return as grafana panel target(query+legend)
     asTarget()::
       prometheusQuery.new(
         datasource,
         signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel) % vars
       )
+      + prometheusQuery.withRefId(name)
       + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel) % vars),
 
     //Return as alert/recordingRule query
     asPromRule():: {},
+    //Return as grafana panel mixi target(query+legend) + overrides(like units)
+    asPanelMixin()::
+      g.panel.timeSeries.queryOptions.withTargetsMixin(self.asTarget())
+      + g.panel.timeSeries.standardOptions.withOverridesMixin(
+        [
+          g.panel.timeSeries.fieldOverride.byQuery.new(name)
+          + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
+            g.panel.timeSeries.standardOptions.withUnit(self.unit),
+          ),
+        ],
+      ),
 
     common::
       // override panel-wide --mixed-- datasource
       prometheusQuery.withDatasource(datasource)
       + g.panel.timeSeries.panelOptions.withDescription(description)
-      + g.panel.timeSeries.standardOptions.withUnit(signalUtils.generateUnits(type, unit))
+      + g.panel.timeSeries.standardOptions.withUnit(self.unit)
       + g.panel.timeSeries.queryOptions.withTargets(
         self.asTarget()
       ),

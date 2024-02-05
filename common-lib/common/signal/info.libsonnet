@@ -20,17 +20,31 @@ local signalUtils = import './utils.libsonnet';
       local lokiQuery = g.query.loki,
 
 
+      unit:: 'short',
       //Return as grafana panel target(query+legend)
       asTarget()::
         prometheusQuery.new(
           datasource,
           signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel) % vars
         )
+        + prometheusQuery.withRefId(name)
         + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel) % vars)
         + prometheusQuery.withFormat('table'),
 
       //Return as alert/recordingRule query
       asPromRule():: {},
+
+      //Return as grafana panel mixin target(query+legend) + overrides(like units)
+      asPanelMixin()::
+        g.panel.timeSeries.queryOptions.withTargetsMixin(self.asTarget())
+        + g.panel.timeSeries.standardOptions.withOverridesMixin(
+          [
+            g.panel.timeSeries.fieldOverride.byQuery.new(name)
+            + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
+              g.panel.timeSeries.standardOptions.withUnit(self.unit),
+            ),
+          ],
+        ),
 
       common::
         // override panel-wide --mixed-- datasource
