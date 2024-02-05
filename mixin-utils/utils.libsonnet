@@ -127,7 +127,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
       }
       else rule;
     [
-      group+ {
+      group {
         rules: [
           update_rule(alert)
           for alert in group.rules
