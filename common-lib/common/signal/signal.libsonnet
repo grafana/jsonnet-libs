@@ -18,6 +18,7 @@ local info = import './info.libsonnet';
     aggFunction='avg',
     //metric used in variables discovery by default
     varMetric='up',
+    //extra prefix for legend
     legendPrefix=''
   ): self {
 
@@ -25,7 +26,7 @@ local info = import './info.libsonnet';
     datasource:: datasource,
     aggLevel:: aggLevel,
 
-    // create vars
+    // vars used in dashboards' variables
     local grafanaVariables = variables.new(
       filteringSelector[0],
       groupLabels,
@@ -33,20 +34,20 @@ local info = import './info.libsonnet';
       varMetric=varMetric,
     ),
     // vars are used in templating(legend+expressions)
-    vars: {
+    templatingVariables: {
       filteringSelector: filteringSelector,
       groupLabels: groupLabels,
       instanceLabels: instanceLabels,
       queriesSelector: grafanaVariables.queriesSelector,
       //used in aggregation queries
-      agg: if this.aggLevel == 'group' then std.join(',', self.groupLabels + self.instanceLabels)
-      else if this.aggLevel == 'instance' then std.join(',', self.instanceLabels)
+      agg: if this.aggLevel == 'group' then std.join(',', self.groupLabels)
+      else if this.aggLevel == 'instance' then std.join(',', self.groupLabels + self.instanceLabels)
       else if this.aggLevel == 'none' then std.join(',', []),
       aggFunction: aggFunction,
       //prefix for legend when aggregation is used
       aggLegend:
-        if aggLevel == 'group' then utils.labelsToPanelLegend(self.groupLabels + self.instanceLabels)
-        else if aggLevel == 'instance' then utils.labelsToPanelLegend(self.instanceLabels)
+        if aggLevel == 'group' then utils.labelsToPanelLegend(self.groupLabels)
+        else if aggLevel == 'instance' then utils.labelsToPanelLegend(self.instanceLabels + self.groupLabels)
         else if aggLevel == 'none' then '',
       interval: interval,
       //extra prefix for legend
@@ -59,6 +60,8 @@ local info = import './info.libsonnet';
     //only single instance selection allowed
     getVariablesMultiChoice()::
       grafanaVariables.multiInstance,
+    getVariablesDatasource(type='prometheus'):
+      grafanaVariables.datasources[type],
 
     //name: metric simple name
     //type: counter, gauge, histogram, // TODO: info metric, status_map metric....
@@ -93,7 +96,7 @@ local info = import './info.libsonnet';
           expr=expr,
           aggLevel=aggLevel,
           datasource=datasource,
-          vars=this.vars,
+          vars=this.templatingVariables,
         )
       else if type == 'counter' then
         counter.new(
@@ -104,7 +107,7 @@ local info = import './info.libsonnet';
           expr=expr,
           aggLevel=aggLevel,
           datasource=datasource,
-          vars=this.vars,
+          vars=this.templatingVariables,
         )
       else if type == 'histogram' then
         histogram.new(
@@ -115,7 +118,7 @@ local info = import './info.libsonnet';
           expr=expr,
           aggLevel=aggLevel,
           datasource=datasource,
-          vars=this.vars,
+          vars=this.templatingVariables,
         )
       else if type == 'info' then
         info.new(
@@ -126,7 +129,7 @@ local info = import './info.libsonnet';
           expr=expr,
           aggLevel=aggLevel,
           datasource=datasource,
-          vars=this.vars,
+          vars=this.templatingVariables,
         ),
   },
 
