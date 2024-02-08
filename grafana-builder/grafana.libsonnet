@@ -87,6 +87,18 @@ local utils = import 'mixin-utils/utils.libsonnet';
           multi: false,
           name: 'show_classic_histograms',
           query: 'hide : 0,show : 1',
+          options: [
+            {
+              selected: false,
+              text: 'hide',
+              value: '0'
+            },
+            {
+              selected: true,
+              text: 'show',
+              value: '1'
+            }
+          ],
           skipUrlSync: false,
           type: 'custom',
           useTags: false,
