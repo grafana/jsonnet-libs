@@ -5,7 +5,49 @@ local counter = import './counter.libsonnet';
 local gauge = import './gauge.libsonnet';
 local histogram = import './histogram.libsonnet';
 local info = import './info.libsonnet';
+local stub = import './stub.libsonnet';
+{
+  //Expected signalsJson format:
+  // {
+  //   filteringSelector: 'job!=""',
+  //   groupLabels: ['job'],
+  //   instanceLabels: ['instance'],
+  //   discoveryMetric: 'up',
+  //   aggLevel: 'group' or 'instance' or 'none'
+  //   signals: {
+  //     signal1: {
   //       name: 'Golang version',
+  //       type: 'info',
+  //       description: 'Golang version used.',
+  //       expr: 'go_info{%(queriesSelector)s}',
+  //       infoLabel: 'version',
+  //     },
+  //     signal2:...,
+  //     signal3:....
+  //   }
+  // }
+  marshallSignalsJson(signalsJson):
+    self.init(
+      datasource='$datasource',
+      filteringSelector=[signalsJson.filteringSelector],
+      groupLabels=signalsJson.groupLabels,
+      instanceLabels=signalsJson.instanceLabels,
+      varMetric=signalsJson.discoveryMetric,
+      aggLevel=signalsJson.aggLevel,
+    )
+    +
+    {
+      [s]: super.addSignal(
+        name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
+        type=std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
+        unit=std.get(signalsJson.signals[s], 'unit', ''),
+        description=std.get(signalsJson.signals[s], 'description', ''),
+        expr=std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
+        aggLevel=std.get(signalsJson.signals[s], 'aggLevel', 'none'),
+        infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
+      )
+      for s in std.objectFieldsAll(signalsJson.signals)
+    },
 
   init(
     datasource='DS_PROMETHEUS',
