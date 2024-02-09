@@ -89,7 +89,7 @@ local stub = import './stub.libsonnet';
       //prefix for legend when aggregation is used
       aggLegend:
         if aggLevel == 'group' then utils.labelsToPanelLegend(self.groupLabels)
-        else if aggLevel == 'instance' then utils.labelsToPanelLegend(self.instanceLabels + self.groupLabels)
+        else if aggLevel == 'instance' then utils.labelsToPanelLegend(self.groupLabels + self.instanceLabels)
         else if aggLevel == 'none' then '',
       interval: interval,
       //extra prefix for legend
