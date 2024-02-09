@@ -13,7 +13,8 @@ local stub = import './stub.libsonnet';
   //   groupLabels: ['job'],
   //   instanceLabels: ['instance'],
   //   discoveryMetric: 'up',
-  //   aggLevel: 'group' or 'instance' or 'none'
+  //   aggLevel: 'group' or 'instance' or 'none',
+  //   aggFunction: 'avg',
   //   signals: {
   //     signal1: {
   //       name: 'Golang version',
@@ -32,8 +33,11 @@ local stub = import './stub.libsonnet';
       filteringSelector=[signalsJson.filteringSelector],
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
-      varMetric=signalsJson.discoveryMetric,
-      aggLevel=signalsJson.aggLevel,
+      interval=std.get(signalsJson, 'interval', '$__rate_interval'),
+      varMetric=std.get(signalsJson, 'discoveryMetric', 'up'),
+      aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
+      aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
+      legendPrefix=std.get(signalsJson, 'legendPrefix', ''),
     )
     +
     {
@@ -43,7 +47,7 @@ local stub = import './stub.libsonnet';
         unit=std.get(signalsJson.signals[s], 'unit', ''),
         description=std.get(signalsJson.signals[s], 'description', ''),
         expr=std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
-        aggLevel=std.get(signalsJson.signals[s], 'aggLevel', 'none'),
+        aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
       )
       for s in std.objectFieldsAll(signalsJson.signals)
@@ -51,7 +55,7 @@ local stub = import './stub.libsonnet';
 
   init(
     datasource='DS_PROMETHEUS',
-    filteringSelector=['job=integrations/agent'],
+    filteringSelector=['job!=""'],
     groupLabels=['job'],
     instanceLabels=['instance'],
     interval='$__rate_interval',
