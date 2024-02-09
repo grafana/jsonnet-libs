@@ -5,7 +5,7 @@ local counter = import './counter.libsonnet';
 local gauge = import './gauge.libsonnet';
 local histogram = import './histogram.libsonnet';
 local info = import './info.libsonnet';
-{
+  //       name: 'Golang version',
 
   init(
     datasource='DS_PROMETHEUS',
@@ -130,6 +130,11 @@ local info = import './info.libsonnet';
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
+        )
+      else if type == 'stub' then
+        stub.new(
+          name=name,
+          type=type,
         ),
   },
 
