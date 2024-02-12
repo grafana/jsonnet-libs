@@ -21,11 +21,11 @@ local m1 = signal.init(
     testResult: test.suite({
       testLegend: {
         actual: m1.asTarget().legendFormat,
-        expect: '{{instance}}: API server requests',
+        expect: '{{job}}/{{instance}}: API server requests',
       },
       testExpression: {
         actual: m1.asTarget().expr,
-        expect: 'max by (instance) (rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m]))',
+        expect: 'max by (job,instance) (rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m]))',
       },
     }),
   },
