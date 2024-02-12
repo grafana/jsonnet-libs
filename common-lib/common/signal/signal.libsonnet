@@ -55,7 +55,7 @@ local stub = import './stub.libsonnet';
     },
 
   init(
-    datasource='DS_PROMETHEUS',
+    datasource='$datasource',
     filteringSelector=['job!=""'],
     groupLabels=['job'],
     instanceLabels=['instance'],
