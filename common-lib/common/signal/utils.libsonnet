@@ -37,8 +37,9 @@
         // some specific cases
         if unit == 'seconds' then 'percent'
         else if unit == 'requests' then 'rps'
+        else if unit == 'packets' then 'pps'
         else if unit == 'short' then '/s'
-        else unit[0] + 'ps'
+        else unit + '/sec'
       ),
 
 }
