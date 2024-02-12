@@ -122,6 +122,7 @@ local stub = import './stub.libsonnet';
       expr,
       aggLevel=self.aggLevel,
       infoLabel=null,
+      valueMapping={},
     ):
 
       // validate inputs
@@ -143,6 +144,7 @@ local stub = import './stub.libsonnet';
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
+          valueMapping=valueMapping,
         )
       else if type == 'counter' then
         counter.new(
@@ -154,6 +156,7 @@ local stub = import './stub.libsonnet';
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
+          valueMapping=valueMapping,
         )
       else if type == 'histogram' then
         histogram.new(
@@ -165,6 +168,7 @@ local stub = import './stub.libsonnet';
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
+          valueMapping=valueMapping,
         )
       else if type == 'info' then
         info.new(
@@ -176,6 +180,7 @@ local stub = import './stub.libsonnet';
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
+          valueMapping=valueMapping,
         )
       else if type == 'stub' then
         stub.new(

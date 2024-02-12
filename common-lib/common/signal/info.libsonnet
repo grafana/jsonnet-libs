@@ -14,6 +14,7 @@ local signalUtils = import './utils.libsonnet';
     aggLevel,
     vars,
     datasource,
+    valueMapping,
   ):
     {
       local prometheusQuery = g.query.prometheus,
@@ -41,7 +42,7 @@ local signalUtils = import './utils.libsonnet';
           [
             g.panel.timeSeries.fieldOverride.byQuery.new(name)
             + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
-              g.panel.timeSeries.standardOptions.withUnit(self.unit),
+              g.panel.timeSeries.standardOptions.withMappings(valueMapping)
             ),
           ],
         ),
@@ -50,6 +51,7 @@ local signalUtils = import './utils.libsonnet';
         // override panel-wide --mixed-- datasource
         prometheusQuery.withDatasource(datasource)
         + g.panel.timeSeries.panelOptions.withDescription(description)
+        + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
         + g.panel.stat.queryOptions.withTargets(
           self.asTarget()
         ),
