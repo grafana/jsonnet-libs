@@ -71,6 +71,15 @@ local signalUtils = import './utils.libsonnet';
       //Return as gauge panel
       asGauge()::
         error 'asGauge() is not supported for info metrics. Use asStat() instead.',
+
+      //Return as statusHistory
+      asStatusHistory()::
+        g.panel.statusHistory.new(name)
+        + self.common
+        // limit number of DPs
+        + g.panel.statusHistory.queryOptions.withMaxDataPoints(100)
+        + g.panel.statusHistory.options.withColorMode('fixed')
+        + g.panel.statusHistory.options.withShowValue('never'),
     },
 
 }
