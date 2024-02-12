@@ -40,7 +40,7 @@ local array = import 'github.com/jsonnet-libs/xtd/array.libsonnet';
         else if unit == 'requests' then 'rps'
         else if unit == 'packets' then 'pps'
         else if unit == 'short' then '/s'
-        else if array.slice(unit, -2) == 'ps' then unit,
+        else if array.slice(unit, -2) == 'ps' then unit
         else unit + '/sec'
       ),
 
