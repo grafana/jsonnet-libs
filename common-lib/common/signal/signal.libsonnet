@@ -49,6 +49,7 @@ local stub = import './stub.libsonnet';
         expr=std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
+        valueMapping=std.get(signalsJson.signals[s], 'valueMapping', {}),
       )
       for s in std.objectFieldsAll(signalsJson.signals)
     },
