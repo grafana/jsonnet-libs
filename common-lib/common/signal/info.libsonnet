@@ -1,10 +1,11 @@
 local g = import '../g.libsonnet';
 local panels = import '../panels.libsonnet';
 local utils = import '../utils.libsonnet';
+local base = import './base.libsonnet';
 local signalUtils = import './utils.libsonnet';
 
 //_info prometheus metric: something_info{<labels>}=1
-{
+base {
   new(
     name,
     type,
@@ -16,6 +17,17 @@ local signalUtils = import './utils.libsonnet';
     datasource,
     valueMapping,
   ):
+    base.new(
+      name,
+      type,
+      'short',
+      description,
+      expr,
+      aggLevel,
+      vars,
+      datasource,
+      valueMapping
+    )
     {
       local prometheusQuery = g.query.prometheus,
       local lokiQuery = g.query.loki,
@@ -24,37 +36,11 @@ local signalUtils = import './utils.libsonnet';
       unit:: 'short',
       //Return as grafana panel target(query+legend)
       asTarget()::
-        prometheusQuery.new(
-          datasource,
-          signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel) % vars
-        )
-        + prometheusQuery.withRefId(name)
-        + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel) % vars)
+        super.asTarget()
         + prometheusQuery.withFormat('table'),
 
       //Return as alert/recordingRule query
       asPromRule():: {},
-
-      //Return as grafana panel mixin target(query+legend) + overrides(like units)
-      asPanelMixin()::
-        g.panel.timeSeries.queryOptions.withTargetsMixin(self.asTarget())
-        + g.panel.timeSeries.standardOptions.withOverridesMixin(
-          [
-            g.panel.timeSeries.fieldOverride.byQuery.new(name)
-            + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
-              g.panel.timeSeries.standardOptions.withMappings(valueMapping)
-            ),
-          ],
-        ),
-
-      common::
-        // override panel-wide --mixed-- datasource
-        prometheusQuery.withDatasource(datasource)
-        + g.panel.timeSeries.panelOptions.withDescription(description)
-        + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
-        + g.panel.stat.queryOptions.withTargets(
-          self.asTarget()
-        ),
 
       //Return as timeSeriesPanel
       asTimeSeries()::
@@ -62,8 +48,7 @@ local signalUtils = import './utils.libsonnet';
 
       //Return as statPanel
       asStat()::
-        g.panel.stat.new(name)
-        + self.common
+        super.asStat()
         + panels.generic.stat.info.stylize()
           { options+: { reduceOptions+: { fields: '/^' + infoLabel + '$/' } } },
 
@@ -72,14 +57,6 @@ local signalUtils = import './utils.libsonnet';
       asGauge()::
         error 'asGauge() is not supported for info metrics. Use asStat() instead.',
 
-      //Return as statusHistory
-      asStatusHistory()::
-        g.panel.statusHistory.new(name)
-        + self.common
-        // limit number of DPs
-        + g.panel.statusHistory.queryOptions.withMaxDataPoints(100)
-        + g.panel.statusHistory.standardOptions.color.withMode('fixed')
-        + g.panel.statusHistory.options.withShowValue('never'),
     },
 
 }
