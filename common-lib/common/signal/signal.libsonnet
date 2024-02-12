@@ -27,7 +27,7 @@ local stub = import './stub.libsonnet';
   //     signal3:....
   //   }
   // }
-  marshallSignalsJson(signalsJson):
+  unmarshallJson(signalsJson):
     self.init(
       datasource='$datasource',
       filteringSelector=[signalsJson.filteringSelector],
