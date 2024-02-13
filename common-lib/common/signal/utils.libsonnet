@@ -1,4 +1,3 @@
-local array = import 'github.com/jsonnet-libs/xtd/array.libsonnet';
 {
   wrapExpr(type, expr, q=0.95, aggLevel):
     if type == 'counter' then
@@ -36,12 +35,11 @@ local array = import 'github.com/jsonnet-libs/xtd/array.libsonnet';
     else if type == 'counter' then
       (
         // some specific cases
-        if unit == 'seconds' then 'percent'
+        if unit == 'seconds' || unit == 's' then 'percent'
         else if unit == 'requests' then 'rps'
         else if unit == 'packets' then 'pps'
         else if unit == 'short' then '/s'
-        else if array.slice(unit, -2) == 'ps' then unit
-        else unit + '/sec'
+        else unit
       ),
 
 }
