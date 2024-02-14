@@ -81,6 +81,38 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.serviceOverviewVariables, uid + 'services-overview', tags, links, annotations, timezone, refresh, period),
+      'istio-workloads-overview':
+        g.dashboard.new(prefix + 'Istio workloads overview')
+        + g.dashboard.withPanels(
+          g.util.grid.wrapPanels(
+            [
+              g.panel.row.new('Client details'),
+              panels.clientWorkloadHTTPGRPCRequests,
+              panels.clientWorkloadHTTPGRPCRequestDelay,
+              panels.clientWorkloadHTTPGRPCRequestThroughput,
+              panels.clientWorkloadHTTPGRPCResponseThroughput,
+              panels.clientWorkloadHTTPResponseOverview { gridPos+: { w: 8 } },
+              panels.clientWorkloadHTTPResponses { gridPos+: { w: 16 } },
+              panels.clientWorkloadGRPCResponseOverview { gridPos+: { w: 8 } },
+              panels.clientWorkloadGRPCResponses { gridPos+: { w: 16 } },
+              panels.clientWorkloadTCPRequestThroughput { gridPos+: { w: 12 } },
+              panels.clientWorkloadTCPResponseThroughput { gridPos+: { w: 12 } },
+              g.panel.row.new('Server details'),
+              panels.serverWorkloadHTTPGRPCRequests,
+              panels.serverWorkloadHTTPGRPCRequestDelay,
+              panels.serverWorkloadHTTPGRPCRequestThroughput,
+              panels.serverWorkloadHTTPGRPCResponseThroughput,
+              panels.serverWorkloadHTTPResponseOverview { gridPos+: { w: 8 } },
+              panels.serverWorkloadHTTPResponses { gridPos+: { w: 16 } },
+              panels.serverWorkloadGRPCResponseOverview { gridPos+: { w: 8 } },
+              panels.serverWorkloadGRPCResponses { gridPos+: { w: 16 } },
+              panels.serverWorkloadTCPRequestThroughput { gridPos+: { w: 12 } },
+              panels.serverWorkloadTCPResponseThroughput { gridPos+: { w: 12 } },
+            ], 12, 6
+          )
+        )
+        // hide link to self
+        + root.applyCommon(vars.workloadOverviewVariables, uid + 'workloads-overview', tags, links, annotations, timezone, refresh, period),
     },
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):

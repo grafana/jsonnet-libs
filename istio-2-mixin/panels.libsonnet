@@ -439,6 +439,230 @@ local utils = commonlib.utils;
           group: 'A',
           mode: 'normal'
         }),
+      clientWorkloadHTTPGRPCRequests:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC requests sent',
+          targets=[
+            t.clientWorkloadHTTPGRPCRequestRate
+          ],
+          description='Rate of HTTP/GRPC requests sent from this workload to server workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('reqps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientWorkloadHTTPGRPCRequestDelay:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC request delay',
+          targets=[
+            t.clientWorkloadHTTPGRPCAvgRequestDelay
+          ],
+          description='Average latency of HTTP/GRPC requests sent from this workload to server workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('ms'),
+      clientWorkloadHTTPGRPCRequestThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC request throughput',
+          targets=[
+            t.clientWorkloadHTTPGRPCRequestThroughputRate
+          ],
+          description='Rate of HTTP/GRPC request data sent from this workload to server workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientWorkloadHTTPGRPCResponseThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC response throughput',
+          targets=[
+            t.clientWorkloadHTTPGRPCResponseThroughputRate
+          ],
+          description='Rate of HTTP/GRPC response data received by this workload from server workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientWorkloadHTTPResponses:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP responses / $__interval',
+          targets=[
+            t.clientWorkloadHTTP1xxResponses,
+            t.clientWorkloadHTTP2xxResponses,
+            t.clientWorkloadHTTP3xxResponses,
+            t.clientWorkloadHTTP4xxResponses,
+            t.clientWorkloadHTTP5xxResponses,
+          ],
+          description='The types of HTTP responses received by this workload from server workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withDisplayMode('table')
+        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientWorkloadGRPCResponses:
+        commonlib.panels.generic.timeSeries.base.new(
+          'GRPC responses / $__interval',
+          targets=[
+            t.clientWorkloadGRPCResponses,
+          ],
+          description='The types of GRPC responses received by this workload from server workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withDisplayMode('table')
+        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientWorkloadTCPRequestThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'TCP request throughput',
+          targets=[
+            t.clientWorkloadTCPRequestThroughputRate
+          ],
+          description='Rate of TCP request data sent from this workload to server workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientWorkloadTCPResponseThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'TCP response throughput',
+          targets=[
+            t.clientWorkloadTCPResponseThroughputRate
+          ],
+          description='Rate of TCP response data received by this workload from server workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverWorkloadHTTPGRPCRequests:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC requests received',
+          targets=[
+            t.serverWorkloadHTTPGRPCRequestRate
+          ],
+          description='Rate of HTTP/GRPC requests received by this workload from client workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('reqps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverWorkloadHTTPGRPCRequestDelay:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC request delay',
+          targets=[
+            t.serverWorkloadHTTPGRPCAvgRequestDelay
+          ],
+          description='Average latency of HTTP/GRPC requests received by this workload from client workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('ms'),
+      serverWorkloadHTTPGRPCRequestThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC request throughput',
+          targets=[
+            t.serverWorkloadHTTPGRPCRequestThroughputRate
+          ],
+          description='Rate of HTTP/GRPC request data received by this workload from client workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverWorkloadHTTPGRPCResponseThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC response throughput',
+          targets=[
+            t.serverWorkloadHTTPGRPCResponseThroughputRate
+          ],
+          description='Rate of HTTP/GRPC response data sent from this workload to client workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverWorkloadHTTPResponses:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP responses / $__interval',
+          targets=[
+            t.serverWorkloadHTTP1xxResponses,
+            t.serverWorkloadHTTP2xxResponses,
+            t.serverWorkloadHTTP3xxResponses,
+            t.serverWorkloadHTTP4xxResponses,
+            t.serverWorkloadHTTP5xxResponses,
+          ],
+          description='The types of HTTP responses sent from this workload to client workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withDisplayMode('table')
+        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverWorkloadGRPCResponses:
+        commonlib.panels.generic.timeSeries.base.new(
+          'GRPC responses / $__interval',
+          targets=[
+            t.serverWorkloadGRPCResponses,
+          ],
+          description='The types of GRPC responses sent from this workload to client workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withDisplayMode('table')
+        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverWorkloadTCPRequestThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'TCP request throughput',
+          targets=[
+            t.serverWorkloadTCPRequestThroughputRate
+          ],
+          description='Rate of TCP request data received by this workload from client workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverWorkloadTCPResponseThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'TCP response throughput',
+          targets=[
+            t.serverWorkloadTCPResponseThroughputRate
+          ],
+          description='Rate of TCP response data sent from this workload to client workloads in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
 
       httpResponseOverview:
         pieChart.new(title='HTTP response overview')
@@ -512,6 +736,62 @@ local utils = commonlib.utils;
         })
         + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
         + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses sent from this service to client services in the Istio system.'),
+      clientWorkloadHTTPResponseOverview:
+        pieChart.new(title='HTTP response overview')
+        + pieChart.queryOptions.withTargets([
+            t.clientWorkloadHTTPOKResponses,
+            t.clientWorkloadHTTPErrorResponses,
+        ])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.reduceOptions.withCalcs(['sum'])
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc'
+        })
+        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
+        + pieChart.panelOptions.withDescription('Overview of the types of HTTP responses received by this workload from server workloads in the Istio system.'),
+      clientWorkloadGRPCResponseOverview:
+        pieChart.new(title='GRPC response overview')
+        + pieChart.queryOptions.withTargets([
+            t.clientWorkloadGRPCOKResponses,
+            t.clientWorkloadGRPCErrorResponses,
+        ])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.reduceOptions.withCalcs(['sum'])
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc'
+        })
+        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
+        + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses received by this workload from server workloads in the Istio system.'),
+      serverWorkloadHTTPResponseOverview:
+        pieChart.new(title='HTTP response overview')
+        + pieChart.queryOptions.withTargets([
+            t.serverWorkloadHTTPOKResponses,
+            t.serverWorkloadHTTPErrorResponses,
+        ])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.reduceOptions.withCalcs(['sum'])
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc'
+        })
+        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
+        + pieChart.panelOptions.withDescription('Overview of the types of HTTP responses sent from this workload to client workloads in the Istio system.'),
+      serverWorkloadGRPCResponseOverview:
+        pieChart.new(title='GRPC response overview')
+        + pieChart.queryOptions.withTargets([
+            t.serverWorkloadGRPCOKResponses,
+            t.serverWorkloadGRPCErrorResponses,
+        ])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.reduceOptions.withCalcs(['sum'])
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc'
+        })
+        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
+        + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses sent from this workload to client workloads in the Istio system.'),
 
       xDSPushes:
         barGauge.new(title='xDS pushes')

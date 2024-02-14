@@ -9,6 +9,10 @@ local utils = commonlib.utils {
   labelsToPromQLServerServiceSelector(namespace, service, clientService): 'destination_workload_namespace=~"$%s",destination_canonical_service=~"$%s",source_canonical_service=~"$%s"' % [namespace, service, clientService],
   labelsToPromQLSourceServiceSelector(namespace, service): 'source_workload_namespace=~"$%s",source_canonical_service=~"$%s"' % [namespace, service],
   labelsToPromQLDestinationServiceSelector(namespace, service): 'destination_workload_namespace=~"$%s",destination_canonical_service=~"$%s"' % [namespace, service],
+  labelsToPromQLClientWorkloadSelector(namespace, workload, serverWorkload): 'source_workload_namespace=~"$%s",source_workload=~"$%s",destination_workload=~"$%s"' % [namespace, workload, serverWorkload],
+  labelsToPromQLServerWorkloadSelector(namespace, workload, clientWorkload): 'destination_workload_namespace=~"$%s",destination_workload=~"$%s",source_workload=~"$%s"' % [namespace, workload, clientWorkload],
+  labelsToPromQLSourceWorkloadSelector(namespace, workload): 'source_workload_namespace=~"$%s",source_workload=~"$%s"' % [namespace, workload],
+  labelsToPromQLDestinationWorkloadSelector(namespace, workload): 'destination_workload_namespace=~"$%s",destination_workload=~"$%s"' % [namespace, workload],
 };
 
 {
@@ -24,12 +28,21 @@ local utils = commonlib.utils {
       local serviceLabel = this.config.serviceLabel,
       local serviceQuery = this.config.serviceQuery,
       local serviceRegex = this.config.serviceRegex,
+      local workloadLabel = this.config.workloadLabel,
+      local workloadQuery = this.config.workloadQuery,
+      local workloadRegex = this.config.workloadRegex,
       local clientServiceLabel = this.config.clientServiceLabel,
       local clientServiceQuery = this.config.clientServiceQuery,
       local clientServiceRegex = this.config.clientServiceRegex,
       local serverServiceLabel = this.config.serverServiceLabel,
       local serverServiceQuery = this.config.serverServiceQuery,
       local serverServiceRegex = this.config.serverServiceRegex,
+      local clientWorkloadLabel = this.config.clientWorkloadLabel,
+      local clientWorkloadQuery = this.config.clientWorkloadQuery,
+      local clientWorkloadRegex = this.config.clientWorkloadRegex,
+      local serverWorkloadLabel = this.config.serverWorkloadLabel,
+      local serverWorkloadQuery = this.config.serverWorkloadQuery,
+      local serverWorkloadRegex = this.config.serverWorkloadRegex,
       local instanceLabels = this.config.instanceLabels,
       local groupVarMetric = 'istiod_uptime_seconds',
       local root = self,
@@ -126,6 +139,14 @@ local utils = commonlib.utils {
         + createQueryVariable(serviceLabel, 'Service', serviceQuery, serviceRegex, false)
         + createQueryVariable(clientServiceLabel, 'Client service', clientServiceQuery, clientServiceRegex, true)
         + createQueryVariable(serverServiceLabel, 'Server service', serverServiceQuery, serverServiceRegex, true),
+      workloadOverviewVariables:
+        [root.datasources.prometheus]
+        + groupVariablesFromLabels(groupLabels)
+        + createQueryVariable(namespaceLabel, 'Namespace', namespaceQuery, namespaceRegex, true)
+        + createQueryVariable(serviceLabel, 'Service', serviceQuery, serviceRegex, false)
+        + createQueryVariable(workloadLabel, 'Workload', workloadQuery, workloadRegex, true)
+        + createQueryVariable(clientWorkloadLabel, 'Client workload', clientWorkloadQuery, clientWorkloadRegex, true)
+        + createQueryVariable(serverWorkloadLabel, 'Server workload', serverWorkloadQuery, serverWorkloadRegex, true),
 
       queriesGroupSelectorAdvanced:
          '%s' % [
@@ -169,6 +190,26 @@ local utils = commonlib.utils {
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
           utils.labelsToPromQLDestinationServiceSelector(namespaceLabel, serviceLabel),
+        ],
+      queriesGroupClientWorkloadSelector:
+        '%s,%s' % [
+          utils.labelsToPromQLSelector(groupLabels),
+          utils.labelsToPromQLClientWorkloadSelector(namespaceLabel, workloadLabel, serverWorkloadLabel),
+        ],
+      queriesGroupServerWorkloadSelector:
+        '%s,%s' % [
+          utils.labelsToPromQLSelector(groupLabels),
+          utils.labelsToPromQLServerWorkloadSelector(namespaceLabel, workloadLabel, clientWorkloadLabel),
+        ],
+      queriesGroupSourceWorkloadSelector:
+        '%s,%s' % [
+          utils.labelsToPromQLSelector(groupLabels),
+          utils.labelsToPromQLSourceWorkloadSelector(namespaceLabel, workloadLabel),
+        ],
+      queriesGroupDestinationWorkloadSelector:
+        '%s,%s' % [
+          utils.labelsToPromQLSelector(groupLabels),
+          utils.labelsToPromQLDestinationWorkloadSelector(namespaceLabel, workloadLabel),
         ],
     }
 }
