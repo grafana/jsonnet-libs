@@ -429,7 +429,305 @@ local lokiQuery = g.query.loki;
     tableSourceServiceTCPSendRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by(job, cluster, service) (label_replace(rate(istio_tcp_sent_bytes_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_service_name", "(.*)"))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+        'sum by(job, cluster, service) (label_replace(rate(istio_tcp_sent_bytes_total{%(queriesGroupSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true),
+    clientServiceHTTPGRPCRequestRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} -> {{destination_canonical_service}}'),
+    clientServiceHTTPGRPCAvgRequestDelay:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        |||
+          sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval:]))
+          /
+          clamp_min(sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval:])), 1)
+        ||| % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} -> {{destination_canonical_service}}'),
+    clientServiceHTTPGRPCRequestThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} -> {{destination_canonical_service}}'),
+    clientServiceHTTPGRPCResponseThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}'),
+    clientServiceHTTPOKResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.pieChart.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (ok)'),
+    clientServiceHTTPErrorResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.pieChart.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (error)'),
+    clientServiceHTTP1xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode1xxFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (1xx)'),
+    clientServiceHTTP2xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode2xxFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (2xx)'),
+    clientServiceHTTP3xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode3xxFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (3xx)'),
+    clientServiceHTTP4xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode4xxFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (4xx)'),
+    clientServiceHTTP5xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCode5xxFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (5xx)'),
+    clientServiceGRPCOKResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusOKFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.pieChart.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (ok)'),
+    clientServiceGRPCErrorResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusErrorFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.pieChart.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: (error)'),
+    clientServiceGRPCResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusFilter)s})[$__interval:])' % config { queriesGroupClientServiceSelector: vars.queriesGroupClientServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}: {{grpc_response_status}}'),
+    clientServiceTCPRequestThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} -> {{destination_canonical_service}}'),
+    clientServiceTCPResponseThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{%(queriesGroupClientServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]))' % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{source_canonical_service}} <- {{destination_canonical_service}}'),
+    serverServiceHTTPGRPCRequestRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} <- {{source_canonical_service}}'),
+    serverServiceHTTPGRPCAvgRequestDelay:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        |||
+          sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval:]))
+          /
+          clamp_min(sum by(job, cluster, source_canonical_service, destination_canonical_service) (increase(istio_request_duration_milliseconds_count{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval:])), 1)
+        ||| % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} <- {{source_canonical_service}}'),
+    serverServiceHTTPGRPCRequestThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_request_bytes_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} <- {{source_canonical_service}}'),
+    serverServiceHTTPGRPCResponseThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_response_bytes_sum{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}'),
+    serverServiceHTTPOKResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeOKFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.pieChart.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (ok)'),
+    serverServiceHTTPErrorResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeErrorFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.pieChart.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (error)'),
+    serverServiceHTTP1xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode1xxFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (1xx)'),
+    serverServiceHTTP2xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode2xxFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (2xx)'),
+    serverServiceHTTP3xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode3xxFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (3xx)'),
+    serverServiceHTTP4xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode4xxFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (4xx)'),
+    serverServiceHTTP5xxResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCode5xxFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (5xx)'),
+    serverServiceGRPCOKResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusOKFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.pieChart.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (ok)'),
+    serverServiceGRPCErrorResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusErrorFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.pieChart.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: (error)'),
+    serverServiceGRPCResponses:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(sum by(job, cluster, source_canonical_service, destination_canonical_service) (istio_requests_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s, %(grpcResponseStatusFilter)s})[$__interval:])' % config { queriesGroupServerServiceSelector: vars.queriesGroupServerServiceSelector }
+      )
+      + panel.timeSeries.queryOptions.withInterval('1m')
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}: {{grpc_response_status}}'),
+    serverServiceTCPRequestThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_received_bytes_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} <- {{source_canonical_service}}'),
+    serverServiceTCPResponseThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, source_canonical_service, destination_canonical_service) (rate(istio_tcp_sent_bytes_total{%(queriesGroupServerServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + prometheusQuery.withLegendFormat('{{destination_canonical_service}} -> {{source_canonical_service}}'),
+    tableSourceWorkloadHTTPGRPCRequestRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_requests_total{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)"), "workload", "$1", "source_workload", "(.*)"))' % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true),
+    tableDestinationWorkloadHTTPGRPCRequestRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_requests_total{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"), "workload", "$1", "destination_workload", "(.*)"))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true),
+    tableSourceWorkloadHTTPGRPCRequestLatency:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        |||
+          sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_request_duration_milliseconds_sum{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval:]), "service", "$1", "source_canonical_service", "(.*)"), "workload", "$1", "source_workload", "(.*)"))
+          /
+          clamp_min(sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_request_duration_milliseconds_count{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval:]), "service", "$1", "source_canonical_service", "(.*)"), "workload", "$1", "source_workload", "(.*)")), 1)
+        ||| % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true)
+      + panel.table.queryOptions.withInterval('1m'),
+    tableDestinationWorkloadHTTPGRPCRequestLatency:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        |||
+          sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_request_duration_milliseconds_sum{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval:]), "service", "$1", "destination_canonical_service", "(.*)"), "workload", "$1", "destination_workload", "(.*)"))
+          /
+          clamp_min(sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_request_duration_milliseconds_count{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval:]), "service", "$1", "destination_canonical_service", "(.*)"), "workload", "$1", "destination_workload", "(.*)")), 1)
+        ||| % vars { reporterDestinationFilter: config.reporterDestinationFilter }
+      )
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true)
+      + panel.table.queryOptions.withInterval('1m'),
+    tableSourceWorkloadHTTPRequestSuccessRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        |||
+          100 * sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_requests_total{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeOKFilter)s}[$__rate_interval:]), "service", "$1", "source_canonical_service", "(.*)"), "workload", "$1", "source_workload", "(.*)"))
+          /
+          clamp_min(sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_requests_total{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s, %(requestProtocolHTTPFilter)s}[$__rate_interval:]), "service", "$1", "source_canonical_service", "(.*)"), "workload", "$1", "source_workload", "(.*)")), 1)
+        ||| % config { queriesGroupSourceServiceSelector: vars.queriesGroupSourceServiceSelector }
+      )
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true)
+      + panel.table.queryOptions.withInterval('1m'),
+    tableDestinationWorkloadHTTPRequestSuccessRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        |||
+          100 * sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_requests_total{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s, %(httpResponseCodeOKFilter)s}[$__rate_interval:]), "service", "$1", "destination_canonical_service", "(.*)"), "workload", "$1", "destination_workload", "(.*)"))
+          /
+          clamp_min(sum by(job, cluster, service, workload) (label_replace(label_replace(increase(istio_requests_total{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s, %(requestProtocolHTTPFilter)s}[$__rate_interval:]), "service", "$1", "destination_canonical_service", "(.*)"), "workload", "$1", "destination_workload", "(.*)")), 1)
+        ||| % config { queriesGroupDestinationServiceSelector: vars.queriesGroupDestinationServiceSelector }
+      )
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true)
+      + panel.table.queryOptions.withInterval('1m'),
+    tableSourceWorkloadTCPRequestThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_tcp_received_bytes_total{%(queriesGroupSourceServiceSelector)s, %(reporterSourceFilter)s}[$__rate_interval]), "service", "$1", "source_canonical_service", "(.*)"), "workload", "$1", "source_workload", "(.*)"))' % vars { reporterSourceFilter: config.reporterSourceFilter }
+      )
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true),
+    tableDestinationWorkloadTCPResponseThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by(job, cluster, service, workload) (label_replace(label_replace(rate(istio_tcp_sent_bytes_total{%(queriesGroupDestinationServiceSelector)s, %(reporterDestinationFilter)s}[$__rate_interval]), "service", "$1", "destination_canonical_service", "(.*)"), "workload", "$1", "destination_workload", "(.*)"))' % vars { reporterDestinationFilter: config.reporterDestinationFilter }
       )
       + prometheusQuery.withFormat('table')
       + prometheusQuery.withInstant(true),

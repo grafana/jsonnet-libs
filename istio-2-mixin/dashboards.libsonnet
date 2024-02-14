@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
-      overview:
+      'istio-overview':
         g.dashboard.new(prefix + 'Istio overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -47,6 +47,40 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links, annotations, timezone, refresh, period),
+      'istio-services-overview':
+        g.dashboard.new(prefix + 'Istio services overview')
+        + g.dashboard.withPanels(
+          g.util.grid.wrapPanels(
+            [
+              g.panel.row.new('Client details'),
+              panels.clientServiceHTTPGRPCRequests,
+              panels.clientServiceHTTPGRPCRequestDelay,
+              panels.clientServiceHTTPGRPCRequestThroughput,
+              panels.clientServiceHTTPGRPCResponseThroughput,
+              panels.clientServiceHTTPResponseOverview { gridPos+: { w: 8 } },
+              panels.clientServiceHTTPResponses { gridPos+: { w: 16 } },
+              panels.clientServiceGRPCResponseOverview { gridPos+: { w: 8 } },
+              panels.clientServiceGRPCResponses { gridPos+: { w: 16 } },
+              panels.clientServiceTCPRequestThroughput { gridPos+: { w: 12 } },
+              panels.clientServiceTCPResponseThroughput { gridPos+: { w: 12 } },
+              g.panel.row.new('Server details'),
+              panels.serverServiceHTTPGRPCRequests,
+              panels.serverServiceHTTPGRPCRequestDelay,
+              panels.serverServiceHTTPGRPCRequestThroughput,
+              panels.serverServiceHTTPGRPCResponseThroughput,
+              panels.serverServiceHTTPResponseOverview { gridPos+: { w: 8 } },
+              panels.serverServiceHTTPResponses { gridPos+: { w: 16 } },
+              panels.serverServiceGRPCResponseOverview { gridPos+: { w: 8 } },
+              panels.serverServiceGRPCResponses { gridPos+: { w: 16 } },
+              panels.serverServiceTCPRequestThroughput { gridPos+: { w: 12 } },
+              panels.serverServiceTCPResponseThroughput { gridPos+: { w: 12 } },
+              g.panel.row.new('Workloads'),
+              panels.workloads { gridPos+: { w: 24, h: 8 } },
+            ], 12, 6
+          )
+        )
+        // hide link to self
+        + root.applyCommon(vars.serviceOverviewVariables, uid + 'services-overview', tags, links, annotations, timezone, refresh, period),
     },
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):

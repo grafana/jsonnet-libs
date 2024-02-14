@@ -215,6 +215,230 @@ local utils = commonlib.utils;
         )
         + timeSeries.options.legend.withDisplayMode('table')
         + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean']),
+      clientServiceHTTPGRPCRequests:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC requests sent',
+          targets=[
+            t.clientServiceHTTPGRPCRequestRate
+          ],
+          description='Rate of HTTP/GRPC requests sent from this service to server services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('reqps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientServiceHTTPGRPCRequestDelay:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC request delay',
+          targets=[
+            t.clientServiceHTTPGRPCAvgRequestDelay
+          ],
+          description='Average latency of HTTP/GRPC requests sent from this service to server services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('ms'),
+      clientServiceHTTPGRPCRequestThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC request throughput',
+          targets=[
+            t.clientServiceHTTPGRPCRequestThroughputRate
+          ],
+          description='Rate of HTTP/GRPC request data sent from this service to server services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientServiceHTTPGRPCResponseThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC response throughput',
+          targets=[
+            t.clientServiceHTTPGRPCResponseThroughputRate
+          ],
+          description='Rate of HTTP/GRPC response data received by this service from server services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientServiceHTTPResponses:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP responses / $__interval',
+          targets=[
+            t.clientServiceHTTP1xxResponses,
+            t.clientServiceHTTP2xxResponses,
+            t.clientServiceHTTP3xxResponses,
+            t.clientServiceHTTP4xxResponses,
+            t.clientServiceHTTP5xxResponses,
+          ],
+          description='The types of HTTP responses received by this service from server services in the Istio system.'
+        )
+        + timeSeries.options.legend.withDisplayMode('table')
+        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientServiceGRPCResponses:
+        commonlib.panels.generic.timeSeries.base.new(
+          'GRPC responses / $__interval',
+          targets=[
+            t.clientServiceGRPCResponses,
+          ],
+          description='The types of GRPC responses received by this service from server services in the Istio system.'
+        )
+        + timeSeries.options.legend.withDisplayMode('table')
+        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientServiceTCPRequestThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'TCP request throughput',
+          targets=[
+            t.clientServiceTCPRequestThroughputRate
+          ],
+          description='Rate of TCP request data sent from this service to server services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      clientServiceTCPResponseThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'TCP response throughput',
+          targets=[
+            t.clientServiceTCPResponseThroughputRate
+          ],
+          description='Rate of TCP response data received by this service from server services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverServiceHTTPGRPCRequests:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC requests received',
+          targets=[
+            t.serverServiceHTTPGRPCRequestRate
+          ],
+          description='Rate of HTTP/GRPC requests received by this service from client services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('reqps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverServiceHTTPGRPCRequestDelay:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC request delay',
+          targets=[
+            t.serverServiceHTTPGRPCAvgRequestDelay
+          ],
+          description='Average latency of HTTP/GRPC requests received by this service from client services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('ms'),
+      serverServiceHTTPGRPCRequestThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC request throughput',
+          targets=[
+            t.serverServiceHTTPGRPCRequestThroughputRate
+          ],
+          description='Rate of HTTP/GRPC request data received by this service from client services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverServiceHTTPGRPCResponseThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP/GRPC response throughput',
+          targets=[
+            t.serverServiceHTTPGRPCResponseThroughputRate
+          ],
+          description='Rate of HTTP/GRPC response data sent from this service to client services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverServiceHTTPResponses:
+        commonlib.panels.generic.timeSeries.base.new(
+          'HTTP responses / $__interval',
+          targets=[
+            t.serverServiceHTTP1xxResponses,
+            t.serverServiceHTTP2xxResponses,
+            t.serverServiceHTTP3xxResponses,
+            t.serverServiceHTTP4xxResponses,
+            t.serverServiceHTTP5xxResponses,
+          ],
+          description='The types of HTTP responses sent from this service to client services in the Istio system.'
+        )
+        + timeSeries.options.legend.withDisplayMode('table')
+        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverServiceGRPCResponses:
+        commonlib.panels.generic.timeSeries.base.new(
+          'GRPC responses / $__interval',
+          targets=[
+            t.serverServiceGRPCResponses,
+          ],
+          description='The types of GRPC responses sent from this service to client services in the Istio system.'
+        )
+        + timeSeries.options.legend.withDisplayMode('table')
+        + timeSeries.options.legend.withCalcsMixin(['min', 'max', 'mean'])
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverServiceTCPRequestThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'TCP request throughput',
+          targets=[
+            t.serverServiceTCPRequestThroughputRate
+          ],
+          description='Rate of TCP request data received by this service from client services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
+      serverServiceTCPResponseThroughput:
+        commonlib.panels.generic.timeSeries.base.new(
+          'TCP response throughput',
+          targets=[
+            t.serverServiceTCPResponseThroughputRate
+          ],
+          description='Rate of TCP response data sent from this service to client services in the Istio system.'
+        )
+        + timeSeries.options.legend.withPlacement('right')
+        + timeSeries.standardOptions.withUnit('Bps')
+        + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+          group: 'A',
+          mode: 'normal'
+        }),
 
       httpResponseOverview:
         pieChart.new(title='HTTP response overview')
@@ -232,6 +456,62 @@ local utils = commonlib.utils;
         })
         + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
         + pieChart.panelOptions.withDescription('Recent number of successful (1xx, 2xx, 3xx) vs error (4xx, 5xx) HTTP responses received by various components of the Istio system.'),
+      clientServiceHTTPResponseOverview:
+        pieChart.new(title='HTTP response overview')
+        + pieChart.queryOptions.withTargets([
+            t.clientServiceHTTPOKResponses,
+            t.clientServiceHTTPErrorResponses,
+        ])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.reduceOptions.withCalcs(['sum'])
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc'
+        })
+        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
+        + pieChart.panelOptions.withDescription('Overview of the types of HTTP responses received by this service from server services in the Istio system.'),
+      clientServiceGRPCResponseOverview:
+        pieChart.new(title='GRPC response overview')
+        + pieChart.queryOptions.withTargets([
+            t.clientServiceGRPCOKResponses,
+            t.clientServiceGRPCErrorResponses,
+        ])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.reduceOptions.withCalcs(['sum'])
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc'
+        })
+        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
+        + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses received by this service from server services in the Istio system.'),
+      serverServiceHTTPResponseOverview:
+        pieChart.new(title='HTTP response overview')
+        + pieChart.queryOptions.withTargets([
+            t.serverServiceHTTPOKResponses,
+            t.serverServiceHTTPErrorResponses,
+        ])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.reduceOptions.withCalcs(['sum'])
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc'
+        })
+        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
+        + pieChart.panelOptions.withDescription('Overview of the types of HTTP responses sent from this service to client services in the Istio system.'),
+      serverServiceGRPCResponseOverview:
+        pieChart.new(title='GRPC response overview')
+        + pieChart.queryOptions.withTargets([
+            t.serverServiceGRPCOKResponses,
+            t.serverServiceGRPCErrorResponses,
+        ])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.reduceOptions.withCalcs(['sum'])
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc'
+        })
+        + pieChart.queryOptions.withDatasource('prometheus', '${datasource}')
+        + pieChart.panelOptions.withDescription('Overview of the types of GRPC responses sent from this service to client services in the Istio system.'),
 
       xDSPushes:
         barGauge.new(title='xDS pushes')
@@ -381,6 +661,96 @@ local utils = commonlib.utils;
               cluster: 'Cluster',
               job: 'Job',
               service: 'Service'
+            }
+          }
+        }
+      ]),
+      workloads:
+        table.new(
+          title='Workloads'
+        )
+        + table.queryOptions.withTargets([
+          t.tableSourceWorkloadHTTPGRPCRequestRate,
+          t.tableDestinationWorkloadHTTPGRPCRequestRate,
+          t.tableSourceWorkloadHTTPGRPCRequestLatency,
+          t.tableDestinationWorkloadHTTPGRPCRequestLatency,
+          t.tableSourceWorkloadHTTPRequestSuccessRate,
+          t.tableDestinationWorkloadHTTPRequestSuccessRate,
+          t.tableSourceWorkloadTCPRequestThroughputRate,
+          t.tableDestinationWorkloadTCPResponseThroughputRate,
+        ])
+        + table.queryOptions.withDatasource('prometheus', '${datasource}')
+        + table.panelOptions.withDescription('Workload details for a service in the Istio system.')
+        + table.standardOptions.withNoValue('NA')
+        + table.standardOptions.withOverridesMixin([
+          table.fieldOverride.byName.new('HTTP/GRPC tx delay')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
+          + table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('unit', 'ms'),
+          table.fieldOverride.byName.new('HTTP/GRPC rx delay')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
+          + table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('unit', 'ms'),
+          table.fieldOverride.byName.new('HTTP/GRPC tx')
+          + table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('unit', 'reqps'),
+          table.fieldOverride.byName.new('HTTP/GRPC rx')
+          + table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('unit', 'reqps'),
+          table.fieldOverride.byName.new('HTTP tx success')
+          + table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('unit', 'percent'),
+          table.fieldOverride.byName.new('HTTP rx success')
+          + table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('unit', 'percent'),
+          table.fieldOverride.byName.new('TCP tx')
+          + table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('unit', 'Bps'),
+          table.fieldOverride.byName.new('TCP rx')
+          + table.fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('unit', 'Bps'),
+        ])
+        + table.options.withFooter(
+          table.options.footer.TableFooterOptions.withReducerMixin(['sum'])
+        )
+        + table.queryOptions.withTransformationsMixin([
+        {
+          id: 'merge',
+          options: {}
+        },
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {
+              Time: true,
+              job: true
+            },
+            includeByName: {},
+            indexByName: {
+              Time: 0,
+              'Value #A': 5,
+              'Value #B': 8,
+              'Value #C': 6,
+              'Value #D': 9,
+              'Value #E': 7,
+              'Value #F': 10,
+              cluster: 1,
+              job: 2,
+              service: 3,
+              workload: 4
+            },
+            renameByName: {
+              'Value #A': 'HTTP/GRPC tx',
+              'Value #B': 'HTTP/GRPC rx',
+              'Value #C': 'HTTP/GRPC tx delay',
+              'Value #D': 'HTTP/GRPC rx delay',
+              'Value #E': 'HTTP tx success',
+              'Value #F': 'HTTP rx success',
+              'Value #G': 'TCP tx',
+              'Value #H': 'TCP rx',
+              cluster: 'Cluster',
+              service: 'Service',
+              workload: 'Workload'
             }
           }
         }
