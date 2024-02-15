@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
-      'istio-overview':
+      'overview':
         g.dashboard.new(prefix + 'Istio overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -46,8 +46,8 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links, annotations, timezone, refresh, period),
-      'istio-services-overview':
+        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
+      'servicesOverview':
         g.dashboard.new(prefix + 'Istio services overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -80,8 +80,8 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.serviceOverviewVariables, uid + 'services-overview', tags, links, annotations, timezone, refresh, period),
-      'istio-workloads-overview':
+        + root.applyCommon(vars.serviceOverviewVariables, uid + '-services-overview', tags, links { backToServicesOverview+:: {} }, annotations, timezone, refresh, period),
+      'workloadsOverview':
         g.dashboard.new(prefix + 'Istio workloads overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -112,7 +112,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.workloadOverviewVariables, uid + 'workloads-overview', tags, links, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.workloadOverviewVariables, uid + '-workloads-overview', tags, links { backToWorkloadsOverview+:: {} }, annotations, timezone, refresh, period),
     },
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):

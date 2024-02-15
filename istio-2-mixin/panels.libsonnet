@@ -868,6 +868,15 @@ local utils = commonlib.utils;
         + table.panelOptions.withDescription('Service details for the Istio system.')
         + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
+          table.fieldOverride.byName.new('job')
+          + table.fieldOverride.byName.withProperty('custom.hidden', 'true'),
+          table.fieldOverride.byName.new('Service')
+          + table.fieldOverride.byName.withProperty('links', [
+            {
+              title: '',
+              url: 'd/istio-services-overview?var-datasource=${datasource}&var-job=${__data.fields["Job"]}&var-cluster=${__data.fields["Cluster"]}&var-service=${__value.raw}&${__url_time_range}'
+            }
+          ]),
           table.fieldOverride.byName.new('HTTP/GRPC tx delay')
           + table.fieldOverride.byName.withProperty('custom.width', 157)
           + table.fieldOverride.byName.withProperty('custom.align', 'left')
@@ -908,7 +917,6 @@ local utils = commonlib.utils;
           options: {
             excludeByName: {
               Time: true,
-              job: true
             },
             includeByName: {},
             indexByName: {
@@ -921,8 +929,6 @@ local utils = commonlib.utils;
               'Value #F': 9,
               'Value #G': 10,
               'Value #H': 11,
-              'Value #I': 13,
-              'Value #J': 12,
               cluster: 1,
               job: 2,
               service: 3
@@ -936,8 +942,6 @@ local utils = commonlib.utils;
               'Value #F': 'HTTP rx success',
               'Value #G': 'TCP tx',
               'Value #H': 'TCP rx',
-              'Value #I': 'TCP client closes',
-              'Value #J': 'TCP client opens',
               cluster: 'Cluster',
               job: 'Job',
               service: 'Service'
@@ -963,6 +967,22 @@ local utils = commonlib.utils;
         + table.panelOptions.withDescription('Workload details for a service in the Istio system.')
         + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
+          table.fieldOverride.byName.new('job')
+          + table.fieldOverride.byName.withProperty('custom.hidden', 'true'),
+          table.fieldOverride.byName.new('Service')
+          + table.fieldOverride.byName.withProperty('links', [
+            {
+              title: '',
+              url: 'd/istio-workloads-overview?var-datasource=${datasource}&var-job=${__data.fields["Job"]}&var-cluster=${__data.fields["Cluster"]}&var-service=${__value.raw}&${__url_time_range}'
+            }
+          ]),
+          table.fieldOverride.byName.new('Workload')
+          + table.fieldOverride.byName.withProperty('links', [
+            {
+              title: '',
+              url: 'd/istio-workloads-overview?var-datasource=${datasource}&var-job=${__data.fields["Job"]}&var-cluster=${__data.fields["Cluster"]}&var-service=${__data.fields["Service"]}&var-workload=${__value.raw}&${__url_time_range}'
+            }
+          ]),
           table.fieldOverride.byName.new('HTTP/GRPC tx delay')
           + table.fieldOverride.byName.withProperty('custom.width', 157)
           + table.fieldOverride.byName.withProperty('custom.align', 'left')
@@ -1003,7 +1023,6 @@ local utils = commonlib.utils;
           options: {
             excludeByName: {
               Time: true,
-              job: true
             },
             includeByName: {},
             indexByName: {
@@ -1014,6 +1033,8 @@ local utils = commonlib.utils;
               'Value #D': 9,
               'Value #E': 7,
               'Value #F': 10,
+              'Value #G': 11,
+              'Value #H': 12,
               cluster: 1,
               job: 2,
               service: 3,
@@ -1029,6 +1050,7 @@ local utils = commonlib.utils;
               'Value #G': 'TCP tx',
               'Value #H': 'TCP rx',
               cluster: 'Cluster',
+              job: 'Job',
               service: 'Service',
               workload: 'Workload'
             }

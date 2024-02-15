@@ -138,7 +138,7 @@
       {
         alert: 'IstioMetricsDown',
         expr: |||
-          up{job="%(alertsMetricsDownJobName)s"} == 0
+          up{%(filteringSelector)s} == 0
         ||| % this.config,
         'for': '5m',
         labels: {
@@ -148,7 +148,7 @@
           summary: 'Istio metrics are down.',
           description:
             (
-              'There are no available metrics for Istio integration from cluster {{$labels.cluster}}.'
+              'There are no available metrics for Istio integration from pod {{$labels.pod}} in cluster {{$labels.cluster}}.'
             ) % this.config,
         },
       },
