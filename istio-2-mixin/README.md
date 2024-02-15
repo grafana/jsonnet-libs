@@ -1,255 +1,251 @@
-# Hello world observ lib
+# Istio mixin
+The Istio mixin is a set of configurable Grafana dashboards and alerts.
 
-This lib can be used as a starter template of modular observ lib. Modular observ libs are highly reusable observability package containing grafana dashboards and prometheus alerts/rules. They can be used in as a replacement or in conjuction to monitoring-mixins format.
+The Istio mixin contains the following dashboards:
 
+- Istio overview
+- Istio services overview
+- Istio workloads overview
+- Istio logs
 
-## Import
+and the following alerts:
 
-```sh
-jb init
-jb install https://github.com/grafana/jsonnet-libs/helloworld-observ-lib
+- IstioHighCPUUsageWarning
+- IstioHighCPUUsageCritical
+- IstioHighRequestLatencyWarning
+- IstioGalleyValidationFailuresWarning
+- IstioListenerConfigConflictsCritical
+- IstioXDSConfigRejectionsWarning
+- IstioHighHTTPRequestErrorsCritical
+- IstioHighGRPCRequestErrorsCritical
+- IstioMetricsDown
+
+## Istio overview
+The Istio overview dashboard provides high level details on alerts, HTTP/GRPC requests, vCPU, memory, control plane metrics, and service info for Istiod, proxies, and gateways.
+![Istio overview dashboard (system)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_overview_1.png)
+![Istio overview dashboard (control plane)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_overview_2.png)
+
+## Istio services overview
+The Istio services overview dashboard provides details on HTTP/GRPC throughput, HTTP/GRPC response time, TCP throughput, and workload info for services acting in both client and server roles.
+![Istio services overview dashboard (client)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_services_overview_1.png)
+![Istio services overview dashboard (server)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_services_overview_2.png)
+![Istio services overview dashboard (workloads)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_services_overview_3.png)
+
+## Istio workloads overview
+The Istio overview dashboard provides details on HTTP/GRPC throughput, HTTP/GRPC response time, and TCP throughput for workloads acting in both client and server roles.
+![Istio workloads overview dashboard (client)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_workloads_overview_1.png)
+![Istio workloads overview dashboard (server)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_workloads_overview_2.png)
+![Istio workloads overview dashboard (server TCP)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_workloads_overview_3.png)
+
+# Istio logs
+The Istio logs dashboard provides details on incoming envoy proxy access logs.
+![Istio logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_logs.png)
+
+Istio logs are enabled by default in the `config.libsonnet` and can be disabled by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
+
 ```
-
-## Modular observability lib format
-
-```jsonnet
-
 {
-  config: {
-    //common options
+  _config+:: {
+    enableLokiLogs: false,
   },
-
-  grafana: {
-   
-   // grafana templated variables to reuse across mutltiple dashboards
-   variables: {
-      datasources: {
-        prometheus: {},
-        loki: {},
-      },
-      multiInstance: [],
-      singleInstace: [],
-  	  queriesSelector: "",
-   },
-
-   // grafana targets (queries) to attach to panels
-   targets: {
-    target1: <target1>,
-    target3: <target2>,
-    ...
-    targetN: <targetN>,
-   },
-
-   // grafana panels
-   panels: {
-    panel1: <panel1>,
-    panel2: <panel2>,
-    ...
-    panelN: <panelN>,
-   },
-
-   // grafana dashboards
-   dashboards: {
-    dashboard1: <dashboard1>,
-    dashboard2: <dashboard2>,
-    ...
-    dashboardN: <dashboardN>,
-   },
-
-   // grafana annotations
-   annotations: {
-    annotation1: <annotation1>,
-    ...
-   },
-   
-   // grafana dashboard links
-   links: {},
- },
-
- prometheus: {
-  alerts: {},
-  rules: {},
- },
 }
-
 ```
 
-## Pros of using modular observabilty format
+For the selectors to properly work with the Istio logs ingested into your logs datasource, replace the `cluster` labels as well as ensuring that the `request_method`, `response_code`, and `protocol` are being generated.
 
-- Uses [jsonnet](https://jsonnet.org/learning/tutorial.html), jsonnet-bundler, and [grafonnet](https://github.com/grafana/grafonnet)
-- Highly customizable and flexible:
+```
+{
+  discovery.kubernetes "istiod" {
+    role = "endpoints"
 
-Any object like `panel`, `target` (query) can be easily referenced by key and then overriden before output of the lib is provided by using jsonnet [patching](https://tanka.dev/tutorial/environments#patching) technique:
+    namespaces {
+      names = ["istio-system"]
+    }
+  }
 
-```jsonnet
-local helloworldlib = import './main.libsonnet';
+  discovery.relabel "istiod_filter" {
+    targets = discovery.kubernetes.istiod.targets
 
-local helloworld =
-  helloworldlib.new() + 
-  {
-    grafana+: {
-      panels+: {
-        panel1+: 
-          g.panel.timeSeries.withDescription("My new description for panel1")
+    rule {
+      source_labels = ["__meta_kubernetes_service_name", "__meta_kubernetes_endpoint_port_name"]
+      regex         = "istiod;http-monitoring"
+      action        = "keep"
+    }
+
+    rule {
+      action = "replace"
+      source_labels = ["__meta_kubernetes_pod_name"]
+      target_label  = "pod"
+    }
+
+    rule {
+      target_label  = "cluster"
+      replacement   = "<your-cluster-name>"
+    }
+  }
+
+  prometheus.scrape "istiod" {
+    targets    = discovery.relabel.istiod_filter.output
+    forward_to = [prometheus.remote_write.cloud.receiver]
+    job_name   = "integrations/istio"
+  }
+
+  discovery.kubernetes "envoy_proxies" {
+    role = "pod"
+  }
+
+  discovery.relabel "envoy_proxies_metrics_filter" {
+    targets = discovery.kubernetes.envoy_proxies.targets
+
+    rule {
+      source_labels = ["__meta_kubernetes_pod_container_name"]
+      regex         = "istio-proxy.*"
+      action        = "keep"
+    }
+
+    rule {
+      source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_port", "__meta_kubernetes_pod_ip"]
+      regex         = "(\\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})"
+      target_label  = "__address__"
+      replacement   = "[$2]:$1"
+    }
+
+    rule {
+      source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_port", "__meta_kubernetes_pod_ip"]
+      regex         = "(\\d+);((([0-9]+?)(\\.|$)){4})"
+      target_label  = "__address__"
+      replacement   = "$2:$1"
+    }
+
+    rule {
+      action = "replace"
+      source_labels = ["__meta_kubernetes_pod_name"]
+      target_label  = "pod"
+    }
+
+    rule {
+      target_label  = "cluster"
+      replacement   = "<your-cluster-name>"
+    }
+  }
+
+  prometheus.scrape "envoy_proxies" {
+    targets      = discovery.relabel.envoy_proxies_metrics_filter.output
+    forward_to   = [prometheus.remote_write.cloud.receiver]
+    job_name     = "integrations/istio"
+    metrics_path = "/stats/prometheus"
+  }
+
+  loki.source.kubernetes "envoy_proxies" {
+    targets    = discovery.relabel.envoy_proxies_logs_filter.output
+    forward_to = [loki.process.istio.receiver]
+  }
+
+  discovery.relabel "envoy_proxies_logs_filter" {
+    targets = discovery.kubernetes.envoy_proxies.targets
+
+    rule {
+      source_labels = ["__meta_kubernetes_pod_container_port_name"]
+      regex         = ".*-envoy-prom"
+      action        = "keep"
+    }
+
+    rule {
+      source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_port", "__meta_kubernetes_pod_ip"]
+      regex         = "(\\d+);(([A-Fa-f0-9]{1,4}::?){1,7}[A-Fa-f0-9]{1,4})"
+      target_label  = "instance"
+      replacement   = "[$2]:$1"
+    }
+
+    rule {
+      source_labels = ["__meta_kubernetes_pod_annotation_prometheus_io_port", "__meta_kubernetes_pod_ip"]
+      regex         = "(\\d+);((([0-9]+?)(\\.|$)){4})"
+      target_label  = "instance"
+      replacement   = "$2:$1"
+    }
+
+    rule {
+      target_label  = "job"
+      replacement   = "integrations/istio"
+    }
+
+    rule {
+      target_label  = "cluster"
+      replacement   = "<your-cluster-name>"
+    }
+  }
+
+  loki.process "istio" {
+    forward_to = [loki.write.<name>.receiver]
+
+    stage.regex {
+      expression = "\\[\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z\\] \"(?P<request_method>\\w+) \\S+ (?P<protocol>\\S+)\" (?P<response_code>\\d+) .+"
+    }
+
+    stage.labels {
+      values = {
+        request_method  = "",
+        protocol = "",
+        response_code = "",
       }
     }
-  };
-```
-
-- Due to high decomposition level, not only dashboards but single panels can be imported ('cherry-picked') from the library to be used in other dashboards
-- Format introduces mandatory arguments that each library should have: `filteringSelector`, `instanceLabels`, `groupLabels`, `uid`. Proper use of those parameters ensures library can be used to instantiate multiple copies of the observability package in the same enviroment without `ids` conflicts or timeSeries overlapping.
-
-## Examples
-
-### Example 1: Monitoring-Mixin example
-
-You can use lib to fill in [monitoring-mixin](https://monitoring.mixins.dev/) structure:
-
-```jsonnet
-// mixin.libsonnet file
-
-local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
-
-local helloworld =
-  helloworldlib.new();
-
-// populate monitoring-mixin:
-{
-  grafanaDashboards+:: helloworld.grafana.dashboards,
-  prometheusAlerts+:: helloworld.prometheus.alerts,
-  prometheusRules+:: helloworld.prometheus.recordingRules,
+  }
 }
 ```
 
-### Example 2: Monitoring-mixin example with custom config
+## Alerts overview
+- IstioHighCPUUsageWarning: High vCPU usage can indicate that the k8s environment is underprovisioned.
+- IstioHighCPUUsageCritical: High vCPU usage can indicate that the k8s environment is underprovisioned.
+- IstioHighRequestLatencyWarning: High request latency between pods can indicate that there are performance issues within the k8s environment.
+- IstioGalleyValidationFailuresWarning: Istio Galley is reporting failures for a number of configurations.
+- IstioListenerConfigConflictsCritical: Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.
+- IstioXDSConfigRejectionsWarning: Istio Pilot is seeing a number of xDS rejections from envoy proxies..
+- IstioHighHTTPRequestErrorsCritical: There are a high number of HTTP request errors in the Istio system.
+- IstioHighGRPCRequestErrorsCritical: There are a high number of GRPC request errors in the Istio system.
+- IstioMetricsDown: Istio metrics are down.
 
+Default thresholds can be configured in `config.libsonnet`.
 
-Any modular library should include as mandator configuration paramaters:
-- `filteringSelector` - Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
-- `groupLabels` - one or more labels that can be used to identify 'group' of instances. In simple cases, can be 'job' or 'cluster'.
-- `instanceLabels` - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
-- `uid` - UID to prefix all dashboards original uids
-- `dashboardNamePrefix` - Use as prefix for all Dashboards and (optional) rule groups
-
-By changing those you can install same mixin two or more times into same Grafana/Prometheus, or import them into other mixins, without any potential problem of conflicting dashboard ids or intersecting PromQL queries:
-
-First:
-
-```
-local helloworldlib = import './main.libsonnet';
-
-local helloworld =
-  helloworldlib.new()
-  + helloworldlib.withConfigMixin(
-    {
-      filteringSelector: 'job=~"integrations/first"',
-      uid: 'firsthelloworld',
-      groupLabels: ['environment', 'cluster', 'job'],
-      instanceLabels: ['instance'],
+```js
+{
+    _configs+:: {
+      // alerts thresholds
+      alertsWarningHighCPUUsage: 70,  //%
+      alertsCriticalHighCPUUsage: 90, //%
+      alertsWarningHighRequestLatency: 4000,
+      alertsWarningGalleyValidationFailures: 0,
+      alertsCriticalListenerConfigConflicts: 0,
+      alertsWarningXDSConfigRejections: 0,
+      alertsCriticalHTTPRequestErrorPercentage: 5, //%
+      alertsCriticalGRPCRequestErrorPercentage: 5, //%
     }
-  );
-
-// populate monitoring-mixin:
-{
-  grafanaDashboards+:: helloworld.grafana.dashboards,
-  prometheusAlerts+:: helloworld.prometheus.alerts,
-  prometheusRules+:: helloworld.prometheus.recordingRules,
 }
 ```
 
-Second:
-
-```
-local helloworldlib = import './main.libsonnet';
-
-local helloworld =
-  helloworldlib.new()
-  + helloworldlib.withConfigMixin(
-    {
-      filteringSelector: 'job=~"integrations/second"',
-      uid: 'secondhelloworld',
-      groupLabels: ['environment', 'cluster', 'job'],
-      instanceLabels: ['instance'],
-    }
-  );
-
-// populate monitoring-mixin:
-{
-  grafanaDashboards+:: helloworld.grafana.dashboards,
-  prometheusAlerts+:: helloworld.prometheus.alerts,
-  prometheusRules+:: helloworld.prometheus.recordingRules,
-}
+## Install tools
+```bash
+go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
+go install github.com/monitoring-mixins/mixtool/cmd/mixtool@latest
 ```
 
+For linting and formatting, you would also need `jsonnetfmt` installed. If you
+have a working Go development environment, it's easiest to run the following:
 
-### Example 3: Changing specific panel before rendering dashboards
-
-We can point to any object (i.e grafana.panels.panel1) and modify it by using [jsonnnet mixins](https://jsonnet.org/learning/tutorial.html).
-
-For example, let's modify panel's default draw style to bars by mutating it with [grafonnet](https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-fieldconfigdefaultscustomwithdrawstyle):
-
-```
-local g = import './g.libsonnet';
-local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
-
-local helloworld =
-  helloworldlib.new()
-  + {
-    grafana+: {
-      panels+: {
-        networkSockstatAll+:
-          + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
-      }
-    }
-  };
-
-// populate monitoring-mixin:
-{
-  grafanaDashboards+:: helloworld.grafana.dashboards,
-  prometheusAlerts+:: helloworld.prometheus.alerts,
-  prometheusRules+:: helloworld.prometheus.recordingRules,
-}
-
+```bash
+go install github.com/google/go-jsonnet/cmd/jsonnetfmt@latest
 ```
 
-### Example 4: Optional logs collection
+The files in `dashboards_out` need to be imported
+into your Grafana server. The exact details will be depending on your environment.
 
-Grafana Loki datasource is used to populate logs dashboard and also for quering annotations.
+`prometheus_alerts.yaml` needs to be imported into Prometheus.
 
-To opt-out, you can set `enableLokiLogs: false` in config:
+## Generate dashboards and alerts
+Edit `config.libsonnet` if required and then build JSON dashboard files for Grafana:
 
-```
-local helloworldlib = import 'helloworld-observ-lib/main.libsonnet';
-
-local helloworld =
-  helloworldlib.new()
-  + helloworldlib.withConfigMixin(
-    {
-      // disable loki logs
-      enableLokiLogs: false,
-    }
-  );
-
-// populate monitoring-mixin:
-{
-  grafanaDashboards+:: helloworld.grafana.dashboards,
-  prometheusAlerts+:: helloworld.prometheus.alerts,
-  prometheusRules+:: helloworld.prometheus.recordingRules,
-}
+```bash
+make
 ```
 
-## Recommended dev environment
-
-To speed up developing observability libs as-code, we recommend to work in the following dev enviroment:
-
-- Setup Vscode with [Jsonnet Language Server](https://marketplace.visualstudio.com/items?itemName=Grafana.vscode-jsonnet)
-- Setup format on save in vscode to lint jsonnet automatically.
-- use [grizzly](https://github.com/grafana/grizzly):
-  - `export GRAFANA_URL=http://localhost:3000`
-  - `grr apply -t "Dashboard/*" mixin.libsonnet` or `grr watch -t "Dashboard/*" . mixin.libsonnet`
-
-## What is generated from this example
-
-![Dashboard 1](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 1")
-![Dashboard 2](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 2")
-![Dashboard 3](https://github.com/grafana/jsonnet-libs/assets/14870891/440f761b-355d-4cea-8659-c37b30b733a9 "Dashboard 3")
+For more advanced uses of mixins, see
+https://github.com/monitoring-mixins/docs.

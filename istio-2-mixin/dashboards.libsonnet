@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
-      'overview':
+      overview:
         g.dashboard.new(prefix + 'Istio overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -47,7 +47,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
-      'servicesOverview':
+      servicesOverview:
         g.dashboard.new(prefix + 'Istio services overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -81,7 +81,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.serviceOverviewVariables, uid + '-services-overview', tags, links { backToServicesOverview+:: {} }, annotations, timezone, refresh, period),
-      'workloadsOverview':
+      workloadsOverview:
         g.dashboard.new(prefix + 'Istio workloads overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -113,7 +113,45 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         )
         // hide link to self
         + root.applyCommon(vars.workloadOverviewVariables, uid + '-workloads-overview', tags, links { backToWorkloadsOverview+:: {} }, annotations, timezone, refresh, period),
-    },
+    }
+    +
+    if this.config.enableLokiLogs then
+      {
+        logs:
+          logslib.new(
+            prefix + 'Istio logs',
+            datasourceName=this.grafana.variables.datasources.loki.name,
+            datasourceRegex=this.grafana.variables.datasources.loki.regex,
+            filterSelector=this.config.filteringSelector,
+            labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
+            formatParser=null,
+            showLogsVolume=this.config.showLogsVolume,
+            logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+          )
+          {
+            dashboards+:
+              {
+                logs+:
+                  // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
+                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+              },
+            panels+:
+              {
+                // modify log panel
+                logs+:
+                  g.panel.logs.options.withEnableLogDetails(true)
+                  + g.panel.logs.options.withShowTime(false)
+                  + g.panel.logs.options.withWrapLogMessage(false),
+              },
+            variables+: {
+              // add prometheus datasource for annotations processing
+              toArray+: [
+                this.grafana.variables.datasources.prometheus { hide: 2 },
+              ],
+            },
+          }.dashboards.logs,
+      }
+    else {},
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)

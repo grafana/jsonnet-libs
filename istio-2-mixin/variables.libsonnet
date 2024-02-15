@@ -43,7 +43,7 @@ local utils = commonlib.utils {
       local serverWorkloadLabel = this.config.serverWorkloadLabel,
       local serverWorkloadQuery = this.config.serverWorkloadQuery,
       local serverWorkloadRegex = this.config.serverWorkloadRegex,
-      local instanceLabels = this.config.instanceLabels,
+      local overviewLabels = this.config.overviewLabels,
       local groupVarMetric = 'istiod_uptime_seconds',
       local root = self,
       // Generates chained variables to use on on all dashboards
