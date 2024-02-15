@@ -13,7 +13,6 @@ base {
     // Decrease opacity (would look better with too many timeseries)
     + defaults.custom.withFillOpacity(1),
 
-
   withNegateOutPackets(regexp='/write|written/'):
     defaults.custom.withAxisLabel('write(-) | read(+)')
     + defaults.custom.withAxisCenteredZero(true)

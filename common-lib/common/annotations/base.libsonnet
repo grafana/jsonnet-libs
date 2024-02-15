@@ -28,5 +28,4 @@ local annotation = g.dashboard.annotation;
       textFormat: value,
     },
 
-
 }

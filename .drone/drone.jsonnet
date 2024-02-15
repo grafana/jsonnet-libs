@@ -16,11 +16,17 @@ local run(name, commands) = {
 };
 
 [
-  pipeline('build', [
-    run('lint-fmt', [
-      'make install-ci-deps',
-      'make lint-fmt',
-      'make lint-mixins',
-    ]),
-  ]),
+  pipeline(
+    'build', [
+      run('lint-fmt', [
+        'make install-ci-deps',
+        'make lint-fmt',
+        'make lint-mixins',
+      ]),
+      run('tests', [
+        'make install-ci-deps',
+        'make tests',
+      ]),
+    ]
+  ),
 ]

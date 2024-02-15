@@ -39,6 +39,9 @@ lint-mixins:
 	done; \
 	exit $$RESULT
 
+tests:
+	pushd . && cd ./common-lib && make vendor && make tests
+
 drone:
 	drone jsonnet --stream --source .drone/drone.jsonnet --target .drone/drone.yml --format yaml
 	drone lint .drone/drone.yml
