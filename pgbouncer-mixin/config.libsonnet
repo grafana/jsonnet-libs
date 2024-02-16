@@ -13,17 +13,17 @@
   dashboardNamePrefix: '',
 
   // additional params can be added if needed
-	dashboardPeriod: 'now-1h',
+  dashboardPeriod: 'now-1h',
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
 
-	// alert thresholds
-	alertsHighClientWaitingConnections: 20,
-	alertsHighClientWaitTime: 15,
-	alertsHighServerConnectionSaturationWarning: 80,
-	alertsHighServerConnectionSaturationCritical: 90,
-	alertsHighNetworkTraffic: 50,
-	
-		// logs lib related
+  // alert thresholds
+  alertsHighClientWaitingConnections: 20,
+  alertsHighClientWaitTime: 15,
+  alertsHighServerConnectionSaturationWarning: 80,
+  alertsHighServerConnectionSaturationCritical: 90,
+  alertsHighNetworkTraffic: 50,
+
+  // logs lib related
   enableLokiLogs: true,
 }
