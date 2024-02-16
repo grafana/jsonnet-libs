@@ -22,11 +22,11 @@ lint: build
 		done
 	mixtool lint mixin.libsonnet
 
-dashboards_out: mixin.libsonnet config.libsonnet $(wildcard dashboards/*)
+dashboards_out: mixin.libsonnet config.libsonnet dashboards.libsonnet
 	@mkdir -p dashboards_out
 	mixtool generate dashboards mixin.libsonnet -d dashboards_out
 
-prometheus_alerts.yaml: mixin.libsonnet alerts/*.libsonnet
+prometheus_alerts.yaml: mixin.libsonnet alerts.libsonnet
 	mixtool generate alerts mixin.libsonnet -a prometheus_alerts.yaml
 
 .PHONY: clean

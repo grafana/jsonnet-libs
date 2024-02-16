@@ -3,49 +3,38 @@ local g = import './g.libsonnet';
 local var = g.dashboard.variable;
 local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
-local utils = commonlib.utils {
-  labelsToPromQLPodSelector(labels): std.join(',', ['pod=~"$%s"' % [label] for label in labels]),
-  labelsToPromQLClientServiceSelector(namespace, service, serverService): 'source_workload_namespace=~"$%s",source_canonical_service=~"$%s",destination_canonical_service=~"$%s"' % [namespace, service, serverService],
-  labelsToPromQLServerServiceSelector(namespace, service, clientService): 'destination_workload_namespace=~"$%s",destination_canonical_service=~"$%s",source_canonical_service=~"$%s"' % [namespace, service, clientService],
-  labelsToPromQLSourceServiceSelector(namespace, service): 'source_workload_namespace=~"$%s",source_canonical_service=~"$%s"' % [namespace, service],
-  labelsToPromQLDestinationServiceSelector(namespace, service): 'destination_workload_namespace=~"$%s",destination_canonical_service=~"$%s"' % [namespace, service],
-  labelsToPromQLClientWorkloadSelector(namespace, workload, serverWorkload): 'source_workload_namespace=~"$%s",source_workload=~"$%s",destination_workload=~"$%s"' % [namespace, workload, serverWorkload],
-  labelsToPromQLServerWorkloadSelector(namespace, workload, clientWorkload): 'destination_workload_namespace=~"$%s",destination_workload=~"$%s",source_workload=~"$%s"' % [namespace, workload, clientWorkload],
-  labelsToPromQLSourceWorkloadSelector(namespace, workload): 'source_workload_namespace=~"$%s",source_workload=~"$%s"' % [namespace, workload],
-  labelsToPromQLDestinationWorkloadSelector(namespace, workload): 'destination_workload_namespace=~"$%s",destination_workload=~"$%s"' % [namespace, workload],
-};
 
 {
   new(this):
     {
       local groupLabels = this.config.groupLabels,
-      local istiodLabel = this.config.istiodLabel,
-      local gatewayLabel = this.config.gatewayLabel,
-      local proxyLabel = this.config.proxyLabel,
-      local namespaceLabel = this.config.namespaceLabel,
-      local namespaceQuery = this.config.namespaceQuery,
-      local namespaceRegex = this.config.namespaceRegex,
-      local serviceLabel = this.config.serviceLabel,
-      local serviceQuery = this.config.serviceQuery,
-      local serviceRegex = this.config.serviceRegex,
-      local workloadLabel = this.config.workloadLabel,
-      local workloadQuery = this.config.workloadQuery,
-      local workloadRegex = this.config.workloadRegex,
-      local clientServiceLabel = this.config.clientServiceLabel,
-      local clientServiceQuery = this.config.clientServiceQuery,
-      local clientServiceRegex = this.config.clientServiceRegex,
-      local serverServiceLabel = this.config.serverServiceLabel,
-      local serverServiceQuery = this.config.serverServiceQuery,
-      local serverServiceRegex = this.config.serverServiceRegex,
-      local clientWorkloadLabel = this.config.clientWorkloadLabel,
-      local clientWorkloadQuery = this.config.clientWorkloadQuery,
-      local clientWorkloadRegex = this.config.clientWorkloadRegex,
-      local serverWorkloadLabel = this.config.serverWorkloadLabel,
-      local serverWorkloadQuery = this.config.serverWorkloadQuery,
-      local serverWorkloadRegex = this.config.serverWorkloadRegex,
-      local overviewLabels = this.config.overviewLabels,
+      local istiodLabel = 'istiod',
+      local gatewayLabel = 'gateway',
+      local proxyLabel = 'proxy',
+      local namespaceLabel = 'namespace',
+      local namespaceQuery = 'query_result(sum(istio_requests_total{job=~"$job", cluster=~"$cluster"}) by (destination_workload_namespace, source_workload_namespace) or sum(istio_tcp_sent_bytes_total{job=~"$job", cluster=~"$cluster"}) by (destination_workload_namespace, source_workload_namespace))',
+      local namespaceRegex = '/(?:destination|source)_workload_namespace="([^"]*)/g',
+      local serviceLabel = 'service',
+      local serviceQuery = 'query_result(sum(istio_requests_total{job=~"$job", cluster=~"$cluster", source_workload_namespace=~"$namespace"}) by (source_canonical_service) or sum(istio_requests_total{job=~"$job", cluster=~"$cluster", destination_workload_namespace=~"$namespace"}) by (destination_canonical_service) or sum(istio_tcp_sent_bytes_total{job=~"$job", cluster=~"$cluster", source_workload_namespace=~"$namespace"}) by (source_canonical_service) or sum(istio_tcp_sent_bytes_total{job=~"$job", cluster=~"$cluster", destination_workload_namespace=~"$namespace"}) by (destination_canonical_service))',
+      local serviceRegex = '/(?:source_canonical_service|destination_canonical_service)="([^"]*)/g',
+      local workloadLabel = 'workload',
+      local workloadQuery = 'query_result(sum by(source_workload) (istio_requests_total{job=~"$job", cluster=~"$cluster", source_workload_namespace=~"$namespace", source_canonical_service=~"$service"}) or sum by(destination_workload) (istio_requests_total{job=~"$job", cluster=~"$cluster", destination_workload_namespace=~"$namespace", destination_service_name=~"$service"}) or sum by(source_workload) (istio_tcp_sent_bytes_total{job=~"$job", cluster=~"$cluster", source_workload_namespace=~"$namespace", source_canonical_service=~"$service"}) or sum by(destination_workload) (istio_tcp_sent_bytes_total{job=~"$job", cluster=~"$cluster", destination_workload_namespace=~"$namespace", destination_service_name=~"$service"}))',
+      local workloadRegex = '/(?:source|destination)_workload="([^"]*)/g',
+      local clientServiceLabel = 'client_service',
+      local clientServiceQuery = 'query_result(sum(istio_requests_total{job=~"$job", cluster=~"$cluster", destination_canonical_service=~"$service"}) by (destination_canonical_service, source_canonical_service) or sum(istio_tcp_received_bytes_total{job=~"$job", cluster=~"$cluster", destination_canonical_service=~"$service"}) by (destination_canonical_service, source_canonical_service))',
+      local clientServiceRegex = '/source_canonical_service="([^"]*)/',
+      local serverServiceLabel = 'server_service',
+      local serverServiceQuery = 'query_result(sum(istio_requests_total{job=~"$job", cluster=~"$cluster", source_canonical_service=~"$service"}) by (destination_canonical_service, source_canonical_service) or sum(istio_tcp_received_bytes_total{job=~"$job", cluster=~"$cluster", source_canonical_service=~"$service"}) by (destination_canonical_service, source_canonical_service))',
+      local serverServiceRegex = '/destination_canonical_service="([^"]*)/',
+      local clientWorkloadLabel = 'client_workload',
+      local clientWorkloadQuery = 'query_result(sum(istio_requests_total{job=~"$job", cluster=~"$cluster", destination_workload=~"$workload"}) by (source_workload) or sum(istio_tcp_received_bytes_total{job=~"$job", cluster=~"$cluster", destination_workload=~"$workload"}) by (source_workload))',
+      local clientWorkloadRegex = '/source_workload="([^"]*)/',
+      local serverWorkloadLabel = 'server_workload',
+      local serverWorkloadQuery = 'query_result(sum(istio_requests_total{job=~"$job", cluster=~"$cluster", source_workload=~"$workload"}) by (destination_workload) or sum(istio_tcp_received_bytes_total{job=~"$job", cluster=~"$cluster", source_workload=~"$workload"}) by (destination_workload))',
+      local serverWorkloadRegex = '/destination_workload="([^"]*)/',
       local groupVarMetric = 'istiod_uptime_seconds',
       local root = self,
+      
       // Generates chained variables to use on on all dashboards
       local groupVariablesFromLabels(groupLabels) =
         local chainVarProto(index, chainVar) =
@@ -159,57 +148,57 @@ local utils = commonlib.utils {
       queriesGroupIstiodSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLPodSelector([istiodLabel]),
+          'pod=~"$' + istiodLabel + '"',
         ],
       queriesGroupGatewaySelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLPodSelector([gatewayLabel]),
+          'pod=~"$' + gatewayLabel + '"',
         ],
       queriesGroupProxySelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLPodSelector([proxyLabel]),
+          'pod=~"$' + proxyLabel + '"',
         ],
       queriesGroupClientServiceSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLClientServiceSelector(namespaceLabel, serviceLabel, serverServiceLabel),
+          'source_workload_namespace=~"$' + namespaceLabel + '",source_canonical_service=~"$' + serviceLabel + '",destination_canonical_service=~"$' + serverServiceLabel + '"',
         ],
       queriesGroupServerServiceSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLServerServiceSelector(namespaceLabel, serviceLabel, clientServiceLabel),
+          'destination_workload_namespace=~"$' + namespaceLabel + '",destination_canonical_service=~"$' + serviceLabel + '",source_canonical_service=~"$' + clientServiceLabel + '"',
         ],
       queriesGroupSourceServiceSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLSourceServiceSelector(namespaceLabel, serviceLabel),
+          'source_workload_namespace=~"$' + namespaceLabel + '",source_canonical_service=~"$' + serviceLabel + '"'
         ],
       queriesGroupDestinationServiceSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLDestinationServiceSelector(namespaceLabel, serviceLabel),
+          'destination_workload_namespace=~"$' + namespaceLabel + '",destination_canonical_service=~"$' + serviceLabel + '"',
         ],
       queriesGroupClientWorkloadSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLClientWorkloadSelector(namespaceLabel, workloadLabel, serverWorkloadLabel),
+          'source_workload_namespace=~"$' + namespaceLabel + '",source_workload=~"$' + workloadLabel + '",destination_workload=~"$' + serverWorkloadLabel + '"'
         ],
       queriesGroupServerWorkloadSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLServerWorkloadSelector(namespaceLabel, workloadLabel, clientWorkloadLabel),
+          'destination_workload_namespace=~"$' + namespaceLabel + '",destination_workload=~"$' + workloadLabel + '",source_workload=~"$' + clientWorkloadLabel + '"',
         ],
       queriesGroupSourceWorkloadSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLSourceWorkloadSelector(namespaceLabel, workloadLabel),
+          'source_workload_namespace=~"$' + namespaceLabel + '",source_workload=~"$' + workloadLabel + '"',
         ],
       queriesGroupDestinationWorkloadSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          utils.labelsToPromQLDestinationWorkloadSelector(namespaceLabel, workloadLabel),
+          'destination_workload_namespace=~"$' + namespaceLabel + '",destination_workload=~"$' + workloadLabel + '"',
         ],
     }
 }

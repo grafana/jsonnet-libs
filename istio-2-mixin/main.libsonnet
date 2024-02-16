@@ -33,7 +33,5 @@ local variables = import './variables.libsonnet';
       alerts: alerts.new(this),
       recordingRules: {},
     },
-
   },
-
 }

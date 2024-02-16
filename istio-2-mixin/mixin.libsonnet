@@ -8,7 +8,7 @@ local istio =
       uid: 'istio',
       groupLabels: ['job', 'cluster'],
       // disable loki logs
-      enableLokiLogs: false,
+      enableLokiLogs: true,
     }
   );
 

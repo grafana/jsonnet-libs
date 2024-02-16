@@ -1,6 +1,12 @@
 {
   new(this): {
-    local istioAlerts = [
+    local reporterSourceFilter = 'reporter="source"',
+    local grpcResponseStatusErrorFilter = 'grpc_response_status=~"[1-9]\\\\d*"',
+    local grpcResponseStatusFilter = 'grpc_response_status=~"[0-9]\\\\d*"',
+    local requestProtocolHTTPFilter = 'request_protocol="http"',
+    local httpResponseCodeErrorFilter = 'request_protocol="http", response_code=~"[45].+"',
+
+    groups: [
       {
         alert: 'IstioHighCPUUsageWarning',
         expr: |||
@@ -39,7 +45,7 @@
           sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_request_duration_milliseconds_sum{%(filteringSelector)s, %(reporterSourceFilter)s}[5m]))
           /
           clamp_min(sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_request_duration_milliseconds_count{%(filteringSelector)s, %(reporterSourceFilter)s}[5m])), 1) > %(alertsWarningHighRequestLatency)s
-        ||| % this.config,
+        ||| % this.config { reporterSourceFilter: reporterSourceFilter },
         'for': '5m',
         labels: {
           severity: 'warning',
@@ -105,7 +111,7 @@
           100 * sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_requests_total{%(filteringSelector)s, %(reporterSourceFilter)s, %(httpResponseCodeErrorFilter)s}[5m]))
           /
           clamp_min(sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_requests_total{%(filteringSelector)s, %(reporterSourceFilter)s, %(requestProtocolHTTPFilter)s}[5m])), 1) > %(alertsCriticalHTTPRequestErrorPercentage)s
-        ||| % this.config,
+        ||| % this.config { reporterSourceFilter: reporterSourceFilter, httpResponseCodeErrorFilter: httpResponseCodeErrorFilter, requestProtocolHTTPFilter: requestProtocolHTTPFilter },
         'for': '5m',
         labels: {
           severity: 'critical',
@@ -113,7 +119,7 @@
         annotations: {
           summary: 'There are a high number of HTTP request errors in the Istio system.',
           description: |||
-            HTTP requests from Istio service {{$labels.source_canonical_service}} to service {{$labels.destination_canonical_service}} on cluster {{$labels.cluster}} have an error rate above {{ printf "%%.0f" $value }}%%, which is above the threshold of %(alertsCriticalHTTPRequestErrorPercentage)%%.
+            HTTP requests from Istio service {{$labels.source_canonical_service}} to service {{$labels.destination_canonical_service}} on cluster {{$labels.cluster}} have an error rate above {{ printf "%%.0f" $value }}%%, which is above the threshold of %(alertsCriticalHTTPRequestErrorPercentage)s%%.
           ||| % this.config,
         },
       },
@@ -123,7 +129,7 @@
           100 * sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_requests_total{%(filteringSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusErrorFilter)s}[5m]))
           /
           clamp_min(sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_requests_total{%(filteringSelector)s, %(reporterSourceFilter)s, %(grpcResponseStatusFilter)s}[5m])), 1) > %(alertsCriticalGRPCRequestErrorPercentage)s
-        ||| % this.config,
+        ||| % this.config { reporterSourceFilter: reporterSourceFilter, grpcResponseStatusErrorFilter: grpcResponseStatusErrorFilter, grpcResponseStatusFilter: grpcResponseStatusFilter },
         'for': '5m',
         labels: {
           severity: 'critical',
@@ -131,7 +137,7 @@
         annotations: {
           summary: 'There are a high number of GRPC request errors in the Istio system.',
           description: |||
-            GRPC requests from Istio service {{$labels.source_canonical_service}} to service {{$labels.destination_canonical_service}} on cluster {{$labels.cluster}} have an error rate above {{ printf "%%.0f" $value }}%%, which is above the threshold of %(alertsCriticalGRPCRequestErrorPercentage)%%.
+            GRPC requests from Istio service {{$labels.source_canonical_service}} to service {{$labels.destination_canonical_service}} on cluster {{$labels.cluster}} have an error rate above {{ printf "%%.0f" $value }}%%, which is above the threshold of %(alertsCriticalGRPCRequestErrorPercentage)s%%.
           ||| % this.config,
         },
       },
