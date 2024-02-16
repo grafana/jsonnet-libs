@@ -1,0 +1,82 @@
+local g = import './g.libsonnet';
+local prometheusQuery = g.query.prometheus;
+
+{
+  new(this): {
+    local variables = this.grafana.variables,
+
+    uptimeQuery:: 'openldap_monitored_object{job=~"$job", instance=~"$instance", dn="cn=Uptime,cn=Time,cn=Monitor"}',
+    referralsQuery:: 'openldap_monitor_counter_object{job=~"$job", instance=~"$instance", dn="cn=Referrals,cn=Statistics,cn=Monitor"}',
+    directoryEntriesQuery(interval):: 'increase(openldap_monitor_counter_object{job=~"$job", instance=~"$instance", dn="cn=Entries,cn=Statistics,cn=Monitor"}[%s])' % interval,
+    connectionsQuery(interval):: 'increase(openldap_monitor_counter_object{job=~"$job", instance=~"$instance", dn="cn=Current,cn=Connections,cn=Monitor"}[%s])' % interval,
+    waitersQuery(type):: 'openldap_monitor_counter_object{job=~"$job", instance=~"$instance", dn="cn=%s,cn=Waiters,cn=Monitor"}' % type,
+    networkConnectivityQuery(interval):: 'increase(openldap_dial{job=~"$job", instance=~"$instance"}[%s])' % interval,
+    pduProcessedQuery(interval):: 'increase(openldap_monitor_counter_object{job=~"$job", instance=~"$instance", dn="cn=PDU,cn=Statistics,cn=Monitor"}[%s])' % interval,
+    authenticationAttemptsQuery(interval):: 'increase(openldap_bind{job=~"$job", instance=~"$instance"}[%s])' % interval,
+    coreOperationsQuery(operation, interval):: 'increase(openldap_monitor_operation{job=~"$job", instance=~"$instance", dn="cn=%s,cn=Operations,cn=Monitor"}[%s])' % [operation, interval],
+    auxiliaryOperationsQuery(operation, interval):: 'increase(openldap_monitor_operation{job=~"$job", instance=~"$instance", dn="cn=%s,cn=Operations,cn=Monitor"}[%s])' % [operation, interval],
+    primaryThreadActivityQuery:: 'openldap_monitored_object{job=~"$job", instance=~"$instance", dn="cn=Open,cn=Threads,cn=Monitor"}',
+    threadQueueManagementQuery(type):: 'openldap_monitored_object{job=~"$job", instance=~"$instance", dn="cn=%s,cn=Threads,cn=Monitor"}' % type,
+
+    uptime:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.uptimeQuery + '{%(queriesSelector)s}' % variables,
+      ),
+    referrals:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.referralsQuery + '{%(queriesSelector)s}' % variables,
+      ),
+    directoryEntries(interval):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.directoryEntriesQuery(interval) + '{%(queriesSelector)s}' % variables,
+      ),
+    connections(interval):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.connectionsQuery(interval) + '{%(queriesSelector)s}' % variables,
+      ),
+    waiters(type):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.waitersQuery(type) + '{%(queriesSelector)s}' % variables,
+      ),
+    networkConnectivity(interval):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.networkConnectivityQuery(interval) + '{%(queriesSelector)s}' % variables,
+      ),
+    pduProcessed(interval):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.pduProcessedQuery(interval) + '{%(queriesSelector)s}' % variables,
+      ),
+    authenticationAttempts(interval):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.authenticationAttemptsQuery(interval) + '{%(queriesSelector)s}' % variables,
+      ),
+    coreOperations(operation, interval):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.coreOperationsQuery(operation, interval) + '{%(queriesSelector)s}' % variables,
+      ),
+    auxiliaryOperations(operation, interval):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.auxiliaryOperationsQuery(operation, interval) + '{%(queriesSelector)s}' % variables,
+      ),
+    primaryThreadActivity:
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.primaryThreadActivityQuery + '{%(queriesSelector)s}' % variables,
+      ),
+    threadQueueManagement(type):
+      prometheusQuery.new(
+        '${' + variables.datasources.prometheus.name + '}',
+        self.threadQueueManagementQuery(type) + '{%(queriesSelector)s}' % variables,
+      ),
+  },
+}
