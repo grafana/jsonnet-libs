@@ -17,7 +17,7 @@
             annotations: {
               summary: 'May indicate a bottleneck in connection pooling where too many clients are waiting for available server connections.',
               description: |||
-                The number of clients waiting connections on {{ $labels.instance }} is now above %(alertsHighClientWaitingConnections)s. The current value is {{ $value | printf "%%.2f" }}.
+                The number of clients waiting for connections on {{ $labels.instance }} is now above %(alertsHighClientWaitingConnections)s. The current value is {{ $value | printf "%%.2f" }}.
               ||| % this.config,
             },
           },
