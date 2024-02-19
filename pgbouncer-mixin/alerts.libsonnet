@@ -76,12 +76,12 @@
             ||| % this.config,
             'for': '10m',
             labels: {
-              severity: 'critical',
+              severity: 'warning',
             },
             annotations: {
               summary: 'A significant spike over the average peak in network traffic may indicate unusual activity or an increase in load.',
               description: |||
-                An increase in network traffic was detected on {{ $labels.instance }}, the increase is above %(alertsHighNetworkTraffic)s%% of the average in the past 10 minutes. The current increase detected is {{ $value | printf "%%.2f" }}.
+                Network traffic increased by {{ $value | printf "%%.2f" }} compared to past ten minutes average on {{ $labels.instance }}. The increase is above the alert threshold of %(alertsHighNetworkTraffic)s%%.
               ||| % this.config,
             },
           },
