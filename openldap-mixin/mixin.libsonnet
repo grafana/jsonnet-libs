@@ -1,6 +1,6 @@
 // openldap-mixin/mixin.libsonnet
-local openldapobservlib = import '../openldap-observ-lib/main.libsonnet';
-local alerts = import './alerts/alerts.libsonnet';
+local openldapobservlib = import './main.libsonnet';
+local alerts = import './alerts.libsonnet';
 local g = import './g.libsonnet';
 local var = g.dashboard.variable;
 
@@ -40,7 +40,7 @@ local selectedDashboards = {
 };
 
 {
-  grafanaDashboards+:: selectedDashboards,
-  prometheusAlerts+:: alerts,
+  grafanaDashboards+:: openldapmixin.grafana.dashboards,
+  prometheusAlerts+:: openldapmixin.prometheus.alerts,
   prometheusRules+:: openldapmixin.prometheus.recordingRules,
 }
