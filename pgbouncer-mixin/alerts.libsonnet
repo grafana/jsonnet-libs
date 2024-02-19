@@ -15,7 +15,7 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'May indicate a bottleneck in connection pooling, where too many clients are waiting for available server connections,',
+              summary: 'May indicate a bottleneck in connection pooling where too many clients are waiting for available server connections.',
               description: |||
                 The number of clients waiting connections on {{ $labels.instance }} is now above %(alertsHighClientWaitingConnections)s. The current value is {{ $value | printf "%%.2f" }}.
               ||| % this.config,
@@ -33,7 +33,7 @@
             annotations: {
               summary: 'Clients are experiencing significant delays, which could indicate issues with connection pool saturation or server performance.',
               description: |||
-                User connection capacity on {{ $labels.instance }}, is above %(alertsHighClientWaitTime)s. The current value is {{ $value | printf "%%.2f" }}.
+                The wait time for user connections on {{ $labels.instance }}, is above %(alertsHighClientWaitTime)s. The current value is {{ $value | printf "%%.2f" }}.
               ||| % this.config,
             },
           },
@@ -49,7 +49,7 @@
             annotations: {
               summary: 'PGBouncer is nearing user connection capacity.',
               description: |||
-                'User connection capacity on {{ $labels.instance }}, is above %(alertsHighServerConnectionSaturationWarning)s%%. The current value is {{ $value | printf "%%.2f" }}.
+                User connection capacity on {{ $labels.instance }}, is above %(alertsHighServerConnectionSaturationWarning)s%%. The current value is {{ $value | printf "%%.2f" }}.
               ||| % this.config,
             },
           },
@@ -65,7 +65,7 @@
             annotations: {
               summary: 'PGBouncer is nearing critical levels of user connection capacity.',
               description: |||
-                'User connection capacity on {{ $labels.instance }}, is above %(alertsHighServerConnectionSaturationCritical)s%%. The current value is {{ $value | printf "%%.2f" }}.
+                User connection capacity on {{ $labels.instance }}, is above %(alertsHighServerConnectionSaturationCritical)s%%. The current value is {{ $value | printf "%%.2f" }}.
               ||| % this.config,
             },
           },
