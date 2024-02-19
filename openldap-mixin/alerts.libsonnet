@@ -1,6 +1,6 @@
 {
   new(this): {
-    local OpenLDAPAlerts = [
+    groups: [
       {
         alert: 'OpenLDAPConnectionSpike',
         expr: |||
