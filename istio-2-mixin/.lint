@@ -13,3 +13,10 @@ exclusions:
     reason: "Not required for logs volume"
   panel-units-rule:
     reason: "Logs volume has no unit"
+  target-instance-rule:
+      reason: "Istio dashboards don't focus on instances"
+      entries:
+        - dashboard: "Istio overview"
+        - dashboard: "Istio services overview"
+        - dashboard: "Istio workloads overview"
+        - dashboard: "Istio logs"

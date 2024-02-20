@@ -34,7 +34,7 @@ local utils = commonlib.utils;
       local serverWorkloadRegex = '/destination_workload="([^"]*)/',
       local groupVarMetric = 'istiod_uptime_seconds',
       local root = self,
-      
+
       // Generates chained variables to use on on all dashboards
       local groupVariablesFromLabels(groupLabels) =
         local chainVarProto(index, chainVar) =
@@ -49,7 +49,7 @@ local utils = commonlib.utils;
           )
           + var.query.selectionOptions.withIncludeAll(
             value=true,
-            customAllValue='.+'
+            customAllValue='.+',
           )
           + var.query.selectionOptions.withMulti(
             true,
@@ -59,7 +59,7 @@ local utils = commonlib.utils;
             i=1,
             type='alphabetical',
             asc=true,
-            caseInsensitive=false
+            caseInsensitive=false,
           );
         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels, [])),
       datasources: {
@@ -75,45 +75,47 @@ local utils = commonlib.utils;
           + var.datasource.generalOptions.showOnDashboard.withNothing(),
       },
       local createOverviewVariable(name, displayName, metric, selector) =
-        local variable = var.query.new(name)
-        + var.query.withDatasourceFromVariable(root.datasources.prometheus)
-        + var.query.queryTypes.withLabelValues(
-          'pod',
-          '%s{%s}' % [metric, selector],
-        )
-        + var.query.generalOptions.withLabel(displayName)
-        + var.query.selectionOptions.withIncludeAll(
-          value=true,
-        )
-        + var.query.selectionOptions.withMulti(
-          true,
-        )
-        + var.query.refresh.onTime()
-        + var.query.withSort(
-          i=1,
-          type='alphabetical',
-          asc=true,
-          caseInsensitive=false
-        );
+        local variable =
+          var.query.new(name)
+          + var.query.withDatasourceFromVariable(root.datasources.prometheus)
+          + var.query.queryTypes.withLabelValues(
+            'pod',
+            '%s{%s}' % [metric, selector],
+          )
+          + var.query.generalOptions.withLabel(displayName)
+          + var.query.selectionOptions.withIncludeAll(
+            value=true,
+          )
+          + var.query.selectionOptions.withMulti(
+            true,
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false,
+          );
         [variable],
       local createQueryVariable(name, displayName, query, regex, includeAll) =
-        local variable = var.query.new(name, query)
-        + var.query.generalOptions.withLabel(displayName)
-        + var.query.withDatasourceFromVariable(root.datasources.prometheus)
-        + var.query.withRegex(regex)
-        + var.query.selectionOptions.withIncludeAll(
-          value=if (!includeAll) then false else true,
-        )
-        + var.query.selectionOptions.withMulti(
-          true,
-        )
-        + var.query.refresh.onTime()
-        + var.query.withSort(
-          i=1,
-          type='alphabetical',
-          asc=true,
-          caseInsensitive=false
-        );
+        local variable =
+          var.query.new(name, query)
+          + var.query.generalOptions.withLabel(displayName)
+          + var.query.withDatasourceFromVariable(root.datasources.prometheus)
+          + var.query.withRegex(regex)
+          + var.query.selectionOptions.withIncludeAll(
+            value=if (!includeAll) then false else true,
+          )
+          + var.query.selectionOptions.withMulti(
+            true,
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false,
+          );
         [variable],
       overviewVariables:
         [root.datasources.prometheus]
@@ -138,9 +140,9 @@ local utils = commonlib.utils;
         + createQueryVariable(serverWorkloadLabel, 'Server workload', serverWorkloadQuery, serverWorkloadRegex, true),
 
       queriesGroupSelectorAdvanced:
-         '%s' % [
-           utils.labelsToPromQLSelectorAdvanced(groupLabels),
-         ],
+        '%s' % [
+          utils.labelsToPromQLSelectorAdvanced(groupLabels),
+        ],
       queriesGroupSelector:
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels),
@@ -173,7 +175,7 @@ local utils = commonlib.utils;
       queriesGroupSourceServiceSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          'source_workload_namespace=~"$' + namespaceLabel + '",source_canonical_service=~"$' + serviceLabel + '"'
+          'source_workload_namespace=~"$' + namespaceLabel + '",source_canonical_service=~"$' + serviceLabel + '"',
         ],
       queriesGroupDestinationServiceSelector:
         '%s,%s' % [
@@ -183,7 +185,7 @@ local utils = commonlib.utils;
       queriesGroupClientWorkloadSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          'source_workload_namespace=~"$' + namespaceLabel + '",source_workload=~"$' + workloadLabel + '",destination_workload=~"$' + serverWorkloadLabel + '"'
+          'source_workload_namespace=~"$' + namespaceLabel + '",source_workload=~"$' + workloadLabel + '",destination_workload=~"$' + serverWorkloadLabel + '"',
         ],
       queriesGroupServerWorkloadSelector:
         '%s,%s' % [
@@ -200,5 +202,5 @@ local utils = commonlib.utils;
           utils.labelsToPromQLSelector(groupLabels),
           'destination_workload_namespace=~"$' + namespaceLabel + '",destination_workload=~"$' + workloadLabel + '"',
         ],
-    }
+    },
 }

@@ -15,13 +15,13 @@
 
   // Alert thresholds
   alertsWarningHighCPUUsage: 70,  //%
-  alertsCriticalHighCPUUsage: 90, //%
+  alertsCriticalHighCPUUsage: 90,  //%
   alertsWarningHighRequestLatency: 4000,
   alertsWarningGalleyValidationFailures: 0,
   alertsCriticalListenerConfigConflicts: 0,
   alertsWarningXDSConfigRejections: 0,
-  alertsCriticalHTTPRequestErrorPercentage: 5, //%
-  alertsCriticalGRPCRequestErrorPercentage: 5, //%
+  alertsCriticalHTTPRequestErrorPercentage: 5,  //%
+  alertsCriticalGRPCRequestErrorPercentage: 5,  //%
 
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations

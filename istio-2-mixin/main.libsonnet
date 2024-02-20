@@ -1,8 +1,6 @@
 local alerts = import './alerts.libsonnet';
-local annotations = import './annotations.libsonnet';
 local config = import './config.libsonnet';
 local dashboards = import './dashboards.libsonnet';
-local datasources = import './datasources.libsonnet';
 local g = import './g.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
@@ -23,7 +21,7 @@ local variables = import './variables.libsonnet';
     grafana: {
       variables: variables.new(this),
       targets: targets.new(this),
-      annotations: annotations.new(this),
+      annotations: {},
       links: links.new(this),
       panels: panels.new(this),
       dashboards: dashboards.new(this),
