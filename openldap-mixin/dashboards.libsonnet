@@ -40,7 +40,6 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
         + root.applyCommon(vars.multiInstance, uid + '-overview', tags, links, annotations, timezone, refresh, period),
     }
     +
-
     (if this.config.enableLokiLogs then
        {
          'logs-overview.json':

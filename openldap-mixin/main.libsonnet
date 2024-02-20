@@ -6,6 +6,7 @@ local panels = import './panels.libsonnet';
 local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
+local link = g.dashboard.link;
 
 {
   new(
@@ -54,16 +55,23 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       // Define any common links or annotations if needed
       links: {
-        local link = g.dashboard.link,
-        backToOverview:
-          link.link.new('Back to OpenLDAP overview', '/d/' + this.grafana.dashboards.overview.uid)
-          + link.link.options.withKeepTime(true),
-        otherDashboards:
-          link.dashboards.new('All OpenLDAP dashboards', this.config.dashboardTags)
-          + link.dashboards.options.withIncludeVars(true)
-          + link.dashboards.options.withKeepTime(true)
-          + link.dashboards.options.withAsDropdown(true),
-      },
+               local link = g.dashboard.link,
+               backToOverview:
+                 link.link.new('Back to OpenLDAP overview', '/d/' + this.grafana.dashboards.overview.uid)
+                 + link.link.options.withKeepTime(true),
+               otherDashboards:
+                 link.dashboards.new('All OpenLDAP dashboards', this.config.dashboardTags)
+                 + link.dashboards.options.withIncludeVars(true)
+                 + link.dashboards.options.withKeepTime(true)
+                 + link.dashboards.options.withAsDropdown(true),
+             }
+             +
+             if this.config.enableLokiLogs then
+               {
+                 logs:
+                   link.link.new('OpenLDAP logs', '/d/' + this.grafana.dashboards.logs.uid)
+                   + link.link.options.withKeepTime(true),
+               },
       annotations: {/* ... */ },
     },
 

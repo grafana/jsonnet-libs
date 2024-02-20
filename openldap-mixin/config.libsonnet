@@ -21,5 +21,6 @@
     alertsCriticalBindFailureRateIncrease: 50,
 
     enableLokiLogs: true,
+    showLogsVolume: true,
   },
 }

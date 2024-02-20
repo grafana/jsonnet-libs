@@ -1,6 +1,6 @@
 {
   new(this): {
-    groups: [
+    local groups = [
       {
         alert: 'OpenLDAPConnectionSpike',
         expr: |||
