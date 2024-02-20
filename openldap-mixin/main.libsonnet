@@ -64,12 +64,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + link.dashboards.options.withKeepTime(true)
           + link.dashboards.options.withAsDropdown(true),
       },
-      annotations: { /* ... */ },
+      annotations: {/* ... */ },
     },
 
     prometheus: {
       alerts: alerts.new(this),
-      recordingRules: { /* ... */ }, // Include if you have specific recording rules
+      recordingRules: {/* ... */ },
     },
   },
 }

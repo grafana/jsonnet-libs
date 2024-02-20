@@ -4,6 +4,7 @@ local prometheusQuery = g.query.prometheus;
 {
   new(this): {
     local variables = this.grafana.variables,
+    local panel = g.panel,
 
     uptimeQuery:: 'openldap_monitored_object{job=~"$job", instance=~"$instance", dn="cn=Uptime,cn=Time,cn=Monitor"}',
     referralsQuery:: 'openldap_monitor_counter_object{job=~"$job", instance=~"$instance", dn="cn=Referrals,cn=Statistics,cn=Monitor"}',
@@ -22,61 +23,80 @@ local prometheusQuery = g.query.prometheus;
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.uptimeQuery + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}}'),
     referrals:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.referralsQuery + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}}'),
     directoryEntries(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.directoryEntriesQuery(interval) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}}')
+      + panel.timeSeries.queryOptions.withInterval('1m'),
     connections(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.connectionsQuery(interval) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}}')
+      + panel.timeSeries.queryOptions.withInterval('1m'),
     waiters(type):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.waitersQuery(type) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}} - ' + type),
     networkConnectivity(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.networkConnectivityQuery(interval) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}}')
+      + panel.timeSeries.queryOptions.withInterval('1m'),
     pduProcessed(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.pduProcessedQuery(interval) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}}')
+      + panel.timeSeries.queryOptions.withInterval('1m'),
     authenticationAttempts(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.authenticationAttemptsQuery(interval) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}}')
+      + panel.timeSeries.queryOptions.withInterval('1m'),
     coreOperations(operation, interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.coreOperationsQuery(operation, interval) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}} - ' + operation)
+      + panel.timeSeries.queryOptions.withInterval('1m'),
     auxiliaryOperations(operation, interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.auxiliaryOperationsQuery(operation, interval) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}} - ' + operation)
+      + panel.timeSeries.queryOptions.withInterval('1m'),
     primaryThreadActivity:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.primaryThreadActivityQuery + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}} - open'),
     threadQueueManagement(type):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.threadQueueManagementQuery(type) + '{%(queriesSelector)s}' % variables,
-      ),
+      )
+      + prometheusQuery.withLegendFormat('{{instance}} - ' + type),
   },
 }

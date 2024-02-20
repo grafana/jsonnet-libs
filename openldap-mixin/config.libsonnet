@@ -10,7 +10,7 @@
     uid: 'openldap',
     // prefix dashboards titles
     dashboardNamePrefix: '',
-    dashboardTags: ['openldap'],
+    dashboardTags: ['openldap-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
@@ -19,7 +19,7 @@
     alertsWarningHighSearchOperationRateSpike: 100,
     alertsCriticalDialFailureRateIncrease: 50,
     alertsCriticalBindFailureRateIncrease: 50,
-    // set to false to disable logs dashboard and logs annotations
-    enableLokiLogs: false,
+
+    enableLokiLogs: true,
   },
 }

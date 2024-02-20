@@ -1,7 +1,6 @@
-// openldap-mixin/mixin.libsonnet
-local openldapobservlib = import './main.libsonnet';
 local alerts = import './alerts.libsonnet';
 local g = import './g.libsonnet';
+local openldapobservlib = import './main.libsonnet';
 local var = g.dashboard.variable;
 
 local openldapmixin =
@@ -18,7 +17,7 @@ local openldapmixin =
       local link = g.dashboard.link,
       links: {
         otherDashboards:
-          link.dashboards.new('All OpenLDAP dashboards', openldapmixin.config.dashboardTags)
+          link.dashboards.new('Other OpenLDAP dashboards', openldapmixin.config.dashboardTags)
           + link.dashboards.options.withIncludeVars(true)
           + link.dashboards.options.withKeepTime(true)
           + link.dashboards.options.withAsDropdown(true),
@@ -32,7 +31,7 @@ local openldapmixin =
     },
   };
 
-local openldapdashboards = ['openldap-overview', 'logs'];
+local openldapdashboards = ['openldap-overview', 'openldap-logs-overview'];
 local selectedDashboards = {
   [key]: openldapmixin.grafana.dashboards[key]
   for key in openldapdashboards
