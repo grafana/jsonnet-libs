@@ -71,6 +71,11 @@ local utils = commonlib.utils {
                    filteringSelector,
                    utils.labelsToPromQLSelector(groupLabels + instanceLabels),
                  ],
+
+               queriesGroupSelectorAdvanced:
+                 '%s' % [
+                   utils.labelsToPromQLSelectorAdvanced(groupLabels),
+                 ],
              }
              + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
   withLokiLogs(this): {
