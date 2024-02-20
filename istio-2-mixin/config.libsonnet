@@ -3,7 +3,6 @@
   filteringSelector: 'job=~"integrations/istio"',
   // Used to identify 'group' of instances.
   groupLabels: ['job', 'cluster'],
-  instanceLabels: ['instance'],
 
   // Prefix all dashboards uids and alert groups
   uid: 'istio',
@@ -27,7 +26,7 @@
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations
   enableLokiLogs: true,
-  extraLogLabels: ['protocol', 'request_method', 'response_code'],
+  extraLogLabels: ['pod', 'protocol', 'request_method', 'response_code'],
   logsVolumeGroupBy: 'response_code',
   showLogsVolume: true,
 }

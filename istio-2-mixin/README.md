@@ -32,7 +32,7 @@ The Istio services overview dashboard provides details on HTTP/GRPC throughput, 
 ![Istio services overview dashboard (workloads)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_services_overview_3.png)
 
 ## Istio workloads overview
-The Istio overview dashboard provides details on HTTP/GRPC throughput, HTTP/GRPC response time, and TCP throughput for workloads acting in both client and server roles.
+The Istio workloads overview dashboard provides details on HTTP/GRPC throughput, HTTP/GRPC response time, and TCP throughput for workloads acting in both client and server roles.
 ![Istio workloads overview dashboard (client)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_workloads_overview_1.png)
 ![Istio workloads overview dashboard (server)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_workloads_overview_2.png)
 ![Istio workloads overview dashboard (server TCP)](https://storage.googleapis.com/grafanalabs-integration-assets/istio/screenshots/istio_workloads_overview_3.png)
@@ -138,7 +138,7 @@ For the selectors to properly work with the Istio logs ingested into your logs d
 
   loki.source.kubernetes "envoy_proxies" {
     targets    = discovery.relabel.envoy_proxies_logs_filter.output
-    forward_to = [loki.process.istio.receiver]
+    forward_to = [loki.process.istio_access.receiver, loki.process.istio_system.receiver]
   }
 
   discovery.relabel "envoy_proxies_logs_filter" {
@@ -173,10 +173,32 @@ For the selectors to properly work with the Istio logs ingested into your logs d
       target_label  = "cluster"
       replacement   = "<your-cluster-name>"
     }
+
+    rule {
+      action = "replace"
+      source_labels = ["__meta_kubernetes_pod_name"]
+      target_label  = "pod"
+    }
   }
 
-  loki.process "istio" {
+  loki.process "istio_system" {
+    forward_to = [loki.write.cloud.receiver]
+
+    stage.drop {
+      expression = "^\\[.*"
+    }
+
+    stage.multiline {
+      firstline = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}"
+    }
+  }
+
+  loki.process "istio_access" {
     forward_to = [loki.write.<name>.receiver]
+
+    stage.drop {
+      expression = "^[^\\[].*"
+    }
 
     stage.regex {
       expression = "\\[\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z\\] \"(?P<request_method>\\w+) \\S+ (?P<protocol>\\S+)\" (?P<response_code>\\d+) .+"

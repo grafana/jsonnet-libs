@@ -46,7 +46,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { overview+:: {} }, annotations, timezone, refresh, period),
       servicesOverview:
         g.dashboard.new(prefix + 'Istio services overview')
         + g.dashboard.withPanels(
@@ -80,7 +80,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.serviceOverviewVariables, uid + '-services-overview', tags, links { backToServicesOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.serviceOverviewVariables, uid + '-services-overview', tags, links { servicesOverview+:: {} }, annotations, timezone, refresh, period),
       workloadsOverview:
         g.dashboard.new(prefix + 'Istio workloads overview')
         + g.dashboard.withPanels(
@@ -112,7 +112,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.workloadOverviewVariables, uid + '-workloads-overview', tags, links { backToWorkloadsOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.workloadOverviewVariables, uid + '-workloads-overview', tags, links { workloadsOverview+:: {} }, annotations, timezone, refresh, period),
     }
     +
     if this.config.enableLokiLogs then
@@ -123,7 +123,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             datasourceName=this.grafana.variables.datasources.loki.name,
             datasourceRegex=this.grafana.variables.datasources.loki.regex,
             filterSelector=this.config.filteringSelector,
-            labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
+            labels=this.config.groupLabels + this.config.extraLogLabels,
             formatParser=null,
             showLogsVolume=this.config.showLogsVolume,
             logsVolumeGroupBy=this.config.logsVolumeGroupBy,
@@ -133,7 +133,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               {
                 logs+:
                   // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
-                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
               },
             panels+:
               {
@@ -152,6 +152,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           }.dashboards.logs,
       }
     else {},
+
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)

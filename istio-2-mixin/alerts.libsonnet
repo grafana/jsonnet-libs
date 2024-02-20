@@ -85,7 +85,7 @@
         annotations: {
           summary: 'Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.',
           description: |||
-            {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%%.0f" $value }} inbound and or outbound listener conflicts reported from envoy proxies, which is above the thresold of %(alertsCriticalListenerConfigConflicts)s.
+            {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%%.0f" $value }} inbound and or outbound listener conflicts reported from envoy proxies, which is above the threshold of %(alertsCriticalListenerConfigConflicts)s.
           ||| % this.config,
         },
       },
@@ -101,7 +101,7 @@
         annotations: {
           summary: 'Istio Pilot is seeing a number of xDS rejections from envoy proxies.',
           description: |||
-            {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%%.0f" $value }} xDS rejections from envoy proxies, which is above the thresold of %(alertsWarningXDSConfigRejections)s.
+            {{$labels.pod}} on cluster {{$labels.cluster}} has had {{ printf "%%.0f" $value }} xDS rejections from envoy proxies, which is above the threshold of %(alertsWarningXDSConfigRejections)s.
           ||| % this.config,
         },
       },
