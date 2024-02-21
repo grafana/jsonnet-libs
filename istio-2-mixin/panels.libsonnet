@@ -134,7 +134,7 @@ local utils = commonlib.utils;
           mode: 'normal',
         }),
       virtualAndResidentMemory:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usageBytes.new(
           'Virtual & resident memory',
           targets=[
             t.istiodVirtualMemory,
@@ -153,7 +153,7 @@ local utils = commonlib.utils;
         })
         + timeSeries.standardOptions.withUnit('bytes'),
       heapMemory:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usageBytes.new(
           'Heap memory',
           targets=[
             t.istiodHeapAllocated,

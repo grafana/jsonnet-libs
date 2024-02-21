@@ -26,7 +26,7 @@
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations
   enableLokiLogs: true,
-  extraLogLabels: ['pod', 'protocol', 'request_method', 'response_code'],
+  extraLogLabels: ['pod', 'log_type', 'protocol', 'request_method', 'response_code', 'level'],
   logsVolumeGroupBy: 'response_code',
   showLogsVolume: true,
 }
