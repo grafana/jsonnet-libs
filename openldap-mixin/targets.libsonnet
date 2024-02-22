@@ -1,5 +1,6 @@
 local g = import './g.libsonnet';
 local prometheusQuery = g.query.prometheus;
+local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
   new(this): {
@@ -24,26 +25,26 @@ local prometheusQuery = g.query.prometheus;
         '${' + variables.datasources.prometheus.name + '}',
         self.uptimeQuery
       )
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('%s' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
     referrals:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.referralsQuery
       )
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('%s' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels)),
     directoryEntries(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.directoryEntriesQuery(interval)
       )
-      + prometheusQuery.withLegendFormat('{{instance}}')
+      + prometheusQuery.withLegendFormat('%s' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels))
       + panel.timeSeries.queryOptions.withInterval('1m'),
     connections(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.connectionsQuery(interval)
       )
-      + prometheusQuery.withLegendFormat('{{instance}}')
+      + prometheusQuery.withLegendFormat('%s' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels))
       + panel.timeSeries.queryOptions.withInterval('1m'),
     waiters(type):
       prometheusQuery.new(
@@ -56,21 +57,21 @@ local prometheusQuery = g.query.prometheus;
         '${' + variables.datasources.prometheus.name + '}',
         self.networkConnectivityQuery(interval)
       )
-      + prometheusQuery.withLegendFormat('{{instance}}')
+      + prometheusQuery.withLegendFormat('%s' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels))
       + panel.timeSeries.queryOptions.withInterval('1m'),
     pduProcessed(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.pduProcessedQuery(interval)
       )
-      + prometheusQuery.withLegendFormat('{{instance}}')
+      + prometheusQuery.withLegendFormat('%s' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels))
       + panel.timeSeries.queryOptions.withInterval('1m'),
     authenticationAttempts(interval):
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
         self.authenticationAttemptsQuery(interval)
       )
-      + prometheusQuery.withLegendFormat('{{instance}}')
+      + prometheusQuery.withLegendFormat('%s' % commonlib.utils.labelsToPanelLegend(this.config.instanceLabels))
       + panel.timeSeries.queryOptions.withInterval('1m'),
     coreOperations(operation, interval):
       prometheusQuery.new(

@@ -10,20 +10,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       local alertListPanel = g.panel.alertList,
 
       // Uptime Panel
-      uptime: commonlib.panels.generic.stat.base.new(
+      uptime: commonlib.panels.generic.stat.info.new(
                 'Uptime',
                 targets=[t.uptime],
                 description='The total time since the LDAP server was last started.'
               )
-              + stat.options.withGraphMode('none')
-              + stat.options.withColorMode('value')
-              + stat.options.withJustifyMode('auto')
-              + stat.options.withOrientation('auto')
-              + stat.options.reduceOptions.withCalcs(['lastNotNull'])
-              + stat.options.reduceOptions.withFields('')
-              + stat.options.reduceOptions.withValues(false)
               + stat.options.withTextMode('value')
-
               + stat.standardOptions.withUnit('s')
               + stat.standardOptions.withMin(0)
               + stat.standardOptions.color.withMode('thresholds')
@@ -33,18 +25,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               ]),
 
       // Referrals Panel
-      referrals: commonlib.panels.generic.stat.base.new(
+      referrals: commonlib.panels.generic.stat.info.new(
                    'Referrals',
                    targets=[t.referrals],
                    description='The number of LDAP referrals.'
                  )
-                 + stat.options.withGraphMode('none')
-                 + stat.options.withColorMode('value')
-                 + stat.options.withJustifyMode('auto')
-                 + stat.options.withOrientation('auto')
-                 + stat.options.reduceOptions.withCalcs(['lastNotNull'])
-                 + stat.options.reduceOptions.withFields('')
-                 + stat.options.reduceOptions.withValues(false)
                  + stat.options.withTextMode('value')
                  + stat.standardOptions.withMin(0)
                  + stat.standardOptions.color.withMode('thresholds')
@@ -213,7 +198,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                                ],
                                description='The active, open, and maximum threads in the LDAP server.'
                              )
-                             + timeSeriesPanel.options.legend.withDisplayMode('list')
+                             + timeSeriesPanel.options.legend.withDisplayMode('table')
                              + timeSeriesPanel.options.legend.withCalcsMixin(['min', 'max', 'mean'])
                              + timeSeriesPanel.options.legend.withPlacement('right')
                              + timeSeriesPanel.options.legend.withShowLegend(true)
@@ -238,7 +223,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                                ],
                                description="The LDAP server's thread backlog and pending status."
                              )
-                             + timeSeriesPanel.options.legend.withDisplayMode('list')
+                             + timeSeriesPanel.options.legend.withDisplayMode('table')
                              + timeSeriesPanel.options.legend.withCalcsMixin(['min', 'max', 'mean'])
                              + timeSeriesPanel.options.legend.withPlacement('right')
                              + timeSeriesPanel.options.legend.withShowLegend(true)
