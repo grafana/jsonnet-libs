@@ -27,5 +27,8 @@
   alertsHighNetworkTraffic: 50,
 
   // logs lib related
-  enableLokiLogs: false,
+  enableLokiLogs: true,
+  extraLogLabels: ['level'],
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
 }

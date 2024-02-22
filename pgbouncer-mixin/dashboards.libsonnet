@@ -47,25 +47,25 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + root.applyCommon(vars.multiInstance, uid + '-overview', tags, links { pgbouncerOverview+:: {} }, annotations, timezone, refresh, period),
     }
     +
-    if this.config.enableLokiLogs
-    then
+    if this.config.enableLokiLogs then
       {
         logs:
-          logslib.new(prefix + 'PgBouncer logs',
-                      datasourceName=this.grafana.variables.datasources.loki.name,
-                      datasourceRegex=this.grafana.variables.datasources.loki.regex,
-                      filterSelector=this.config.filteringSelector,
-                      labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
-                      formatParser=null,
-                      showLogsVolume=this.config.showLogsVolume,
-                      logsVolumeGroupBy=this.config.logsVolumeGroupBy,
-                      extraFilters=this.config.logsExtraFilters)
+          logslib.new(
+            prefix + 'PgBouncer logs',
+            datasourceName=this.grafana.variables.datasources.loki.name,
+            datasourceRegex=this.grafana.variables.datasources.loki.regex,
+            filterSelector=this.config.filteringSelector,
+            labels=this.config.groupLabels + this.config.extraLogLabels,
+            formatParser=null,
+            showLogsVolume=this.config.showLogsVolume,
+            logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+          )
           {
             dashboards+:
               {
                 logs+:
                   // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
-                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
               },
             panels+:
               {
