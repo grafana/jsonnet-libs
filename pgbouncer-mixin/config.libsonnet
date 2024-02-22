@@ -6,7 +6,9 @@
   // 'instanceLabels' - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
   // 'uid' - UID to prefix all dashboards original uids
   filteringSelector: 'job="integrations/pgbouncer"',
-  groupLabels: ['job'],
+  groupLabels: ['job', 'pgbouncer_cluster', 'database'],
+  mainGroupLabels: ['job', 'pgbouncer_cluster'],
+  legendLabels: ['pgbouncer_cluster', 'instance', 'database'],
   instanceLabels: ['instance'],
   dashboardTags: [self.uid],
   uid: 'pgbouncer',
@@ -25,5 +27,5 @@
   alertsHighNetworkTraffic: 50,
 
   // logs lib related
-  enableLokiLogs: true,
+  enableLokiLogs: false,
 }
