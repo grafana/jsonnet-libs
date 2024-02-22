@@ -18,8 +18,8 @@ and the following alerts:
 
 The OpenLDAP cluster overview dashboard provides details on connections, waiters, network connectivity, PDU processes, authentication attempts, operations and threads metrics.
 
-![OpenLDAP Overview Dashboard 1](https://storage.googleapis.com/grafanalabs-integration-assets/openldap/screenshots/openldap-overview-1.png)
-![OpenLDAP Overview Dashboard 2](https://storage.googleapis.com/grafanalabs-integration-assets/openldap/screenshots/openldap-overview-2.png)
+![OpenLDAP Overview Dashboard (connections)](https://storage.googleapis.com/grafanalabs-integration-assets/openldap/screenshots/openldap-overview-1.png)
+![OpenLDAP Overview Dashboard (operations)](https://storage.googleapis.com/grafanalabs-integration-assets/openldap/screenshots/openldap-overview-2.png)
 
 ## OpenLDAP Logs Overview
 

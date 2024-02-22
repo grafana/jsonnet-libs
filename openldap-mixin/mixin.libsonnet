@@ -31,13 +31,6 @@ local openldapmixin =
     },
   };
 
-local openldapdashboards = ['openldap-overview', 'openldap-logs-overview'];
-local selectedDashboards = {
-  [key]: openldapmixin.grafana.dashboards[key]
-  for key in openldapdashboards
-  if key in openldapmixin.grafana.dashboards
-};
-
 {
   grafanaDashboards+:: openldapmixin.grafana.dashboards,
   prometheusAlerts+:: openldapmixin.prometheus.alerts,

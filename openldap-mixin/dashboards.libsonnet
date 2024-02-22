@@ -21,19 +21,19 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.uptime { gridPos+: { w: 8, x: 0, y: 0 } },
-              panels.referrals { gridPos+: { w: 8, x: 8, y: 0 } },
-              panels.alerts { gridPos+: { w: 8, x: 16, y: 0 } },
-              panels.connections { gridPos+: { w: 8, x: 0, y: 8 } },
-              panels.waiters { gridPos+: { w: 8, x: 8, y: 8 } },
-              panels.directoryEntries { gridPos+: { w: 8, x: 16, y: 8 } },
-              panels.networkConnectivity { gridPos+: { w: 8, x: 0, y: 16 } },
-              panels.pduProcessed { gridPos+: { w: 8, x: 8, y: 16 } },
-              panels.authenticationAttempts { gridPos+: { w: 8, x: 16, y: 16 } },
-              panels.coreOperations { gridPos+: { w: 12, x: 0, y: 24 } },
-              panels.auxiliaryOperations { gridPos+: { w: 12, x: 12, y: 24 } },
-              panels.primaryThreadActivity { gridPos+: { w: 12, x: 0, y: 32 } },
-              panels.threadQueueManagement { gridPos+: { w: 12, x: 12, y: 32 } },
+              panels.uptime { gridPos+: { w: 8 } },
+              panels.referrals { gridPos+: { w: 8 } },
+              panels.alerts { gridPos+: { w: 8 } },
+              panels.connections { gridPos+: { w: 8 } },
+              panels.waiters { gridPos+: { w: 8 } },
+              panels.directoryEntries { gridPos+: { w: 8 } },
+              panels.networkConnectivity { gridPos+: { w: 8 } },
+              panels.pduProcessed { gridPos+: { w: 8 } },
+              panels.authenticationAttempts { gridPos+: { w: 8 } },
+              panels.coreOperations { gridPos+: { w: 12 } },
+              panels.auxiliaryOperations { gridPos+: { w: 12 } },
+              panels.primaryThreadActivity { gridPos+: { w: 12 } },
+              panels.threadQueueManagement { gridPos+: { w: 12 } },
             ], 12, 7
           )
         )
