@@ -8,7 +8,7 @@ local pgbouncer =
       uid: 'pgbouncer',
       groupLabels: ['job', 'pgbouncer_cluster', 'database'],
       instanceLabels: ['instance'],
-      enableLokiLogs: false,
+      enableLokiLogs: true,
     }
   );
 
