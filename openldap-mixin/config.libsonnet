@@ -16,9 +16,9 @@
     dashboardRefresh: '1m',
 
     alertsWarningConnectionSpike: 100,
-    alertsWarningHighSearchOperationRateSpike: 100,
-    alertsCriticalDialFailureRateIncrease: 50,
-    alertsCriticalBindFailureRateIncrease: 50,
+    alertsWarningHighSearchOperationRateSpike: 200,
+    alertsWarningDialFailureSpike: 10,
+    alertsWarningBindFailureRateIncrease: 10,
 
     enableLokiLogs: true,
     showLogsVolume: true,

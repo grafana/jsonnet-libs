@@ -26,9 +26,9 @@
             alert: 'OpenLDAPHighSearchOperationRateSpike',
             expr: |||
               100 * (
-                increase(openldap_monitor_operation{dn="cn=Search,cn=Operations,cn=Monitor"}[5m]) 
+                rate(openldap_monitor_operation{dn="cn=Search,cn=Operations,cn=Monitor"}[5m]) 
                 / 
-                clamp_min(avg_over_time(openldap_monitor_operation{dn="cn=Search,cn=Operations,cn=Monitor"}[15m]), 1)
+                clamp_min(rate(openldap_monitor_operation{dn="cn=Search,cn=Operations,cn=Monitor"}[15m] offset 5m), 0.0001)
               ) > %(alertsWarningHighSearchOperationRateSpike)s
             ||| % this.config,
             'for': '5m',
@@ -45,46 +45,38 @@
             },
           },
           {
-            alert: 'OpenLDAPDialFailureRateIncrease',
+            alert: 'OpenLDAPDialFailures',
             expr: |||
-              100 * (
-                increase(openldap_dial{result!="ok"}[10m])
-                /
-                clamp_min(avg_over_time(openldap_dial{result!="ok"}[20m]), 1)
-              ) > %(alertsCriticalDialFailureRateIncrease)s
+              increase(openldap_dial{result!="ok"}[10m]) > %(alertsWarningDialFailureSpike)s
             ||| % this.config,
             'for': '10m',
             labels: {
-              severity: 'critical',
+              severity: 'warning',
             },
             annotations: {
               summary: 'Significant increase in LDAP dial failures indicates network issues, problems with the LDAP service, or configuration errors that may lead to service unavailability.',
               description:
                 (
-                  'LDAP dial failures on instance {{$labels.instance}} have increased by {{ printf "%%.0f" $value }} percent in the last 10 minutes, ' +
-                  'compared to the average over the last 20 minutes, which is above the threshold of %(alertsCriticalDialFailureRateIncrease)s percent.'
+                  'LDAP dial failures on instance {{$labels.instance}} have increased by {{ printf "%%.0f" $value }} in the last 10 minutes, ' +
+                  'which is above the threshold of %(alertsWarningDialFailureSpike)s.'
                 ) % this.config,
             },
           },
           {
             alert: 'OpenLDAPBindFailureRateIncrease',
             expr: |||
-              100 * (
-                increase(openldap_bind{result!="ok"}[10m])
-                /
-                clamp_min(avg_over_time(openldap_bind{result!="ok"}[20m]), 1)
-              ) > %(alertsCriticalBindFailureRateIncrease)s
+              increase(openldap_bind{result!="ok"}[10m]) > %(alertsWarningBindFailureRateIncrease)s
             ||| % this.config,
             'for': '10m',
             labels: {
-              severity: 'critical',
+              severity: 'warning',
             },
             annotations: {
               summary: 'Significant increase in LDAP bind failures indicates authentication issues, potential security threats or problems with user directories.',
               description:
                 (
-                  'LDAP bind failures on instance {{$labels.instance}} have increased by {{ printf "%%.0f" $value }} percent in the last 10 minutes, ' +
-                  'compared to the average over the last 20 minutes, which is above the threshold of %(alertsCriticalBindFailureRateIncrease)s percent.'
+                  'LDAP bind failures on instance {{$labels.instance}} have increased by {{ printf "%%.0f" $value }} in the last 10 minutes, ' +
+                  'which is above the threshold of %(alertsWarningBindFailureRateIncrease)s.'
                 ) % this.config,
             },
           },
