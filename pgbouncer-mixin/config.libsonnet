@@ -8,7 +8,7 @@
   filteringSelector: 'job="integrations/pgbouncer"',
   groupLabels: ['job', 'pgbouncer_cluster', 'database'],
   mainGroupLabels: ['job', 'pgbouncer_cluster'],
-  legendLabels: ['pgbouncer_cluster', 'instance', 'database'],
+  legendLabels: ['database'],
   instanceLabels: ['instance'],
   dashboardTags: [self.uid],
   uid: 'pgbouncer',
