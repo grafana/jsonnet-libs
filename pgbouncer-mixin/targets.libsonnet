@@ -50,7 +50,7 @@ local lokiQuery = g.query.loki;
     queryDuration:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '1000 * increase(pgbouncer_stats_queries_pooled_total{%(queriesSelector)s}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_duration_seconds_total{%(queriesSelector)s}[$__interval:]), 1)' % vars
+        '1000 * increase(pgbouncer_stats_queries_duration_seconds_total{%(queriesSelector)s}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{%(queriesSelector)s}[$__interval:]), 1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
@@ -78,7 +78,7 @@ local lokiQuery = g.query.loki;
     transactionAverageDuration:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '1000 * increase(pgbouncer_stats_sql_transactions_pooled_total{%(queriesSelector)s}[$__interval:]) / clamp_min(increase(pgbouncer_stats_server_in_transaction_seconds_total{%(queriesSelector)s}[$__interval:]), 1)' % vars
+        '1000 * increase(pgbouncer_stats_server_in_transaction_seconds_total{%(queriesSelector)s}[$__interval]) / clamp_min(increase(pgbouncer_stats_sql_transactions_pooled_total{%(queriesSelector)s}[$__interval:]), 1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
