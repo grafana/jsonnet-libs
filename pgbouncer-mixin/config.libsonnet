@@ -7,6 +7,7 @@
   // 'uid' - UID to prefix all dashboards original uids
   filteringSelector: 'job="integrations/pgbouncer"',
   groupLabels: ['job', 'pgbouncer_cluster', 'database'],
+  logLabels: ['job', 'pgbouncer_cluster', 'instance'],
   mainGroupLabels: ['job', 'pgbouncer_cluster'],
   legendLabels: ['database'],
   instanceLabels: ['instance'],
