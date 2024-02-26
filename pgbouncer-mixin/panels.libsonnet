@@ -34,7 +34,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.stat.info.new(
           'Active server connections',
           targets=[t.activeServerConnections],
-          description='Current number of client connections that are linked to server connection and able to process queries.'
+          description='Current number of client connections that are linked to a server connection and able to process queries.'
         )
         + stat.options.withGraphMode('none'),
       maxDatabaseConnections:
@@ -67,7 +67,7 @@ local utils = commonlib.utils;
             Rate of SQL queries pooled by PgBouncer.
           |||
         )
-        + g.panel.timeSeries.standardOptions.withUnit('queries/s'),
+        + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
       queryDuration:
         commonlib.panels.generic.timeSeries.base.new(
@@ -99,7 +99,7 @@ local utils = commonlib.utils;
             Rate of SQL transactions pooled.
           |||
         )
-        + g.panel.timeSeries.standardOptions.withUnit('txn/s'),
+        + g.panel.timeSeries.standardOptions.withUnit('ops'),
 
       transactionAverageDuration:
         commonlib.panels.generic.timeSeries.base.new(
