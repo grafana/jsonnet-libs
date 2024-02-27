@@ -58,7 +58,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.multiInstance, uid + '-cluster-overview', tags, links { clusterOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.multiCluster, uid + '-cluster-overview', tags, links { clusterOverview+:: {} }, annotations, timezone, refresh, period),
     }
     +
     if this.config.enableLokiLogs then

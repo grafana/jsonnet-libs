@@ -10,6 +10,7 @@ local utils = commonlib.utils;
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local instanceLabels = this.config.instanceLabels,
+      local mainGroupLabels = this.config.mainGroupLabels,
       local root = self,
       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
         local chainVarProto(index, chainVar) =
@@ -51,6 +52,9 @@ local utils = commonlib.utils;
       multiInstance:
         [root.datasources.prometheus]
         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
+      multiCluster:
+        [root.datasources.prometheus]
+        + variablesFromLabels(mainGroupLabels, [], filteringSelector),
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
         [root.datasources.prometheus]
@@ -67,12 +71,12 @@ local utils = commonlib.utils;
         ],
       clusterQuerySelector:
         '%s,%s' % [
-          utils.labelsToPromQLSelector(this.config.mainGroupLabels),
+          utils.labelsToPromQLSelector(mainGroupLabels),
           filteringSelector,
         ],
       instanceQueriesSelector:
         '%s,%s' % [
-          utils.labelsToPromQLSelector(this.config.mainGroupLabels + instanceLabels),
+          utils.labelsToPromQLSelector(mainGroupLabels + instanceLabels),
           filteringSelector,
         ],
     }

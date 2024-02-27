@@ -160,7 +160,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('conn'),
       topDatabaseQueryPooled:
         commonlib.panels.generic.timeSeries.base.new(
-          'Max client wait time',
+          'Top databases by queries processed',
           targets=[t.topDatabaseQueryProcessed],
           description=|||
             Top databases by rate of SQL queries pooled by PgBouncer.
@@ -169,7 +169,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('ops'),
       topDatabaseQueryDuration:
         commonlib.panels.generic.timeSeries.base.new(
-          'Max client wait time',
+          'Top databases by average query duration',
           targets=[t.topDatabaseQueryDuration],
           description=|||
             Top databases by average duration of queries being processed by PgBouncer.
@@ -178,7 +178,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('s'),
       topDatabaseNetworkTraffic:
         commonlib.panels.generic.timeSeries.base.new(
-          'Max client wait time',
+          'Top databases by Network Traffic',
           targets=[t.topDatabaseNetworkTrafficReceived, t.topDatabaseNetworkTrafficSent],
           description=|||
             Top databases by volume in bytes of network traffic received by PgBouncer.
