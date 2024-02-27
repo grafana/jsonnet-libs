@@ -61,6 +61,15 @@ local utils = commonlib.utils;
           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
           filteringSelector,
         ],
+      queriesGroupSelectorAdvanced:
+        '%s' % [
+          utils.labelsToPromQLSelectorAdvanced(groupLabels),
+        ],
+      clusterQuerySelector:
+        '%s,%s' % [
+          utils.labelsToPromQLSelector(this.config.mainGroupLabels),
+          filteringSelector,
+        ],
       instanceQueriesSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(this.config.mainGroupLabels + instanceLabels),

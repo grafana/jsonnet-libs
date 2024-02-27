@@ -6,6 +6,8 @@ local utils = commonlib.utils;
     {
       local t = this.grafana.targets,
       local stat = g.panel.stat,
+      local alertList = g.panel.alertList,
+
       // create stat panel using commonlib
       clientsWaitingConnections:
         commonlib.panels.generic.stat.base.new(
@@ -143,14 +145,47 @@ local utils = commonlib.utils;
         )
         + g.panel.timeSeries.standardOptions.withUnit('clients'),
 
-      maxClientWaitTime:
+      alertsPanel:
+        alertList.new('PgBouncer alerts')
+        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
+
+      topDatabaseActiveConnection:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Top database by active connections',
+          targets=[t.topDatabaseActiveConnection],
+          description=|||
+            Top databases by current number of active client connections.
+          |||
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('conn'),
+      topDatabaseQueryPooled:
         commonlib.panels.generic.timeSeries.base.new(
           'Max client wait time',
-          targets=[t.maxClientWaitTime],
+          targets=[t.topDatabaseQueryProcessed],
           description=|||
-            Age of the oldest unserved client connection in seconds.
+            Top databases by rate of SQL queries pooled by PgBouncer.
+          |||
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+      topDatabaseQueryDuration:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Max client wait time',
+          targets=[t.topDatabaseQueryDuration],
+          description=|||
+            Top databases by average duration of queries being processed by PgBouncer.
           |||
         )
         + g.panel.timeSeries.standardOptions.withUnit('s'),
+      topDatabaseNetworkTraffic:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Max client wait time',
+          targets=[t.topDatabaseNetworkTrafficReceived, t.topDatabaseNetworkTrafficSent],
+          description=|||
+            Top databases by volume in bytes of network traffic received by PgBouncer.
+          |||
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('Bps')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
     },
 }

@@ -39,12 +39,26 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               g.panel.row.new('Client'),
               panels.granularActiveClientConnections { gridPos+: { w: 8 } },
               panels.clientsWaiting { gridPos+: { w: 8 } },
-              panels.maxClientWaitTime { gridPos+: { w: 8 } },
             ], 12, 6
           )
         )
         // hide link to self
-        + root.applyCommon(vars.multiInstance, uid + '-overview', tags, links { pgbouncerOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { pgbouncerOverview+:: {} }, annotations, timezone, refresh, period),
+      clusterOverview:
+        g.dashboard.new(prefix + 'PgBouncer cluster overview')
+        + g.dashboard.withPanels(
+          g.util.grid.wrapPanels(
+            [
+              panels.topDatabaseActiveConnection { gridPos+: { w: 12 } },
+              panels.alertsPanel { gridPos+: { w: 12 } },
+              panels.topDatabaseQueryPooled { gridPos+: { w: 12 } },
+              panels.topDatabaseQueryDuration { gridPos+: { w: 12 } },
+              panels.topDatabaseNetworkTraffic { gridPos+: { w: 24 } },
+            ], 12, 6
+          )
+        )
+        // hide link to self
+        + root.applyCommon(vars.multiInstance, uid + '-cluster-overview', tags, links { clusterOverview+:: {} }, annotations, timezone, refresh, period),
     }
     +
     if this.config.enableLokiLogs then

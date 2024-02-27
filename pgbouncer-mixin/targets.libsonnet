@@ -131,5 +131,35 @@ local lokiQuery = g.query.loki;
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
+    topDatabaseActiveConnection:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(database, instance, pgbouncer_cluster)(5, pgbouncer_pools_client_active_connections{%(clusterQuerySelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.clusterLegendLabel)),
+    topDatabaseQueryProcessed:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(database, instance, pgbouncer_cluster)(5, rate(pgbouncer_stats_queries_pooled_total{%(clusterQuerySelector)s}[$__rate_interval]))' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.clusterLegendLabel)),
+    topDatabaseQueryDuration:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(database, instance, pgbouncer_cluster)(5, 1000 * increase(pgbouncer_stats_queries_duration_seconds_total{%(queriesSelector)s}[$__interval:]) / clamp_min(increase(pgbouncer_stats_queries_pooled_total{%(queriesSelector)s}[$__interval:]), 1))' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.clusterLegendLabel)),
+    topDatabaseNetworkTrafficReceived:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(database, instance, pgbouncer_cluster)(5, rate(pgbouncer_stats_received_bytes_total{%(queriesSelector)s}[$__rate_interval]))' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - received' % utils.labelsToPanelLegend(this.config.clusterLegendLabel)),
+    topDatabaseNetworkTrafficSent:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(database, instance, pgbouncer_cluster)(5, rate(pgbouncer_stats_sent_bytes_total{%(queriesSelector)s}[$__rate_interval]))' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - sent' % utils.labelsToPanelLegend(this.config.clusterLegendLabel)),
   },
 }
