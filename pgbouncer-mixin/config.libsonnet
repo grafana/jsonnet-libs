@@ -10,6 +10,7 @@
   logLabels: ['job', 'pgbouncer_cluster', 'instance'],
   mainGroupLabels: ['job', 'pgbouncer_cluster'],
   legendLabels: ['database'],
+  clusterLegendLabel: ['pgbouncer_cluster', 'instance', 'database'],
   instanceLabels: ['instance'],
   dashboardTags: [self.uid],
   uid: 'pgbouncer',
