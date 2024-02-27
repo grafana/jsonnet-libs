@@ -145,6 +145,16 @@ local utils = commonlib.utils;
         )
         + g.panel.timeSeries.standardOptions.withUnit('clients'),
 
+      maxClientWaitTime:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Max client wait time',
+          targets=[t.maxClientWaitTime],
+          description=|||
+            Age of the oldest unserved client connection in seconds.
+          |||
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('s'),
+
       alertsPanel:
         alertList.new('PgBouncer alerts')
         + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),

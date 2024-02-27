@@ -39,6 +39,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               g.panel.row.new('Client'),
               panels.granularActiveClientConnections { gridPos+: { w: 8 } },
               panels.clientsWaiting { gridPos+: { w: 8 } },
+              panels.maxClientWaitTime { gridPos+: { w: 8 } },
             ], 12, 6
           )
         )
