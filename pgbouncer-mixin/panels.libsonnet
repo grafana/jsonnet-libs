@@ -178,7 +178,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('s'),
       topDatabaseNetworkTraffic:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top databases by Network Traffic',
+          'Top databases by network traffic',
           targets=[t.topDatabaseNetworkTrafficReceived, t.topDatabaseNetworkTrafficSent],
           description=|||
             Top databases by volume in bytes of network traffic received by PgBouncer.
