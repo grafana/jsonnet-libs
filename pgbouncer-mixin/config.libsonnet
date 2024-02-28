@@ -5,10 +5,11 @@
   // 'groupLabels' - one or more labels that can be used to identify 'group' of instances. In simple cases, can be 'job' or 'cluster'.
   // 'instanceLabels' - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
   // 'uid' - UID to prefix all dashboards original uids
+  enableMultiCluster: false,
   filteringSelector: 'job="integrations/pgbouncer"',
-  groupLabels: ['job', 'pgbouncer_cluster', 'database'],
-  logLabels: ['job', 'pgbouncer_cluster', 'instance'],
-  mainGroupLabels: ['job', 'pgbouncer_cluster'],
+  groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster', 'database'] else ['job', 'pgbouncer_cluster', 'database'],
+  logLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster', 'instance'] else ['job', 'pgbouncer_cluster', 'instance'],
+  mainGroupLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster'] else ['job', 'pgbouncer_cluster'],
   legendLabels: ['database'],
   clusterLegendLabel: ['pgbouncer_cluster', 'instance', 'database'],
   instanceLabels: ['instance'],
