@@ -155,6 +155,7 @@ local utils = commonlib.utils;
 
     alertsPanel:
       alertList.new('Alerts')
+      + alertList.panelOptions.withDescription('Panel to report on the status of firing alerts.')
       + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
 
     totalResources:
