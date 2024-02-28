@@ -9,7 +9,7 @@ local g = import './g.libsonnet';
       novaNeutronOverview:
         link.link.new('OpenStack nova and neutron overview', '/d/' + this.grafana.dashboards.novaNeutronOverview.uid)
         + link.link.options.withKeepTime(true),
-      cinderGlanceOverviewOverview:
+      cinderGlanceOverview:
         link.link.new('OpenStack cinder and glance overview', '/d/' + this.grafana.dashboards.cinderGlanceOverview.uid)
         + link.link.options.withKeepTime(true),
     }
