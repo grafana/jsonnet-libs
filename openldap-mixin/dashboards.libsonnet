@@ -16,7 +16,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     local panels = this.grafana.panels;
 
     {
-      'openldap-overview.json':
+      overview:
         g.dashboard.new(prefix + 'OpenLDAP Overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
@@ -42,24 +42,21 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     +
     (if this.config.enableLokiLogs then
        {
-         'logs-overview.json':
-           logslib.new(
-             prefix + 'OpenLDAP logs',
-             datasourceName=this.grafana.variables.datasources.loki.name,
-             datasourceRegex=this.grafana.variables.datasources.loki.regex,
-             filterSelector=this.config.filteringSelector,
-             labels=this.config.groupLabels + this.config.instanceLabels + this.config.extraLogLabels,
-             formatParser='json',
-             showLogsVolume=this.config.showLogsVolume,
-             logsVolumeGroupBy=this.config.logsVolumeGroupBy,
-             extraFilters=this.config.logsExtraFilters
-           )
+         logs:
+           logslib.new(prefix + 'OpenLDAP logs',
+                       datasourceName=this.grafana.variables.datasources.loki.name,
+                       datasourceRegex=this.grafana.variables.datasources.loki.regex,
+                       filterSelector=this.config.filteringSelector,
+                       labels=this.config.groupLabels + this.config.instanceLabels,
+                       formatParser=null,
+                       showLogsVolume=this.config.showLogsVolume,
+                       logsVolumeGroupBy=null)
            {
              dashboards+:
                {
                  logs+:
                    // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
-                   root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+                   root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
                },
              panels+:
                {

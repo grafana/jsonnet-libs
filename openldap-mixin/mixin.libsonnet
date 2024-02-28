@@ -1,38 +1,20 @@
-local alerts = import './alerts.libsonnet';
-local g = import './g.libsonnet';
-local openldapobservlib = import './main.libsonnet';
-local var = g.dashboard.variable;
+local openldaplib = import './main.libsonnet';
 
-local openldapmixin =
-  openldapobservlib.new(
-    filteringSelector='job=~"integration/openldap"',
-    uid='openldap',
-    groupLabels=['job'],
-    instanceLabels=['instance'],
-  ) {
-    config+: {
-    },
-  } {
-    grafana+: {
-      local link = g.dashboard.link,
-      links: {
-        otherDashboards:
-          link.dashboards.new('Other OpenLDAP dashboards', openldapmixin.config.dashboardTags)
-          + link.dashboards.options.withIncludeVars(true)
-          + link.dashboards.options.withKeepTime(true)
-          + link.dashboards.options.withAsDropdown(true),
-      },
-      variables+: {
-        datasources+: {
-          loki+: var.datasource.withRegex('Loki|.+logs'),
-          prometheus+: var.datasource.withRegex('Prometheus|Cortex|Mimir|grafanacloud-.+-prom'),
-        },
-      },
-    },
-  };
+local openldap =
+  openldaplib.new()
+  + openldaplib.withConfigMixin(
+    {
+      filteringSelector: 'job=~"integrations/openldap"',
+      uid: 'openldap',
+      groupLabels: ['job', 'cluster'],
+      instanceLabels: ['instance'],
+      enableLokiLogs: true,
+    }
+  );
 
+// populate monitoring-mixin:
 {
-  grafanaDashboards+:: openldapmixin.grafana.dashboards,
-  prometheusAlerts+:: openldapmixin.prometheus.alerts,
-  prometheusRules+:: openldapmixin.prometheus.recordingRules,
+  grafanaDashboards+:: openldap.grafana.dashboards,
+  prometheusAlerts+:: openldap.prometheus.alerts,
+  prometheusRules+:: openldap.prometheus.recordingRules,
 }
