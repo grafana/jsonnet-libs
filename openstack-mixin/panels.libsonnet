@@ -849,7 +849,6 @@ local utils = commonlib.utils;
         description='The percent of pool capacity in use for Cinder.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.standardOptions.withDecimals(0)
       + timeSeries.standardOptions.withMax(1)
       + timeSeries.standardOptions.withMin(0),
 
