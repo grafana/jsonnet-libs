@@ -1,5 +1,4 @@
 # PgBouncer Mixin
-
 The PgBouncer mixin is a set of configurable Grafana dashboards and alerts.
 
 The PgBouncer mixin contains the following dashboards:
@@ -31,6 +30,8 @@ The PgBouncer overview dashboard provides details on active connections, query d
 ## PgBouncer Logs Overview
 
 The PgBouncer logs overview dashboard provides details on the PgBouncer system. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default PgBouncer log path is `/var/log/postgresql/pgbouncer.log`, but this can change depending on the path you provide in your `pgbouncer.ini` configuration file.
+
+![PgBouncer Logs Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/pgbouncer/screenshots/pgbouncer-logs-overview.png)
 
 PgBouncer logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
