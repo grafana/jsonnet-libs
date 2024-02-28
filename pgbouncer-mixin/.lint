@@ -13,4 +13,7 @@ exclusions:
     reason: "Not required for logs volume"
   panel-units-rule:
     reason: "Logs volume has no unit"
-
+  target-instance-rule:
+      reason: "Cluster dashboard doesn't use instance"
+      entries:
+        - dashboard: "PgBouncer cluster overview"
