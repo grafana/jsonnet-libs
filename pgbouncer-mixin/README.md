@@ -120,6 +120,3 @@ make
 For more advanced uses of mixins, see
 https://github.com/monitoring-mixins/docs.
 
-Documentation
-port forwarding with the multipass VM
-One shot prompting, can't figure out
