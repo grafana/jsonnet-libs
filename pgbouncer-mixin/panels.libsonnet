@@ -161,7 +161,7 @@ local utils = commonlib.utils;
 
       topDatabaseActiveConnection:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top database by active connections',
+          'Top databases by active connections',
           targets=[t.topDatabaseActiveConnection],
           description=|||
             Top databases by current number of active client connections.
@@ -191,7 +191,7 @@ local utils = commonlib.utils;
           'Top databases by network traffic',
           targets=[t.topDatabaseNetworkTrafficReceived, t.topDatabaseNetworkTrafficSent],
           description=|||
-            Top databases by volume in bytes of network traffic received by PgBouncer.
+            Top databases by volume of network traffic.
           |||
         )
         + g.panel.timeSeries.standardOptions.withUnit('Bps')
