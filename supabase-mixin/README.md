@@ -7,7 +7,7 @@ The SupaBase mixin contains the following dashboards:
 - SupaBase
 
 ## SupaBase Dashboard Overview
-SupaBase dashbaord provides details on the overall status of the SupaBase project including the database related metrics. The dashboard includes visualizations for requests, overall project stats.
+SupaBase dashbaord provides details on the overall status of the SupaBase project including the database related metrics. The dashboard includes visualizations for requests, overall project stats. The dashboard is sourced from https://github.com/supabase/supabase-grafana
 
 ## Tools
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
