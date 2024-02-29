@@ -576,20 +576,20 @@ local utils = commonlib.utils;
               __name__: true,
               hostname: true,
               job: true,
+              project_id: true,
             },
-            includeByName: {},
             indexByName: {
-              Time: 7,
-              Value: 10,
-              __name__: 8,
-              admin_state_up: 3,
-              external_network_id: 4,
-              id: 5,
-              instance: 1,
-              job: 9,
               name: 0,
-              project_id: 6,
+              instance: 1,
               status: 2,
+              admin_state_up: 3,
+              id: 4,
+              external_network_id: 5,
+              project_id: 6,
+              Time: 7,
+              __name__: 8,
+              job: 9,
+              Value: 10,
             },
             renameByName: {
               Time: '',
@@ -599,11 +599,12 @@ local utils = commonlib.utils;
               id: 'ID',
               instance: 'Instance',
               name: 'Name',
-              project_id: 'Project ID',
+              project_id: '',
               service: 'Service',
               status: 'Status',
               zone: 'Zone',
             },
+            includeByName: {},
           },
         },
       ]),
@@ -671,8 +672,8 @@ local utils = commonlib.utils;
               __name__: true,
               hostname: true,
               job: true,
+              fixed_ips: true,
             },
-            includeByName: {},
             indexByName: {
               Time: 8,
               Value: 11,
@@ -701,7 +702,9 @@ local utils = commonlib.utils;
               status: 'Status',
               uuid: 'UUID',
               zone: 'Zone',
+              fixed_ips: '',
             },
+            includeByName: {},
           },
         },
       ]),
@@ -721,7 +724,6 @@ local utils = commonlib.utils;
         description='The usage of available IP addresses broken down by subnet.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
-      + timeSeries.standardOptions.withDecimals(0)
       + timeSeries.options.legend.withPlacement('right')
       + timeSeries.standardOptions.withMax(1)
       + timeSeries.standardOptions.withMin(0),
@@ -820,6 +822,10 @@ local utils = commonlib.utils;
         description='The current status of volumes in Cinder.',
       )
       + timeSeries.options.legend.withPlacement('right')
+      + timeSeries.fieldConfig.defaults.custom.withStackingMixin({
+        group: 'A',
+        mode: 'normal',
+      })
       + timeSeries.standardOptions.withDecimals(0),
 
     volumeUsage:
@@ -907,7 +913,6 @@ local utils = commonlib.utils;
               hostname: true,
               job: true,
             },
-            includeByName: {},
             indexByName: {
               Time: 6,
               Value: 9,
@@ -927,7 +932,9 @@ local utils = commonlib.utils;
               instance: 'Instance',
               service: 'Service',
               zone: 'Zone',
+              uuid: 'UUID',
             },
+            includeByName: {},
           },
         },
       ]),

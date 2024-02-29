@@ -284,7 +284,7 @@ local lokiQuery = g.query.loki;
         '(openstack_cinder_pool_capacity_total_gb{%(queriesSelector)s} - openstack_cinder_pool_capacity_free_gb{%(queriesSelector)s}) / clamp_min(openstack_cinder_pool_capacity_total_gb{%(queriesSelector)s}, 1)' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{tenant}}'),
+      + prometheusQuery.withLegendFormat('{{instance}} - {{name}}'),
     snaphots:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
