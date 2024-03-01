@@ -14,8 +14,6 @@
   dashboardRefresh: '1m',
 
   // Alert thresholds
-  alertsWarningHighCPUUsage: 70,  //%
-  alertsCriticalHighCPUUsage: 90,  //%
   alertsWarningHighRequestLatency: 4000,
   alertsWarningGalleyValidationFailures: 0,
   alertsCriticalListenerConfigConflicts: 0,

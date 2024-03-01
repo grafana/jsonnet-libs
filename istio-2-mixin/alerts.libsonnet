@@ -11,38 +11,6 @@
         name: 'istio-alerts-' + this.config.uid,
         rules: [
           {
-            alert: 'IstioHighCPUUsageWarning',
-            expr: |||
-              100 * (sum without (instance, pod) (rate(process_cpu_seconds_total{%(filteringSelector)s, pod=~"istiod.*"}[5m])) + sum without (instance, pod) (rate(istio_agent_process_cpu_seconds_total{%(filteringSelector)s}[5m]))) > %(alertsWarningHighCPUUsage)s
-            ||| % this.config,
-            'for': '5m',
-            labels: {
-              severity: 'warning',
-            },
-            annotations: {
-              summary: 'High vCPU usage can indicate that the k8s environment is underprovisioned.',
-              description: |||
-                Istio cluster {{$labels.cluster}} has had vCPU usage of {{ printf "%%.0f" $value }}%% over the last 5 minutes, which is above the threshold of %(alertsWarningHighCPUUsage)s.
-              ||| % this.config,
-            },
-          },
-          {
-            alert: 'IstioHighCPUUsageCritical',
-            expr: |||
-              100 * (sum without (instance, pod) (rate(process_cpu_seconds_total{%(filteringSelector)s, pod=~"istiod.*"}[5m])) + sum without (instance, pod) (rate(istio_agent_process_cpu_seconds_total{%(filteringSelector)s}[5m]))) > %(alertsCriticalHighCPUUsage)s
-            ||| % this.config,
-            'for': '5m',
-            labels: {
-              severity: 'critical',
-            },
-            annotations: {
-              summary: 'High vCPU usage can indicate that the k8s environment is underprovisioned.',
-              description: |||
-                Istio cluster {{$labels.cluster}} has had vCPU usage of {{ printf "%%.0f" $value }}%% over the last 5 minutes, which is above the threshold of %(alertsCriticalHighCPUUsage)s.
-              ||| % this.config,
-            },
-          },
-          {
             alert: 'IstioHighRequestLatencyWarning',
             expr: |||
               sum without(connection_security_policy, destination_app, destination_canonical_revision, destination_service_name, destination_cluster, destination_principal, destination_service, destination_service_namespace, destination_version, destination_workload, destination_workload_namespace, grpc_response_status, instance, pod, reporter, request_protocol, response_code, response_flags, source_app, source_canonical_revision, source_cluster, source_principal, source_version, source_workload, source_workload_namespace) (increase(istio_request_duration_milliseconds_sum{%(filteringSelector)s, %(reporterSourceFilter)s}[5m]))
