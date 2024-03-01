@@ -10,8 +10,6 @@ The Istio mixin contains the following dashboards:
 
 and the following alerts:
 
-- IstioHighCPUUsageWarning
-- IstioHighCPUUsageCritical
 - IstioHighRequestLatencyWarning
 - IstioGalleyValidationFailuresWarning
 - IstioListenerConfigConflictsCritical
@@ -216,8 +214,6 @@ For the selectors to properly work with the Istio logs ingested into your logs d
 ```
 
 ## Alerts overview
-- IstioHighCPUUsageWarning: High vCPU usage can indicate that the k8s environment is underprovisioned.
-- IstioHighCPUUsageCritical: High vCPU usage can indicate that the k8s environment is underprovisioned.
 - IstioHighRequestLatencyWarning: High request latency between pods can indicate that there are performance issues within the k8s environment.
 - IstioGalleyValidationFailuresWarning: Istio Galley is reporting failures for a number of configurations.
 - IstioListenerConfigConflictsCritical: Istio Pilot is seeing a number of inbound and or outbound listener conflicts by envoy proxies.
@@ -232,8 +228,6 @@ Default thresholds can be configured in `config.libsonnet`.
 {
     _configs+:: {
       // alerts thresholds
-      alertsWarningHighCPUUsage: 70,  //%
-      alertsCriticalHighCPUUsage: 90, //%
       alertsWarningHighRequestLatency: 4000,
       alertsWarningGalleyValidationFailures: 0,
       alertsCriticalListenerConfigConflicts: 0,
