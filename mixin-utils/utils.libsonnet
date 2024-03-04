@@ -1,7 +1,7 @@
 local g = import 'grafana-builder/grafana.libsonnet';
 
 {
-  histogramRules(metric, labels, interval='1m')::
+  histogramRules(metric, labels, interval='1m', record_native=false)::
     local vars = {
       metric: metric,
       labels_underscore: std.join('_', labels),
@@ -33,7 +33,18 @@ local g = import 'grafana-builder/grafana.libsonnet';
         record: '%(labels_underscore)s:%(metric)s_count:sum_rate' % vars,
         expr: 'sum(rate(%(metric)s_count[%(interval)s])) by (%(labels_comma)s)' % vars,
       },
-    ],
+    ] + if record_native then [
+      // Native histogram rule, sum_rate contains the following information:
+      // - rate of sum,
+      // - rate of count,
+      // - rate of sum/count aka average,
+      // - rate of buckets,
+      // - implicitly the quantile information.
+      {
+        record: '%(labels_underscore)s:%(metric)s:sum_rate' % vars,
+        expr: 'sum(rate(%(metric)s[%(interval)s])) by (%(labels_comma)s)' % vars,
+      },
+    ] else [],
 
 
   // latencyRecordingRulePanel - build a latency panel for a recording rule.
