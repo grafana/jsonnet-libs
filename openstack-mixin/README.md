@@ -23,7 +23,7 @@ and the following alerts:
 
 ## OpenStack cloud overview
 
-The OpenStack cloud overview dashboard provides details on the statuses of the basic OpenStack services, alerts, cloud resource usage, and hierarchy.
+The OpenStack cloud overview dashboard provides details on OpenStack services, alerts, cloud resource usage, and hierarchy.
 ![OpenStack cloud overview dashboard (services)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cloud_overview_1.png)
 ![OpenStack cloud overview dashboard (keystone)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cloud_overview_2.png)
 

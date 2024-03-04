@@ -283,7 +283,7 @@ local utils = commonlib.utils;
       ]),
 
     domains:
-      commonlib.panels.generic.stat.base.new(
+      commonlib.panels.generic.stat.info.new(
         'Domains',
         targets=[t.domains],
         description='The number of domains for the OpenStack cloud.',
@@ -291,7 +291,7 @@ local utils = commonlib.utils;
       + stat.options.withGraphMode('none'),
 
     projects:
-      commonlib.panels.generic.stat.base.new(
+      commonlib.panels.generic.stat.info.new(
         'Projects',
         targets=[t.projects],
         description='The number of projects for the OpenStack cloud.',
@@ -299,7 +299,7 @@ local utils = commonlib.utils;
       + stat.options.withGraphMode('none'),
 
     regions:
-      commonlib.panels.generic.stat.base.new(
+      commonlib.panels.generic.stat.info.new(
         'Regions',
         targets=[t.regions],
         description='The number of regions for the OpenStack cloud.',
