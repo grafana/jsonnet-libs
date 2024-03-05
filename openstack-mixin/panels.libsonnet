@@ -835,6 +835,7 @@ local utils = commonlib.utils;
         description='The percent of volume storage in use for Cinder.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.options.legend.withPlacement('right')
       + timeSeries.standardOptions.withMax(1)
       + timeSeries.standardOptions.withMin(0),
 
@@ -845,6 +846,7 @@ local utils = commonlib.utils;
         description='The percent of backup storage in use for Cinder.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.options.legend.withPlacement('right')
       + timeSeries.standardOptions.withMax(1)
       + timeSeries.standardOptions.withMin(0),
 
@@ -971,31 +973,26 @@ local utils = commonlib.utils;
           options: {
             excludeByName: {
               Time: true,
-              Value: true,
               __name__: true,
-              hostname: true,
               job: true,
             },
             includeByName: {},
             indexByName: {
-              Time: 6,
-              Value: 9,
-              __name__: 7,
-              adminState: 3,
-              hostname: 5,
-              instance: 1,
-              job: 8,
-              service: 0,
-              uuid: 4,
-              zone: 2,
+              Time: 5,
+              Value: 2,
+              __name__: 6,
+              id: 1,
+              instance: 3,
+              job: 7,
+              name: 0,
+              tenant_id: 4,
             },
             renameByName: {
-              Time: '',
-              adminState: 'Admin state',
+              Value: 'Size',
               id: 'ID',
               instance: 'Instance',
-              service: 'Service',
-              zone: 'Zone',
+              name: 'Name',
+              tenant_id: 'Tenant ID',
             },
           },
         },
