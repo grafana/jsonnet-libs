@@ -214,11 +214,11 @@ local lokiQuery = g.query.loki;
         'openstack_neutron_floating_ips{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{instance}} - total'),
     floatingIPsAssociatedNotActive:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_neutron_routers_not_active{%(queriesSelector)s}' % vars
+        'openstack_neutron_floating_ips_associated_not_active{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{instance}} - associated inactive'),
