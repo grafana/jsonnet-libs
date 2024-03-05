@@ -211,7 +211,7 @@ local lokiQuery = g.query.loki;
     floatingIPs:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_neutron_routers{%(queriesSelector)s}' % vars
+        'openstack_neutron_floating_ips{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{instance}}'),
