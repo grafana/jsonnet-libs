@@ -3,7 +3,7 @@ local g = import './g.libsonnet';
   local link = g.dashboard.link,
   new(this):
     {
-      pgbouncerOverview:
+      openldapOverview:
         link.link.new('OpenLDAP overview', '/d/' + this.grafana.dashboards.overview.uid)
         + link.link.options.withKeepTime(true),
     }

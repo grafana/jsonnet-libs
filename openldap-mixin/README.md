@@ -37,6 +37,8 @@ OpenLDAP logs are enabled by default in the `config.libsonnet` and can be remove
 
 In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `job` label onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
+Additionally to get slapd that contain stats level logging, you may need to [configure OpenLDAP](https://tutoriels.meddeb.net/openldap-tutorial-log/) to enable stats logs and configured for rsyslog. 
+
 ```yaml
 scrape_configs:
   - job_name: integrations/openldap
@@ -48,7 +50,15 @@ scrape_configs:
       - targets: [localhost]
         labels:
           job: integrations/openldap
-          __path__: /var/log/auth.log
+          __path__: /var/log/slapd/*.log
+    pipeline_stages:
+      - multiline:
+          firstline: '^\[\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}\]'
+      - regex:
+          expression: '^\[\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}\] (?P<component>\S+) (?P<level>\w+)'
+      - labels:
+          level:
+          component:
 ```
 
 ![OpenLDAP Logs Overview Dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/openldap/screenshots/openldap-logs-overview.png)

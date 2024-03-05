@@ -6,7 +6,7 @@ local openldap =
     {
       filteringSelector: 'job=~"integrations/openldap"',
       uid: 'openldap',
-      groupLabels: ['job', 'cluster'],
+      groupLabels: ['job'],
       instanceLabels: ['instance'],
       enableLokiLogs: true,
     }

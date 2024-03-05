@@ -34,7 +34,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
               panels.auxiliaryOperations { gridPos+: { w: 12 } },
               panels.primaryThreadActivity { gridPos+: { w: 12 } },
               panels.threadQueueManagement { gridPos+: { w: 12 } },
-            ], 12, 7
+            ], 12, 6
           )
         )
         + root.applyCommon(vars.multiInstance, uid + '-overview', tags, links, annotations, timezone, refresh, period),
@@ -47,10 +47,10 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                        datasourceName=this.grafana.variables.datasources.loki.name,
                        datasourceRegex=this.grafana.variables.datasources.loki.regex,
                        filterSelector=this.config.filteringSelector,
-                       labels=this.config.groupLabels + this.config.instanceLabels,
+                       labels=this.config.groupLabels + this.config.extraLogLabels,
                        formatParser=null,
                        showLogsVolume=this.config.showLogsVolume,
-                       logsVolumeGroupBy=null)
+                       logsVolumeGroupBy=this.config.logsVolumeGroupBy)
            {
              dashboards+:
                {

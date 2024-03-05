@@ -17,5 +17,7 @@
   alertsWarningBindFailureRateIncrease: 10,
 
   enableLokiLogs: true,
+  extraLogLabels: ['level'],
+  logsVolumeGroupBy: 'level',
   showLogsVolume: true,
 }
