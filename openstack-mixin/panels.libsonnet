@@ -170,6 +170,7 @@ local utils = commonlib.utils;
       ])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Summary of the hardware resources available and used by OpenStack.')
+      + table.fieldConfig.defaults.custom.withAlign('center')
       + table.standardOptions.withOverridesMixin([
         table.fieldOverride.byRegexp.new('/Disk/')
         + table.standardOptions.override.byRegexp.withPropertiesFromOptions(
@@ -319,6 +320,7 @@ local utils = commonlib.utils;
       + table.queryOptions.withTargets([t.projectDetails])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the projects in the OpenStack cloud.')
+      + table.fieldConfig.defaults.custom.withAlign('center')
       + table.standardOptions.withOverridesMixin([
         table.fieldOverride.byName.new('Enabled')
         + table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
@@ -431,6 +433,7 @@ local utils = commonlib.utils;
       + table.queryOptions.withTargets([t.novaAgentState])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the agents for OpenStack Nova.')
+      + table.fieldConfig.defaults.custom.withAlign('center')
       + table.standardOptions.withOverridesMixin([
         table.fieldOverride.byName.new('Admin state')
         + table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
@@ -526,6 +529,7 @@ local utils = commonlib.utils;
       + table.queryOptions.withTargets([t.routerDetails])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Detailed view of the routers managed by Neutron.')
+      + table.fieldConfig.defaults.custom.withAlign('center')
       + table.standardOptions.withOverridesMixin([
         table.fieldOverride.byRegexp.new('/Admin up|Status/')
         + table.fieldOverride.byRegexp.withProperty('custom.displayMode', 'color-text')
@@ -622,6 +626,7 @@ local utils = commonlib.utils;
       + table.queryOptions.withTargets([t.portDetails])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Detailed view of the ports managed by Neutron.')
+      + table.fieldConfig.defaults.custom.withAlign('center')
       + table.standardOptions.withOverridesMixin([
         table.fieldOverride.byRegexp.new('/Admin up|Status/')
         + table.fieldOverride.byRegexp.withProperty('custom.displayMode', 'color-text')
@@ -741,6 +746,7 @@ local utils = commonlib.utils;
       + table.queryOptions.withTargets([t.neutronAgentState])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the agents for OpenStack Neutron.')
+      + table.fieldConfig.defaults.custom.withAlign('center')
       + table.standardOptions.withOverridesMixin([
         table.fieldOverride.byName.new('Admin state')
         + table.fieldOverride.byName.withProperty('custom.displayMode', 'color-text')
@@ -873,6 +879,7 @@ local utils = commonlib.utils;
       + table.queryOptions.withTargets([t.cinderAgentState])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the agents for OpenStack Cinder.')
+      + table.fieldConfig.defaults.custom.withAlign('center')
       + table.fieldConfig.defaults.custom.withCellOptions('color-text')
       + table.standardOptions.withOverridesMixin([
         table.fieldOverride.byName.new('Admin state')
@@ -954,6 +961,7 @@ local utils = commonlib.utils;
       + table.queryOptions.withTargets([t.imageDetails])
       + table.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
       + table.panelOptions.withDescription('Details for the images in Glance.')
+      + table.fieldConfig.defaults.custom.withAlign('center')
       + table.standardOptions.withOverridesMixin([
         table.fieldOverride.byName.new('Size')
         + table.standardOptions.override.byName.withPropertiesFromOptions(

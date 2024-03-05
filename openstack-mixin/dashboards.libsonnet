@@ -78,7 +78,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.volumeUsage,
               panels.backupUsage,
               panels.poolUsage,
-              panels.snaphots,
+              panels.snapshots,
               panels.cinderAgents { gridPos+: { w: 24 } },
               g.panel.row.new('Glance service'),
               panels.glanceStatus { gridPos+: { w: 6 } },
