@@ -409,7 +409,7 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withMin(0),
 
     vCPUUsage:
-      commonlib.panels.disk.timeSeries.usagePercent.new(
+      commonlib.panels.generic.timeSeries.percentage.new(
         'VCPU usage',
         targets=[t.vCPUUsage],
         description='Percentage of the maximum number of virtual CPUs in use for each project.'
@@ -419,7 +419,7 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withMin(0),
 
     memoryUsage:
-      commonlib.panels.disk.timeSeries.usagePercent.new(
+      commonlib.panels.generic.timeSeries.percentage.new(
         'Memory usage',
         targets=[t.memoryUsage],
         description='Percentage of the maximum amount of memory in use for each project.'
@@ -857,7 +857,7 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withMin(0),
 
     poolUsage:
-      commonlib.panels.memory.timeSeries.usagePercent.new(
+      commonlib.panels.generic.timeSeries.percentage.new(
         'Pool usage',
         targets=[t.poolUsage],
         description='The percent of pool capacity in use for Cinder.',
