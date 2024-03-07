@@ -19,8 +19,10 @@ local signalUtils = import './utils.libsonnet';
 
     //Return as timeSeriesPanel
     asTimeSeries()::
-      g.panel.text.new(name)
-      + g.panel.text.options.withContent('Not found in signals'),
+      g.panel.text.new('')
+      + g.panel.text.panelOptions.withTransparent(true)
+      + g.panel.text.panelOptions.withDescription(name + ': Signal not found.')
+      + g.panel.text.options.withContent(''),
 
     //Return as statPanel
     asStat()::
