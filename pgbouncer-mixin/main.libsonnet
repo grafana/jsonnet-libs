@@ -19,7 +19,7 @@ local variables = import './variables.libsonnet';
     config: config,
 
     grafana: {
-      variables: variables.new(this, varMetric='up{%(filteringSelector)s}' % this.config),
+      variables: variables.new(this, varMetric='up'),
       targets: targets.new(this),
       annotations: {},
       links: links.new(this),
