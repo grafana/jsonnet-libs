@@ -50,7 +50,7 @@ local stub = import './stub.libsonnet';
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
         valueMapping=std.get(signalsJson.signals[s], 'valueMapping', {}),
-        legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', null),
+        legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', signalsJson.legendCustomTemplate),
       )
       for s in std.objectFieldsAll(signalsJson.signals)
     },
@@ -83,7 +83,7 @@ local stub = import './stub.libsonnet';
             aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
             infoLabel=std.get(signalsJson.signals[s].sources[type], 'infoLabel', null),
             valueMapping=std.get(signalsJson.signals[s].sources[type], 'valueMapping', {}),
-            legendCustomTemplate=std.get(signalsJson.signals[s].legendCustomTemplate[type], 'legendCustomTemplate', null),
+            legendCustomTemplate=std.get(signalsJson.signals[s].legendCustomTemplate[type], 'legendCustomTemplate', signalsJson.legendCustomTemplate),
           )
         else if std.get(signalsJson.signals[s], 'optional', false) == false then error 'must provide source for signal %s of type=%s' % [signalsJson.signals[s].name, type] else
           //maybe add stub signal?
