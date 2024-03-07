@@ -38,7 +38,7 @@ local stub = import './stub.libsonnet';
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
       legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
-      rangeFunction=std.get(signalsJson, 'rangeFunction', 'rate'), // rate, irate , delta, increase, idelta...
+      rangeFunction=std.get(signalsJson, 'rangeFunction', 'rate'),  // rate, irate , delta, increase, idelta...
     )
     +
     {
@@ -52,7 +52,7 @@ local stub = import './stub.libsonnet';
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
         valueMapping=std.get(signalsJson.signals[s], 'valueMapping', {}),
         legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
-        rangeFunction=std.get(signalsJson, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')), // rate, irate , delta, increase, idelta...
+        rangeFunction=std.get(signalsJson.signals[s], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
       )
       for s in std.objectFieldsAll(signalsJson.signals)
     },
@@ -69,7 +69,7 @@ local stub = import './stub.libsonnet';
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
       legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
-      rangeFunction=std.get(signalsJson, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')), // rate, irate , delta, increase, idelta...
+      rangeFunction=std.get(signalsJson, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
     )
     +
     {
@@ -170,7 +170,7 @@ local stub = import './stub.libsonnet';
       infoLabel=null,
       valueMapping={},
       legendCustomTemplate=null,
-      rangeFunction=rangeFunction,
+      rangeFunction='rate'
     ):
 
       // validate inputs

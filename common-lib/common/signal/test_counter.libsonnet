@@ -21,7 +21,7 @@ local m1 = signal.init(
     testResult: test.suite({
       testLegend: {
         actual: m1.asTarget().legendFormat,
-        expect: '{{job}}/{{instance}}: API server requests',
+        expect: '{{instance}}: API server requests',
       },
       testExpression: {
         actual: m1.asTarget().expr,
