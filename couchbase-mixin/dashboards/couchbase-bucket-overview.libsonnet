@@ -12,11 +12,11 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local topBucketsByMemoryUsedPanel = {
+local topBucketsByMemoryUsedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, kv_mem_used_bytes{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"})',
+      'topk(5, kv_mem_used_bytes{' + matcher + ' })',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
       format='time_series',
@@ -92,11 +92,11 @@ local topBucketsByMemoryUsedPanel = {
   },
 };
 
-local topBucketsByDiskUsedPanel = {
+local topBucketsByDiskUsedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, couch_docs_actual_disk_size{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"})',
+      'topk(5, couch_docs_actual_disk_size{' + matcher + ' })',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
     ),
@@ -147,11 +147,11 @@ local topBucketsByDiskUsedPanel = {
   pluginVersion: '10.0.2-cloud.1.94a6f396',
 };
 
-local topBucketsByCurrentItemsPanel = {
+local topBucketsByCurrentItemsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, kv_curr_items{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"})',
+      'topk(5, kv_curr_items{' + matcher + ' })',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
     ),
@@ -226,11 +226,11 @@ local topBucketsByCurrentItemsPanel = {
   },
 };
 
-local topBucketsByOperationsPanel = {
+local topBucketsByOperationsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job, op) (rate(kv_ops{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval])))',
+      'topk(5, sum by(bucket, couchbase_cluster, instance, job, op) (rate(kv_ops{' + matcher + ' }[$__rate_interval])))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}} - {{op}}',
     ),
@@ -305,11 +305,11 @@ local topBucketsByOperationsPanel = {
   },
 };
 
-local topBucketsByOperationsFailedPanel = {
+local topBucketsByOperationsFailedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (rate(kv_ops_failed{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval])))',
+      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (rate(kv_ops_failed{' + matcher + ' }[$__rate_interval])))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
     ),
@@ -384,11 +384,11 @@ local topBucketsByOperationsFailedPanel = {
   },
 };
 
-local topBucketsByHighPriorityRequestsPanel = {
+local topBucketsByHighPriorityRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_high_pri_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}))',
+      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_high_pri_requests{' + matcher + ' }))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
     ),
@@ -463,11 +463,11 @@ local topBucketsByHighPriorityRequestsPanel = {
   },
 };
 
-local bottomBucketsByCacheHitRatioPanel = {
+local bottomBucketsByCacheHitRatioPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval]))) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_misses{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}[$__rate_interval])))',
+      'bottomk(5, sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{' + matcher + ' }[$__rate_interval]))) / (clamp_min(sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_hits{' + matcher + ' }[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance, bucket) (increase(index_cache_misses{' + matcher + ' }[$__rate_interval])))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
     ),
@@ -543,11 +543,11 @@ local bottomBucketsByCacheHitRatioPanel = {
   },
 };
 
-local topBucketsByVBucketsCountPanel = {
+local topBucketsByVBucketsCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_vbuckets{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}))',
+      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_num_vbuckets{' + matcher + ' }))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
     ),
@@ -597,11 +597,11 @@ local topBucketsByVBucketsCountPanel = {
   pluginVersion: '10.0.2-cloud.1.94a6f396',
 };
 
-local topBucketsByVBucketQueueMemoryPanel = {
+local topBucketsByVBucketQueueMemoryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_vb_queue_memory_bytes{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"}))',
+      'topk(5, sum by(bucket, couchbase_cluster, instance, job) (kv_vb_queue_memory_bytes{' + matcher + ' }))',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{bucket}}',
     ),
@@ -675,6 +675,8 @@ local topBucketsByVBucketQueueMemoryPanel = {
   },
 };
 
+local getMatcher(cfg) = '%(couchbaseSelector)s, couchbase_cluster=~"$couchbase_cluster", instance=~"$instance", bucket=~"$bucket"' % cfg;
+
 {
   grafanaDashboards+:: {
     'couchbase-bucket-overview.json':
@@ -715,9 +717,21 @@ local topBucketsByVBucketQueueMemoryPanel = {
             sort=0
           ),
           template.new(
+            'cluster',
+            promDatasource,
+            'label_values(kv_mem_used_bytes{%(multiclusterSelector)s}, cluster)' % $._config,
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='.*',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
+          template.new(
             'couchbase_cluster',
             promDatasource,
-            'label_values(kv_mem_used_bytes,couchbase_cluster)',
+            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},couchbase_cluster)',
             label='Couchbase cluster',
             refresh=2,
             includeAll=true,
@@ -728,7 +742,7 @@ local topBucketsByVBucketQueueMemoryPanel = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(kv_mem_used_bytes,instance)',
+            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},instance)',
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -739,7 +753,7 @@ local topBucketsByVBucketQueueMemoryPanel = {
           template.new(
             'bucket',
             promDatasource,
-            'label_values(kv_mem_used_bytes,bucket)',
+            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},bucket)',
             label='Bucket',
             refresh=2,
             includeAll=true,
@@ -751,15 +765,15 @@ local topBucketsByVBucketQueueMemoryPanel = {
       )
       .addPanels(
         [
-          topBucketsByMemoryUsedPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-          topBucketsByDiskUsedPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-          topBucketsByCurrentItemsPanel { gridPos: { h: 8, w: 8, x: 0, y: 8 } },
-          topBucketsByOperationsPanel { gridPos: { h: 8, w: 8, x: 8, y: 8 } },
-          topBucketsByOperationsFailedPanel { gridPos: { h: 8, w: 8, x: 16, y: 8 } },
-          topBucketsByHighPriorityRequestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-          bottomBucketsByCacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-          topBucketsByVBucketsCountPanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
-          topBucketsByVBucketQueueMemoryPanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
+          topBucketsByMemoryUsedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+          topBucketsByDiskUsedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+          topBucketsByCurrentItemsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 8 } },
+          topBucketsByOperationsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 8, y: 8 } },
+          topBucketsByOperationsFailedPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 8 } },
+          topBucketsByHighPriorityRequestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
+          bottomBucketsByCacheHitRatioPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+          topBucketsByVBucketsCountPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
+          topBucketsByVBucketQueueMemoryPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
         ]
       ),
   },
