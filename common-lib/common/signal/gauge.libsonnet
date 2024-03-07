@@ -26,6 +26,7 @@ base {
       datasource,
       valueMapping,
       legendCustomTemplate,
+      rangeFunction=null,
     )
     {
     },

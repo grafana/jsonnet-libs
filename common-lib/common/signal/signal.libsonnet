@@ -86,8 +86,8 @@ local stub = import './stub.libsonnet';
             aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
             infoLabel=std.get(signalsJson.signals[s].sources[type], 'infoLabel', null),
             valueMapping=std.get(signalsJson.signals[s].sources[type], 'valueMapping', {}),
-            legendCustomTemplate=std.get(signalsJson.signals[s].legendCustomTemplate[type], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
-            rangeFunction=std.get(signalsJson.signals[s].rangeFunction[type], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
+            legendCustomTemplate=std.get(signalsJson.signals[s].sources[type], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
+            rangeFunction=std.get(signalsJson.signals[s].sources[type], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
           )
         else if std.get(signalsJson.signals[s], 'optional', false) == false then error 'must provide source for signal %s of type=%s' % [signalsJson.signals[s].name, type] else
           //maybe add stub signal?
@@ -221,6 +221,7 @@ local stub = import './stub.libsonnet';
           vars=this.templatingVariables,
           valueMapping=valueMapping,
           legendCustomTemplate=legendCustomTemplate,
+          rangeFunction=rangeFunction,
         )
       else if type == 'info' then
         info.new(

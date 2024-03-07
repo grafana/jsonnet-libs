@@ -29,6 +29,7 @@ base {
       datasource,
       valueMapping,
       legendCustomTemplate,
+      rangeFunction=null,
     )
     {
       local prometheusQuery = g.query.prometheus,
