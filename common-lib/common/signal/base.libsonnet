@@ -13,6 +13,7 @@ local signalUtils = import './utils.libsonnet';
     vars,
     datasource,
     valueMapping,
+    legendCustomTemplate,
   ): {
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
@@ -25,7 +26,7 @@ local signalUtils = import './utils.libsonnet';
         signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel) % vars
       )
       + prometheusQuery.withRefId(name)
-      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel) % vars),
+      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % vars),
 
     //Return as grafana panel mixi target(query+legend) + overrides(like units)
     asPanelMixin()::

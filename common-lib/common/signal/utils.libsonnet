@@ -25,10 +25,12 @@
       expr,
 
 
-  wrapLegend(legend, aggLevel):
-    if aggLevel == 'none' then '%(legendPrefix)s' + legend
+  wrapLegend(legend, aggLevel, legendCustomTemplate):
+    if legendCustomTemplate != null then legendCustomTemplate
+    else if
+      aggLevel == 'none' then legend
     else
-      '%(aggLegend)s%(legendPrefix)s: ' + legend,
+      '%(aggLegend)s: ' + legend,
 
   generateUnits(type, unit):
     if type == 'gauge' || type == 'histogram' || type == 'info' then unit

@@ -37,7 +37,7 @@ local stub = import './stub.libsonnet';
       varMetric=std.get(signalsJson, 'discoveryMetric', 'up'),
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
-      legendPrefix=std.get(signalsJson, 'legendPrefix', ''),
+      legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
     )
     +
     {
@@ -50,6 +50,7 @@ local stub = import './stub.libsonnet';
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
         valueMapping=std.get(signalsJson.signals[s], 'valueMapping', {}),
+        legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', null),
       )
       for s in std.objectFieldsAll(signalsJson.signals)
     },
@@ -65,8 +66,7 @@ local stub = import './stub.libsonnet';
     aggFunction='avg',
     //metric used in variables discovery by default
     varMetric='up',
-    //extra prefix for legend
-    legendPrefix=''
+    legendCustomTemplate=null,
   ): self {
 
     local this = self,
@@ -97,8 +97,7 @@ local stub = import './stub.libsonnet';
         else if aggLevel == 'instance' then utils.labelsToPanelLegend(self.groupLabels + self.instanceLabels)
         else if aggLevel == 'none' then '',
       interval: interval,
-      //extra prefix for legend
-      legendPrefix: legendPrefix,
+      legendCustomTemplate: legendCustomTemplate,
     },
     //get Grafana Variables
     //allow multiple instance selection
@@ -124,6 +123,7 @@ local stub = import './stub.libsonnet';
       aggLevel=self.aggLevel,
       infoLabel=null,
       valueMapping={},
+      legendCustomTemplate=null,
     ):
 
       // validate inputs
@@ -146,6 +146,7 @@ local stub = import './stub.libsonnet';
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
+          legendCustomTemplate=legendCustomTemplate,
         )
       else if type == 'counter' then
         counter.new(
@@ -158,6 +159,7 @@ local stub = import './stub.libsonnet';
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
+          legendCustomTemplate=legendCustomTemplate,
         )
       else if type == 'histogram' then
         histogram.new(
@@ -170,6 +172,7 @@ local stub = import './stub.libsonnet';
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
+          legendCustomTemplate=legendCustomTemplate,
         )
       else if type == 'info' then
         info.new(
@@ -182,6 +185,7 @@ local stub = import './stub.libsonnet';
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
+          legendCustomTemplate=legendCustomTemplate,
         )
       else if type == 'stub' then
         stub.new(

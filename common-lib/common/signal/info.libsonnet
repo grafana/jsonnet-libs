@@ -16,6 +16,7 @@ base {
     vars,
     datasource,
     valueMapping,
+    legendCustomTemplate,
   ):
     base.new(
       name,
@@ -26,7 +27,8 @@ base {
       aggLevel,
       vars,
       datasource,
-      valueMapping
+      valueMapping,
+      legendCustomTemplate,
     )
     {
       local prometheusQuery = g.query.prometheus,
