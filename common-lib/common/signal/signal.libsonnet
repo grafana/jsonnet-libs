@@ -38,6 +38,7 @@ local stub = import './stub.libsonnet';
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
       legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
+      rangeFunction=std.get(signalsJson, 'rangeFunction', 'rate'), // rate, irate , delta, increase, idelta...
     )
     +
     {
@@ -51,6 +52,7 @@ local stub = import './stub.libsonnet';
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
         valueMapping=std.get(signalsJson.signals[s], 'valueMapping', {}),
         legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
+        rangeFunction=std.get(signalsJson, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')), // rate, irate , delta, increase, idelta...
       )
       for s in std.objectFieldsAll(signalsJson.signals)
     },
@@ -67,6 +69,7 @@ local stub = import './stub.libsonnet';
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
       legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
+      rangeFunction=std.get(signalsJson, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')), // rate, irate , delta, increase, idelta...
     )
     +
     {
@@ -84,6 +87,7 @@ local stub = import './stub.libsonnet';
             infoLabel=std.get(signalsJson.signals[s].sources[type], 'infoLabel', null),
             valueMapping=std.get(signalsJson.signals[s].sources[type], 'valueMapping', {}),
             legendCustomTemplate=std.get(signalsJson.signals[s].legendCustomTemplate[type], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
+            rangeFunction=std.get(signalsJson.signals[s].rangeFunction[type], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
           )
         else if std.get(signalsJson.signals[s], 'optional', false) == false then error 'must provide source for signal %s of type=%s' % [signalsJson.signals[s].name, type] else
           //maybe add stub signal?
@@ -109,6 +113,7 @@ local stub = import './stub.libsonnet';
     //metric used in variables discovery by default
     varMetric='up',
     legendCustomTemplate=null,
+    rangeFunction='rate'
   ): self {
 
     local this = self,
@@ -165,6 +170,7 @@ local stub = import './stub.libsonnet';
       infoLabel=null,
       valueMapping={},
       legendCustomTemplate=null,
+      rangeFunction=rangeFunction,
     ):
 
       // validate inputs
@@ -201,6 +207,7 @@ local stub = import './stub.libsonnet';
           vars=this.templatingVariables,
           valueMapping=valueMapping,
           legendCustomTemplate=legendCustomTemplate,
+          rangeFunction=rangeFunction,
         )
       else if type == 'histogram' then
         histogram.new(

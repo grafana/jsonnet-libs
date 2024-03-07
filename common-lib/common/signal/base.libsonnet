@@ -14,6 +14,7 @@ local signalUtils = import './utils.libsonnet';
     datasource,
     valueMapping,
     legendCustomTemplate,
+    rateFunction,
   ): {
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
@@ -23,7 +24,7 @@ local signalUtils = import './utils.libsonnet';
     asTarget()::
       prometheusQuery.new(
         datasource,
-        signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel) % vars
+        signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel, rateFunction=rateFunction) % vars
       )
       + prometheusQuery.withRefId(name)
       + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % vars),

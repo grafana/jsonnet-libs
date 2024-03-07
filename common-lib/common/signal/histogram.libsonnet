@@ -15,6 +15,7 @@ base {
     datasource,
     valueMapping,
     legendCustomTemplate,
+    rateFunction,
   ):
     base.new(
       name,
@@ -27,6 +28,7 @@ base {
       datasource,
       valueMapping,
       legendCustomTemplate,
+      rateFunction,
     )
 
     {

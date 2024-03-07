@@ -1,8 +1,8 @@
 {
-  wrapExpr(type, expr, q=0.95, aggLevel):
+  wrapExpr(type, expr, q=0.95, aggLevel, rateFunction):
     if type == 'counter' then
       (
-        local baseExpr = 'rate(' + expr + '[%(interval)s])';
+        local baseExpr = rateFunction + '(' + expr + '[%(interval)s])';
         if aggLevel == 'none' then
           baseExpr
         else
@@ -17,7 +17,7 @@
       )
     else if type == 'histogram' then
       (
-        local baseExpr = 'histogram_quantile(' + '%.2f' % q + ', sum(rate(' + expr + '[%(interval)s])) by (le,%(agg)s))';
+        local baseExpr = 'histogram_quantile(' + '%.2f' % q + ', sum(' + rateFunction + '(' + expr + '[%(interval)s])) by (le,%(agg)s))';
         if aggLevel == 'none' then baseExpr
         else '%(aggFunction)s by (%(agg)s) (' + baseExpr + ')'
       )
