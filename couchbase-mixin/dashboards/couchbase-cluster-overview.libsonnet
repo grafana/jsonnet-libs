@@ -949,7 +949,7 @@ local getMatcher(cfg) = '%(couchbaseSelector)s, couchbase_cluster=~"$couchbase_c
           template.new(
             'couchbase_cluster',
             promDatasource,
-            'label_values(kv_num_vbuckets{%(couchbaseSelector)s},couchbase_cluster)',
+            'label_values(kv_num_vbuckets{%(couchbaseSelector)s},couchbase_cluster)' % $._config,
             label='Couchbase cluster',
             refresh=2,
             includeAll=true,

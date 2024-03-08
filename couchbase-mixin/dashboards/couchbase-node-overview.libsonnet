@@ -1104,7 +1104,7 @@ local getMatcher(cfg) = '%(couchbaseSelector)s, couchbase_cluster=~"$couchbase_c
             template.new(
               'couchbase_cluster',
               promDatasource,
-              'label_values(sys_mem_actual_used{%(couchbaseSelector)s},couchbase_cluster)',
+              'label_values(sys_mem_actual_used{%(couchbaseSelector)s},couchbase_cluster)' % $._config,
               label='Couchbase cluster',
               refresh=2,
               includeAll=true,
@@ -1115,7 +1115,7 @@ local getMatcher(cfg) = '%(couchbaseSelector)s, couchbase_cluster=~"$couchbase_c
             template.new(
               'instance',
               promDatasource,
-              'label_values(sys_mem_actual_used{%(couchbaseSelector)s},instance)',
+              'label_values(sys_mem_actual_used{%(couchbaseSelector)s},instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,

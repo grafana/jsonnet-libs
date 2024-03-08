@@ -731,7 +731,7 @@ local getMatcher(cfg) = '%(couchbaseSelector)s, couchbase_cluster=~"$couchbase_c
           template.new(
             'couchbase_cluster',
             promDatasource,
-            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},couchbase_cluster)',
+            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},couchbase_cluster)' % $._config,
             label='Couchbase cluster',
             refresh=2,
             includeAll=true,
@@ -742,7 +742,7 @@ local getMatcher(cfg) = '%(couchbaseSelector)s, couchbase_cluster=~"$couchbase_c
           template.new(
             'instance',
             promDatasource,
-            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},instance)',
+            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},instance)' % $._config,
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -753,7 +753,7 @@ local getMatcher(cfg) = '%(couchbaseSelector)s, couchbase_cluster=~"$couchbase_c
           template.new(
             'bucket',
             promDatasource,
-            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},bucket)',
+            'label_values(kv_mem_used_bytes{%(couchbaseSelector)s},bucket)' % $._config,
             label='Bucket',
             refresh=2,
             includeAll=true,
