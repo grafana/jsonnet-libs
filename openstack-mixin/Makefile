@@ -32,3 +32,4 @@ prometheus_alerts.yaml: mixin.libsonnet alerts.libsonnet
 .PHONY: clean
 clean:
 	rm -rf dashboards_out prometheus_alerts.yaml
+	

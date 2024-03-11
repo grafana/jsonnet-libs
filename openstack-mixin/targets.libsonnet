@@ -253,14 +253,14 @@ local lokiQuery = g.query.loki;
     volumeErrorStatus:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_cinder_volume_status_counter{%(queriesSelector)s, status=~"error|error_backing-up|error_deleting|error_extending|error_restoring"}' % vars
+        'openstack_cinder_volume_status_counter{%(queriesSelector)s, status=~"error|error_backing-up|error_deleting|error_extending|error_restoring"} > 0' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{instance}} - {{status}}'),
     volumeNonErrorStatus:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk(5, openstack_cinder_volume_status_counter{%(queriesSelector)s, status!~"error|error_backing-up|error_deleting|error_extending|error_restoring"})' % vars
+        'topk(5, openstack_cinder_volume_status_counter{%(queriesSelector)s, status!~"error|error_backing-up|error_deleting|error_extending|error_restoring"}) > 0' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{instance}} - {{status}}'),

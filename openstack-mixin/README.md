@@ -4,9 +4,11 @@ The OpenStack mixin is a set of configurable Grafana dashboards and alerts.
 
 The OpenStack mixin contains the following dashboards:
 
-- OpenStack cloud overview
-- OpenStack nova and neutron overview
-- OpenStack cinder and glance overview
+- OpenStack overview
+- OpenStack Nova
+- OpenStack Neutron
+- OpenStack Cinder
+- OpenStack Glance
 - OpenStack logs
 
 and the following alerts:
@@ -21,24 +23,28 @@ and the following alerts:
 - OpenStackCinderHighVolumeMemoryUsage
 - OpenStackCinderHighPoolCapacityUsage
 
-## OpenStack cloud overview
+## OpenStack overview
 
-The OpenStack cloud overview dashboard provides details on OpenStack services, alerts, cloud resource usage, and hierarchy.
-![OpenStack cloud overview dashboard (services)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cloud_overview_1.png)
-![OpenStack cloud overview dashboard (keystone)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cloud_overview_2.png)
+The OpenStack cloud overview dashboard provides details on OpenStack services, alerts, cloud resource usage, hierarchy, and images.
+![OpenStack overview dashboard (services)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_1.png)
+![OpenStack overview dashboard (keystone)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_2.png)
+![OpenStack overview dashboard (images)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_3.png)
 
-## OpenStack nova and neutron overview
+## OpenStack Nova
 
-The OpenStack nova and neutron overview dashboard provides details on the compute and networking services in OpenStack.
-![OpenStack nova and neutron overview dashboard (compute)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_nova_and_neutron_overview_1.png)
-![OpenStack nova and neutron overview dashboard (networks)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_nova_and_neutron_overview_2.png)
-![OpenStack nova and neutron overview dashboard (ports)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_nova_and_neutron_overview_3.png)
+The OpenStack Nova dashboard provides details on the compute service in OpenStack.
+![OpenStack nova dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_nova.png)
 
-## OpenStack cinder and glance overview
+## OpenStack Neutron
 
-The OpenStack cinder and glance overview dashboard provides details on the block storage and image services in OpenStack.
-![OpenStack cinder and glance overview dashboard (storage)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder_and_glance_overview_1.png)
-![OpenStack cinder and glance overview dashboard (images)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder_and_glance_overview_2.png)
+The OpenStack Neutron dashboard provides details on the networking service in OpenStack.
+![OpenStack neutron dashboard (networks)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_neutron_1.png)
+![OpenStack neutron dashboard (ports)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_neutron_2.png)
+
+## OpenStack Cinder
+
+The OpenStack Cinder dashboard provides details on the block storage service in OpenStack.
+![OpenStack Cinder and glance overview dashboard (storage)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder.png)
 
 # OpenStack logs
 
@@ -77,6 +83,20 @@ scrape_configs:
           level:
           service:
 ```
+
+#### Logging to a file (optional)
+
+This integration collects logs from journald, assuming that logging to a file is not configured. If you wish to configure a log file for your OpenStack services:
+
+1. Create a `<service>.log` file.
+2. Edit the `<service>.conf` file to include `log_file` and `level` config options.
+
+```bash
+log_file = /Path/to/log/dir/<service>.log
+level =  WARNING
+```
+- Other possible `level` options are `DEBUG`, `INFO`, and `ERROR`.
+3. Repeat steps 1 & 2 for each service.
 
 ## Alerts overview
 

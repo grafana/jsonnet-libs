@@ -3,14 +3,17 @@ local g = import './g.libsonnet';
   local link = g.dashboard.link,
   new(this):
     {
-      cloudOverview:
-        link.link.new('OpenStack cloud overview', '/d/' + this.grafana.dashboards.cloudOverview.uid)
+      overview:
+        link.link.new('OpenStack overview', '/d/' + this.grafana.dashboards.overview.uid)
         + link.link.options.withKeepTime(true),
-      novaNeutronOverview:
-        link.link.new('OpenStack nova and neutron overview', '/d/' + this.grafana.dashboards.novaNeutronOverview.uid)
+      nova:
+        link.link.new('OpenStack Nova', '/d/' + this.grafana.dashboards.nova.uid)
         + link.link.options.withKeepTime(true),
-      cinderGlanceOverview:
-        link.link.new('OpenStack cinder and glance overview', '/d/' + this.grafana.dashboards.cinderGlanceOverview.uid)
+      neutron:
+        link.link.new('OpenStack Neutron', '/d/' + this.grafana.dashboards.neutron.uid)
+        + link.link.options.withKeepTime(true),
+      cinder:
+        link.link.new('OpenStack Nova', '/d/' + this.grafana.dashboards.cinder.uid)
         + link.link.options.withKeepTime(true),
     }
     +

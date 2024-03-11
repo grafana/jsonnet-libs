@@ -13,8 +13,8 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
-      cloudOverview:
-        g.dashboard.new('OpenStack cloud overview')
+      overview:
+        g.dashboard.new('OpenStack overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
@@ -32,54 +32,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.regions { gridPos+: { w: 4 } },
               panels.users,
               panels.projectDetails { gridPos+: { w: 24 } },
-            ], 12, 8
-          )
-        )
-        // hide link to self
-        + root.applyCommon(vars.multiInstance, uid + '-cloud-overview', tags, links { cloudOverview+:: {} }, timezone, refresh, period),
-      novaNeutronOverview:
-        g.dashboard.new('OpenStack nova and neutron overview')
-        + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              g.panel.row.new('Nova service'),
-              panels.novaStatus { gridPos+: { w: 6 } },
-              panels.vms { gridPos+: { w: 18 } },
-              panels.instanceUsage,
-              panels.vCPUUsage,
-              panels.memoryUsage,
-              panels.novaAgents,
-              g.panel.row.new('Neutron service'),
-              panels.neutronStatus { gridPos+: { w: 6 } },
-              panels.networks { gridPos+: { w: 9 } },
-              panels.subnets { gridPos+: { w: 9 } },
-              panels.routers,
-              panels.routerDetails,
-              panels.ports { gridPos+: { w: 10 } },
-              panels.portDetails { gridPos+: { w: 14 } },
-              panels.floatingIPs,
-              panels.ipsUsed,
-              panels.securityGroups,
-              panels.neutronAgents,
-            ], 12, 8
-          )
-        )
-        // hide link to self
-        + root.applyCommon(vars.multiInstance, uid + '-nova-and-neutron-overview', tags, links { novaNeutronOverview+:: {} }, timezone, refresh, period),
-      cinderGlanceOverview:
-        g.dashboard.new('OpenStack cinder and glance overview')
-        + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            [
-              g.panel.row.new('Cinder service'),
-              panels.cinderStatus { gridPos+: { w: 4 } },
-              panels.volumes { gridPos+: { w: 10 } },
-              panels.volumeStatus { gridPos+: { w: 10 } },
-              panels.volumeUsage,
-              panels.backupUsage,
-              panels.poolUsage,
-              panels.snapshots,
-              panels.cinderAgents { gridPos+: { w: 24 } },
               g.panel.row.new('Glance service'),
               panels.glanceStatus { gridPos+: { w: 6 } },
               panels.imageCount { gridPos+: { w: 18 } },
@@ -88,7 +40,62 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.multiInstance, uid + '-cinder-and-glance-overview', tags, links { cinderGlanceOverview+:: {} }, timezone, refresh, period),
+        + root.applyCommon(vars.multiInstance, uid + '-overview', tags, links { overview+:: {} }, timezone, refresh, period),
+      nova:
+        g.dashboard.new('OpenStack Nova')
+        + g.dashboard.withPanels(
+          g.util.grid.wrapPanels(
+            [
+              panels.novaStatus { gridPos+: { w: 6 } },
+              panels.vms { gridPos+: { w: 18 } },
+              panels.instanceUsage,
+              panels.vCPUUsage,
+              panels.memoryUsage,
+              panels.novaAgents,
+            ], 12, 8
+          )
+        )
+        // hide link to self
+        + root.applyCommon(vars.multiInstance, uid + '-nova', tags, links { nova+:: {} }, timezone, refresh, period),
+      neutron:
+        g.dashboard.new('OpenStack Neutron')
+        + g.dashboard.withPanels(
+          g.util.grid.wrapPanels(
+            [
+              panels.neutronStatus { gridPos+: { w: 6 } },
+              panels.networks { gridPos+: { w: 9 } },
+              panels.subnets { gridPos+: { w: 9 } },
+              panels.routers,
+              panels.routerDetails,
+              panels.ports { gridPos+: { w: 8 } },
+              panels.portDetails { gridPos+: { w: 16 } },
+              panels.floatingIPs,
+              panels.ipsUsed,
+              panels.securityGroups,
+              panels.neutronAgents,
+            ], 12, 8
+          )
+        )
+        // hide link to self
+        + root.applyCommon(vars.multiInstance, uid + '-neutron', tags, links { neutron+:: {} }, timezone, refresh, period),
+      cinder:
+        g.dashboard.new('OpenStack Cinder')
+        + g.dashboard.withPanels(
+          g.util.grid.wrapPanels(
+            [
+              panels.cinderStatus { gridPos+: { w: 4 } },
+              panels.volumes { gridPos+: { w: 10 } },
+              panels.volumeStatus { gridPos+: { w: 10 } },
+              panels.volumeUsage,
+              panels.backupUsage,
+              panels.poolUsage,
+              panels.snapshots,
+              panels.cinderAgents { gridPos+: { w: 24 } },
+            ], 12, 8
+          )
+        )
+        // hide link to self
+        + root.applyCommon(vars.multiInstance, uid + '-cinder', tags, links { cinder+:: {} }, timezone, refresh, period),
     }
     +
     if this.config.enableLokiLogs then

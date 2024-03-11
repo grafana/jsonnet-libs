@@ -405,6 +405,7 @@ local utils = commonlib.utils;
         description='Percentage of the maximum number of instances in use for each project.'
       )
       + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.options.legend.withPlacement('right')
       + timeSeries.standardOptions.withMax(1)
       + timeSeries.standardOptions.withMin(0),
 
@@ -415,6 +416,7 @@ local utils = commonlib.utils;
         description='Percentage of the maximum number of virtual CPUs in use for each project.'
       )
       + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.options.legend.withPlacement('right')
       + timeSeries.standardOptions.withMax(1)
       + timeSeries.standardOptions.withMin(0),
 
@@ -425,6 +427,7 @@ local utils = commonlib.utils;
         description='Percentage of the maximum amount of memory in use for each project.'
       )
       + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.options.legend.withPlacement('right')
       + timeSeries.standardOptions.withMax(1)
       + timeSeries.standardOptions.withMin(0),
 
