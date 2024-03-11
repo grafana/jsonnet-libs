@@ -1,9 +1,14 @@
 {
-  groupLabels: ['job', 'cluster'],
-  instanceLabels: ['instance'],
   filteringSelector: 'job=~".*openldap.*"',
   uid: 'openldap',
-  clusterLegendLabel: ['openldap_cluster', 'instance'],
+
+  enableMultiCluster: false,
+  groupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
+  logLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
+  mainGroupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
+  clusterLegendLabel: ['cluster', 'instance'],
+  instanceLabels: ['instance'],
+
   // prefix dashboards titles
   dashboardNamePrefix: '',
   dashboardTags: [self.uid],
