@@ -281,6 +281,7 @@ local lokiQuery = g.query.loki;
       )
       + prometheusQuery.withLegendFormat('{{cluster}}')
       + panel.histogram.queryOptions.withInterval('1m')
+      + prometheusQuery.withInstant(true)
       + prometheusQuery.withFormat('heatmap'),
     galleyValidationsPassed:
       prometheusQuery.new(
