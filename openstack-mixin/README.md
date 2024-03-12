@@ -8,7 +8,6 @@ The OpenStack mixin contains the following dashboards:
 - OpenStack Nova
 - OpenStack Neutron
 - OpenStack Cinder
-- OpenStack Glance
 - OpenStack logs
 
 and the following alerts:
