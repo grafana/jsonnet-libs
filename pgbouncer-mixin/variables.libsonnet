@@ -10,7 +10,7 @@ local utils = commonlib.utils;
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local instanceLabels = this.config.instanceLabels,
-      local mainGroupLabels = this.config.mainGroupLabels,
+			local pureInstanceLabels = this.config.pureInstanceLabels,
       local topDatabaseSelector =
         var.custom.new(
           'top_database_count',
@@ -63,7 +63,7 @@ local utils = commonlib.utils;
         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
       multiCluster:
         [root.datasources.prometheus]
-        + variablesFromLabels(mainGroupLabels, [], filteringSelector),
+        + variablesFromLabels(groupLabels, [], filteringSelector),
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
         [root.datasources.prometheus]
@@ -74,19 +74,19 @@ local utils = commonlib.utils;
           filteringSelector,
         ],
       clusterVariableSelectors:
-        [root.datasources.prometheus] + variablesFromLabels(mainGroupLabels, [], filteringSelector) + [topDatabaseSelector],
+        [root.datasources.prometheus] + variablesFromLabels(groupLabels, [], filteringSelector) + [topDatabaseSelector],
       queriesGroupSelectorAdvanced:
         '%s' % [
           utils.labelsToPromQLSelectorAdvanced(this.config.logLabels),
         ],
       clusterQuerySelector:
         '%s,%s' % [
-          utils.labelsToPromQLSelector(mainGroupLabels),
+          utils.labelsToPromQLSelector(groupLabels),
           filteringSelector,
         ],
       instanceQueriesSelector:
         '%s,%s' % [
-          utils.labelsToPromQLSelector(mainGroupLabels + instanceLabels),
+          utils.labelsToPromQLSelector(groupLabels + pureInstanceLabels),
           filteringSelector,
         ],
     }
