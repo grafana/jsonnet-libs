@@ -6,8 +6,6 @@ local pgbouncer =
     {
       filteringSelector: 'job=~"integrations/pgbouncer"',
       uid: 'pgbouncer',
-      groupLabels: ['job', 'pgbouncer_cluster', 'database'],
-      instanceLabels: ['instance'],
       enableLokiLogs: true,
     }
   );
