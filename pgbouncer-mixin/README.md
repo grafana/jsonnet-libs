@@ -13,7 +13,6 @@ and the following alerts:
 - HighClientWaitTime
 - HighServerConnectionSaturationWarning
 - HighServerConnectionSaturationCritical
-- HighNetworkTraffic
 
 ## PgBouncer Cluster Overview
 
@@ -74,7 +73,6 @@ scrape_configs:
 | HighClientWaitTime                     | Clients are experiencing significant delays, which could indicate issues with connection pool saturation or server performance.                                         |
 | HighServerConnectionSaturationWarning  | System is nearing a high number of user connections, near the threshold of configured max user connections.                                                             |
 | HighServerConnectionSaturationCritical | System is nearing a critically high number of user connections, near the threshold of configured max user connections.                                                  |
-| HighNetworkTraffic                     | A significant spike over the average peak of network traffic was observed, may indicate unusual activity or an increase in load.                                        |
 
 Default thresholds can be configured in `config.libsonnet`
 
@@ -85,7 +83,6 @@ Default thresholds can be configured in `config.libsonnet`
   alertsHighClientWaitTime: 15,
   alertsHighServerConnectionSaturationWarning: 80,
   alertsHighServerConnectionSaturationCritical: 90,
-  alertsHighNetworkTraffic: 50,
   },
 }
 ```
