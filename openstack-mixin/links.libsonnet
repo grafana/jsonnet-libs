@@ -13,7 +13,7 @@ local g = import './g.libsonnet';
         link.link.new('OpenStack Neutron', '/d/' + this.grafana.dashboards.neutron.uid)
         + link.link.options.withKeepTime(true),
       cinder:
-        link.link.new('OpenStack Nova', '/d/' + this.grafana.dashboards.cinder.uid)
+        link.link.new('OpenStack Cinder', '/d/' + this.grafana.dashboards.cinder.uid)
         + link.link.options.withKeepTime(true),
     }
     +

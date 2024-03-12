@@ -26,8 +26,7 @@ and the following alerts:
 
 The OpenStack cloud overview dashboard provides details on OpenStack services, alerts, cloud resource usage, hierarchy, and images.
 ![OpenStack overview dashboard (services)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_1.png)
-![OpenStack overview dashboard (keystone)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_2.png)
-![OpenStack overview dashboard (images)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_3.png)
+![OpenStack overview dashboard (images)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_2.png)
 
 ## OpenStack Nova
 
@@ -43,7 +42,8 @@ The OpenStack Neutron dashboard provides details on the networking service in Op
 ## OpenStack Cinder
 
 The OpenStack Cinder dashboard provides details on the block storage service in OpenStack.
-![OpenStack Cinder and glance overview dashboard (storage)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder.png)
+![OpenStack Cinder and glance overview dashboard (storage)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder_1.png)
+![OpenStack Cinder and glance overview dashboard (agents)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder_2.png)
 
 # OpenStack logs
 
