@@ -9,7 +9,7 @@
   filteringSelector: 'job="integrations/pgbouncer"',
   groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster'] else ['job', 'pgbouncer_cluster'],
   logLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster', 'instance'] else ['job', 'pgbouncer_cluster', 'instance'],
-	pureInstanceLabels: ['instance'],
+  pureInstanceLabels: ['instance'],
   legendLabels: ['database'],
   clusterLegendLabel: ['pgbouncer_cluster', 'instance', 'database'],
   instanceLabels: ['instance', 'database'],

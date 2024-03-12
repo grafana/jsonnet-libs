@@ -63,7 +63,11 @@ local utils = commonlib.utils;
         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
       multiCluster:
         [root.datasources.prometheus]
+<<<<<<< HEAD
         + variablesFromLabels(groupLabels, [], filteringSelector),
+=======
+        + variablesFromLabels(mainGroupLabels, [], filteringSelector),
+>>>>>>> master
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
         [root.datasources.prometheus]
@@ -74,19 +78,31 @@ local utils = commonlib.utils;
           filteringSelector,
         ],
       clusterVariableSelectors:
+<<<<<<< HEAD
         [root.datasources.prometheus] + variablesFromLabels(groupLabels, [], filteringSelector) + [topDatabaseSelector],
+=======
+        [root.datasources.prometheus] + variablesFromLabels(mainGroupLabels, [], filteringSelector) + [topDatabaseSelector],
+>>>>>>> master
       queriesGroupSelectorAdvanced:
         '%s' % [
           utils.labelsToPromQLSelectorAdvanced(this.config.logLabels),
         ],
       clusterQuerySelector:
         '%s,%s' % [
+<<<<<<< HEAD
           utils.labelsToPromQLSelector(groupLabels),
+=======
+          utils.labelsToPromQLSelector(mainGroupLabels),
+>>>>>>> master
           filteringSelector,
         ],
       instanceQueriesSelector:
         '%s,%s' % [
+<<<<<<< HEAD
           utils.labelsToPromQLSelector(groupLabels + pureInstanceLabels),
+=======
+          utils.labelsToPromQLSelector(mainGroupLabels + instanceLabels),
+>>>>>>> master
           filteringSelector,
         ],
     }
