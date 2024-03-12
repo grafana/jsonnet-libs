@@ -24,26 +24,26 @@ and the following alerts:
 
 ## OpenStack overview
 
-The OpenStack cloud overview dashboard provides details on OpenStack services, alerts, cloud resource usage, hierarchy, and images.
+The OpenStack overview dashboard provides details on OpenStack services, alerts, cloud resource usage, hierarchy, and images.
 ![OpenStack overview dashboard (services)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_1.png)
 ![OpenStack overview dashboard (images)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_overview_2.png)
 
 ## OpenStack Nova
 
 The OpenStack Nova dashboard provides details on the compute service in OpenStack.
-![OpenStack nova dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_nova.png)
+![OpenStack Nova dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_nova.png)
 
 ## OpenStack Neutron
 
 The OpenStack Neutron dashboard provides details on the networking service in OpenStack.
-![OpenStack neutron dashboard (networks)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_neutron_1.png)
-![OpenStack neutron dashboard (ports)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_neutron_2.png)
+![OpenStack Neutron dashboard (networks)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_neutron_1.png)
+![OpenStack Neutron dashboard (ports)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_neutron_2.png)
 
 ## OpenStack Cinder
 
 The OpenStack Cinder dashboard provides details on the block storage service in OpenStack.
-![OpenStack Cinder and glance overview dashboard (storage)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder_1.png)
-![OpenStack Cinder and glance overview dashboard (agents)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder_2.png)
+![OpenStack Cinder dashboard (storage)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder_1.png)
+![OpenStack Cinder dashboard (agents)](https://storage.googleapis.com/grafanalabs-integration-assets/openstack/screenshots/openstack_cinder_2.png)
 
 # OpenStack logs
 
