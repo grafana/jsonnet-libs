@@ -1,5 +1,7 @@
 # Signal
 
+Status: experimental.
+
 This part of the lib allows to define signals (i.e. metrics, logs). 
 
 This shifts focus of dashboard building from panels to actual signals we want to observe.
