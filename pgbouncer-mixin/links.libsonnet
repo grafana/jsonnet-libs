@@ -1,4 +1,5 @@
 local g = import './g.libsonnet';
+local config = (import 'config.libsonnet')._config;
 {
   local link = g.dashboard.link,
   new(this):
@@ -11,7 +12,7 @@ local g = import './g.libsonnet';
         + link.link.options.withKeepTime(true),
     }
     +
-    if this.config.enableLokiLogs then
+    if config.enableLokiLogs then
       {
         logs:
           link.link.new('PgBouncer logs', '/d/' + this.grafana.dashboards.logs.uid)
