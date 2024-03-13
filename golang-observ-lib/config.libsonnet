@@ -8,7 +8,7 @@
   local this = self,
   filteringSelector: 'job!=""',
   groupLabels: ['job'],
-  instanceLabels: ['service_name'],
+  instanceLabels: ['instance'],
   dashboardTags: [self.uid],
   uid: 'golang',
   dashboardNamePrefix: '',
