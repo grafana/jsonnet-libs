@@ -1,14 +1,12 @@
 local pgbouncerlib = import './main.libsonnet';
+local config = (import 'config.libsonnet')._config;
 
 local pgbouncer =
   pgbouncerlib.new()
-  + pgbouncerlib.withConfigMixin(
-    {
-      filteringSelector: 'job=~"integrations/pgbouncer"',
-      uid: 'pgbouncer',
-      enableLokiLogs: true,
-    }
-  );
+  +
+  {
+    config+: config,
+  };
 
 // populate monitoring-mixin:
 {

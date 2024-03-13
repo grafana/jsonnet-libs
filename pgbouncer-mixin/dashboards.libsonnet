@@ -63,7 +63,7 @@ local config = (import 'config.libsonnet')._config;
         + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-overview', tags, links { pgbouncerClusterOverview+:: {} }, annotations, timezone, refresh, period),
     }
     +
-    if config.enableLokiLogs then
+    if this.config.enableLokiLogs then
       {
         logs:
           logslib.new(
