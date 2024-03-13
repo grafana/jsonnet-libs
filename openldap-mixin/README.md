@@ -23,7 +23,7 @@ The OpenLDAP cluster overview dashboard provides details on connections, waiters
 
 ## OpenLDAP Logs Overview
 
-The OpenLDAP logs overview dashboard provides details on authentication and kernel logs. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. The default OpenLDAP error log path is `/var/log/auth.log` and `/var/log/kern.log` for each instance on Linux.
+The OpenLDAP logs overview dashboard provides details on the stats olc logs level. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance. 
 
 OpenLDAP logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -37,16 +37,12 @@ OpenLDAP logs are enabled by default in the `config.libsonnet` and can be remove
 
 In order for the selectors to properly work for system logs ingested into your logs datasource, please also include the matching `job` label onto the [scrape_configs](https://grafana.com/docs/loki/latest/clients/promtail/configuration/#scrape_configs) as to match the labels for ingested metrics.
 
-Additionally to get slapd that contain stats level logging, you may need to [configure OpenLDAP](https://tutoriels.meddeb.net/openldap-tutorial-log/) to enable stats logs and configured for rsyslog. 
+Additionally to get slapd logs that contain stats level logging, you may need to [configure OpenLDAP](https://tutoriels.meddeb.net/openldap-tutorial-log/) to enable stats logs and configured for rsyslog. 
 
 ```yaml
 scrape_configs:
   - job_name: integrations/openldap
     static_configs:
-      - targets: [localhost]
-        labels:
-          job: integrations/openldap
-          __path__: /var/log/kern.log
       - targets: [localhost]
         labels:
           job: integrations/openldap

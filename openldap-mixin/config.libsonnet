@@ -22,7 +22,7 @@
   alertsWarningBindFailureRateIncrease: 10,
 
   enableLokiLogs: true,
-  extraLogLabels: ['level'],
+  extraLogLabels: ['level', 'component'],
   logsVolumeGroupBy: 'level',
   showLogsVolume: true,
 }
