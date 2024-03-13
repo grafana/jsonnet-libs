@@ -16,7 +16,6 @@ local signalUtils = import './utils.libsonnet';
     //Return as alert/recordingRule query
     asPromRule():: {},
 
-
     //Return as timeSeriesPanel
     asTimeSeries()::
       g.panel.text.new('')

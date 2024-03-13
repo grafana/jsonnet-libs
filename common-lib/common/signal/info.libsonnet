@@ -35,7 +35,6 @@ base {
       local prometheusQuery = g.query.prometheus,
       local lokiQuery = g.query.loki,
 
-
       unit:: 'short',
       //Return as grafana panel target(query+legend)
       asTarget()::
@@ -54,7 +53,6 @@ base {
         super.asStat()
         + panels.generic.stat.info.stylize()
           { options+: { reduceOptions+: { fields: '/^' + infoLabel + '$/' } } },
-
 
       //Return as gauge panel
       asGauge()::

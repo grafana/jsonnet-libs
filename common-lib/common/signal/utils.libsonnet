@@ -24,7 +24,6 @@
     else if type == 'info' || type == 'info' then
       expr,
 
-
   wrapLegend(legend, aggLevel, legendCustomTemplate):
     if legendCustomTemplate != null then legendCustomTemplate
     else if

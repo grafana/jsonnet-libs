@@ -5,7 +5,6 @@ local panels = import './panels.libsonnet';
 local rows = import './rows.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
-
 {
 
   withConfigMixin(config): {

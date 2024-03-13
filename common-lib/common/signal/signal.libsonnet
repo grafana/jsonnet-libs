@@ -58,7 +58,6 @@ local stub = import './stub.libsonnet';
     },
   unmarshallJsonNew(signalsJson, type='prometheus'):
 
-
     self.init(
       datasource='$datasource',
       filteringSelector=[signalsJson.filteringSelector],

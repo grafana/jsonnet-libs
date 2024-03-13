@@ -67,6 +67,5 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       //   this.signals[type].nextGC.asTimeSeries()
       //   + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
-
     },
 }
