@@ -1,17 +1,18 @@
 local g = import './g.libsonnet';
 local logslib = import 'logs-lib/logs/main.libsonnet';
+local config = (import 'config.libsonnet')._config;
 {
   local root = self,
   new(this):
-    local prefix = this.config.dashboardNamePrefix;
+    local prefix = config.dashboardNamePrefix;
     local links = this.grafana.links;
-    local tags = this.config.dashboardTags;
-    local uid = g.util.string.slugify(this.config.uid);
+    local tags = config.dashboardTags;
+    local uid = g.util.string.slugify(config.uid);
     local vars = this.grafana.variables;
     local annotations = this.grafana.annotations;
-    local refresh = this.config.dashboardRefresh;
-    local period = this.config.dashboardPeriod;
-    local timezone = this.config.dashboardTimezone;
+    local refresh = config.dashboardRefresh;
+    local period = config.dashboardPeriod;
+    local timezone = config.dashboardTimezone;
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
     {
@@ -62,18 +63,18 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-overview', tags, links { pgbouncerClusterOverview+:: {} }, annotations, timezone, refresh, period),
     }
     +
-    if this.config.enableLokiLogs then
+    if config.enableLokiLogs then
       {
         logs:
           logslib.new(
             prefix + 'PgBouncer logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
             datasourceRegex=this.grafana.variables.datasources.loki.regex,
-            filterSelector=this.config.filteringSelector,
-            labels=this.config.logLabels + this.config.extraLogLabels,
+            filterSelector=config.filteringSelector,
+            labels=config.logLabels + config.extraLogLabels,
             formatParser=null,
-            showLogsVolume=this.config.showLogsVolume,
-            logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+            showLogsVolume=config.showLogsVolume,
+            logsVolumeGroupBy=config.logsVolumeGroupBy,
           )
           {
             dashboards+:

@@ -2,15 +2,16 @@ local g = import './g.libsonnet';
 local var = g.dashboard.variable;
 local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
+local config = (import 'config.libsonnet')._config;
 
 // Generates chained variables to use on on all dashboards
 {
   new(this, varMetric):
     {
-      local filteringSelector = this.config.filteringSelector,
-      local groupLabels = this.config.groupLabels,
-      local instanceLabels = this.config.instanceLabels,
-      local pureInstanceLabels = this.config.pureInstanceLabels,
+      local filteringSelector = config.filteringSelector,
+      local groupLabels = config.groupLabels,
+      local instanceLabels = config.instanceLabels,
+      local pureInstanceLabels = config.pureInstanceLabels,
       local topDatabaseSelector =
         var.custom.new(
           'top_database_count',
@@ -90,7 +91,7 @@ local utils = commonlib.utils;
           filteringSelector,
         ],
     }
-    + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
+    + if config.enableLokiLogs then self.withLokiLogs(this) else {},
   withLokiLogs(this): {
     multiInstance+: [this.grafana.variables.datasources.loki],
     singleInstance+: [this.grafana.variables.datasources.loki],
