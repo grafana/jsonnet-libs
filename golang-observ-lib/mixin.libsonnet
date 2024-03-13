@@ -5,12 +5,9 @@ local golang =
   + golanglib.withConfigMixin(
     {
       filteringSelector: 'job!=""',
+      metricsSource: 'otel',
     }
   );
 
 // populate monitoring-mixin:
-{
-  grafanaDashboards+:: golang.grafana.dashboards,
-  prometheusAlerts+:: golang.prometheus.alerts,
-  prometheusRules+:: golang.prometheus.recordingRules,
-}
+golang.asMonitoringMixin()

@@ -6,32 +6,34 @@ local g = import './g.libsonnet';
     local links = this.grafana.links;
     local tags = this.config.dashboardTags;
     local uid = g.util.string.slugify(this.config.uid);
-    local vars = this.grafana.variables;
+    local signals = this.grafana.signals;
     local annotations = this.grafana.annotations;
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
     local timezone = this.config.dashboardTimezone;
     local panels = this.grafana.panels;
     local stat = g.panel.stat;
+    local type = this.config.metricSource;
     {
-      golangruntime:
+      'golangruntime.json':
         g.dashboard.new(prefix + 'Golang runtime')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
-            [
-              panels.memoryReservedMemory,
-              panels.memoryStackUse,
-              panels.memoryOtherReservations,
-              panels.memoryHeap,
-              panels.memoryAllocationRate,
-              panels.memoryObjectAllocationRate,
-              panels.goroutines,
-              panels.garbageCollector,
-              panels.nextGC,
-            ], 12, 6
+            std.flattenArrays(
+              std.objectValues(this.grafana.rows)
+            )
           )
         )
-        + root.applyCommon(vars.singleInstance, uid + '-golangruntime', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(
+          this.signals.getVariablesMultiChoice(),
+          uid + '-golangruntime',
+          tags,
+          links { backToOverview+:: {} },
+          annotations,
+          timezone,
+          refresh,
+          period
+        ),
     },
 
   //Apply common options(uids, tags, annotations etc..) to all dashboards above

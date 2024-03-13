@@ -1,89 +1,71 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
-local utils = commonlib.utils;
 {
-  new(this):
+  new(signals):
     {
-      local t = this.grafana.targets,
+      version: signals.version.asStat(),
+      goRoutines:
+        signals.goRoutines.asTimeSeries()
+        + commonlib.panels.generic.timeSeries.base.stylize()
+        + g.panel.timeSeries.standardOptions.withDecimals(0),
+      uptime:
+        signals.uptime.asStat()
+        + commonlib.panels.system.stat.uptime.stylize(),
+      cGo:
+        signals.cgoCalls.asStat()
+        + commonlib.panels.generic.stat.base.stylize()
+        + g.panel.timeSeries.standardOptions.withNoValue('0'),
+      gcDuration:
+        g.panel.timeSeries.new('GC duration')
+        + signals.gcDurationMax.asPanelMixin()
+        + signals.gcDurationMin.asPanelMixin()
+        + signals.gcDurationPercentile.asPanelMixin()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
+      goThreads:
+        signals.goThreads.asStat()
+        + commonlib.panels.generic.stat.base.stylize(),
+      mem:
+        g.panel.timeSeries.new('Memory')
+        + signals.memReserved.asPanelMixin()
+        + signals.memTotal.asPanelMixin()
+        + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
-      memoryReservedMemory:
-        commonlib.panels.memory.timeSeries.usageBytes.new(
-          'Total reserved memory',
-          targets=[t['group:go_memstats_sys_bytes:avg']],
-          description='Average total bytes of memory reserved across all instances in a group.'
-        ),
-      memoryStackUse:
-        commonlib.panels.memory.timeSeries.usageBytes.new(
-          'Stack memory in use',
-          targets=[t['group:go_memstats_stack_sys_bytes:avg']],
-          description='Average stack memory usage across all instances in a group.'
-        ),
+      memHeapBytes:
+        g.panel.timeSeries.new('Memory heap')
+        + signals.memHeapReserved.asPanelMixin()
+        + signals.memHeapObjBytes.asPanelMixin()
+        + signals.memHeapIdleBytes.asPanelMixin()
+        + signals.memHeapInUseBytes.asPanelMixin()
+        + signals.memHeapReleasedBytes.asPanelMixin()
+        + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
-      memoryOtherReservations:
-        commonlib.panels.memory.timeSeries.usageBytes.new(
-          'Other memory reservations',
-          targets=[
-            t['group:go_memstats_mspan_sys_bytes:avg'],
-            t['group:go_memstats_mcache_sys_bytes:avg'],
-            t['group:go_memstats_buck_hash_sys_bytes:avg'],
-            t['group:go_memstats_gc_sys_bytes:avg'],
-          ],
-          description='Average memory reservations by the runtime, not for stack or heap, across all instances of a group.',
-        ),
+      memHeapObjects:
+        g.panel.timeSeries.new('Memory heap objects')
+        + signals.memHeapAllocatedObjects.asPanelMixin()
+        // + signals.memHeapLiveObjects.asPanelMixin()
+        + commonlib.panels.generic.timeSeries.base.stylize(),
 
-      memoryHeap:
-        commonlib.panels.memory.timeSeries.usageBytes.new(
-          title='Heap memory',
-          targets=[
-            t['group:go_memstats_heap_inuse_bytes:avg'],
-            t['group:go_memstats_heap_sys_bytes:avg'],
-          ],
-          description='Average memory reserved, and actually in use, by the heap, across all instances of a group.',
-          totalRegexp='heap reserved',
-        ),
+      memOffHeap:
+        g.panel.timeSeries.new('Memory off-heap')
+        + signals.memMspan.asPanelMixin()
+        + signals.memMcache.asPanelMixin()
+        + signals.memBuckHash.asPanelMixin()
+        + signals.memGc.asPanelMixin()
+        + signals.memOther.asPanelMixin()
+        + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
-      memoryAllocationRate:
-        commonlib.panels.generic.timeSeries.base.new(
-          title='Allocation rate, bytes',
-          targets=[t['group:go_memstats_alloc_bytes:avg_rate']],
-          description='Average allocation rate in bytes per second, across all instances of a group.',
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('bps'),
-      memoryObjectAllocationRate:
-        commonlib.panels.generic.timeSeries.base.new(
-          title='Heap object allocation rate',
-          targets=[t['group:go_memstats_mallocs:avg_rate']],
-          description='Average rate of heap object allocation, across all instances of a group.',
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('obj/s'),
+      memStack:
+        g.panel.timeSeries.new('Memory stack')
+        + signals.memStack.asPanelMixin()
+        + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
-      goroutines:
-        commonlib.panels.generic.timeSeries.base.new(
-          title='Goroutines',
-          targets=[t['group:go_goroutines:avg']],
-          description='Average number of goroutines across instances of a group.',
-        ),
+      // memoryObjectAllocationRate:
+      //   this.signals[type].memoryAllocations.asTimeSeries()
+      //   + commonlib.panels.generic.timeSeries.base.stylize(),
 
-      garbageCollector:
-        commonlib.panels.generic.timeSeries.base.new(
-          title='Garbage collector',
-          targets=[
-            t['group:go_gc_duration_seconds:avg_min'],
-            t['group:go_gc_duration_seconds:avg_max'],
-          ],
-          description='GC min & max duration.',
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('seconds'),
-
-      nextGC:
-        commonlib.panels.generic.timeSeries.base.new(
-          title='Next GC, bytes',
-          targets=[
-            t['group:go_memstats_next_gc_bytes:avg'],
-          ],
-          description='The number used bytes at which the runtime plans to perform the next GC, averaged across all instances of a group.',
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('bytes'),
+      // nextGC:
+      //   this.signals[type].nextGC.asTimeSeries()
+      //   + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
 
     },

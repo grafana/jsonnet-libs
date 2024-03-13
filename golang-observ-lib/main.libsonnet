@@ -1,13 +1,10 @@
-local alerts = import './alerts.libsonnet';
-local annotations = import './annotations.libsonnet';
 local config = import './config.libsonnet';
 local dashboards = import './dashboards.libsonnet';
-local datasources = import './datasources.libsonnet';
 local g = import './g.libsonnet';
-local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
-local targets = import './targets.libsonnet';
-local variables = import './variables.libsonnet';
+local rows = import './rows.libsonnet';
+local commonlib = import 'common-lib/common/main.libsonnet';
+
 
 {
 
@@ -19,19 +16,25 @@ local variables = import './variables.libsonnet';
 
     local this = self,
     config: config,
-
+    signals: commonlib.signals.unmarshallJsonNew(this.config.signals, type=this.config.metricsSource),
     grafana: {
-      variables: variables.new(this, varMetric='go_info'),
-      targets: targets.new(this),
-      annotations: annotations.new(this),
-      links: links.new(this),
-      panels: panels.new(this),
+      annotations: {},
+      links: {},
+      panels: panels.new(this.signals),
       dashboards: dashboards.new(this),
+      rows: rows.new(this.grafana.panels),
     },
 
     prometheus: {
-      alerts: alerts.new(this),
+      alerts: {},
       recordingRules: {},
+    },
+
+    asMonitoringMixin(): {
+      // _config+:: this.config,
+      grafanaDashboards+:: this.grafana.dashboards,
+      prometheusAlerts+:: this.prometheus.alerts,
+      prometheusRuless+:: this.prometheus.recordingRules,
     },
 
   },
