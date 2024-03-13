@@ -20,7 +20,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     primaryThreadActivityQuery(type):: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=%s,cn=Threads,cn=Monitor"}' % [variables.queriesSelector, type],
     threadQueueManagementQuery(type):: 'openldap_monitored_object{%(queriesSelector)s, dn="cn=%s,cn=Threads,cn=Monitor"}' % [variables.queriesSelector, type],
 
-
     uptime:
       prometheusQuery.new(
         '${' + variables.datasources.prometheus.name + '}',
