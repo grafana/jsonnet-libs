@@ -17,11 +17,11 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local memoryUtilizationPanel = {
+local memoryUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sys_mem_actual_used{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"} / (clamp_min(sys_mem_actual_free{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"} + sys_mem_actual_used{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}, 1))',
+      'sys_mem_actual_used{' + matcher + '} / (clamp_min(sys_mem_actual_free{' + matcher + '} + sys_mem_actual_used{' + matcher + '}, 1))',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
@@ -96,11 +96,11 @@ local memoryUtilizationPanel = {
   },
 };
 
-local cpuUtilizationPanel = {
+local cpuUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(couchbase_cluster, job, instance) (sys_cpu_utilization_rate{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"})',
+      'sum by(couchbase_cluster, job, instance) (sys_cpu_utilization_rate{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
@@ -175,21 +175,21 @@ local cpuUtilizationPanel = {
   },
 };
 
-local totalMemoryUsedByServicePanel = {
+local totalMemoryUsedByServicePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'index_memory_used_total{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}',
+      'index_memory_used_total{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - index',
     ),
     prometheus.target(
-      'cbas_direct_memory_used_bytes{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}',
+      'cbas_direct_memory_used_bytes{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - analytics',
     ),
     prometheus.target(
-      'sum by(couchbase_cluster, instance, job) (kv_mem_used_bytes{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"})',
+      'sum by(couchbase_cluster, instance, job) (kv_mem_used_bytes{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - data',
     ),
@@ -264,11 +264,11 @@ local totalMemoryUsedByServicePanel = {
   },
 };
 
-local backupSizePanel = {
+local backupSizePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(couchbase_cluster, instance, job) (backup_data_size{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"})',
+      'sum by(couchbase_cluster, instance, job) (backup_data_size{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
@@ -319,11 +319,11 @@ local backupSizePanel = {
   pluginVersion: '10.0.2-cloud.1.94a6f396',
 };
 
-local currentConnectionsPanel = {
+local currentConnectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'kv_curr_connections{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}',
+      'kv_curr_connections{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
@@ -399,11 +399,11 @@ local currentConnectionsPanel = {
   },
 };
 
-local httpResponseCodesPanel = {
+local httpResponseCodesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, instance, couchbase_cluster, code) (rate(cm_http_requests_total{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, instance, couchbase_cluster, code) (rate(cm_http_requests_total{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - {{code}}',
     ),
@@ -479,11 +479,11 @@ local httpResponseCodesPanel = {
   },
 };
 
-local httpRequestMethodsPanel = {
+local httpRequestMethodsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, instance, couchbase_cluster, method) (rate(cm_http_requests_total{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval]))',
+      'sum by(job, instance, couchbase_cluster, method) (rate(cm_http_requests_total{' + matcher + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - {{method}}',
     ),
@@ -558,21 +558,21 @@ local httpRequestMethodsPanel = {
   },
 };
 
-local queryServiceRequestsPanel = {
+local queryServiceRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(n1ql_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval]) + rate(n1ql_invalid_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_requests{' + matcher + '}[$__rate_interval]) + rate(n1ql_invalid_requests{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - total',
     ),
     prometheus.target(
-      'rate(n1ql_errors{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_errors{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - error',
     ),
     prometheus.target(
-      'rate(n1ql_invalid_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_invalid_requests{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - invalid',
     ),
@@ -647,31 +647,31 @@ local queryServiceRequestsPanel = {
   },
 };
 
-local queryServiceRequestProcessingTimePanel = {
+local queryServiceRequestProcessingTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(n1ql_requests{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_requests{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - >0ms',
     ),
     prometheus.target(
-      'rate(n1ql_requests_250ms{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_requests_250ms{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - >250ms',
     ),
     prometheus.target(
-      'rate(n1ql_requests_500ms{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_requests_500ms{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - >500ms',
     ),
     prometheus.target(
-      'rate(n1ql_requests_1000ms{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_requests_1000ms{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - >1000ms',
     ),
     prometheus.target(
-      'rate(n1ql_requests_5000ms{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])',
+      'rate(n1ql_requests_5000ms{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - >5000ms',
     ),
@@ -746,7 +746,7 @@ local queryServiceRequestProcessingTimePanel = {
   },
 };
 
-local indexServiceRequestsPanel = {
+local indexServiceRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -825,11 +825,11 @@ local indexServiceRequestsPanel = {
   },
 };
 
-local indexCacheHitRatioPanel = {
+local indexCacheHitRatioPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])) / (clamp_min(sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance) (increase(index_cache_misses{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"}[$__rate_interval])))',
+      'sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{' + matcher + '}[$__rate_interval])) / (clamp_min(sum by(couchbase_cluster, job, instance) (increase(index_cache_hits{' + matcher + '}[$__rate_interval])), 1) + sum by(couchbase_cluster, job, instance) (increase(index_cache_misses{' + matcher + '}[$__rate_interval])))',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}}',
     ),
@@ -905,11 +905,11 @@ local indexCacheHitRatioPanel = {
   },
 };
 
-local averageScanLatencyPanel = {
+local averageScanLatencyPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(couchbase_cluster, index, instance, job) (index_avg_scan_latency{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"})',
+      'sum by(couchbase_cluster, index, instance, job) (index_avg_scan_latency{' + matcher + '})',
       datasource=promDatasource,
       legendFormat='{{couchbase_cluster}} - {{instance}} - {{index}}',
     ),
@@ -984,13 +984,13 @@ local averageScanLatencyPanel = {
   },
 };
 
-local errorLogsPanel = {
+local errorLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"} |~ `(ns_server:error)`',
+      expr: '{' + matcher + '} |~ `(ns_server:error)`',
       queryType: 'range',
       refId: 'A',
     },
@@ -1010,13 +1010,13 @@ local errorLogsPanel = {
   },
 };
 
-local couchbaseLogsPanel = {
+local couchbaseLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"} |~ `(couchdb:(info|error))`',
+      expr: '{' + matcher + '} |~ `(couchdb:(info|error))`',
       queryType: 'range',
       refId: 'A',
     },
@@ -1035,6 +1035,8 @@ local couchbaseLogsPanel = {
     wrapLogMessage: false,
   },
 };
+
+local getMatcher(cfg) = '%(couchbaseSelector)s, couchbase_cluster=~"$couchbase_cluster", instance=~"$instance"' % cfg;
 
 {
   grafanaDashboards+:: {
@@ -1088,9 +1090,21 @@ local couchbaseLogsPanel = {
               sort=0
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(sys_mem_actual_used{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'couchbase_cluster',
               promDatasource,
-              'label_values(sys_mem_actual_used,couchbase_cluster)',
+              'label_values(sys_mem_actual_used{%(couchbaseSelector)s},couchbase_cluster)' % $._config,
               label='Couchbase cluster',
               refresh=2,
               includeAll=true,
@@ -1101,7 +1115,7 @@ local couchbaseLogsPanel = {
             template.new(
               'instance',
               promDatasource,
-              'label_values(sys_mem_actual_used,instance)',
+              'label_values(sys_mem_actual_used{%(couchbaseSelector)s},instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -1115,26 +1129,26 @@ local couchbaseLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            memoryUtilizationPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-            cpuUtilizationPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-            totalMemoryUsedByServicePanel { gridPos: { h: 8, w: 8, x: 0, y: 8 } },
-            backupSizePanel { gridPos: { h: 8, w: 8, x: 8, y: 8 } },
-            currentConnectionsPanel { gridPos: { h: 8, w: 8, x: 16, y: 8 } },
-            httpResponseCodesPanel { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
-            httpRequestMethodsPanel { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
-            queryServiceRequestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
-            queryServiceRequestProcessingTimePanel { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
-            indexServiceRequestsPanel { gridPos: { h: 8, w: 8, x: 0, y: 32 } },
-            indexCacheHitRatioPanel { gridPos: { h: 8, w: 8, x: 8, y: 32 } },
-            averageScanLatencyPanel { gridPos: { h: 8, w: 8, x: 16, y: 32 } },
+            memoryUtilizationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            cpuUtilizationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+            totalMemoryUsedByServicePanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 8 } },
+            backupSizePanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 8, y: 8 } },
+            currentConnectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 8 } },
+            httpResponseCodesPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 16 } },
+            httpRequestMethodsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 16 } },
+            queryServiceRequestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 24 } },
+            queryServiceRequestProcessingTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 24 } },
+            indexServiceRequestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 0, y: 32 } },
+            indexCacheHitRatioPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 8, y: 32 } },
+            averageScanLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 32 } },
           ],
           if $._config.enableLokiLogs then [
-            errorLogsPanel { gridPos: { h: 7, w: 24, x: 0, y: 40 } },
+            errorLogsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 24, x: 0, y: 40 } },
           ] else [],
           [
           ],
           if $._config.enableLokiLogs then [
-            couchbaseLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 47 } },
+            couchbaseLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 47 } },
           ] else [],
           [
           ],
