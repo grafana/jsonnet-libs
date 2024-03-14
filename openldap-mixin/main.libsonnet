@@ -19,7 +19,7 @@ local variables = import './variables.libsonnet';
     config: config,
 
     grafana: {
-      variables: variables.new(this, varMetric='' % this.config),
+      variables: variables.new(this, varMetric='openldap_dial' % this.config),
       targets: targets.new(this),
       annotations: {},
       links: links.new(this),

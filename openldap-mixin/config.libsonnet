@@ -4,8 +4,7 @@
 
   enableMultiCluster: false,
   groupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
-  logLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
-  mainGroupLabels: if self.enableMultiCluster then ['job', 'cluster'] else ['job'],
+  logLabels: if self.enableMultiCluster then ['job', 'cluster', 'instance'] else ['job', 'instance'],
   clusterLegendLabel: ['cluster', 'instance'],
   instanceLabels: ['instance'],
 
