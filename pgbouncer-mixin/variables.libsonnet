@@ -77,7 +77,7 @@ local utils = commonlib.utils;
         [root.datasources.prometheus] + variablesFromLabels(groupLabels, [], filteringSelector) + [topDatabaseSelector],
       queriesGroupSelectorAdvanced:
         '%s' % [
-          utils.labelsToPromQLSelectorAdvanced(this.config.logLabels),
+          utils.labelsToPromQLSelectorAdvanced(groupLabels),
         ],
       clusterQuerySelector:
         '%s,%s' % [
