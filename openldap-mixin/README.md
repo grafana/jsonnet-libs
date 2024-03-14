@@ -46,6 +46,7 @@ scrape_configs:
         labels:
           job: integrations/openldap
           __path__: /var/log/slapd/*.log
+          instance: '<your-instance-name>'
     pipeline_stages:
       - multiline:
           firstline: '^\[\d{2}-\d{2}-\d{4} \d{2}:\d{2}:\d{2}\]'
