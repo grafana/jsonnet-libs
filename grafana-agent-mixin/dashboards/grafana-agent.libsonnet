@@ -53,139 +53,142 @@ local instance_template = grafana.template.new(
 
 {
   grafanaDashboards+:: {
-    'grafana-agent-overview.json':
-      local agentStats =
-        tablePanel.new(
-          'Running Instances',
-          description='General statistics of running grafana agent instances.',
-          datasource='$prometheus_datasource',
-          span=12,
-          styles=[
-            { alias: 'Container', pattern: 'container' },
-            { alias: 'Instance', pattern: 'instance' },
-            { alias: 'Pod', pattern: 'pod' },
-            { alias: 'Version', pattern: 'version' },
-            { alias: 'Uptime', pattern: 'Value #B', type: 'number', unit: 's' },
-          ],
-        )
-        .addTarget(prometheus.target(
-          'count by (instance, version) (agent_build_info{' + host_matcher + '})',
-          format='table',
-          instant=true,
-        ))
-        .addTarget(prometheus.target(
-          'max by (instance) (time() - process_start_time_seconds{' + host_matcher + '})',
-          format='table',
-          instant=true,
-        ))
-        .hideColumn('Time')
-        .hideColumn('Value #A');
+    // grafana-agent-overview.json using the older version of grafonnet, resulting in Angular usage.
+    // Temporarily disasbled in favour of flat-file json until we update this mixin to the latest Grafonnet.
+    'grafana-agent-overview.json': (import 'grafana-agent-overview.json'),
+    // 'grafana-agent-overview.json':
+    //   local agentStats =
+    //     tablePanel.new(
+    //       'Running Instances',
+    //       description='General statistics of running grafana agent instances.',
+    //       datasource='$prometheus_datasource',
+    //       span=12,
+    //       styles=[
+    //         { alias: 'Container', pattern: 'container' },
+    //         { alias: 'Instance', pattern: 'instance' },
+    //         { alias: 'Pod', pattern: 'pod' },
+    //         { alias: 'Version', pattern: 'version' },
+    //         { alias: 'Uptime', pattern: 'Value #B', type: 'number', unit: 's' },
+    //       ],
+    //     )
+    //     .addTarget(prometheus.target(
+    //       'count by (instance, version) (agent_build_info{' + host_matcher + '})',
+    //       format='table',
+    //       instant=true,
+    //     ))
+    //     .addTarget(prometheus.target(
+    //       'max by (instance) (time() - process_start_time_seconds{' + host_matcher + '})',
+    //       format='table',
+    //       instant=true,
+    //     ))
+    //     .hideColumn('Time')
+    //     .hideColumn('Value #A');
 
-      local prometheusTargetSync =
-        graphPanel.new(
-          'Target Sync',
-          description='Actual interval to sync the scrape pool.',
-          datasource='$prometheus_datasource',
-          span=6,
-        )
-        .addTarget(prometheus.target(
-          'sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (instance, scrape_job)',
-          legendFormat='{{instance}}/{{scrape_job}}',
-        )) +
-        utils.timeSeriesOverride(unit='s');
+    //   local prometheusTargetSync =
+    //     graphPanel.new(
+    //       'Target Sync',
+    //       description='Actual interval to sync the scrape pool.',
+    //       datasource='$prometheus_datasource',
+    //       span=6,
+    //     )
+    //     .addTarget(prometheus.target(
+    //       'sum(rate(prometheus_target_sync_length_seconds_sum{' + host_matcher + '}[$__rate_interval])) by (instance, scrape_job)',
+    //       legendFormat='{{instance}}/{{scrape_job}}',
+    //     )) +
+    //     utils.timeSeriesOverride(unit='s');
 
-      local prometheusTargets =
-        graphPanel.new(
-          'Targets',
-          description='Discovered targets by prometheus service discovery.',
-          datasource='$prometheus_datasource',
-          span=6,
-        )
-        .addTarget(prometheus.target(
-          'sum by (instance) (prometheus_sd_discovered_targets{' + host_matcher + '})',
-        )) +
-        utils.timeSeriesOverride(unit='short');
+    //   local prometheusTargets =
+    //     graphPanel.new(
+    //       'Targets',
+    //       description='Discovered targets by prometheus service discovery.',
+    //       datasource='$prometheus_datasource',
+    //       span=6,
+    //     )
+    //     .addTarget(prometheus.target(
+    //       'sum by (instance) (prometheus_sd_discovered_targets{' + host_matcher + '})',
+    //     )) +
+    //     utils.timeSeriesOverride(unit='short');
 
-      local averageScrapeIntervalDuration =
-        graphPanel.new(
-          'Average Scrape Interval Duration',
-          description='Actual intervals between scrapes.',
-          datasource='$prometheus_datasource',
-          span=6,
-        )
-        .addTarget(prometheus.target(
-          'rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[$__rate_interval]) / rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[$__rate_interval])',
-          legendFormat='{{instance}} {{interval}} configured',
-        )) +
-        utils.timeSeriesOverride(unit='s');
+    //   local averageScrapeIntervalDuration =
+    //     graphPanel.new(
+    //       'Average Scrape Interval Duration',
+    //       description='Actual intervals between scrapes.',
+    //       datasource='$prometheus_datasource',
+    //       span=6,
+    //     )
+    //     .addTarget(prometheus.target(
+    //       'rate(prometheus_target_interval_length_seconds_sum{' + host_matcher + '}[$__rate_interval]) / rate(prometheus_target_interval_length_seconds_count{' + host_matcher + '}[$__rate_interval])',
+    //       legendFormat='{{instance}} {{interval}} configured',
+    //     )) +
+    //     utils.timeSeriesOverride(unit='s');
 
-      local scrapeFailures =
-        graphPanel.new(
-          'Scrape failures',
-          description='Shows all scrape failures (sample limit exceeded, duplicate, out of bounds, out of order).',
-          datasource='$prometheus_datasource',
-          span=6,
-        )
-        .addTarget(prometheus.target(
-          'sum by (job) (rate(prometheus_target_scrapes_exceeded_sample_limit_total{' + host_matcher + '}[$__rate_interval]))',
-          legendFormat='exceeded sample limit: {{job}}'
-        ))
-        .addTarget(prometheus.target(
-          'sum by (job) (rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{' + host_matcher + '}[$__rate_interval]))',
-          legendFormat='duplicate timestamp: {{job}}'
-        ))
-        .addTarget(prometheus.target(
-          'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_bounds_total{' + host_matcher + '}[$__rate_interval]))',
-          legendFormat='out of bounds: {{job}}'
-        ))
-        .addTarget(prometheus.target(
-          'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_order_total{' + host_matcher + '}[$__rate_interval]))',
-          legendFormat='out of order: {{job}}'
-        )) +
-        utils.timeSeriesOverride(unit='short');
+    //   local scrapeFailures =
+    //     graphPanel.new(
+    //       'Scrape failures',
+    //       description='Shows all scrape failures (sample limit exceeded, duplicate, out of bounds, out of order).',
+    //       datasource='$prometheus_datasource',
+    //       span=6,
+    //     )
+    //     .addTarget(prometheus.target(
+    //       'sum by (job) (rate(prometheus_target_scrapes_exceeded_sample_limit_total{' + host_matcher + '}[$__rate_interval]))',
+    //       legendFormat='exceeded sample limit: {{job}}'
+    //     ))
+    //     .addTarget(prometheus.target(
+    //       'sum by (job) (rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{' + host_matcher + '}[$__rate_interval]))',
+    //       legendFormat='duplicate timestamp: {{job}}'
+    //     ))
+    //     .addTarget(prometheus.target(
+    //       'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_bounds_total{' + host_matcher + '}[$__rate_interval]))',
+    //       legendFormat='out of bounds: {{job}}'
+    //     ))
+    //     .addTarget(prometheus.target(
+    //       'sum by (job) (rate(prometheus_target_scrapes_sample_out_of_order_total{' + host_matcher + '}[$__rate_interval]))',
+    //       legendFormat='out of order: {{job}}'
+    //     )) +
+    //     utils.timeSeriesOverride(unit='short');
 
-      local appendedSamples =
-        graphPanel.new(
-          'Appended Samples',
-          description='Total number of samples appended to the WAL.',
-          datasource='$prometheus_datasource',
-          span=6,
-        )
-        .addTarget(prometheus.target(
-          'sum by (job, instance_group_name) (rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval]))',
-          legendFormat='{{job}} {{instance_group_name}}',
-        )) +
-        utils.timeSeriesOverride(unit='short');
+    //   local appendedSamples =
+    //     graphPanel.new(
+    //       'Appended Samples',
+    //       description='Total number of samples appended to the WAL.',
+    //       datasource='$prometheus_datasource',
+    //       span=6,
+    //     )
+    //     .addTarget(prometheus.target(
+    //       'sum by (job, instance_group_name) (rate(agent_wal_samples_appended_total{' + host_matcher + '}[$__rate_interval]))',
+    //       legendFormat='{{job}} {{instance_group_name}}',
+    //     )) +
+    //     utils.timeSeriesOverride(unit='short');
 
 
-      grafana.dashboard.new('Grafana Agent Overview', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent')
-      .addTemplates([
-        ds_template,
-        job_template,
-        instance_template,
-      ])
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Grafana Agent Dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
-      .addRow(
-        row.new('Overview')
-        .addPanel(agentStats)
-      )
-      .addRow(
-        row.new('Prometheus Discovery')
-        .addPanel(prometheusTargetSync)
-        .addPanel(prometheusTargets)
-      )
-      .addRow(
-        row.new('Prometheus Retrieval')
-        .addPanel(averageScrapeIntervalDuration)
-        .addPanel(scrapeFailures)
-        .addPanel(appendedSamples)
-      ),
+    //   grafana.dashboard.new('Grafana Agent Overview', tags=$._config.dashboardTags, editable=false, time_from='%s' % $._config.dashboardPeriod, uid='integration-agent')
+    //   .addTemplates([
+    //     ds_template,
+    //     job_template,
+    //     instance_template,
+    //   ])
+    //   .addLink(grafana.link.dashboards(
+    //     asDropdown=false,
+    //     title='Grafana Agent Dashboards',
+    //     includeVars=true,
+    //     keepTime=true,
+    //     tags=($._config.dashboardTags),
+    //   ))
+    //   .addRow(
+    //     row.new('Overview')
+    //     .addPanel(agentStats)
+    //   )
+    //   .addRow(
+    //     row.new('Prometheus Discovery')
+    //     .addPanel(prometheusTargetSync)
+    //     .addPanel(prometheusTargets)
+    //   )
+    //   .addRow(
+    //     row.new('Prometheus Retrieval')
+    //     .addPanel(averageScrapeIntervalDuration)
+    //     .addPanel(scrapeFailures)
+    //     .addPanel(appendedSamples)
+    //   ),
 
     // Remote write specific dashboard.
     'grafana-agent-remote-write.json':
