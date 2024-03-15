@@ -67,7 +67,8 @@ local utils = commonlib.utils;
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
+        + variablesFromLabels(groupLabels, pureInstanceLabels, filteringSelector, multiInstance=false)
+        + variablesFromLabels([], ['database'], filteringSelector),
       queriesSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
