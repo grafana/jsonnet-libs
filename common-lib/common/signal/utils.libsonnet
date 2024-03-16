@@ -2,7 +2,9 @@
   wrapExpr(type, expr, q=0.95, aggLevel, rangeFunction):
     if type == 'counter' then
       (
-        local baseExpr = rangeFunction + '(' + expr + '[%(interval)s])';
+        // for increase/delta/idelta - must be $__interval with negative offset for proper Total calculations, else use default from init function.
+        local interval = if (rangeFunction == 'idelta' || rangeFunction == 'delta' || rangeFunction == 'increase') then '[$__interval:] offset -$__interval' else '[%(interval)s]';
+        local baseExpr = rangeFunction + '(' + expr + interval + ')';
         if aggLevel == 'none' then
           baseExpr
         else
