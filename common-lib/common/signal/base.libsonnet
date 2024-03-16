@@ -18,7 +18,7 @@ local signalUtils = import './utils.libsonnet';
   ): {
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
-
+    local root = self,
     unit:: signalUtils.generateUnits(type, unit, rangeFunction),
     //Return as grafana panel target(query+legend)
     asTarget()::
@@ -36,7 +36,7 @@ local signalUtils = import './utils.libsonnet';
         [
           g.panel.timeSeries.fieldOverride.byQuery.new(name)
           + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
-            g.panel.timeSeries.standardOptions.withUnit(self.unit)
+            g.panel.timeSeries.standardOptions.withUnit(root.unit)
             + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
           ),
         ],
