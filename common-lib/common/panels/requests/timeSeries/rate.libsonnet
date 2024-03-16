@@ -15,7 +15,6 @@ base {
 
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
-    + generic.percentage.stylize(allLayers=false)
     + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
     + g.panel.timeSeries.queryOptions.withMaxDataPoints(100)
     + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(100)
