@@ -43,6 +43,7 @@
         else if unit == 'packets' then 'pps'
         else if unit == 'short' then '/s'
         else unit
-      ),
+      )
+    else unit,
 
 }
