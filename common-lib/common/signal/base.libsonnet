@@ -19,7 +19,7 @@ local signalUtils = import './utils.libsonnet';
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
 
-    unit:: signalUtils.generateUnits(type, unit),
+    unit:: signalUtils.generateUnits(type, unit, rangeFunction),
     //Return as grafana panel target(query+legend)
     asTarget()::
       prometheusQuery.new(

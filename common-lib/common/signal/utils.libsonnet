@@ -31,9 +31,9 @@
     else
       '%(aggLegend)s: ' + legend,
 
-  generateUnits(type, unit):
+  generateUnits(type, unit, rangeFunction):
     if type == 'gauge' || type == 'histogram' || type == 'info' then unit
-    else if type == 'counter' then
+    else if type == 'counter' && (rangeFunction == 'rate' || rangeFunction == 'irate') then
       (
         // some specific cases
         if unit == 'seconds' || unit == 's' then 'percent'
