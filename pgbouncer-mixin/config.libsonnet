@@ -27,7 +27,6 @@
   alertsHighClientWaitTime: 15,
   alertsHighServerConnectionSaturationWarning: 80,
   alertsHighServerConnectionSaturationCritical: 90,
-  alertsHighNetworkTraffic: 50,
 
   // logs lib related
   enableLokiLogs: true,
