@@ -11,5 +11,5 @@ base {
     (if allLayers then super.stylize() else {})
     + stat.standardOptions.color.withMode('fixed')
     + stat.standardOptions.color.withFixedColor('blue')
-    + stat.standardOptions.withUnit('seconds')
+    + stat.standardOptions.withUnit('s')
 }
