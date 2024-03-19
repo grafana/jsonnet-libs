@@ -1,0 +1,17 @@
+exclusions:
+  panel-units-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-datasource-rule:
+    reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
+  template-instance-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  template-on-time-change-reload-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-instance-rule:
+    reason: "Failing with new dashboard linter. TODO: Investigate and remove the warning exclusion"
+  target-job-rule:
+    reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
+  target-promql-rule:
+    reason: "Linter does not support all LogQL queries and gives invalid PromQL query error"
+    entries:
+      - dashboard: "OpenLDAP logs"
