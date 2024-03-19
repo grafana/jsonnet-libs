@@ -15,5 +15,6 @@ base {
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
     + g.panel.timeSeries.standardOptions.color.withMode('fixed')
-    + g.panel.timeSeries.standardOptions.color.withFixedColor('blue'),
+    + g.panel.timeSeries.standardOptions.color.withFixedColor('blue')
+    + g.panel.timeSeries.standardOptions.withUnit('seconds')
 }
