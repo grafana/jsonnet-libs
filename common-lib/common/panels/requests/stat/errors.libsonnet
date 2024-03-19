@@ -12,5 +12,6 @@ base {
     (if allLayers then super.stylize() else {})
     + stat.standardOptions.color.withMode('fixed')
     + stat.standardOptions.color.withFixedColor('light-red')
-    + stat.standardOptions.withNoValue('No errors'),
+    + stat.standardOptions.withNoValue('No errors')
+    + stat.options.withGraphMode('none'),
 }

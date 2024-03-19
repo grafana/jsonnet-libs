@@ -11,5 +11,6 @@ base {
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
     + stat.standardOptions.color.withMode('fixed')
-    + stat.standardOptions.color.withFixedColor('light-purple'),
+    + stat.standardOptions.color.withFixedColor('light-purple')
+    + stat.options.withGraphMode('none'),
 }

@@ -12,4 +12,5 @@ base {
     + stat.standardOptions.color.withMode('fixed')
     + stat.standardOptions.color.withFixedColor('blue')
     + stat.standardOptions.withUnit('s')
+    + stat.options.withGraphMode('none'),
 }
