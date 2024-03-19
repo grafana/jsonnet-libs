@@ -1,6 +1,6 @@
 # SupaBase Mixin
 
-The SupaBase mixin is a set of configurable Grafana dashboard.
+The SupaBase mixin is a configurable Grafana dashboard.
 
 The SupaBase mixin contains the following dashboards:
 
