@@ -14,4 +14,6 @@ base {
     local fieldOverride = g.panel.timeSeries.fieldOverride;
 
     (if allLayers then super.stylize() else {})
+    + g.panel.timeSeries.standardOptions.color.withMode('fixed')
+    + g.panel.timeSeries.standardOptions.color.withFixedColor('light-red'),
 }

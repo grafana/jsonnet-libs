@@ -14,5 +14,6 @@ base {
 
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
-    + generic.percentage.stylize(allLayers=false),
+    + g.panel.timeSeries.standardOptions.color.withMode('fixed')
+    + g.panel.timeSeries.standardOptions.color.withFixedColor('blue'),
 }

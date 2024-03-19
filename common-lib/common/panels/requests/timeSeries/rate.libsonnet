@@ -18,5 +18,7 @@ base {
     + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
     + g.panel.timeSeries.queryOptions.withMaxDataPoints(100)
     + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(100)
-    + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' }),
+    + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
+    + g.panel.timeSeries.standardOptions.color.withMode('fixed')
+    + g.panel.timeSeries.standardOptions.color.withFixedColor('light-purple'),
 }
