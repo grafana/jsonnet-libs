@@ -61,7 +61,6 @@ scrape_configs:
 
 ## Alerts Overview
 
-
 | Alert                                | Summary                                                                                                                                                               |
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | OpenLDAPConnectionSpike              | A sudden spike in OpenLDAP connections indicates potential high usage or security issues.                                                                             |
