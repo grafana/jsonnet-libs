@@ -35,5 +35,6 @@ local g = import './g.libsonnet';
   },
   requests: {
     timeSeries: import './panels/requests/timeSeries/main.libsonnet',
+    stat: import './panels/requests/stat/main.libsonnet',
   }
 }

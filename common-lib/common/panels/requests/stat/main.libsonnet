@@ -1,0 +1,3 @@
+{
+  rate: import './rate.libsonnet',
+}
