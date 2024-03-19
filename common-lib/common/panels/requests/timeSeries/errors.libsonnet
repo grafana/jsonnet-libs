@@ -14,6 +14,10 @@ base {
     local fieldOverride = g.panel.timeSeries.fieldOverride;
 
     (if allLayers then super.stylize() else {})
+    + timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars')
+    + timeSeries.queryOptions.withMaxDataPoints(100)
+    + timeSeries.fieldConfig.defaults.custom.withFillOpacity(100)
+    + timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
     + timeSeries.standardOptions.color.withMode('fixed')
     + timeSeries.standardOptions.color.withFixedColor('light-red')
     + timeSeries.standardOptions.withNoValue('No errors'),
