@@ -7,12 +7,12 @@
   // 'uid' - UID to prefix all dashboards original uids
   enableMultiCluster: false,
   filteringSelector: 'job="integrations/pgbouncer"',
-  groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster', 'database'] else ['job', 'pgbouncer_cluster', 'database'],
+  groupLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster'] else ['job', 'pgbouncer_cluster'],
   logLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster', 'instance'] else ['job', 'pgbouncer_cluster', 'instance'],
-  mainGroupLabels: if self.enableMultiCluster then ['job', 'cluster', 'pgbouncer_cluster'] else ['job', 'pgbouncer_cluster'],
+  pureInstanceLabels: ['instance'],
   legendLabels: ['database'],
   clusterLegendLabel: ['pgbouncer_cluster', 'instance', 'database'],
-  instanceLabels: ['instance'],
+  instanceLabels: ['instance', 'database'],
   dashboardTags: [self.uid],
   uid: 'pgbouncer',
   dashboardNamePrefix: '',
@@ -27,7 +27,6 @@
   alertsHighClientWaitTime: 15,
   alertsHighServerConnectionSaturationWarning: 80,
   alertsHighServerConnectionSaturationCritical: 90,
-  alertsHighNetworkTraffic: 50,
 
   // logs lib related
   enableLokiLogs: true,

@@ -19,7 +19,7 @@ local variables = import './variables.libsonnet';
     config: config,
 
     grafana: {
-      variables: variables.new(this, varMetric='pgbouncer_databases_current_connections'),
+      variables: variables.new(this),
       targets: targets.new(this),
       annotations: {},
       links: links.new(this),
