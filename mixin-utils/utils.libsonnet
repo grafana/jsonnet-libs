@@ -248,7 +248,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
     local labels = std.join('_', [matcher.label for matcher in selectors]);
     local legend = std.join('', ['{{ %(lb)s }} ' % lb for lb in sum_by]);
     local metricStr = '%(labels)s:%(metric)s' % { labels: labels, metric: metric };
-    local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
+    local selectorStr = $.toPrometheusSelectorNaked(selectors + extra_selectors);
     {
       nullPointMode: 'null as zero',
       yaxes: g.yaxes('ms'),
@@ -292,12 +292,14 @@ local g = import 'grafana-builder/grafana.libsonnet';
       ],
     },
 
-  toPrometheusSelector(selector)::
+  toPrometheusSelectorNaked(selector)::
     local pairs = [
       '%(label)s%(op)s"%(value)s"' % matcher
       for matcher in std.filter(function(matcher) matcher.op != 'nop', selector)
     ];
-    '{%s}' % std.join(', ', pairs),
+    '%s' % std.join(', ', pairs),
+
+  toPrometheusSelector(selector):: '{%s}' % $.toPrometheusSelectorNaked(selector),
 
   // withRunbookURL - Add/Override the runbook_url annotations for all alerts inside a list of rule groups.
   // - url_format: an URL format for the runbook, the alert name will be substituted in the URL.
