@@ -1,6 +1,93 @@
 local g = import 'grafana-builder/grafana.libsonnet';
 
 {
+  // The classicNativeHistogramQuantile function is used to calculate histogram quantiles from native histograms or classic histograms.
+  // Metric name should be provided without _bucket suffix.
+  nativeClassicHistogramQuantile(percentile, metric, selector, sum_by=[], rate_interval='$__rate_interval', multiplier='')::
+    local classicSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', ['le'] + sum_by) } else ' by (le) ';
+    local nativeSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
+    local multiplierStr = if multiplier == '' then '' else ' * %s' % multiplier;
+    {
+      classic: 'histogram_quantile(%(percentile)s, sum%(classicSumBy)s(rate(%(metric)s_bucket{%(selector)s}[%(rateInterval)s])))%(multiplierStr)s' % {
+        classicSumBy: classicSumBy,
+        metric: metric,
+        multiplierStr: multiplierStr,
+        percentile: percentile,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+      native: 'histogram_quantile(%(percentile)s, sum%(nativeSumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s])))%(multiplierStr)s' % {
+        metric: metric,
+        multiplierStr: multiplierStr,
+        nativeSumBy: nativeSumBy,
+        percentile: percentile,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+    },
+
+  // The classicNativeHistogramSumRate function is used to calculate the histogram sum of rate from native histograms or classic histograms.
+  // Metric name should be provided without _sum suffix.
+  nativeClassicHistogramSumRate(metric, selector, rate_interval='$__rate_interval')::
+    {
+      classic: 'rate(%(metric)s_sum{%(selector)s}[%(rateInterval)s])' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+      native: 'histogram_sum(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+    },
+
+
+  // The classicNativeHistogramCountRate function is used to calculate the histogram count of rate from native histograms or classic histograms.
+  // Metric name should be provided without _count suffix.
+  nativeClassicHistogramCountRate(metric, selector, rate_interval='$__rate_interval')::
+    {
+      classic: 'rate(%(metric)s_count{%(selector)s}[%(rateInterval)s])' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+      native: 'histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+    },
+
+  // TODO(krajorama) Switch to histogram_avg function for native histograms later.
+  nativeClassicHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='')::
+    local multiplierStr = if multiplier == '' then '' else '%s * ' % multiplier;
+    {
+      classic: |||
+        %(multiplier)ssum(%(sumMetricQuery)s) /
+        sum(%(countMetricQuery)s)
+      ||| % {
+        sumMetricQuery: $.nativeClassicHistogramSumRate(metric, selector, rate_interval).classic,
+        countMetricQuery: $.nativeClassicHistogramCountRate(metric, selector, rate_interval).classic,
+        multiplier: multiplierStr,
+      },
+      native: |||
+        %(multiplier)ssum(%(sumMetricQuery)s) /
+        sum(%(countMetricQuery)s)
+      ||| % {
+        sumMetricQuery: $.nativeClassicHistogramSumRate(metric, selector, rate_interval).native,
+        countMetricQuery: $.nativeClassicHistogramCountRate(metric, selector, rate_interval).native,
+        multiplier: multiplierStr,
+      },
+    },
+
+  // showClassicHistogramQuery wraps a query defined as map {classic: q, native: q}, and compares the classic query
+  // to dashboard variable which should take -1 or +1 as values in order to hide or show the classic query.
+  showClassicHistogramQuery(query, dashboard_variable='latency_metrics'):: '%s < ($%s * +Inf)' % [query.classic, dashboard_variable],
+  // showNativeHistogramQuery wraps a query defined as map {classic: q, native: q}, and compares the native query
+  // to dashboard variable which should take -1 or +1 as values in order to show or hide the native query.
+  showNativeHistogramQuery(query, dashboard_variable='latency_metrics'):: '%s < ($%s * -Inf)' % [query.native, dashboard_variable],
+
   histogramRules(metric, labels, interval='1m', record_native=false)::
     local vars = {
       metric: metric,
