@@ -1,3 +1,5 @@
+local utils = import 'mixin-utils/utils.libsonnet';
+
 {
   dashboard(title, uid='', datasource='default', datasource_regex=''):: {
     // Stuff that isn't materialised.
@@ -65,6 +67,40 @@
           tags: [],
           tagsQuery: '',
           type: 'query',
+          useTags: false,
+        }],
+      },
+    },
+
+    addShowNativeLatencyVariable():: self {
+      templating+: {
+        list+: [{
+          current: {
+            selected: true,
+            text: 'classic',
+            value: '1',
+          },
+          description: 'Choose between showing latencies based on low precision classic or high precision native histogram metrics.',
+          hide: 0,
+          includeAll: false,
+          label: 'Latency metrics',
+          multi: false,
+          name: 'latency_metrics',
+          query: 'native : -1,classic : 1',
+          options: [
+            {
+              selected: false,
+              text: 'native',
+              value: '-1',
+            },
+            {
+              selected: true,
+              text: 'classic',
+              value: '1',
+            },
+          ],
+          skipUrlSync: false,
+          type: 'custom',
           useTags: false,
         }],
       },
