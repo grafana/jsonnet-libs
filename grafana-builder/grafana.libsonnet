@@ -488,7 +488,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
 
   // Assumes that the metricName is for a histogram (as opposed to qpsPanel above)
   // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
-  qpsPanelNativeHistogram(title, metricName, selector, statusLabelName='status_code'):: $.timeseriesPanel(title) {
+  qpsPanelNativeHistogram(metricName, selector, statusLabelName='status_code'):: {
     fieldConfig+: {
       defaults+: {
         custom+: {
@@ -580,7 +580,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
   },
 
   // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
-  latencyPanelNativeHistogram(title, metricName, selector, multiplier='1e3'):: $.timeseriesPanel(title) {
+  latencyPanelNativeHistogram(metricName, selector, multiplier='1e3'):: {
     nullPointMode: 'null as zero',
     fieldConfig+: {
       defaults+: {
