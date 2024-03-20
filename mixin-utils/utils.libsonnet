@@ -9,7 +9,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
     local nativeSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
     local multiplierStr = if multiplier == '' then '' else ' * %s' % multiplier;
     local rateOpen = if from_recording then '' else 'rate(';
-    local rateClose = if from_recording then '' else '[%s]),' % rate_interval;
+    local rateClose = if from_recording then '' else '[%s])' % rate_interval;
     {
       classic: 'histogram_quantile(%(percentile)s, sum%(classicSumBy)s(%(rateOpen)s%(metric)s_bucket%(suffix)s{%(selector)s}%(rateClose)s))%(multiplierStr)s' % {
         classicSumBy: classicSumBy,
@@ -40,7 +40,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // If from_recording is true, the function will assume :sum_rate metric suffix and no rate needed.
   nativeClassicHistogramSumRate(metric, selector, rate_interval='$__rate_interval', from_recording=false)::
     local rateOpen = if from_recording then '' else 'rate(';
-    local rateClose = if from_recording then '' else '[%s]),' % rate_interval;
+    local rateClose = if from_recording then '' else '[%s])' % rate_interval;
     {
       classic: '%(rateOpen)s%(metric)s_sum%(suffix)s{%(selector)s}%(rateClose)s' % {
         metric: metric,
@@ -66,7 +66,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // If from_recording is true, the function will assume :sum_rate metric suffix and no rate needed.
   nativeClassicHistogramCountRate(metric, selector, rate_interval='$__rate_interval', from_recording=false)::
     local rateOpen = if from_recording then '' else 'rate(';
-    local rateClose = if from_recording then '' else '[%s]),' % rate_interval;
+    local rateClose = if from_recording then '' else '[%s])' % rate_interval;
     {
       classic: '%(rateOpen)s%(metric)s_count%(suffix)s{%(selector)s}%(rateClose)s' % {
         metric: metric,
