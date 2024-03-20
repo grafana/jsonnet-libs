@@ -246,6 +246,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // - sum_by (optional): additional labels to use in the sum by clause, will also be used in the legend
   latencyRecordingRulePanelNativeHistogram(metric, selectors, extra_selectors=[], multiplier='1e3', sum_by=[])::
     local labels = std.join('_', [matcher.label for matcher in selectors]);
+    local legend = std.join('', ['{{ %(lb)s }} ' % lb for lb in sum_by]);
     local metricStr = '%(labels)s:%(metric)s' % { labels: labels, metric: metric };
     local selectorStr = $.toPrometheusSelector(selectors + extra_selectors);
     {
