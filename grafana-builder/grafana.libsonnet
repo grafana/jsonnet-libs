@@ -526,22 +526,6 @@ local utils = import 'mixin-utils/utils.libsonnet';
               label_replace(label_replace(%(metricQuery)s,
               "status", "${1}xx", "%(label)s", "([0-9]).."),
               "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
-              < ($latency_metrics * -Inf)
-          ||| % {
-            metricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).native,
-            label: statusLabelName,
-          },
-        format: 'time_series',
-        legendFormat: '{{status}}',
-        refId: 'A',
-      },
-      {
-        expr:
-          |||
-            sum by (status) (
-              label_replace(label_replace(%(metricQuery)s,
-              "status", "${1}xx", "%(label)s", "([0-9]).."),
-              "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
               < ($latency_metrics * +Inf)
           ||| % {
             metricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).classic,
@@ -550,6 +534,22 @@ local utils = import 'mixin-utils/utils.libsonnet';
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A_classic',
+      },
+      {
+        expr:
+          |||
+            sum by (status) (
+              label_replace(label_replace(%(metricQuery)s,
+              "status", "${1}xx", "%(label)s", "([0-9]).."),
+              "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
+              < ($latency_metrics * -Inf)
+          ||| % {
+            metricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).native,
+            label: statusLabelName,
+          },
+        format: 'time_series',
+        legendFormat: '{{status}}',
+        refId: 'A',
       },
     ],
   } + $.stack,
