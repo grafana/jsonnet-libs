@@ -19,6 +19,7 @@
               ||| % $._config,
             },
             'for': '5m',
+            'keep_firing_for': '5m',
           },
           {
             alert: 'ClickHouseRejectedInserts',
@@ -31,6 +32,7 @@
               description: 'ClickHouse inserts are being rejected on {{ $labels.instance }} as items are being inserted faster than ClickHouse is able to merge them.',
             },
             'for': '5m',
+            'keep_firing_for': '5m',
           },
           {
             alert: 'ClickHouseZookeeperSessions',
@@ -45,6 +47,7 @@
               |||,
             },
             'for': '5m',
+            'keep_firing_for': '5m',
           },
           {
             alert: 'ClickHouseReplicasInReadOnly',
@@ -59,6 +62,7 @@
               |||,
             },
             'for': '5m',
+            'keep_firing_for': '5m',
           },
         ],
       },
