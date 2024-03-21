@@ -24,7 +24,7 @@ local signalUtils = import './utils.libsonnet';
     asTarget()::
       prometheusQuery.new(
         datasource,
-        signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel, rangeFunction=rangeFunction) % vars
+        self.asPanelExpression(),
       )
       + prometheusQuery.withRefId(name)
       + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % vars),
@@ -42,8 +42,19 @@ local signalUtils = import './utils.libsonnet';
         ],
       ),
 
-    //Return as alert/recordingRule query
-    asPromRule():: {},
+    //Return query
+    asPanelExpression()::
+      signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel, rangeFunction=rangeFunction) % vars,
+    //Return query, usable in alerts/recording rules.
+    asRuleExpression()::
+      signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel, rangeFunction=rangeFunction)
+      % vars
+        {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
+        interval: vars.alertsInterval,
+        // keep only filteringSelector, remove any Grafana dashboard variables:
+        queriesSelector: vars.filteringSelector,
+      },
+
 
     common::
       // override panel-wide --mixed-- datasource

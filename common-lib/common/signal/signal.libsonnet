@@ -34,6 +34,7 @@ local stub = import './stub.libsonnet';
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
       interval=std.get(signalsJson, 'interval', '$__rate_interval'),
+      alertsInterval=std.get(signalsJson, 'alertsInterval', '5m'),
       varMetric=std.get(signalsJson, 'discoveryMetric', 'up'),
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
@@ -64,6 +65,7 @@ local stub = import './stub.libsonnet';
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
       interval=std.get(signalsJson, 'interval', '$__rate_interval'),
+      alertsInterval=std.get(signalsJson, 'alertsInterval', '5m'),
       varMetric=if std.objectHas(signalsJson, 'discoveryMetric') then std.get(signalsJson.discoveryMetric, type, 'up') else 'up',
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
@@ -106,6 +108,8 @@ local stub = import './stub.libsonnet';
     groupLabels=['job'],
     instanceLabels=['instance'],
     interval='$__rate_interval',
+    # interval used in alert expressions
+    alertsInterval='5m',
     //default aggregation level
     aggLevel='none',
     aggFunction='avg',
@@ -143,6 +147,7 @@ local stub = import './stub.libsonnet';
         else if aggLevel == 'instance' then utils.labelsToPanelLegend(self.instanceLabels)
         else if aggLevel == 'none' then '',
       interval: interval,
+      alertsInterval: alertsInterval,
     },
     //get Grafana Variables
     //allow multiple instance selection
