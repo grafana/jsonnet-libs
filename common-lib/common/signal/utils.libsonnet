@@ -23,8 +23,7 @@
         if aggLevel == 'none' then baseExpr
         else '%(aggFunction)s by (%(agg)s) (' + baseExpr + ')'
       )
-    else if type == 'info' || type == 'info' then
-      expr,
+    else expr,
 
   wrapLegend(legend, aggLevel, legendCustomTemplate):
     if legendCustomTemplate != null then legendCustomTemplate
