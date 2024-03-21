@@ -10,12 +10,12 @@ local signalUtils = import './utils.libsonnet';
 
     asTarget():: {},
 
-    //Return as grafana panel mixi target(query+legend) + overrides(like units)
+    //Return as grafana panel mixin target(query+legend) + overrides(like units)
     asPanelMixin():: {},
 
-    //Return as alert/recordingRule query
-    asPromRule():: {},
-
+    asPanelExpression():: {},
+    //Return query, usable in alerts/recording rules. No aggregation is applied.
+    asRuleExpression():: {},
     //Return as timeSeriesPanel
     asTimeSeries()::
       g.panel.text.new('')

@@ -53,6 +53,8 @@ local signalUtils = import './utils.libsonnet';
         interval: vars.alertsInterval,
         // keep only filteringSelector, remove any Grafana dashboard variables:
         queriesSelector: vars.filteringSelector,
+        // never aggregate if rule to avoid lossing labels.
+        aggLegend: 'none',
       },
 
 
