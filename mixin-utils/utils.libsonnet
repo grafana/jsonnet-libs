@@ -110,6 +110,22 @@ local g = import 'grafana-builder/grafana.libsonnet';
       },
     },
 
+  nativeClassicSumBy(query, sum_by=[], multiplier='')::
+    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
+    local multiplierStr = if multiplier == '' then '' else ' * %s' % multiplier;
+    {
+      classic: 'sum%(sumBy)s(%(query)s)%(multiplierStr)s' % {
+        multiplierStr: multiplierStr,
+        query: query.classic,
+        sumBy: sumBy,
+      },
+      native: 'sum%(sumBy)s(%(query)s)%(multiplierStr)s' % {
+        multiplierStr: multiplierStr,
+        query: query.native,
+        sumBy: sumBy,
+      },
+    },
+
   // showClassicHistogramQuery wraps a query defined as map {classic: q, native: q}, and compares the classic query
   // to dashboard variable which should take -1 or +1 as values in order to hide or show the classic query.
   showClassicHistogramQuery(query, dashboard_variable='latency_metrics'):: '%s < ($%s * +Inf)' % [query.classic, dashboard_variable],
