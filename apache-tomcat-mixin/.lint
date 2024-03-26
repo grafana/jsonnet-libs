@@ -10,6 +10,8 @@ exclusions:
       - panel: "Servlet requests"
       - panel: "Sessions"
       - panel: "Threads"
+  panel-datasource-rule:
+    reason: "Loki datasource variable is being named as loki_datasource now while linter expects 'datasource'"
   template-datasource-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-instance-rule:
