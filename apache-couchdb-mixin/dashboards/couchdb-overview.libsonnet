@@ -7,17 +7,17 @@ local prometheus = grafana.prometheus;
 local dashboardUid = 'couchdb-overview';
 
 local promDatasourceName = 'prometheus_datasource';
-local matcher = 'job=~"$job", couchdb_cluster=~"$couchdb_cluster"';
+local getMatcher(cfg) = '%(couchDBSelector)s, couchdb_cluster=~"$couchdb_cluster"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local numberOfClustersPanel = {
+local numberOfClustersPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'count(count by(couchdb_cluster, job) (couchdb_request_time_seconds_count{' + matcher + '}))',
+      'count(count by(couchdb_cluster, job) (couchdb_request_time_seconds_count{' + getMatcher(cfg) + '}))',
       datasource=promDatasource,
       legendFormat='{{ couchdb_cluster }}',
       format='time_series',
@@ -69,11 +69,11 @@ local numberOfClustersPanel = {
   pluginVersion: '9.2.3',
 };
 
-local numberOfNodesPanel = {
+local numberOfNodesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(count by(couchdb_cluster, job) (couchdb_request_time_seconds_count{' + matcher + '}))',
+      'sum(count by(couchdb_cluster, job) (couchdb_request_time_seconds_count{' + getMatcher(cfg) + '}))',
       datasource=promDatasource,
       legendFormat='{{ couchdb_cluster }}',
       format='time_series',
@@ -125,11 +125,11 @@ local numberOfNodesPanel = {
   pluginVersion: '9.2.3',
 };
 
-local clusterHealthPanel = {
+local clusterHealthPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(min by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable{' + matcher + '})) / count(count by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable{' + matcher + '})) * 100',
+      'sum(min by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable{' + getMatcher(cfg) + '})) / count(count by(job, couchdb_cluster) (couchdb_couch_replicator_cluster_is_stable{' + getMatcher(cfg) + '})) * 100',
       datasource=promDatasource,
       legendFormat='{{ couchdb_cluster }}',
       format='time_series',
@@ -187,11 +187,11 @@ local clusterHealthPanel = {
   pluginVersion: '9.2.3',
 };
 
-local openOSFilesPanel = {
+local openOSFilesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(couchdb_cluster, job) (couchdb_open_os_files_total{' + matcher + '})',
+      'sum by(couchdb_cluster, job) (couchdb_open_os_files_total{' + getMatcher(cfg) + '})',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -266,11 +266,11 @@ local openOSFilesPanel = {
   },
 };
 
-local openDatabasesPanel = {
+local openDatabasesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (couchdb_open_databases_total{' + matcher + '})',
+      'sum by(job, couchdb_cluster) (couchdb_open_databases_total{' + getMatcher(cfg) + '})',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -345,11 +345,11 @@ local openDatabasesPanel = {
   },
 };
 
-local databaseWritesPanel = {
+local databaseWritesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (rate(couchdb_database_writes_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, couchdb_cluster) (rate(couchdb_database_writes_total{' + getMatcher(cfg) + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -424,11 +424,11 @@ local databaseWritesPanel = {
   },
 };
 
-local databaseReadsPanel = {
+local databaseReadsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (rate(couchdb_database_reads_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, couchdb_cluster) (rate(couchdb_database_reads_total{' + getMatcher(cfg) + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -503,11 +503,11 @@ local databaseReadsPanel = {
   },
 };
 
-local viewReadsPanel = {
+local viewReadsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (rate(couchdb_httpd_view_reads_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, couchdb_cluster) (rate(couchdb_httpd_view_reads_total{' + getMatcher(cfg) + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -582,11 +582,11 @@ local viewReadsPanel = {
   },
 };
 
-local viewTimeoutsPanel = {
+local viewTimeoutsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (rate(couchdb_httpd_view_timeouts_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, couchdb_cluster) (rate(couchdb_httpd_view_timeouts_total{' + getMatcher(cfg) + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -661,11 +661,11 @@ local viewTimeoutsPanel = {
   },
 };
 
-local temporaryViewReadsPanel = {
+local temporaryViewReadsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (rate(couchdb_httpd_temporary_view_reads_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, couchdb_cluster) (rate(couchdb_httpd_temporary_view_reads_total{' + getMatcher(cfg) + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -748,11 +748,11 @@ local requestsRow = {
   collapsed: false,
 };
 
-local requestMethodsPanel = {
+local requestMethodsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster, method) (rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval])) != 0',
+      'sum by(job, couchdb_cluster, method) (rate(couchdb_httpd_request_methods{' + getMatcher(cfg) + '}[$__rate_interval])) != 0',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - {{method}}',
     ),
@@ -827,26 +827,26 @@ local requestMethodsPanel = {
   },
 };
 
-local averageRequestLatencyPanel = {
+local averageRequestLatencyPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.5"})',
+      'avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{' + getMatcher(cfg) + ', quantile=~"0.5"})',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - p50',
     ),
     prometheus.target(
-      'avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.75"})',
+      'avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{' + getMatcher(cfg) + ', quantile=~"0.75"})',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - p75',
     ),
     prometheus.target(
-      'avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.95"})',
+      'avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{' + getMatcher(cfg) + ', quantile=~"0.95"})',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - p95',
     ),
     prometheus.target(
-      'avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{' + matcher + ', quantile=~"0.99"})',
+      'avg by(job, couchdb_cluster, quantile) (couchdb_request_time_seconds{' + getMatcher(cfg) + ', quantile=~"0.99"})',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - p99',
     ),
@@ -922,11 +922,11 @@ local averageRequestLatencyPanel = {
   pluginVersion: '9.2.3',
 };
 
-local bulkRequestsPanel = {
+local bulkRequestsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (rate(couchdb_httpd_bulk_requests_total{' + matcher + '}[$__rate_interval]))',
+      'sum by(job, couchdb_cluster) (rate(couchdb_httpd_bulk_requests_total{' + getMatcher(cfg) + '}[$__rate_interval]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -1001,29 +1001,29 @@ local bulkRequestsPanel = {
   },
 };
 
-local responseStatusOverviewPanel = {
+local responseStatusOverviewPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__interval:])) != 0',
+      'sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"2.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - 2xx',
       interval='1m',
     ),
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__interval:])) != 0',
+      'sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"3.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - 3xx',
       interval='1m',
     ),
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__interval:])) != 0',
+      'sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"4.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - 4xx',
       interval='1m',
     ),
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"5.*"}[$__interval:])) != 0',
+      'sum by(job, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"5.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - 5xx',
       interval='1m',
@@ -1069,11 +1069,11 @@ local responseStatusOverviewPanel = {
   },
 };
 
-local goodResponseStatusesPanel = {
+local goodResponseStatusesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster, code) (rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[23].*"}[$__rate_interval])) != 0',
+      'sum by(job, couchdb_cluster, code) (rate(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"[23].*"}[$__rate_interval])) != 0',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - {{code}}',
     ),
@@ -1148,11 +1148,11 @@ local goodResponseStatusesPanel = {
   },
 };
 
-local errorResponseStatusesPanel = {
+local errorResponseStatusesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster, code) (rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[45].*"}[$__rate_interval])) != 0',
+      'sum by(job, couchdb_cluster, code) (rate(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"[45].*"}[$__rate_interval])) != 0',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}} - {{code}}',
     ),
@@ -1235,11 +1235,11 @@ local replicationRow = {
   collapsed: false,
 };
 
-local replicatorChangesManagerDeathsPanel = {
+local replicatorChangesManagerDeathsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{' + matcher + '}[$__interval:]))',
+      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_manager_deaths_total{' + getMatcher(cfg) + '}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
       interval='1m',
@@ -1315,11 +1315,11 @@ local replicatorChangesManagerDeathsPanel = {
   },
 };
 
-local replicatorChangesQueueDeathsPanel = {
+local replicatorChangesQueueDeathsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_queue_deaths_total{' + matcher + '}[$__interval:]))',
+      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_queue_deaths_total{' + getMatcher(cfg) + '}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
       interval='1m',
@@ -1395,11 +1395,11 @@ local replicatorChangesQueueDeathsPanel = {
   },
 };
 
-local replicatorChangesReaderDeathsPanel = {
+local replicatorChangesReaderDeathsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_reader_deaths_total{' + matcher + '}[$__interval:]))',
+      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_changes_reader_deaths_total{' + getMatcher(cfg) + '}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
       interval='1m',
@@ -1475,11 +1475,11 @@ local replicatorChangesReaderDeathsPanel = {
   },
 };
 
-local replicatorConnectionOwnerCrashesPanel = {
+local replicatorConnectionOwnerCrashesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_connection_owner_crashes_total{' + matcher + '}[$__interval:]))',
+      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_connection_owner_crashes_total{' + getMatcher(cfg) + '}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
       interval='1m',
@@ -1555,11 +1555,11 @@ local replicatorConnectionOwnerCrashesPanel = {
   },
 };
 
-local replicatorConnectionWorkerCrashesPanel = {
+local replicatorConnectionWorkerCrashesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_connection_worker_crashes_total{' + matcher + '}[$__interval:]))',
+      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_connection_worker_crashes_total{' + getMatcher(cfg) + '}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
       interval='1m',
@@ -1635,11 +1635,11 @@ local replicatorConnectionWorkerCrashesPanel = {
   },
 };
 
-local replicatorJobCrashesPanel = {
+local replicatorJobCrashesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_jobs_crashes_total{' + matcher + '}[$__interval:]))',
+      'sum by(job, couchdb_cluster) (increase(couchdb_couch_replicator_jobs_crashes_total{' + getMatcher(cfg) + '}[$__interval:]))',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
       interval='1m',
@@ -1715,11 +1715,11 @@ local replicatorJobCrashesPanel = {
   },
 };
 
-local replicatorJobsPendingPanel = {
+local replicatorJobsPendingPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(job, couchdb_cluster) (couchdb_couch_replicator_jobs_pending{' + matcher + '})',
+      'sum by(job, couchdb_cluster) (couchdb_couch_replicator_jobs_pending{' + getMatcher(cfg) + '})',
       datasource=promDatasource,
       legendFormat='{{couchdb_cluster}}',
     ),
@@ -1833,6 +1833,18 @@ local replicatorJobsPendingPanel = {
             sort=0
           ),
           template.new(
+              'cluster',
+              promDatasource,
+              'label_values(couchdb_couch_replicator_cluster_is_stable{%(multiClusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=1,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              hide=if $._config.enableMultiCluster then '' else 'variable' % $._config,
+              sort=0
+          ),
+          template.new(
             'couchdb_cluster',
             promDatasource,
             'label_values(couchdb_couch_replicator_cluster_is_stable{job=~"$job"}, couchdb_cluster)',
@@ -1847,31 +1859,31 @@ local replicatorJobsPendingPanel = {
       )
       .addPanels(
         [
-          numberOfClustersPanel { gridPos: { h: 6, w: 8, x: 0, y: 0 } },
-          numberOfNodesPanel { gridPos: { h: 6, w: 8, x: 8, y: 0 } },
-          clusterHealthPanel { gridPos: { h: 6, w: 8, x: 16, y: 0 } },
-          openOSFilesPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-          openDatabasesPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-          databaseWritesPanel { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
-          databaseReadsPanel { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
-          viewReadsPanel { gridPos: { h: 6, w: 8, x: 0, y: 18 } },
-          viewTimeoutsPanel { gridPos: { h: 6, w: 8, x: 8, y: 18 } },
-          temporaryViewReadsPanel { gridPos: { h: 6, w: 8, x: 16, y: 18 } },
+          numberOfClustersPanel($._config) { gridPos: { h: 6, w: 8, x: 0, y: 0 } },
+          numberOfNodesPanel($._config) { gridPos: { h: 6, w: 8, x: 8, y: 0 } },
+          clusterHealthPanel($._config) { gridPos: { h: 6, w: 8, x: 16, y: 0 } },
+          openOSFilesPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+          openDatabasesPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+          databaseWritesPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
+          databaseReadsPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+          viewReadsPanel($._config) { gridPos: { h: 6, w: 8, x: 0, y: 18 } },
+          viewTimeoutsPanel($._config) { gridPos: { h: 6, w: 8, x: 8, y: 18 } },
+          temporaryViewReadsPanel($._config) { gridPos: { h: 6, w: 8, x: 16, y: 18 } },
           requestsRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
-          bulkRequestsPanel { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
-          averageRequestLatencyPanel { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
-          requestMethodsPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
-          responseStatusOverviewPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
-          goodResponseStatusesPanel { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
-          errorResponseStatusesPanel { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
+          bulkRequestsPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+          averageRequestLatencyPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+          requestMethodsPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
+          responseStatusOverviewPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
+          goodResponseStatusesPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
+          errorResponseStatusesPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
           replicationRow { gridPos: { h: 1, w: 24, x: 0, y: 43 } },
-          replicatorChangesManagerDeathsPanel { gridPos: { h: 6, w: 8, x: 0, y: 44 } },
-          replicatorChangesQueueDeathsPanel { gridPos: { h: 6, w: 8, x: 8, y: 44 } },
-          replicatorChangesReaderDeathsPanel { gridPos: { h: 6, w: 8, x: 16, y: 44 } },
-          replicatorConnectionOwnerCrashesPanel { gridPos: { h: 6, w: 12, x: 0, y: 50 } },
-          replicatorConnectionWorkerCrashesPanel { gridPos: { h: 6, w: 12, x: 12, y: 50 } },
-          replicatorJobCrashesPanel { gridPos: { h: 6, w: 12, x: 0, y: 56 } },
-          replicatorJobsPendingPanel { gridPos: { h: 6, w: 12, x: 12, y: 56 } },
+          replicatorChangesManagerDeathsPanel($._config) { gridPos: { h: 6, w: 8, x: 0, y: 44 } },
+          replicatorChangesQueueDeathsPanel($._config) { gridPos: { h: 6, w: 8, x: 8, y: 44 } },
+          replicatorChangesReaderDeathsPanel($._config) { gridPos: { h: 6, w: 8, x: 16, y: 44 } },
+          replicatorConnectionOwnerCrashesPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 50 } },
+          replicatorConnectionWorkerCrashesPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 50 } },
+          replicatorJobCrashesPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 56 } },
+          replicatorJobsPendingPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 56 } },
         ]
       ),
   },

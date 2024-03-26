@@ -8,7 +8,7 @@ local dashboardUid = 'couchdb-nodes';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
-local matcher = 'job=~"$job", couchdb_cluster=~"$couchdb_cluster", instance=~"$instance"';
+local getMatcher(cfg) = '%(couchDBSelector)s, couchdb_cluster=~"$couchdb_cluster", instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -18,11 +18,11 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local erlangMemoryUsagePanel = {
+local erlangMemoryUsagePanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'couchdb_erlang_memory_bytes{' + matcher + ', memory_type="total"}',
+      'couchdb_erlang_memory_bytes{' + getMatcher(cfg) + ', memory_type="total"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -97,11 +97,11 @@ local erlangMemoryUsagePanel = {
   },
 };
 
-local openOSFilesPanel = {
+local openOSFilesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'couchdb_open_os_files_total{' + matcher + '}',
+      'couchdb_open_os_files_total{' + getMatcher(cfg) + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -172,11 +172,11 @@ local openOSFilesPanel = {
   },
 };
 
-local openDatabasesPanel = {
+local openDatabasesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'couchdb_open_databases_total{' + matcher + '}',
+      'couchdb_open_databases_total{' + getMatcher(cfg) + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -250,11 +250,11 @@ local openDatabasesPanel = {
   },
 };
 
-local databaseWritesPanel = {
+local databaseWritesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_database_writes_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_database_writes_total{' + getMatcher(cfg) + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -329,11 +329,11 @@ local databaseWritesPanel = {
   },
 };
 
-local databaseReadsPanel = {
+local databaseReadsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_database_reads_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_database_reads_total{' + getMatcher(cfg) + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -408,11 +408,11 @@ local databaseReadsPanel = {
   },
 };
 
-local viewReadsPanel = {
+local viewReadsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_view_reads_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_httpd_view_reads_total{' + getMatcher(cfg) + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -487,11 +487,11 @@ local viewReadsPanel = {
   },
 };
 
-local viewTimeoutsPanel = {
+local viewTimeoutsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_view_timeouts_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_httpd_view_timeouts_total{' + getMatcher(cfg) + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -566,11 +566,11 @@ local viewTimeoutsPanel = {
   },
 };
 
-local temporaryViewReadsPanel = {
+local temporaryViewReadsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_temporary_view_reads_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_httpd_temporary_view_reads_total{' + getMatcher(cfg) + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -653,11 +653,11 @@ local requestsRow = {
   collapsed: false,
 };
 
-local requestMethodsPanel = {
+local requestMethodsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_request_methods{' + matcher + '}[$__rate_interval]) != 0',
+      'rate(couchdb_httpd_request_methods{' + getMatcher(cfg) + '}[$__rate_interval]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{method}}',
     ),
@@ -732,26 +732,26 @@ local requestMethodsPanel = {
   },
 };
 
-local requestLatencyPanel = {
+local requestLatencyPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'couchdb_request_time_seconds{' + matcher + ', quantile="0.5"}',
+      'couchdb_request_time_seconds{' + getMatcher(cfg) + ', quantile="0.5"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - p50',
     ),
     prometheus.target(
-      'couchdb_request_time_seconds{' + matcher + ', quantile="0.75"}',
+      'couchdb_request_time_seconds{' + getMatcher(cfg) + ', quantile="0.75"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - p75',
     ),
     prometheus.target(
-      'couchdb_request_time_seconds{' + matcher + ', quantile="0.95"}',
+      'couchdb_request_time_seconds{' + getMatcher(cfg) + ', quantile="0.95"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - p95',
     ),
     prometheus.target(
-      'couchdb_request_time_seconds{' + matcher + ', quantile="0.99"}',
+      'couchdb_request_time_seconds{' + getMatcher(cfg) + ', quantile="0.99"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - p99',
     ),
@@ -826,11 +826,11 @@ local requestLatencyPanel = {
   },
 };
 
-local bulkRequestsPanel = {
+local bulkRequestsPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_bulk_requests_total{' + matcher + '}[$__rate_interval])',
+      'rate(couchdb_httpd_bulk_requests_total{' + getMatcher(cfg) + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -905,29 +905,29 @@ local bulkRequestsPanel = {
   },
 };
 
-local responseStatusOverviewPanel = {
+local responseStatusOverviewPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"2.*"}[$__interval:])) != 0',
+      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"2.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - 2xx',
       interval='1m',
     ),
     prometheus.target(
-      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"3.*"}[$__interval:])) != 0',
+      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"3.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - 3xx',
       interval='1m',
     ),
     prometheus.target(
-      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"4.*"}[$__interval:])) != 0',
+      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"4.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - 4xx',
       interval='1m',
     ),
     prometheus.target(
-      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + matcher + ', code=~"5.*"}[$__interval:])) != 0',
+      'sum by(instance, couchdb_cluster) (increase(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"5.*"}[$__interval:])) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - 5xx',
       interval='1m',
@@ -973,11 +973,11 @@ local responseStatusOverviewPanel = {
   },
 };
 
-local goodResponseStatusesPanel = {
+local goodResponseStatusesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[23].*"}[$__rate_interval]) != 0',
+      'rate(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"[23].*"}[$__rate_interval]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{code}}',
     ),
@@ -1052,11 +1052,11 @@ local goodResponseStatusesPanel = {
   },
 };
 
-local errorResponseStatusesPanel = {
+local errorResponseStatusesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(couchdb_httpd_status_codes{' + matcher + ', code=~"[45].*"}[$__rate_interval]) != 0',
+      'rate(couchdb_httpd_status_codes{' + getMatcher(cfg) + ', code=~"[45].*"}[$__rate_interval]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{code}}',
     ),
@@ -1139,11 +1139,11 @@ local logsRow = {
   collapsed: false,
 };
 
-local logTypesPanel = {
+local logTypesPanel(cfg) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(couchdb_couch_log_requests_total{' + matcher + ', level=~"$log_level"}[$__interval:]) != 0',
+      'increase(couchdb_couch_log_requests_total{' + getMatcher(cfg) + ', level=~"$log_level"}[$__interval:]) != 0',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{level}}',
       interval='1m',
@@ -1219,13 +1219,13 @@ local logTypesPanel = {
   },
 };
 
-local systemLogsPanel = {
+local systemLogsPanel(cfg) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + ', filename="/var/log/couchdb/couchdb.log"} |~ "$log_level"',
+      expr: '{' + getMatcher(cfg) + ', filename="/var/log/couchdb/couchdb.log"} |~ "$log_level"',
       queryType: 'range',
       refId: 'A',
     },
@@ -1297,6 +1297,18 @@ local systemLogsPanel = {
               sort=0
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(couchdb_couch_replicator_cluster_is_stable{%(multiClusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=1,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              hide=if $._config.enableMultiCluster then '' else 'variable' % $._config,
+              sort=0
+            ),
+            template.new(
               'couchdb_cluster',
               promDatasource,
               'label_values(couchdb_couch_replicator_cluster_is_stable{job=~"$job"}, couchdb_cluster)',
@@ -1335,26 +1347,26 @@ local systemLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            erlangMemoryUsagePanel { gridPos: { h: 6, w: 8, x: 0, y: 0 } },
-            openOSFilesPanel { gridPos: { h: 6, w: 8, x: 8, y: 0 } },
-            openDatabasesPanel { gridPos: { h: 6, w: 8, x: 16, y: 0 } },
-            databaseWritesPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-            databaseReadsPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-            viewReadsPanel { gridPos: { h: 6, w: 8, x: 0, y: 12 } },
-            viewTimeoutsPanel { gridPos: { h: 6, w: 8, x: 8, y: 12 } },
-            temporaryViewReadsPanel { gridPos: { h: 6, w: 8, x: 16, y: 12 } },
+            erlangMemoryUsagePanel($._config) { gridPos: { h: 6, w: 8, x: 0, y: 0 } },
+            openOSFilesPanel($._config) { gridPos: { h: 6, w: 8, x: 8, y: 0 } },
+            openDatabasesPanel($._config) { gridPos: { h: 6, w: 8, x: 16, y: 0 } },
+            databaseWritesPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+            databaseReadsPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+            viewReadsPanel($._config) { gridPos: { h: 6, w: 8, x: 0, y: 12 } },
+            viewTimeoutsPanel($._config) { gridPos: { h: 6, w: 8, x: 8, y: 12 } },
+            temporaryViewReadsPanel($._config) { gridPos: { h: 6, w: 8, x: 16, y: 12 } },
             requestsRow { gridPos: { h: 1, w: 24, x: 0, y: 18 } },
-            bulkRequestsPanel { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
-            requestLatencyPanel { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
-            requestMethodsPanel { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
-            responseStatusOverviewPanel { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
-            goodResponseStatusesPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
-            errorResponseStatusesPanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
+            bulkRequestsPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
+            requestLatencyPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
+            requestMethodsPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+            responseStatusOverviewPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+            goodResponseStatusesPanel($._config) { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
+            errorResponseStatusesPanel($._config) { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
-            logTypesPanel { gridPos: { h: 6, w: 24, x: 0, y: 38 } },
+            logTypesPanel($._config) { gridPos: { h: 6, w: 24, x: 0, y: 38 } },
           ],
           if $._config.enableLokiLogs then [
-            systemLogsPanel { gridPos: { h: 6, w: 24, x: 0, y: 44 } },
+            systemLogsPanel($._config) { gridPos: { h: 6, w: 24, x: 0, y: 44 } },
           ] else [],
           [
           ],
