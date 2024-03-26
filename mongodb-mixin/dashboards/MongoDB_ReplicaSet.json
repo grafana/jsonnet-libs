@@ -487,7 +487,7 @@
             "uid": "${datasource}"
           },
           "exemplar": true,
-          "expr": "max by (set, mongodb_cluter, service_name) (mongodb_mongod_replset_my_state{set=~\"$replset\",service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
+          "expr": "max by (set, mongodb_cluster, service_name) (mongodb_mongod_replset_my_state{set=~\"$replset\",service_name=~\"$service_name\", mongodb_cluster=\"$cluster\",job=~\"$job\"})",
           "format": "time_series",
           "hide": false,
           "instant": false,
