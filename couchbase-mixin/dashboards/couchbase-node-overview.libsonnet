@@ -990,7 +990,7 @@ local errorLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + '} |~ `(ns_server:error)`',
+      expr: '{' + matcher + '} |~ `error|couchbase.log.error`',
       queryType: 'range',
       refId: 'A',
     },
@@ -1016,7 +1016,7 @@ local couchbaseLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + '} |~ `(couchdb:(info|error))`',
+      expr: '{' + matcher + '} |~ `couchdb`',
       queryType: 'range',
       refId: 'A',
     },
