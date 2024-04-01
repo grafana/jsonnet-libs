@@ -16,18 +16,26 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local stat = g.panel.stat;
     {
       clusterOverview:
-        g.dashboard.new(prefix + 'Cluster overview')
+        g.dashboard.new(prefix + ' cluster overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.clientsWaitingConnections { gridPos+: { w: 4, h: 4 } },
-              .panel.row.new('Queries'),
-              panels.queriesPooled { gridPos+: { w: 12 } }, 
+              panels.successfulBackupsCount { gridPos+: { w: 4, h: 4 } },
+              panels.failedBackups { gridPos+: { w: 4, h: 4 } },
+              panels.successfulRestores	 { gridPos+: { w: 4, h: 4 } },
+              panels.failedRestores	 { gridPos+: { w: 4, h: 4 } },
+              panels.alertsPanel { gridPos+: { w: 8, h: 4 } }, 
+              panels.topClustersByBackup { gridPos+: { w: 12 } }, 
+              panels.topClustersByRestore { gridPos+: { w: 12 } }, 
+              panels.topClustersByBackupSize { gridPos+: { w: 24 } }, 
+              panels.topClustersByVolumeSnapshots { gridPos+: { w: 12 } }, 
+              panels.topClustersByCSISnapshots { gridPos+: { w: 12 } }, 
             ], 12, 6
           )
         )
         // hide link to self
-        + root.applyCommon(vars.singleInstance, uid + '-cluster-overview', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-overview', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
+				},
         //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)

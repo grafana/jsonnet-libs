@@ -10,15 +10,15 @@ local utils = commonlib.utils;
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local instanceLabels = this.config.instanceLabels,
-      local topDatabaseSelector =
+      local topClusterSelector =
         var.custom.new(
-          'top_database_count',
-          values=[2, 4, 6, 8, 10],
+          'top_cluster_count',
+          values=[2, 3, 6, 8, 10],
         )
         + var.custom.generalOptions.withDescription(
-          'This variable allows for modification of top database value.'
+          'This variable allows for modification of top cluster value.'
         )
-        + var.custom.generalOptions.withLabel('Top database count'),
+        + var.custom.generalOptions.withLabel('Top cluster count'),
       local root = self,
       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
         local chainVarProto(index, chainVar) =
@@ -66,7 +66,7 @@ local utils = commonlib.utils;
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, filteringSelector, multiInstance=false),
+        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
 
       queriesSelector:
         '%s,%s' % [
@@ -77,6 +77,10 @@ local utils = commonlib.utils;
         '%s' % [
           utils.labelsToPromQLSelectorAdvanced(groupLabels),
         ],
+
+			clusterVariableSelectors:
+        [root.datasources.prometheus] + variablesFromLabels(groupLabels, instanceLabels, filteringSelector) + [topClusterSelector],
+
       clusterQuerySelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels),

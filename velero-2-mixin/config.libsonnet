@@ -8,7 +8,7 @@
   filteringSelector: 'job="integrations/velero"',
   groupLabels: ['job', 'velero_cluster'],
   logLabels: ['job', 'pod'],
-  instanceLabels: ['instance', 'database'],
+  instanceLabels: ['pod'],
   dashboardTags: [self.uid],
   uid: 'velero',
   dashboardNamePrefix: 'Velero',
@@ -19,11 +19,12 @@
   dashboardRefresh: '1m',
 
   // alert thresholds
-	 alertsHighBackupFailure: 0,
-   alertsHighBackupDuration: 20,
-   alertsHighRestoreFailureRate: 0,
-   alertsVeleroUpStatus: 0,
-    // logs lib related
+  alertsHighBackupFailure: 0,
+  alertsHighBackupDuration: 20,
+  alertsHighRestoreFailureRate: 0,
+  alertsVeleroUpStatus: 0,
+  
+	// logs lib related
   enableLokiLogs: true,
   extraLogLabels: ['level'],
   logsVolumeGroupBy: 'level',
