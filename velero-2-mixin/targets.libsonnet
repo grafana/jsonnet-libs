@@ -11,22 +11,22 @@ local lokiQuery = g.query.loki;
     succesfulBackups:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum(increase(velero_backup_success_total{%(queriesSelector)s})[$__rate_interval:])' % vars
+        'sum(increase(velero_backup_success_total{%(queriesSelector)s}[$__rate_interval:]))' % vars
       ),
     failedBackups:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum(increase(velero_backup_failure_total{%(queriesSelector)s})[$__rate_interval:])' % vars
+        'sum(increase(velero_backup_failure_total{%(queriesSelector)s}[$__rate_interval:]))' % vars
       ),
     succesfulRestores:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum(increase(velero_restore_success_total{%(queriesSelector)s})[$__rate_interval:])' % vars
+        'sum(increase(velero_restore_success_total{%(queriesSelector)s}[$__rate_interval:]))' % vars
       ),
      failedRestores:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum(increase(velero_restore_failed_total{%(queriesSelector)s})[$__rate_interval:])' % vars
+        'sum(increase(velero_restore_failed_total{%(queriesSelector)s}[$__rate_interval:]))' % vars
       ),
 
 		topClustersByBackupSuccess:
