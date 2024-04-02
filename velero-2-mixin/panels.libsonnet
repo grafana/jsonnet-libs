@@ -41,7 +41,7 @@ local utils = commonlib.utils;
         + stat.options.withGraphMode('area'),
 
       alertsPanel:
-        alertList.new('PgBouncer alerts')
+        alertList.new('Velero alerts')
         + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
 
       topClustersByBackup:
@@ -72,7 +72,9 @@ local utils = commonlib.utils;
             Top clusters by size of backups.
           |||
         )
-        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       topClustersByVolumeSnapshots:
         commonlib.panels.generic.timeSeries.base.new(
@@ -86,7 +88,7 @@ local utils = commonlib.utils;
 
       topClustersByCSISnapshots:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by restores',
+          'Top clusters by CSI snapshots',
           targets=[t.topClustersByCSISnapshotSuccess, t.topClustersByCSISnapshotFailure],
           description='Top clusters by number of CSI snapshots.'
         )
