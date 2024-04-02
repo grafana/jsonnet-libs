@@ -73,12 +73,12 @@ local utils = commonlib.utils;
           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
           filteringSelector,
         ],
-		 queriesGroupSelectorAdvanced:
+      queriesGroupSelectorAdvanced:
         '%s' % [
           utils.labelsToPromQLSelectorAdvanced(groupLabels),
         ],
 
-			clusterVariableSelectors:
+      clusterVariableSelectors:
         [root.datasources.prometheus] + variablesFromLabels(groupLabels, instanceLabels, filteringSelector) + [topClusterSelector],
 
       clusterQuerySelector:
@@ -86,7 +86,7 @@ local utils = commonlib.utils;
           utils.labelsToPromQLSelector(groupLabels),
           filteringSelector,
         ],
-		}
+    }
     + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
   withLokiLogs(this): {
     multiInstance+: [this.grafana.variables.datasources.loki],

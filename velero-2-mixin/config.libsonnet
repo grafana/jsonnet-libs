@@ -23,8 +23,8 @@
   alertsHighBackupDuration: 20,
   alertsHighRestoreFailureRate: 0,
   alertsVeleroUpStatus: 0,
-  
-	// logs lib related
+
+  // logs lib related
   enableLokiLogs: true,
   extraLogLabels: ['level'],
   logsVolumeGroupBy: 'level',

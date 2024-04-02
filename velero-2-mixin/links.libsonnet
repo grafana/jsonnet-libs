@@ -6,5 +6,5 @@ local g = import './g.libsonnet';
       veleroClusterOverview:
         link.link.new('Velero cluster overview', '/d/' + this.grafana.dashboards.clusterOverview.uid)
         + link.link.options.withKeepTime(true),
-		}
-		}
+    },
+}

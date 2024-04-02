@@ -23,60 +23,60 @@ local lokiQuery = g.query.loki;
         '${' + vars.datasources.prometheus.name + '}',
         'sum(increase(velero_restore_success_total{%(queriesSelector)s}[$__rate_interval:]))' % vars
       ),
-     failedRestores:
+    failedRestores:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum(increase(velero_restore_failed_total{%(queriesSelector)s}[$__rate_interval:]))' % vars
       ),
 
-		topClustersByBackupSuccess:
-		 prometheusQuery.new(
+    topClustersByBackupSuccess:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, increase(velero_backup_success_total{%(queriesSelector)s}[$__interval]))' % vars
       ),
-		topClustersByBackupFailure:
-		 prometheusQuery.new(
+    topClustersByBackupFailure:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, increase(velero_backup_failure_total{%(queriesSelector)s}[$__interval]))' % vars
       ),
 
-		topClustersByRestoreSuccess:
-		 prometheusQuery.new(
+    topClustersByRestoreSuccess:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, increase(velero_restore_success_total{%(queriesSelector)s}[$__interval]))' % vars
       ),
-		topClustersByRestoreFailure:
-		 prometheusQuery.new(
+    topClustersByRestoreFailure:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, increase(velero_restore_failed_total{%(queriesSelector)s}[$__interval]))' % vars
       ),
-		
-		topClustersByBackupSize:
-		 prometheusQuery.new(
+
+    topClustersByBackupSize:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, velero_backup_tarball_size_bytes{%(queriesSelector)s})' % vars
       ),
 
-		topClustersByVolumeSnapshotSuccess:
-		 prometheusQuery.new(
+    topClustersByVolumeSnapshotSuccess:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, increase(velero_volume_snapshot_success_total{%(queriesSelector)s}[$__interval]))' % vars
       ),
-		topClustersByVolumeSnapshotFailure:
-		 prometheusQuery.new(
+    topClustersByVolumeSnapshotFailure:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, increase(velero_volume_snapshot_failure_total{%(queriesSelector)s}[$__interval]))' % vars
       ),
-		topClustersByCSISnapshotSuccess:
-		 prometheusQuery.new(
+    topClustersByCSISnapshotSuccess:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, increase(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__interval]))' % vars
       ),
-		topClustersByCSISnapshotFailure:
-		 prometheusQuery.new(
+    topClustersByCSISnapshotFailure:
+      prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(velero_cluster)($top_cluster_count, increase(velero_csi_snapshot_failure_total{%(queriesSelector)s}[$__interval]))' % vars
       ),
 
-		},
+  },
 }
