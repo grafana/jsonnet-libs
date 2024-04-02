@@ -34,9 +34,47 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-view', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
-    },
-  //Apply common options(uids, tags, annotations etc..) to all dashboards above
+        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-overview', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
+    }
+    //Apply common options(uids, tags, annotations etc..) to all dashboards above
+    +
+    if this.config.enableLokiLogs then
+      {
+        logs:
+          logslib.new(
+            prefix + ' logs',
+            datasourceName=this.grafana.variables.datasources.loki.name,
+            datasourceRegex=this.grafana.variables.datasources.loki.regex,
+            filterSelector=this.config.filteringSelector,
+            labels=this.config.logLabels + this.config.extraLogLabels,
+            formatParser=null,
+            showLogsVolume=this.config.showLogsVolume,
+            logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+          )
+          {
+            dashboards+:
+              {
+                logs+:
+                  // reference to self, already generated variables, to keep them, but apply other common data in applyCommon
+                  root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links { logs+:: {} }, annotations=annotations, timezone=timezone, refresh=refresh, period=period),
+              },
+            panels+:
+              {
+                // modify log panel
+                logs+:
+                  g.panel.logs.options.withEnableLogDetails(true)
+                  + g.panel.logs.options.withShowTime(false)
+                  + g.panel.logs.options.withWrapLogMessage(false),
+              },
+            variables+: {
+              // add prometheus datasource for annotations processing
+              toArray+: [
+                this.grafana.variables.datasources.prometheus { hide: 2 },
+              ],
+            },
+          }.dashboards.logs,
+      }
+    else {},
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(uid)
