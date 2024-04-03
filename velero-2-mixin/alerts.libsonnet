@@ -8,7 +8,8 @@
           {
             alert: 'VeleroBackupFailure',
             expr: |||
-              increase(velero_backup_failure_total{%(filteringSelector)s}[5m]) > 0
+              increase(velero_backup_failure_total{%(filteringSelector)s}[5m]) > %(alertsHighBackupFailure)s
+
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -24,7 +25,7 @@
           {
             alert: 'VeleroHighBackupDuration',
             expr: |||
-              histogram_quantile(0.5, sum(rate(velero_backup_duration_seconds_bucket{%(filteringSelector)s}[5m])) by (le)) > 1.2 * avg_over_time(histogram_quantile(0.5, sum(rate(velero_backup_duration_seconds_bucket{%(filteringSelector)s}[5m])) by (le))[48h:5m])
+              histogram_quantile(0.5, sum(rate(velero_backup_duration_seconds_bucket{%(filteringSelector)s}[5m])) by (le)) > %(alertsHighBackupDuration)s * avg_over_time(histogram_quantile(0.5, sum(rate(velero_backup_duration_seconds_bucket{%(filteringSelector)s}[5m])) by (le))[48h:5m])
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -40,7 +41,7 @@
           {
             alert: 'VeleroHighRestoreFailureRate',
             expr: |||
-              increase(velero_restore_failed_total{%(filteringSelector)s}[5m]) > 0
+              increase(velero_restore_failed_total{%(filteringSelector)s}[5m]) > %(alertsHighRestoreFailureRate)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -56,7 +57,7 @@
           {
             alert: 'VeleroUpStatus',
             expr: |||
-              up{%(filteringSelector)s} != 1
+              up{%(filteringSelector)s} != %(alertsVeleroUpStatus)s
             ||| % this.config,
             'for': '5m',
             labels: {
