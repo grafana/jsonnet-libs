@@ -452,7 +452,7 @@ local instance_template = grafana.template.new(
           fill=0,
         )
         .addTarget(prometheus.target(
-          'rate(traces_receiver_accepted_spans{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])',
+          'rate(traces_receiver_accepted_spans_total{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])',
           legendFormat='{{ instance }} - {{ receiver }}/{{ transport }}',
         )) +
         utils.timeSeriesOverride(unit='short');
@@ -468,7 +468,7 @@ local instance_template = grafana.template.new(
           fill=0,
         )
         .addTarget(prometheus.target(
-          'rate(traces_receiver_refused_spans{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])',
+          'rate(traces_receiver_refused_spans_total{' + host_matcher + ',receiver!="otlp/lb"}[$__rate_interval])',
           legendFormat='{{ instance }} - {{ receiver }}/{{ transport }}',
         )) +
         utils.timeSeriesOverride(unit='short');
@@ -484,7 +484,7 @@ local instance_template = grafana.template.new(
           fill=0,
         )
         .addTarget(prometheus.target(
-          'rate(traces_exporter_sent_spans{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])',
+          'rate(traces_exporter_sent_spans_total{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])',
           legendFormat='{{ instance }} - {{ exporter }}',
         )) +
         utils.timeSeriesOverride(unit='short');
@@ -500,7 +500,7 @@ local instance_template = grafana.template.new(
           fill=0,
         )
         .addTarget(prometheus.target(
-          'rate(traces_exporter_send_failed_spans{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])',
+          'rate(traces_exporter_send_failed_spans_total{' + host_matcher + ',exporter!="otlp"}[$__rate_interval])',
           legendFormat='{{ instance }} - {{ exporter }}',
         )) +
         utils.timeSeriesOverride(unit='short');
@@ -515,11 +515,11 @@ local instance_template = grafana.template.new(
           fill=1,
         )
         .addTarget(prometheus.target(
-          'sum(rate(traces_receiver_accepted_spans{' + host_matcher + ',%s}[$__rate_interval]))' % receiverFilter,
+          'sum(rate(traces_receiver_accepted_spans_total{' + host_matcher + ',%s}[$__rate_interval]))' % receiverFilter,
           legendFormat='Accepted',
         ))
         .addTarget(prometheus.target(
-          'sum(rate(traces_receiver_refused_spans{' + host_matcher + ',%s}[$__rate_interval])) ' % receiverFilter,
+          'sum(rate(traces_receiver_refused_spans_total{' + host_matcher + ',%s}[$__rate_interval])) ' % receiverFilter,
           legendFormat='Refused',
         )) +
         utils.timeSeriesOverride(unit='short');
@@ -534,11 +534,11 @@ local instance_template = grafana.template.new(
           fill=1,
         )
         .addTarget(prometheus.target(
-          'sum(rate(traces_exporter_sent_spans{' + host_matcher + ',%s}[$__rate_interval]))' % exporterFilter,
+          'sum(rate(traces_exporter_sent_spans_total{' + host_matcher + ',%s}[$__rate_interval]))' % exporterFilter,
           legendFormat='Sent',
         ))
         .addTarget(prometheus.target(
-          'sum(rate(traces_exporter_send_failed_spans{' + host_matcher + ',%s}[$__rate_interval]))' % exporterFilter,
+          'sum(rate(traces_exporter_send_failed_spans_total{' + host_matcher + ',%s}[$__rate_interval]))' % exporterFilter,
           legendFormat='Send failed',
         )) +
         utils.timeSeriesOverride(unit='short');
