@@ -69,9 +69,8 @@ local utils = commonlib.utils;
         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
 
       queriesSelector:
-        '%s,%s' % [
+        '%s' % [
           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
-          filteringSelector,
         ],
       queriesGroupSelectorAdvanced:
         '%s' % [

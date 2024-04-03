@@ -4,9 +4,9 @@ The Velero mixin is a set of configurable Grafana dashboards and alerts.
 
 The Velero mixin contains the following dashboards:
 
-- Velero cluster overview
+- Velero cluster view
 - Velero overview
-- Velero logs overview
+- Velero logs 
 
 and the following alerts:
 
@@ -15,21 +15,21 @@ and the following alerts:
 - VeleroHighRestoreFailureRate
 - VeleroUpStatus
 
-## Velero Cluster Overview
-
-The Velero cluster view dashboard provides details on alerts, volume snapshots, backup, and restore counts.
-
-![Velero Overview Dashboard]()
-
 ## Velero Overview
 
 The Velero overview dashboard provides details on backup sizes, backup success rates, backup status, restore counts, restore success rates, and snapshot data.
 
 ![Velero Overview Dashboard]()
 
-## Velero Logs Overview
+## Velero Cluster Overview
 
-The Velero logs overview dashboard provides details on the Velero system. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
+The Velero cluster view dashboard provides details on alerts, volume snapshots, backup, and restore counts.
+
+![Velero Cluster Dashboard]()
+
+## Velero Logs View
+
+The Velero logs overview dashboard provides details on the Velero system. 
 
 ![Velero Logs Dashboard]()
 

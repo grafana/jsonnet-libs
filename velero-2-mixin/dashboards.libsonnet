@@ -16,7 +16,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local stat = g.panel.stat;
     {
       clusterOverview:
-        g.dashboard.new(prefix + ' cluster overview')
+        g.dashboard.new(prefix + ' cluster view')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
