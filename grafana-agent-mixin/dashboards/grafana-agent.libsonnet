@@ -597,12 +597,14 @@ local instance_template = grafana.template.new(
         .addPanel(receivedSpans('receiver!="otlp/lb"', 6))
         .addPanel(exportedSpans('exporter!="otlp"', 6))
       )
-      .addRow(
-        row.new('Load balancing')
-        .addPanel(loadBalancedSpans)
-        .addPanel(peersNum)
-        .addPanel(receivedSpans('receiver="otlp/lb"', 3))
-        .addPanel(exportedSpans('exporter="otlp"', 3))
-      ),
+      // TODO(ptodev): Uncomment this when Collector has instrumeneted LB exporter using OTel:
+      // https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/29867
+      // .addRow(
+      //   row.new('Load balancing')
+      //   .addPanel(loadBalancedSpans)
+      //   .addPanel(peersNum)
+      //   .addPanel(receivedSpans('receiver="otlp/lb"', 3))
+      //   .addPanel(exportedSpans('exporter="otlp"', 3))
+      // ),
   },
 }
