@@ -14,22 +14,30 @@ local utils = commonlib.utils {
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum(increase(velero_backup_success_total{%(queriesSelector)s}[$__interval:]))' % vars
-      ),
+      )
+      + prometheusQuery.withLegendFormat('Backups'),
+
     failedBackups:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum(increase(velero_backup_failure_total{%(queriesSelector)s}[$__interval:]))' % vars
-      ),
+      )
+      + prometheusQuery.withLegendFormat('Backups'),
+
     succesfulRestores:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum(increase(velero_restore_success_total{%(queriesSelector)s}[$__interval:]))' % vars
-      ),
+      )
+      + prometheusQuery.withLegendFormat('Restores'),
+
     failedRestores:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum(increase(velero_restore_failed_total{%(queriesSelector)s}[$__interval:]))' % vars
-      ),
+      )
+      + prometheusQuery.withLegendFormat('Restores'),
+
     topClustersByBackupSuccess:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',

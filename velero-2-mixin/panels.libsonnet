@@ -11,58 +11,57 @@ local utils = commonlib.utils;
       // create stat panel using commonlib
       successfulBackupsCount:
         commonlib.panels.generic.stat.info.new(
-          'Successful backups',
+          'Successful backups / $__interval ',
           targets=[t.succesfulBackups],
-          description='Number of successful backups'
+          description='Number of successful backups across all clusters.'
         )
         + stat.options.withGraphMode('area'),
 
       failedBackups:
         commonlib.panels.generic.stat.info.new(
-          'Failed backups',
+          'Failed backups / $__interval ',
           targets=[t.failedBackups],
-          description='Number of failed backups.'
+          description='Number of failed backups across all clusters'
         )
         + stat.options.withGraphMode('area'),
 
       successfulRestores:
         commonlib.panels.generic.stat.info.new(
-          'Succesful restores',
+          'Succesful restores / $__interval ',
           targets=[t.succesfulRestores],
-          description='Number of succesful restores.'
+          description='Number of succesful restores across all clusters.'
         )
         + stat.options.withGraphMode('area'),
       failedRestores:
         commonlib.panels.generic.stat.info.new(
-          'Failed restores',
+          'Failed restores / $__interval ',
           targets=[t.failedRestores],
-          description='Number of failed restores'
+          description='Number of failed restores across all clusters.'
         )
         + stat.options.withGraphMode('area'),
 
       alertsPanel:
         alertList.new('Velero alerts')
+        + alertList.panelOptions.withDescription('Status of firing alerts for Velero.')
         + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
 
       topClustersByBackup:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by backups',
+          'Top clusters by backups / $__interval ',
           targets=[t.topClustersByBackupSuccess, t.topClustersByBackupFailure],
           description=|||
             The top clusters by number of backups.
           |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+        ),
 
       topClustersByRestore:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by restores',
+          'Top clusters by restores / $__interval ',
           targets=[t.topClustersByRestoreSuccess, t.topClustersByRestoreFailure],
           description=|||
             Top clusters by number of restores.
           |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+        ),
 
       topClustersByBackupSize:
         commonlib.panels.memory.timeSeries.base.new(
@@ -78,20 +77,18 @@ local utils = commonlib.utils;
 
       topClustersByVolumeSnapshots:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by volume snapshots',
+          'Top clusters by volume snapshots / $__interval ',
           targets=[t.topClustersByVolumeSnapshotSuccess, t.topClustersByVolumeSnapshotFailure],
           description=|||
             Top clusters by number of volume snapshots.
           |||
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+        ),
 
       topClustersByCSISnapshots:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top clusters by CSI snapshots',
+          'Top clusters by CSI snapshots / $__interval ',
           targets=[t.topClustersByCSISnapshotSuccess, t.topClustersByCSISnapshotFailure],
           description='Top clusters by number of CSI snapshots.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('ops'),
+        ),
     },
 }

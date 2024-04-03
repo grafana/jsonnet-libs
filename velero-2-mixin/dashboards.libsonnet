@@ -25,16 +25,16 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.successfulRestores { gridPos+: { w: 4, h: 4 } },
               panels.failedRestores { gridPos+: { w: 4, h: 4 } },
               panels.alertsPanel { gridPos+: { w: 8, h: 4 } },
-              panels.topClustersByBackup { gridPos+: { w: 12 } },
-              panels.topClustersByRestore { gridPos+: { w: 12 } },
+              panels.topClustersByBackup,
+              panels.topClustersByRestore,
               panels.topClustersByBackupSize { gridPos+: { w: 24 } },
-              panels.topClustersByVolumeSnapshots { gridPos+: { w: 12 } },
-              panels.topClustersByCSISnapshots { gridPos+: { w: 12 } },
+              panels.topClustersByVolumeSnapshots,
+              panels.topClustersByCSISnapshots,
             ], 12, 6
           )
         )
         // hide link to self
-        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-overview', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-view', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
     },
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):

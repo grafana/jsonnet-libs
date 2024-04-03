@@ -17,7 +17,7 @@ and the following alerts:
 
 ## Velero Cluster Overview
 
-The Velero cluster overview dashboard a top level overview that provides details on alerts, volume snapshots, backup and restore counts.
+The Velero cluster view dashboard provides details on alerts, volume snapshots, backup, and restore counts.
 
 ![Velero Overview Dashboard]()
 
@@ -60,7 +60,6 @@ In order for the selectors to properly work for system logs ingested into your l
    }
     rule {
       source_labels = ["__meta_kubernetes_pod_name"]
-      separator = "-"
       target_label = "instance"
     }
     rule {
@@ -115,8 +114,6 @@ In order for the selectors to properly work for system logs ingested into your l
       }
      }
 ```
-
-![Velero Logs Overview Dashboard]()
 
 ## Alerts Overview
 
