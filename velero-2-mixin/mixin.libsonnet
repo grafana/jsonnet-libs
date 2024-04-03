@@ -13,4 +13,7 @@ local velero =
 // populate monitoring-mixin:
 {
   grafanaDashboards+:: velero.grafana.dashboards,
+  prometheusAlerts+:: velero.prometheus.alerts,
+  prometheusRules+:: velero.prometheus.recordingRules,
+
 }
