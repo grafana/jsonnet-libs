@@ -687,7 +687,7 @@ local getMatcher(cfg) = '%(tensorflowSelector)s, tensorflow_cluster=~"$tensorflo
             'cluster',
             promDatasource,
             'label_values(:tensorflow:serving:request_count{}, cluster)' % $._config,
-            label='Cluster'
+            label='Cluster',
             refresh=2,
             includeAll=true,
             multi=true,
