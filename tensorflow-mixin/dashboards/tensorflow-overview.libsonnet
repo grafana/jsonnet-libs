@@ -648,7 +648,7 @@ local containerLogsPanel(matcher) = {
   type: 'logs',
 };
 
-local getMatcher(cfg) = '%(tensorflowSelector)s, tensorflow_cluster=~"$tensorflow_cluster", instance=~"$instance"' % cfg;
+local getMatcher(cfg) = '%(tensorflowSelector)s, instance=~"$instance"' % cfg;
 
 {
   grafanaDashboards+:: {
@@ -693,17 +693,6 @@ local getMatcher(cfg) = '%(tensorflowSelector)s, tensorflow_cluster=~"$tensorflo
             multi=true,
             allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
-            sort=0
-          ),
-          template.new(
-            'tensorflow_cluster',
-            promDatasource,
-            'label_values(sys_mem_actual_used{%(tensorflowSelector)s},tensorflow_cluster)' % $._config,
-            label='Tensorflow cluster',
-            refresh=2,
-            includeAll=true,
-            multi=true,
-            allValues='',
             sort=0
           ),
           template.new(
