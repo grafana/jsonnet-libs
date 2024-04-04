@@ -23,7 +23,7 @@ local servingOverviewRow = {
   type: 'row',
 };
 
-local modelRequestRatePanel = {
+local modelRequestRatePanel(matcher) = {
   datasource: promDatasource,
   description: 'Rate of requests over time for the selected model. Grouped by statuses.',
   fieldConfig: {
@@ -80,7 +80,7 @@ local modelRequestRatePanel = {
   },
   targets: [
     prometheus.target(
-      'rate(:tensorflow:serving:request_count{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])',
+      'rate(:tensorflow:serving:request_count{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='model_name="{{model_name}}",status="{{status}}"',
     ),
@@ -90,7 +90,7 @@ local modelRequestRatePanel = {
   type: 'timeseries',
 };
 
-local modelPredictRequestLatencyPanel = {
+local modelPredictRequestLatencyPanel(matcher) = {
   datasource: promDatasource,
   description: 'Average request latency of predict requests for the selected model.',
   fieldConfig: {
@@ -147,7 +147,7 @@ local modelPredictRequestLatencyPanel = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:serving:request_latency_sum{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])/increase(:tensorflow:serving:request_latency_count{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])',
+      'increase(:tensorflow:serving:request_latency_sum{' + matcher + '}[$__rate_interval])/increase(:tensorflow:serving:request_latency_count{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='model_name="{{model_name}}"',
     ),
@@ -157,7 +157,7 @@ local modelPredictRequestLatencyPanel = {
   type: 'timeseries',
 };
 
-local modelPredictRuntimeLatencyPanel = {
+local modelPredictRuntimeLatencyPanel(matcher) = {
   datasource: promDatasource,
   description: 'Average runtime latency to fulfill a predict request for the selected model.',
   fieldConfig: {
@@ -214,7 +214,7 @@ local modelPredictRuntimeLatencyPanel = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:serving:runtime_latency_sum{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])/increase(:tensorflow:serving:runtime_latency_count{job=~"$job",instance=~"$instance",model_name=~"$model_name"}[$__rate_interval])',
+      'increase(:tensorflow:serving:runtime_latency_sum{' + matcher + '}[$__rate_interval])/increase(:tensorflow:serving:runtime_latency_count{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='model_name="{{model_name}}"',
     ),
@@ -224,7 +224,7 @@ local modelPredictRuntimeLatencyPanel = {
   type: 'timeseries',
 };
 
-local graphBuildCallsPanel = {
+local graphBuildCallsPanel(matcher) = {
   datasource: promDatasource,
   description: 'Number of times TensorFlow Serving has created a new client graph.',
   fieldConfig: {
@@ -281,7 +281,7 @@ local graphBuildCallsPanel = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:core:graph_build_calls{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'increase(:tensorflow:core:graph_build_calls{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
     ),
   ],
@@ -290,7 +290,7 @@ local graphBuildCallsPanel = {
   type: 'timeseries',
 };
 
-local graphRunsPanel = {
+local graphRunsPanel(matcher) = {
   datasource: promDatasource,
   description: 'Number of graph executions.',
   fieldConfig: {
@@ -347,7 +347,7 @@ local graphRunsPanel = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:core:graph_runs{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'increase(:tensorflow:core:graph_runs{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
     ),
   ],
@@ -356,7 +356,7 @@ local graphRunsPanel = {
   type: 'timeseries',
 };
 
-local graphBuildTimePanel = {
+local graphBuildTimePanel(matcher) = {
   datasource: promDatasource,
   description: 'Amount of time Tensorflow has spent creating new client graphs.',
   fieldConfig: {
@@ -413,7 +413,7 @@ local graphBuildTimePanel = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:core:graph_build_time_usecs{job=~"$job",instance=~"$instance"}[$__rate_interval])/increase(:tensorflow:core:graph_build_calls{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'increase(:tensorflow:core:graph_build_time_usecs{' + matcher + '}[$__rate_interval])/increase(:tensorflow:core:graph_build_calls{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
     ),
   ],
@@ -422,7 +422,7 @@ local graphBuildTimePanel = {
   type: 'timeseries',
 };
 
-local graphRunTimePanel = {
+local graphRunTimePanel(matcher) = {
   datasource: promDatasource,
   description: 'Amount of time spent executing graphs.',
   fieldConfig: {
@@ -479,7 +479,7 @@ local graphRunTimePanel = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:core:graph_run_time_usecs{job=~"$job",instance=~"$instance"}[$__rate_interval])/increase(:tensorflow:core:graph_runs{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'increase(:tensorflow:core:graph_run_time_usecs{' + matcher + '}[$__rate_interval])/increase(:tensorflow:core:graph_runs{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
     ),
   ],
@@ -488,7 +488,7 @@ local graphRunTimePanel = {
   type: 'timeseries',
 };
 
-local batchQueuingLatencyPanel = {
+local batchQueuingLatencyPanel(matcher) = {
   datasource: promDatasource,
   description: 'Current latency in the batching queue.',
   fieldConfig: {
@@ -545,7 +545,7 @@ local batchQueuingLatencyPanel = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:serving:batching_session:queuing_latency_sum{job=~"$job",instance=~"$instance"}[$__rate_interval])/increase(:tensorflow:serving:batching_session:queuing_latency_count{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'increase(:tensorflow:serving:batching_session:queuing_latency_sum{' + matcher + '}[$__rate_interval])/increase(:tensorflow:serving:batching_session:queuing_latency_count{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
     ),
   ],
@@ -554,7 +554,7 @@ local batchQueuingLatencyPanel = {
   type: 'timeseries',
 };
 
-local batchQueueThroughputPanel = {
+local batchQueueThroughputPanel(matcher) = {
   datasource: promDatasource,
   description: 'Rate of batch queue throughput over time.',
   fieldConfig: {
@@ -611,7 +611,7 @@ local batchQueueThroughputPanel = {
   },
   targets: [
     prometheus.target(
-      'rate(:tensorflow:serving:batching_session:queuing_latency_count{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'rate(:tensorflow:serving:batching_session:queuing_latency_count{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
     ),
   ],
@@ -620,7 +620,7 @@ local batchQueueThroughputPanel = {
   type: 'timeseries',
 };
 
-local containerLogsPanel = {
+local containerLogsPanel(matcher) = {
   datasource: lokiDatasource,
   description: 'Logs from the TensorFlow Serving Docker container.',
   options: {
@@ -637,7 +637,7 @@ local containerLogsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{name="tensorflow",job=~"$job",instance=~"$instance"}',
+      expr: '{' + matcher + '}',
       legendFormat: '',
       queryType: 'range',
       refId: 'A',
@@ -647,6 +647,8 @@ local containerLogsPanel = {
   transformations: [],
   type: 'logs',
 };
+
+local getMatcher(cfg) = '%(tensorflowSelector)s, tensorflow_cluster=~"$tensorflow_cluster", instance=~"$instance"' % cfg;
 
 {
   grafanaDashboards+:: {
@@ -682,9 +684,32 @@ local containerLogsPanel = {
             sort=1,
           ),
           template.new(
+            'cluster',
+            promDatasource,
+            'label_values(:tensorflow:serving:request_count{}, cluster)' % $._config,
+            label='Cluster'
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='.*',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
+          template.new(
+            'tensorflow_cluster',
+            promDatasource,
+            'label_values(sys_mem_actual_used{%(tensorflowSelector)s},tensorflow_cluster)' % $._config,
+            label='Tensorflow cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            sort=0
+          ),
+          template.new(
             'instance',
             promDatasource,
-            'label_values(:tensorflow:serving:request_count{job=~"$job"}, instance)',
+            'label_values(:tensorflow:serving:request_count{%(tensorflowSelector)s}, instance)', % $._config,
             label='Instance',
             refresh='time',
             includeAll=true,
@@ -695,7 +720,7 @@ local containerLogsPanel = {
           template.new(
             'model_name',
             promDatasource,
-            'label_values(:tensorflow:serving:request_count{job=~"$job",instance=~"$instance"}, model_name)',
+            'label_values(:tensorflow:serving:request_count{%(tensorflowSelector)s}}, model_name)', % $._config,
             label='Model name',
             refresh='time',
             includeAll=true,
@@ -718,23 +743,23 @@ local containerLogsPanel = {
         std.flattenArrays([
           // Model Row
           [
-            modelRequestRatePanel { gridPos: { h: 8, w: 24, x: 0, y: 0 } },
-            modelPredictRequestLatencyPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            modelPredictRuntimeLatencyPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            modelRequestRatePanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 0 } },
+            modelPredictRequestLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            modelPredictRuntimeLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           ],
           // Serving Overview Row
           [
-            servingOverviewRow { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
-            graphBuildCallsPanel { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
-            graphRunsPanel { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
-            graphBuildTimePanel { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
-            graphRunTimePanel { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
-            batchQueuingLatencyPanel { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
-            batchQueueThroughputPanel { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
+            servingOverviewRow(getMatcher($._config)) { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
+            graphBuildCallsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
+            graphRunsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
+            graphBuildTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
+            graphRunTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 25 } },
+            batchQueuingLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 33 } },
+            batchQueueThroughputPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 33 } },
           ],
           // Optional Log Row
           if $._config.enableLokiLogs then [
-            containerLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 41 } },
+            containerLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 41 } },
           ] else [],
         ]),
       ),
