@@ -80,7 +80,7 @@ local modelRequestRatePanel(matcher) = {
   },
   targets: [
     prometheus.target(
-      'rate(:tensorflow:serving:request_count{' + matcher + '}[$__rate_interval])',
+      'rate(:tensorflow:serving:request_count{' + matcher + ', model_name=~"$model_name"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='model_name="{{model_name}}",status="{{status}}"',
     ),
@@ -147,7 +147,7 @@ local modelPredictRequestLatencyPanel(matcher) = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:serving:request_latency_sum{' + matcher + '}[$__rate_interval])/increase(:tensorflow:serving:request_latency_count{' + matcher + '}[$__rate_interval])',
+      'increase(:tensorflow:serving:request_latency_sum{' + matcher + ', model_name=~"$model_name"}[$__rate_interval])/increase(:tensorflow:serving:request_latency_count{' + matcher + ', model_name=~"$model_name"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='model_name="{{model_name}}"',
     ),
@@ -214,7 +214,7 @@ local modelPredictRuntimeLatencyPanel(matcher) = {
   },
   targets: [
     prometheus.target(
-      'increase(:tensorflow:serving:runtime_latency_sum{' + matcher + '}[$__rate_interval])/increase(:tensorflow:serving:runtime_latency_count{' + matcher + '}[$__rate_interval])',
+      'increase(:tensorflow:serving:runtime_latency_sum{' + matcher + ', model_name=~"$model_name"}[$__rate_interval])/increase(:tensorflow:serving:runtime_latency_count{' + matcher + ', model_name=~"$model_name"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='model_name="{{model_name}}"',
     ),
@@ -637,7 +637,7 @@ local containerLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + '}',
+      expr: '{name="tensorflow",' + matcher + '}',
       legendFormat: '',
       queryType: 'range',
       refId: 'A',
@@ -698,7 +698,7 @@ local getMatcher(cfg) = '%(tensorflowSelector)s, instance=~"$instance"' % cfg;
           template.new(
             'instance',
             promDatasource,
-            'label_values(:tensorflow:serving:request_count{%(tensorflowSelector)s}, instance)', % $._config,
+            'label_values(:tensorflow:serving:request_count{%(tensorflowSelector)s}, instance)' % $._config,
             label='Instance',
             refresh='time',
             includeAll=true,
@@ -709,7 +709,7 @@ local getMatcher(cfg) = '%(tensorflowSelector)s, instance=~"$instance"' % cfg;
           template.new(
             'model_name',
             promDatasource,
-            'label_values(:tensorflow:serving:request_count{%(tensorflowSelector)s}}, model_name)', % $._config,
+            'label_values(:tensorflow:serving:request_count{%(tensorflowSelector)s}}, model_name)' % $._config,
             label='Model name',
             refresh='time',
             includeAll=true,
@@ -738,7 +738,7 @@ local getMatcher(cfg) = '%(tensorflowSelector)s, instance=~"$instance"' % cfg;
           ],
           // Serving Overview Row
           [
-            servingOverviewRow(getMatcher($._config)) { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
+            servingOverviewRow { gridPos: { h: 1, w: 24, x: 0, y: 16 } },
             graphBuildCallsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 17 } },
             graphRunsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 17 } },
             graphBuildTimePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 25 } },
