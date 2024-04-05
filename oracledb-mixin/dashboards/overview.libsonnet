@@ -279,7 +279,7 @@ local alertLogPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'builder',
-      expr: '{filename=~"/u01/base/diag/rdbms/.*/.*/trace/alert_.*log",' + matcher + '}',
+      expr: '{filename=~"/.*/.*/diag/rdbms/.*/.*/trace/alert_.*log",' + matcher + '}',
       queryType: 'range',
       refId: 'A',
     },
