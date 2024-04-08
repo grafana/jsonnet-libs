@@ -489,6 +489,17 @@ local utils = import 'mixin-utils/utils.libsonnet';
   // Assumes that the metricName is for a histogram (as opposed to qpsPanel above)
   // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
   qpsPanelNativeHistogram(metricName, selector, statusLabelName='status_code'):: {
+    local sumByStatus(nativeClassicQuery) = {
+      local template =
+        |||
+          sum by (status) (
+            label_replace(label_replace(%(metricQuery)s,
+            "status", "${1}xx", "%(label)s", "([0-9]).."),
+            "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
+        |||,
+      native: template % { metricQuery: nativeClassicQuery.native, label: statusLabelName },
+      classic: template % { metricQuery: nativeClassicQuery.classic, label: statusLabelName },
+    },
     fieldConfig+: {
       defaults+: {
         custom+: {
@@ -520,33 +531,13 @@ local utils = import 'mixin-utils/utils.libsonnet';
     },
     targets: [
       {
-        expr:
-          |||
-            sum by (status) (
-              label_replace(label_replace(%(metricQuery)s,
-              "status", "${1}xx", "%(label)s", "([0-9]).."),
-              "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
-              < ($latency_metrics * +Inf)
-          ||| % {
-            metricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).classic,
-            label: statusLabelName,
-          },
+        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramCountRate(metricName, selector)),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A_classic',
       },
       {
-        expr:
-          |||
-            sum by (status) (
-              label_replace(label_replace(%(metricQuery)s,
-              "status", "${1}xx", "%(label)s", "([0-9]).."),
-              "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
-              < ($latency_metrics * -Inf)
-          ||| % {
-            metricQuery: utils.nativeClassicHistogramCountRate(metricName, selector).native,
-            label: statusLabelName,
-          },
+        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramCountRate(metricName, selector)),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A',
