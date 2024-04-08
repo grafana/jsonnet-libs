@@ -5,7 +5,7 @@ local dashboardUid = 'oracledb-overview';
 
 local prometheus = grafana.prometheus;
 local promDatasourceName = 'prometheus_datasource';
-local getMatcher(cfg) = '%(tensorflowSelector)s, instance=~"$instance"' % cfg;
+local getMatcher(cfg) = '%(oracledbSelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
