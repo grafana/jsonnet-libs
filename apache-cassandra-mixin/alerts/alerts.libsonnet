@@ -79,7 +79,7 @@
           {
             alert: 'HintsStoredOnNode',
             expr: |||
-              cassandra_storage_totalhints_count > %(alertsWarningHintsStored1m)s
+              increase(cassandra_storage_totalhints_count[5m]) > %(alertsWarningHintsStored1m)s
             ||| % $._config,
             'for': '1m',
             labels: {
