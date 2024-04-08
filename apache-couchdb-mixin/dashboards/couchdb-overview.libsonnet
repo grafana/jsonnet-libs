@@ -1833,16 +1833,16 @@ local replicatorJobsPendingPanel(cfg) = {
             sort=0
           ),
           template.new(
-              'cluster',
-              promDatasource,
-              'label_values(couchdb_couch_replicator_cluster_is_stable{%(multiClusterSelector)s}, cluster)' % $._config,
-              label='Cluster',
-              refresh=1,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              hide=if $._config.enableMultiCluster then '' else 'variable' % $._config,
-              sort=0
+            'cluster',
+            promDatasource,
+            'label_values(couchdb_couch_replicator_cluster_is_stable{%(multiClusterSelector)s}, cluster)' % $._config,
+            label='Cluster',
+            refresh=1,
+            includeAll=true,
+            multi=true,
+            allValues='',
+            hide=if $._config.enableMultiCluster then '' else 'variable' % $._config,
+            sort=0
           ),
           template.new(
             'couchdb_cluster',
