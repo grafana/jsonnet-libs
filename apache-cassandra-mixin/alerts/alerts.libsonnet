@@ -79,7 +79,7 @@
           {
             alert: 'HintsStoredOnNode',
             expr: |||
-              cassandra_storage_totalhints_count > %(alertsWarningHintsStored1m)s
+              increase(cassandra_storage_totalhints_count[5m]) > %(alertsWarningHintsStored1m)s
             ||| % $._config,
             'for': '1m',
             labels: {
@@ -115,7 +115,7 @@
           {
             alert: 'HighCpuUsage',
             expr: |||
-              jvm_process_cpu_load * 100 > %(alertsCriticalHighCpuUsage5m)s
+              jvm_process_cpu_load{job=~"integrations/apache-cassandra"} * 100 > %(alertsCriticalHighCpuUsage5m)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -133,7 +133,7 @@
           {
             alert: 'HighMemoryUsage',
             expr: |||
-              sum(jvm_memory_usage_used_bytes{area="Heap"}) / sum(jvm_physical_memory_size) * 100 > %(alertsCriticalHighMemoryUsage5m)s
+              sum(jvm_memory_usage_used_bytes{job=~"integrations/apache-cassandra", area="Heap"}) / sum(jvm_physical_memory_size{job=~"integrations/apache-cassandra"}) * 100 > %(alertsCriticalHighMemoryUsage5m)s
             ||| % $._config,
             'for': '5m',
             labels: {

@@ -10,16 +10,6 @@ local utils = commonlib.utils;
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local instanceLabels = this.config.instanceLabels,
-      local pureInstanceLabels = this.config.pureInstanceLabels,
-      local topDatabaseSelector =
-        var.custom.new(
-          'top_database_count',
-          values=[2, 4, 6, 8, 10],
-        )
-        + var.custom.generalOptions.withDescription(
-          'This variable allows for modification of top database value.'
-        )
-        + var.custom.generalOptions.withLabel('Top database count'),
       local root = self,
       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
         local chainVarProto(index, chainVar) =
@@ -67,18 +57,16 @@ local utils = commonlib.utils;
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, pureInstanceLabels, filteringSelector, multiInstance=false)
-        + variablesFromLabels([], ['database'], filteringSelector),
+        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
+
       queriesSelector:
         '%s,%s' % [
           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
           filteringSelector,
         ],
-      clusterVariableSelectors:
-        [root.datasources.prometheus] + variablesFromLabels(groupLabels, [], filteringSelector) + [topDatabaseSelector],
       queriesGroupSelectorAdvanced:
         '%s' % [
-          utils.labelsToPromQLSelectorAdvanced(groupLabels),
+          utils.labelsToPromQLSelectorAdvanced(this.config.logLabels),
         ],
       clusterQuerySelector:
         '%s,%s' % [
@@ -87,7 +75,7 @@ local utils = commonlib.utils;
         ],
       instanceQueriesSelector:
         '%s,%s' % [
-          utils.labelsToPromQLSelector(groupLabels + pureInstanceLabels),
+          utils.labelsToPromQLSelector(groupLabels + instanceLabels),
           filteringSelector,
         ],
     }

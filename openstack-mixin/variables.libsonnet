@@ -5,21 +5,12 @@ local utils = commonlib.utils;
 
 // Generates chained variables to use on on all dashboards
 {
-  new(this, varMetric):
+  new(this):
     {
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local instanceLabels = this.config.instanceLabels,
-      local pureInstanceLabels = this.config.pureInstanceLabels,
-      local topDatabaseSelector =
-        var.custom.new(
-          'top_database_count',
-          values=[2, 4, 6, 8, 10],
-        )
-        + var.custom.generalOptions.withDescription(
-          'This variable allows for modification of top database value.'
-        )
-        + var.custom.generalOptions.withLabel('Top database count'),
+      local varMetric = 'openstack_identity_up',
       local root = self,
       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
         local chainVarProto(index, chainVar) =
@@ -48,47 +39,30 @@ local utils = commonlib.utils;
       datasources: {
         prometheus:
           var.datasource.new('prometheus_datasource', 'prometheus')
-          + var.datasource.generalOptions.withLabel('Prometheus data source')
+          + var.datasource.generalOptions.withLabel('Data source')
           + var.datasource.withRegex(''),
         loki:
           var.datasource.new('loki_datasource', 'loki')
           + var.datasource.generalOptions.withLabel('Loki data source')
-          + var.datasource.withRegex('')
-          // hide by default (used for annotations)
+          + var.datasource.withRegex('(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+')
           + var.datasource.generalOptions.showOnDashboard.withNothing(),
       },
       // Use on dashboards where multiple entities can be selected, like fleet dashboards
       multiInstance:
         [root.datasources.prometheus]
         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
-      multiCluster:
-        [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, [], filteringSelector),
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       singleInstance:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, pureInstanceLabels, filteringSelector, multiInstance=false)
-        + variablesFromLabels([], ['database'], filteringSelector),
+        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
+
       queriesSelector:
-        '%s,%s' % [
+        '%s' % [
           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
-          filteringSelector,
         ],
-      clusterVariableSelectors:
-        [root.datasources.prometheus] + variablesFromLabels(groupLabels, [], filteringSelector) + [topDatabaseSelector],
       queriesGroupSelectorAdvanced:
         '%s' % [
           utils.labelsToPromQLSelectorAdvanced(groupLabels),
-        ],
-      clusterQuerySelector:
-        '%s,%s' % [
-          utils.labelsToPromQLSelector(groupLabels),
-          filteringSelector,
-        ],
-      instanceQueriesSelector:
-        '%s,%s' % [
-          utils.labelsToPromQLSelector(groupLabels + pureInstanceLabels),
-          filteringSelector,
         ],
     }
     + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
