@@ -5,7 +5,7 @@ local dashboardUid = 'oracledb-overview';
 
 local prometheus = grafana.prometheus;
 local promDatasourceName = 'prometheus_datasource';
-local matcher = 'job=~"$job", instance=~"$instance"';
+local getMatcher(cfg) = '%(tensorflowSelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -15,7 +15,7 @@ local lokiDatasource = {
   uid: '$loki_datasource',
 };
 
-local databaseStatusPanel = {
+local databaseStatusPanel(matcher) = {
   description: 'Database status either Up or Down. Colored to be green when Up or red when Down',
   fieldConfig: {
     defaults: {
@@ -81,7 +81,7 @@ local databaseStatusPanel = {
   type: 'stat',
 };
 
-local sessionsPanel = {
+local sessionsPanel(matcher) = {
   datasource: promDatasource,
   description: 'Number of sessions and the limit overtime.',
   fieldConfig: {
@@ -171,7 +171,7 @@ local sessionsPanel = {
   type: 'timeseries',
 };
 
-local processPanel = {
+local processPanel(matcher) = {
   datasource: promDatasource,
   description: 'Number of processes and the limit overtime.',
   fieldConfig: {
@@ -261,7 +261,7 @@ local processPanel = {
   type: 'timeseries',
 };
 
-local alertLogPanel = {
+local alertLogPanel(matcher) = {
   datasource: lokiDatasource,
   description: 'Recent logs from alert log file',
   options: {
@@ -294,7 +294,7 @@ local waitTimerow = {
   type: 'row',
 };
 
-local applicationWaitTimePanel = {
+local applicationWaitTimePanel(matcher) = {
   datasource: promDatasource,
   description: 'Application wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -375,7 +375,7 @@ local applicationWaitTimePanel = {
   type: 'timeseries',
 };
 
-local commitTimePanel = {
+local commitTimePanel(matcher) = {
   datasource: promDatasource,
   description: 'Commit wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -456,7 +456,7 @@ local commitTimePanel = {
   type: 'timeseries',
 };
 
-local concurrencyWaitTime = {
+local concurrencyWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'Concurrency wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -537,7 +537,7 @@ local concurrencyWaitTime = {
   type: 'timeseries',
 };
 
-local configurationWaitTime = {
+local configurationWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'Configuration wait time, in seconds waiting for wait events.',
   fieldConfig: {
@@ -618,7 +618,7 @@ local configurationWaitTime = {
   type: 'timeseries',
 };
 
-local networkWaitTime = {
+local networkWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'Network wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -699,7 +699,7 @@ local networkWaitTime = {
   type: 'timeseries',
 };
 
-local schedulerWaitTime = {
+local schedulerWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'Scheduler wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -780,7 +780,7 @@ local schedulerWaitTime = {
   type: 'timeseries',
 };
 
-local systemIOWaitTime = {
+local systemIOWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'System I/O wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -861,7 +861,7 @@ local systemIOWaitTime = {
   type: 'timeseries',
 };
 
-local userIOWaitTime = {
+local userIOWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'User I/O wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -948,7 +948,7 @@ local tablespaceRow = {
   type: 'row',
 };
 
-local tablespaceSizePanel = {
+local tablespaceSizePanel(matcher) = {
   datasource: promDatasource,
   description: 'Shows the size overtime for the tablespace.',
   fieldConfig: {
