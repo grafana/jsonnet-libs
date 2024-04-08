@@ -531,13 +531,13 @@ local utils = import 'mixin-utils/utils.libsonnet';
     },
     targets: [
       {
-        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramCountRate(metricName, selector)),
+        expr: utils.showClassicHistogramQuery(sumByStatus(utils.nativeClassicHistogramCountRate(metricName, selector))),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A_classic',
       },
       {
-        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramCountRate(metricName, selector)),
+        expr: utils.showNativeHistogramQuery(sumByStatus(utils.nativeClassicHistogramCountRate(metricName, selector))),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A',
