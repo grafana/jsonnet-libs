@@ -1113,7 +1113,7 @@ local tablespaceSizePanel(matcher) = {
               template.new(
                 'tablespace',
                 promDatasource,
-                query='label_values(oracledb_tablespace_bytes{' + matcher + '}, tablespace)',
+                query='label_values(oracledb_tablespace_bytes{%(oracledbSelector)s}, tablespace)' % $._config,
                 label='Tablespace',
                 refresh='time',
                 includeAll=true,
@@ -1128,33 +1128,33 @@ local tablespaceSizePanel(matcher) = {
       .addPanels(
         std.flattenArrays([
           [
-            databaseStatusPanel { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
-            sessionsPanel { gridPos: { h: 6, w: 10, x: 4, y: 0 } },
-            processPanel { gridPos: { h: 6, w: 10, x: 14, y: 0 } },
+            databaseStatusPanel(getMatcher($._config)) { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
+            sessionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 10, x: 4, y: 0 } },
+            processPanel(getMatcher($._config)) { gridPos: { h: 6, w: 10, x: 14, y: 0 } },
           ],
           if $._config.enableLokiLogs then [
-            alertLogPanel { gridPos: { h: 7, w: 24, x: 0, y: 6 } },
+            alertLogPanel(getMatcher($._config)) { gridPos: { h: 7, w: 24, x: 0, y: 6 } },
           ] else [],
           [
             waitTimerow { gridPos: { h: 1, w: 24, x: 0, y: 13 } },
           ],
           [
-            applicationWaitTimePanel { gridPos: { h: 6, w: 6, x: 0, y: 14 } },
-            commitTimePanel { gridPos: { h: 6, w: 6, x: 6, y: 14 } },
-            concurrencyWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 14 } },
-            configurationWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 14 } },
+            applicationWaitTimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 14 } },
+            commitTimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 14 } },
+            concurrencyWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 14 } },
+            configurationWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 14 } },
           ],
           [
-            networkWaitTime { gridPos: { h: 6, w: 6, x: 0, y: 20 } },
-            schedulerWaitTime { gridPos: { h: 6, w: 6, x: 6, y: 20 } },
-            systemIOWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 20 } },
-            userIOWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 20 } },
+            networkWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 20 } },
+            schedulerWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 20 } },
+            systemIOWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 20 } },
+            userIOWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 20 } },
           ],
           [
             tablespaceRow { gridPos: { h: 1, w: 24, x: 0, y: 26 } },
           ],
           [
-            tablespaceSizePanel { gridPos: { h: 6, w: 24, x: 0, y: 27 } },
+            tablespaceSizePanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 27 } },
           ],
         ])
       ),
