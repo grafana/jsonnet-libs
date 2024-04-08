@@ -1,5 +1,9 @@
 {
   _config+:: {
+    enableMultiCluster: false,
+    couchDBSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
+    multiClusterSelector: 'job=~"$job"',
+
     dashboardTags: ['apache-couchdb-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
