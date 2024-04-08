@@ -1,5 +1,5 @@
 {
-  local matcher = 'job=~"$job", instance=~"$instance"',
+  local matcher = 'job=~"$job", server=~"$service", instance=~"$instance"',
   annotations: {
     list: [
       {
@@ -714,14 +714,50 @@
         datasource: {
           uid: '$datasource',
         },
-        definition: '',
+        definition: "label_values(caddy_http_requests_total{job=~\"'$job'\"} server)",
+        hide: 0,
+        includeAll: true,
+        label: 'service',
+        multi: true,
+        name: 'service',
+        options: [],
+        query: {
+          qryType: 1,
+          query: "label_values(caddy_http_requests_total{job=~\"'$job'\"}, server)",
+          refId: 'PrometheusVariableQueryEditor-VariableQuery',
+        },
+        refresh: 2,
+        regex: '',
+        skipUrlSync: false,
+        sort: 1,
+        tagValuesQuery: '',
+        tags: [],
+        tagsQuery: '',
+        type: 'query',
+        useTags: false,
+      },
+      {
+        allValue: '.+',
+        current: {
+          selected: false,
+          text: 'All',
+          value: '$__all',
+        },
+        datasource: {
+          uid: '$datasource',
+        },
+        definition: "label_values(caddy_http_requests_total{job=~\"'$job'\", server=~\"$service\"}, instance)",
         hide: 0,
         includeAll: true,
         label: 'Instance',
         multi: true,
         name: 'instance',
         options: [],
-        query: "label_values(caddy_http_requests_total{job=~'$job'}, instance)",
+        query: {
+          qryType: 1,
+          query: "label_values(caddy_http_requests_total{job=~\"'$job'\", server=~\"$service\"}, instance)",
+          refId: 'PrometheusVariableQueryEditor-VariableQuery',
+        },
         refresh: 2,
         regex: '',
         skipUrlSync: false,

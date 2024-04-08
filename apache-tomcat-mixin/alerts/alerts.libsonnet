@@ -7,7 +7,7 @@
           {
             alert: 'ApacheTomcatAlertsHighCpuUsage',
             expr: |||
-              sum by (job, instance) (jvm_process_cpu_load) > %(ApacheTomcatAlertsCriticalCpuUsage)s
+              sum by (job, instance) (jvm_process_cpu_load{job=~"integrations/tomcat"}) > %(ApacheTomcatAlertsCriticalCpuUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
@@ -25,7 +25,7 @@
           {
             alert: 'ApacheTomcatAlertsHighMemoryUsage',
             expr: |||
-              sum(jvm_memory_usage_used_bytes) by (job, instance) / sum(jvm_physical_memory_bytes) by (job, instance) * 100 > %(ApacheTomcatAlertsCriticalMemoryUsage)s
+              sum(jvm_memory_usage_used_bytes{job=~"integrations/tomcat"}) by (job, instance) / sum(jvm_physical_memory_bytes{job=~"integrations/tomcat"}) by (job, instance) * 100 > %(ApacheTomcatAlertsCriticalMemoryUsage)s
             ||| % $._config,
             'for': '5m',
             labels: {
