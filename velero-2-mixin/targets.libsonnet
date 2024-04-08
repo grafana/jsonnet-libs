@@ -100,5 +100,114 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
+    lastBackupStatus:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'velero_backup_last_status{%(queriesSelector)s}' % vars
+      )
+      + prometheusQuery.withLegendFormat('Backups'),
+
+    restoreValidationFailure:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum(increase(velero_restore_validation_failed_total{%(queriesSelector)s}[$__interval:]))' % vars
+      )
+      + prometheusQuery.withLegendFormat('Failure'),
+    backupSuccess:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_backup_success_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('success'),
+    backupFailure:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_backup_failure_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('failure'),
+
+    backupSuccessRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'rate(velero_backup_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_backup_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001)' % vars
+      )
+      + prometheusQuery.withLegendFormat('success'),
+
+    backupSize:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'velero_backup_tarball_size_bytes{%(queriesSelector)s}' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
+    backupTime:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum(increase(velero_backup_duration_seconds_bucket{le!="+Inf"}[$__interval:])) by (le)' % vars
+      ),
+
+    restoreSuccess:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_restore_success_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('success'),
+
+    restoreFailure:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_restore_failed_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('failure'),
+
+    restoreSuccessRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'rate(velero_restore_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_restore_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001)' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
+    volumeSnapshotSuccess:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_volume_snapshot_success_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('success'),
+
+    volumeSnapshotFailure:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_volume_snapshot_failure_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('failure'),
+
+    volumeSnapshotSuccessRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'rate(velero_volume_snapshot_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_volume_snapshot_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001)' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
+    csiSnapshotSuccess:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('success'),
+
+    csiSnapshotFailure:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('failure'),
+
+    csiSnapshotSuccessRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'rate(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_csi_snapshot_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001) ' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
   },
 }

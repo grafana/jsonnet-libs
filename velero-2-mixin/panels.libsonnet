@@ -17,7 +17,7 @@ local utils = commonlib.utils;
         )
         + stat.options.withGraphMode('area'),
 
-      failedBackups:
+      failedBackupsCount:
         commonlib.panels.generic.stat.info.new(
           'Failed backups / $__interval ',
           targets=[t.failedBackups],
@@ -90,5 +90,175 @@ local utils = commonlib.utils;
           targets=[t.topClustersByCSISnapshotSuccess, t.topClustersByCSISnapshotFailure],
           description='Top clusters by number of CSI snapshots.'
         ),
+
+      backupSuccessRate:
+        g.panel.gauge.new('Backup success rate (1 hour)')
+        + g.panel.gauge.queryOptions.withTargets([t.backupSuccessRate])
+        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
+        + g.panel.gauge.panelOptions.withDescription('Success rate of backups.')
+        + g.panel.gauge.standardOptions.withUnit('percentunit'),
+
+      restoreSuccessRate:
+        g.panel.gauge.new('Restore success rate (1 hour)')
+        + g.panel.gauge.queryOptions.withTargets([t.restoreSuccessRate])
+        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
+        + g.panel.gauge.panelOptions.withDescription('Success rate of restores.')
+        + g.panel.gauge.standardOptions.withUnit('percentunit'),
+
+      volumeSnapshotSuccessRate:
+        g.panel.gauge.new('Volume snapshot success rate')
+        + g.panel.gauge.queryOptions.withTargets([t.volumeSnapshotSuccessRate])
+        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
+        + g.panel.gauge.panelOptions.withDescription('Success rate of volume snapshots.')
+        + g.panel.gauge.standardOptions.withUnit('percentunit'),
+
+      restoreValidationFailure:
+        commonlib.panels.generic.stat.info.new(
+          'Restore validation failure / $__interval ',
+          targets=[t.restoreValidationFailure],
+          description='Number of failed restore validations'
+        )
+        + stat.options.withGraphMode('area'),
+      lastBackupStatus:
+        commonlib.panels.generic.stat.base.new(
+          'Backup last status',
+          targets=[t.lastBackupStatus],
+          description='Reports the status of the last backup.',
+        )
+        + stat.standardOptions.withUnit('string')
+        + stat.options.withGraphMode('none')
+        + stat.standardOptions.withMappings({
+          type: 'value',
+          options: {
+            '0': {
+              color: 'red',
+              index: 1,
+              text: 'Down',
+            },
+            '1': {
+              color: 'green',
+              index: 0,
+              text: 'Up',
+            },
+          },
+        }),
+
+      backupCount:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Backup count / $__interval ',
+          targets=[t.backupSuccess, t.backupFailure],
+          description=|||
+            Number of failed and succeeded backups.
+          |||
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars'),
+
+      successfulBackups:
+        commonlib.panels.generic.stat.info.new(
+          'Successful backups / $__interval ',
+          targets=[t.succesfulBackups],
+          description='Number of successful backups'
+        )
+        + stat.options.withGraphMode('area'),
+      failedBackups:
+        commonlib.panels.generic.stat.info.new(
+          'Failed backups / $__interval ',
+          targets=[t.failedBackups],
+          description='Number of failed backups.'
+        )
+        + stat.options.withGraphMode('area'),
+
+      backupSuccessRateTimeseries:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Backup success rate',
+          targets=[t.backupSuccessRate],
+          description=|||
+            Success rate of backups.
+          |||
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(1),
+
+      backupSize:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Backup size',
+          targets=[t.backupSize],
+          description=|||
+            Size (in bytes) of backups for this cluster.
+          |||
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
+
+      backupTime:
+        g.panel.heatmap.new('Backup time')
+        + g.panel.heatmap.queryOptions.withTargets([t.backupTime])
+        + g.panel.heatmap.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
+        + g.panel.heatmap.panelOptions.withDescription('Success rate of volume snapshots')
+        + g.panel.heatmap.options.yAxis.withUnit('s')
+        + g.panel.heatmap.options.withLegend('true')
+        + g.panel.heatmap.options.withCalculate('true'),
+
+      restoreCount:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Restore count / $__interval ',
+          targets=[t.restoreSuccess, t.restoreFailure],
+          description=|||
+            Number of failed and succeeded restores.
+          |||
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars'),
+
+      restoreSuccessRateTimeseries:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Restore success rate',
+          targets=[t.restoreSuccessRate],
+          description=|||
+            Success rate of restores.
+          |||
+        ) + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(1),
+      volumeSnapshotCount:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Volume snapshot count / $__interval ',
+          targets=[t.volumeSnapshotSuccess, t.volumeSnapshotFailure],
+          description=|||
+            Number of failed and succeeded volume snapshots.
+          |||
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars'),
+
+      volumeSnapshotSuccessRateTimeseries:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Volume snapshot success rate',
+          targets=[t.volumeSnapshotSuccessRate],
+          description=|||
+            Success rate of volume snapshots.
+          |||
+        ) + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(1),
+
+      csiSnapshotCount:
+        commonlib.panels.generic.timeSeries.base.new(
+          'CSI snapshot count / $__interval ',
+          targets=[t.csiSnapshotSuccess, t.csiSnapshotFailure],
+          description=|||
+            Number of failed and succeeded CSI snapshots.
+          |||
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withDrawStyle('bars'),
+
+      csiSnapshotSuccessRateTimeseries:
+        commonlib.panels.generic.timeSeries.base.new(
+          'CSI snapshot success rate',
+          targets=[t.csiSnapshotSuccessRate],
+          description=|||
+            Success rate of CSI snapshots.
+          |||
+        ) + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.standardOptions.withMax(1),
     },
 }
