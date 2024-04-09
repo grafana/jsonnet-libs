@@ -79,4 +79,20 @@ local k = import 'ksonnet-util/kausal.libsonnet';
         ),
       ]),
   },
+
+  withQueriesYaml(content):: {
+    container+:
+      k.core.v1.container.withVolumeMounts([
+        k.core.v1.volumeMount.new(
+          'queries-yaml',
+          '/etc/pg_exporter/queries.yaml',
+        ),
+      ])
+      + k.core.v1.configMap.new('queries-yaml', {
+        'queries.yaml': content,
+      })
+      + k.core.v1.container.withEnvMixin([
+        envVar.new('PG_EXPORTER_EXTEND_QUERY_PATH', '/etc/pg_exporter/queries.yaml'),
+      ]),
+  },
 }
