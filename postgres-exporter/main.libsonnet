@@ -96,7 +96,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
         'queries.yaml': content,
       })
       + k.core.v1.container.withEnvMixin([
-        envVar.new('PG_EXPORTER_EXTEND_QUERY_PATH', '/etc/pg_exporter/queries.yaml'),
+        k.core.v1.envVar.new('PG_EXPORTER_EXTEND_QUERY_PATH', '/etc/pg_exporter/queries.yaml'),
       ]),
   },
 }
