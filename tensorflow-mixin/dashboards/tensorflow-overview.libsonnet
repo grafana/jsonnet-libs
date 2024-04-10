@@ -709,7 +709,7 @@ local getMatcher(cfg) = '%(tensorflowSelector)s, instance=~"$instance"' % cfg;
           template.new(
             'model_name',
             promDatasource,
-            'label_values(:tensorflow:serving:request_count{%(tensorflowSelector)s}}, model_name)' % $._config,
+            'label_values(:tensorflow:serving:request_count{%(tensorflowSelector)s}, model_name)' % $._config,
             label='Model name',
             refresh='time',
             includeAll=true,
