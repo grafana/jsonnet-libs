@@ -2,7 +2,7 @@
   filteringSelector: 'job="integrations/velero"',
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'instance'],
-  legendLabels: ['cluster', 'instance'],
+  legendLabels: ['cluster', 'instance', 'schedule'],
   instanceLabels: ['instance'],
   dashboardTags: [self.uid],
   uid: 'velero',

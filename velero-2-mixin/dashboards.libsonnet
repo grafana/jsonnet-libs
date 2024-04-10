@@ -64,6 +64,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
+<<<<<<< HEAD
         + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { veleroOverview+:: {} }, annotations, timezone, refresh, period),
     }
     //Apply common options(uids, tags, annotations etc..) to all dashboards above
@@ -105,6 +106,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           }.dashboards.logs,
       }
     else {},
+=======
+        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { veleroOverview+:: {} }, annotations, timezone, refresh, period),
+
+
+    },
+>>>>>>> 14d5873 (added attempt into timeseries, refactored)
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)

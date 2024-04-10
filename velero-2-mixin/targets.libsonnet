@@ -44,6 +44,14 @@ local utils = commonlib.utils {
         'topk by(cluster)($top_cluster_count, increase(velero_backup_success_total{%(queriesSelector)s}[$__interval:]))' % vars
       )
       + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
+    topClustersByBackupAttempt:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(cluster)($top_cluster_count, increase(velero_backup_attempt_total{%(queriesSelector)s}[$__interval:]))' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - attempt' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
     topClustersByBackupFailure:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -57,6 +65,14 @@ local utils = commonlib.utils {
         'topk by(cluster)($top_cluster_count, increase(velero_restore_success_total{%(queriesSelector)s}[$__interval:]))' % vars
       )
       + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
+    topClustersByRestoreAttempt:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(cluster)($top_cluster_count, increase(velero_restore_success_total{%(queriesSelector)s}[$__interval:]))' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - attempt' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
 
     topClustersByRestoreFailure:
       prometheusQuery.new(
@@ -86,12 +102,27 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
+    topClustersByVolumeSnapshotAttempt:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(cluster)($top_cluster_count, increase(velero_volume_snapshot_attempt_total{%(queriesSelector)s}[$__interval:]))' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - attempt' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
     topClustersByCSISnapshotSuccess:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by(cluster)($top_cluster_count, increase(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__interval:]))' % vars
       )
       + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
+    topClustersByCSISnapshotAttempt:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'topk by(cluster)($top_cluster_count, increase(velero_csi_snapshot_attempt_total{%(queriesSelector)s}[$__interval:]))' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - attempt' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
 
     topClustersByCSISnapshotFailure:
       prometheusQuery.new(
@@ -112,27 +143,31 @@ local utils = commonlib.utils {
         '${' + vars.datasources.prometheus.name + '}',
         'sum(increase(velero_restore_validation_failed_total{%(queriesSelector)s}[$__interval:]))' % vars
       )
-      + prometheusQuery.withLegendFormat('Failure'),
+      + prometheusQuery.withLegendFormat('failure'),
     backupSuccess:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'increase(velero_backup_success_total{%(queriesSelector)s}[$__interval:])' % vars
       )
-      + prometheusQuery.withLegendFormat('success'),
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(this.config.legendLabels)),
+    backupAttempt:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_backup_attempt_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - attempt' % utils.labelsToPanelLegend(this.config.legendLabels)),
     backupFailure:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'increase(velero_backup_failure_total{%(queriesSelector)s}[$__interval:])' % vars
       )
-      + prometheusQuery.withLegendFormat('failure'),
-
+      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(this.config.legendLabels)),
     backupSuccessRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'rate(velero_backup_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_backup_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001)' % vars
       )
-      + prometheusQuery.withLegendFormat('success'),
-
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
     backupSize:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -151,14 +186,19 @@ local utils = commonlib.utils {
         '${' + vars.datasources.prometheus.name + '}',
         'increase(velero_restore_success_total{%(queriesSelector)s}[$__interval:])' % vars
       )
-      + prometheusQuery.withLegendFormat('success'),
-
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(this.config.legendLabels)),
     restoreFailure:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'increase(velero_restore_failed_total{%(queriesSelector)s}[$__interval:])' % vars
       )
-      + prometheusQuery.withLegendFormat('failure'),
+      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(this.config.legendLabels)),
+    restoreAttempt:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_restore_attempt_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - attempt' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
     restoreSuccessRate:
       prometheusQuery.new(
@@ -172,14 +212,21 @@ local utils = commonlib.utils {
         '${' + vars.datasources.prometheus.name + '}',
         'increase(velero_volume_snapshot_success_total{%(queriesSelector)s}[$__interval:])' % vars
       )
-      + prometheusQuery.withLegendFormat('success'),
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
     volumeSnapshotFailure:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'increase(velero_volume_snapshot_failure_total{%(queriesSelector)s}[$__interval:])' % vars
       )
-      + prometheusQuery.withLegendFormat('failure'),
+      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(this.config.legendLabels)),
+
+    volumeSnapshotAttempt:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_volume_snapshot_attempt_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - attempt' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
     volumeSnapshotSuccessRate:
       prometheusQuery.new(
@@ -193,14 +240,19 @@ local utils = commonlib.utils {
         '${' + vars.datasources.prometheus.name + '}',
         'increase(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__interval:])' % vars
       )
-      + prometheusQuery.withLegendFormat('success'),
-
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(this.config.legendLabels)),
     csiSnapshotFailure:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'increase(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__interval:])' % vars
       )
-      + prometheusQuery.withLegendFormat('failure'),
+      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(this.config.legendLabels)),
+    csiSnapshotAttempt:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'increase(velero_csi_snapshot_attempt_total{%(queriesSelector)s}[$__interval:])' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - attempt' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
     csiSnapshotSuccessRate:
       prometheusQuery.new(
