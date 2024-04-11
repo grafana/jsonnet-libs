@@ -106,7 +106,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
       },
       {
         record: '%(labels_underscore)s:%(metric)s:avg' % vars,
-        expr: 'sum(rate(%(metric)s_sum[1m])) by (%(labels_comma)s) / sum(rate(%(metric)s_count[%(interval)s])) by (%(labels_comma)s)' % vars,
+        expr: 'sum(rate(%(metric)s_sum[%(interval)s])) by (%(labels_comma)s) / sum(rate(%(metric)s_count[%(interval)s])) by (%(labels_comma)s)' % vars,
       },
       {
         record: '%(labels_underscore)s:%(metric)s_bucket:sum_rate' % vars,
