@@ -1099,6 +1099,18 @@ local tablespaceSizePanel(matcher) = {
                 sort=1
               ),
               template.new(
+                'cluster',
+                promDatasource,
+                'label_values(oracledb_up, cluster)' % $._config,
+                label='Cluster',
+                refresh=2,
+                includeAll=true,
+                multi=true,
+                allValues='.*',
+                hide=if $._config.enableMultiCluster then '' else 'variable',
+                sort=0
+              ),
+              template.new(
                 name='instance',
                 label='Instance',
                 datasource='$prometheus_datasource',
