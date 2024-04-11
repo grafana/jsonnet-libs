@@ -165,7 +165,7 @@ local utils = commonlib.utils {
     backupSuccessRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'rate(velero_backup_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_backup_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001)' % vars
+        'rate(velero_backup_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_backup_attempt_total{%(queriesSelector)s}[$__rate_interval]),1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
     backupSize:
@@ -203,7 +203,7 @@ local utils = commonlib.utils {
     restoreSuccessRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'rate(velero_restore_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_restore_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001)' % vars
+        'rate(velero_restore_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_restore_attempt_total{%(queriesSelector)s}[$__rate_interval]),1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
@@ -231,7 +231,7 @@ local utils = commonlib.utils {
     volumeSnapshotSuccessRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'rate(velero_volume_snapshot_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_volume_snapshot_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001)' % vars
+        'rate(velero_volume_snapshot_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_volume_snapshot_attempt_total{%(queriesSelector)s}[$__rate_interval]),1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
@@ -257,7 +257,7 @@ local utils = commonlib.utils {
     csiSnapshotSuccessRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'rate(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_csi_snapshot_attempt_total{%(queriesSelector)s}[$__rate_interval]),0.001) ' % vars
+        'rate(velero_csi_snapshot_success_total{%(queriesSelector)s}[$__rate_interval]) / clamp_min(rate(velero_csi_snapshot_attempt_total{%(queriesSelector)s}[$__rate_interval]),1) ' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 

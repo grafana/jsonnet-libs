@@ -13,7 +13,8 @@ local utils = commonlib.utils;
       local scheduleLabel = 'schedule',
       local groupVarMetric = 'velero_backup_attempt_total',
       local querySelectorVar = ['job', 'cluster', 'instance', 'schedule'],
-
+      local scheduleRegex = '/schedule="([^"]*)/',
+      local scheduleQuery = 'query_result(label_replace(velero_backup_success_total, "schedule", "none", "schedule", "^$"))',
       local topClusterSelector =
         var.custom.new(
           'top_cluster_count',
@@ -57,6 +58,7 @@ local utils = commonlib.utils;
             chainVar.label,
             '%s{%s}' % [groupVarMetric, chainVar.chainSelector],
           )
+          + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
           + var.query.selectionOptions.withIncludeAll(
             value=false,
           )
@@ -71,17 +73,17 @@ local utils = commonlib.utils;
             caseInsensitive=false,
           );
         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels, [])),
-      local createOverviewVariable(name, displayName, metric, selector) =
+      local createOverviewVariable(name, displayName, query, regex, includeAll) =
         local variable =
-          var.query.new(name)
-          + var.query.withDatasourceFromVariable(root.datasources.prometheus)
-          + var.query.queryTypes.withLabelValues(
-            'schedule',
-            '%s{%s}' % [metric, selector],
-          )
+          var.query.new(name, query)
           + var.query.generalOptions.withLabel(displayName)
+          + var.query.withDatasourceFromVariable(root.datasources.prometheus)
+          + var.query.withRegex(regex)
           + var.query.selectionOptions.withIncludeAll(
             value=false,
+          )
+          + var.query.selectionOptions.withIncludeAll(
+            value=if (!includeAll) then false else true,
           )
           + var.query.selectionOptions.withMulti(
             false,
@@ -127,7 +129,7 @@ local utils = commonlib.utils;
         [root.datasources.prometheus]
         + groupVariablesFromLabels(groupLabels)
         + groupVariablesFromLabels(instanceLabels)
-        + createOverviewVariable(scheduleLabel, 'Schedule', groupVarMetric, 'job=~"$job", cluster=~"$cluster", instance=~"$instance"'),
+        + createOverviewVariable(scheduleLabel, 'Schedule', scheduleQuery, scheduleRegex, false),
 
       queriesGroupSelectorAdvanced:
         '%s' % [
