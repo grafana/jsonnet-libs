@@ -109,7 +109,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
 =======
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { veleroOverview+:: {} }, annotations, timezone, refresh, period),
 
-
     },
 >>>>>>> 14d5873 (added attempt into timeseries, refactored)
   //Apply common options(uids, tags, annotations etc..) to all dashboards above

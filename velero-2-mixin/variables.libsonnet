@@ -14,7 +14,7 @@ local utils = commonlib.utils;
       local groupVarMetric = 'velero_backup_attempt_total',
       local querySelectorVar = ['job', 'cluster', 'instance', 'schedule'],
       local scheduleRegex = '/schedule="([^"]*)/',
-      local scheduleQuery = 'query_result(label_replace(velero_backup_success_total, "schedule", "none", "schedule", "^$"))',
+      local scheduleQuery = 'query_result(label_replace(velero_backup_success_total, "schedule", "^$", "schedule", "^$"))',
       local topClusterSelector =
         var.custom.new(
           'top_cluster_count',

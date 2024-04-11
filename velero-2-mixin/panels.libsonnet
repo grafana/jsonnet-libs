@@ -93,14 +93,14 @@ local utils = commonlib.utils;
 
       backupSuccessRate:
         g.panel.gauge.new('Backup success rate (1 hour)')
-        + g.panel.gauge.queryOptions.withTargets([t.backupSuccessRate])
+        + g.panel.gauge.queryOptions.withTargets([t.backupSuccessRateGauge])
         + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.gauge.panelOptions.withDescription('Success rate of backups in the past hour.')
         + g.panel.gauge.standardOptions.withUnit('percentunit'),
 
       restoreSuccessRate:
         g.panel.gauge.new('Restore success rate (1 hour)')
-        + g.panel.gauge.queryOptions.withTargets([t.restoreSuccessRate])
+        + g.panel.gauge.queryOptions.withTargets([t.restoreSuccessRateGauge])
         + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.gauge.panelOptions.withDescription('Success rate of restores in the past hour.')
         + g.panel.gauge.standardOptions.withUnit('percentunit'),
@@ -116,7 +116,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.stat.info.new(
           'Restore validation failure / $__interval ',
           targets=[t.restoreValidationFailure],
-          description='Number of failed restore validations'
+          description='Number of failed restore validations.'
         )
         + stat.options.withGraphMode('area'),
       lastBackupStatus:
@@ -156,7 +156,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.stat.info.new(
           'Successful backups / $__interval ',
           targets=[t.succesfulBackups],
-          description='Number of successful backups'
+          description='Number of successful backups.'
         )
         + stat.options.withGraphMode('area'),
       failedBackups:
@@ -194,7 +194,7 @@ local utils = commonlib.utils;
         + g.panel.heatmap.queryOptions.withTargets([t.backupTime])
         + g.panel.heatmap.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.heatmap.panelOptions.withDescription('The time it took to create backups.')
-				+ g.panel.heatmap.standardOptions.withUnit('s')
+        + g.panel.heatmap.options.yAxis.withUnit('s')
         + g.panel.heatmap.options.withLegend('true')
         + g.panel.heatmap.options.withCalculate('true'),
 
