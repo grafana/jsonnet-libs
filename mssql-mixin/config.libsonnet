@@ -1,5 +1,7 @@
 {
   _config+:: {
+    enableMultiCluster: false,
+    mssqlSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
     dashboardTags: ['mssql-mixin'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
