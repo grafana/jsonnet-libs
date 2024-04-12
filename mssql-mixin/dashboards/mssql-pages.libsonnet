@@ -17,7 +17,7 @@ local pageFileMemoryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_os_page_file{instance=~"$instance", job=~"$job"}',
+      'mssql_os_page_file{'+ matcher +'}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{state}}',
     ),
@@ -93,7 +93,7 @@ local bufferCacheHitPercentagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_buffer_cache_hit_ratio{instance=~"$instance", job=~"$job"}',
+      'mssql_buffer_cache_hit_ratio{'+ matcher +'}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -174,7 +174,7 @@ local pageCheckpointsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_checkpoint_pages_sec{instance=~"$instance", job=~"$job"}',
+      'mssql_checkpoint_pages_sec{'+ matcher +'}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -253,7 +253,7 @@ local pageFaultsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_page_fault_count_total{instance=~"$instance", job=~"$job"}[$__rate_interval])',
+      'increase(mssql_page_fault_count_total{'+ matcher +'}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -360,7 +360,7 @@ local pageFaultsPanel(matcher) = {
           template.new(
             'job',
             promDatasource,
-            'label_values(mssql_build_info{}, job)',
+            'label_values(mssql_build_info{%(mssqlwSelector)s}, job)' % $._config,
             label='Job',
             refresh=2,
             includeAll=true,
@@ -371,7 +371,7 @@ local pageFaultsPanel(matcher) = {
           template.new(
             'cluster',
             promDatasource,
-            'label_values(mssql_build_info{}, cluster)' % $._config,
+            'label_values(mssql_build_info{%(mssqlwSelector)s}, cluster)' % $._config,
             label='Cluster',
             refresh=2,
             includeAll=true,
@@ -383,7 +383,7 @@ local pageFaultsPanel(matcher) = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(mssql_build_info{job=~"$job"}, instance)',
+            'label_values(mssql_build_info{%(mssqlwSelector)s}, instance)' % $._config,
             label='Instance',
             refresh=2,
             includeAll=true,
