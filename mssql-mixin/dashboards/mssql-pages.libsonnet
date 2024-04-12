@@ -369,6 +369,18 @@ local pageFaultsPanel(matcher) = {
             sort=0
           ),
           template.new(
+            'cluster',
+            promDatasource,
+            'label_values(mssql_build_info{}, cluster)' % $._config,
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='.*',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
+          template.new(
             'instance',
             promDatasource,
             'label_values(mssql_build_info{job=~"$job"}, instance)',
