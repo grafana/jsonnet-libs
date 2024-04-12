@@ -7,12 +7,13 @@ local prometheus = grafana.prometheus;
 local dashboardUid = 'mssql-pages';
 
 local promDatasourceName = 'prometheus_datasource';
+local getMatcher(cfg) = '%(mssqlSelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local pageFileMemoryPanel = {
+local pageFileMemoryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -88,7 +89,7 @@ local pageFileMemoryPanel = {
   },
 };
 
-local bufferCacheHitPercentagePanel = {
+local bufferCacheHitPercentagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -169,7 +170,7 @@ local bufferCacheHitPercentagePanel = {
   },
 };
 
-local pageCheckpointsPanel = {
+local pageCheckpointsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -248,7 +249,7 @@ local pageCheckpointsPanel = {
   },
 };
 
-local pageFaultsPanel = {
+local pageFaultsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(

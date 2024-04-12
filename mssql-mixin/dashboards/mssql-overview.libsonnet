@@ -8,6 +8,7 @@ local dashboardUid = 'mssql-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
+local getMatcher(cfg) = '%(mssqlSelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -17,7 +18,7 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local connectionsPanel = {
+local connectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -97,7 +98,7 @@ local connectionsPanel = {
   },
 };
 
-local batchRequestsPanel = {
+local batchRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -177,7 +178,7 @@ local batchRequestsPanel = {
   },
 };
 
-local severeErrorsPanel = {
+local severeErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -257,7 +258,7 @@ local severeErrorsPanel = {
   },
 };
 
-local deadlocksPanel = {
+local deadlocksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -337,7 +338,7 @@ local deadlocksPanel = {
   },
 };
 
-local osMemoryUsagePanel = {
+local osMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -416,7 +417,7 @@ local osMemoryUsagePanel = {
   },
 };
 
-local memoryManagerPanel = {
+local memoryManagerPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -500,7 +501,7 @@ local memoryManagerPanel = {
   },
 };
 
-local committedMemoryUtilizationPanel = {
+local committedMemoryUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -548,7 +549,7 @@ local committedMemoryUtilizationPanel = {
   pluginVersion: '9.1.7',
 };
 
-local errorLogsPanel = {
+local errorLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
@@ -582,7 +583,7 @@ local databaseRow = {
   collapsed: false,
 };
 
-local databaseWriteStallDurationPanel = {
+local databaseWriteStallDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -658,7 +659,7 @@ local databaseWriteStallDurationPanel = {
   },
 };
 
-local databaseReadStallDurationPanel = {
+local databaseReadStallDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -734,7 +735,7 @@ local databaseReadStallDurationPanel = {
   },
 };
 
-local transactionLogExpansionsPanel = {
+local transactionLogExpansionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
