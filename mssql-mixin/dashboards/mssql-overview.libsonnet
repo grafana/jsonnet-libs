@@ -858,7 +858,7 @@ local transactionLogExpansionsPanel(matcher) = {
             template.new(
               'job',
               promDatasource,
-              'label_values(mssql_build_info{%(mssqlwSelector)s}, job)' % $._config,
+              'label_values(mssql_build_info{%(mssqlSelector)s}, job)' % $._config,
               label='Job',
               refresh=2,
               includeAll=true,
@@ -869,7 +869,7 @@ local transactionLogExpansionsPanel(matcher) = {
             template.new(
               'cluster',
               promDatasource,
-              'label_values(mssql_build_info{%(mssqlwSelector)s}, cluster)' % $._config,
+              'label_values(mssql_build_info{%(mssqlSelector)s}, cluster)' % $._config,
               label='Cluster',
               refresh=2,
               includeAll=true,
@@ -881,7 +881,7 @@ local transactionLogExpansionsPanel(matcher) = {
             template.new(
               'instance',
               promDatasource,
-              'label_values(mssql_build_info{%(mssqlwSelector)s}, instance)' % $._config,
+              'label_values(mssql_build_info{%(mssqlSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -892,7 +892,7 @@ local transactionLogExpansionsPanel(matcher) = {
             template.new(
               'database',
               promDatasource,
-              'label_values(mssql_log_growths_total{%(mssqlwSelector)s, instance=~"$instance"}, db)' % $._config,
+              'label_values(mssql_log_growths_total{%(mssqlSelector)s, instance=~"$instance"}, db)' % $._config,
               label='Database',
               refresh=1,
               includeAll=true,

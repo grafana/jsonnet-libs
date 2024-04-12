@@ -360,7 +360,7 @@ local pageFaultsPanel(matcher) = {
           template.new(
             'job',
             promDatasource,
-            'label_values(mssql_build_info{%(mssqlwSelector)s}, job)' % $._config,
+            'label_values(mssql_build_info{%(mssqlSelector)s}, job)' % $._config,
             label='Job',
             refresh=2,
             includeAll=true,
@@ -371,7 +371,7 @@ local pageFaultsPanel(matcher) = {
           template.new(
             'cluster',
             promDatasource,
-            'label_values(mssql_build_info{%(mssqlwSelector)s}, cluster)' % $._config,
+            'label_values(mssql_build_info{%(mssqlSelector)s}, cluster)' % $._config,
             label='Cluster',
             refresh=2,
             includeAll=true,
@@ -383,7 +383,7 @@ local pageFaultsPanel(matcher) = {
           template.new(
             'instance',
             promDatasource,
-            'label_values(mssql_build_info{%(mssqlwSelector)s}, instance)' % $._config,
+            'label_values(mssql_build_info{%(mssqlSelector)s}, instance)' % $._config,
             label='Instance',
             refresh=2,
             includeAll=true,
