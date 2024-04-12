@@ -906,22 +906,22 @@ local transactionLogExpansionsPanel(matcher) = {
       .addPanels(
         std.flattenArrays([
           [
-            connectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-            batchRequestsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-            severeErrorsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            deadlocksPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
-            osMemoryUsagePanel { gridPos: { h: 8, w: 24, x: 0, y: 16 } },
-            memoryManagerPanel { gridPos: { h: 8, w: 16, x: 0, y: 24 } },
-            committedMemoryUtilizationPanel { gridPos: { h: 8, w: 8, x: 16, y: 24 } },
+            connectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            batchRequestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+            severeErrorsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            deadlocksPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            osMemoryUsagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 16 } },
+            memoryManagerPanel(getMatcher($._config)) { gridPos: { h: 8, w: 16, x: 0, y: 24 } },
+            committedMemoryUtilizationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 24 } },
           ],
           if $._config.enableLokiLogs then [
-            errorLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 32 } },
+            errorLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 32 } },
           ] else [],
           [
             databaseRow { gridPos: { h: 1, w: 24, x: 0, y: 40 } },
-            databaseWriteStallDurationPanel { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
-            databaseReadStallDurationPanel { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
-            transactionLogExpansionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 49 } },
+            databaseWriteStallDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 41 } },
+            databaseReadStallDurationPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 41 } },
+            transactionLogExpansionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 49 } },
           ],
         ])
       ),

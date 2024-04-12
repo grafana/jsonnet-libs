@@ -395,10 +395,10 @@ local pageFaultsPanel(matcher) = {
       )
       .addPanels(
         [
-          pageFileMemoryPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-          bufferCacheHitPercentagePanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-          pageCheckpointsPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-          pageFaultsPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+          pageFileMemoryPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+          bufferCacheHitPercentagePanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+          pageCheckpointsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+          pageFaultsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
         ]
       ),
 
