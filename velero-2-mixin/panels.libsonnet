@@ -155,14 +155,14 @@ local utils = commonlib.utils;
       successfulBackups:
         commonlib.panels.generic.stat.info.new(
           'Successful backups / $__interval ',
-          targets=[t.succesfulBackups],
+          targets=[t.succesfulBackupsStat],
           description='Number of successful backups.'
         )
         + stat.options.withGraphMode('area'),
       failedBackups:
         commonlib.panels.generic.stat.info.new(
           'Failed backups / $__interval ',
-          targets=[t.failedBackups],
+          targets=[t.failedBackupsStat],
           description='Number of failed backups.'
         )
         + stat.options.withGraphMode('area'),

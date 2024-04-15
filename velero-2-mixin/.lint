@@ -13,3 +13,7 @@ exclusions:
     reason: "Not required for logs volume"
   panel-units-rule:
     reason: "Logs volume has no unit"
+  target-instance-rule:
+    reason: "Cluster dashboards is focused on view of clusters"
+    entries:
+      - dashboard: "Velero cluster view"
