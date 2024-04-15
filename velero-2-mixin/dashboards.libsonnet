@@ -21,7 +21,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           g.util.grid.wrapPanels(
             [
               panels.successfulBackupsCount { gridPos+: { w: 4, h: 4 } },
-              panels.failedBackups { gridPos+: { w: 4, h: 4 } },
+              panels.failedBackupsCount { gridPos+: { w: 4, h: 4 } },
               panels.successfulRestores { gridPos+: { w: 4, h: 4 } },
               panels.failedRestores { gridPos+: { w: 4, h: 4 } },
               panels.alertsPanel { gridPos+: { w: 8, h: 4 } },
@@ -34,7 +34,37 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-overview', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.clusterVariableSelectors, uid + '-cluster-view', tags, links { veleroClusterOverview+:: {} }, annotations, timezone, refresh, period),
+      overview:
+        g.dashboard.new(prefix + ' overview')
+        + g.dashboard.withPanels(
+          g.util.grid.wrapPanels(
+            [
+              panels.lastBackupStatus { gridPos+: { w: 4, h: 4 } },
+              panels.backupSuccessRate { gridPos+: { w: 4, h: 4 } },
+              panels.restoreSuccessRate { gridPos+: { w: 4, h: 4 } },
+              panels.successfulBackups { gridPos+: { w: 4, h: 4 } },
+              panels.failedBackups { gridPos+: { w: 4, h: 4 } },
+              panels.restoreValidationFailure { gridPos+: { w: 4, h: 4 } },
+              g.panel.row.new('Backup'),
+              panels.backupCount,
+              panels.backupSuccessRateTimeseries,
+              panels.backupSize { gridPos+: { w: 24 } },
+              panels.backupTime { gridPos+: { w: 24 } },
+              g.panel.row.new('Restore'),
+              panels.restoreCount,
+              panels.restoreSuccessRateTimeseries,
+              g.panel.row.new('CSI snapshots'),
+              panels.csiSnapshotCount,
+              panels.csiSnapshotSuccessRateTimeseries,
+              g.panel.row.new('Volume snapshots'),
+              panels.volumeSnapshotCount,
+              panels.volumeSnapshotSuccessRateTimeseries,
+            ], 12, 6
+          )
+        )
+        // hide link to self
+        + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { veleroOverview+:: {} }, annotations, timezone, refresh, period),
     }
     //Apply common options(uids, tags, annotations etc..) to all dashboards above
     +
@@ -75,6 +105,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           }.dashboards.logs,
       }
     else {},
+  //Apply common options(uids, tags, annotations etc..) to all dashboards above
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(uid)
