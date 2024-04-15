@@ -3,6 +3,7 @@
   groupLabels: ['job', 'cluster'],
   logLabels: ['job', 'instance'],
   legendLabels: ['schedule'],
+	clusterLegendLabels: ['cluster'],
   instanceLabels: ['instance'],
   dashboardTags: [self.uid],
   uid: 'velero',

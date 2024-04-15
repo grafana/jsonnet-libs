@@ -64,7 +64,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { veleroOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { veleroOverview+:: {} }, annotations, timezone, refresh, period),
     }
     //Apply common options(uids, tags, annotations etc..) to all dashboards above
     +

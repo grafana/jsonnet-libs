@@ -137,12 +137,11 @@ local utils = commonlib.utils;
         ],
 
       clusterVariableSelectors:
-        [root.datasources.prometheus] + variablesFromLabels(groupLabels, instanceLabels, filteringSelector) + [topClusterSelector],
+        [root.datasources.prometheus] + variablesFromLabels(groupLabels, [], filteringSelector) + [topClusterSelector],
 
       clusterQuerySelector:
-        '%s,%s' % [
+        '%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-          filteringSelector,
         ],
     }
     + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
