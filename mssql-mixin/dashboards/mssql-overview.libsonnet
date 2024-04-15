@@ -869,7 +869,7 @@ local transactionLogExpansionsPanel(matcher) = {
             template.new(
               'cluster',
               promDatasource,
-              'label_values(mssql_build_info{%(multiclusterSelector)s}, cluster)' % $._config,
+              'label_values(mssql_build_info{%(mssqlSelector)s}, cluster)' % $._config,
               label='Cluster',
               refresh=2,
               includeAll=true,
