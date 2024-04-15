@@ -15,7 +15,7 @@
 
   // alert thresholds
   alertsHighBackupFailure: 0,
-  alertsHighBackupDuration: 20,
+  alertsHighBackupDuration: 1.2,
   alertsHighRestoreFailureRate: 0,
   alertsVeleroUpStatus: 0,
 
