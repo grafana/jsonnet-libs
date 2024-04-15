@@ -4,7 +4,10 @@ local g = import './g.libsonnet';
   new(this):
     {
       veleroClusterOverview:
-        link.link.new('Velero cluster overview', '/d/' + this.grafana.dashboards.clusterOverview.uid)
+        link.link.new('Velero cluster view', '/d/' + this.grafana.dashboards.clusterOverview.uid)
+        + link.link.options.withKeepTime(true),
+      veleroOverview:
+        link.link.new('Velero overview', '/d/' + this.grafana.dashboards.overview.uid)
         + link.link.options.withKeepTime(true),
     }
     +

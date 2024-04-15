@@ -10,10 +10,15 @@ local utils = commonlib.utils;
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local instanceLabels = this.config.instanceLabels,
+      local scheduleLabel = 'schedule',
+      local groupVarMetric = 'velero_backup_attempt_total',
+      local querySelectorVar = ['job', 'cluster', 'instance', 'schedule'],
+      local scheduleRegex = '/schedule="([^"]*)/',
+      local scheduleQuery = 'query_result(label_replace(velero_backup_success_total, "schedule", "^$", "schedule", "^$"))',
       local topClusterSelector =
         var.custom.new(
           'top_cluster_count',
-          values=[2, 3, 6, 8, 10],
+          values=[2, 4, 6, 8, 10],
         )
         + var.custom.generalOptions.withDescription(
           'This variable allows for modification of top cluster value.'
@@ -44,6 +49,54 @@ local utils = commonlib.utils;
             caseInsensitive=false
           );
         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
+
+      local groupVariablesFromLabels(groupLabels) =
+        local chainVarProto(index, chainVar) =
+          var.query.new(chainVar.label)
+          + var.query.withDatasourceFromVariable(root.datasources.prometheus)
+          + var.query.queryTypes.withLabelValues(
+            chainVar.label,
+            '%s{%s}' % [groupVarMetric, chainVar.chainSelector],
+          )
+          + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
+          + var.query.selectionOptions.withIncludeAll(
+            value=false,
+          )
+          + var.query.selectionOptions.withMulti(
+            false,
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false,
+          );
+        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels, [])),
+      local createOverviewVariable(name, displayName, query, regex, includeAll) =
+        local variable =
+          var.query.new(name, query)
+          + var.query.generalOptions.withLabel(displayName)
+          + var.query.withDatasourceFromVariable(root.datasources.prometheus)
+          + var.query.withRegex(regex)
+          + var.query.selectionOptions.withIncludeAll(
+            value=false,
+          )
+          + var.query.selectionOptions.withIncludeAll(
+            value=if (!includeAll) then false else true,
+          )
+          + var.query.selectionOptions.withMulti(
+            false,
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false,
+          );
+        [variable],
+
       datasources: {
         prometheus:
           var.datasource.new('prometheus_datasource', 'prometheus')
@@ -70,8 +123,14 @@ local utils = commonlib.utils;
 
       queriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + instanceLabels),
+          utils.labelsToPromQLSelector(querySelectorVar),
         ],
+      overviewVariables:
+        [root.datasources.prometheus]
+        + groupVariablesFromLabels(groupLabels)
+        + groupVariablesFromLabels(instanceLabels)
+        + createOverviewVariable(scheduleLabel, 'Schedule', scheduleQuery, scheduleRegex, false),
+
       queriesGroupSelectorAdvanced:
         '%s' % [
           utils.labelsToPromQLSelectorAdvanced(groupLabels),
