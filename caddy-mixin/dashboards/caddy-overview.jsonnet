@@ -714,7 +714,7 @@
         datasource: {
           uid: '$datasource',
         },
-        definition: "label_values(caddy_http_requests_total{job=~\"$job\"}, instance)",
+        definition: 'label_values(caddy_http_requests_total{job=~"$job"}, instance)',
         hide: 0,
         includeAll: true,
         label: 'Instance',
@@ -723,7 +723,7 @@
         options: [],
         query: {
           qryType: 1,
-          query: "label_values(caddy_http_requests_total{job=~\"$job\"}, instance)",
+          query: 'label_values(caddy_http_requests_total{job=~"$job"}, instance)',
           refId: 'PrometheusVariableQueryEditor-VariableQuery',
         },
         refresh: 2,
