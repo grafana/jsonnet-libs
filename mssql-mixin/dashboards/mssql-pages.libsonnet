@@ -360,7 +360,7 @@ local pageFaultsPanel(matcher) = {
           template.new(
             'job',
             promDatasource,
-            'label_values(mssql_build_info{}, job)' % $._config,
+            'label_values(mssql_build_info{}, job)',
             label='Job',
             refresh=2,
             includeAll=true,
