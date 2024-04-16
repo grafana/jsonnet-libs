@@ -17,7 +17,7 @@ local pageFileMemoryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_os_page_file{'+ matcher +'}',
+      'mssql_os_page_file{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{state}}',
     ),
@@ -93,7 +93,7 @@ local bufferCacheHitPercentagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_buffer_cache_hit_ratio{'+ matcher +'}',
+      'mssql_buffer_cache_hit_ratio{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -174,7 +174,7 @@ local pageCheckpointsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_checkpoint_pages_sec{'+ matcher +'}',
+      'mssql_checkpoint_pages_sec{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -253,7 +253,7 @@ local pageFaultsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_page_fault_count_total{'+ matcher +'}[$__rate_interval])',
+      'increase(mssql_page_fault_count_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),

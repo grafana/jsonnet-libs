@@ -22,7 +22,7 @@ local connectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_connections{'+ matcher +'}',
+      'mssql_connections{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
     ),
@@ -102,7 +102,7 @@ local batchRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mssql_batch_requests_total{'+ matcher +'}[$__rate_interval])',
+      'rate(mssql_batch_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -182,7 +182,7 @@ local severeErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_kill_connection_errors_total{'+ matcher +'}[$__rate_interval])',
+      'increase(mssql_kill_connection_errors_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -262,7 +262,7 @@ local deadlocksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(mssql_deadlocks_total{'+ matcher +'}[$__rate_interval])',
+      'rate(mssql_deadlocks_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -342,7 +342,7 @@ local osMemoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_os_memory{'+ matcher +'}',
+      'mssql_os_memory{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{state}}',
     ),
@@ -421,12 +421,12 @@ local memoryManagerPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'mssql_server_total_memory_bytes{'+ matcher +'}',
+      'mssql_server_total_memory_bytes{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
     ),
     prometheus.target(
-      'mssql_server_target_memory_bytes{'+ matcher +'}',
+      'mssql_server_target_memory_bytes{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - target',
     ),
@@ -505,7 +505,7 @@ local committedMemoryUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 * mssql_server_total_memory_bytes{'+ matcher +'} / clamp_min(mssql_available_commit_memory_bytes{'+ matcher +'},1)',
+      '100 * mssql_server_total_memory_bytes{' + matcher + '} / clamp_min(mssql_available_commit_memory_bytes{' + matcher + '},1)',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -555,7 +555,7 @@ local errorLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{'+ matcher +', log_type="mssql_error"}',
+      expr: '{' + matcher + ', log_type="mssql_error"}',
       queryType: 'range',
       refId: 'A',
     },
@@ -587,7 +587,7 @@ local databaseWriteStallDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_io_stall_seconds_total{'+ matcher +', db=~"$database", operation="write"}[$__rate_interval])',
+      'increase(mssql_io_stall_seconds_total{' + matcher + ', db=~"$database", operation="write"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
     ),
@@ -663,7 +663,7 @@ local databaseReadStallDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_io_stall_seconds_total{'+ matcher +', db=~"$database", operation="read"}[$__rate_interval])',
+      'increase(mssql_io_stall_seconds_total{' + matcher + ', db=~"$database", operation="read"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
     ),
@@ -739,7 +739,7 @@ local transactionLogExpansionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_log_growths_total{'+ matcher +', db=~"$database"}[$__rate_interval])',
+      'increase(mssql_log_growths_total{' + matcher + ', db=~"$database"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
     ),
