@@ -95,14 +95,14 @@ local utils = commonlib.utils;
         g.panel.gauge.new('Backup success rate (1 hour)')
         + g.panel.gauge.queryOptions.withTargets([t.backupSuccessRateGauge])
         + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.gauge.panelOptions.withDescription('Success rate of backups in the past hour.')
+        + g.panel.gauge.panelOptions.withDescription('Success rate of backups within the instance in the past hour.')
         + g.panel.gauge.standardOptions.withUnit('percentunit'),
 
       restoreSuccessRate:
         g.panel.gauge.new('Restore success rate (1 hour)')
         + g.panel.gauge.queryOptions.withTargets([t.restoreSuccessRateGauge])
         + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.gauge.panelOptions.withDescription('Success rate of restores in the past hour.')
+        + g.panel.gauge.panelOptions.withDescription('Success rate of restores within the instance in the past hour.')
         + g.panel.gauge.standardOptions.withUnit('percentunit'),
 
       volumeSnapshotSuccessRate:
@@ -119,30 +119,13 @@ local utils = commonlib.utils;
           description='Number of failed restore validations.'
         )
         + stat.options.withGraphMode('area'),
-      lastBackupStatus:
-        commonlib.panels.generic.stat.base.new(
-          'Backup last status',
-          targets=[t.lastBackupStatus],
-          description='Reports the last backup status.',
+      backupValidationFailure:
+        commonlib.panels.generic.stat.info.new(
+          'Backup validation failure / $__interval ',
+          targets=[t.backupValidationFailure],
+          description='Number of failed backup validations.'
         )
-        + stat.standardOptions.withUnit('string')
-        + stat.options.withGraphMode('none')
-        + stat.standardOptions.withMappings({
-          type: 'value',
-          options: {
-            '0': {
-              color: 'red',
-              index: 1,
-              text: 'Down',
-            },
-            '1': {
-              color: 'green',
-              index: 0,
-              text: 'Up',
-            },
-          },
-        }),
-
+        + stat.options.withGraphMode('area'),
       backupCount:
         commonlib.panels.generic.timeSeries.base.new(
           'Backup count / $__interval ',

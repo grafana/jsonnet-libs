@@ -14,7 +14,7 @@ local utils = commonlib.utils;
       local groupVarMetric = 'velero_backup_attempt_total',
       local querySelectorVar = ['job', 'cluster', 'instance', 'schedule'],
       local scheduleRegex = '/schedule="([^"]*)/',
-      local scheduleQuery = 'query_result(label_replace(velero_backup_success_total, "schedule", "^$", "schedule", "^$"))',
+      local scheduleQuery = 'query_result(velero_backup_success_total)',
       local topClusterSelector =
         var.custom.new(
           'top_cluster_count',
@@ -80,7 +80,8 @@ local utils = commonlib.utils;
           + var.query.withDatasourceFromVariable(root.datasources.prometheus)
           + var.query.withRegex(regex)
           + var.query.selectionOptions.withIncludeAll(
-            value=false,
+            value=true,
+            customAllValue='.*',
           )
           + var.query.selectionOptions.withIncludeAll(
             value=if (!includeAll) then false else true,
@@ -129,7 +130,7 @@ local utils = commonlib.utils;
         [root.datasources.prometheus]
         + groupVariablesFromLabels(groupLabels)
         + groupVariablesFromLabels(instanceLabels)
-        + createOverviewVariable(scheduleLabel, 'Schedule', scheduleQuery, scheduleRegex, false),
+        + createOverviewVariable(scheduleLabel, 'Schedule', scheduleQuery, scheduleRegex, true),
 
       queriesGroupSelectorAdvanced:
         '%s' % [

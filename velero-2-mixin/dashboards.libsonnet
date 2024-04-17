@@ -40,12 +40,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.lastBackupStatus { gridPos+: { w: 4, h: 4 } },
               panels.backupSuccessRate { gridPos+: { w: 4, h: 4 } },
               panels.restoreSuccessRate { gridPos+: { w: 4, h: 4 } },
               panels.successfulBackups { gridPos+: { w: 4, h: 4 } },
               panels.failedBackups { gridPos+: { w: 4, h: 4 } },
               panels.restoreValidationFailure { gridPos+: { w: 4, h: 4 } },
+              panels.backupValidationFailure { gridPos+: { w: 4, h: 4 } },
               g.panel.row.new('Backup'),
               panels.backupCount,
               panels.backupSuccessRateTimeseries,
