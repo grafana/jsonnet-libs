@@ -135,14 +135,13 @@ local utils = commonlib.utils {
         'sum(increase(label_replace(velero_restore_validation_failed_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]))' % vars
       )
       + prometheusQuery.withLegendFormat('failure'),
-		
-		backupValidationFailure:
+
+    backupValidationFailure:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum(increase(label_replace(velero_backup_validation_failure_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]))' % vars
       )
       + prometheusQuery.withLegendFormat('failure'),
-
 
     succesfulBackupsStat:
       prometheusQuery.new(

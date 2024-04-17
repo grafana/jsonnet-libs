@@ -133,7 +133,9 @@ local utils = commonlib.utils;
           description=|||
             Number of failed and successful backups.
           |||
-        ),
+        )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       successfulBackups:
         commonlib.panels.generic.stat.info.new(
@@ -188,7 +190,9 @@ local utils = commonlib.utils;
           description=|||
             Number of failed and successful restores.
           |||
-        ),
+        )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       restoreSuccessRateTimeseries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -208,7 +212,9 @@ local utils = commonlib.utils;
           description=|||
             Number of failed and successful volume snapshots.
           |||
-        ),
+        )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       volumeSnapshotSuccessRateTimeseries:
         commonlib.panels.generic.timeSeries.base.new(
@@ -228,7 +234,9 @@ local utils = commonlib.utils;
           description=|||
             Number of failed and successful CSI snapshots.
           |||
-        ),
+        )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       csiSnapshotSuccessRateTimeseries:
         commonlib.panels.generic.timeSeries.base.new(
