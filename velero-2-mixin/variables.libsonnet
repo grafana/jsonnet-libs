@@ -81,7 +81,7 @@ local utils = commonlib.utils;
           + var.query.generalOptions.withLabel(displayName)
           + var.query.selectionOptions.withIncludeAll(
             value=true,
-						customAllValue='.*',
+            customAllValue='.*',
           )
           + var.query.selectionOptions.withMulti(
             true,
