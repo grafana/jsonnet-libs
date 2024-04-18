@@ -8,6 +8,7 @@ local dashboardUid = 'wildfly-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
+local getMatcher(cfg) = '%(wildflySelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -17,11 +18,11 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local requestsPanel = {
+local requestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(wildfly_undertow_request_count_total{server=~"$server", job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(wildfly_undertow_request_count_total{server=~"$server",' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{server}} - {{http_listener}}{{https_listener}}',
     ),
@@ -96,11 +97,11 @@ local requestsPanel = {
   },
 };
 
-local requestErrorsPanel = {
+local requestErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(wildfly_undertow_error_count_total{server=~"$server", job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(wildfly_undertow_error_count_total{server=~"$server",' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{server}} - {{http_listener}}{{https_listener}}',
     ),
@@ -175,11 +176,11 @@ local requestErrorsPanel = {
   },
 };
 
-local networkReceivedThroughputPanel = {
+local networkReceivedThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(wildfly_undertow_bytes_received_total_bytes{server=~"$server", job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(wildfly_undertow_bytes_received_total_bytes{server=~"$server",' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{server}} - {{http_listener}}{{https_listener}}',
     ),
@@ -254,11 +255,11 @@ local networkReceivedThroughputPanel = {
   },
 };
 
-local networkSentThroughputPanel = {
+local networkSentThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(wildfly_undertow_bytes_sent_total_bytes{server=~"$server", job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(wildfly_undertow_bytes_sent_total_bytes{server=~"$server",' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{server}} - {{http_listener}}{{https_listener}}',
     ),
@@ -333,13 +334,13 @@ local networkSentThroughputPanel = {
   },
 };
 
-local serverLogsPanel = {
+local serverLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/opt/wildfly/standalone/log/server.log", job=~"$job",instance=~"$instance"}',
+      expr: '{filename="/opt/wildfly/standalone/log/server.log",' + matcher + '}',
       queryType: 'range',
       refId: 'A',
     },
@@ -368,11 +369,11 @@ local sessionsRow = {
   collapsed: false,
 };
 
-local activeSessionsPanel = {
+local activeSessionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'wildfly_undertow_active_sessions{deployment=~"$deployment", job=~"$job", instance=~"$instance"}',
+      'wildfly_undertow_active_sessions{deployment=~"$deployment",' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{deployment}}',
     ),
@@ -446,11 +447,11 @@ local activeSessionsPanel = {
   },
 };
 
-local expiredSessionsPanel = {
+local expiredSessionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_undertow_expired_sessions_total{deployment=~"$deployment", job=~"$job", instance=~"$instance"}[$__interval])',
+      'increase(wildfly_undertow_expired_sessions_total{deployment=~"$deployment",' + matcher + '}[$__interval])',
       datasource=promDatasource,
       legendFormat='{{deployment}}',
       interval='1m',
@@ -527,7 +528,7 @@ local expiredSessionsPanel = {
   },
 };
 
-local rejectedSessionsPanel = {
+local rejectedSessionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -654,9 +655,21 @@ local rejectedSessionsPanel = {
               sort=1
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(wildfly_batch_jberet_active_count{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(wildfly_batch_jberet_active_count{job=~"$job"}, instance)',
+              'label_values(wildfly_batch_jberet_active_count{%(wildflySelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=false,
@@ -667,7 +680,7 @@ local rejectedSessionsPanel = {
             template.new(
               'server',
               promDatasource,
-              'label_values(wildfly_undertow_request_count_total{}, server)',
+              'label_values(wildfly_undertow_request_count_total{%(wildflySelector)s}, server)' % $._config,
               label='Server',
               refresh=2,
               includeAll=false,
@@ -678,7 +691,7 @@ local rejectedSessionsPanel = {
             template.new(
               'deployment',
               promDatasource,
-              'label_values(wildfly_undertow_active_sessions{}, deployment)',
+              'label_values(wildfly_undertow_active_sessions{%(wildflySelector)s}, deployment)' % $._config,
               label='Deployment',
               refresh=2,
               includeAll=false,
@@ -701,19 +714,19 @@ local rejectedSessionsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
-            requestErrorsPanel { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
-            networkReceivedThroughputPanel { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            networkSentThroughputPanel { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            requestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 0 } },
+            requestErrorsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 0 } },
+            networkReceivedThroughputPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            networkSentThroughputPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           ],
           if $._config.enableLokiLogs then [
-            serverLogsPanel { gridPos: { h: 9, w: 24, x: 0, y: 16 } },
+            serverLogsPanel(getMatcher($._config)) { gridPos: { h: 9, w: 24, x: 0, y: 16 } },
           ] else [],
           [
             sessionsRow { gridPos: { h: 1, w: 24, x: 0, y: 25 } },
-            activeSessionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 26 } },
-            expiredSessionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
-            rejectedSessionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
+            activeSessionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 26 } },
+            expiredSessionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 34 } },
+            rejectedSessionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 34 } },
           ],
         ])
       ),
