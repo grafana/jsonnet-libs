@@ -12,7 +12,6 @@ local utils = commonlib.utils;
       local instanceLabels = this.config.instanceLabels,
       local scheduleLabel = 'schedule',
       local groupVarMetric = 'velero_backup_attempt_total',
-      local querySelectorVar = ['job', 'cluster', 'instance', 'schedule'],
       local topClusterSelector =
         var.custom.new(
           'top_cluster_count',
@@ -121,7 +120,7 @@ local utils = commonlib.utils;
 
       queriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(querySelectorVar),
+          utils.labelsToPromQLSelector(groupLabels + instanceLabels + ['schedule']),
         ],
       overviewVariables:
         [root.datasources.prometheus]

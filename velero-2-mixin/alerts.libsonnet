@@ -66,7 +66,7 @@
             annotations: {
               summary: 'Velero is down.',
               description: |||
-                Cannot find any metrics related to Velero on {{ $labels.instance }}. This indicates that Velero is not running or the Grafana agent is not properly configured.
+                Cannot find any metrics related to Velero on {{ $labels.instance }}. This may indicate further issues with Velero or the scraping agent. 
               ||| % this.config,
             },
           },
