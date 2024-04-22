@@ -125,7 +125,6 @@ local prometheusQuery = g.query.prometheus;
         '${' + vars.datasources.prometheus.name + '}',
         ''
       ),
-
     hostCPUUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -143,7 +142,6 @@ local prometheusQuery = g.query.prometheus;
         '${' + vars.datasources.prometheus.name + '}',
         ''
       ),
-
     hostMemoryUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -185,7 +183,6 @@ local prometheusQuery = g.query.prometheus;
         '${' + vars.datasources.prometheus.name + '}',
         ''
       ),
-
     clusterCPULimit:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -203,13 +200,11 @@ local prometheusQuery = g.query.prometheus;
         '${' + vars.datasources.prometheus.name + '}',
         ''
       ),
-
     clusterMemoryLimit:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         ''
       ),
-
     clusterMemoryUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
