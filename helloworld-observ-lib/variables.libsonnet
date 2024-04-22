@@ -43,7 +43,7 @@ local utils = commonlib.utils;
         loki:
           var.datasource.new('loki_datasource', 'loki')
           + var.datasource.generalOptions.withLabel('Loki data source')
-          + var.datasource.withRegex('')
+          + var.datasource.withRegex('(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+')
           // hide by default (used for annotations)
           + var.datasource.generalOptions.showOnDashboard.withNothing(),
       },
