@@ -17,7 +17,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
 
     {
       overview:
-        g.dashboard.new(prefix + 'OpenLDAP Overview')
+        g.dashboard.new(prefix + 'OpenLDAP overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [

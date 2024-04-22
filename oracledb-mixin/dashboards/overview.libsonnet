@@ -5,7 +5,7 @@ local dashboardUid = 'oracledb-overview';
 
 local prometheus = grafana.prometheus;
 local promDatasourceName = 'prometheus_datasource';
-local matcher = 'job=~"$job", instance=~"$instance"';
+local getMatcher(cfg) = '%(oracledbSelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -15,7 +15,7 @@ local lokiDatasource = {
   uid: '$loki_datasource',
 };
 
-local databaseStatusPanel = {
+local databaseStatusPanel(matcher) = {
   description: 'Database status either Up or Down. Colored to be green when Up or red when Down',
   fieldConfig: {
     defaults: {
@@ -81,7 +81,7 @@ local databaseStatusPanel = {
   type: 'stat',
 };
 
-local sessionsPanel = {
+local sessionsPanel(matcher) = {
   datasource: promDatasource,
   description: 'Number of sessions and the limit overtime.',
   fieldConfig: {
@@ -171,7 +171,7 @@ local sessionsPanel = {
   type: 'timeseries',
 };
 
-local processPanel = {
+local processPanel(matcher) = {
   datasource: promDatasource,
   description: 'Number of processes and the limit overtime.',
   fieldConfig: {
@@ -261,7 +261,7 @@ local processPanel = {
   type: 'timeseries',
 };
 
-local alertLogPanel = {
+local alertLogPanel(matcher) = {
   datasource: lokiDatasource,
   description: 'Recent logs from alert log file',
   options: {
@@ -279,7 +279,7 @@ local alertLogPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'builder',
-      expr: '{filename=~"/u01/base/diag/rdbms/.*/.*/trace/alert_.*log",' + matcher + '}',
+      expr: '{filename=~"/.*/.*/diag/rdbms/.*/.*/trace/alert_.*log",' + matcher + '}',
       queryType: 'range',
       refId: 'A',
     },
@@ -294,7 +294,7 @@ local waitTimerow = {
   type: 'row',
 };
 
-local applicationWaitTimePanel = {
+local applicationWaitTimePanel(matcher) = {
   datasource: promDatasource,
   description: 'Application wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -375,7 +375,7 @@ local applicationWaitTimePanel = {
   type: 'timeseries',
 };
 
-local commitTimePanel = {
+local commitTimePanel(matcher) = {
   datasource: promDatasource,
   description: 'Commit wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -456,7 +456,7 @@ local commitTimePanel = {
   type: 'timeseries',
 };
 
-local concurrencyWaitTime = {
+local concurrencyWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'Concurrency wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -537,7 +537,7 @@ local concurrencyWaitTime = {
   type: 'timeseries',
 };
 
-local configurationWaitTime = {
+local configurationWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'Configuration wait time, in seconds waiting for wait events.',
   fieldConfig: {
@@ -618,7 +618,7 @@ local configurationWaitTime = {
   type: 'timeseries',
 };
 
-local networkWaitTime = {
+local networkWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'Network wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -699,7 +699,7 @@ local networkWaitTime = {
   type: 'timeseries',
 };
 
-local schedulerWaitTime = {
+local schedulerWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'Scheduler wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -780,7 +780,7 @@ local schedulerWaitTime = {
   type: 'timeseries',
 };
 
-local systemIOWaitTime = {
+local systemIOWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'System I/O wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -861,7 +861,7 @@ local systemIOWaitTime = {
   type: 'timeseries',
 };
 
-local userIOWaitTime = {
+local userIOWaitTime(matcher) = {
   datasource: promDatasource,
   description: 'User I/O wait time, in seconds, waiting for wait events.',
   fieldConfig: {
@@ -948,7 +948,7 @@ local tablespaceRow = {
   type: 'row',
 };
 
-local tablespaceSizePanel = {
+local tablespaceSizePanel(matcher) = {
   datasource: promDatasource,
   description: 'Shows the size overtime for the tablespace.',
   fieldConfig: {
@@ -1099,6 +1099,18 @@ local tablespaceSizePanel = {
                 sort=1
               ),
               template.new(
+                'cluster',
+                promDatasource,
+                'label_values(oracledb_up, cluster)' % $._config,
+                label='Cluster',
+                refresh=2,
+                includeAll=true,
+                multi=true,
+                allValues='.*',
+                hide=if $._config.enableMultiCluster then '' else 'variable',
+                sort=0
+              ),
+              template.new(
                 name='instance',
                 label='Instance',
                 datasource='$prometheus_datasource',
@@ -1113,7 +1125,7 @@ local tablespaceSizePanel = {
               template.new(
                 'tablespace',
                 promDatasource,
-                query='label_values(oracledb_tablespace_bytes{' + matcher + '}, tablespace)',
+                query='label_values(oracledb_tablespace_bytes{%(oracledbSelector)s, instance=~"$instance"}, tablespace)' % $._config,
                 label='Tablespace',
                 refresh='time',
                 includeAll=true,
@@ -1128,33 +1140,33 @@ local tablespaceSizePanel = {
       .addPanels(
         std.flattenArrays([
           [
-            databaseStatusPanel { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
-            sessionsPanel { gridPos: { h: 6, w: 10, x: 4, y: 0 } },
-            processPanel { gridPos: { h: 6, w: 10, x: 14, y: 0 } },
+            databaseStatusPanel(getMatcher($._config)) { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
+            sessionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 10, x: 4, y: 0 } },
+            processPanel(getMatcher($._config)) { gridPos: { h: 6, w: 10, x: 14, y: 0 } },
           ],
           if $._config.enableLokiLogs then [
-            alertLogPanel { gridPos: { h: 7, w: 24, x: 0, y: 6 } },
+            alertLogPanel(getMatcher($._config)) { gridPos: { h: 7, w: 24, x: 0, y: 6 } },
           ] else [],
           [
             waitTimerow { gridPos: { h: 1, w: 24, x: 0, y: 13 } },
           ],
           [
-            applicationWaitTimePanel { gridPos: { h: 6, w: 6, x: 0, y: 14 } },
-            commitTimePanel { gridPos: { h: 6, w: 6, x: 6, y: 14 } },
-            concurrencyWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 14 } },
-            configurationWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 14 } },
+            applicationWaitTimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 14 } },
+            commitTimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 14 } },
+            concurrencyWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 14 } },
+            configurationWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 14 } },
           ],
           [
-            networkWaitTime { gridPos: { h: 6, w: 6, x: 0, y: 20 } },
-            schedulerWaitTime { gridPos: { h: 6, w: 6, x: 6, y: 20 } },
-            systemIOWaitTime { gridPos: { h: 6, w: 6, x: 12, y: 20 } },
-            userIOWaitTime { gridPos: { h: 6, w: 6, x: 18, y: 20 } },
+            networkWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 20 } },
+            schedulerWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 20 } },
+            systemIOWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 20 } },
+            userIOWaitTime(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 20 } },
           ],
           [
             tablespaceRow { gridPos: { h: 1, w: 24, x: 0, y: 26 } },
           ],
           [
-            tablespaceSizePanel { gridPos: { h: 6, w: 24, x: 0, y: 27 } },
+            tablespaceSizePanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 27 } },
           ],
         ])
       ),
