@@ -1,5 +1,9 @@
 {
   _config+:: {
+    enableMultiCluster: false,
+    multiclusterSelector: 'job=~"$job"',
+    opensearchSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
+
     // extra static selector to apply to all templated variables and alerts
     filteringSelector: 'cluster!=""',
     groupLabels: ['job', 'cluster'],
