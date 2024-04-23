@@ -184,7 +184,7 @@ local utils = commonlib.utils {
     backupSuccessRateGauge:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'avg by (instance) (label_replace(increase(velero_backup_success_total{job=~"$job",cluster=~"$cluster",instance=~"$instance",schedule=~"$schedule",job=~"integrations/velero"}[1h]), "schedule", "none", "schedule", "^$") / clamp_min(label_replace(increase(velero_backup_attempt_total{job=~"$job",cluster=~"$cluster",instance=~"$instance",schedule=~"$schedule",job=~"integrations/velero"}[1h]), "schedule", "none", "schedule", "^$"),1))' % vars
+        'avg by (instance) (label_replace(increase(velero_backup_success_total{job=~"$job",cluster=~"$cluster",instance=~"$instance",schedule=~"$schedule"}[1h]), "schedule", "none", "schedule", "^$") / label_replace(increase(velero_backup_attempt_total{job=~"$job",cluster=~"$cluster",instance=~"$instance",schedule=~"$schedule"}[1h]), "schedule", "none", "schedule", "^$") >  0)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
@@ -223,14 +223,14 @@ local utils = commonlib.utils {
     restoreSuccessRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'rate(label_replace(velero_restore_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]) / clamp_min(rate(label_replace(velero_restore_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]),1)' % vars
+        'increase(label_replace(velero_restore_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_restore_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
     restoreSuccessRateGauge:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'avg by (instance) (label_replace(increase(velero_restore_success_total{job=~"$job",cluster=~"$cluster",instance=~"$instance",schedule=~"$schedule",job=~"integrations/velero"}[1h]), "schedule", "none", "schedule", "^$") / clamp_min(label_replace(increase(velero_restore_attempt_total{job=~"$job",cluster=~"$cluster",instance=~"$instance",schedule=~"$schedule",job=~"integrations/velero"}[1h]), "schedule", "none", "schedule", "^$"),1))' % vars
+        'avg by (instance) (label_replace(increase(velero_restore_success_total{job=~"$job",cluster=~"$cluster",instance=~"$instance",schedule=~"$schedule"}[1h]), "schedule", "none", "schedule", "^$") / label_replace(increase(velero_restore_attempt_total{job=~"$job",cluster=~"$cluster",instance=~"$instance",schedule=~"$schedule"}[1h]), "schedule", "none", "schedule", "^$") >  0)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
@@ -258,7 +258,7 @@ local utils = commonlib.utils {
     volumeSnapshotSuccessRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'rate(label_replace(velero_volume_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]) / clamp_min(rate(label_replace(velero_volume_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]),1)' % vars
+        'increase(label_replace(velero_volume_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_volume_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 
@@ -284,7 +284,7 @@ local utils = commonlib.utils {
     csiSnapshotSuccessRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (schedule) (rate(label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]) / clamp_min(rate(label_replace(velero_csi_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__rate_interval:]),1)) ' % vars
+        'sum by (schedule) (increase(label_replace(velero_csi_snapshot_success_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]) / clamp_min(increase(label_replace(velero_csi_snapshot_attempt_total{%(queriesSelector)s}, "schedule", "none", "schedule", "^$")[$__interval:]),1)) ' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(this.config.legendLabels)),
 

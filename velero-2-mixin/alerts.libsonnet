@@ -25,7 +25,7 @@
           {
             alert: 'VeleroHighBackupDuration',
             expr: |||
-              histogram_quantile(0.5, sum(rate(velero_backup_duration_seconds_bucket{%(filteringSelector)s}[5m])) by (le)) > %(alertsHighBackupDuration)s * avg_over_time(histogram_quantile(0.5, sum(rate(velero_backup_duration_seconds_bucket{%(filteringSelector)s}[5m])) by (le))[48h:5m])
+              histogram_quantile(0.5, sum(rate(velero_backup_duration_seconds_bucket{%(filteringSelector)s}[5m])) by (le, schedule)) > %(alertsHighBackupDuration)s * 1.2 * avg_over_time(histogram_quantile(0.5, sum(rate(velero_backup_duration_seconds_bucket{%(filteringSelector)s}[48h])) by (le, schedule))[5m:])
             ||| % this.config,
             'for': '5m',
             labels: {

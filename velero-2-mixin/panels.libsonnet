@@ -96,6 +96,12 @@ local utils = commonlib.utils;
         + g.panel.gauge.queryOptions.withTargets([t.backupSuccessRateGauge])
         + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.gauge.panelOptions.withDescription('Success rate of backups within the instance in the past hour.')
+        + g.panel.gauge.standardOptions.thresholds.withSteps([
+          g.panel.gauge.standardOptions.threshold.step.withColor('super-light-red')
+          + g.panel.gauge.standardOptions.threshold.step.withValue(0.5),
+          g.panel.gauge.standardOptions.threshold.step.withColor('super-light-green')
+          + g.panel.gauge.standardOptions.threshold.step.withValue(0.9),
+        ])
         + g.panel.gauge.standardOptions.withUnit('percentunit'),
 
       restoreSuccessRate:
@@ -103,13 +109,12 @@ local utils = commonlib.utils;
         + g.panel.gauge.queryOptions.withTargets([t.restoreSuccessRateGauge])
         + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
         + g.panel.gauge.panelOptions.withDescription('Success rate of restores within the instance in the past hour.')
-        + g.panel.gauge.standardOptions.withUnit('percentunit'),
-
-      volumeSnapshotSuccessRate:
-        g.panel.gauge.new('Volume snapshot success rate')
-        + g.panel.gauge.queryOptions.withTargets([t.volumeSnapshotSuccessRate])
-        + g.panel.gauge.queryOptions.withDatasource('prometheus', '${prometheus_datasource}')
-        + g.panel.gauge.panelOptions.withDescription('Success rate of volume snapshots.')
+        + g.panel.gauge.standardOptions.thresholds.withSteps([
+          g.panel.gauge.standardOptions.threshold.step.withColor('super-light-red')
+          + g.panel.gauge.standardOptions.threshold.step.withValue(0.5),
+          g.panel.gauge.standardOptions.threshold.step.withColor('super-light-green')
+          + g.panel.gauge.standardOptions.threshold.step.withValue(0.9),
+        ])
         + g.panel.gauge.standardOptions.withUnit('percentunit'),
 
       restoreValidationFailure:
@@ -154,7 +159,7 @@ local utils = commonlib.utils;
 
       backupSuccessRateTimeseries:
         commonlib.panels.generic.timeSeries.base.new(
-          'Backup success rate',
+          'Backup success rate / $__interval',
           targets=[t.backupSuccessRate],
           description=|||
             Success rate of backups.
@@ -196,7 +201,7 @@ local utils = commonlib.utils;
 
       restoreSuccessRateTimeseries:
         commonlib.panels.generic.timeSeries.base.new(
-          'Restore success rate',
+          'Restore success rate / $__interval',
           targets=[t.restoreSuccessRate],
           description=|||
             Success rate of restores.
@@ -218,7 +223,7 @@ local utils = commonlib.utils;
 
       volumeSnapshotSuccessRateTimeseries:
         commonlib.panels.generic.timeSeries.base.new(
-          'Volume snapshot success rate',
+          'Volume snapshot success rate / $__interval',
           targets=[t.volumeSnapshotSuccessRate],
           description=|||
             Success rate of volume snapshots.
@@ -240,7 +245,7 @@ local utils = commonlib.utils;
 
       csiSnapshotSuccessRateTimeseries:
         commonlib.panels.generic.timeSeries.base.new(
-          'CSI snapshot success rate',
+          'CSI snapshot success rate / $__interval',
           targets=[t.csiSnapshotSuccessRate],
           description=|||
             Success rate of CSI snapshots.
