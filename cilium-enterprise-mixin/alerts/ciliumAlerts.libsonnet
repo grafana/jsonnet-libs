@@ -104,7 +104,7 @@
         rules: [
           {
             alert: 'CiliumAgentMapOperationFailures',
-            expr: 'sum(rate(cilium_bpf_map_ops_total{k8s_app="cilium", outcome="fail",pod=~"$pod"}[5m])) by (map_name, pod) > 0',
+            expr: 'sum(rate(cilium_bpf_map_ops_total{k8s_app="cilium", outcome="fail"}[5m])) by (map_name, pod) > 0',
             labels: {
               severity: 'warning',
             },
