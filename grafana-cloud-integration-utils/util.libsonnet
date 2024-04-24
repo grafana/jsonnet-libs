@@ -193,15 +193,19 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
         + patch
       );
 
-    [
-      if group.name == group_name then
-        {
-          name: group_name,
-          rules: patch_rules(group.rules, alert_rules_patch),
-        }
-      else group
-      for group in prometheusAlerts.groups
-    ],
+    {
+      groups+:
+        [
+          if group.name == group_name then
+            {
+              name: group_name,
+              rules: patch_rules(group.rules, alert_rules_patch),
+            }
+          else group
+          for group in prometheusAlerts.groups
+
+        ],
+    },
 
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {
     [k]: {
