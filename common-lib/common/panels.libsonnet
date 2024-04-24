@@ -33,4 +33,8 @@ local g = import './g.libsonnet';
   hardware: {
     timeSeries: import './panels/hardware/timeSeries/main.libsonnet',
   },
+  requests: {
+    timeSeries: import './panels/requests/timeSeries/main.libsonnet',
+    stat: import './panels/requests/stat/main.libsonnet',
+  }
 }

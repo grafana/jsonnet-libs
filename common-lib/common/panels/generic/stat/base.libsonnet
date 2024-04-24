@@ -8,5 +8,7 @@ base {
     + super.new(targets, description),
 
   stylize(allLayers=true):
-    (if allLayers then super.stylize() else {}),
+    (if allLayers then super.stylize() else {})
+    + stat.standardOptions.color.withMode('fixed')
+    + stat.standardOptions.color.withFixedColor('text'),
 }
