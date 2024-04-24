@@ -149,7 +149,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
     for k in std.objectFields(dashboards)
     if !std.member(ignoreDashboards, k)
   },
-  prepare_alerts(namespace, prometheusAlerts, ignoreAlerts=[], ignoreAlertGroups=[])::
+  prepare_alerts(namespace, prometheusAlerts, ignoreAlerts=[], ignoreAlertGroups=[], extraAnnotations={}, extraLabels={})::
     {
       namespace: namespace,
     } +
@@ -157,10 +157,17 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
       groups:
         std.map(function(el) el {
           rules:
-            std.filter(function(r) !std.member(ignoreAlerts, r.alert), super.rules),
+            std.map(function(r) r {
+                      annotations+: extraAnnotations,
+                      labels+: extraLabels,
+                    },
+                    std.filter(
+                      function(r) !std.member(ignoreAlerts, r.alert),
+                      super.rules
+                    )),
         }, std.filter(function(g) !std.member(ignoreAlertGroups, g.name), super.groups)),
     },
-  prepare_rules(namespace, rules, ignoreRules=[], ignoreRuleGroups=[])::
+  prepare_rules(namespace, rules, ignoreRules=[], ignoreRuleGroups=[], extraAnnotations={}, extraLabels={})::
     {
       namespace: namespace,
     } +
@@ -168,7 +175,14 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
       groups:
         std.map(function(rr) rr {
           rules:
-            std.filter(function(r) !std.member(ignoreRules, r.record), super.rules),
+            std.map(function(r) r {
+                      annotations+: extraAnnotations,
+                      labels+: extraLabels,
+                    },
+                    std.filter(
+                      function(r) !std.member(ignoreRules, r.record),
+                      super.rules
+                    )),
         }, std.filter(function(g) !std.member(ignoreRuleGroups, g.name), super.groups)),
     },
   integration_status_panels(config, version, setId)::
