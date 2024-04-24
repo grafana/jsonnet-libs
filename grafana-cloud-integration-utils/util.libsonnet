@@ -1,6 +1,7 @@
 local g = import 'grafonnet-latest/main.libsonnet';
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local statusPanels = import 'status-panels-lib/status-panels/main.libsonnet';
+local xtd = import 'xtd/main.libsonnet';
 
 local debug(obj) =
   std.trace(std.toString(obj), obj);
@@ -139,6 +140,69 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
         ],
       },
     },
+
+
+  // This function can be used to patch alert rules:
+  // prometheusAlerts format (as in mixin):
+  // {
+  //   groups: [
+  //     {
+  //       name: 'abc',
+  //       rules: [
+  //         {
+  //           alert: 'Alert1',
+  //           expr: 'up==0',
+  //           labels: {
+  //             severity: "warning"
+  //           }
+  //         },
+  //         {
+  //           alert: 'Alert2',
+  //           expr: 'up!=0',
+  //           labels: {
+  //             severity: "warning"
+  //           }
+  //         },
+  //       ]
+  //     }
+  //   ]
+  // }
+  // patch format:
+  // {
+  //   Alert1+: {
+  //     labels+: {
+  //       new_label: 'abc',
+  //       asserts_severity: super.severity,
+  //     }
+  //   },
+  //   Alert2+: {
+  //     labels+: {
+  //       new_label: 'zyx',
+  //     }
+  //   }
+  // }
+  patch_alerts(prometheusAlerts, group_name, alert_rules_patch)::
+    local patch_rules(rules, patch) =
+      std.objectValues(
+        {
+          [o.key]: o.value[0]
+          for o
+          in
+            std.objectKeysValues(xtd.aggregate.byKey(rules, 'alert'))
+        }
+        + patch
+      );
+
+    [
+      if group.name == group_name then
+        {
+          name: group_name,
+          rules: patch_rules(group.rules, alert_rules_patch),
+        }
+      else group
+      for group in prometheusAlerts.groups
+    ],
+
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {
     [k]: {
       dashboard: $.decorate_dashboard(dashboards[k], tags, refresh, timeFrom),
