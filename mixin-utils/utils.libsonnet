@@ -111,7 +111,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
     },
 
   nativeClassicSumBy(query, sum_by=[], multiplier='')::
-    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
+    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(', ', sum_by) } else ' ';
     local multiplierStr = if multiplier == '' then '' else ' * %s' % multiplier;
     {
       classic: 'sum%(sumBy)s(%(query)s)%(multiplierStr)s' % {
