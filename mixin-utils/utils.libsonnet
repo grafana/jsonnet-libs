@@ -3,81 +3,126 @@ local g = import 'grafana-builder/grafana.libsonnet';
 {
   // The classicNativeHistogramQuantile function is used to calculate histogram quantiles from native histograms or classic histograms.
   // Metric name should be provided without _bucket suffix.
-  nativeClassicHistogramQuantile(percentile, metric, selector, sum_by=[], rate_interval='$__rate_interval', multiplier='')::
+  // If from_recording is true, the function will assume :sum_rate metric suffix and no rate needed.
+  nativeClassicHistogramQuantile(percentile, metric, selector, sum_by=[], rate_interval='$__rate_interval', multiplier='', from_recording=false)::
     local classicSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', ['le'] + sum_by) } else ' by (le) ';
     local nativeSumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
     local multiplierStr = if multiplier == '' then '' else ' * %s' % multiplier;
+    local rateOpen = if from_recording then '' else 'rate(';
+    local rateClose = if from_recording then '' else '[%s])' % rate_interval;
     {
-      classic: 'histogram_quantile(%(percentile)s, sum%(classicSumBy)s(rate(%(metric)s_bucket{%(selector)s}[%(rateInterval)s])))%(multiplierStr)s' % {
+      classic: 'histogram_quantile(%(percentile)s, sum%(classicSumBy)s(%(rateOpen)s%(metric)s_bucket%(suffix)s{%(selector)s}%(rateClose)s))%(multiplierStr)s' % {
         classicSumBy: classicSumBy,
         metric: metric,
         multiplierStr: multiplierStr,
         percentile: percentile,
         rateInterval: rate_interval,
+        rateOpen: rateOpen,
+        rateClose: rateClose,
         selector: selector,
+        suffix: if from_recording then ':sum_rate' else '',
       },
-      native: 'histogram_quantile(%(percentile)s, sum%(nativeSumBy)s(rate(%(metric)s{%(selector)s}[%(rateInterval)s])))%(multiplierStr)s' % {
+      native: 'histogram_quantile(%(percentile)s, sum%(nativeSumBy)s(%(rateOpen)s%(metric)s%(suffix)s{%(selector)s}%(rateClose)s))%(multiplierStr)s' % {
         metric: metric,
         multiplierStr: multiplierStr,
         nativeSumBy: nativeSumBy,
         percentile: percentile,
         rateInterval: rate_interval,
+        rateOpen: rateOpen,
+        rateClose: rateClose,
         selector: selector,
+        suffix: if from_recording then ':sum_rate' else '',
       },
     },
 
   // The classicNativeHistogramSumRate function is used to calculate the histogram sum of rate from native histograms or classic histograms.
   // Metric name should be provided without _sum suffix.
-  nativeClassicHistogramSumRate(metric, selector, rate_interval='$__rate_interval')::
+  // If from_recording is true, the function will assume :sum_rate metric suffix and no rate needed.
+  nativeClassicHistogramSumRate(metric, selector, rate_interval='$__rate_interval', from_recording=false)::
+    local rateOpen = if from_recording then '' else 'rate(';
+    local rateClose = if from_recording then '' else '[%s])' % rate_interval;
     {
-      classic: 'rate(%(metric)s_sum{%(selector)s}[%(rateInterval)s])' % {
+      classic: '%(rateOpen)s%(metric)s_sum%(suffix)s{%(selector)s}%(rateClose)s' % {
         metric: metric,
         rateInterval: rate_interval,
+        rateOpen: rateOpen,
+        rateClose: rateClose,
         selector: selector,
+        suffix: if from_recording then ':sum_rate' else '',
       },
-      native: 'histogram_sum(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
+      native: 'histogram_sum(%(rateOpen)s%(metric)s%(suffix)s{%(selector)s}%(rateClose)s)' % {
         metric: metric,
         rateInterval: rate_interval,
+        rateOpen: rateOpen,
+        rateClose: rateClose,
         selector: selector,
+        suffix: if from_recording then ':sum_rate' else '',
       },
     },
 
 
   // The classicNativeHistogramCountRate function is used to calculate the histogram count of rate from native histograms or classic histograms.
   // Metric name should be provided without _count suffix.
-  nativeClassicHistogramCountRate(metric, selector, rate_interval='$__rate_interval')::
+  // If from_recording is true, the function will assume :sum_rate metric suffix and no rate needed.
+  nativeClassicHistogramCountRate(metric, selector, rate_interval='$__rate_interval', from_recording=false)::
+    local rateOpen = if from_recording then '' else 'rate(';
+    local rateClose = if from_recording then '' else '[%s])' % rate_interval;
     {
-      classic: 'rate(%(metric)s_count{%(selector)s}[%(rateInterval)s])' % {
+      classic: '%(rateOpen)s%(metric)s_count%(suffix)s{%(selector)s}%(rateClose)s' % {
         metric: metric,
         rateInterval: rate_interval,
+        rateOpen: rateOpen,
+        rateClose: rateClose,
         selector: selector,
+        suffix: if from_recording then ':sum_rate' else '',
       },
-      native: 'histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
+      native: 'histogram_count(%(rateOpen)s%(metric)s%(suffix)s{%(selector)s}%(rateClose)s)' % {
         metric: metric,
         rateInterval: rate_interval,
+        rateOpen: rateOpen,
+        rateClose: rateClose,
         selector: selector,
+        suffix: if from_recording then ':sum_rate' else '',
       },
     },
 
   // TODO(krajorama) Switch to histogram_avg function for native histograms later.
-  nativeClassicHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='')::
+  // nativeClassicHistogramAverageRate function is used to calculate the histogram average rate from native histograms or classic histograms.
+  // If from_recording is true, the function will assume :sum_rate metric suffix and no rate needed.
+  nativeClassicHistogramAverageRate(metric, selector, rate_interval='$__rate_interval', multiplier='', from_recording=false)::
     local multiplierStr = if multiplier == '' then '' else '%s * ' % multiplier;
     {
       classic: |||
         %(multiplier)ssum(%(sumMetricQuery)s) /
         sum(%(countMetricQuery)s)
       ||| % {
-        sumMetricQuery: $.nativeClassicHistogramSumRate(metric, selector, rate_interval).classic,
-        countMetricQuery: $.nativeClassicHistogramCountRate(metric, selector, rate_interval).classic,
+        sumMetricQuery: $.nativeClassicHistogramSumRate(metric, selector, rate_interval, from_recording).classic,
+        countMetricQuery: $.nativeClassicHistogramCountRate(metric, selector, rate_interval, from_recording).classic,
         multiplier: multiplierStr,
       },
       native: |||
         %(multiplier)ssum(%(sumMetricQuery)s) /
         sum(%(countMetricQuery)s)
       ||| % {
-        sumMetricQuery: $.nativeClassicHistogramSumRate(metric, selector, rate_interval).native,
-        countMetricQuery: $.nativeClassicHistogramCountRate(metric, selector, rate_interval).native,
+        sumMetricQuery: $.nativeClassicHistogramSumRate(metric, selector, rate_interval, from_recording).native,
+        countMetricQuery: $.nativeClassicHistogramCountRate(metric, selector, rate_interval, from_recording).native,
         multiplier: multiplierStr,
+      },
+    },
+
+  nativeClassicSumBy(query, sum_by=[], multiplier='')::
+    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(',', sum_by) } else ' ';
+    local multiplierStr = if multiplier == '' then '' else ' * %s' % multiplier;
+    {
+      classic: 'sum%(sumBy)s(%(query)s)%(multiplierStr)s' % {
+        multiplierStr: multiplierStr,
+        query: query.classic,
+        sumBy: sumBy,
+      },
+      native: 'sum%(sumBy)s(%(query)s)%(multiplierStr)s' % {
+        multiplierStr: multiplierStr,
+        query: query.native,
+        sumBy: sumBy,
       },
     },
 
@@ -205,12 +250,72 @@ local g = import 'grafana-builder/grafana.libsonnet';
     noop(label):: { label: label, op: 'nop' },
   },
 
-  toPrometheusSelector(selector)::
+  // latencyRecordingRulePanelNativeHistogram - build a latency panel for a recording rule.
+  // - metric: the base metric name (middle part of recording rule name)
+  // - selectors: list of selectors which will be added to first part of
+  //   recording rule name, and to the query selector itself.
+  // - extra_selectors (optional): list of selectors which will be added to the
+  //   query selector, but not to the beginnig of the recording rule name.
+  //   Useful for external labels.
+  // - multiplier (optional): assumes results are in seconds, will multiply
+  //   by 1e3 to get ms.  Can be turned off.
+  // - sum_by (optional): additional labels to use in the sum by clause, will also be used in the legend
+  latencyRecordingRulePanelNativeHistogram(metric, selectors, extra_selectors=[], multiplier='1e3', sum_by=[])::
+    local labels = std.join('_', [matcher.label for matcher in selectors]);
+    local legend = std.join('', ['{{ %(lb)s }} ' % lb for lb in sum_by]);
+    local metricStr = '%(labels)s:%(metric)s' % { labels: labels, metric: metric };
+    local selectorStr = $.toPrometheusSelectorNaked(selectors + extra_selectors);
+    {
+      nullPointMode: 'null as zero',
+      yaxes: g.yaxes('ms'),
+      targets: [
+        {
+          expr: $.showClassicHistogramQuery($.nativeClassicHistogramQuantile('0.99', metricStr, selectorStr, sum_by=sum_by, multiplier=multiplier, from_recording=true)),
+          format: 'time_series',
+          legendFormat: '%(legend)s99th percentile' % legend,
+          refId: 'A_classic',
+        },
+        {
+          expr: $.showNativeHistogramQuery($.nativeClassicHistogramQuantile('0.99', metricStr, selectorStr, sum_by=sum_by, multiplier=multiplier, from_recording=true)),
+          format: 'time_series',
+          legendFormat: '%(legend)s99th percentile' % legend,
+          refId: 'A_native',
+        },
+        {
+          expr: $.showClassicHistogramQuery($.nativeClassicHistogramQuantile('0.50', metricStr, selectorStr, sum_by=sum_by, multiplier=multiplier, from_recording=true)),
+          format: 'time_series',
+          legendFormat: '%(legend)s50th percentile' % legend,
+          refId: 'B_classic',
+        },
+        {
+          expr: $.showNativeHistogramQuery($.nativeClassicHistogramQuantile('0.50', metricStr, selectorStr, sum_by=sum_by, multiplier=multiplier, from_recording=true)),
+          format: 'time_series',
+          legendFormat: '%(legend)s50th percentile' % legend,
+          refId: 'B_native',
+        },
+        {
+          expr: $.showClassicHistogramQuery($.nativeClassicHistogramAverageRate(metricStr, selectorStr, multiplier=multiplier, from_recording=true)),
+          format: 'time_series',
+          legendFormat: '%(legend)sAverage' % legend,
+          refId: 'C_classic',
+        },
+        {
+          expr: $.showNativeHistogramQuery($.nativeClassicHistogramAverageRate(metricStr, selectorStr, multiplier=multiplier, from_recording=true)),
+          format: 'time_series',
+          legendFormat: '%(legend)sAverage' % legend,
+          refId: 'C_native',
+        },
+      ],
+    },
+
+  toPrometheusSelectorNaked(selector)::
     local pairs = [
       '%(label)s%(op)s"%(value)s"' % matcher
       for matcher in std.filter(function(matcher) matcher.op != 'nop', selector)
     ];
-    '{%s}' % std.join(', ', pairs),
+    '%s' % std.join(', ', pairs),
+
+  toPrometheusSelector(selector):: '{%s}' % $.toPrometheusSelectorNaked(selector),
 
   // withRunbookURL - Add/Override the runbook_url annotations for all alerts inside a list of rule groups.
   // - url_format: an URL format for the runbook, the alert name will be substituted in the URL.

@@ -456,18 +456,20 @@ local utils = import 'mixin-utils/utils.libsonnet';
       },
     ],
 
+  httpStatusColors:: {
+    '1xx': '#EAB839',
+    '2xx': '#7EB26D',
+    '3xx': '#6ED0E0',
+    '4xx': '#EF843C',
+    '5xx': '#E24D42',
+    OK: '#7EB26D',
+    success: '#7EB26D',
+    'error': '#E24D42',
+    cancel: '#A9A9A9',
+  },
+
   qpsPanel(selector, statusLabelName='status_code'):: {
-    aliasColors: {
-      '1xx': '#EAB839',
-      '2xx': '#7EB26D',
-      '3xx': '#6ED0E0',
-      '4xx': '#EF843C',
-      '5xx': '#E24D42',
-      OK: '#7EB26D',
-      success: '#7EB26D',
-      'error': '#E24D42',
-      cancel: '#A9A9A9',
-    },
+    aliasColors: $.httpStatusColors,
     targets: [
       {
         expr:
@@ -477,6 +479,65 @@ local utils = import 'mixin-utils/utils.libsonnet';
               "status", "${1}xx", "%s", "([0-9]).."),
               "status", "${1}", "%s", "([a-zA-Z]+)"))
           ||| % [selector, statusLabelName, statusLabelName],
+        format: 'time_series',
+        legendFormat: '{{status}}',
+        refId: 'A',
+      },
+    ],
+  } + $.stack,
+
+  // Assumes that the metricName is for a histogram (as opposed to qpsPanel above)
+  // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
+  qpsPanelNativeHistogram(metricName, selector, statusLabelName='status_code'):: {
+    local sumByStatus(nativeClassicQuery) = {
+      local template =
+        |||
+          sum by (status) (
+            label_replace(label_replace(%(metricQuery)s,
+            "status", "${1}xx", "%(label)s", "([0-9]).."),
+            "status", "${1}", "%(label)s", "([a-zA-Z]+)"))
+        |||,
+      native: template % { metricQuery: nativeClassicQuery.native, label: statusLabelName },
+      classic: template % { metricQuery: nativeClassicQuery.classic, label: statusLabelName },
+    },
+    fieldConfig+: {
+      defaults+: {
+        custom+: {
+          lineWidth: 0,
+          fillOpacity: 100,  // Get solid fill.
+          stacking: {
+            mode: 'normal',
+            group: 'A',
+          },
+        },
+        unit: 'reqps',
+        min: 0,
+      },
+      overrides+: [{
+        matcher: {
+          id: 'byName',
+          options: status,
+        },
+        properties: [
+          {
+            id: 'color',
+            value: {
+              mode: 'fixed',
+              fixedColor: $.httpStatusColors[status],
+            },
+          },
+        ],
+      } for status in std.objectFieldsAll($.httpStatusColors)],
+    },
+    targets: [
+      {
+        expr: utils.showClassicHistogramQuery(sumByStatus(utils.nativeClassicHistogramCountRate(metricName, selector))),
+        format: 'time_series',
+        legendFormat: '{{status}}',
+        refId: 'A_classic',
+      },
+      {
+        expr: utils.showNativeHistogramQuery(sumByStatus(utils.nativeClassicHistogramCountRate(metricName, selector))),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A',
@@ -504,6 +565,58 @@ local utils = import 'mixin-utils/utils.libsonnet';
         format: 'time_series',
         legendFormat: 'Average',
         refId: 'C',
+      },
+    ],
+    yaxes: $.yaxes('ms'),
+  },
+
+  // Assumes that there is a dashboard variable named latency_metrics, values are -1 (native) or 1 (classic)
+  latencyPanelNativeHistogram(metricName, selector, multiplier='1e3'):: {
+    nullPointMode: 'null as zero',
+    fieldConfig+: {
+      defaults+: {
+        custom+: {
+          fillOpacity: 10,
+        },
+        unit: 'ms',
+      },
+    },
+    targets: [
+      {
+        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: '99th percentile',
+        refId: 'A',
+      },
+      {
+        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: '99th percentile',
+        refId: 'A_classic',
+      },
+      {
+        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: '50th percentile',
+        refId: 'B',
+      },
+      {
+        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: '50th percentile',
+        refId: 'B_classic',
+      },
+      {
+        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramAverageRate(metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C',
+      },
+      {
+        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramAverageRate(metricName, selector, multiplier=multiplier)),
+        format: 'time_series',
+        legendFormat: 'Average',
+        refId: 'C_classic',
       },
     ],
     yaxes: $.yaxes('ms'),
