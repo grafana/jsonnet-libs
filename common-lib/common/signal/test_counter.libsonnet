@@ -25,7 +25,7 @@ local m1 = signal.init(
       },
       testExpression: {
         actual: m1.asTarget().expr,
-        expect: 'max by (instance) (rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m]))',
+        expect: 'max by (job,instance) (rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m]))',
       },
     }),
   },
@@ -52,7 +52,7 @@ local m1 = signal.init(
         testTSUid: {
           actual: m1.asTimeSeries().datasource,
           expect: {
-            uid: 'DS_PROMETHEUS',
+            uid: '${datasource}',
             type: 'prometheus',
           },
         },
