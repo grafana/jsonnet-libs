@@ -84,14 +84,6 @@ local successfulQueriesPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'rate(ClickHouseProfileEvents_Query{' + matcher + '}[$__rate_interval])',
-        legendFormat: '{{ instance }} - query',
-        range: true,
-        refId: 'A',
-      },
-      {
-        datasource: promDatasource,
-        editorMode: 'builder',
         expr: 'rate(ClickHouseProfileEvents_SelectQuery{' + matcher + '}[$__rate_interval])',
         hide: false,
         legendFormat: '{{ instance }} - select query',
@@ -191,14 +183,6 @@ local failedQueriesPanel(matcher) =
       },
     },
     targets: [
-      {
-        datasource: promDatasource,
-        editorMode: 'builder',
-        expr: 'rate(ClickHouseProfileEvents_FailedQuery{' + matcher + '}[$__rate_interval])',
-        legendFormat: '{{ instance }} - failed query',
-        range: true,
-        refId: 'A',
-      },
       {
         datasource: promDatasource,
         editorMode: 'builder',
