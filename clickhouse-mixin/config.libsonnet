@@ -7,7 +7,7 @@
     dashboardPeriod: 'now-30m',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
-    logLabels: if self.enableMultiCluster then ['job', 'instance', 'cluster','level']
+    logLabels: if self.enableMultiCluster then ['job', 'instance', 'cluster', 'level']
     else ['job', 'instance', 'level'],
 
     // for alerts
