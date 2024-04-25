@@ -1,6 +1,6 @@
 {
   _config+:: {
-    enableMultiCluster: true,
+    enableMultiCluster: false,
     clickhouseSelector: if self.enableMultiCluster then 'job=~"$job", instance=~"$instance", cluster=~"$cluster"' else 'job=~"$job", instance=~"$instance"',
 
     dashboardTags: ['clickhouse-mixin'],
