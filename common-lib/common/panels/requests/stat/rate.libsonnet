@@ -2,7 +2,7 @@ local g = import '../../../g.libsonnet';
 local generic = import '../../generic/stat/main.libsonnet';
 local base = import './base.libsonnet';
 local stat = g.panel.stat;
-// Uptime panel. expects duration in seconds as input
+
 base {
   new(title='Rate', targets, description='Rate of requests.'):
     super.new(title, targets, description)
