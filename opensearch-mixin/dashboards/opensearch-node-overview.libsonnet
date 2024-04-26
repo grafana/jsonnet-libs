@@ -27,12 +27,8 @@ local dashboardUidSuffix = '-node-overview';
     uid: '${%s}' % variables.datasources.prometheus.name,
   },
 
-  // local lokiDatasource = {
-  //   uid: '${%s}' % variables.datasources.loki.name,
-  // },
-  
   local lokiDatasource = {
-    uid: 'grafanacloud-k3d-logs',
+    uid: '${%s}' % variables.datasources.loki.name,
   },
 
   local nodeHealthRow = {
