@@ -176,7 +176,7 @@ local diskWriteLatencyPanel(matcher) =
     type: 'timeseries',
   };
 
-local networkTransmitLatencyPanel(matcher) =
+local networkTransmitLatencyInboundPanel(matcher) =
   {
     datasource: promDatasource,
     description: 'Latency of inbound network traffic',
@@ -259,7 +259,7 @@ local networkTransmitLatencyPanel(matcher) =
     type: 'timeseries',
   };
 
-local networkTransmitLatencyPanel(matcher) =
+local networkTransmitLatencyOutboundPanel(matcher) =
   {
     datasource: promDatasource,
     description: 'Latency of outbound network traffic',
@@ -497,8 +497,8 @@ local zooKeeperWaitTimePanel(matcher) =
           ],
           //next row
           [
-            networkTransmitLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
-            networkTransmitLatencyPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
+            networkTransmitLatencyInboundPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 8 } },
+            networkTransmitLatencyOutboundPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 8 } },
           ],
           //next row
           [
