@@ -5,7 +5,6 @@ local template = grafana.template;
 local dashboardUid = 'clickhouse-overview';
 local promDatasourceName = 'prometheus_datasource';
 local getMatcher(cfg) = '%(clickhouseSelector)s' % cfg;
-local logExpr(cfg) = '%(logExpr)s' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -709,39 +708,6 @@ local networkTransmittedPanel(matcher) =
     type: 'timeseries',
   };
 
-local errorLogsPanel(cfg) =
-  {
-    datasource: {
-      type: 'loki',
-      uid: '${loki_datasource}',
-    },
-    description: 'Recent logs from the error log file',
-    options: {
-      dedupStrategy: 'none',
-      enableLogDetails: true,
-      prettifyLogMessage: false,
-      showCommonLabels: false,
-      showLabels: false,
-      showTime: false,
-      sortOrder: 'Descending',
-      wrapLogMessage: false,
-    },
-    targets: [
-      {
-        datasource: {
-          type: 'loki',
-          uid: '${loki_datasource}',
-        },
-        editorMode: 'builder',
-        expr: logExpr(cfg.logExpression),
-        legendFormat: '{{ instance }}',
-        queryType: 'range',
-        refId: 'A',
-      },
-    ],
-    title: 'Error logs',
-    type: 'logs',
-  };
 {
   grafanaDashboards+:: {
 
