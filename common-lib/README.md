@@ -32,7 +32,7 @@ local commonlib = import 'github.com/grafana/jsonnet-libs/common-lib/common/main
 local cpuPanel = oldPanel + commonlib.panels.cpu.timeSeries.utilization.stylize();
 ```
 
-See [windows-observ-lib](../windows-observ-lib/README.md) or [helloworld-observ-lib](../helloworld-observ-lib/README.md)for full example.
+See [windows-observ-lib](../windows-observ-lib/README.md) or [helloworld-observ-lib](../helloworld-observ-lib/README.md) for full example.
 
 ### Signals
 
