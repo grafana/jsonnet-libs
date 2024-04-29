@@ -1115,7 +1115,7 @@ local getMatcher(cfg) = '%(solrSelector)s, solr_cluster="$solr_cluster", base_ur
           template.new(
             'base_url',
             promDatasource,
-            'label_values(solr_metrics_core_errors_total{%(solrSelector)s}, base_url)',
+            'label_values(solr_metrics_core_errors_total{%(solrSelector)s}, base_url)' % $._config,
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -1126,7 +1126,7 @@ local getMatcher(cfg) = '%(solrSelector)s, solr_cluster="$solr_cluster", base_ur
           template.new(
             'solr_cluster',
             promDatasource,
-            'label_values(solr_metrics_core_errors_total{%(solrSelector)s}, solr_cluster)',
+            'label_values(solr_metrics_core_errors_total{%(solrSelector)s}, solr_cluster)' % $._config,
             label='Solr cluster',
             refresh=2,
             includeAll=true,
