@@ -64,9 +64,9 @@ local utils = commonlib.utils;
     datasources+: {
       loki:
         var.datasource.new('loki_datasource', 'loki')
-        + var.datasource.generalOptions.withLabel('Loki data source'),
-        // + var.datasource.withRegex(''),
-        // + var.datasource.generalOptions.showOnDashboard.withNothing(),
+        + var.datasource.generalOptions.withLabel('Loki data source')
+        + var.datasource.withRegex('')
+        + var.datasource.generalOptions.showOnDashboard.withNothing(),
     },
 
     multiInstance+: [self.datasources.loki],
