@@ -49,7 +49,7 @@ local integration_status_panel(statusPanelQuery, statusPanelDataSource, height, 
           result: {
             color: 'green',
             index: 0,
-            text: 'Agent Configured - Sending Metrics',
+            text: 'Receiving Metrics',
           },
           to: 10000000000000,
         },
