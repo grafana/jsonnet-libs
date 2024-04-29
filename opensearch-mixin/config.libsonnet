@@ -2,8 +2,8 @@
   _config+:: {
     enableMultiCluster: false,
     // extra static selector to apply to all templated variables and alerts
-    filteringSelector: if self.enableMultiCluster then 'opensearch_cluster!=""' else 'cluster!=""',
-    groupLabels: if self.enableMultiCluster then ['job', 'opensearch_cluster'] else ['job', 'cluster'],
+    filteringSelector: 'opensearch_cluster!=""',
+    groupLabels: ['job', 'opensearch_cluster'],
     instanceLabels: ['node'],
     dashboardTags: ['opensearch-mixin'],
     dashboardPeriod: 'now-1h',
