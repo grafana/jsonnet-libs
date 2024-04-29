@@ -1,6 +1,6 @@
 {
   _config+:: {
-    enableMultiCluster: false,
+    enableMultiCluster: true,
     solrSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
     multiclusterSelector: 'job=~"$job"',
     filterSelector: 'job=~"integrations/apache-solr"',
