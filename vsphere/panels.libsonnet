@@ -204,7 +204,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Packet rate',
           targets=[t.packetRate],
-          description='The number of packets received or transmitted over the ESXi host's networks during the most recent 20s interval.'
+          description='The number of packets received or transmitted over the ESXi hosts networks during the most recent 20s interval.'
         ),
 
       VMTable:
