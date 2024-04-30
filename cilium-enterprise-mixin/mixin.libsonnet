@@ -23,4 +23,5 @@
     'cilium-policy.json': (import 'dashboards/cilium-agent/cilium-policy.json'),
     'cilium-resource-utilization.json': (import 'dashboards/cilium-agent/cilium-resource-utilization.json'),
   },
-}
+} +
+(import 'config.libsonnet')

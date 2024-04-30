@@ -7,7 +7,7 @@
         rules: [
           {
             alert: 'CiliumAgentEndpointFailures',
-            expr: 'sum(cilium_endpoint_state{endpoint_state="invalid"}) by (pod)',
+            expr: 'sum(cilium_endpoint_state{endpoint_state="invalid"}) by (%s)' % std.join(', ', (['pod'] + $._config.alertAggregationLabels)),
             annotations:
               {
                 summary: 'Cilium Agent endpoints in the invalid state.',
@@ -20,7 +20,7 @@
           },
           {
             alert: 'CiliumAgentEndpointUpdateFailure',
-            expr: 'sum(rate(cilium_k8s_client_api_calls_total{method=~"(PUT|POST|PATCH)", endpoint="endpoint",return_code!~"2[0-9][0-9]"}[5m])) by (pod, method, return_code)',
+            expr: 'sum(rate(cilium_k8s_client_api_calls_total{method=~"(PUT|POST|PATCH)", endpoint="endpoint",return_code!~"2[0-9][0-9]"}[5m])) by (%s)' % std.join(', ', (['pod', 'method', 'return_code'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'API calls to Cilium Agent API to create or update Endpoints are failing.',
               description: 'API calls to Cilium Agent API to create or update Endpoints are failing on pod {{$labels.pod}} ({{$labels.method}} {{$labels.return_code}}).\n\nThis may cause problems for Pod scheduling',
@@ -32,7 +32,7 @@
           },
           {
             alert: 'CiliumAgentContainerNetworkInterfaceApiErrorEndpointCreate',
-            expr: 'sum(rate(cilium_api_limiter_processed_requests_total{api_call=~"endpoint-create", outcome="fail"}[1m])) by (pod,api_call)',
+            expr: 'sum(rate(cilium_api_limiter_processed_requests_total{api_call=~"endpoint-create", outcome="fail"}[1m])) by (%s)' % std.join(', ', (['pod', 'api_call'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium Endpoint API endpoint rate limiter is reporting errors while doing endpoint create.',
               description: 'Cilium Endpoint API endpoint rate limiter on Pod {{$labels.pod}} is reporting errors while doing endpoint create.\nThis may cause CNI and prevent Cilium scheduling.',
@@ -44,7 +44,7 @@
           },
           {
             alert: 'CiliumAgentApiEndpointErrors',
-            expr: 'sum(rate(cilium_agent_api_process_time_seconds_count{return_code=~"5[0-9][0-9]", path="/v1/endpoint"}[5m])) by (pod, return_code)',
+            expr: 'sum(rate(cilium_agent_api_process_time_seconds_count{return_code=~"5[0-9][0-9]", path="/v1/endpoint"}[5m])) by (%s)' % std.join(', ', (['pod', 'return_code'] + $._config.alertAggregationLabels)),
             labels: {
               severity: 'warning',
             },
@@ -62,7 +62,7 @@
         rules: [
           {
             alert: 'CiliumOperatorExhaustedIpamIps',
-            expr: 'sum(cilium_operator_ipam_ips{type="available"}) <= 0',
+            expr: 'sum(cilium_operator_ipam_ips{type="available"}) by (%s) <= 0' % std.join(', ', $._config.alertAggregationLabels),
             annotations: {
               summary: 'Cilium Operator has exhausted its IPAM IPs.',
               description: 'Cilium Operator {{$labels.pod}} has exhausted its IPAM IPs. This is a critical issue which may cause Pods to fail to be scheduled.\n\nThis may be caused by number of Pods being scheduled exceeding the you cloud platforms network limits or issues with Cilium rate limiting.',
@@ -75,7 +75,7 @@
           {
             // Should be relative time range of 600-0
             alert: 'CiliumOperatorLowAvailableIpamIps',
-            expr: '(sum(cilium_operator_ipam_ips{type!="available"}) / sum(cilium_operator_ipam_ips)) > 0.9',
+            expr: '(sum(cilium_operator_ipam_ips{type!="available"}) by (%s) / sum(cilium_operator_ipam_ips) by (%s)) > 0.9' % [std.join(', ', $._config.alertAggregationLabels), std.join(', ', $._config.alertAggregationLabels)],
             annotations: {
               summary: 'Cilium Operator has used up over 90% of its available IPs.',
               description: 'Cilium Operator {{$labels.pod}} has used up over 90% of its available IPs. If available IPs become exhausted then the operator may not be able to schedule Pods.\n\nThis may be caused by number of Pods being scheduled exceeding the you cloud platforms network limits or issues with Cilium rate limiting.',
@@ -87,7 +87,7 @@
           },
           {
             alert: 'CiliumOperatorEniIpamErrors',
-            expr: 'sum(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) / count(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) > 0.0',
+            expr: 'sum(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) by (%s) / count(rate(cilium_operator_ipam_interface_creation_ops{status=~"unable to (create|attach) ENI"}[5m])) by (%s) > 0.0' % [std.join(', ', $._config.alertAggregationLabels), std.join(', ', $._config.alertAggregationLabels)],
             annotations: {
               summary: 'Cilium Operator has high error rate while trying to create/attach ENIs for IPAM.',
               description: 'Cilium Operator {{$labels.pod}} has high error rate while trying to create/attach ENIs for IPAM.\n\nThis may be caused by exceeding Node instance ENI/Address limts, as well as errors with Cilium Operators cloud configuration.',
@@ -104,7 +104,7 @@
         rules: [
           {
             alert: 'CiliumAgentMapOperationFailures',
-            expr: 'sum(rate(cilium_bpf_map_ops_total{k8s_app="cilium", outcome="fail"}[5m])) by (map_name, pod) > 0',
+            expr: 'sum(rate(cilium_bpf_map_ops_total{k8s_app="cilium", outcome="fail"}[5m])) by (%s) > 0' % std.join(', ', (['map_name', 'pod'] + $._config.alertAggregationLabels)),
             labels: {
               severity: 'warning',
             },
@@ -133,7 +133,7 @@
         rules: [
           {
             alert: 'CiliumAgentNatTableFull',
-            expr: 'sum(rate(cilium_drop_count_total{reason="No mapping for NAT masquerade"}[1m])) by (pod) > 0',
+            expr: 'sum(rate(cilium_drop_count_total{reason="No mapping for NAT masquerade"}[1m])) by (%s) > 0' % std.join(', ', (['pod'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium Agent Pod is dropping packets due to "No mapping for NAT masquerade" errors.',
               description: 'Cilium Agent Pod {{$labels.pod}} is dropping packets due to "No mapping for NAT masquerade" errors. This likely means that the Cilium agents NAT table is full.\nThis is a potentially critical issue that can lead to connection issues for packets leaving the cluster network.\n\nSee: https://docs.cilium.io/en/v1.9/concepts/networking/masquerading/ for more info.',
@@ -150,7 +150,7 @@
         rules: [
           {
             alert: 'CiliumAgentApiHighErrorRate',
-            expr: 'sum(rate(cilium_k8s_client_api_calls_total{endpoint!="metrics",return_code!~"2[0-9][0-9]"}[5m])) by (pod, endpoint, return_code)',
+            expr: 'sum(rate(cilium_k8s_client_api_calls_total{endpoint!="metrics",return_code!~"2[0-9][0-9]"}[5m])) by (%s)' % std.join(', ', (['pod', 'endpoint', 'return_code'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium Agent API on Pod is experiencing a high error rate.',
               description: 'Cilium Agent API on Pod {{$labels.pod}} is experiencing a high error rate for response code: {{$labels.response_code}} on endpoint {{$labels.endpoint}}.',
@@ -167,7 +167,7 @@
         rules: [
           {
             alert: 'CiliumAgentConntrackTableFull',
-            expr: 'sum(rate(cilium_drop_count_total{reason="CT: Map insertion failed"}[5m])) by (pod) > 0',
+            expr: 'sum(rate(cilium_drop_count_total{reason="CT: Map insertion failed"}[5m])) by (%s) > 0' % std.join(', ', (['pod'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Ciliums conntrack map is failing on new insertions on Agent Pod.',
               description: 'Ciliums conntrack map is failing on new insertions on agent Pod {{$labels.pod}}, this likely means that the conntrack BPF map is full. This is a potentially critical issue and may result in unexpected packet drops.\n\nIf this is firing, it is recommend to look at both CPU/memory resource utilization dashboards. As well as conntrack GC run dashboards for more details on what the issue is.',
@@ -180,7 +180,7 @@
           {
             // TODO: According to alert dump this should have two conditions/time ranges
             alert: 'CiliumAgentConnTrackFailedGarbageCollectorRuns',
-            expr: 'sum(rate(cilium_datapath_conntrack_gc_runs_total{status="uncompleted"}[5m])) by (pod) > 0',
+            expr: 'sum(rate(cilium_datapath_conntrack_gc_runs_total{status="uncompleted"}[5m])) by (%s) > 0' % std.join(', ', (['pod'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium Agent Conntrack GC runs are failing on Agent Pod.',
               description: 'Cilium Agent Conntrack GC runs on Agent Pod {{$labels.pod}} has been reported as not completing. Runs reported "uncompleted" may indicate a problem with ConnTrack GC.\nCilium failing to GC its ConnTrack table may cause further ConnTrack issues later. This may result in dropped packets or other issues.',
@@ -197,7 +197,7 @@
         rules: [
           {
             alert: 'CiliumAgentHighDeniedRate',
-            expr: 'sum(rate(cilium_drop_count_total{reason="Policy denied"}[1m])) by (reason, pod) > 0',
+            expr: 'sum(rate(cilium_drop_count_total{reason="Policy denied"}[1m])) by (%s) > 0' % std.join(', ', (['reason', 'pod'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium Agent is experiencing a high drop rate due to policy rule denies.',
               description: 'Cilium Agent Pod {{$labels.pod}} is experiencing a high drop rate due to policy rule denies. This could mean that a network policy is not configured correctly, or that a Pod is sending unexpected network traffic',
@@ -214,7 +214,7 @@
         rules: [
           {
             alert: 'CiliumAgentPolicyMapPressure',
-            expr: 'sum(cilium_bpf_map_pressure{map_name=~"cilium_policy_.*"}) by (pod) > 0.9',
+            expr: 'sum(cilium_bpf_map_pressure{map_name=~"cilium_policy_.*"}) by (%s) > 0.9' % std.join(', ', (['pod'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium Agent is experiencing high BPF map pressure.',
               description: 'Cilium Agent {{$labels.pod}} is experiencing high BPF map pressure (over 90% full) on policy map: {{$labels.map_name}}. This means that the map is running low on capacity. A full policy map may result in packet drops.',
@@ -231,7 +231,7 @@
         rules: [
           {
             alert: 'CiliumNodeLocalHighIdentityAllocation',
-            expr: '(sum(cilium_identity{type="node_local"}) by (pod) / (2^16-1)) > 0.8',
+            expr: '(sum(cilium_identity{type="node_local"}) by (%s) / (2^16-1)) > 0.8' % std.join(', ', (['pod'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium is using a very high percent (over 80%) of its maximum per-node identity limit (65535).',
               description: 'Cilium agent Pod {{$labels.pod}} is using a very high percent (over 80%) of its maximum per-node identity limit (65535).\n\nIf this capacity is exhausted Cilium may be unable to allocate new identities. Very high identity allocations can also indicate other problems',
@@ -243,7 +243,7 @@
           },
           {
             alert: 'RunningOutOfCiliumClusterIdentities',
-            expr: 'sum(cilium_identity{type="cluster_local"}) / (2^16-256) > .8',
+            expr: 'sum(cilium_identity{type="cluster_local"}) by (%s) / (2^16-256) > .8' % std.join(', ', $._config.alertAggregationLabels),
             annotations: {
               summary: 'Cilium is using a very high percent of its maximum cluster identity limit (65280).',
               description: 'Cilium is using a very high percent of its maximum cluster identity limit ({{value}}/65280) . If this capacity is exhausted Cilium may be unable to allocate new identities. Very high identity allocations can also indicate other problems',
@@ -260,7 +260,7 @@
         rules: [
           {
             alert: 'CiliumUnreachableNodes',
-            expr: 'sum(cilium_unreachable_nodes{}) by (pod) > 0',
+            expr: 'sum(cilium_unreachable_nodes{}) by (%s) > 0' % std.join(', ', (['pod'] + $._config.alertAggregationLabels)),
             labels: {
               severity: 'info',
             },
