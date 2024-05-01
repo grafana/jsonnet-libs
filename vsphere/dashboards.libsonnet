@@ -54,12 +54,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.vmOnStatus { gridPos+: { w: 4, h: 4 } },
-              panels.vmOffStatus { gridPos+: { w: 4, h: 4 } },
-              panels.vmSuspendedStatus { gridPos+: { w: 4, h: 4 } },
-              panels.vmTemplateStatus { gridPos+: { w: 4, h: 4 } },
-              panels.esxiHostsActiveStatus { gridPos+: { w: 4, h: 4 } },
-              panels.esxiHostsInactiveStatus { gridPos+: { w: 4, h: 4 } },
+              panels.vmOnStatusCluster { gridPos+: { w: 4, h: 4 } },
+              panels.vmOffStatusCluster { gridPos+: { w: 4, h: 4 } },
+              panels.vmSuspendedStatusCluster { gridPos+: { w: 4, h: 4 } },
+              panels.vmTemplateStatusCluster { gridPos+: { w: 4, h: 4 } },
+              panels.esxiHostsActiveStatusCluster { gridPos+: { w: 4, h: 4 } },
+              panels.esxiHostsInactiveStatusCluster { gridPos+: { w: 4, h: 4 } },
               panels.clusterCPUEffective { gridPos+: { w: 8, h: 4 } },
               panels.clusterCPULimit { gridPos+: { w: 8, h: 4 } },
               panels.clusterCPUUtilization { gridPos+: { w: 8, h: 4 } },

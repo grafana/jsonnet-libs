@@ -41,6 +41,37 @@ local utils = commonlib.utils;
           description='The number of virtual machine templates available.'
         )
         + stat.options.withGraphMode('none'),
+      vmOnStatusCluster:
+        commonlib.panels.generic.stat.info.new(
+          'VMs on',
+          targets=[t.vmOnStatusCluster],
+          description='The number of virtual machines currently powered on within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      vmOffStatusCluster:
+        commonlib.panels.generic.stat.info.new(
+          'VMs off',
+          targets=[t.vmOffStatusCluster],
+          description='The number of virtual machines currently powered off within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      vmSuspendedStatusCluster:
+        commonlib.panels.generic.stat.info.new(
+          'VMs suspended',
+          targets=[t.vmSuspendedStatusCluster],
+          description='The number of virtual machines currently in a suspended state within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      vmTemplateStatusCluster:
+        commonlib.panels.generic.stat.info.new(
+          'VM templates',
+          targets=[t.vmTemplateStatusCluster],
+          description='The number of virtual machine templates available within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
 
       clusterCountStatus:
         commonlib.panels.generic.stat.info.new(
@@ -52,7 +83,7 @@ local utils = commonlib.utils;
 
       resourcePoolCountStatus:
         commonlib.panels.generic.stat.info.new(
-          'Resource Pool Count',
+          'Resource pool count',
           targets=[t.resourcePoolCountStatus],
           description='The total number of resource pools in the vCenter environment.'
         )
@@ -60,7 +91,7 @@ local utils = commonlib.utils;
 
       esxiHostsActiveStatus:
         commonlib.panels.generic.stat.info.new(
-          'Active ESXi Hosts',
+          'Active ESXi hosts',
           targets=[t.esxiHostsActiveStatus],
           description='The number of ESXi hosts that are currently in an active state.'
         )
@@ -68,22 +99,38 @@ local utils = commonlib.utils;
 
       esxiHostsInactiveStatus:
         commonlib.panels.generic.stat.info.new(
-          'Inactive ESXi Hosts',
+          'Inactive ESXi hosts',
           targets=[t.esxiHostsInactiveStatus],
           description='The number of ESXi hosts that are currently in an inactive state.'
+        )
+        + stat.options.withGraphMode('none'),
+     
+     esxiHostsActiveStatusCluster:
+        commonlib.panels.generic.stat.info.new(
+          'Active ESXi hosts',
+          targets=[t.esxiHostsActiveStatusCluster],
+          description='The number of ESXi hosts that are currently in an active state within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      esxiHostsInactiveStatusCluster:
+        commonlib.panels.generic.stat.info.new(
+          'Inactive ESXi hosts',
+          targets=[t.esxiHostsInactiveStatusCluster],
+          description='The number of ESXi hosts that are currently in an inactive state within the cluster.'
         )
         + stat.options.withGraphMode('none'),
 
       topCPUUtilizationClusters:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top CPU Utilization Clusters',
+          'Top CPU utilization by cluster',
           targets=[t.topCPUUtilizationClusters],
           description='The clusters with the highest CPU utilization percentage.'
         ),
 
       topMemoryUtilizationClusters:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top Memory Utilization Clusters',
+          'Top memory utilization by cluster',
           targets=[t.topMemoryUtilizationClusters],
           description='The clusters with the highest memory utilization percentage.'
         ),
@@ -125,7 +172,7 @@ local utils = commonlib.utils;
 
       topCPUUtilizationEsxiHosts:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top CPU Utilization ESXi Hosts',
+          'Top CPU utilization ESXi hosts',
           targets=[t.topCPUUtilizationEsxiHosts],
           description='The ESXi hosts with the highest CPU utilization percentage.'
         ),
@@ -196,15 +243,15 @@ local utils = commonlib.utils;
       networkThroughputRate:
         commonlib.panels.generic.timeSeries.base.new(
           'Network throughput rate',
-          targets=[t.networkThroughputRate],
-          description='The amount of data transmitted or received over the network of the ESXi host during the most recent 20s interval.'
+          targets=[t.networkTransmittedThroughputRate, t.networkReceivedThroughputRate],
+          description='The rate of data transmitted or received over the network of the ESXi host.'
         ),
 
       packetRate:
         commonlib.panels.generic.timeSeries.base.new(
           'Packet rate',
-          targets=[t.packetRate],
-          description='The number of packets received or transmitted over the ESXi hosts networks during the most recent 20s interval.'
+          targets=[t.packetReceivedRate, t.packetTransmittedRate],
+          description='The rate of packets received or transmitted over the ESXi hosts networks.'
         ),
 
       VMTable:
@@ -219,6 +266,55 @@ local utils = commonlib.utils;
           'Disks table',
           targets=[t.disksTable],
           description='A table displaying information about the disks associated with the virtual machines.'
+        ),
+
+      vmCPUUsage:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Host CPU usage',
+          targets=[t.vmCPUUsage],
+          description='The amount of CPU used by the VMs.'
+        ),
+
+      vmCPUUtilization:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Host CPU utilization',
+          targets=[t.vmCPUUtilization],
+          description='The CPU utilization percentage of VMs.'
+        ),
+
+      vmMemoryUsage:
+        g.panel.timeSeries.new(
+          'Host memory usage',
+          targets=[t.vmMemoryUsage],
+          description='The amount of memory used by the VMs.'
+        ),
+
+      vmMemoryUtilization:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Host memory utilization',
+          targets=[t.vmMemoryUtilization],
+          description='The memory utilization percentage of the VMs.'
+        ),
+
+      vmModifiedMemory:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Modified memory',
+          targets=[t.vmModifiedMemory],
+          description='The amount of memory that has been modified or ballooned on the VMs.'
+        ),
+
+      vmNetworkThroughputRate:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Network throughput rate',
+          targets=[t.vmNetworkReceivedThroughputRate, t.vmNetworkTransmittedThroughputRate],
+          description='The rate of data transmitted or received over the network of the VMs.'
+        ),
+
+      vmPacketRate:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Packet rate',
+          targets=[t.vmPacketReceivedRate, t.vmPacketTransmittedRate],
+          description='The rate of packets received or transmitted over the VMs network.'
         ),
 
       clusterCPUEffective:
