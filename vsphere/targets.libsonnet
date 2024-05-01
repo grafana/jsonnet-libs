@@ -212,9 +212,9 @@ local prometheusQuery = g.query.prometheus;
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'vcenter_vm_network_packet_count{direction="transmitted", %(hostQueriesSelector)s}' % vars
-      ),    
-   
-   vmCPUUsage:
+      ),
+
+    vmCPUUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'vcenter_host_cpu_usage_MHz{%(virtualMachinesQueriesSelector)s}'
@@ -282,7 +282,7 @@ local prometheusQuery = g.query.prometheus;
     clusterCPUEffective:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_cpu_effective{%(clusterQueriesSelector)s}'% vars
+        'vcenter_cluster_cpu_effective{%(clusterQueriesSelector)s}' % vars
       ),
 
     clusterCPULimit:

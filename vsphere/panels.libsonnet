@@ -104,8 +104,8 @@ local utils = commonlib.utils;
           description='The number of ESXi hosts that are currently in an inactive state.'
         )
         + stat.options.withGraphMode('none'),
-     
-     esxiHostsActiveStatusCluster:
+
+      esxiHostsActiveStatusCluster:
         commonlib.panels.generic.stat.info.new(
           'Active ESXi hosts',
           targets=[t.esxiHostsActiveStatusCluster],
