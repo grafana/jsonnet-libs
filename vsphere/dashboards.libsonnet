@@ -43,7 +43,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.topNetworksActiveEsxiHosts,
               panels.topPacketErrorEsxiHosts,
               g.panel.row.new('Datastore row'),
-              panels.datastoresTable { gridPos+: { w: 24 } },
+              //panels.datastoresTable { gridPos+: { w: 24 } },
             ], 12, 6
           )
         )
@@ -109,7 +109,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.networkThroughputRate,
               panels.packetRate,
               g.panel.row.new('Disks row'),
-              panels.vmDisksTable,
+              panels.vmDisksTable { gridPos+: { w: 24 } },
             ], 12, 6
           )
         )
@@ -128,7 +128,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             labels=this.config.groupLabels + this.config.extraLogLabels,
             formatParser=null,
             showLogsVolume=this.config.showLogsVolume,
-            logsVolumeGroupBy=this.config.logsVolumeGroupBy,
           )
           {
             dashboards+:
