@@ -69,7 +69,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               g.panel.row.new('ESXi host row'),
               panels.esxiHostsTable { gridPos+: { w: 24 } },
               g.panel.row.new('VMs row'),
-              panels.VMTable { gridPos+: { w: 24 } },
+              panels.VMTableCluster { gridPos+: { w: 24 } },
             ], 12, 6
           )
         )
@@ -88,7 +88,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.networkThroughputRate,
               panels.packetRate,
               g.panel.row.new('VMs row'),
-              panels.VMTable { gridPos+: { w: 24 } },
+              panels.VMTableHost { gridPos+: { w: 24 } },
               g.panel.row.new('Disks row'),
               panels.disksTable { gridPos+: { w: 24 } },
             ], 12, 6
@@ -109,7 +109,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.networkThroughputRate,
               panels.packetRate,
               g.panel.row.new('Disks row'),
-              panels.disksTable,
+              panels.vmDisksTable,
             ], 12, 6
           )
         )

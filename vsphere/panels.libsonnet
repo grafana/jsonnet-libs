@@ -328,14 +328,25 @@ local utils = commonlib.utils;
         )
         + g.panel.timeSeries.standardOptions.withUnit('packet/s'),
 
-      VMTable:
+      VMTableCluster:
         g.panel.table.new(
           'VMs table',
-          targets=[t.VMTable],
+          targets=[t.vmCPUUtilizationCluster, t.vmMemoryUtilizationCluster, t.vmModifiedMemoryBalloonedCluster, t.vmModifiedMemorySwappedCluster, t.vmNetDiskThroughputCluster],
           description='A table displaying information about the virtual machines in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + fieldOverride.byName.withProperty('custom.minWidth', 250)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percentunit')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory utilization')
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withProperty('custom.minWidth', 250)
@@ -358,38 +369,134 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Network throughput')
+          fieldOverride.byName.new('Disk throughput')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
           ),
         ])
         +
-        table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withProperty('custom.minWidth', 250)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percentunit')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withDecimals(1)
-          ),
-        ])
-        +
         table.queryOptions.withTransformationsMixin([
-
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'vcenter_host_name',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'vcenter_host_name',
+                  'Value #A',
+                  'Value #D',
+                  'Value #E',
+                  'Value #F',
+                  'Value #B',
+                  'vcenter_vm_name 1',
+                ],
+              },
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {},
+              includeByName: {},
+              indexByName: {
+                'Value #A': 2,
+                'Value #B': 6,
+                'Value #D': 3,
+                'Value #E': 4,
+                'Value #F': 5,
+                vcenter_host_name: 0,
+                'vcenter_vm_name 1': 1,
+              },
+              renameByName: {
+                'Value #A': 'CPU utilization',
+                'Value #B': 'Disk throughput',
+                'Value #C': '',
+                'Value #D': 'Memory utilization',
+                'Value #E': 'Memory ballooned',
+                'Value #F': 'Memory swapped',
+                vcenter_cluster_name: 'Cluster',
+                'vcenter_cluster_name 1': 'Cluster',
+                vcenter_host_name: 'Host',
+                'vcenter_host_name 1': 'Host',
+                vcenter_vm_name: 'Name',
+                'vcenter_vm_name 1': 'Name',
+                'vcenter_vm_name 2': '',
+              },
+            },
+          },
         ]),
 
       disksTable:
         g.panel.table.new(
           'Disks table',
-          targets=[t.disksTable],
+          targets=[t.hostDiskLatency, t.diskThroughputRate],
           description='A table displaying information about the disks associated with the virtual machines.'
-        ),
+        )
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory swapped')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('mbytes')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Disk throughput')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        +
+        table.queryOptions.withTransformationsMixin([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'vcenter_host_name',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'vcenter_host_name',
+                  'Value #A',
+                  'Value #B',
+                ],
+              },
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {},
+              includeByName: {},
+              indexByName: {
+                'Value #A': 2,
+                'Value #B': 6,
+                'Value #D': 3,
+                'Value #E': 4,
+                'Value #F': 5,
+                vcenter_host_name: 0,
+                'vcenter_vm_name 1': 1,
+              },
+              renameByName: {
+                'Value #A': 'Latency',
+                'Value #B': 'Throughput',
+                vcenter_host_name: 'Host',
+              },
+            },
+          },
+        ]),
 
       vmCPUUsage:
         commonlib.panels.generic.timeSeries.base.new(
-          'Host CPU usage',
+          'CPU usage',
           targets=[t.vmCPUUsage],
           description='The amount of CPU used by the VMs.'
         )
@@ -405,7 +512,7 @@ local utils = commonlib.utils;
 
       vmMemoryUsage:
         g.panel.timeSeries.new(
-          'Host memory usage',
+          'Memory usage',
           targets=[t.vmMemoryUsage],
           description='The amount of memory used by the VMs.'
         )
@@ -413,7 +520,7 @@ local utils = commonlib.utils;
 
       vmMemoryUtilization:
         commonlib.panels.generic.timeSeries.base.new(
-          'Host memory utilization',
+          'Memory utilization',
           targets=[t.vmMemoryUtilization],
           description='The memory utilization percentage of the VMs.'
         )
@@ -442,6 +549,197 @@ local utils = commonlib.utils;
           description='The rate of packets received or transmitted over the VMs network.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('packet/s'),
+
+      vmDisksTable:
+        g.panel.table.new(
+          'Disks table',
+          targets=[t.vmDiskUtilization, t.vmDiskLatency, t.vmNetDiskThroughput, t.vmDiskUsage],
+          description='A table displaying information about the disks associated with the virtual machines.'
+        )
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Latency')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('ms')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Throughput')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Usage')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('decbytes')
+          ),
+        ])
+        +
+        table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percentunit')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        +
+        table.queryOptions.withTransformationsMixin([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'vcenter_host_name',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'vcenter_host_name',
+                  'vcenter_vm_name 1',
+                  'Value #C',
+                  'disk_type',
+                  'Value #A',
+                  'Value #B',
+                  'Value #D',
+                ],
+              },
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {},
+              includeByName: {},
+              indexByName: {
+                'Value #A': 3,
+                'Value #B': 6,
+                'Value #C': 4,
+                'Value #D': 5,
+                disk_type: 2,
+                vcenter_host_name: 0,
+                'vcenter_vm_name 1': 1,
+              },
+              renameByName: {
+                'Value #A': 'Latency',
+                'Value #B': 'Throughput',
+                'Value #C': 'Utilization',
+                'Value #D': 'Usage',
+                disk_type: 'Type',
+                vcenter_host_name: 'Host',
+                'vcenter_vm_name 1': 'VM name',
+              },
+            },
+          },
+        ]),
+
+      VMTableHost:
+        g.panel.table.new(
+          'VMs table',
+          targets=[t.vmCPUUtilization, t.vmMemoryUtilization, t.vmModifiedMemoryBallooned, t.vmModifiedMemorySwapped, t.vmNetDiskThroughput],
+          description='A table displaying information about the virtual machines in the vCenter environment.'
+        )
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('CPU utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + fieldOverride.byName.withProperty('custom.minWidth', 250)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percentunit')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + fieldOverride.byName.withProperty('custom.minWidth', 250)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percentunit')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory ballooned')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('mbytes')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory swapped')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('mbytes')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Disk throughput')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        +
+        table.queryOptions.withTransformationsMixin([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'vcenter_host_name',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'vcenter_host_name',
+                  'Value #A',
+                  'Value #D',
+                  'Value #E',
+                  'Value #F',
+                  'Value #B',
+                  'vcenter_vm_name 1',
+                ],
+              },
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {},
+              includeByName: {},
+              indexByName: {
+                'Value #A': 2,
+                'Value #B': 6,
+                'Value #D': 3,
+                'Value #E': 4,
+                'Value #F': 5,
+                vcenter_host_name: 0,
+                'vcenter_vm_name 1': 1,
+              },
+              renameByName: {
+                'Value #A': 'CPU utilization',
+                'Value #B': 'Disk throughput',
+                'Value #C': '',
+                'Value #D': 'Memory utilization',
+                'Value #E': 'Memory ballooned',
+                'Value #F': 'Memory swapped',
+                vcenter_cluster_name: 'Cluster',
+                'vcenter_cluster_name 1': 'Cluster',
+                vcenter_host_name: 'Host',
+                'vcenter_host_name 1': 'Host',
+                vcenter_vm_name: 'Name',
+                'vcenter_vm_name 1': 'Name',
+                'vcenter_vm_name 2': '',
+              },
+            },
+          },
+        ]),
 
       clusterCPUEffective:
         commonlib.panels.generic.timeSeries.base.new(
@@ -494,7 +792,7 @@ local utils = commonlib.utils;
       esxiHostsTable:
         g.panel.table.new(
           'ESXi hosts table',
-          targets=[t.hostCPUUtilization, t.hostCPUUsage, t.hostMemoryUtilization, t.hostMemoryUsage, t.networkThroughputRate, t.packetc],
+          targets=[t.hostCPUUtilization, t.hostMemoryUtilization, t.networkThroughputRate, t.modifiedMemoryBallooned, t.modifiedMemorySwapped],
           description='A table displaying information about the ESXi hosts in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
@@ -509,6 +807,24 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Network throughput')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory swapped')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('mbyte')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory ballooned')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('mbyte')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU usage')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('rotmhz')
@@ -517,13 +833,7 @@ local utils = commonlib.utils;
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory usage')
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
-          ),
-        ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Network throughput')
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
+            table.standardOptions.withUnit('mbyte')
           ),
         ])
         +
@@ -554,12 +864,13 @@ local utils = commonlib.utils;
                 names: [
                   'vcenter_host_name',
                   'Value #A',
-                  'Value #C',
                   'Value #B',
-                  'Value #D',
                   'Value #E',
                   'Value #F',
-                  'vcenter_cluster_name 1',
+                  'Value #C',
+                  'Value #D',
+                  'Value #H',
+                  'Value #G',
                 ],
               },
             },
@@ -570,20 +881,25 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 2,
+                'Value #A': 1,
                 'Value #B': 3,
-                'Value #C': 4,
-                'Value #D': 5,
-                'vcenter_cluster_name 1': 0,
-                vcenter_host_name: 1,
+                'Value #C': 5,
+                'Value #D': 6,
+                'Value #E': 7,
+                'Value #F': 8,
+                'Value #G': 2,
+                'Value #H': 4,
+                vcenter_host_name: 0,
               },
               renameByName: {
                 'Value #A': 'CPU utilization',
                 'Value #B': 'Memory utilization',
-                'Value #C': 'CPU usage',
-                'Value #D': 'Memory usage',
+                'Value #C': 'Memory ballooned',
+                'Value #D': 'Memory swapped',
                 'Value #E': 'Network throughput',
                 'Value #F': 'Packet error',
+                'Value #G': 'CPU usage',
+                'Value #H': 'Memory usage',
                 vcenter_cluster_name: 'Cluster',
                 'vcenter_cluster_name 1': 'Cluster',
                 vcenter_host_name: 'Host',
