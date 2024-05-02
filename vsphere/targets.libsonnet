@@ -6,6 +6,11 @@ local prometheusQuery = g.query.prometheus;
     local vars = this.grafana.variables,
     local config = this.config,
 
+    vmNumberTotal:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (vcenter_cluster_name) (vcenter_cluster_vm_count{%(queriesSelector)s})' % vars
+      ),
     vmOnStatus:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -201,6 +206,11 @@ local prometheusQuery = g.query.prometheus;
         '${' + vars.datasources.prometheus.name + '}',
         'vcenter_host_network_throughput{direction="received", %(hostQueriesSelector)s}' % vars
       ),
+    networkThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'vcenter_host_network_throughput{direction="received", %(hostQueriesSelector)s} + vcenter_host_network_throughput{direction="transmitted", %(hostQueriesSelector)s}' % vars
+      ),
 
     packetReceivedRate:
       prometheusQuery.new(
@@ -279,6 +289,13 @@ local prometheusQuery = g.query.prometheus;
         '${' + vars.datasources.prometheus.name + '}',
         'vcenter_vm_network_packet_count{direction="transmitted", %(virtualMachinesQueriesSelector)s}' % vars
       ),
+
+    vmPacketErrorTotal:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'vcenter_host_network_packet_errors{direction="received", %(virtualMachinesQueriesSelector)s} + vcenter_host_network_packet_errors{direction="transmitted", %(virtualMachinesQueriesSelector)s} ' % vars
+      ),
+
     clusterCPUEffective:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
