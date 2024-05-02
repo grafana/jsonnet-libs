@@ -18,6 +18,7 @@ local utils = commonlib.utils;
       // with multiple metrics:
       timeSeriesPanel3:
         g.panel.timeSeries.new('Panel3')
+        + g.panel.timeSeries.withDescription('Some description.')
         + this.signals.metric2.asPanelMixin()
         + this.signals.metric3.asPanelMixin(),
 
