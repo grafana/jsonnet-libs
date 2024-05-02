@@ -5,7 +5,7 @@ local utils = commonlib.utils;
 
 // Generates chained variables to use on on all dashboards
 {
-  new(this):
+  new(this, varMetric):
     {
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
@@ -51,6 +51,7 @@ local utils = commonlib.utils;
           + var.datasource.withRegex('(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+')
           + var.datasource.generalOptions.showOnDashboard.withNothing(),
       },
+
       // Use on dashboards where multiple entities can be selected, like fleet dashboards
       multiInstance:
         [root.datasources.prometheus]
@@ -59,16 +60,30 @@ local utils = commonlib.utils;
       singleInstance:
         [root.datasources.prometheus]
         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
+      // Use on dashboards where multiple entities can be selected, like fleet dashboards
+      clusterVariables:
+        [root.datasources.prometheus]
+        + variablesFromLabels(groupLabels, clusterLabels, filteringSelector),
+      // Use on dashboards where only single entity can be selected, like drill-down dashboards
+      overviewVariables:
+        [root.datasources.prometheus]
+        + variablesFromLabels(groupLabels, [], filteringSelector, multiInstance=false),
+      hostsVariable:
+        [root.datasources.prometheus]
+        + variablesFromLabels(groupLabels, hostLabels, filteringSelector, multiInstance=false),
+      virtualMachinesVariables:
+        [root.datasources.prometheus]
+        + variablesFromLabels(groupLabels, virtualMachineLabels, filteringSelector, multiInstance=false),
 
       queriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + instanceLabels),
+          utils.labelsToPromQLSelector(groupLabels),
         ],
       clusterQueriesSelector:
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels + clusterLabels),
         ],
-      hostsQueriesSelector:
+      hostQueriesSelector:
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels + clusterLabels),
         ],

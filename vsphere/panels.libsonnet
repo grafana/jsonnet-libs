@@ -139,9 +139,18 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('percentutil'),
 
       clustersTable:
-        g.panel.table.new(
+        commonlib.panels.generic.table.base.new(
           'Cluster summary',
-          targets=[t.topMemoryUtilizationClusters, t.topCPUUtilizationClusters, t.vmNumberTotal],
+          targets=[
+            t.topMemoryUtilizationClusters + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.topCPUUtilizationClusters + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmNumberTotal + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true),
+          ],
           description='A table displaying information about the clusters in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
@@ -266,13 +275,6 @@ local utils = commonlib.utils;
         )
         + g.panel.timeSeries.standardOptions.withUnit('err'),
 
-      datastoresTable:
-        g.panel.table.new(
-          'Datastores table',
-          targets=[t.datastoresTable],
-          description='A table displaying information about the datastores in the vCenter environment.'
-        ),
-
       hostCPUUsage:
         commonlib.panels.generic.timeSeries.base.new(
           'Host CPU usage',
@@ -290,7 +292,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       hostMemoryUsage:
-        g.panel.timeSeries.new(
+        commonlib.panels.generic.timeSeries.base.new(
           'Host memory usage',
           targets=[t.hostMemoryUsage],
           description='The amount of memory used by the ESXi host.'
@@ -308,7 +310,7 @@ local utils = commonlib.utils;
       modifiedMemory:
         commonlib.panels.generic.timeSeries.base.new(
           'Modified memory',
-          targets=[t.modifiedMemory],
+          targets=[t.modifiedMemoryBallooned, t.modifiedMemorySwapped],
           description='The amount of memory that has been modified or ballooned on the ESXi host.'
         ) + g.panel.timeSeries.standardOptions.withUnit('mbytes'),
 
@@ -329,9 +331,24 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('packet/s'),
 
       VMTableCluster:
-        g.panel.table.new(
+        commonlib.panels.generic.table.base.new(
           'VMs table',
-          targets=[t.vmCPUUtilizationCluster, t.vmMemoryUtilizationCluster, t.vmModifiedMemoryBalloonedCluster, t.vmModifiedMemorySwappedCluster, t.vmNetDiskThroughputCluster],
+          targets=[
+            t.vmCPUUtilizationCluster + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmMemoryUtilizationCluster + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmModifiedMemoryBalloonedCluster + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmModifiedMemorySwappedCluster + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmNetDiskThroughputCluster + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true),
+          ],
           description='A table displaying information about the virtual machines in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
@@ -433,9 +450,15 @@ local utils = commonlib.utils;
         ]),
 
       disksTable:
-        g.panel.table.new(
+        commonlib.panels.generic.table.base.new(
           'Disks table',
-          targets=[t.hostDiskLatency, t.diskThroughputRate],
+          targets=[
+            t.hostDiskLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.diskThroughputRate + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true),
+          ],
           description='A table displaying information about the disks associated with the virtual machines.'
         )
         + table.standardOptions.withOverridesMixin([
@@ -551,9 +574,21 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('packet/s'),
 
       vmDisksTable:
-        g.panel.table.new(
+        commonlib.panels.generic.table.base.new(
           'Disks table',
-          targets=[t.vmDiskUtilization, t.vmDiskLatency, t.vmNetDiskThroughput, t.vmDiskUsage],
+          targets=[
+            t.vmDiskUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmDiskLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmNetDiskThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmDiskUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true),
+          ],
           description='A table displaying information about the disks associated with the virtual machines.'
         )
         + table.standardOptions.withOverridesMixin([
@@ -638,9 +673,22 @@ local utils = commonlib.utils;
         ]),
 
       VMTableHost:
-        g.panel.table.new(
+        commonlib.panels.generic.table.base.new(
           'VMs table',
-          targets=[t.vmCPUUtilization, t.vmMemoryUtilization, t.vmModifiedMemoryBallooned, t.vmModifiedMemorySwapped, t.vmNetDiskThroughput],
+          targets=[
+            t.vmCPUUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmMemoryUtilization,
+            t.vmModifiedMemoryBallooned + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmModifiedMemorySwapped + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true)
+            ,
+            t.vmNetDiskThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withInstant(true),
+          ],
           description='A table displaying information about the virtual machines in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
@@ -790,9 +838,19 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
 
       esxiHostsTable:
-        g.panel.table.new(
+        commonlib.panels.generic.table.base.new(
           'ESXi hosts table',
-          targets=[t.hostCPUUtilization, t.hostMemoryUtilization, t.networkThroughputRate, t.modifiedMemoryBallooned, t.modifiedMemorySwapped],
+          targets=[t.hostCPUUtilization + g.query.prometheus.withFormat('table')
+                   + g.query.prometheus.withInstant(true)
+                   , t.hostMemoryUtilization + g.query.prometheus.withFormat('table')
+                     + g.query.prometheus.withInstant(true)
+                   , t.networkThroughputRate + g.query.prometheus.withFormat('table')
+                     + g.query.prometheus.withInstant(true)
+                   , t.modifiedMemoryBallooned + g.query.prometheus.withFormat('table')
+                     + g.query.prometheus.withInstant(true)
+                   , t.modifiedMemorySwapped + g.query.prometheus.withFormat('table')
+                     + g.query.prometheus.withInstant(true)]
+          ,
           description='A table displaying information about the ESXi hosts in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
