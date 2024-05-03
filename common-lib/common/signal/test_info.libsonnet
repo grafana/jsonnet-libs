@@ -42,7 +42,7 @@ local m1 = signal.init(
         testTSUid: {
           actual: m1.asStat().datasource,
           expect: {
-            uid: 'DS_PROMETHEUS',
+            uid: '${datasource}',
             type: 'prometheus',
           },
         },

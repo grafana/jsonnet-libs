@@ -1,5 +1,5 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
-
+local g = import 'g.libsonnet';
 {
   new(this):
     local grafana = this.grafana;
@@ -9,7 +9,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       reboot:
         commonlib.annotations.reboot.new(
           title='Reboot',
-          target=this.grafana.targets.uptime1,
+          target=
+          g.query.prometheus.new(
+            '${' + this.grafana.variables.datasources.prometheus.name + '}',
+            this.signals.uptime1.asPanelExpression(),
+          )
+          ,
           instanceLabels=std.join(',', instanceLabels),
         )
         + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels)),
@@ -23,7 +28,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         criticalEvents:
           commonlib.annotations.base.new(
             title='Interesting system event from logs',
-            target=this.grafana.targets.lokiQuery1,
+            target=
+            g.query.loki.new(
+              '${' + this.grafana.variables.datasources.loki.name + '}',
+              this.signals.logsErrors.asPanelExpression(),
+            )
           )
           + commonlib.annotations.base.withTagKeys(std.join(',', groupLabels + instanceLabels + ['level']))
           + commonlib.annotations.base.withTextFormat('{{message}}'),
