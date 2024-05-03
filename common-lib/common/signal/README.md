@@ -26,7 +26,7 @@ When one of built-in functions are used (asTimeSeries, asPanelsMixin, asTarget..
 - info: no transformation
 - raw: no transformation. You can write your own complex expression and make sure is kept as is.
 
-Also, regardless of type (with the exception of `raw`), additioanl wrapper can be added when aggLevel `group` or `instance` is selected:
+Also, regardless of type (with the exception of `raw`), additional wrapper can be added when aggLevel `group` or `instance` is selected:
 
 `<aggFunction> by (<agg>) (<base>)`
 
