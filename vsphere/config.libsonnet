@@ -2,11 +2,11 @@
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
   filteringSelector: 'job=~"integrations/vsphere"',
   // Used to identify 'group' of instances.
-  groupLabels: ['job', 'datacenter'],
-  clusterLabels: ['cluster'],
-  hostLabels: ['ESXi host'],
-  resourcePoolLabels: ['resource pool'],
-  virtualMachineLabels: ['virtual machine'],
+  groupLabels: ['job', 'vcenter_datacenter_name'],
+  clusterLabels: ['vcenter_cluster_name'],
+  hostLabels: ['vcenter_host_name'],
+  resourcePoolLabels: ['vcenter_resource_pool_name'],
+  virtualMachineLabels: ['vcenter_vm_name'],
   // Prefix all dashboards uids and alert groups
   uid: 'vSphere',
   // Prefix for all Dashboards and (optional) rule groups

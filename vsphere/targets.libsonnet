@@ -96,49 +96,49 @@ local prometheusQuery = g.query.prometheus;
     topCPUUtilizationClusters:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, (100 * vcenter_cluster_cpu_effective{%(queriesSelector)s} / vcenter_cluster_cpu_limit{%(queriesSelector)s}))'
+        'topk by (vcenter_cluster_name) (777, (100 * vcenter_cluster_cpu_effective{%(queriesSelector)s} / vcenter_cluster_cpu_limit{%(queriesSelector)s}))' % vars
       ),
 
     topMemoryUtilizationClusters:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, (100 * vcenter_cluster_memory_effective_bytes{%(queriesSelector)s} / vcenter_cluster_memory_limit_bytes{%(queriesSelector)s}))'
+        'topk by (vcenter_cluster_name) (777, (100 * vcenter_cluster_memory_effective_bytes{%(queriesSelector)s} / vcenter_cluster_memory_limit_bytes{%(queriesSelector)s}))' % vars
       ),
 
     topCPUUsageResourcePools:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, (vcenter_resource_pool_cpu_usage{%(queriesSelector)s}))'
+        'topk by (vcenter_cluster_name) (777, (vcenter_resource_pool_cpu_usage{%(queriesSelector)s}))' % vars
       ),
 
     topMemoryUsageResourcePools:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, (vcenter_resource_pool_memory_usage_mebibytes{%(queriesSelector)s}))'
+        'topk by (vcenter_cluster_name) (777, (vcenter_resource_pool_memory_usage_mebibytes{%(queriesSelector)s}))' % vars
       ),
 
     topCPUShareResourcePools:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, vcenter_resource_pool_cpu_shares{%(queriesSelector)s})'
+        'topk by (vcenter_cluster_name) (777, vcenter_resource_pool_cpu_shares{%(queriesSelector)s})' % vars
       ),
 
     topMemoryShareResourcePools:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, vcenter_resource_pool_memory_shares{%(queriesSelector)s})'
+        'topk by (vcenter_cluster_name) (777, vcenter_resource_pool_memory_shares{%(queriesSelector)s})' % vars
       ),
 
     topCPUUtilizationEsxiHosts:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, vcenter_host_cpu_utilization_percent{%(queriesSelector)h sostnameandclustername})'
+        'topk by (vcenter_cluster_name) (777, vcenter_host_cpu_utilization_percent{%(queriesSelector)s})' % vars
       ),
 
     topMemoryUsageEsxiHosts:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, vcenter_host_memory_utilization_percent{%(queriesSelector)s hostnameandclustername})'
+        'topk by (vcenter_cluster_name) (777, vcenter_host_memory_utilization_percent{%(queriesSelector)s})' % vars
       ),
 
     topNetworksActiveEsxiHosts:
@@ -150,25 +150,25 @@ local prometheusQuery = g.query.prometheus;
     topPacketErrorEsxiHosts:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (vcenter_cluster_name) (777, sum by (vcenter_cluster_name) (increase(vcenter_host_network_packet_errors{%(queriesSelector)s}[$__interval:])))'
+        'topk by (vcenter_cluster_name) (777, sum by (vcenter_cluster_name) (increase(vcenter_host_network_packet_errors{%(queriesSelector)s}[$__interval:])))' % vars
       ),
 
     hostCPUUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_cpu_usage_MHz{%(hostQueriesSelector)s}'
+        'vcenter_host_cpu_usage_MHz{%(hostQueriesSelector)s}' % vars
       ),
 
     hostCPUUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_cpu_utilization_percent{%(hostQueriesSelector)s}'
+        'vcenter_host_cpu_utilization_percent{%(hostQueriesSelector)s}' % vars
       ),
 
     hostMemoryUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_memory_usage_mebibytes{%(hostQueriesSelector)s}'
+        'vcenter_host_memory_usage_mebibytes{%(hostQueriesSelector)s}' % vars
       ),
 
     hostDiskLatency:
@@ -180,7 +180,7 @@ local prometheusQuery = g.query.prometheus;
     hostMemoryUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_memory_utilization_percent{%(hostQueriesSelector)s}'
+        'vcenter_host_memory_utilization_percent{%(hostQueriesSelector)s}' % vars
       ),
 
     modifiedMemoryBallooned:
@@ -276,19 +276,19 @@ local prometheusQuery = g.query.prometheus;
     vmModifiedMemoryBallooned:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_ballooned_mebibytes{%(virtualMachinesQueriesSelector)s})'
+        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_ballooned_mebibytes{%(virtualMachinesQueriesSelector)s})' % vars
       ),
 
     vmModifiedMemorySwapped:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_swapped_mebibytes{%(virtualMachinesQueriesSelector)s})'
+        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_swapped_mebibytes{%(virtualMachinesQueriesSelector)s})' % vars
       ),
 
     vmModifiedMemorySwappedSSD:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_swapped_ssd_kibibytes{%(virtualMachinesQueriesSelector)s})'
+        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_swapped_ssd_kibibytes{%(virtualMachinesQueriesSelector)s})' % vars
       ),
 
     vmNetworkTransmittedThroughputRate:
@@ -342,7 +342,7 @@ local prometheusQuery = g.query.prometheus;
     clusterCPUUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '(100 * vcenter_cluster_cpu_effective{%(clusterQueriesSelector)s} / vcenter_cluster_cpu_limit{%(clusterQueriesSelector)s}))' % vars
+        '(100 * vcenter_cluster_cpu_effective{%(clusterQueriesSelector)s} / vcenter_cluster_cpu_limit{%(clusterQueriesSelector)s})' % vars
       ),
 
     clusterMemoryEffective:
@@ -364,25 +364,25 @@ local prometheusQuery = g.query.prometheus;
     vmCPUUtilizationCluster:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_vm_cpu_utilization_percent{%(clusterQueriesSelector)s}'
+        'vcenter_vm_cpu_utilization_percent{%(clusterQueriesSelector)s}' % vars
       ),
 
     vmMemoryUtilizationCluster:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_vm_memory_utilization_percent{%(clusterQueriesSelector)s}'
+        'vcenter_vm_memory_utilization_percent{%(clusterQueriesSelector)s}' % vars
       ),
 
     vmModifiedMemoryBalloonedCluster:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_ballooned_mebibytes{%(clusterQueriesSelector)s})'
+        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_ballooned_mebibytes{%(clusterQueriesSelector)s})' % vars
       ),
 
     vmModifiedMemorySwappedCluster:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_swapped_mebibytes{%(clusterQueriesSelector)s})'
+        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_swapped_mebibytes{%(clusterQueriesSelector)s})' % vars
       ),
 
     vmNetDiskThroughputCluster:
