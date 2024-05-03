@@ -3,6 +3,14 @@
   "dependencies": [
     {
       "source": {
+        "local": {
+          "directory": "../common-lib"
+        }
+      },
+      "version": ""
+    },
+    {
+      "source": {
         "git": {
           "remote": "https://github.com/grafana/grafonnet-lib.git",
           "subdir": "grafonnet"
@@ -13,11 +21,19 @@
     {
       "source": {
         "git": {
-          "remote": "https://github.com/grafana/jsonnet-libs.git",
-          "subdir": "grafana-builder"
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-latest"
         }
       },
-      "version": "master"
+      "version": "main"
+    },
+    {
+      "source": {
+        "local": {
+          "directory": "../logs-lib"
+        }
+      },
+      "version": ""
     }
   ],
   "legacyImports": true

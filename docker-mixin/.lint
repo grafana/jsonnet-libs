@@ -15,17 +15,11 @@ exclusions:
         panel: "CPU"
       - dashboard: "Docker Overview"
         panel: "Memory"
-      - dashboard: "Docker Overview"
-        panel: "Bandwidth"
-      - dashboard: "Docker Overview"
-        panel: "TCP Sockets By State"
-      - dashboard: "Docker Overview"
-        panel: "" # Storage table panel has no name
   template-datasource-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-on-time-change-reload-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-promql-rule:
-    reason: "Linter does not support parsing PromQL queries"
+    reason: "Linter does not support parsing LogQL queries"
     entries:
       - dashboard: "Docker Logs"
