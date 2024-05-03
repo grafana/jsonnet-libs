@@ -143,13 +143,13 @@ local utils = commonlib.utils;
           'Cluster summary',
           targets=[
             t.topMemoryUtilizationClusters + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.topCPUUtilizationClusters + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmNumberTotal + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true),
+            + g.query.prometheus.withRange(true),
           ],
           description='A table displaying information about the clusters in the vCenter environment.'
         )
@@ -335,19 +335,19 @@ local utils = commonlib.utils;
           'VMs table',
           targets=[
             t.vmCPUUtilizationCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmMemoryUtilizationCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmModifiedMemoryBalloonedCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmModifiedMemorySwappedCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmNetDiskThroughputCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true),
+            + g.query.prometheus.withRange(true),
           ],
           description='A table displaying information about the virtual machines in the vCenter environment.'
         )
@@ -454,10 +454,10 @@ local utils = commonlib.utils;
           'Disks table',
           targets=[
             t.hostDiskLatency + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.diskThroughputRate + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true),
+            + g.query.prometheus.withRange(true),
           ],
           description='A table displaying information about the disks associated with the virtual machines.'
         )
@@ -578,16 +578,16 @@ local utils = commonlib.utils;
           'Disks table',
           targets=[
             t.vmDiskUtilization + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmDiskLatency + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmNetDiskThroughput + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmDiskUsage + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true),
+            + g.query.prometheus.withRange(true),
           ],
           description='A table displaying information about the disks associated with the virtual machines.'
         )
@@ -677,17 +677,17 @@ local utils = commonlib.utils;
           'VMs table',
           targets=[
             t.vmCPUUtilization + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmMemoryUtilization,
             t.vmModifiedMemoryBallooned + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmModifiedMemorySwapped + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true)
+            + g.query.prometheus.withRange(true)
             ,
             t.vmNetDiskThroughput + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withInstant(true),
+            + g.query.prometheus.withRange(true),
           ],
           description='A table displaying information about the virtual machines in the vCenter environment.'
         )
@@ -745,13 +745,11 @@ local utils = commonlib.utils;
             options: {
               include: {
                 names: [
-                  'vcenter_host_name',
                   'Value #A',
+                  'Value #B',
                   'Value #D',
                   'Value #E',
-                  'Value #F',
-                  'Value #B',
-                  'vcenter_vm_name 1',
+                  'vcenter_host_name',
                 ],
               },
             },
@@ -762,28 +760,25 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 2,
-                'Value #B': 6,
+                'Value #A': 1,
+                'Value #B': 2,
                 'Value #D': 3,
                 'Value #E': 4,
-                'Value #F': 5,
                 vcenter_host_name: 0,
-                'vcenter_vm_name 1': 1,
               },
               renameByName: {
                 'Value #A': 'CPU utilization',
-                'Value #B': 'Disk throughput',
-                'Value #C': '',
-                'Value #D': 'Memory utilization',
-                'Value #E': 'Memory ballooned',
-                'Value #F': 'Memory swapped',
+                'Value #B': 'Memory utilization',
+                'Value #C': 'Memory ballooned',
+                'Value #D': 'Memory swapped',
+                'Value #E': 'Network throughput',
+                'Value #F': 'Packet error',
+                'Value #G': 'CPU usage',
+                'Value #H': 'Memory usage',
                 vcenter_cluster_name: 'Cluster',
                 'vcenter_cluster_name 1': 'Cluster',
                 vcenter_host_name: 'Host',
                 'vcenter_host_name 1': 'Host',
-                vcenter_vm_name: 'Name',
-                'vcenter_vm_name 1': 'Name',
-                'vcenter_vm_name 2': '',
               },
             },
           },
@@ -795,7 +790,8 @@ local utils = commonlib.utils;
           targets=[t.clusterCPUEffective],
           description='The effective CPU capacity of the cluster, excluding hosts in maintenance mode or unresponsive hosts.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('rotmhz'),
+        + g.panel.timeSeries.standardOptions.withUnit('rotmhz')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       clusterCPULimit:
         commonlib.panels.generic.timeSeries.base.new(
@@ -803,7 +799,8 @@ local utils = commonlib.utils;
           targets=[t.clusterCPULimit],
           description='The available CPU capacity of the cluster, aggregated from all hosts.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('rotmhz'),
+        + g.panel.timeSeries.standardOptions.withUnit('rotmhz')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       clusterCPUUtilization:
         commonlib.panels.generic.timeSeries.base.new(
@@ -811,7 +808,8 @@ local utils = commonlib.utils;
           targets=[t.clusterCPUUtilization],
           description='The CPU utilization percentage of the cluster.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       clusterMemoryEffective:
         commonlib.panels.generic.timeSeries.base.new(
@@ -819,7 +817,8 @@ local utils = commonlib.utils;
           targets=[t.clusterMemoryEffective],
           description='The effective memory capacity of the cluster, excluding hosts in maintenance mode or unresponsive hosts.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       clusterMemoryLimit:
         commonlib.panels.generic.timeSeries.base.new(
@@ -827,7 +826,8 @@ local utils = commonlib.utils;
           targets=[t.clusterMemoryLimit],
           description='The available memory capacity of the cluster, aggregated from all hosts.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       clusterMemoryUtilization:
         commonlib.panels.generic.timeSeries.base.new(
@@ -835,21 +835,22 @@ local utils = commonlib.utils;
           targets=[t.clusterMemoryUtilization],
           description='The memory utilization percentage of the cluster.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('decbytes'),
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       esxiHostsTable:
         commonlib.panels.generic.table.base.new(
           'ESXi hosts table',
           targets=[t.hostCPUUtilization + g.query.prometheus.withFormat('table')
-                   + g.query.prometheus.withInstant(true)
+                   + g.query.prometheus.withRange(true)
                    , t.hostMemoryUtilization + g.query.prometheus.withFormat('table')
-                     + g.query.prometheus.withInstant(true)
+                     + g.query.prometheus.withRange(true)
                    , t.networkThroughputRate + g.query.prometheus.withFormat('table')
-                     + g.query.prometheus.withInstant(true)
+                     + g.query.prometheus.withRange(true)
                    , t.modifiedMemoryBallooned + g.query.prometheus.withFormat('table')
-                     + g.query.prometheus.withInstant(true)
+                     + g.query.prometheus.withRange(true)
                    , t.modifiedMemorySwapped + g.query.prometheus.withFormat('table')
-                     + g.query.prometheus.withInstant(true)]
+                     + g.query.prometheus.withRange(true)]
           ,
           description='A table displaying information about the ESXi hosts in the vCenter environment.'
         )
@@ -859,7 +860,7 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withProperty('custom.minWidth', 250)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percentunit')
+            table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
             + table.standardOptions.withDecimals(1)
           ),
@@ -873,13 +874,13 @@ local utils = commonlib.utils;
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory swapped')
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbyte')
+            table.standardOptions.withUnit('mbytes')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory ballooned')
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbyte')
+            table.standardOptions.withUnit('mbytes')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
@@ -891,7 +892,7 @@ local utils = commonlib.utils;
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory usage')
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbyte')
+            table.standardOptions.withUnit('mbytes')
           ),
         ])
         +
@@ -901,7 +902,7 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withProperty('custom.minWidth', 250)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percentunit')
+            table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
             + table.standardOptions.withDecimals(1)
           ),
@@ -920,15 +921,12 @@ local utils = commonlib.utils;
             options: {
               include: {
                 names: [
-                  'vcenter_host_name',
                   'Value #A',
                   'Value #B',
-                  'Value #E',
-                  'Value #F',
                   'Value #C',
                   'Value #D',
-                  'Value #H',
-                  'Value #G',
+                  'Value #E',
+                  'vcenter_host_name 1',
                 ],
               },
             },
@@ -940,14 +938,11 @@ local utils = commonlib.utils;
               includeByName: {},
               indexByName: {
                 'Value #A': 1,
-                'Value #B': 3,
-                'Value #C': 5,
-                'Value #D': 6,
-                'Value #E': 7,
-                'Value #F': 8,
-                'Value #G': 2,
-                'Value #H': 4,
-                vcenter_host_name: 0,
+                'Value #B': 2,
+                'Value #C': 3,
+                'Value #D': 4,
+                'Value #E': 5,
+                'vcenter_host_name 1': 0,
               },
               renameByName: {
                 'Value #A': 'CPU utilization',
