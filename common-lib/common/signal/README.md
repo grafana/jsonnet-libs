@@ -51,8 +51,8 @@ Signal's level:
 
 |Name|Description|Possible values|Example value|Default value|
 |-----|---|---|---|---|
-|name|Singal's name. Used to populate panel's legends and titles. |*|CPU usage|-|
-|type|Singal's type. Depending on the type, some opinionated autotransformations would happen with queries, units. |gauge,counter,histogram,info,raw|gauge|-|
+|name|Signal's name. Used to populate panel's legends and titles. |*|CPU usage|-|
+|type|Signal's type. Depending on the type, some opinionated autotransformations would happen with queries, units. |gauge,counter,histogram,info,raw|gauge|-|
 |unit| Signal's units. |*|bytes|``|
 |description| Signal's description. Used to populate panel's description. |*|CPU usage time in percent.|``|
 |expr| Signal's BASE expression in simplest form. Simplified jsonnet templating is supported (see below). Depending on signal's type(not `raw`) could autotransform to different form. |*|network_bytes_received_total{%(queriesSelector)s}|-|
