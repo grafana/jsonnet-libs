@@ -9,6 +9,7 @@ local utils = import '../utils.libsonnet';
     instanceLabels,
     varMetric='up',
     enableLokiLogs=false,
+    customAllValue='.+',
   ): {
 
        local root = self,
@@ -23,7 +24,7 @@ local utils = import '../utils.libsonnet';
            + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
            + var.query.selectionOptions.withIncludeAll(
              value=if (!multiInstance && std.member(instanceLabels, chainVar.label)) then false else true,
-             customAllValue='.+'
+             customAllValue=customAllValue,
            )
            + var.query.selectionOptions.withMulti(
              if (!multiInstance && std.member(instanceLabels, chainVar.label)) then false else true,
