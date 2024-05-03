@@ -8,4 +8,4 @@ exclusions:
   template-instance-rule:
     reason: "instanceLabels must be single-select for single instance dashboards."
   target-job-rule:
-    reason: "using filtering selector lik job=\"<static value\" which is totally fine."
+    reason: "using filtering selector like job=\"<static value\" which is totally fine."
