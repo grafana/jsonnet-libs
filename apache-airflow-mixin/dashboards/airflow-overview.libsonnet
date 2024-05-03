@@ -9,15 +9,17 @@ local dashboardUid = 'apache-airflow-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
-local promDatasource = {
+local getMatcher(cfg) = '%(mssqlSelector)s, instance=~"$instance"' % cfg;
+
+local promDatasource(matcher) = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local lokiDatasource = {
+local lokiDatasource(matcher) = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local dagFileParsingErrorsPanel = {
+local dagFileParsingErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -98,7 +100,7 @@ local dagFileParsingErrorsPanel = {
   },
 };
 
-local slaMissesPanel = {
+local slaMissesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -180,7 +182,7 @@ local slaMissesPanel = {
   },
 };
 
-local taskFailuresPanel = {
+local taskFailuresPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -262,7 +264,7 @@ local taskFailuresPanel = {
   },
 };
 
-local dagSuccessDurationPanel = {
+local dagSuccessDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -343,7 +345,7 @@ local dagSuccessDurationPanel = {
   },
 };
 
-local dagFailedDurationPanel = {
+local dagFailedDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -424,7 +426,7 @@ local dagFailedDurationPanel = {
   },
 };
 
-local taskDurationPanel = {
+local taskDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -476,7 +478,7 @@ local taskDurationPanel = {
   transformations: [],
 };
 
-local taskCountSummaryPanel = {
+local taskCountSummaryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -526,7 +528,7 @@ local taskCountSummaryPanel = {
   },
 };
 
-local taskCountsPanel = {
+local taskCountsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -605,7 +607,7 @@ local taskCountsPanel = {
   pluginVersion: '9.2.3',
 };
 
-local taskLogsPanel = {
+local taskLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
@@ -639,7 +641,7 @@ local schedulerDetailsRow = {
   collapsed: false,
 };
 
-local dagScheduleDelayPanel = {
+local dagScheduleDelayPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -720,7 +722,7 @@ local dagScheduleDelayPanel = {
   },
 };
 
-local schedulerTasksPanel = {
+local schedulerTasksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -806,7 +808,7 @@ local schedulerTasksPanel = {
   },
 };
 
-local executorTasksPanel = {
+local executorTasksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -897,7 +899,7 @@ local executorTasksPanel = {
   },
 };
 
-local poolTaskSlotsPanel = {
+local poolTaskSlotsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
@@ -993,7 +995,7 @@ local poolTaskSlotsPanel = {
   },
 };
 
-local schedulerLogsPanel = {
+local schedulerLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
