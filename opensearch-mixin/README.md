@@ -27,6 +27,18 @@ and the following alerts:
 >>The Prometheus exporter plugin provides the label `cluster` on the metrics, which represents the name given to the OpenSearch cluster.
 The mixin is looking for `opensearch_cluster` and the configuration snippets will include rules for creating the `opensearch_cluster` label and dropping the `cluster` label.
 
+### Kubernetes deployments
+
+By default, the mixin has `enableMultiCluster` set to `false` to account for those running OpenSearch clusters outside of kubernetes. To configure the mixin
+to work with deployments in kubernetes, set this to `true` in the `config.libsonnet` file.
+```jsonnet
+{
+  _config+:: {
+    enableMultiCluster: true,
+  },
+}
+```
+
 ## OpenSearch Cluster Overview
 
 The OpenSearch cluster overview dashboard provides details on cluster, node and shard status as well as cluster search and index summary details on a cluster level.
