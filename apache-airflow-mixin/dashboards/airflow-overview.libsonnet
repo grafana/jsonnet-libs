@@ -11,11 +11,11 @@ local lokiDatasourceName = 'loki_datasource';
 
 local getMatcher(cfg) = '%(mssqlSelector)s, instance=~"$instance"' % cfg;
 
-local promDatasource(matcher) = {
+local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local lokiDatasource(matcher) = {
+local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
