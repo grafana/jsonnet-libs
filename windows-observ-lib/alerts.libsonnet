@@ -51,7 +51,7 @@
           summary: 'There is a high number of password changes. This may indicate unauthorized changes or attacks.',
           description:
             (
-              'The number of password changes on {{$labels.instance}} is {{ printf "%%.0f" $value }} which is greater than the threshold of %(alertsHighPasswordChanges)s. This alert would resolve itself if no new anomalies are detected withing 24 hours.'
+              'The number of password changes on {{$labels.instance}} is {{ printf "%%.0f" $value }} which is greater than the threshold of %(alertsHighPasswordChanges)s. This alert would resolve itself if no new anomalies are detected within 24 hours.'
             ) % this.config,
         },
       },
