@@ -17,6 +17,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.panel.timeSeries.standardOptions.withNoValue('0'),
       gcDuration:
         g.panel.timeSeries.new('GC duration')
+        + g.panel.timeSeries.panelOptions.withDescription(
+          |||
+            Amount of time in GC stop-the-world pauses.
+            During a stop-the-world pause, all goroutines are paused and only the garbage collector can run
+          |||
+        )
         + signals.gcDurationMax.asPanelMixin()
         + signals.gcDurationMin.asPanelMixin()
         + signals.gcDurationPercentile.asPanelMixin()
@@ -26,12 +32,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + commonlib.panels.generic.stat.base.stylize(),
       mem:
         g.panel.timeSeries.new('Memory')
+        + g.panel.timeSeries.panelOptions.withDescription('Memory reserved from system.')
         + signals.memReserved.asPanelMixin()
         + signals.memTotal.asPanelMixin()
         + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
       memHeapBytes:
         g.panel.timeSeries.new('Memory heap')
+        + g.panel.timeSeries.panelOptions.withDescription('Memory used heap.')
         + signals.memHeapReserved.asPanelMixin()
         + signals.memHeapObjBytes.asPanelMixin()
         + signals.memHeapIdleBytes.asPanelMixin()
