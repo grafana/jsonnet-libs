@@ -16,7 +16,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     local this = self,
     config: config,
-    signals: commonlib.signals.unmarshallJsonNew(this.config.signals, type=this.config.metricsSource),
+    signals: commonlib.signals.unmarshallJsonMulti(this.config.signals, type=this.config.metricsSource),
     grafana: {
       annotations: {},
       links: {},
