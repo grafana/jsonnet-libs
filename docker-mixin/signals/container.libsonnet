@@ -20,7 +20,7 @@ function(this)
         unit: 'percent',
         sources: {
           cadvisor: {
-            expr: 'container_cpu_usage_seconds_total{%(queriesSelector)s} * 100',
+            expr: '100 * container_cpu_usage_seconds_total{%(queriesSelector)s}',
             legendCustomTemplate: commonlib.utils.labelsToPanelLegend(s.legendLabels),
           },
         },
@@ -44,7 +44,7 @@ function(this)
         unit: 'bps',
         sources: {
           cadvisor: {
-            expr: 'container_network_receive_bytes_total{%(queriesSelector)s} * 8',
+            expr: '8 * container_network_receive_bytes_total{%(queriesSelector)s}',
             legendCustomTemplate: '%s receive' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
           },
         },
@@ -56,7 +56,7 @@ function(this)
         unit: 'bps',
         sources: {
           cadvisor: {
-            expr: 'container_network_transmit_bytes_total{%(queriesSelector)s} * 8',
+            expr: '8 * container_network_transmit_bytes_total{%(queriesSelector)s}',
             legendCustomTemplate: '%s transmit' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
           },
         },
