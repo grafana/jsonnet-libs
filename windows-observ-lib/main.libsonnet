@@ -4,7 +4,6 @@ local datasources = import './datasources.libsonnet';
 local g = import './g.libsonnet';
 local panels = import './panels.libsonnet';
 local targets = import './targets.libsonnet';
-local variables = import './variables.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 
 {
@@ -61,7 +60,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         |||,
     },
     grafana: {
-      variables: variables.new(this),
+      variables: commonlib.variables.new(
+        filteringSelector=this.config.filteringSelector,
+        groupLabels=this.config.groupLabels,
+        instanceLabels=this.config.instanceLabels,
+        varMetric='windows_os_info',
+        customAllValue='.+',
+        enableLokiLogs=this.config.enableLokiLogs,
+      ),
       targets: targets.new(this),
       annotations:
         {

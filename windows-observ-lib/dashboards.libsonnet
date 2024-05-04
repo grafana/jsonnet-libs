@@ -1,3 +1,4 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
 local g = import './g.libsonnet';
 local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 {
@@ -145,6 +146,15 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
     +
     (if this.config.enableADDashboard then
        {
+         local adVariables = commonlib.variables.new(
+           this.config.filteringSelector,
+           this.config.groupLabels,
+           this.config.instanceLabels,
+           varMetric='windows_ad_directory_service_threads',
+           enableLokiLogs=this.config.enableLokiLogs,
+           // override to null to force more precise alert's panel filter
+           customAllValue=null,
+         ),
          activedirectory:
            local title = prefix + 'Windows Active Directory overview';
            g.dashboard.new(title)
@@ -165,7 +175,10 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
                  panels.databaseOperations { gridPos+: { w: 12 } },
                ], 12, 6
              )
-           ) + root.applyCommon(vars.multiInstance, uid, tags, links, annotations, timezone, refresh, period),
+           )
+           + root.applyCommon(vars.multiInstance, uid, tags, links, annotations, timezone, refresh, period)
+           //override variables
+           + g.dashboard.withVariables(adVariables.multiInstance),
        } else {}),
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
