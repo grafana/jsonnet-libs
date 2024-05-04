@@ -49,6 +49,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       memHeapObjects:
         g.panel.timeSeries.new('Memory heap objects')
+        + g.panel.timeSeries.panelOptions.withDescription(
+          |||
+            Number of allocated heap objects.
+            This changes as GC is performed and new objects are allocated.
+          |||,
+        )
         + signals.memHeapAllocatedObjects.asPanelMixin()
         // + signals.memHeapLiveObjects.asPanelMixin()
         + commonlib.panels.generic.timeSeries.base.stylize(),
