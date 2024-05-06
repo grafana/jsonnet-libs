@@ -67,10 +67,11 @@ Default thresholds can be configured in `config.libsonnet`
 ```js
 {
   _config+:: {
-  alertsHighClientWaitingConnections: 20,
-  alertsHighClientWaitTime: 15,
-  alertsHighServerConnectionSaturationWarning: 80,
-  alertsHighServerConnectionSaturationCritical: 90,
+  alertsHighCPUUtilization: 90,
+  alertsHighMemoryUtilization: 90,
+  alertsWarningDiskUtilization: 75,
+  alertsCriticalDiskUtilization: 90,
+  alertsHighPacketErrors: 20,
   },
 }
 ```

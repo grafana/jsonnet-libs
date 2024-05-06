@@ -497,7 +497,7 @@ local utils = commonlib.utils {
     packetErrorEsxiHostsCluster:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'increase(vcenter_host_network_packet_errors{direction="recieved", %(queriesSelector)s}[$__interval:]) + increase(vcenter_host_network_packet_errors{direction="transmitted", %(queriesSelector)s}[$__interval:])' % vars
+        'vcenter_host_network_packet_errors{direction="recieved", %(queriesSelector)s} + vcenter_host_network_packet_errors{direction="transmitted", %(queriesSelector)s}' % vars
       ),
   },
 }
