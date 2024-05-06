@@ -1,0 +1,11 @@
+exclusions:
+  panel-units-rule:
+    reason: "Table doesn't require units."
+    entities:
+      - panel: Table 1
+  target-job-rule:
+    reason: Use filteringSelector with static job
+  panel-datasource-rule:
+    reason: "grafonnet created panels use --Mixed-- datasource by default."
+  template-instance-rule:
+    reason: "instanceLabels must be single-select for single instance dashboards."
