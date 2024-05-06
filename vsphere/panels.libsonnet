@@ -128,7 +128,8 @@ local utils = commonlib.utils;
           targets=[t.topCPUUtilizationClusters],
           description='The clusters with the highest CPU utilization percentage.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('percentutil'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       topMemoryUtilizationClusters:
         commonlib.panels.generic.timeSeries.base.new(
@@ -136,7 +137,8 @@ local utils = commonlib.utils;
           targets=[t.topMemoryUtilizationClusters],
           description='The clusters with the highest memory utilization percentage.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('percentutil'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       clustersTable:
         commonlib.panels.generic.table.base.new(
@@ -158,10 +160,16 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percentunit')
+            table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Number of VMs')
+          + fieldOverride.byName.withProperty('custom.align', 'left'),
         ])
         +
         table.standardOptions.withOverridesMixin([
@@ -169,8 +177,10 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percentunit')
+            table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
         ])
@@ -192,6 +202,7 @@ local utils = commonlib.utils;
                   'Value #A',
                   'Value #B',
                   'Value #C',
+                  'vcenter_datacenter_name 1',
                 ],
               },
             },
@@ -201,12 +212,100 @@ local utils = commonlib.utils;
             options: {
               excludeByName: {},
               includeByName: {},
-              indexByName: {},
+              indexByName: {
+                'Value #A': 2,
+                'Value #B': 3,
+                'Value #C': 4,
+                vcenter_cluster_name: 1,
+                'vcenter_datacenter_name 1': 0,
+              },
               renameByName: {
                 'Value #A': 'CPU utilization',
                 'Value #B': 'Memory utilization',
                 'Value #C': 'Number of VMs',
+                vcenter_cluster_name: 'Cluster',
                 'vcenter_cluster_name 1': 'Cluster',
+                'vcenter_datacenter_name 1': 'Datacenter',
+              },
+            },
+          },
+        ]),
+
+      datastoreTable:
+        commonlib.panels.generic.table.base.new(
+          'Datastores summary',
+          targets=[
+            t.datastoreDiskUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.datastoreDiskUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true),
+          ],
+          description='A table displaying information about the clusters in the vCenter environment.'
+        )
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('decbytes')
+          ),
+        ])
+        +
+        table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percent')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
+            + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        +
+        table.queryOptions.withTransformationsMixin([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'vcenter_datastore_name',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'vcenter_datastore_name',
+                  'vcenter_cluster_name 1',
+                  'Value #A',
+                  'Value #B',
+                  'disk_state 1',
+                ],
+              },
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {},
+              includeByName: {},
+              indexByName: {
+                'Value #A': 3,
+                'Value #B': 4,
+                'disk_state 1': 2,
+                'vcenter_cluster_name 1': 1,
+                vcenter_datastore_name: 0,
+              },
+              renameByName: {
+                'Value #A': 'Memory usage',
+                'Value #B': 'Memory utilization',
+                disk_state: 'State',
+                'disk_state 1': 'State',
+                'disk_state 2': '',
+                'vcenter_cluster_name 1': 'Cluster',
+                vcenter_datastore_name: 'Datastore',
               },
             },
           },
@@ -218,7 +317,8 @@ local utils = commonlib.utils;
           targets=[t.topCPUUsageResourcePools],
           description='The resource pools with the highest CPU usage.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.standardOptions.withUnit('rotmhz'),
 
       topMemoryUsageResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
@@ -226,6 +326,7 @@ local utils = commonlib.utils;
           targets=[t.topMemoryUsageResourcePools],
           description='The resource pools with the highest memory usage.'
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('mbytes'),
 
       topCPUShareResourcePools:
@@ -234,6 +335,7 @@ local utils = commonlib.utils;
           targets=[t.topCPUShareResourcePools],
           description='The resource pools with the highest amount of CPU shares allocated.'
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('shares'),
 
       topMemoryShareResourcePools:
@@ -242,6 +344,7 @@ local utils = commonlib.utils;
           targets=[t.topMemoryShareResourcePools],
           description='The resource pools with the highest amount of memory shares allocated.'
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('shares'),
 
       topCPUUtilizationEsxiHosts:
@@ -250,6 +353,7 @@ local utils = commonlib.utils;
           targets=[t.topCPUUtilizationEsxiHosts],
           description='The ESXi hosts with the highest CPU utilization percentage.'
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       topMemoryUsageEsxiHosts:
@@ -258,6 +362,7 @@ local utils = commonlib.utils;
           targets=[t.topMemoryUsageEsxiHosts],
           description='The ESXi hosts with the highest memory usage.'
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       topNetworksActiveEsxiHosts:
@@ -265,11 +370,13 @@ local utils = commonlib.utils;
           'Top networks active ESXi hosts',
           targets=[t.topNetworksActiveEsxiHosts],
           description='The ESXi hosts with the highest network throughput.'
-        ),
+        )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      ,
 
       topPacketErrorEsxiHosts:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top packet error ESXi hosts',
+          'Top packet error ESXi hosts / $__interval',
           targets=[t.topPacketErrorEsxiHosts],
           description='The ESXi hosts with the highest number of packet errors.'
         )
@@ -369,6 +476,8 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
         ])
@@ -380,6 +489,8 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
         ])
@@ -623,12 +734,14 @@ local utils = commonlib.utils;
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Throughput')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('decbytes')
           ),
@@ -639,8 +752,10 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percentunit')
+            table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
         ])
@@ -725,6 +840,8 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
         ])
@@ -736,6 +853,8 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
         ])
@@ -877,19 +996,19 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'ESXi hosts table',
           targets=[
-            t.hostCPUUtilization + g.query.prometheus.withFormat('table')
+            t.hostCPUUtilizationCluster + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostMemoryUtilization + g.query.prometheus.withFormat('table')
+            t.hostMemoryUtilizationCluster + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.networkThroughputRate + g.query.prometheus.withFormat('table')
+            t.networkThroughputRateCluster + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostCPUUsage + g.query.prometheus.withFormat('table')
+            t.hostCPUUsageCluster + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostMemoryUsage + g.query.prometheus.withFormat('table')
+            t.hostMemoryUsageCluster + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ]
           ,
@@ -903,6 +1022,8 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
         ])
@@ -933,6 +1054,8 @@ local utils = commonlib.utils;
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
         ])
