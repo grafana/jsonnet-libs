@@ -101,13 +101,13 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.hostCPUUsage,
-              panels.hostCPUUtilization,
-              panels.hostMemoryUsage,
-              panels.hostMemoryUtilization,
-              panels.modifiedMemory { gridPos+: { w: 24 } },
-              panels.networkThroughputRate,
-              panels.packetRate,
+              panels.vmCPUUsage,
+              panels.vmCPUUtilization,
+              panels.vmMemoryUsage,
+              panels.vmMemoryUtilization,
+              panels.vmModifiedMemory { gridPos+: { w: 24 } },
+              panels.vmNetworkThroughputRate,
+              panels.vmPacketRate,
               g.panel.row.new('Disks row'),
               panels.vmDisksTable { gridPos+: { w: 24 } },
             ], 12, 6
