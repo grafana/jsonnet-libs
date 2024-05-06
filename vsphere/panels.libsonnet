@@ -1029,18 +1029,21 @@ local utils = commonlib.utils;
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Network throughput')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('rotmhz')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('mbytes')
           ),
