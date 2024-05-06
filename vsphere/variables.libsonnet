@@ -14,6 +14,15 @@ local utils = commonlib.utils;
       local resourcePoolLabels = this.config.resourcePoolLabels,
       local virtualMachineLabels = this.config.virtualMachineLabels,
       local varMetric = 'vcenter_vm_network_throughput_bytes_per_sec',
+      local topClusterSelector =
+        var.custom.new(
+          'top_cluster_count',
+          values=[2, 4, 6, 8, 10],
+        )
+        + var.custom.generalOptions.withDescription(
+          'This variable allows for modification of top cluster value.'
+        )
+        + var.custom.generalOptions.withLabel('Top cluster count'),
       local root = self,
       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
         local chainVarProto(index, chainVar) =
@@ -66,7 +75,7 @@ local utils = commonlib.utils;
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       overviewVariables:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, [], filteringSelector, multiInstance=true),
+        + variablesFromLabels(groupLabels, [], filteringSelector, multiInstance=true) + [topClusterSelector],
       hostsVariable:
         [root.datasources.prometheus]
         + variablesFromLabels(groupLabels, hostLabels, filteringSelector, multiInstance=true),

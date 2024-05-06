@@ -43,7 +43,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.topNetworksActiveEsxiHosts,
               panels.topPacketErrorEsxiHosts,
               g.panel.row.new('Datastore row'),
-              //panels.datastoresTable { gridPos+: { w: 24 } },
+              panels.datastoreTable { gridPos+: { w: 24 } },
             ], 12, 6
           )
         )
