@@ -30,11 +30,12 @@
     },
     {
       "source": {
-        "local": {
-          "directory": "../logs-lib"
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "logs-lib"
         }
       },
-      "version": ""
+      "version": "master"
     }
   ],
   "legacyImports": true
