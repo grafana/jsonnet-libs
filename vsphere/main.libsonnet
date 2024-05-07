@@ -1,7 +1,6 @@
 local alerts = import './alerts.libsonnet';
 local config = import './config.libsonnet';
 local dashboards = import './dashboards.libsonnet';
-local g = import './g.libsonnet';
 local links = import './links.libsonnet';
 local panels = import './panels.libsonnet';
 local targets = import './targets.libsonnet';
