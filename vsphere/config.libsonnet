@@ -17,6 +17,11 @@
 
   // Alert thresholds
 
+  alertsHighCPUUtilization: 90,
+  alertsHighMemoryUtilization: 90,
+  alertsWarningDiskUtilization: 75,
+  alertsCriticalDiskUtilization: 90,
+  alertsHighPacketErrors: 20,
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations
   enableLokiLogs: true,

@@ -13,4 +13,6 @@ local vsphere =
 // populate monitoring-mixin:
 {
   grafanaDashboards+:: vsphere.grafana.dashboards,
+  prometheusAlerts+:: vsphere.prometheus.alerts,
+  prometheusRules+:: vsphere.prometheus.recordingRules,
 }

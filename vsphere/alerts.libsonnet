@@ -6,25 +6,25 @@
         name: this.config.uid,
         rules: [
           {
-            alert: 'vSphereHostInfoCPUUtilization',
+            alert: 'VSphereHostInfoCpuUtilization',
             expr: |||
-              vcenter_host_cpu_utilization_percent{%(filteringSelector)s}} > %(alertsHighCPUUtilization)s
+              vcenter_host_cpu_utilization_percent{%(filteringSelector)s} > %(alertsHighCPUUtilization)s
             ||| % this.config,
             'for': '15m',
             labels: {
               severity: 'info',
             },
             annotations: {
-              summary: 'CPU is approaching a high threshold of utilization for an ESXi host. High CPU utilization may lead to performance degradation and potential downtime. ',
+              summary: 'CPU is approaching a high threshold of utilization for an ESXi host. High CPU utilization may lead to performance degradation and potential downtime.',
               description: |||
                 The CPU utilization of the host system {{ $labels.vcenter_host_name }} is now above %(alertsHighCPUUtilization)s%%. The current value is {{ $value | printf "%%.2f" }}%%.
               ||| % this.config,
             },
           },
           {
-            alert: 'vSphereHostWarningMemoryUtilization',
+            alert: 'VSphereHostWarningMemoryUtilization',
             expr: |||
-              vcenter_host_memory_utilization_percent{%(filteringSelector)s}} > %(alertsHighMemoryUtilization)s
+              vcenter_host_memory_utilization_percent{%(filteringSelector)s} > %(alertsHighMemoryUtilization)s
             ||| % this.config,
             'for': '15m',
             labels: {
@@ -38,9 +38,9 @@
             },
           },
           {
-            alert: 'vSphereDatastoreWarningDiskUtilization',
+            alert: 'VSphereDatastoreWarningDiskUtilization',
             expr: |||
-              vcenter_datastore_disk_utilization_percent{%(filteringSelector)s}} > %(alertsWarningDiskUtilization)s
+              vcenter_datastore_disk_utilization_percent{%(filteringSelector)s} > %(alertsWarningDiskUtilization)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -54,9 +54,9 @@
             },
           },
           {
-            alert: 'vSphereDatastoreCriticalDiskUtilization',
+            alert: 'VSphereDatastoreCriticalDiskUtilization',
             expr: |||
-              vcenter_datastore_disk_utilization_percent{%(filteringSelector)s}} > %(alertsCriticalDiskUtilization)s
+              vcenter_datastore_disk_utilization_percent{%(filteringSelector)s} > %(alertsCriticalDiskUtilization)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -70,9 +70,9 @@
             },
           },
           {
-            alert: 'vSphereHostWarningHighPacketErrors',
+            alert: 'VSphereHostWarningHighPacketErrors',
             expr: |||
-              100 * sum without (job, direction, object) (vcenter_host_network_packet_errors{%(filteringSelector)s}}) / sum without (job, direction, object) (vcenter_host_network_packet_count{%(filteringSelector)s}}) > %(alertsHighPacketErrors)s
+              100 * sum without (job, direction, object) (vcenter_host_network_packet_errors{%(filteringSelector)s}) / sum without (job, direction, object) (vcenter_host_network_packet_count{%(filteringSelector)s}) > %(alertsHighPacketErrors)s
             ||| % this.config,
             'for': '5m',
             labels: {
