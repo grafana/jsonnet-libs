@@ -10,6 +10,11 @@
               up{
                 job="integrations/agent",
               } == 0
+              or absent(
+                up{
+                  job="integrations/agent",
+                }
+              )
             |||,
             'for': '5m',
             annotations: {
