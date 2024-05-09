@@ -39,7 +39,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.topMemoryShareResourcePools,
               g.panel.row.new('ESXi host row'),
               panels.topCPUUtilizationEsxiHosts,
-              panels.topMemoryUsageEsxiHosts,
+              panels.topMemoryUtilizationEsxiHosts,
               panels.topNetworksActiveEsxiHosts,
               panels.topPacketErrorEsxiHosts,
               g.panel.row.new('Datastore row'),
