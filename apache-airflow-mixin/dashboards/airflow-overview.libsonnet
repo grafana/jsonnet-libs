@@ -1081,7 +1081,7 @@ local schedulerLogsPanel(matcher) = {
             template.new(
               'instance',
               promDatasource,
-              'label_values(airflow_scheduler_tasks_executable{%(airflowSelector)s}, instance)',
+              'label_values(airflow_scheduler_tasks_executable{%(airflowSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -1092,7 +1092,7 @@ local schedulerLogsPanel(matcher) = {
             template.new(
               'dag_id',
               promDatasource,
-              'label_values(airflow_task_start_total{%(airflowSelector)s, instance=~"$instance"}, dag_id)',
+              'label_values(airflow_task_start_total{%(airflowSelector)s, instance=~"$instance"}, dag_id)' % $._config,
               label='DAG',
               refresh=2,
               includeAll=true,
@@ -1103,7 +1103,7 @@ local schedulerLogsPanel(matcher) = {
             template.new(
               'task_id',
               promDatasource,
-              'label_values(airflow_task_start_total{%(airflowSelector)s, instance=~"$instance", dag_id=~"$dag_id"}, task_id)',
+              'label_values(airflow_task_start_total{%(airflowSelector)s, instance=~"$instance", dag_id=~"$dag_id"}, task_id)' % $._config,
               label='Task',
               refresh=2,
               includeAll=true,
@@ -1114,7 +1114,7 @@ local schedulerLogsPanel(matcher) = {
             template.new(
               'state',
               promDatasource,
-              'label_values(airflow_task_finish_total{%(airflowSelector)s, instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id"}, state)',
+              'label_values(airflow_task_finish_total{%(airflowSelector)s, instance=~"$instance", dag_id=~"$dag_id", task_id=~"$task_id"}, state)' % $._config,
               label='Task state',
               refresh=2,
               includeAll=true,
@@ -1125,7 +1125,7 @@ local schedulerLogsPanel(matcher) = {
             template.new(
               'pool_name',
               promDatasource,
-              'label_values(airflow_pool_open_slots{%(airflowSelector)s, instance=~"$instance"}, pool_name)',
+              'label_values(airflow_pool_open_slots{%(airflowSelector)s, instance=~"$instance"}, pool_name)' % $._config,
               label='Pool',
               refresh=2,
               includeAll=true,
