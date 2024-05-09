@@ -464,6 +464,9 @@ local utils = commonlib.utils;
             + g.query.prometheus.withRange(true)
             ,
             t.vmNetDiskThroughputCluster + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.packetDropRateCluster + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the virtual machines in the vCenter environment.'
@@ -502,6 +505,13 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Packet drop rate')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('packet/s')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory swapped')
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
@@ -531,12 +541,12 @@ local utils = commonlib.utils;
               include: {
                 names: [
                   'vcenter_host_name',
-                  'vcenter_vm_name 1',
                   'Value #A',
+                  'Value #B',
                   'Value #C',
                   'Value #D',
-                  'Value #B',
                   'Value #E',
+                  'Value #F',
                 ],
               },
             },
@@ -547,21 +557,21 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 2,
-                'Value #B': 6,
+                'Value #A': 1,
+                'Value #B': 2,
                 'Value #C': 3,
                 'Value #D': 4,
                 'Value #E': 5,
+                'Value #F': 6,
                 vcenter_host_name: 0,
-                'vcenter_vm_name 1': 1,
               },
               renameByName: {
                 'Value #A': 'CPU utilization',
-                'Value #B': 'Disk throughput',
-                'Value #C': 'Memory utilization',
-                'Value #D': 'Memory ballooned',
-                'Value #E': 'Memory swapped',
-                'Value #F': 'Memory swapped',
+                'Value #B': 'Memory utilization',
+                'Value #C': 'Memory ballooned',
+                'Value #D': 'Memory swapped',
+                'Value #E': 'Disk throughput',
+                'Value #F': 'Packet drop rate',
                 vcenter_cluster_name: 'Cluster',
                 'vcenter_cluster_name 1': 'Cluster',
                 vcenter_host_name: 'Host',
@@ -587,13 +597,16 @@ local utils = commonlib.utils;
           description='Information about the disks associated with the virtual machines.'
         )
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory swapped')
+          fieldOverride.byName.new('Latency')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
+            table.standardOptions.withUnit('ms')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Throughput')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
           ),
@@ -828,6 +841,9 @@ local utils = commonlib.utils;
             + g.query.prometheus.withRange(true)
             ,
             t.vmNetDiskThroughputHost + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.hostPacketDropRate + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the virtual machines in the vCenter environment.'
@@ -871,6 +887,12 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Packet drop rate')
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('packet/s')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Disk throughput')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
@@ -896,7 +918,7 @@ local utils = commonlib.utils;
                   'Value #C',
                   'Value #D',
                   'Value #E',
-                  'vcenter_vm_name 1',
+                  'Value #F',
                 ],
               },
             },
@@ -912,6 +934,7 @@ local utils = commonlib.utils;
                 'Value #C': 4,
                 'Value #D': 5,
                 'Value #E': 6,
+                'Value #F': 7,
                 vcenter_host_name: 0,
                 'vcenter_vm_name 1': 1,
               },
@@ -921,7 +944,7 @@ local utils = commonlib.utils;
                 'Value #C': 'Memory ballooned',
                 'Value #D': 'Memory swapped',
                 'Value #E': 'Disk throughput',
-                'Value #F': 'Memory swapped',
+                'Value #F': 'Packet drop rate',
                 vcenter_cluster_name: 'Cluster',
                 'vcenter_cluster_name 1': 'Cluster',
                 vcenter_host_name: 'Host',

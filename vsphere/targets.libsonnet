@@ -207,7 +207,12 @@ local utils = commonlib.utils {
     hostDiskLatency:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_disk_latency_avg_milliseconds{direction="read", %(hostQueriesSelector)s}) + sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_disk_latency_avg_milliseconds{direction="write", %(hostQueriesSelector)s})' % vars
+        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_disk_latency_avg_milliseconds{%(hostQueriesSelector)s})' % vars
+      ),
+    hostPacketDropRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_network_packet_drop_rate{%(hostQueriesSelector)s})' % vars
       ),
 
     hostMemoryUtilization:
@@ -232,7 +237,7 @@ local utils = commonlib.utils {
     vmNetDiskThroughputHost:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_disk_throughput{direction="write", %(hostQueriesSelector)s}) + sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_disk_throughput{direction="read", %(hostQueriesSelector)s})' % vars
+        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_disk_throughput{%(hostQueriesSelector)s})' % vars
       ),
 
     modifiedMemoryBallooned:
@@ -493,6 +498,11 @@ local utils = commonlib.utils {
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_disk_throughput{direction="write", %(clusterQueriesSelector)s}) + sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_disk_throughput{direction="read", %(clusterQueriesSelector)s})' % vars
+      ),
+    packetDropRateCluster:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_network_packet_drop_rate{%(clusterQueriesSelector)s})' % vars
       ),
     packetErrorEsxiHostsCluster:
       prometheusQuery.new(
