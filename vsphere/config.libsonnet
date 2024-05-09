@@ -5,6 +5,7 @@
   groupLabels: ['job', 'vcenter_datacenter_name', 'vcenter_cluster_name'],
   hostLabels: ['vcenter_host_name'],
   resourcePoolLabels: ['vcenter_resource_pool_name'],
+  datastoreLabels: ['job', 'vcenter_datacenter_name'],
   virtualMachineLabels: ['vcenter_vm_name'],
   // Prefix all dashboards uids and alert groups
   uid: 'vSphere',

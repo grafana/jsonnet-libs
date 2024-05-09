@@ -13,6 +13,8 @@ local utils = commonlib.utils;
       local hostLabels = this.config.hostLabels,
       local resourcePoolLabels = this.config.resourcePoolLabels,
       local virtualMachineLabels = this.config.virtualMachineLabels,
+      local datastoreLabels = this.config.datastoreLabels,
+
       local varMetric = 'vcenter_vm_network_throughput_bytes_per_sec',
       local topClusterSelector =
         var.custom.new(
@@ -87,10 +89,11 @@ local utils = commonlib.utils;
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels),
         ],
-      clusterQueriesSelector:
+      datastoreSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels),
+          utils.labelsToPromQLSelector(datastoreLabels),
         ],
+
       hostQueriesSelector:
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels + hostLabels),
