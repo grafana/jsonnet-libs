@@ -12,29 +12,41 @@ The vSphere mixin contains the following dashboards:
 
 and the following alerts:
 
-- vSphereHostInfoCPUUtilization
-- vSphereHostWarningMemoryUtilization
-- vSphereDatastoreWarningDiskUtilization
-- vSphereDatastoreCriticalDiskUtilization
-- vSphereHostWarningHighPacketErrors
+- VSphereHostInfoCPUUtilization
+- VSphereHostWarningMemoryUtilization
+- VSphereDatastoreWarningDiskUtilization
+- VSphereDatastoreCriticalDiskUtilization
+- VSphereHostWarningHighPacketErrors
 
-## vSphere Cluster
+## vSphere clusters
 
-The vSphere cluster dashboard provides details on cluster CPU and memory while giving a high level view into hosts, and VM's.
+The vSphere clusters dashboard provides details on cluster CPU and memory while giving a high-level view of hosts and VMs.
 
-![vSphere Overview Dashboard]()
+![vSphere clusters dashboard]()
 
-## vSphere Overview
+## vSphere overview
 
 The vSphere overview dashboard provides details on CPU, memory, resource pools, ESXi hosts, and datastores.
 
-![vSphere Overview Dashboard]()
+![vSphere overview dashboard]()
 
-## vSphere Logs Overview
+## vSphere hosts
 
-The vSphere logs overview dashboard provides details on the vSphere system. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
+The vSphere hosts dashboard provides details on CPU, memory, network, disks, and VMs.
 
-![vSphere Logs Dashboard]()
+![vSphere hosts dashboard]()
+
+## vSphere virtual machines
+
+The vSphere virtual machines dashboard provides details on CPU, memory, network, and disks.
+
+![vSphere virtual machines dashboard]()
+
+## vSphere logs
+
+The vSphere logs dashboard provides details on the vSphere system. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
+
+![vSphere logs dashboard]()
 
 vSphere logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
@@ -56,11 +68,11 @@ In order for the selectors to properly work for system logs ingested into your l
 
 | Alert                                   | Summary                                                                                                                                                                                   |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| vSphereHostInfoCPUUtilization           | CPU is approaching a high threshold of utilization for an ESXi host. High CPU utilization may lead to performance degradation and potential downtime.                                     |
-| vSphereHostWarningMemoryUtilization     | Memory is approaching a high threshold of utilization for an ESXi host. High memory utilization may cause the host to become unresponsive and impact the performance of virtual machines. |
-| vSphereDatastoreWarningDiskUtilization  | Disk space is approaching a warning threshold of utilization for a datastore. Low disk space may prevent virtual machines from functioning properly and cause data loss.                  |
-| vSphereDatastoreCriticalDiskUtilization | Disk space is approaching a critical threshold of utilization for a datastore. Critically low disk space may cause virtual machines to crash and result in significant data loss.         |
-| vSphereHostWarningHighPacketErrors      | High percentage of packet errors seen for ESXi host. High packet errors may indicate network issues that can lead to poor performance and connectivity problems for virtual machines.     |
+| VSphereHostInfoCPUUtilization           | CPU is approaching a high threshold of utilization for an ESXi host. High CPU utilization may lead to performance degradation and potential downtime.                                     |
+| VSphereHostWarningMemoryUtilization     | Memory is approaching a high threshold of utilization for an ESXi host. High memory utilization may cause the host to become unresponsive and impact the performance of virtual machines. |
+| VSphereDatastoreWarningDiskUtilization  | Disk space is approaching a warning threshold of utilization for a datastore. Low disk space may prevent virtual machines from functioning properly and cause data loss.                  |
+| VSphereDatastoreCriticalDiskUtilization | Disk space is approaching a critical threshold of utilization for a datastore. Critically low disk space may cause virtual machines to crash and result in significant data loss.         |
+| VSphereHostWarningHighPacketErrors      | High percentage of packet errors seen for ESXi host. High packet errors may indicate network issues that can lead to poor performance and connectivity problems for virtual machines.     |
 
 Default thresholds can be configured in `config.libsonnet`
 

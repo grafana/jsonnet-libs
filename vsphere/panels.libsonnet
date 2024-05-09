@@ -123,7 +123,7 @@ local utils = commonlib.utils;
         + stat.options.withGraphMode('none'),
 
       topCPUUtilizationClusters:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Top CPU utilization by cluster',
           targets=[t.topCPUUtilizationClusters],
           description='The clusters with the highest CPU utilization percentage.'
@@ -132,7 +132,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       topMemoryUtilizationClusters:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Top memory utilization by cluster',
           targets=[t.topMemoryUtilizationClusters],
           description='The clusters with the highest memory utilization percentage.'
@@ -153,7 +153,7 @@ local utils = commonlib.utils;
             t.vmNumberTotal + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='A table displaying information about the clusters in the vCenter environment.'
+          description='Information about the clusters in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU utilization')
@@ -241,7 +241,7 @@ local utils = commonlib.utils;
             t.datastoreDiskUtilization + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='A table displaying information about the clusters in the vCenter environment.'
+          description='Information about the clusters in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory usage')
@@ -348,7 +348,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('shares'),
 
       topCPUUtilizationEsxiHosts:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Top CPU utilization ESXi hosts',
           targets=[t.topCPUUtilizationEsxiHosts],
           description='The ESXi hosts with the highest CPU utilization percentage.'
@@ -356,11 +356,11 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
-      topMemoryUsageEsxiHosts:
+      topMemoryUtilizationEsxiHosts:
         commonlib.panels.generic.timeSeries.base.new(
           'Top memory usage ESXi hosts',
-          targets=[t.topMemoryUsageEsxiHosts],
-          description='The ESXi hosts with the highest memory usage.'
+          targets=[t.topMemoryUtilizationEsxiHosts],
+          description='The ESXi hosts with the highest memory utilization.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
@@ -392,7 +392,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       hostCPUUtilization:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Host CPU utilization',
           targets=[t.hostCPUUtilization],
           description='The CPU utilization percentage of the ESXi host.'
@@ -410,7 +410,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
       hostMemoryUtilization:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Host memory utilization',
           targets=[t.hostMemoryUtilization],
           description='The memory utilization percentage of the ESXi host.'
@@ -466,7 +466,7 @@ local utils = commonlib.utils;
             t.vmNetDiskThroughputCluster + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='A table displaying information about the virtual machines in the vCenter environment.'
+          description='Information about the virtual machines in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU utilization')
@@ -584,7 +584,7 @@ local utils = commonlib.utils;
             t.diskThroughputRate + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='A table displaying information about the disks associated with the virtual machines.'
+          description='Information about the disks associated with the virtual machines.'
         )
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory swapped')
@@ -652,7 +652,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('rotmhz'),
 
       vmCPUUtilization:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'CPU utilization',
           targets=[t.vmCPUUtilization],
           description='The CPU utilization percentage of VMs.'
@@ -670,7 +670,7 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       vmMemoryUtilization:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Memory utilization',
           targets=[t.vmMemoryUtilization],
           description='The memory utilization percentage of the VMs.'
@@ -724,7 +724,7 @@ local utils = commonlib.utils;
             t.vmDiskUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='A table displaying information about the disks associated with the virtual machines.'
+          description='Information about the disks associated with the virtual machines.'
         )
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Latency')
@@ -830,7 +830,7 @@ local utils = commonlib.utils;
             t.vmNetDiskThroughputHost + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='A table displaying information about the virtual machines in the vCenter environment.'
+          description='Information about the virtual machines in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU utilization')
@@ -955,7 +955,7 @@ local utils = commonlib.utils;
         + barGauge.standardOptions.color.withMode('continuous-YlRd'),
 
       clusterCPUUtilization:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Cluster CPU utilization',
           targets=[t.clusterCPUUtilization],
           description='The CPU utilization percentage of the cluster.'
@@ -968,7 +968,7 @@ local utils = commonlib.utils;
         + barGauge.queryOptions.withTargets([
           t.clusterMemoryEffective,
         ])
-        + barGauge.panelOptions.withDescription('The effective memory capacity of the cluster,')
+        + barGauge.panelOptions.withDescription('The effective memory capacity of the cluster.')
         + barGauge.options.withOrientation('horizontal')
         + barGauge.standardOptions.withUnit('decbytes')
         + barGauge.standardOptions.color.withMode('continuous-YlRd'),
@@ -984,7 +984,7 @@ local utils = commonlib.utils;
         + barGauge.standardOptions.color.withMode('continuous-YlRd'),
 
       clusterMemoryUtilization:
-        commonlib.panels.generic.timeSeries.base.new(
+        commonlib.panels.memory.timeSeries.usagePercent.new(
           'Cluster memory utilization',
           targets=[t.clusterMemoryUtilization],
           description='The memory utilization percentage of the cluster.'
@@ -1012,7 +1012,7 @@ local utils = commonlib.utils;
             + g.query.prometheus.withRange(true),
           ]
           ,
-          description='A table displaying information about the ESXi hosts in the vCenter environment.'
+          description='Information about the ESXi hosts in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU utilization')
