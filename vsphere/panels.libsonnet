@@ -278,10 +278,9 @@ local utils = commonlib.utils;
               include: {
                 names: [
                   'vcenter_datastore_name',
-                  'vcenter_cluster_name 1',
                   'Value #A',
                   'Value #B',
-                  'disk_state 1',
+                  'disk_state',
                 ],
               },
             },
@@ -292,10 +291,9 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 3,
-                'Value #B': 4,
-                'disk_state 1': 2,
-                'vcenter_cluster_name 1': 1,
+                'Value #A': 2,
+                'Value #B': 3,
+                disk_state: 1,
                 vcenter_datastore_name: 0,
               },
               renameByName: {
