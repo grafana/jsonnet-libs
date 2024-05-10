@@ -1103,7 +1103,7 @@ local getMatcher(cfg) = '%(solrSelector)s, solr_cluster="$solr_cluster", base_ur
           template.new(
             'cluster',
             promDatasource,
-            'label_values(cassandra_cache_size{%(multiclusterSelector)s}, cluster)' % $._config,
+            'label_values(solr_metrics_core_errors_total{%(multiclusterSelector)s}, cluster)' % $._config,
             label='Cluster',
             refresh=2,
             includeAll=true,
