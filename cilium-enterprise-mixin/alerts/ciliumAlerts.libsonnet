@@ -20,7 +20,7 @@
           },
           {
             alert: 'CiliumAgentEndpointUpdateFailure',
-            expr: 'sum(rate(cilium_k8s_client_api_calls_total{method=~"(PUT|POST|PATCH)", endpoint="endpoint",return_code!~"2[0-9][0-9]"}[5m])) by (%s)' % std.join(', ', (['pod', 'method', 'return_code'] + $._config.alertAggregationLabels)),
+            expr: 'sum(rate(cilium_k8s_client_api_calls_total{method=~"(PUT|POST|PATCH)", endpoint="endpoint",return_code!~"2[0-9][0-9]"}[5m])) by (%s) > 0' % std.join(', ', (['pod', 'method', 'return_code'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'API calls to Cilium Agent API to create or update Endpoints are failing.',
               description: 'API calls to Cilium Agent API to create or update Endpoints are failing on pod {{$labels.pod}} ({{$labels.method}} {{$labels.return_code}}).\n\nThis may cause problems for Pod scheduling',
@@ -32,7 +32,7 @@
           },
           {
             alert: 'CiliumAgentContainerNetworkInterfaceApiErrorEndpointCreate',
-            expr: 'sum(rate(cilium_api_limiter_processed_requests_total{api_call=~"endpoint-create", outcome="fail"}[1m])) by (%s)' % std.join(', ', (['pod', 'api_call'] + $._config.alertAggregationLabels)),
+            expr: 'sum(rate(cilium_api_limiter_processed_requests_total{api_call=~"endpoint-create", outcome="fail"}[1m])) by (%s) > 0' % std.join(', ', (['pod', 'api_call'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium Endpoint API endpoint rate limiter is reporting errors while doing endpoint create.',
               description: 'Cilium Endpoint API endpoint rate limiter on Pod {{$labels.pod}} is reporting errors while doing endpoint create.\nThis may cause CNI and prevent Cilium scheduling.',
@@ -44,7 +44,7 @@
           },
           {
             alert: 'CiliumAgentApiEndpointErrors',
-            expr: 'sum(rate(cilium_agent_api_process_time_seconds_count{return_code=~"5[0-9][0-9]", path="/v1/endpoint"}[5m])) by (%s)' % std.join(', ', (['pod', 'return_code'] + $._config.alertAggregationLabels)),
+            expr: 'sum(rate(cilium_agent_api_process_time_seconds_count{return_code=~"5[0-9][0-9]", path="/v1/endpoint"}[5m])) by (%s) > 0' % std.join(', ', (['pod', 'return_code'] + $._config.alertAggregationLabels)),
             labels: {
               severity: 'warning',
             },
@@ -150,7 +150,7 @@
         rules: [
           {
             alert: 'CiliumAgentApiHighErrorRate',
-            expr: 'sum(rate(cilium_k8s_client_api_calls_total{endpoint!="metrics",return_code!~"2[0-9][0-9]"}[5m])) by (%s)' % std.join(', ', (['pod', 'endpoint', 'return_code'] + $._config.alertAggregationLabels)),
+            expr: 'sum(rate(cilium_k8s_client_api_calls_total{endpoint!="metrics",return_code!~"2[0-9][0-9]"}[5m])) by (%s) > 0' % std.join(', ', (['pod', 'endpoint', 'return_code'] + $._config.alertAggregationLabels)),
             annotations: {
               summary: 'Cilium Agent API on Pod is experiencing a high error rate.',
               description: 'Cilium Agent API on Pod {{$labels.pod}} is experiencing a high error rate for response code: {{$labels.response_code}} on endpoint {{$labels.endpoint}}.',
