@@ -15,7 +15,7 @@ function(this)
     signals: {
       cpuUsage: {
         name: 'CPU usage',
-        description: 'Cpu time consumed in seconds by container.',
+        description: 'CPU time consumed in seconds by container.',
         type: 'counter',
         unit: 'percent',
         sources: {
