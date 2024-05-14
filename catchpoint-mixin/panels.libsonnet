@@ -10,5 +10,117 @@ local utils = commonlib.utils;
       local barGauge = g.panel.barGauge,
       local fieldOverride = g.panel.table.fieldOverride,
 
+      topAvgLoadTimeTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top average total load time by test name',
+          targets=[t.topAvgLoadTimeTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+
+      topMaxTotalLoadTime:
+        commonlib.panels.generic.stat.info.new(
+          'Top max total load time',
+          targets=[t.topMaxTotalLoadTime],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+      
+      topAvgDocumentCompletionTimeTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top average document completion time by test name',
+          targets=[t.topAvgDocumentCompletionTimeTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+      
+      topMaxDocumentCompletionTime:
+        commonlib.panels.generic.stat.info.new(
+          'Top max document completion time',
+          targets=[t.topMaxDocumentCompletionTime],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+      
+      topAvgRequestRatioTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top average request ratio by test name',
+          targets=[t.topAvgRequestSuccessRatioTestName, t.topAvgRequestFailureRatioTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+      
+      topMaxRequestRatioTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top max request ratio by test name',
+          targets=[t.topMaxRequestSuccessRatioTestName,t.topMaxRequestFailureRatioTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+
+      topAvgConnectionSetupTimeTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top average connection setup time by test name',
+          targets=[t.topAvgConnectionSetupTimeTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+      
+      topMaxConnectionSetupTimeTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top max connection setup time by test name',
+          targets=[t.topMaxConnectionSetupTimeTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+
+      topAvgContentLoadingTimeTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top average content loading time by test name',
+          targets=[t.topAvgContentLoadingTimeTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+
+      topMaxContentLoadingTimeTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top average content loading time by test name',
+          targets=[t.topMaxContentLoadingTimeTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+
+      topAvgRedirectsTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top average redirects by test name',
+          targets=[t.topAvgRedirectsTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+      
+      topMaxRedirectsTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top max redirects by test name',
+          targets=[t.topMaxRedirectsTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+
+     alertsPanel:
+        alertList.new('Catchpoint alerts')
+        + alertList.options.UnifiedAlertListOptions.withAlertInstanceLabelFilter(this.grafana.variables.queriesGroupSelectorAdvanced),
+ 
+      topErrorsByTestName:
+        commonlib.panels.generic.stat.info.new(
+          'Top errors by test name',
+          targets=[t.topErrorsByTestName],
+          description=''
+        )
+        + stat.options.withGraphMode('none'),
+
+
+
+
+
     },
 }
