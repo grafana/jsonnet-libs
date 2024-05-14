@@ -20,7 +20,10 @@ function(this)
         unit: 'percent',
         sources: {
           cadvisor: {
-            expr: '100 * container_cpu_usage_seconds_total{%(queriesSelector)s}',
+            expr: 'container_cpu_usage_seconds_total{%(queriesSelector)s}',
+            exprWrappers: [
+              ['100 *', ''],
+            ],
             legendCustomTemplate: commonlib.utils.labelsToPanelLegend(s.legendLabels),
           },
         },
@@ -44,7 +47,10 @@ function(this)
         unit: 'bps',
         sources: {
           cadvisor: {
-            expr: '8 * container_network_receive_bytes_total{%(queriesSelector)s}',
+            expr: 'container_network_receive_bytes_total{%(queriesSelector)s}',
+            exprWrappers: [
+              ['8 *', ''],
+            ],
             legendCustomTemplate: '%s receive' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
           },
         },
@@ -56,7 +62,10 @@ function(this)
         unit: 'bps',
         sources: {
           cadvisor: {
-            expr: '8 * container_network_transmit_bytes_total{%(queriesSelector)s}',
+            expr: 'container_network_transmit_bytes_total{%(queriesSelector)s}',
+            exprWrappers: [
+              ['8 *', ''],
+            ],
             legendCustomTemplate: '%s transmit' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
           },
         },
@@ -128,10 +137,13 @@ function(this)
         name: 'Disk I/O',
         description: 'The number of I/O requests per second for the device/volume.',
         type: 'counter',
-        unit: 'iops',
+        unit: 'percent',
         sources: {
           cadvisor: {
             expr: 'container_fs_io_time_seconds_total{%(queriesSelector)s}',
+            exprWrappers: [
+              ['100 *', ''],
+            ],
             legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
           },
         },
