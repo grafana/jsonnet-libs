@@ -56,6 +56,7 @@ Signal's level:
 |unit| Signal's units. |*|bytes|``|
 |description| Signal's description. Used to populate panel's description. |*|CPU usage time in percent.|``|
 |expr| Signal's BASE expression in simplest form. Simplified jsonnet templating is supported (see below). Depending on signal's type(not `raw`) could autotransform to different form. |*|network_bytes_received_total{%(queriesSelector)s}|-|
+|exprWrappers| Signal's additional wrapper functions that could be added as an array, [<left_part>, <right_part>]. Functions would be applied AFTER any autotransformation takes place.  |*|`['topk(10,',')']`|[]|
 |aggLevel| Metrics aggregation level. |none, instance, group|`group`|`none`|
 |infoLabel| Only applicable to `info` metrics. Points to label name used to extract info. |*|-|-|
 |valueMapping| Define signal's valueMapping in the same way defined in Grafana Dashboard Schema. |*|-|-|

@@ -1,29 +1,43 @@
 {
-  wrapExpr(type, expr, q=0.95, aggLevel, rangeFunction):
-    if type == 'counter' then
+  wrapExpr(type, expr, exprWrappers=[], q=0.95, aggLevel, rangeFunction): {
+
+    // additional templates to wrap base expression
+    functionTemplates::
+      (
+        if aggLevel != 'none' && (type == 'counter' || type == 'gauge' || type == 'histogram')
+        then
+          [
+            ['%(aggFunction)s by (%(agg)s) (', ')'],
+          ]
+        else []
+      )
+      + exprWrappers,
+
+    withFuncTemplate(funcTemplate):: self {
+      functionTemplates+: [funcTemplate],
+    },
+    runTemplate(expr, funcTemplate):: funcTemplate[0] + '\n  ' + expr + '\n' + funcTemplate[1],
+    applyFunctions():: std.foldl(self.runTemplate, self.functionTemplates, self.expr),
+
+    expr: if type == 'counter' then
       (
         // for increase/delta/idelta - must be $__interval with negative offset for proper Total calculations, else use default from init function.
         local interval = if (rangeFunction == 'idelta' || rangeFunction == 'delta' || rangeFunction == 'increase') then '[$__interval:] offset -$__interval' else '[%(interval)s]';
         local baseExpr = rangeFunction + '(' + expr + interval + ')';
-        if aggLevel == 'none' then
-          baseExpr
-        else
-          ('%(aggFunction)s by (%(agg)s) (' + baseExpr + ')')
+        baseExpr
       )
     else if type == 'gauge' then
       (
-        if aggLevel == 'none' then
-          expr
-        else
-          ('%(aggFunction)s by (%(agg)s) (' + expr + ')')
+        expr
       )
     else if type == 'histogram' then
       (
         local baseExpr = 'histogram_quantile(' + '%.2f' % q + ', sum(' + rangeFunction + '(' + expr + '[%(interval)s])) by (le,%(agg)s))';
-        if aggLevel == 'none' then baseExpr
-        else '%(aggFunction)s by (%(agg)s) (' + baseExpr + ')'
+        baseExpr
       )
     else expr,
+  },
+
 
   wrapLegend(legend, aggLevel, legendCustomTemplate):
     if legendCustomTemplate != null then legendCustomTemplate
