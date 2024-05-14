@@ -186,7 +186,7 @@ local stub = import './stub.libsonnet';
       std.prune(
         {
           checks: [
-            if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info') then error "type must be one of 'gauge','histogram','counter','raw'",
+            if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub') then error "type must be one of 'gauge','histogram','counter','raw','info' Got %s for %s" % [type, name],
             if (aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'group','instance' or 'none'",
             if (exprWrappers != null && !std.isArray(exprWrappers)) then error 'exprWrappers must be an array.',
           ],
