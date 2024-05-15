@@ -9,7 +9,7 @@ local gauge1 = signal.init(
   type='gauge',
   unit='short',
   description='abc',
-  expr='up{%(queriesSelector)s}'
+  expr='up{%(queriesSelector)s}',
 );
 
 {
@@ -23,7 +23,7 @@ local gauge1 = signal.init(
       },
       testExpression: {
         actual: gauge1.asTarget().expr,
-        expect: 'avg by (job) (up{job="integrations/agent",job=~"$job",instance=~"$instance"})',
+        expect: 'avg by (job) (\n  up{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },

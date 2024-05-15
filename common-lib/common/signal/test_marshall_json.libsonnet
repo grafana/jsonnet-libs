@@ -101,7 +101,7 @@ local signals = signal.unmarshallJson(jsonSignals);
     testResult: test.suite({
       testExpression: {
         actual: panel.expr,
-        expect: 'avg by (job) (abc{job="integrations/agent",job=~"$job",instance=~"$instance"})',
+        expect: 'avg by (job) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },

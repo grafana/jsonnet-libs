@@ -9,7 +9,6 @@ local m1 = signal.init(
   description='Go version.',
   expr='go_info{%(queriesSelector)s}',
   infoLabel='version'
-
 );
 
 {

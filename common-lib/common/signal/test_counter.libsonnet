@@ -11,7 +11,7 @@ local m1 = signal.init(
   type='counter',
   unit='requests',
   description='API server calls.',
-  expr='apiserver_request_total{%(queriesSelector)s}'
+  expr='apiserver_request_total{%(queriesSelector)s}',
 );
 
 {
@@ -25,7 +25,7 @@ local m1 = signal.init(
       },
       testExpression: {
         actual: m1.asTarget().expr,
-        expect: 'max by (job,instance) (rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m]))',
+        expect: 'max by (job,instance) (\n  rate(apiserver_request_total{job="abc",job=~"$job",instance=~"$instance"}[5m])\n)',
       },
     }),
   },

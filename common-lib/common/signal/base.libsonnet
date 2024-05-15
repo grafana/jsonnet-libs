@@ -8,7 +8,8 @@ local signalUtils = import './utils.libsonnet';
     type,
     unit,
     description,
-    expr,
+    exprBase,
+    exprWrappers,
     aggLevel,
     vars,
     datasource,
@@ -29,7 +30,7 @@ local signalUtils = import './utils.libsonnet';
       + prometheusQuery.withRefId(name)
       + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % vars),
 
-    //Return as grafana panel mixi target(query+legend) + overrides(like units)
+    //Return as grafana panel mixin target(query+legend) + overrides(like units)
     asPanelMixin()::
       g.panel.timeSeries.queryOptions.withTargetsMixin(self.asTarget())
       + g.panel.timeSeries.standardOptions.withOverridesMixin(
@@ -44,10 +45,11 @@ local signalUtils = import './utils.libsonnet';
 
     //Return query
     asPanelExpression()::
-      signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel, rangeFunction=rangeFunction) % vars,
+      signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel=aggLevel, rangeFunction=rangeFunction).applyFunctions()
+      % vars,
     //Return query, usable in alerts/recording rules.
     asRuleExpression()::
-      signalUtils.wrapExpr(type, expr, q=0.95, aggLevel=aggLevel, rangeFunction=rangeFunction)
+      signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel=aggLevel, rangeFunction=rangeFunction).applyFunctions()
       % vars
         {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
         interval: vars.alertsInterval,

@@ -50,6 +50,7 @@ local stub = import './stub.libsonnet';
         unit=std.get(signalsJson.signals[s], 'unit', ''),
         description=std.get(signalsJson.signals[s], 'description', ''),
         expr=std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
+        exprWrappers=std.get(signalsJson.signals[s], 'exprWrappers', []),
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
         valueMapping=std.get(signalsJson.signals[s], 'valueMapping', {}),
@@ -86,6 +87,7 @@ local stub = import './stub.libsonnet';
             unit=std.get(signalsJson.signals[s], 'unit', ''),
             description=std.get(signalsJson.signals[s], 'description', ''),
             expr=std.get(signalsJson.signals[s].sources[type], 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [signalsJson.signals[s].name, type]),
+            exprWrappers=std.get(signalsJson.signals[s].sources[type], 'exprWrappers', []),
             aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
             infoLabel=std.get(signalsJson.signals[s].sources[type], 'infoLabel', null),
             valueMapping=std.get(signalsJson.signals[s].sources[type], 'valueMapping', {}),
@@ -172,6 +174,7 @@ local stub = import './stub.libsonnet';
       unit='short',
       description,
       expr,
+      exprWrappers=[],
       aggLevel=self.aggLevel,
       infoLabel=null,
       valueMapping={},
@@ -182,10 +185,10 @@ local stub = import './stub.libsonnet';
       // validate inputs
       std.prune(
         {
-          checks:: [
-            // TODO fix checks
-            if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw') then error "type must be one of 'gauge','histogram','counter','raw'",
+          checks: [
+            if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub') then error "type must be one of 'gauge','histogram','counter','raw','info' Got %s for %s" % [type, name],
             if (aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'group','instance' or 'none'",
+            if (exprWrappers != null && !std.isArray(exprWrappers)) then error 'exprWrappers must be an array.',
           ],
         }
       ) +
@@ -196,6 +199,7 @@ local stub = import './stub.libsonnet';
           unit=unit,
           description=description,
           expr=expr,
+          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
@@ -209,6 +213,7 @@ local stub = import './stub.libsonnet';
           unit=unit,
           description=description,
           expr=expr,
+          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
@@ -223,6 +228,7 @@ local stub = import './stub.libsonnet';
           unit=unit,
           description=description,
           expr=expr,
+          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
@@ -237,6 +243,7 @@ local stub = import './stub.libsonnet';
           unit=unit,
           description=description,
           expr=expr,
+          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,
@@ -251,6 +258,7 @@ local stub = import './stub.libsonnet';
           infoLabel=infoLabel,
           description=description,
           expr=expr,
+          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           datasource=datasource,
           vars=this.templatingVariables,

@@ -81,7 +81,10 @@ function(this)
         optional: true,
         sources: {
           prometheus: {
-            expr: 'go_gc_duration_seconds{%(queriesSelector)s, quantile="0"}*10^6',
+            expr: 'go_gc_duration_seconds{%(queriesSelector)s, quantile="0"}',
+            exprWrappers: [
+              ['', '*10^6'],
+            ],
           },
         },
       },
@@ -96,7 +99,10 @@ function(this)
         optional: true,
         sources: {
           prometheus: {
-            expr: 'go_gc_duration_seconds{%(queriesSelector)s, quantile="1"}*10^6',
+            expr: 'go_gc_duration_seconds{%(queriesSelector)s, quantile="1"}',
+            exprWrappers: [
+              ['', '*10^6'],
+            ],
           },
         },
       },
