@@ -2,30 +2,28 @@ exclusions:
   panel-title-description-rule:
     reason: "These panels do not require a description"
     entries:
-      - dashboard: "Docker Overview"
+      - dashboard: "Docker overview"
         panel: "" # Storage table panel has no name
   panel-units-rule:
-    reason: "Linter does not properly read unit property for old SingleStat, Graph and Table panel"
+    reason: "Units are not needed or come from overrides"
     entries:
-      - dashboard: "Docker Overview"
-        panel: "CPU Utilization by Containers"
-      - dashboard: "Docker Overview"
-        panel: "Memory Reserved by Containers"
-      - dashboard: "Docker Overview"
-        panel: "CPU"
-      - dashboard: "Docker Overview"
-        panel: "Memory"
-      - dashboard: "Docker Overview"
-        panel: "Bandwidth"
-      - dashboard: "Docker Overview"
-        panel: "TCP Sockets By State"
-      - dashboard: "Docker Overview"
-        panel: "" # Storage table panel has no name
+      - dashboard: "Docker overview"
+        panel: "Disk I/O"
+      - dashboard: "Docker overview"
+        panel: "Containers"
+      - dashboard: "Docker overview"
+        panel: "Images"
   template-datasource-rule:
     reason: "Based on new convention we are using variable names prometheus_datasource and loki_datasource where as linter expects 'datasource'"
   template-on-time-change-reload-rule:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-promql-rule:
-    reason: "Linter does not support parsing PromQL queries"
+    reason: "Linter does not support parsing LogQL queries"
     entries:
       - dashboard: "Docker Logs"
+  target-job-rule:
+    reason: "Using filtering selector with job"
+  template-instance-rule:
+    reason: "Instance is single select on purpose."
+  panel-datasource-rule:
+    reason: "Many panels use --Mixed-- DS"
