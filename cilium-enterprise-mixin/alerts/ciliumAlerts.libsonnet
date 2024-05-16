@@ -272,6 +272,35 @@
           },
         ],
       },
+      {
+        name: 'Cilium Clustermesh',
+        rules: [
+          {
+            alert: 'CiliumAgentRemoteClusterNotReady',
+            expr: 'count(cilium_clustermesh_remote_cluster_readiness_status < 1) by (%s) > 0' % std.join(', ', (['source_cluster', 'target_cluster'] + $._config.alertAggregationLabels)),
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: "Agent can't mesh with remote cluster.",
+              description: "Agent can't mesh with {{$labels.target_cluster}}",
+            },
+            'for': '5m',
+          },
+          {
+            alert: 'CiliumAgentRemoteClusterFailing',
+            expr: 'sum(rate(cilium_clustermesh_remote_cluster_failures[5m])) by (%s) > 0' % std.join(', ', (['source_cluster', 'target_cluster'] + $._config.alertAggregationLabels)),
+            labels: {
+              severity: 'critical',
+            },
+            annotations: {
+              summary: 'Agent fails to mesh with remote cluster.',
+              description: 'Agent fails to mesh with {{$labels.target_cluster}}',
+            },
+            'for': '5m',
+          },
+        ],
+      },
     ],
   },
 }
