@@ -7,16 +7,17 @@ local prometheus = grafana.prometheus;
 local dashboardUid = 'wildfly-datasource';
 
 local promDatasourceName = 'prometheus_datasource';
+local getMatcher(cfg) = '%(wildflySelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local activeConnectionsPanel = {
+local activeConnectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'wildfly_datasources_pool_in_use_count{job=~"$job", instance=~"$instance", data_source=~"$datasource"}',
+      'wildfly_datasources_pool_in_use_count{' + matcher + ', data_source=~"$datasource"}',
       datasource=promDatasource,
       legendFormat='{{data_source}}',
     ),
@@ -90,11 +91,11 @@ local activeConnectionsPanel = {
   },
 };
 
-local idleConnectionsPanel = {
+local idleConnectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'wildfly_datasources_pool_idle_count{job=~"$job", instance=~"$instance", data_source=~"$datasource"}',
+      'wildfly_datasources_pool_idle_count{' + matcher + ', data_source=~"$datasource"}',
       datasource=promDatasource,
       legendFormat='{{data_source}}',
     ),
@@ -168,11 +169,11 @@ local idleConnectionsPanel = {
   },
 };
 
-local createdTransactionsPanel = {
+local createdTransactionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_transactions_number_of_transactions_total{job=~"$job", instance=~"$instance"}[$__interval])',
+      'increase(wildfly_transactions_number_of_transactions_total{' + matcher + '}[$__interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -248,11 +249,11 @@ local createdTransactionsPanel = {
   },
 };
 
-local inflightTransactionsPanel = {
+local inflightTransactionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'wildfly_transactions_number_of_inflight_transactions{job=~"$job", instance=~"$instance"}',
+      'wildfly_transactions_number_of_inflight_transactions{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -326,11 +327,12 @@ local inflightTransactionsPanel = {
     },
   },
 };
-local abortedTransactionsPanel = {
+
+local abortedTransactionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(wildfly_transactions_number_of_aborted_transactions_total{job=~"$job", instance=~"$instance"}[$__interval])',
+      'increase(wildfly_transactions_number_of_aborted_transactions_total{' + matcher + '}[$__interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
       interval='1m',
@@ -439,9 +441,21 @@ local abortedTransactionsPanel = {
             sort=1
           ),
           template.new(
+            'cluster',
+            promDatasource,
+            'label_values(wildfly_batch_jberet_active_count{%(multiclusterSelector)s}, cluster)' % $._config,
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='.*',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
+          template.new(
             'instance',
             promDatasource,
-            'label_values(wildfly_batch_jberet_active_count{job=~"$job"}, instance)',
+            'label_values(wildfly_batch_jberet_active_count{%(wildflySelector)s}, instance)' % $._config,
             label='Instance',
             refresh=2,
             includeAll=false,
@@ -452,7 +466,7 @@ local abortedTransactionsPanel = {
           template.new(
             'datasource',
             promDatasource,
-            'label_values(wildfly_datasources_pool_idle_count{}, data_source)',
+            'label_values(wildfly_datasources_pool_idle_count{%(wildflySelector)s}, data_source)' % $._config,
             label='Wildfly datasource',
             refresh=2,
             includeAll=false,
@@ -473,11 +487,11 @@ local abortedTransactionsPanel = {
 
       .addPanels(
         [
-          activeConnectionsPanel { gridPos: { h: 7, w: 12, x: 0, y: 1 } },
-          idleConnectionsPanel { gridPos: { h: 7, w: 12, x: 12, y: 1 } },
-          createdTransactionsPanel { gridPos: { h: 7, w: 12, x: 0, y: 8 } },
-          inflightTransactionsPanel { gridPos: { h: 7, w: 12, x: 12, y: 8 } },
-          abortedTransactionsPanel { gridPos: { h: 8, w: 24, x: 0, y: 15 } },
+          activeConnectionsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 0, y: 1 } },
+          idleConnectionsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 12, y: 1 } },
+          createdTransactionsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 0, y: 8 } },
+          inflightTransactionsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 12, y: 8 } },
+          abortedTransactionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 15 } },
         ]
       ),
   },
