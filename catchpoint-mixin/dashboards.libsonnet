@@ -20,12 +20,28 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-
+              panels.topAvgLoadTimeTestName,
+              panels.topMaxTotalLoadTime,
+              panels.topAvgDocumentCompletionTimeTestName,
+              panels.topMaxDocumentCompletionTime,
+              g.panel.row.new('Requests'),
+              panels.topAvgRequestRatioTestName,
+              panels.topMaxRequestRatioTestName,
+              g.panel.row.new('Connectivity'),
+              panels.topAvgConnectionSetupTimeTestName,
+              panels.topMaxConnectionSetupTimeTestName,
+              panels.topAvgContentLoadingTimeTestName,
+              panels.topMaxContentLoadingTimeTestName,
+              panels.topAvgRedirectsTestName,
+              panels.topMaxRedirectsTestName,
+              g.panel.row.new('Errors'),
+              panels.topErrorsByTestName,
+              panels.alertsPanel,
             ], 12, 6
           )
         )
         // hide link to self
-        + root.applyCommon(vars, uid + '-overview', tags, links { catchpointOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { catchpointOverview+:: {} }, annotations, timezone, refresh, period),
       testNameOverview:
         g.dashboard.new(prefix + ' web performance by node name')
         + g.dashboard.withPanels(
@@ -36,7 +52,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.clusterVariables, uid + '-testname-overview', tags, links { catchpointTestNameOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars, uid + '-testname-overview', tags, links { catchpointTestNameOverview+:: {} }, annotations, timezone, refresh, period),
       nodeNameOverview:
         g.dashboard.new(prefix + ' web performance by node name')
         + g.dashboard.withPanels(
@@ -47,7 +63,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           )
         )
         // hide link to self
-        + root.applyCommon(vars.hostsVariable, uid + '-nodename-overview', tags, links { catchpointNodeNameOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars, uid + '-nodename-overview', tags, links { catchpointNodeNameOverview+:: {} }, annotations, timezone, refresh, period),
     },
 
   //Apply common options(uids, tags, annotations etc..) to all dashboards above

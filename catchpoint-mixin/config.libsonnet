@@ -1,9 +1,9 @@
 {
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
-  filteringSelector: 'job=~"integrations/vsphere"',
+  filteringSelector: 'job=~"integrations/catchpoint"',
   // Used to identify 'group' of instances.
   groupLabels: ['job'],
-  instanceLabel: ['instance'],
+  instanceLabels: ['instance'],
   testNameLabel: ['test_name'],
   nodeNameLabel: ['node_name'],
   // Prefix all dashboards uids and alert groups
@@ -17,9 +17,4 @@
 
   // Alert thresholds
 
-  // Logs lib related
-  // Set to false to disable logs dashboard and logs annotations
-  enableLokiLogs: true,
-  extraLogLabels: ['level'],
-  showLogsVolume: true,
 }
