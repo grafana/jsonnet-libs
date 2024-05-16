@@ -53,7 +53,7 @@ local utils = commonlib.utils;
           var.datasource.new('prometheus_datasource', 'prometheus')
           + var.datasource.generalOptions.withLabel('Data source')
           + var.datasource.withRegex(''),
-          },
+      },
 
       // Use on dashboards where multiple entities can be selected, like fleet dashboards
       multiInstance:
@@ -66,8 +66,8 @@ local utils = commonlib.utils;
       // Use on dashboards where multiple entities can be selected, like fleet dashboards
       overviewVariables:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) + [topClusterSelector],
-      
+        + variablesFromLabels(groupLabels, instanceLabels + testNameLabel, filteringSelector, multiInstance=true) + [topClusterSelector],
+
       testNameVariable:
         [root.datasources.prometheus]
         + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) + [testNameLabel],
@@ -80,10 +80,18 @@ local utils = commonlib.utils;
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels),
         ],
+      testNameSelector:
+        '%s' % [
+          utils.labelsToPromQLSelector(groupLabels + testNameLabel),
+        ],
+      nodeNameSelector:
+        '%s' % [
+          utils.labelsToPromQLSelector(groupLabels + testNameLabel),
+        ],
+
       queriesGroupSelectorAdvanced:
         '%s' % [
           utils.labelsToPromQLSelectorAdvanced(groupLabels),
         ],
-    }
- },
+    },
 }
