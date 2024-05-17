@@ -82,7 +82,7 @@ local utils = commonlib.utils;
         ],
       testNameSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + testNameLabel),
+          utils.labelsToPromQLSelector(groupLabels + instanceLabels + testNameLabel),
         ],
       nodeNameSelector:
         '%s' % [
