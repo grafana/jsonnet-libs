@@ -44,28 +44,28 @@ local utils = commonlib.utils {
         '${' + vars.datasources.prometheus.name + '}',
         'topk by (test_name) (2, avg by (instance, test_name) ((catchpoint_requests_count{%(testNameSelector)s} - catchpoint_failed_requests_count{%(testNameSelector)s}) / clamp_min(catchpoint_requests_count{%(testNameSelector)s},1)))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testNameLabel)),
 
     topAvgRequestFailureRatioTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk by (test_name) (2, avg by (instance, test_name) ((catchpoint_failed_requests_count{%(testNameSelector)s}) / clamp_min(catchpoint_requests_count{%(testNameSelector)s},1)))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(testNameLabel)),
 
     topMaxRequestSuccessRatioTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         ''
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testNameLabel)),
 
     topMaxRequestFailureRatioTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         ''
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(testNameLabel)),
 
     topAvgConnectionSetupTimeTestName:
       prometheusQuery.new(
