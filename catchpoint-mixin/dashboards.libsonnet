@@ -47,7 +47,26 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-
+              panels.pageCompletionTime,
+              panels.DNSResolution,
+              panels.contentHandling { gridPos+: { w: 8 } },
+              panels.clientProcessing { gridPos+: { w: 8 } },
+              panels.additionalDelay { gridPos+: { w: 8 } },
+              g.panel.row.new('Response'),
+              panels.responseContentSize,
+              panels.totalContentSize,
+              g.panel.row.new('Network activity'),
+              panels.networkConnections { gridPos+: { w: 8 } },
+              panels.hostsContacted { gridPos+: { w: 8 } },
+              panels.cacheAccess { gridPos+: { w: 8 } },
+              g.panel.row.new('Request'),
+              panels.requestsRatio,
+              panels.redirections,
+              g.panel.row.new('Content type'),
+              panels.contentTypesLoadedBySize,
+              panels.contentLoadedByType,
+              g.panel.row.new('Errors'),
+              panels.errors { gridPos+: { w: 24 } },
             ], 12, 6
           )
         )
