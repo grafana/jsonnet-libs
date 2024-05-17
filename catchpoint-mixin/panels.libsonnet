@@ -7,9 +7,12 @@ local utils = commonlib.utils;
     {
       local t = this.grafana.targets,
       local stat = g.panel.stat,
-      local barGauge = g.panel.barGauge,
       local fieldOverride = g.panel.table.fieldOverride,
       local alertList = g.panel.alertList,
+      local pieChart = g.panel.pieChart,
+      local barGauge = g.panel.barGauge,
+
+      // Catchpoint Overview dashboard Panels
       topAvgLoadTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average total load time by test name',
@@ -113,6 +116,115 @@ local utils = commonlib.utils;
           'Top errors by test name',
           targets=[t.topErrorsByTestName],
           description='Errors encountered by test name.'
+        ),
+
+
+      // Web Performance by Test Name Dashboard Panels
+      pageCompletionTime:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Page completion time',
+          targets=[t.pageCompletionTime],
+          description=''
+        ),
+
+      DNSResolution:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Connection and DNS resolution',
+          targets=[t.DNSResolution],
+          description=''
+        ),
+      contentHandling:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Content handling',
+          targets=[t.contentHandlingLoad, t.contentHandlingRender],
+          description=''
+        ),
+
+      clientProcessing:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Client processing',
+          targets=[t.clientProcessing],
+          description=''
+        ),
+
+      additionalDelay:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Additional delays',
+          targets=[t.additionalDelay],
+          description=''
+        ),
+
+      responseContentSize:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Response content size',
+          targets=[t.responseContentSize, t.responseHeaderSize],
+          description=''
+        ),
+
+      totalContentSize:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Total content size',
+          targets=[t.totalContentSize, t.totalHeaderSize],
+          description=''
+        ),
+
+      networkConnections:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Network connections',
+          targets=[t.networkConnections],
+          description=''
+        ),
+
+      hostsContacted:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Hosts contacted',
+          targets=[t.hostsContacted],
+          description=''
+        ),
+
+      cacheAccess:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Cache access',
+          targets=[t.cacheAccess],
+          description=''
+        ),
+
+      requestsRatio:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Requests success/failure ratio',
+          targets=[t.requestsSuccessRatio, t.requestsFailureRatio],
+          description=''
+        ),
+
+      redirections:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Redirects',
+          targets=[t.redirections],
+          description=''
+        ),
+
+      contentTypesLoadedBySize:
+        pieChart.new(title='Content types loaded by size')
+        + pieChart.queryOptions.withTargets([t.imageLoadedBySize, t.htmlLoadedBySize, t.cssLoadedBySize, t.scriptLoadedBySize, t.fontLoadedBySize, t.xmlLoadedBySize, t.mediaLoadedBySize])
+        + pieChart.options.legend.withPlacement('right')
+        + pieChart.options.withTooltipMixin({
+          mode: 'multi',
+          sort: 'desc',
+        })
+        + pieChart.panelOptions.withDescription(''),
+
+
+      contentLoadedByType:
+        barGauge.new(title='Content loaded by type')
+        + barGauge.queryOptions.withTargets([t.imageLoadedByType, t.htmlLoadedByType, t.cssLoadedByType, t.scriptLoadedByType, t.fontLoadedByType, t.xmlLoadedByType, t.mediaLoadedByType])
+        + barGauge.panelOptions.withDescription('')
+        + barGauge.options.withOrientation('horizontal'),
+
+      errors:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Errors',
+          targets=[t.errors],
+          description=''
         ),
     },
 }
