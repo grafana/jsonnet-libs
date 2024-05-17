@@ -10,46 +10,45 @@ local utils = commonlib.utils;
       local barGauge = g.panel.barGauge,
       local fieldOverride = g.panel.table.fieldOverride,
       local alertList = g.panel.alertList,
-
       topAvgLoadTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average total load time by test name',
           targets=[t.topAvgLoadTimeTestName],
-          description=''
+          description='Average total time it took to load the webpage by test name, helping assess the responsiveness and speed of the monitored webpage.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topMaxTotalLoadTime:
         commonlib.panels.generic.timeSeries.base.new(
           'Top max total load time',
           targets=[t.topMaxTotalLoadTime],
-          description=''
+          description='Maximum total time it took to load the webpage by test name, indicating the worst-case scenario for webpage loading performance.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topAvgDocumentCompletionTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average document completion time by test name',
           targets=[t.topAvgDocumentCompletionTimeTestName],
-          description=''
+          description='Average time taken for the browser to fully render the page after all resources are downloaded by test name, serving as a key indicator of end-user perceived load time.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topMaxDocumentCompletionTime:
         commonlib.panels.generic.timeSeries.base.new(
           'Top max document completion time',
           targets=[t.topMaxDocumentCompletionTime],
-          description=''
+          description='Maximum time taken for the browser to fully render the page after all resources are downloaded by test name, highlighting the worst-case scenario for end-user perceived load time.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topAvgRequestRatioTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average request ratio by test name',
           targets=[t.topAvgRequestSuccessRatioTestName, t.topAvgRequestFailureRatioTestName],
-          description=''
+          description='Average ratio of successful and failed requests by test name.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
       topMaxRequestRatioTestName:
         commonlib.panels.generic.timeSeries.base.new(
@@ -57,55 +56,53 @@ local utils = commonlib.utils;
           targets=[t.topMaxRequestSuccessRatioTestName, t.topMaxRequestFailureRatioTestName],
           description=''
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
       topAvgConnectionSetupTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average connection setup time by test name',
           targets=[t.topAvgConnectionSetupTimeTestName],
-          description=''
+          description='Average time taken to establish a connection to the URL by test names.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topMaxConnectionSetupTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top max connection setup time by test name',
           targets=[t.topMaxConnectionSetupTimeTestName],
-          description=''
+          description='Maximum time taken to establish a connection to the URL by test name, indicating the worst-case scenario for network connectivity and infrastructure performance.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topAvgContentLoadingTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average content loading time by test name',
           targets=[t.topAvgContentLoadingTimeTestName],
-          description=''
+          description='Average time taken to load content on the webpage by test name.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topMaxContentLoadingTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average content loading time by test name',
           targets=[t.topMaxContentLoadingTimeTestName],
-          description=''
+          description='Maximum time taken to load content on the webpage by test name, highlighting the worst-case scenario for content delivery and display speed.'
         )
-        + stat.options.withGraphMode('none'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topAvgRedirectsTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average redirects by test name',
           targets=[t.topAvgRedirectsTestName],
-          description=''
-        )
-        + stat.options.withGraphMode('none'),
+          description='Average number of HTTP redirections by test name, which is important for assessing the impact of redirects on overall page load time.'
+        ),
 
       topMaxRedirectsTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top max redirects by test name',
           targets=[t.topMaxRedirectsTestName],
-          description=''
-        )
-        + stat.options.withGraphMode('none'),
+          description='Maximum number of HTTP redirections encountered by test name, indicating the worst-case scenario for the impact of redirects on page load time.'
+        ),
 
       alertsPanel:
         alertList.new('Catchpoint alerts')
@@ -115,9 +112,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top errors by test name',
           targets=[t.topErrorsByTestName],
-          description=''
-        )
-        + stat.options.withGraphMode('none'),
-
+          description='Errors encountered by test name.'
+        ),
     },
 }
