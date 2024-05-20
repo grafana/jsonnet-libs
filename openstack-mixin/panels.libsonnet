@@ -8,6 +8,7 @@ local utils = commonlib.utils;
     local stat = g.panel.stat,
     local timeSeries = g.panel.timeSeries,
     local table = g.panel.table,
+    local gauge = g.panel.gauge,
 
     placementStatus:
       commonlib.panels.generic.stat.base.new(
@@ -272,6 +273,48 @@ local utils = commonlib.utils;
             }
           }
         },
+      ]),
+
+    vCPUusedStat:
+      gauge.new(
+        'vCPU used'
+      )
+      + gauge.queryOptions.withTargetsMixin(t.vCPUused)
+      + gauge.standardOptions.withUnit('percent')
+      + gauge.standardOptions.withMin('0')
+      + gauge.standardOptions.withMax('150')
+      + gauge.standardOptions.thresholds.withSteps([
+        gauge.standardOptions.threshold.step.withValue(0) +
+        gauge.standardOptions.threshold.step.withColor('green'),
+        gauge.standardOptions.threshold.step.withValue(99) +
+        gauge.standardOptions.threshold.step.withColor('red'),
+      ]),
+
+    RAMusedStat:
+      gauge.new(
+        'Memory used'
+      )
+      + gauge.queryOptions.withTargetsMixin(t.RAMused)
+      + gauge.standardOptions.withUnit('percent')
+      + gauge.standardOptions.withMin('0')
+      + gauge.standardOptions.withMax('150')
+      + gauge.standardOptions.thresholds.withSteps([
+        gauge.standardOptions.threshold.step.withValue(0) +
+        gauge.standardOptions.threshold.step.withColor('green'),
+        gauge.standardOptions.threshold.step.withValue(99) +
+        gauge.standardOptions.threshold.step.withColor('red'),
+      ]),
+
+    freeIPsStat:
+      stat.new(
+        'Free IPs',
+      )
+      + stat.queryOptions.withTargetsMixin(t.freeIPs)
+      + stat.standardOptions.thresholds.withSteps([
+        stat.standardOptions.threshold.step.withValue(0) +
+        stat.standardOptions.threshold.step.withColor('red'),
+        stat.standardOptions.threshold.step.withValue(20) +
+        stat.standardOptions.threshold.step.withColor('green'),
       ]),
 
     domains:
