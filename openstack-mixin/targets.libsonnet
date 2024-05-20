@@ -101,7 +101,7 @@ local lokiQuery = g.query.loki;
         'openstack_identity_users{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
 
     projectDetails:
       prometheusQuery.new(
@@ -116,28 +116,28 @@ local lokiQuery = g.query.loki;
         'openstack_nova_total_vms{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     instanceUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_nova_limits_instances_used{%(queriesSelector)s} / clamp_min(openstack_nova_limits_instances_max{%(queriesSelector)s}, 1)' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{tenant}}'),
+      + prometheusQuery.withLegendFormat('{{tenant}}'),
     vCPUUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_nova_limits_vcpus_used{%(queriesSelector)s} / clamp_min(openstack_nova_limits_vcpus_max{%(queriesSelector)s}, 1)' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{tenant}}'),
+      + prometheusQuery.withLegendFormat('{{tenant}}'),
     memoryUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_nova_limits_memory_used{%(queriesSelector)s} / clamp_min(openstack_nova_limits_memory_max{%(queriesSelector)s}, 1)' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{tenant}}'),
+      + prometheusQuery.withLegendFormat('{{tenant}}'),
     novaAgentState:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -151,28 +151,28 @@ local lokiQuery = g.query.loki;
         'openstack_neutron_networks{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     subnets:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_neutron_subnets{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     routers:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_neutron_routers{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - total'),
+      + prometheusQuery.withLegendFormat('total'),
     routersNotActive:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_neutron_routers_not_active{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - inactive'),
+      + prometheusQuery.withLegendFormat('inactive'),
     routerDetails:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -186,21 +186,21 @@ local lokiQuery = g.query.loki;
         'openstack_neutron_ports{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - total'),
+      + prometheusQuery.withLegendFormat('total'),
     portsLBNotActive:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_neutron_ports_lb_not_active{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - load balancer inactive'),
+      + prometheusQuery.withLegendFormat('load balancer inactive'),
     portsNoIPs:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_neutron_ports_no_ips{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - no IPs'),
+      + prometheusQuery.withLegendFormat('no IPs'),
     portDetails:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -214,28 +214,28 @@ local lokiQuery = g.query.loki;
         'openstack_neutron_floating_ips{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - total'),
+      + prometheusQuery.withLegendFormat('total'),
     floatingIPsAssociatedNotActive:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_neutron_floating_ips_associated_not_active{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - associated inactive'),
+      + prometheusQuery.withLegendFormat('associated inactive'),
     ipsUsed:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum by (job, instance, ip_version, subnet_name) (openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s}) / sum by (job, instance, ip_version, subnet_name)(openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s})' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{subnet_name}}'),
+      + prometheusQuery.withLegendFormat('{{network_name}}/{{subnet_name}}'),
     securityGroups:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_neutron_security_groups{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     neutronAgentState:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -249,49 +249,49 @@ local lokiQuery = g.query.loki;
         'openstack_cinder_volumes{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     volumeErrorStatus:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_cinder_volume_status_counter{%(queriesSelector)s, status=~"error|error_backing-up|error_deleting|error_extending|error_restoring"} > 0' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{status}}'),
+      + prometheusQuery.withLegendFormat('{{status}}'),
     volumeNonErrorStatus:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk(5, openstack_cinder_volume_status_counter{%(queriesSelector)s, status!~"error|error_backing-up|error_deleting|error_extending|error_restoring"}) > 0' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{status}}'),
+      + prometheusQuery.withLegendFormat('{{status}}'),
     volumeUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_cinder_limits_volume_used_gb{%(queriesSelector)s} / clamp_min(openstack_cinder_limits_volume_max_gb{%(queriesSelector)s}, 1)' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{tenant}}'),
+      + prometheusQuery.withLegendFormat('{{tenant}}'),
     backupUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_cinder_limits_backup_used_gb{%(queriesSelector)s} / clamp_min(openstack_cinder_limits_backup_max_gb{%(queriesSelector)s}, 1)' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{tenant}}'),
+      + prometheusQuery.withLegendFormat('{{tenant}}'),
     poolUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         '(openstack_cinder_pool_capacity_total_gb{%(queriesSelector)s} - openstack_cinder_pool_capacity_free_gb{%(queriesSelector)s}) / clamp_min(openstack_cinder_pool_capacity_total_gb{%(queriesSelector)s}, 1)' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}} - {{name}}'),
+      + prometheusQuery.withLegendFormat('{{name}}'),
     snaphots:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_cinder_snapshots{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     cinderAgentState:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -305,7 +305,7 @@ local lokiQuery = g.query.loki;
         'openstack_glance_images{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat('{{instance}}'),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     imageDetails:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
