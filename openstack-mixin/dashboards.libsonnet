@@ -107,7 +107,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           logslib.new(
             'OpenStack logs',
             datasourceName=this.grafana.variables.datasources.loki.name,
-            datasourceRegex=this.grafana.variables.datasources.loki.regex,
+            datasourceRegex='',
             filterSelector=this.config.logsFilteringSelector,
             labels=this.config.groupLabels + this.config.extraLogLabels,
             formatParser=null,
