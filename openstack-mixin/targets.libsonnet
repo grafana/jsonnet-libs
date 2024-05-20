@@ -134,7 +134,7 @@ local lokiQuery = g.query.loki;
     memoryUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_nova_limits_memory_used{%(queriesSelector)s}' % vars
+        'openstack_nova_limits_memory_used{%(queriesSelector)s} * 1024 * 1024' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{tenant}}'),
