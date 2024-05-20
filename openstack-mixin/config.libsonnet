@@ -1,6 +1,7 @@
 {
   filteringSelector: 'job="integrations/openstack"',
   groupLabels: ['job'],
+  // instance of openstack cluster
   instanceLabels: ['instance'],
 
   uid: 'openstack',
@@ -11,6 +12,10 @@
 
   alertsWarningPlacementHighMemoryUsage: 80,  // %
   alertsCriticalPlacementHighMemoryUsage: 90,  // %
+  alertsWarningPlacementHighVcpuUsage: 80,  // %
+  alertsCriticalPlacementHighVcpuUsage: 90,  // %
+  alertsWarningNeutronHighNetworkUsage: 80,  // %
+  alertsCriticalNeutronHighNetworkUsage: 90,  // %
   alertsWarningNovaHighVMMemoryUsage: 80,  // %
   alertsWarningNovaHighVMVCPUUsage: 80,  // %
   alertsCriticalNeutronHighDisconnectedPortRate: 25,  // %
