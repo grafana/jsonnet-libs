@@ -120,21 +120,21 @@ local lokiQuery = g.query.loki;
     instanceUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_nova_limits_instances_used{%(queriesSelector)s} / clamp_min(openstack_nova_limits_instances_max{%(queriesSelector)s}, 1)' % vars
+        'openstack_nova_limits_instances_used{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{tenant}}'),
     vCPUUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_nova_limits_vcpus_used{%(queriesSelector)s} / clamp_min(openstack_nova_limits_vcpus_max{%(queriesSelector)s}, 1)' % vars
+        'openstack_nova_limits_vcpus_used{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{tenant}}'),
     memoryUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_nova_limits_memory_used{%(queriesSelector)s} / clamp_min(openstack_nova_limits_memory_max{%(queriesSelector)s}, 1)' % vars
+        'openstack_nova_limits_memory_used{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{tenant}}'),
@@ -267,14 +267,14 @@ local lokiQuery = g.query.loki;
     volumeUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_cinder_limits_volume_used_gb{%(queriesSelector)s} / clamp_min(openstack_cinder_limits_volume_max_gb{%(queriesSelector)s}, 1)' % vars
+        'openstack_cinder_limits_volume_used_gb{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{tenant}}'),
     backupUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_cinder_limits_backup_used_gb{%(queriesSelector)s} / clamp_min(openstack_cinder_limits_backup_max_gb{%(queriesSelector)s}, 1)' % vars
+        'openstack_cinder_limits_backup_used_gb{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{tenant}}'),
