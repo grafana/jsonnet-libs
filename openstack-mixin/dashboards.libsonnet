@@ -18,23 +18,23 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.placementStatus { gridPos+: { w: 4 } },
-              panels.keystoneStatus { gridPos+: { w: 4 } },
-              panels.novaStatus { gridPos+: { w: 4 } },
-              panels.neutronStatus { gridPos+: { w: 4 } },
-              panels.cinderStatus { gridPos+: { w: 4 } },
-              panels.glanceStatus { gridPos+: { w: 4 } },
+              panels.placementStatus { gridPos+: { w: 4, h: 2 } },
+              panels.keystoneStatus { gridPos+: { w: 4, h: 2 } },
+              panels.novaStatus { gridPos+: { w: 4, h: 2 } },
+              panels.neutronStatus { gridPos+: { w: 4, h: 2 } },
+              panels.cinderStatus { gridPos+: { w: 4, h: 2 } },
+              panels.glanceStatus { gridPos+: { w: 4, h: 2 } },
               panels.alertsPanel { gridPos+: { w: 8 } },
               panels.totalResources { gridPos+: { w: 16 } },
               g.panel.row.new('Keystone service'),
-              panels.domains { gridPos+: { w: 4 } },
-              panels.projects { gridPos+: { w: 4 } },
-              panels.regions { gridPos+: { w: 4 } },
-              panels.users,
+              panels.domains { gridPos+: { w: 4, h: 4 } },
+              panels.projects { gridPos+: { w: 4, h: 4 } },
+              panels.regions { gridPos+: { w: 4, h: 4 } },
+              panels.users { gridPos+: { w: 12, h: 4 } },
               panels.projectDetails { gridPos+: { w: 24 } },
               g.panel.row.new('Glance service'),
-              panels.glanceStatus { gridPos+: { w: 6 } },
-              panels.imageCount { gridPos+: { w: 18 } },
+              panels.glanceStatus { gridPos+: { w: 6, h: 4 } },
+              panels.imageCount { gridPos+: { w: 18, h: 4 } },
               panels.images { gridPos+: { w: 24 } },
             ], 12, 8
           )
@@ -46,8 +46,8 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.novaStatus { gridPos+: { w: 6 } },
-              panels.vms { gridPos+: { w: 18 } },
+              panels.novaStatus { gridPos+: { w: 6, h: 4 } },
+              panels.vms { gridPos+: { w: 18, h: 4 } },
               panels.instanceUsage,
               panels.vCPUUsage,
               panels.memoryUsage,
@@ -62,9 +62,9 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.neutronStatus { gridPos+: { w: 6 } },
-              panels.networks { gridPos+: { w: 9 } },
-              panels.subnets { gridPos+: { w: 9 } },
+              panels.neutronStatus { gridPos+: { w: 6, h: 4 } },
+              panels.networks { gridPos+: { w: 9, h: 4 } },
+              panels.subnets { gridPos+: { w: 9, h: 4 } },
               panels.routers,
               panels.routerDetails,
               panels.ports { gridPos+: { w: 8 } },
@@ -83,9 +83,9 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.cinderStatus { gridPos+: { w: 4 } },
-              panels.volumes { gridPos+: { w: 10 } },
-              panels.volumeStatus { gridPos+: { w: 10 } },
+              panels.cinderStatus { gridPos+: { w: 4, h: 4 } },
+              panels.volumes { gridPos+: { w: 10, h: 4 } },
+              panels.volumeStatus { gridPos+: { w: 10, h: 4 } },
               panels.volumeUsage,
               panels.backupUsage,
               panels.poolUsage,
