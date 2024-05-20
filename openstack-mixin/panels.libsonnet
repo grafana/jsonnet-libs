@@ -433,37 +433,46 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withDecimals(0),
 
     instanceUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
-        'Instance usage',
+      commonlib.panels.generic.timeSeries.base.new(
+        'Instance count',
         targets=[t.instanceUsage],
-        description='Percentage of the maximum number of instances in use for each project.'
+        description='Number of instances in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('short')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     vCPUUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      commonlib.panels.generic.timeSeries.base.new(
         'VCPU usage',
         targets=[t.vCPUUsage],
-        description='Percentage of the maximum number of virtual CPUs in use for each project.'
+        description='Number of virtual CPUs in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('short')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     memoryUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      commonlib.panels.generic.timeSeries.base.new(
         'Memory usage',
         targets=[t.memoryUsage],
-        description='Percentage of the maximum amount of memory in use for each project.'
+        description='Maximum amount of memory in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('bytes')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     novaAgents:
       table.new('Agents')
@@ -760,15 +769,18 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withDecimals(0),
 
     ipsUsed:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      commonlib.panels.generic.timeSeries.base.new(
         'IPs used',
         targets=[t.ipsUsed],
         description='The usage of available IP addresses broken down by subnet.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     securityGroups:
       commonlib.panels.generic.timeSeries.base.new(
@@ -872,29 +884,35 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withDecimals(0),
 
     volumeUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
-        'Volume usage',
+      commonlib.panels.generic.timeSeries.base.new(
+        'Volume usage in GB',
         targets=[t.volumeUsage],
-        description='The percent of volume storage in use for Cinder.',
+        description='Volume storage usage in bytes in use for Cinder.',
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('decgbytes')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     backupUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
-        'Backup usage',
+      commonlib.panels.generic.timeSeries.base.new(
+        'Backup usage in GB',
         targets=[t.backupUsage],
-        description='The percent of backup storage in use for Cinder.',
+        description='Backup storage usage in bytes in use for Cinder.',
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('decgbytes')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     poolUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      commonlib.panels.generic.timeSeries.base.new(
         'Pool usage',
         targets=[t.poolUsage],
         description='The percent of pool capacity in use for Cinder.',
