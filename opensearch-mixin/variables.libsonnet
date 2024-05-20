@@ -39,8 +39,8 @@ local utils = commonlib.utils;
          std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
        datasources: {
          prometheus:
-           var.datasource.new('datasource', 'prometheus')
-           + var.datasource.generalOptions.withLabel('Data source')
+           var.datasource.new('prometheus_datasource', 'prometheus')
+           + var.datasource.generalOptions.withLabel('Prometheus data source')
            + var.datasource.withRegex(''),
        },
        // Use on dashboards where multiple entities can be selected, like fleet dashboards
