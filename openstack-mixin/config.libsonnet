@@ -24,6 +24,9 @@
   alertsWarningCinderHighVolumeMemoryUsage: 80,  // %
   alertsWarningCinderHighPoolCapacityUsage: 80,  // %
 
+  // regex to match network names where we should track IP address utilization:
+  alertsIPutilizationNetworksMatcher: '.+',
+
   // logs lib related
   enableLokiLogs: true,
   logsExtraFilters: '',
