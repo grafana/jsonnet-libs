@@ -41,42 +41,42 @@ local lokiQuery = g.query.loki;
     totalDiskCapacity:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_placement_resource_total{%(queriesSelector)s, resourcetype="DISK_GB"}' % vars
+        'sum(openstack_placement_resource_total{%(queriesSelector)s, resourcetype="DISK_GB"})' % vars
       )
       + prometheusQuery.withFormat('table')
       + prometheusQuery.withInstant(true),
     totalDiskUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_placement_resource_usage{%(queriesSelector)s, resourcetype="DISK_GB"}' % vars
+        'sum(openstack_placement_resource_usage{%(queriesSelector)s, resourcetype="DISK_GB"})' % vars
       )
       + prometheusQuery.withFormat('table')
       + prometheusQuery.withInstant(true),
     totalMemoryCapacity:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_placement_resource_total{%(queriesSelector)s, resourcetype="MEMORY_MB"}' % vars
+        'sum(openstack_placement_resource_total{%(queriesSelector)s, resourcetype="MEMORY_MB"})' % vars
       )
       + prometheusQuery.withFormat('table')
       + prometheusQuery.withInstant(true),
     totalMemoryUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_placement_resource_usage{%(queriesSelector)s, resourcetype="MEMORY_MB"}' % vars
+        'sum(openstack_placement_resource_usage{%(queriesSelector)s, resourcetype="MEMORY_MB"})' % vars
       )
       + prometheusQuery.withFormat('table')
       + prometheusQuery.withInstant(true),
     totalVCPUCapacity:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_placement_resource_total{%(queriesSelector)s, resourcetype="VCPU"}' % vars
+        'sum(openstack_placement_resource_total{%(queriesSelector)s, resourcetype="VCPU"})' % vars
       )
       + prometheusQuery.withFormat('table')
       + prometheusQuery.withInstant(true),
     totalVCPUUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_placement_resource_usage{%(queriesSelector)s, resourcetype="VCPU"}' % vars
+        'sum(openstack_placement_resource_usage{%(queriesSelector)s, resourcetype="VCPU"})' % vars
       )
       + prometheusQuery.withFormat('table')
       + prometheusQuery.withInstant(true),
