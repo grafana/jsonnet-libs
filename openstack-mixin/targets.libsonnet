@@ -225,7 +225,7 @@ local lokiQuery = g.query.loki;
     ipsUsed:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (job, instance, ip_version, subnet_name) (openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s}) / sum by (job, instance, ip_version, subnet_name)(openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s})' % vars
+        'sum by (job, instance, ip_version, network_name, subnet_name) (openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"}) / sum by (job, instance, ip_version, network_name, subnet_name)(openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"})' % vars {alertsIPutilizationNetworksMatcher: config.alertsIPutilizationNetworksMatcher}
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
       + prometheusQuery.withLegendFormat('{{network_name}}/{{subnet_name}}'),
