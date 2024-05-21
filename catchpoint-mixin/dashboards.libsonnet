@@ -76,12 +76,31 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-
+              panels.pageCompletionTimeNodeName,
+              panels.DNSResolutionNodeName,
+              panels.contentHandlingNodeName { gridPos+: { w: 8 } },
+              panels.clientProcessingNodeName { gridPos+: { w: 8 } },
+              panels.additionalDelayNodeName { gridPos+: { w: 8 } },
+              g.panel.row.new('Response'),
+              panels.responseContentSizeNodeName,
+              panels.totalContentSizeNodeName,
+              g.panel.row.new('Network activity'),
+              panels.networkConnectionsNodeName { gridPos+: { w: 8 } },
+              panels.hostsContactedNodeName { gridPos+: { w: 8 } },
+              panels.cacheAccessNodeName { gridPos+: { w: 8 } },
+              g.panel.row.new('Request'),
+              panels.requestsRatioNodeName,
+              panels.redirectionsNodeName,
+              g.panel.row.new('Content type'),
+              panels.contentTypesLoadedBySizeNodeName,
+              panels.contentLoadedByTypeNodeName,
+              g.panel.row.new('Errors'),
+              panels.errorsNodeName { gridPos+: { w: 24 } },
             ], 12, 6
           )
         )
         // hide link to self
-        + root.applyCommon(vars, uid + '-nodename-overview', tags, links { catchpointNodeNameOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.nodeNameVariable, uid + '-nodename-overview', tags, links { catchpointNodeNameOverview+:: {} }, annotations, timezone, refresh, period),
     },
 
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
