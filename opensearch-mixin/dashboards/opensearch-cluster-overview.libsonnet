@@ -6,14 +6,13 @@ local utils = commonlib.utils;
 
 local dashboardUidSuffix = '-cluster-overview';
 
-
 {
   // variables
   local variables = (import '../variables.libsonnet').new(
     filteringSelector=$._config.filteringSelector,
     groupLabels=$._config.groupLabels,
     instanceLabels=[],
-    varMetric='opensearch_cluster_status'
+    varMetric='opensearch_cluster_status',
   ),
 
   local panels = (import '../panels.libsonnet').new(
