@@ -61,7 +61,7 @@ local utils = commonlib.utils;
 
       testNameVariable:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) + [testNameLabel],
+        + variablesFromLabels(groupLabels, instanceLabels + testNameLabel, filteringSelector, multiInstance=false),
 
       nodeNameVariable:
         [root.datasources.prometheus]
