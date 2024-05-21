@@ -43,7 +43,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { catchpointOverview+:: {} }, annotations, timezone, refresh, period),
       testNameOverview:
-        g.dashboard.new(prefix + ' web performance by node name')
+        g.dashboard.new(prefix + ' web performance by test name')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
@@ -60,13 +60,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.hostsContacted { gridPos+: { w: 8 } },
               panels.cacheAccess { gridPos+: { w: 8 } },
               g.panel.row.new('Request'),
-              panels.requestsRatio,
+              panels.requestSucessRatio,
               panels.redirections,
-              g.panel.row.new('Content type'),
-              panels.contentTypesLoadedBySize,
-              panels.contentLoadedByType,
-              g.panel.row.new('Errors'),
-              panels.errors { gridPos+: { w: 24 } },
+              g.panel.row.new('Errors and content types'),
+              panels.errors { gridPos+: { w: 8 } },
+              panels.contentTypesLoadedBySize { gridPos+: { w: 8 } },
+              panels.contentLoadedByType { gridPos+: { w: 8 } },
             ], 12, 6
           )
         )
