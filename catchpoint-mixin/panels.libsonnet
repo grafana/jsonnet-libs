@@ -118,90 +118,113 @@ local utils = commonlib.utils;
           description='Errors encountered by test name.'
         ),
 
-
       // Web Performance by Test Name Dashboard Panels
       pageCompletionTime:
         commonlib.panels.generic.timeSeries.base.new(
           'Page completion time',
           targets=[t.pageCompletionTime],
-          description=''
-        ),
+          description='Time taken for the browser to fully render the page after all resources are downloaded.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       DNSResolution:
         commonlib.panels.generic.timeSeries.base.new(
           'Connection and DNS resolution',
           targets=[t.DNSResolution],
-          description=''
-        ),
+          description='Time taken to establish a connection to the URL and resolve the domain name, which is critical for identifying network connectivity and DNS resolution issues.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+
       contentHandling:
         commonlib.panels.generic.timeSeries.base.new(
           'Content handling',
           targets=[t.contentHandlingLoad, t.contentHandlingRender],
-          description=''
-        ),
+          description='Time taken to load and render content on the webpage.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       clientProcessing:
         commonlib.panels.generic.timeSeries.base.new(
           'Client processing',
           targets=[t.clientProcessing],
-          description=''
-        ),
+          description='Client processing time, which reflects the time spent on client-side processing, including script execution and rendering.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       additionalDelay:
         commonlib.panels.generic.timeSeries.base.new(
           'Additional delays',
           targets=[t.additionalDelay],
-          description=''
-        ),
+          description='Additional delays encountered due to redirects.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       responseContentSize:
         commonlib.panels.generic.timeSeries.base.new(
           'Response content size',
           targets=[t.responseContentSize, t.responseHeaderSize],
-          description=''
-        ),
+          description='Size of the HTTP response content in bytes.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       totalContentSize:
         commonlib.panels.generic.timeSeries.base.new(
           'Total content size',
           targets=[t.totalContentSize, t.totalHeaderSize],
-          description=''
-        ),
+          description='Total size of the HTTP response content and headers in bytes.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       networkConnections:
         commonlib.panels.generic.timeSeries.base.new(
           'Network connections',
           targets=[t.networkConnections],
-          description=''
-        ),
+          description='Number of connections made.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('conn')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       hostsContacted:
         commonlib.panels.generic.timeSeries.base.new(
           'Hosts contacted',
           targets=[t.hostsContacted],
-          description=''
-        ),
+          description='Number of hosts contacted.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('hosts')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+
 
       cacheAccess:
         commonlib.panels.generic.timeSeries.base.new(
           'Cache access',
           targets=[t.cacheAccess],
-          description=''
-        ),
+          description='Number of cached elements accessed.'
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       requestsRatio:
         commonlib.panels.generic.timeSeries.base.new(
           'Requests success/failure ratio',
-          targets=[t.requestsSuccessRatio, t.requestsFailureRatio],
-          description=''
-        ),
+          targets=[t.requestsSuccessRatio],
+          description='Success ratio of requests made.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       redirections:
         commonlib.panels.generic.timeSeries.base.new(
           'Redirects',
           targets=[t.redirections],
-          description=''
-        ),
+          description='Number of HTTP redirections encountered.'
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       contentTypesLoadedBySize:
         pieChart.new(title='Content types loaded by size')
@@ -211,20 +234,25 @@ local utils = commonlib.utils;
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.panelOptions.withDescription(''),
-
+        + pieChart.panelOptions.withDescription('Size of content loaded in bytes')
+        + pieChart.standardOptions.withUnit('decbytes'),
 
       contentLoadedByType:
         barGauge.new(title='Content loaded by type')
         + barGauge.queryOptions.withTargets([t.imageLoadedByType, t.htmlLoadedByType, t.cssLoadedByType, t.scriptLoadedByType, t.fontLoadedByType, t.xmlLoadedByType, t.mediaLoadedByType])
-        + barGauge.panelOptions.withDescription('')
-        + barGauge.options.withOrientation('horizontal'),
+        + barGauge.panelOptions.withDescription('Number of elements loaded.')
+        + barGauge.options.withOrientation('horizontal')
+        + barGauge.standardOptions.thresholds.withSteps([
+          barGauge.thresholdStep.withColor('super-light-green'),
+        ]),
 
       errors:
         commonlib.panels.generic.timeSeries.base.new(
           'Errors',
           targets=[t.errors],
-          description=''
-        ),
+          description='Indicates if any errors occurred.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('err')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
     },
 }

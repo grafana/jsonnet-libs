@@ -12,5 +12,5 @@ local g = import './g.libsonnet';
       catchpointNodeNameOverview:
         link.link.new('Catchpoint node name machines', '/d/' + this.grafana.dashboards.nodeNameOverview.uid)
         + link.link.options.withKeepTime(true),
-    }
+    },
 }
