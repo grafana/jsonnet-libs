@@ -139,7 +139,7 @@ local utils = commonlib.utils;
       pageCompletionTime:
         commonlib.panels.generic.timeSeries.base.new(
           'Page completion time',
-          targets=[t.pageCompletionTime],
+          targets=[t.pageCompletionTime, t.pageTotalLoadTime],
           description='Time taken for the browser to fully render the page after all resources are downloaded.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
@@ -148,8 +148,8 @@ local utils = commonlib.utils;
       DNSResolution:
         commonlib.panels.generic.timeSeries.base.new(
           'Connection and DNS resolution',
-          targets=[t.DNSResolution],
-          description='Time taken to establish a connection to the URL and resolve the domain name, which is critical for identifying network connectivity and DNS resolution issues.'
+          targets=[t.DNSResolution, t.SSLTime, t.connectTime],
+          description='Time taken establish an SSL handshake, DNS resolution and connect.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
@@ -175,8 +175,8 @@ local utils = commonlib.utils;
       additionalDelay:
         commonlib.panels.generic.timeSeries.base.new(
           'Additional delays',
-          targets=[t.additionalDelay],
-          description='Additional delays encountered due to redirects.'
+          targets=[t.additionalDelay, t.waitTime],
+          description='Additional delays encountered due to redirects as well as time from successful connection to receiving the first byte.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
@@ -226,10 +226,10 @@ local utils = commonlib.utils;
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
-      requestsRatio:
+      requestSucessRatio:
         commonlib.panels.generic.timeSeries.base.new(
-          'Requests success/failure ratio',
-          targets=[t.requestsSuccessRatio],
+          'Requests success ratio',
+          targets=[t.requestSuccessRatio],
           description='Success ratio of requests made.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
@@ -263,13 +263,17 @@ local utils = commonlib.utils;
           barGauge.thresholdStep.withColor('super-light-green'),
         ]),
 
+
       errors:
-        commonlib.panels.generic.timeSeries.base.new(
-          'Errors',
-          targets=[t.errors],
-          description='Indicates if any errors occurred.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('err')
-        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
+        barGauge.new(title='Errors')
+        + barGauge.queryOptions.withTargets([t.objectLoadedError, t.DNSError, t.loadError, t.timeoutError, t.connectionError, t.transactionError])
+        + barGauge.panelOptions.withDescription('Indicates various potential errors that are occuring.')
+        + barGauge.options.withOrientation('horizontal')
+        + barGauge.standardOptions.withMax(1)
+        + barGauge.standardOptions.thresholds.withSteps([
+          barGauge.thresholdStep.withColor('super-light-green'),
+          barGauge.standardOptions.threshold.step.withValue(1) + barGauge.thresholdStep.withColor('super-light-red'),
+        ]),
+
     },
 }
