@@ -394,5 +394,222 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
+    // Web performance by node name dashboard
+    pageCompletionTimeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_document_complete_time{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+
+    DNSResolutionNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_dns_time{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+
+    contentHandlingLoadNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_content_load_time{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - load' % utils.labelsToPanelLegend(testNameLabel)),
+
+    contentHandlingRenderNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_render_start_time{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - render' % utils.labelsToPanelLegend(testNameLabel)),
+
+    clientProcessingNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_client_time{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+
+    additionalDelayNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_redirect_time{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+
+    responseContentSizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_response_content_size{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - content' % utils.labelsToPanelLegend(testNameLabel)),
+
+    responseHeaderSizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_response_header_size{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - header' % utils.labelsToPanelLegend(testNameLabel)),
+
+    totalContentSizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_total_content_size{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - content' % utils.labelsToPanelLegend(testNameLabel)),
+
+    totalHeaderSizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_total_header_size{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - header' % utils.labelsToPanelLegend(testNameLabel)),
+
+    networkConnectionsNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_connections_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+
+    hostsContactedNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_hosts_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+
+    cacheAccessNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_cached_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+
+    requestsSuccessRatioNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        '(avg by (test_name) (catchpoint_requests_count{%(nodeNameSelector)s}) - avg by (test_name) (catchpoint_failed_requests_count{%(nodeNameSelector)s})) / avg by (test_name) (catchpoint_requests_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testNameLabel)),
+
+    requestsFailureRatioNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'avg by (test_name) (catchpoint_failed_requests_count{%(nodeNameSelector)s}) / clamp_min(avg by (test_name) (catchpoint_requests_count{%(nodeNameSelector)s}), 1)' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(testNameLabel)),
+
+    redirectionsNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_redirections_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+
+    imageLoadedBySizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_image_content_type{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('image'),
+
+    scriptLoadedBySizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_script_content_type{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('script'),
+
+    htmlLoadedBySizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_html_content_type{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('html'),
+
+    cssLoadedBySizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_css_content_type{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('css'),
+
+    fontLoadedBySizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_font_content_type{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('font'),
+
+    xmlLoadedBySizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_xml_content_type{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('xml'),
+
+    mediaLoadedBySizeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_media_content_type{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('media'),
+
+    imageLoadedByTypeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_image_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('image'),
+
+    scriptLoadedByTypeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_script_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('script'),
+
+    htmlLoadedByTypeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_html_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('html'),
+
+    cssLoadedByTypeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_css_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('css'),
+
+    fontLoadedByTypeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_font_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('font'),
+
+    xmlLoadedByTypeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_xml_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('xml'),
+
+    mediaLoadedByTypeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_media_count{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('media'),
+
+    errorsNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_any_error{%(nodeNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
   },
 }
