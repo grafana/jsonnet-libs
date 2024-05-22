@@ -412,217 +412,288 @@ local utils = commonlib.utils {
     pageCompletionTimeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_document_complete_time{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_document_complete_time{%(testNameSelector)s})' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s - completion' % utils.labelsToPanelLegend(testNameLabel)),
+
+    pageTotalLoadTimeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_total_time{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - load' % utils.labelsToPanelLegend(testNameLabel)),
 
     DNSResolutionNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_dns_time{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_dns_time{%(testNameSelector)s})' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s - DNS' % utils.labelsToPanelLegend(testNameLabel)),
+
+    SSLTimeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_ssl_time{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - SSL' % utils.labelsToPanelLegend(testNameLabel)),
+
+    connectTimeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_connect_time{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - connect' % utils.labelsToPanelLegend(testNameLabel)),
 
     contentHandlingLoadNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_content_load_time{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_content_load_time{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - load' % utils.labelsToPanelLegend(testNameLabel)),
+
 
     contentHandlingRenderNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_render_start_time{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_render_start_time{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - render' % utils.labelsToPanelLegend(testNameLabel)),
 
     clientProcessingNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_client_time{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_client_time{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     additionalDelayNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_redirect_time{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_redirect_time{%(testNameSelector)s})' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s - redirect' % utils.labelsToPanelLegend(testNameLabel)),
+
+    waitTimeNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (test_name) (catchpoint_wait_time{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - wait' % utils.labelsToPanelLegend(testNameLabel)),
 
     responseContentSizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_response_content_size{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_response_content_size{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - content' % utils.labelsToPanelLegend(testNameLabel)),
 
     responseHeaderSizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_response_header_size{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_response_header_size{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - header' % utils.labelsToPanelLegend(testNameLabel)),
 
     totalContentSizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_total_content_size{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_total_content_size{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - content' % utils.labelsToPanelLegend(testNameLabel)),
 
     totalHeaderSizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_total_header_size{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_total_header_size{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - header' % utils.labelsToPanelLegend(testNameLabel)),
 
     networkConnectionsNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_connections_count{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_connections_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     hostsContactedNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_hosts_count{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_hosts_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     cacheAccessNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_cached_count{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_cached_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
-    requestsSuccessRatioNodeName:
+    requestSuccessRatioNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '(avg by (test_name) (catchpoint_requests_count{%(nodeNameSelector)s}) - avg by (test_name) (catchpoint_failed_requests_count{%(nodeNameSelector)s})) / avg by (test_name) (catchpoint_requests_count{%(nodeNameSelector)s})' % vars
+        '(avg by (test_name) (catchpoint_requests_count{%(testNameSelector)s}) - avg by (test_name) (catchpoint_failed_requests_count{%(testNameSelector)s})) / avg by (test_name) (catchpoint_requests_count{%(testNameSelector)s})' % vars
       )
-      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     requestsFailureRatioNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'avg by (test_name) (catchpoint_failed_requests_count{%(nodeNameSelector)s}) / clamp_min(avg by (test_name) (catchpoint_requests_count{%(nodeNameSelector)s}), 1)' % vars
+        'avg by (test_name) (catchpoint_failed_requests_count{%(testNameSelector)s}) / clamp_min(avg by (test_name) (catchpoint_requests_count{%(testNameSelector)s}), 1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(testNameLabel)),
 
     redirectionsNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_redirections_count{%(nodeNameSelector)s})' % vars
+        'sum by (test_name) (catchpoint_redirections_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     imageLoadedBySizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_image_content_type{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_image_content_type{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('image'),
 
     scriptLoadedBySizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_script_content_type{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_script_content_type{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('script'),
 
     htmlLoadedBySizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_html_content_type{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_html_content_type{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('html'),
 
     cssLoadedBySizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_css_content_type{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_css_content_type{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('css'),
 
     fontLoadedBySizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_font_content_type{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_font_content_type{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('font'),
 
     xmlLoadedBySizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_xml_content_type{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_xml_content_type{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('xml'),
 
     mediaLoadedBySizeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_media_content_type{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_media_content_type{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('media'),
 
     imageLoadedByTypeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_image_count{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_image_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('image'),
 
     scriptLoadedByTypeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_script_count{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_script_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('script'),
 
     htmlLoadedByTypeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_html_count{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_html_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('html'),
 
     cssLoadedByTypeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_css_count{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_css_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('css'),
 
     fontLoadedByTypeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_font_count{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_font_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('font'),
 
     xmlLoadedByTypeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_xml_count{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_xml_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('xml'),
 
     mediaLoadedByTypeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (node_name) (catchpoint_media_count{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_media_count{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('media'),
+
+    objectLoadedErrorNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_error_objects_loaded{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('object loaded'),
+
+    DNSErrorNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_dns_error{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('DNS'),
+
+    loadErrorNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_load_error{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('load'),
+
+    timeoutErrorNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_timeout_error{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('timeout'),
+
+    connectionErrorNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_connection_error{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('connection'),
+
+    transactionErrorNodeName:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (node_name) (catchpoint_transaction_error{%(testNameSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('transaction'),
 
     errorsNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (test_name) (catchpoint_any_error{%(nodeNameSelector)s})' % vars
+        'sum by (node_name) (catchpoint_any_error{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
   },
