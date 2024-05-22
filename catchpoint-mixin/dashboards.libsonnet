@@ -89,13 +89,12 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.hostsContactedNodeName { gridPos+: { w: 8 } },
               panels.cacheAccessNodeName { gridPos+: { w: 8 } },
               g.panel.row.new('Request'),
-              panels.requestsRatioNodeName,
+              panels.requestSucessRatioNodeName,
               panels.redirectionsNodeName,
-              g.panel.row.new('Content type'),
-              panels.contentTypesLoadedBySizeNodeName,
-              panels.contentLoadedByTypeNodeName,
-              g.panel.row.new('Errors'),
-              panels.errorsNodeName { gridPos+: { w: 24 } },
+              g.panel.row.new('Errors and content types'),
+              panels.errorsNodeName { gridPos+: { w: 8 } },
+              panels.contentTypesLoadedBySizeNodeName { gridPos+: { w: 8 } },
+              panels.contentLoadedByTypeNodeName { gridPos+: { w: 8 } },
             ], 12, 6
           )
         )
