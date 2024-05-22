@@ -16,7 +16,8 @@ local utils = commonlib.utils;
           targets=[t.topAvgLoadTimeTestName],
           description='Average total time it took to load the webpage by test name, helping assess the responsiveness and speed of the monitored webpage.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('ms'),
+        + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       topMaxTotalLoadTime:
         commonlib.panels.generic.timeSeries.base.new(
@@ -24,6 +25,7 @@ local utils = commonlib.utils;
           targets=[t.topMaxTotalLoadTime],
           description='Maximum total time it took to load the webpage by test name, indicating the worst-case scenario for webpage loading performance.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topAvgDocumentCompletionTimeTestName:
@@ -32,6 +34,7 @@ local utils = commonlib.utils;
           targets=[t.topAvgDocumentCompletionTimeTestName],
           description='Average time taken for the browser to fully render the page after all resources are downloaded by test name, serving as a key indicator of end-user perceived load time.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topMaxDocumentCompletionTime:
@@ -40,22 +43,25 @@ local utils = commonlib.utils;
           targets=[t.topMaxDocumentCompletionTime],
           description='Maximum time taken for the browser to fully render the page after all resources are downloaded by test name, highlighting the worst-case scenario for end-user perceived load time.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
-      topAvgRequestRatioTestName:
+      bottomAvgRequestRatioTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average request ratio by test name',
-          targets=[t.topAvgRequestSuccessRatioTestName, t.topAvgRequestFailureRatioTestName],
-          description='Average ratio of successful and failed requests by test name.'
+          'Bottom average success request ratio by test name',
+          targets=[t.bottomAvgRequestSuccessRatioTestName],
+          description='Worst average succesful request ratio by test name.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
-      topMaxRequestRatioTestName:
+      topMaxFailedRequestRatioTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top max request ratio by test name',
-          targets=[t.topMaxRequestSuccessRatioTestName, t.topMaxRequestFailureRatioTestName],
-          description=''
+          'Top max failed request ratio',
+          targets=[t.topMaxFailedRequestRatioTestName],
+          description='Highest failure request ratio.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
       topAvgConnectionSetupTimeTestName:
@@ -64,6 +70,7 @@ local utils = commonlib.utils;
           targets=[t.topAvgConnectionSetupTimeTestName],
           description='Average time taken to establish a connection to the URL by test names.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topMaxConnectionSetupTimeTestName:
@@ -72,6 +79,7 @@ local utils = commonlib.utils;
           targets=[t.topMaxConnectionSetupTimeTestName],
           description='Maximum time taken to establish a connection to the URL by test name, indicating the worst-case scenario for network connectivity and infrastructure performance.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topAvgContentLoadingTimeTestName:
@@ -80,6 +88,7 @@ local utils = commonlib.utils;
           targets=[t.topAvgContentLoadingTimeTestName],
           description='Average time taken to load content on the webpage by test name.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topMaxContentLoadingTimeTestName:
@@ -88,6 +97,7 @@ local utils = commonlib.utils;
           targets=[t.topMaxContentLoadingTimeTestName],
           description='Maximum time taken to load content on the webpage by test name, highlighting the worst-case scenario for content delivery and display speed.'
         )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topAvgRedirectsTestName:
@@ -95,14 +105,16 @@ local utils = commonlib.utils;
           'Top average redirects by test name',
           targets=[t.topAvgRedirectsTestName],
           description='Average number of HTTP redirections by test name, which is important for assessing the impact of redirects on overall page load time.'
-        ),
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       topMaxRedirectsTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top max redirects by test name',
           targets=[t.topMaxRedirectsTestName],
           description='Maximum number of HTTP redirections encountered by test name, indicating the worst-case scenario for the impact of redirects on page load time.'
-        ),
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       alertsPanel:
         alertList.new('Catchpoint alerts')
