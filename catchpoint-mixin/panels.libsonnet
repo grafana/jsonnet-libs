@@ -53,6 +53,8 @@ local utils = commonlib.utils;
           description='Worst average succesful request ratio by test name.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
+        + g.panel.timeSeries.standardOptions.withMax(1)
+        + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
       topMaxFailedRequestRatioTestName:
@@ -62,6 +64,8 @@ local utils = commonlib.utils;
           description='Highest failure request ratio.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
+        + g.panel.timeSeries.standardOptions.withMax(1)
+        + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
       topAvgConnectionSetupTimeTestName:
