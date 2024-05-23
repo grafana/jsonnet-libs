@@ -216,6 +216,8 @@ local utils = commonlib.utils;
           description='Success ratio of requests made.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+        + g.panel.timeSeries.standardOptions.withMax(1)
+        + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       redirections:
