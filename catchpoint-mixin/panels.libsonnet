@@ -132,7 +132,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Connection and DNS resolution',
           targets=[t.DNSResolution, t.SSLTime, t.connectTime],
-          description='Time taken establish an SSL handshake, DNS resolution and connect.'
+          description='Time taken to establish an SSL handshake, DNS resolution, and connect.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
@@ -159,7 +159,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Additional delays',
           targets=[t.additionalDelay, t.waitTime],
-          description='Additional delays encountered due to redirects as well as time from successful connection to receiving the first byte.'
+          description='Additional delays encountered due to redirects, as well as time from successful connection to receiving the first byte.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
@@ -168,7 +168,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Response content size',
           targets=[t.responseContentSize, t.responseHeaderSize],
-          description='Size of the HTTP response content in bytes.'
+          description='Size of the HTTP response content.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
@@ -177,7 +177,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Total content size',
           targets=[t.totalContentSize, t.totalHeaderSize],
-          description='Total size of the HTTP response content and headers in bytes.'
+          description='Total size of the HTTP response content and headers.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
@@ -234,7 +234,7 @@ local utils = commonlib.utils;
           mode: 'multi',
           sort: 'desc',
         })
-        + pieChart.panelOptions.withDescription('Size of content loaded in bytes')
+        + pieChart.panelOptions.withDescription('Size of content loaded.')
         + pieChart.standardOptions.withUnit('decbytes'),
 
       contentLoadedByType:
