@@ -125,6 +125,7 @@ local utils = commonlib.utils;
           'Top errors by test name',
           targets=[t.topErrorsByTestName],
           description='Errors encountered by test name.'
-        ),
+        )
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
     },
 }

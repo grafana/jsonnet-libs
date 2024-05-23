@@ -9,98 +9,99 @@ local utils = commonlib.utils {
   new(this): {
     local vars = this.grafana.variables,
     local config = this.config,
-    local testNameLabel = config.instanceLabels + config.testNameLabel,
+    local testNameLabel = config.testNameLabel,
+    local nodeNameLabel = config.nodeNameLabel,
     local testAndNodeLabel = config.nodeNameLabel + config.testNameLabel,
 
     topAvgLoadTimeTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, avg by (instance, test_name, node_name) (catchpoint_load_time{%(testNameSelector)s}))' % vars
+        'topk(1, avg by (test_name) (avg_over_time(catchpoint_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     topMaxTotalLoadTime:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, max by (instance, test_name, node_name) (catchpoint_load_time{%(testNameSelector)s}))' % vars
+        'topk(1, max by (node_name) (max_over_time(catchpoint_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
     topAvgDocumentCompletionTimeTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, avg by (instance, test_name, node_name) (catchpoint_document_complete_time{%(testNameSelector)s}))' % vars
+        'topk(1, avg by (test_name) (avg_over_time(catchpoint_document_complete_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     topMaxDocumentCompletionTime:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, max by (instance, test_name, node_name) (catchpoint_document_complete_time{%(testNameSelector)s}))' % vars
+        'topk(1, max by (node_name) (max_over_time(catchpoint_document_complete_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
     bottomAvgRequestSuccessRatioTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, avg by (instance, test_name, node_name) ((catchpoint_requests_count{%(testNameSelector)s} - catchpoint_failed_requests_count{%(testNameSelector)s}) / clamp_min(catchpoint_requests_count{%(testNameSelector)s},1)))' % vars
+        'bottomk(1, avg by (test_name) (avg_over_time(((catchpoint_requests_count{%(pureTestNameSelector)s} - catchpoint_failed_requests_count{%(pureTestNameSelector)s}) / clamp_min(catchpoint_requests_count{%(pureTestNameSelector)s},1))[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testNameLabel)),
 
     topMaxFailedRequestRatioTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, max by (instance, test_name, node_name) (catchpoint_failed_requests_count{%(testNameSelector)s} / clamp_min(catchpoint_requests_count{%(testNameSelector)s},1)))' % vars
+        'topk(1, avg by (node_name) (avg_over_time(((catchpoint_failed_requests_count{%(pureTestNameSelector)s}) / clamp_min(catchpoint_requests_count{%(pureTestNameSelector)s},1))[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(nodeNameLabel)),
 
     topAvgConnectionSetupTimeTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, avg by (instance, test_name, node_name) (catchpoint_connect_time{%(testNameSelector)s}))' % vars
+        'topk(1, avg by (test_name) (avg_over_time(catchpoint_connect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     topMaxConnectionSetupTimeTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, max by (instance, test_name, node_name) (catchpoint_connect_time{%(testNameSelector)s}))' % vars
+        'topk(1, max by (node_name) (max_over_time(catchpoint_connect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
 
     topAvgContentLoadingTimeTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, avg by (instance, test_name, node_name) (catchpoint_load_time{%(testNameSelector)s}))' % vars
+        'topk(1, avg by (test_name) (avg_over_time(catchpoint_content_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     topMaxContentLoadingTimeTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, max by (instance, test_name, node_name) (catchpoint_load_time{%(testNameSelector)s}))' % vars
+        'topk(1, max by (node_name) (max_over_time(catchpoint_content_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
 
     topAvgRedirectsTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, avg by (instance, test_name, node_name) (catchpoint_redirect_time{%(testNameSelector)s}))' % vars
+        'topk(1, avg by (test_name) (avg_over_time(catchpoint_redirect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     topMaxRedirectsTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, max by (instance, test_name, node_name) (catchpoint_redirect_time{%(testNameSelector)s}))' % vars
+        'topk(1, max by (node_name) (max_over_time(catchpoint_redirect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
 
     topErrorsByTestName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk by (test_name, node_name) ($top_cluster_count, max by (instance, test_name, node_name) (catchpoint_any_error{%(testNameSelector)s}))' % vars
+        'topk(1, sum by (test_name) (sum_over_time(catchpoint_any_error{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
   },
 }
