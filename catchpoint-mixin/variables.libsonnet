@@ -14,15 +14,6 @@ local utils = commonlib.utils;
       local testNameLabel = this.config.testNameLabel,
 
       local varMetric = 'catchpoint_any_error',
-      local topClusterSelector =
-        var.custom.new(
-          'top_cluster_count',
-          values=[2, 4, 6, 8, 10],
-        )
-        + var.custom.generalOptions.withDescription(
-          'This variable allows for modification of top cluster value.'
-        )
-        + var.custom.generalOptions.withLabel('Top count'),
       local root = self,
       local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
         local chainVarProto(index, chainVar) =
@@ -66,7 +57,7 @@ local utils = commonlib.utils;
       // Use on dashboards where multiple entities can be selected, like fleet dashboards
       overviewVariables:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels + testNameLabel, filteringSelector, multiInstance=true) + [topClusterSelector],
+        + variablesFromLabels(groupLabels, instanceLabels + testNameLabel, filteringSelector, multiInstance=true),
 
       testNameVariable:
         [root.datasources.prometheus]
@@ -80,10 +71,17 @@ local utils = commonlib.utils;
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels),
         ],
+
+      pureTestNameSelector:
+        '%s' % [
+          utils.labelsToPromQLSelector(groupLabels + instanceLabels + testNameLabel),
+        ],
+
       testNameSelector:
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels + instanceLabels + testNameLabel),
         ],
+
       nodeNameSelector:
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels + testNameLabel),
