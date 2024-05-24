@@ -30,7 +30,8 @@ local stub = import './stub.libsonnet';
   // }
   unmarshallJson(signalsJson):
     self.init(
-      datasource='${datasource}',
+      datasource=std.get(signalsJson, 'datasource', 'datasource'),
+      datasourceLabel=std.get(signalsJson, 'datasourceLabel', 'Data source'),
       filteringSelector=[signalsJson.filteringSelector],
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
@@ -63,7 +64,8 @@ local stub = import './stub.libsonnet';
   unmarshallJsonMulti(signalsJson, type='prometheus'):
 
     self.init(
-      datasource='${datasource}',
+      datasource=std.get(signalsJson, 'datasource', 'datasource'),
+      datasourceLabel=std.get(signalsJson, 'datasourceLabel', 'Data source'),
       filteringSelector=[signalsJson.filteringSelector],
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
@@ -107,7 +109,8 @@ local stub = import './stub.libsonnet';
     },
 
   init(
-    datasource='${datasource}',
+    datasource='datasource',
+    datasourceLabel='Data source',
     filteringSelector=['job!=""'],
     groupLabels=['job'],
     instanceLabels=['instance'],
@@ -133,6 +136,8 @@ local stub = import './stub.libsonnet';
       groupLabels,
       instanceLabels,
       varMetric=varMetric,
+      prometheusDatasourceName=datasource,
+      prometheusDatasourceLabel=datasourceLabel,
     ),
     // vars are used in templating(legend+expressions)
     templatingVariables: {

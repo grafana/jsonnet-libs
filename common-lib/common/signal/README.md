@@ -36,6 +36,8 @@ Init level:
 
 |Name|Description|Possible values|Example value|Default value|
 |-----|---|---|---|---|
+|datasource| Prometheus Datasource name. |*|`custom_datasource`|`datasource`|
+|datasourceLabel| Prometheus Datasource label. |*|`Custom data source`|`Data source`|
 |filteringSelector|Used to filter metric scopes. Added to all dashboards'(as part of `queriesSelector`) and alerts' queries. |*|`[job="blablablah]"`,|`['job!=""']`|
 |groupLabels| List of labels used to identify group of instance or whole service. |*|`[job]`|`[job]`|
 |instanceLabels| List of labels used to identify single entity or specific service instance. |*|`[instance]`|`['instance']`|
@@ -83,7 +85,7 @@ local g = import 'g.libsonnet';
 
 # define signals
     local s = commonlib.signals.init(
-        datasource='${datasource}',
+        datasource='datasource',
         instanceLabels=['instance','device'],
         groupLabels=['job'],
         filteringSelector=['job=integrations/test'],

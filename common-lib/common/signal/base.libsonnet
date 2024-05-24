@@ -24,7 +24,7 @@ local signalUtils = import './utils.libsonnet';
     //Return as grafana panel target(query+legend)
     asTarget()::
       prometheusQuery.new(
-        datasource,
+        '${%s}' % datasource,
         self.asPanelExpression(),
       )
       + prometheusQuery.withRefId(name)
@@ -62,7 +62,7 @@ local signalUtils = import './utils.libsonnet';
 
     common::
       // override panel-wide --mixed-- datasource
-      prometheusQuery.withDatasource(datasource)
+      prometheusQuery.withDatasource('${%s}' % datasource)
       + g.panel.timeSeries.panelOptions.withDescription(description)
       + g.panel.timeSeries.standardOptions.withUnit(self.unit)
       + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
