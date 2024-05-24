@@ -80,12 +80,12 @@
           steppedLine: false,
           targets: [
             {
-              expr: 'jvm_memory_bytes_used{job=~"$job", instance=~"$instance"}',
+              expr: 'jvm_memory_used_bytes{job=~"$job", instance=~"$instance"}',
               format: 'time_series',
               interval: '',
 
               legendFormat: '{{area}} memory [{{instance}}]',
-              metric: 'jvm_memory_bytes_used',
+              metric: 'jvm_memory_used_bytes',
               refId: 'A',
               step: 5,
             },
@@ -515,7 +515,7 @@
         multi: true,
         name: 'job',
         options: [],
-        query: 'label_values(jvm_memory_bytes_used,job)',
+        query: 'label_values(jvm_memory_used_bytes,job)',
         refresh: 1,
         regex: '',
         sort: 0,
@@ -535,7 +535,7 @@
         multi: true,
         name: 'instance',
         options: [],
-        query: 'label_values(jvm_memory_bytes_used{job=~"$job"},instance)',
+        query: 'label_values(jvm_memory_used_bytes{job=~"$job"},instance)',
         refresh: 1,
         regex: '',
         sort: 0,
