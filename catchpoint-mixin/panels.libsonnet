@@ -19,11 +19,11 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('ms')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
-      topMaxTotalLoadTime:
+      topAvgTotalLoadTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top max total load time',
-          targets=[t.topMaxTotalLoadTime],
-          description='Maximum total time it took to load the webpage by test name, indicating the worst-case scenario for webpage loading performance.'
+          'Top average total load time by node name',
+          targets=[t.topAvgTotalLoadTimeNodeName],
+          description='Average total time it took to load the webpage by test name, indicating the worst-case scenario for webpage loading performance.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -37,11 +37,11 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
-      topMaxDocumentCompletionTime:
+      topAvgDocumentCompletionTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top max document completion time',
-          targets=[t.topMaxDocumentCompletionTime],
-          description='Maximum time taken for the browser to fully render the page after all resources are downloaded by test name, highlighting the worst-case scenario for end-user perceived load time.'
+          'Top average document completion time by node name',
+          targets=[t.topAvgDocumentCompletionTimeNodeName],
+          description='Average time taken for the browser to fully render the page after all resources are downloaded by test name, highlighting the worst-case scenario for end-user perceived load time.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -57,11 +57,11 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
-      topMaxFailedRequestRatioTestName:
+      topAvgFailedRequestRatioNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top max failed request ratio',
-          targets=[t.topMaxFailedRequestRatioTestName],
-          description='Highest failure request ratio.'
+          'Top average failed request ratio by node name',
+          targets=[t.topAvgFailedRequestRatioNodeName],
+          description='Highest average failed request ratios.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withMax(1)
@@ -77,29 +77,29 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
-      topMaxConnectionSetupTimeTestName:
+      topAvgConnectionSetupTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top max connection setup time by test name',
-          targets=[t.topMaxConnectionSetupTimeTestName],
-          description='Maximum time taken to establish a connection to the URL by test name, indicating the worst-case scenario for network connectivity and infrastructure performance.'
+          'Top average connection setup time by node name',
+          targets=[t.topAvgConnectionSetupTimeNodeName],
+          description='Average time taken to establish a connection to the URL, indicating the worst-case scenario for network connectivity and infrastructure performance.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
       topAvgContentLoadingTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average content loading time by test name',
+          'Top average content loading time',
           targets=[t.topAvgContentLoadingTimeTestName],
           description='Average time taken to load content on the webpage by test name.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
-      topMaxContentLoadingTimeTestName:
+      topAvgContentLoadingTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average content loading time by test name',
-          targets=[t.topMaxContentLoadingTimeTestName],
-          description='Maximum time taken to load content on the webpage by test name, highlighting the worst-case scenario for content delivery and display speed.'
+          'Top average content loading time by node name',
+          targets=[t.topAvgContentLoadingTimeNodeName],
+          description='Average time taken to load content on the webpage by test name, highlighting the worst-case scenario for content delivery and display speed.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -112,11 +112,11 @@ local utils = commonlib.utils;
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
-      topMaxRedirectsTestName:
+      topAvgRedirectsNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top max redirects by test name',
-          targets=[t.topMaxRedirectsTestName],
-          description='Maximum number of HTTP redirections encountered by test name, indicating the worst-case scenario for the impact of redirects on page load time.'
+          'Top average redirects by node name',
+          targets=[t.topAvgRedirectsNodeName],
+          description='Average number of HTTP redirections encountered, indicating the worst-case scenario for the impact of redirects on page load time.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
