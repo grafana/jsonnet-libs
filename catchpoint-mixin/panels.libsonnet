@@ -116,7 +116,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average redirects by node name',
           targets=[t.topAvgRedirectsNodeName],
-          description='Average number of HTTP redirections encountered, indicating the worst-case scenario for the impact of redirects on page load time.'
+          description='The top average number of redirects among all node names over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
