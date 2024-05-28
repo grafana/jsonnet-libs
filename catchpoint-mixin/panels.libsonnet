@@ -81,7 +81,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average connection setup time by node name',
           targets=[t.topAvgConnectionSetupTimeNodeName],
-          description='Average time taken to establish a connection to the URL, indicating the worst-case scenario for network connectivity and infrastructure performance.'
+          description='The top average connection setup time among all node names over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
