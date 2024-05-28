@@ -20,10 +20,10 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
-    topMaxTotalLoadTime:
+    topAvgTotalLoadTimeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk(1, max by (node_name) (max_over_time(catchpoint_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
+        'topk(1, avg by (node_name) (avg_over_time(catchpoint_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
@@ -34,10 +34,10 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
-    topMaxDocumentCompletionTime:
+    topAvgDocumentCompletionTimeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk(1, max by (node_name) (max_over_time(catchpoint_document_complete_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
+        'topk(1, avg by (node_name) (avg_over_time(catchpoint_document_complete_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
@@ -48,7 +48,7 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testNameLabel)),
 
-    topMaxFailedRequestRatioTestName:
+    topAvgFailedRequestRatioNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'topk(1, avg by (node_name) (avg_over_time(((catchpoint_failed_requests_count{%(pureTestNameSelector)s}) / clamp_min(catchpoint_requests_count{%(pureTestNameSelector)s},1))[$__interval:])))' % vars
@@ -62,12 +62,12 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
-    topMaxConnectionSetupTimeTestName:
+    topAvgConnectionSetupTimeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk(1, max by (node_name) (max_over_time(catchpoint_connect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
+        'topk(1, avg by (node_name) (avg_over_time(catchpoint_connect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
     topAvgContentLoadingTimeTestName:
       prometheusQuery.new(
@@ -76,10 +76,10 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
-    topMaxContentLoadingTimeTestName:
+    topAvgContentLoadingTimeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk(1, max by (node_name) (max_over_time(catchpoint_content_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
+        'topk(1, avg by (node_name) (avg_over_time(catchpoint_content_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
 
@@ -90,10 +90,10 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
-    topMaxRedirectsTestName:
+    topAvgRedirectsNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk(1, max by (node_name) (max_over_time(catchpoint_redirect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
+        'topk(1, avg by (node_name) (avg_over_time(catchpoint_redirect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
 
