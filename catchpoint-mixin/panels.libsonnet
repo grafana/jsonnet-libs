@@ -23,7 +23,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average total load time by node name',
           targets=[t.topAvgTotalLoadTimeNodeName],
-          description='Average total time it took to load the webpage by test name, indicating the worst-case scenario for webpage loading performance.'
+          description='The top average total load time among all node names over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
