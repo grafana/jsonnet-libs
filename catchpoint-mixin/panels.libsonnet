@@ -108,7 +108,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average redirects by test name',
           targets=[t.topAvgRedirectsTestName],
-          description='Average number of HTTP redirections by test name, which is important for assessing the impact of redirects on overall page load time.'
+          description='The top average number of redirects among all test names over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
