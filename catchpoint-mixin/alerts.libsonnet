@@ -10,7 +10,7 @@
             expr: |||
               catchpoint_wait_time{%(filteringSelector)s} > %(alertsHighServerResponseTime)s
               or
-              catchpoint_wait_time{%(filteringSelector)s} > avg_over_time(catchpoint_wait_time{%(filteringSelector)s}[15m]) * %(alertsHighServerResponseTimePercent)s
+              catchpoint_wait_time{%(filteringSelector)s} > avg_over_time(catchpoint_wait_time{%(filteringSelector)s}[1h]) * %(alertsHighServerResponseTimePercent)s
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -28,9 +28,9 @@
             expr: |||
               catchpoint_total_time{%(filteringSelector)s} > %(alertsTotalTimeExceeded)s
               or
-              catchpoint_total_time{%(filteringSelector)s} > avg_over_time(catchpoint_total_time{%(filteringSelector)s}[15m]) * %(alertsTotalTimeExceededPercent)s
+              catchpoint_total_time{%(filteringSelector)s} > avg_over_time(catchpoint_total_time{%(filteringSelector)s}[1h]) * %(alertsTotalTimeExceededPercent)s
             ||| % this.config,
-            'for': '15m',
+            'for': '1h',
             labels: {
               severity: 'critical',
             },
@@ -46,9 +46,9 @@
             expr: |||
               catchpoint_dns_time{%(filteringSelector)s} > %(alertsHighDNSResolutionTime)s
               or
-              catchpoint_dns_time{%(filteringSelector)s} > avg_over_time(catchpoint_dns_time{%(filteringSelector)s}[15m]) * %(alertsHighDNSResolutionTimePercent)s
+              catchpoint_dns_time{%(filteringSelector)s} > avg_over_time(catchpoint_dns_time{%(filteringSelector)s}[1h]) * %(alertsHighDNSResolutionTimePercent)s
             ||| % this.config,
-            'for': '15m',
+            'for': '1h',
             labels: {
               severity: 'warning',
             },
@@ -64,9 +64,9 @@
             expr: |||
               catchpoint_content_load_time{%(filteringSelector)s} > %(alertsContentLoadingDelay)s
               or
-              catchpoint_content_load_time{%(filteringSelector)s} > avg_over_time(catchpoint_content_load_time{%(filteringSelector)s}[15m]) * %(alertsContentLoadingDelayPercent)s
+              catchpoint_content_load_time{%(filteringSelector)s} > avg_over_time(catchpoint_content_load_time{%(filteringSelector)s}[1h]) * %(alertsContentLoadingDelayPercent)s
             ||| % this.config,
-            'for': '15m',
+            'for': '1h',
             labels: {
               severity: 'warning',
             },
