@@ -1,2808 +1,2732 @@
 {
-  "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": {
-          "uid": "${datasource}"
-        },
-        "enable": true,
-        "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
-        "type": "dashboard"
-      }
-    ]
-  },
-  "description": "Hashicorp Vault metrics",
-  "editable": true,
-  "fiscalYearStartMonth": 0,
-  "gnetId": 12904,
-  "graphTooltip": 1,
-  "id": 121,
-  "links": [],
-  "liveNow": false,
-  "panels": [
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [
+    "annotations": {
+        "list": [
             {
-              "options": {
-                "0": {
-                  "text": "Standby"
+                "builtIn": 1,
+                "datasource": {
+                    "uid": "${datasource}"
                 },
-                "1": {
-                  "text": "Active"
-                }
-              },
-              "type": "value"
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
             }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          },
-          "unit": "Misc"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 9,
-        "x": 0,
-        "y": 0
-      },
-      "id": 39,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "up{job=~\"$job\", instance=~\"$instance\"}",
-          "format": "time_series",
-          "interval": "",
-          "legendFormat": "{{ instance }}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Healthy status",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto",
-            "inspect": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Number of entries"
-            },
-            "properties": [
-              {
-                "id": "custom.displayMode",
-                "value": "basic"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Mount path"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 113
-              }
-            ]
-          }
         ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 5,
-        "x": 9,
-        "y": 0
-      },
-      "id": 59,
-      "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Number of entries"
-          }
-        ]
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
+    },
+    "description": "Hashicorp Vault metrics",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": 12904,
+    "graphTooltip": 1,
+    "id": 121,
+    "links": [],
+    "liveNow": false,
+    "panels": [
         {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "last_over_time(vault_secret_kv_count{job=~\"$job\", instance=~\"$instance\", mount_point=~\"$mountpoint/\"}[$__range])",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{ mount_point }}",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "Secrets",
-      "transformations": [
-        {
-          "id": "groupBy",
-          "options": {
-            "fields": {
-              "Mount path": {
-                "aggregations": [],
-                "operation": "groupby"
-              },
-              "Number of entries": {
-                "aggregations": [
-                  "last"
-                ],
-                "operation": "aggregate"
-              },
-              "Value": {
-                "aggregations": [
-                  "last"
-                ],
-                "operation": "aggregate"
-              },
-              "mount_point": {
-                "aggregations": [],
-                "operation": "groupby"
-              }
-            }
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "__name__": true,
-              "cluster": true,
-              "env": true,
-              "instance": true,
-              "job": true,
-              "namespace": true,
-              "project": true
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
             },
-            "indexByName": {},
-            "renameByName": {
-              "Value": "Number of entries",
-              "Value (last)": "Number of entries",
-              "mount_point": "Mount path"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 5,
-        "x": 14,
-        "y": 0
-      },
-      "id": 78,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(vault_identity_num_entities{job=~\"$job\", instance=~\"$instance\"})",
-          "interval": "",
-          "legendFormat": "",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Number of identity entities",
-      "type": "stat"
-    },
-    {
-      "aliasColors": {},
-      "breakPoint": "50%",
-      "combine": {
-        "label": "Others",
-        "threshold": 0
-      },
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": []
-        },
-        "overrides": []
-      },
-      "fontSize": "80%",
-      "format": "short",
-      "gridPos": {
-        "h": 6,
-        "w": 5,
-        "x": 19,
-        "y": 0
-      },
-      "id": 49,
-      "legend": {
-        "header": "count",
-        "percentage": false,
-        "show": true,
-        "values": true
-      },
-      "legendType": "Right side",
-      "links": [],
-      "maxDataPoints": 1,
-      "nullPointMode": "connected",
-      "options": {
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "pieType": "pie",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pieType": "pie",
-      "pluginVersion": "7.0.3",
-      "strokeWidth": "3",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg without(instance) (vault_identity_entity_alias_count{job=~\"$job\", instance=~\"$instance\"})",
-          "format": "time_series",
-          "interval": "",
-          "legendFormat": "{{ auth_method }}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Identity entities aliases by method",
-      "type": "piechart",
-      "valueName": "current"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "1": {
-                  "text": "SEALED"
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [
+                        {
+                            "options": {
+                                "0": {
+                                    "text": "Standby"
+                                },
+                                "1": {
+                                    "text": "Active"
+                                }
+                            },
+                            "type": "value"
+                        }
+                    ],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "green",
+                                "value": 1
+                            }
+                        ]
+                    },
+                    "unit": "Misc"
                 },
-                "2": {
-                  "text": "UNSEALED"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "noValue": "N/A",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "yellow",
-                "value": 1
-              },
-              {
-                "color": "green",
-                "value": 2
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 9,
-        "x": 0,
-        "y": 3
-      },
-      "id": 47,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "max(1 + vault_core_unsealed{job=~\"$job\", instance=~\"$instance\"})",
-          "format": "time_series",
-          "interval": "",
-          "legendFormat": "{{ instance }}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Sealed status",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 100
-              },
-              {
-                "color": "#EF843C",
-                "value": 200
-              },
-              {
-                "color": "red",
-                "value": 400
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 5,
-        "x": 14,
-        "y": 3
-      },
-      "id": 95,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(vault_expire_num_leases{job=~\"$job\", instance=~\"$instance\"})",
-          "interval": "",
-          "legendFormat": "",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Number of leases",
-      "type": "stat"
-    },
-    {
-      "collapsed": true,
-      "datasource": {
-        "uid": "${datasource}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 6
-      },
-      "id": 74,
-      "panels": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "Operations",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "bars",
-                "fillOpacity": 25,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "normal"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "decimals": 0,
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
+                "overrides": []
             },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Read"
+            "gridPos": {
+                "h": 3,
+                "w": 9,
+                "x": 0,
+                "y": 0
+            },
+            "id": 39,
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["last"],
+                    "fields": "",
+                    "values": false
                 },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "blue",
-                      "mode": "fixed"
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "up{job=~\"$job\", instance=~\"$instance\"}",
+                    "format": "time_series",
+                    "interval": "",
+                    "legendFormat": "{{ instance }}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Healthy status",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {
+                        "align": "auto",
+                        "displayMode": "auto",
+                        "inspect": false
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
                     }
-                  }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 7
-          },
-          "id": 24,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "max",
-                "sum"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true
-            },
-            "tooltip": {
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "9.2.7",
-          "targets": [
-            {
-              "datasource": {
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "sum(increase({__name__=\"vault_route_create_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "5m",
-              "legendFormat": "Create",
-              "range": true,
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "sum(increase({__name__=\"vault_route_delete_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
-              "hide": false,
-              "interval": "5m",
-              "legendFormat": "Delete",
-              "range": true,
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "sum(increase({__name__=\"vault_route_read_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
-              "format": "time_series",
-              "hide": false,
-              "instant": false,
-              "interval": "5m",
-              "intervalFactor": 1,
-              "legendFormat": "Read",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "sum(increase({__name__=\"vault_route_list_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "5m",
-              "legendFormat": "List",
-              "range": true,
-              "refId": "D"
-            },
-            {
-              "datasource": {
-                "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "sum(increase({__name__=\"vault_route_rollback_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
-              "hide": false,
-              "interval": "5m",
-              "legendFormat": "Rollback",
-              "range": true,
-              "refId": "E"
-            }
-          ],
-          "title": "Number of operations / $__interval",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisCenteredZero": false,
-                "axisColorMode": "text",
-                "axisLabel": "Time of one operation",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
                 },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "min": 0,
-              "noValue": "0",
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "µs"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Read"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "blue",
-                      "mode": "fixed"
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Number of entries"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.displayMode",
+                                "value": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Mount path"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.width",
+                                "value": 113
+                            }
+                        ]
                     }
-                  }
                 ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 12,
-            "y": 7
-          },
-          "id": 35,
-          "links": [],
-          "options": {
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 5,
+                "x": 9,
+                "y": 0
+            },
+            "id": 59,
+            "options": {
+                "footer": {
+                    "fields": "",
+                    "reducer": ["sum"],
+                    "show": false
+                },
+                "showHeader": true,
+                "sortBy": [
+                    {
+                        "desc": true,
+                        "displayName": "Number of entries"
+                    }
+                ]
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "last_over_time(vault_secret_kv_count{job=~\"$job\", instance=~\"$instance\", mount_point=~\"$mountpoint/\"}[$__range])",
+                    "format": "table",
+                    "instant": true,
+                    "interval": "",
+                    "legendFormat": "{{ mount_point }}",
+                    "range": false,
+                    "refId": "A"
+                }
+            ],
+            "title": "Secrets",
+            "transformations": [
+                {
+                    "id": "groupBy",
+                    "options": {
+                        "fields": {
+                            "Mount path": {
+                                "aggregations": [],
+                                "operation": "groupby"
+                            },
+                            "Number of entries": {
+                                "aggregations": ["last"],
+                                "operation": "aggregate"
+                            },
+                            "Value": {
+                                "aggregations": ["last"],
+                                "operation": "aggregate"
+                            },
+                            "mount_point": {
+                                "aggregations": [],
+                                "operation": "groupby"
+                            }
+                        }
+                    }
+                },
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "Time": true,
+                            "__name__": true,
+                            "cluster": true,
+                            "env": true,
+                            "instance": true,
+                            "job": true,
+                            "namespace": true,
+                            "project": true
+                        },
+                        "indexByName": {},
+                        "renameByName": {
+                            "Value": "Number of entries",
+                            "Value (last)": "Number of entries",
+                            "mount_point": "Mount path"
+                        }
+                    }
+                }
+            ],
+            "type": "table"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 3,
+                "w": 5,
+                "x": 14,
+                "y": 0
+            },
+            "id": 78,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["lastNotNull"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(vault_identity_num_entities{job=~\"$job\", instance=~\"$instance\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Number of identity entities",
+            "type": "stat"
+        },
+        {
+            "aliasColors": {},
+            "breakPoint": "50%",
+            "combine": {
+                "label": "Others",
+                "threshold": 0
+            },
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        }
+                    },
+                    "mappings": []
+                },
+                "overrides": []
+            },
+            "fontSize": "80%",
+            "format": "short",
+            "gridPos": {
+                "h": 6,
+                "w": 5,
+                "x": 19,
+                "y": 0
+            },
+            "id": 49,
             "legend": {
-              "calcs": [
-                "mean",
-                "max"
-              ],
-              "displayMode": "table",
-              "placement": "bottom",
-              "showLegend": true
+                "header": "count",
+                "percentage": false,
+                "show": true,
+                "values": true
             },
-            "tooltip": {
-              "mode": "multi",
-              "sort": "none"
-            }
-          },
-          "pluginVersion": "9.2.7",
-          "targets": [
-            {
-              "datasource": {
+            "legendType": "Right side",
+            "links": [],
+            "maxDataPoints": 1,
+            "nullPointMode": "connected",
+            "options": {
+                "legend": {
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "pieType": "pie",
+                "reduceOptions": {
+                    "calcs": ["lastNotNull"],
+                    "fields": "",
+                    "values": false
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pieType": "pie",
+            "pluginVersion": "7.0.3",
+            "strokeWidth": "3",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg without(instance) (vault_identity_entity_alias_count{job=~\"$job\", instance=~\"$instance\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "legendFormat": "{{ auth_method }}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Identity entities aliases by method",
+            "type": "piechart",
+            "valueName": "current"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
                 "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "avg(rate(vault_route_create_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_create_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "Create",
-              "range": true,
-              "refId": "A"
             },
-            {
-              "datasource": {
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [
+                        {
+                            "options": {
+                                "1": {
+                                    "text": "SEALED"
+                                },
+                                "2": {
+                                    "text": "UNSEALED"
+                                }
+                            },
+                            "type": "value"
+                        }
+                    ],
+                    "noValue": "N/A",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "red",
+                                "value": null
+                            },
+                            {
+                                "color": "yellow",
+                                "value": 1
+                            },
+                            {
+                                "color": "green",
+                                "value": 2
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 3,
+                "w": 9,
+                "x": 0,
+                "y": 3
+            },
+            "id": 47,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["last"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "max(1 + vault_core_unsealed{job=~\"$job\", instance=~\"$instance\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "legendFormat": "{{ instance }}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Sealed status",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
                 "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "avg(rate(vault_route_delete_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_delete_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
-              "interval": "",
-              "legendFormat": "Delete",
-              "range": true,
-              "refId": "B"
             },
-            {
-              "datasource": {
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 100
+                            },
+                            {
+                                "color": "#EF843C",
+                                "value": 200
+                            },
+                            {
+                                "color": "red",
+                                "value": 400
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 3,
+                "w": 5,
+                "x": 14,
+                "y": 3
+            },
+            "id": 95,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["lastNotNull"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(vault_expire_num_leases{job=~\"$job\", instance=~\"$instance\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Number of leases",
+            "type": "stat"
+        },
+        {
+            "collapsed": true,
+            "datasource": {
                 "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "avg(rate(vault_route_read_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_read_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
-              "hide": false,
-              "interval": "",
-              "legendFormat": "Read",
-              "range": true,
-              "refId": "C"
             },
-            {
-              "datasource": {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 6
+            },
+            "id": 74,
+            "panels": [
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "Operations",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "bars",
+                                "fillOpacity": 25,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "never",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "normal"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "decimals": 0,
+                            "links": [],
+                            "mappings": [],
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "short"
+                        },
+                        "overrides": [
+                            {
+                                "matcher": {
+                                    "id": "byName",
+                                    "options": "Read"
+                                },
+                                "properties": [
+                                    {
+                                        "id": "color",
+                                        "value": {
+                                            "fixedColor": "blue",
+                                            "mode": "fixed"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "gridPos": {
+                        "h": 9,
+                        "w": 12,
+                        "x": 0,
+                        "y": 7
+                    },
+                    "id": 24,
+                    "interval": "1m",
+                    "links": [],
+                    "options": {
+                        "legend": {
+                            "calcs": ["max", "sum"],
+                            "displayMode": "table",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "pluginVersion": "9.2.7",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "sum(increase({__name__=\"vault_route_create_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
+                            "format": "time_series",
+                            "hide": false,
+                            "interval": "5m",
+                            "legendFormat": "Create",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "sum(increase({__name__=\"vault_route_delete_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
+                            "hide": false,
+                            "interval": "5m",
+                            "legendFormat": "Delete",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "sum(increase({__name__=\"vault_route_read_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
+                            "format": "time_series",
+                            "hide": false,
+                            "instant": false,
+                            "interval": "5m",
+                            "intervalFactor": 1,
+                            "legendFormat": "Read",
+                            "refId": "C"
+                        },
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "sum(increase({__name__=\"vault_route_list_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
+                            "format": "time_series",
+                            "hide": false,
+                            "interval": "5m",
+                            "legendFormat": "List",
+                            "range": true,
+                            "refId": "D"
+                        },
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "sum(increase({__name__=\"vault_route_rollback_${mountpoint}__count\",job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
+                            "hide": false,
+                            "interval": "5m",
+                            "legendFormat": "Rollback",
+                            "range": true,
+                            "refId": "E"
+                        }
+                    ],
+                    "title": "Number of operations / $__interval",
+                    "type": "timeseries"
+                },
+                {
+                    "datasource": {
+                        "type": "prometheus",
+                        "uid": "${datasource}"
+                    },
+                    "fieldConfig": {
+                        "defaults": {
+                            "color": {
+                                "mode": "palette-classic"
+                            },
+                            "custom": {
+                                "axisCenteredZero": false,
+                                "axisColorMode": "text",
+                                "axisLabel": "Time of one operation",
+                                "axisPlacement": "auto",
+                                "barAlignment": 0,
+                                "drawStyle": "line",
+                                "fillOpacity": 10,
+                                "gradientMode": "none",
+                                "hideFrom": {
+                                    "legend": false,
+                                    "tooltip": false,
+                                    "viz": false
+                                },
+                                "lineInterpolation": "linear",
+                                "lineWidth": 1,
+                                "pointSize": 5,
+                                "scaleDistribution": {
+                                    "type": "linear"
+                                },
+                                "showPoints": "never",
+                                "spanNulls": false,
+                                "stacking": {
+                                    "group": "A",
+                                    "mode": "none"
+                                },
+                                "thresholdsStyle": {
+                                    "mode": "off"
+                                }
+                            },
+                            "links": [],
+                            "mappings": [],
+                            "min": 0,
+                            "noValue": "0",
+                            "thresholds": {
+                                "mode": "absolute",
+                                "steps": [
+                                    {
+                                        "color": "green",
+                                        "value": null
+                                    },
+                                    {
+                                        "color": "red",
+                                        "value": 80
+                                    }
+                                ]
+                            },
+                            "unit": "µs"
+                        },
+                        "overrides": [
+                            {
+                                "matcher": {
+                                    "id": "byName",
+                                    "options": "Read"
+                                },
+                                "properties": [
+                                    {
+                                        "id": "color",
+                                        "value": {
+                                            "fixedColor": "blue",
+                                            "mode": "fixed"
+                                        }
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "gridPos": {
+                        "h": 9,
+                        "w": 12,
+                        "x": 12,
+                        "y": 7
+                    },
+                    "id": 35,
+                    "links": [],
+                    "options": {
+                        "legend": {
+                            "calcs": ["mean", "max"],
+                            "displayMode": "table",
+                            "placement": "bottom",
+                            "showLegend": true
+                        },
+                        "tooltip": {
+                            "mode": "multi",
+                            "sort": "none"
+                        }
+                    },
+                    "pluginVersion": "9.2.7",
+                    "targets": [
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "avg(rate(vault_route_create_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_create_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
+                            "format": "time_series",
+                            "interval": "",
+                            "intervalFactor": 1,
+                            "legendFormat": "Create",
+                            "range": true,
+                            "refId": "A"
+                        },
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "avg(rate(vault_route_delete_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_delete_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
+                            "interval": "",
+                            "legendFormat": "Delete",
+                            "range": true,
+                            "refId": "B"
+                        },
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "avg(rate(vault_route_read_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_read_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
+                            "hide": false,
+                            "interval": "",
+                            "legendFormat": "Read",
+                            "range": true,
+                            "refId": "C"
+                        },
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "avg(rate(vault_route_list_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_list_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
+                            "hide": false,
+                            "interval": "",
+                            "legendFormat": "List",
+                            "range": true,
+                            "refId": "D"
+                        },
+                        {
+                            "datasource": {
+                                "uid": "${datasource}"
+                            },
+                            "editorMode": "code",
+                            "expr": "avg(rate(vault_route_rollback_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_rollback_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
+                            "hide": true,
+                            "interval": "",
+                            "legendFormat": "Rollback",
+                            "range": true,
+                            "refId": "E"
+                        }
+                    ],
+                    "title": "Time of operations in \"$mountpoint\"",
+                    "type": "timeseries"
+                }
+            ],
+            "repeat": "mountpoint",
+            "repeatDirection": "h",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "refId": "A"
+                }
+            ],
+            "title": "Path info $mountpoint",
+            "type": "row"
+        },
+        {
+            "collapsed": false,
+            "datasource": {
                 "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "avg(rate(vault_route_list_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_list_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
-              "hide": false,
-              "interval": "",
-              "legendFormat": "List",
-              "range": true,
-              "refId": "D"
             },
-            {
-              "datasource": {
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 9
+            },
+            "id": 45,
+            "panels": [],
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "refId": "A"
+                }
+            ],
+            "title": "Resource usage",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
                 "uid": "${datasource}"
-              },
-              "editorMode": "code",
-              "expr": "avg(rate(vault_route_rollback_${mountpoint}__sum{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) / rate(vault_route_rollback_${mountpoint}__count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]) * 1000)",
-              "hide": true,
-              "interval": "",
-              "legendFormat": "Rollback",
-              "range": true,
-              "refId": "E"
-            }
-          ],
-          "title": "Time of operations in \"$mountpoint\"",
-          "type": "timeseries"
-        }
-      ],
-      "repeat": "mountpoint",
-      "repeatDirection": "h",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Path info $mountpoint",
-      "type": "row"
-    },
-    {
-      "collapsed": false,
-      "datasource": {
-        "uid": "${datasource}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 9
-      },
-      "id": 45,
-      "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Resource usage",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "noValue": "N/A",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "blue",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 0.2
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 0,
-        "y": 10
-      },
-      "id": 41,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(vault_runtime_heap_objects{job=~\"$job\", instance=~\"$instance\"} / vault_runtime_malloc_count{job=~\"$job\", instance=~\"$instance\"})",
-          "interval": "",
-          "intervalFactor": 10,
-          "legendFormat": "",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Heap objects used",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "noValue": "N/A",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "purple",
-                "value": null
-              },
-              {
-                "color": "#EAB839",
-                "value": 70
-              },
-              {
-                "color": "#EF843C",
-                "value": 100
-              },
-              {
-                "color": "#E24D42",
-                "value": 150
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 3,
-        "y": 10
-      },
-      "id": 76,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(vault_runtime_num_goroutines{job=~\"$job\", instance=~\"$instance\"})",
-          "interval": "",
-          "legendFormat": "",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Goroutines",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "noValue": "N/A",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 0.2
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
             },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
+            "gridPos": {
+                "h": 5,
+                "w": 3,
+                "x": 0,
+                "y": 10
             },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Allocated bytes"
+            "id": 41,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["last"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
             },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(vault_runtime_heap_objects{job=~\"$job\", instance=~\"$instance\"} / vault_runtime_malloc_count{job=~\"$job\", instance=~\"$instance\"})",
+                    "interval": "",
+                    "intervalFactor": 10,
+                    "legendFormat": "",
+                    "range": true,
+                    "refId": "A"
                 }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 18,
-        "x": 6,
-        "y": 10
-      },
-      "id": 43,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(vault_runtime_alloc_bytes{job=~\"$job\", instance=~\"$instance\"})",
-          "interval": "",
-          "intervalFactor": 5,
-          "legendFormat": "Allocated bytes",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Allocated bytes",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "datasource": {
-        "uid": "${datasource}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 15
-      },
-      "id": 16,
-      "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Tokens",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "noValue": "N/A",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "purple",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 0,
-        "y": 16
-      },
-      "id": 53,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(vault_token_count{job=~\"$job\", instance=~\"$instance\"})",
-          "interval": "",
-          "legendFormat": "",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Available tokens",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 21,
-        "x": 3,
-        "y": 16
-      },
-      "id": 108,
-      "options": {
-        "displayMode": "basic",
-        "minVizHeight": 10,
-        "minVizWidth": 0,
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "sum by(policy) (vault_token_count_by_policy{job=~\"$job\", instance=~\"$instance\"})",
-          "format": "table",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{ policy }}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Tokens by policy",
-      "transformations": [
-        {
-          "id": "sortBy",
-          "options": {
-            "fields": {},
-            "sort": [
-              {
-                "desc": true,
-                "field": "Value"
-              }
-            ]
-          }
+            ],
+            "title": "Heap objects used",
+            "type": "stat"
         },
         {
-          "id": "prepareTimeSeries",
-          "options": {
-            "format": "many"
-          }
-        }
-      ],
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "blue",
-                "value": null
-              },
-              {
-                "color": "orange",
-                "value": 1
-              },
-              {
-                "color": "red",
-                "value": 3
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 0,
-        "y": 20
-      },
-      "id": 8,
-      "links": [],
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "fieldOptions": {
-          "calcs": [
-            "lastNotNull"
-          ]
-        },
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "last"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(vault_token_create_count{job=~\"$job\", instance=~\"$instance\"} - vault_token_store_count{job=~\"$job\", instance=~\"$instance\"})",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Pending tokens",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 24
-      },
-      "id": 102,
-      "options": {
-        "displayMode": "basic",
-        "minVizHeight": 10,
-        "minVizWidth": 0,
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg by(creation_ttl) (vault_token_count_by_ttl{job=~\"$job\", instance=~\"$instance\"})",
-          "format": "table",
-          "interval": "",
-          "legendFormat": "{{ creation_ttl }}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Tokens by TTL",
-      "transformations": [
-        {
-          "id": "sortBy",
-          "options": {
-            "fields": {},
-            "sort": [
-              {
-                "desc": true,
-                "field": "Value"
-              }
-            ]
-          }
-        },
-        {
-          "id": "prepareTimeSeries",
-          "options": {
-            "format": "many"
-          }
-        }
-      ],
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "continuous-BlPu"
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 24
-      },
-      "id": 100,
-      "options": {
-        "displayMode": "basic",
-        "minVizHeight": 10,
-        "minVizWidth": 0,
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg by(auth_method) (vault_token_count_by_auth{job=~\"$job\", instance=~\"$instance\"})",
-          "format": "table",
-          "interval": "",
-          "legendFormat": "{{ auth_method }}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Tokens by auth method",
-      "transformations": [
-        {
-          "id": "sortBy",
-          "options": {
-            "fields": {},
-            "sort": [
-              {
-                "desc": true,
-                "field": "Value"
-              }
-            ]
-          }
-        },
-        {
-          "id": "prepareTimeSeries",
-          "options": {
-            "format": "many"
-          }
-        }
-      ],
-      "type": "bargauge"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 25,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "noValue": "N/A",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "purple",
+                                "value": null
+                            },
+                            {
+                                "color": "#EAB839",
+                                "value": 70
+                            },
+                            {
+                                "color": "#EF843C",
+                                "value": 100
+                            },
+                            {
+                                "color": "#E24D42",
+                                "value": 150
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
             },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
+            "gridPos": {
+                "h": 5,
+                "w": 3,
+                "x": 3,
+                "y": 10
             },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 30
-      },
-      "id": 65,
-      "interval": "1m",
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg by(auth_method, creation_ttl) (sum_over_time(vault_token_creation{job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "{{ auth_method }} - {{ creation_ttl }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Tokens creation by method and TTL",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "bars",
-            "fillOpacity": 25,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+            "id": 76,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["last"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "normal"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Store"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "dark-blue",
-                  "mode": "fixed"
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(vault_runtime_num_goroutines{job=~\"$job\", instance=~\"$instance\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "range": true,
+                    "refId": "A"
                 }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 30
-      },
-      "id": 6,
-      "interval": "1m",
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg without(instance) (vault_token_create_count{job=~\"$job\", instance=~\"$instance\"})",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Create",
-          "refId": "A"
+            ],
+            "title": "Goroutines",
+            "type": "stat"
         },
         {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg without(instance) (vault_token_store_count{job=~\"$job\", instance=~\"$instance\"})",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Store",
-          "refId": "B"
-        }
-      ],
-      "title": "Token creation/storage",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Lookups per second",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "decbytes"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Allocated bytes"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "blue",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
             },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
+            "gridPos": {
+                "h": 5,
+                "w": 18,
+                "x": 6,
+                "y": 10
             },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Lookup"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#0a50a1",
-                  "mode": "fixed"
+            "id": 43,
+            "options": {
+                "legend": {
+                    "calcs": ["mean", "lastNotNull", "max", "min"],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
                 }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Lookups"
             },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "blue",
-                  "mode": "fixed"
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(vault_runtime_alloc_bytes{job=~\"$job\", instance=~\"$instance\"})",
+                    "interval": "",
+                    "intervalFactor": 5,
+                    "legendFormat": "Allocated bytes",
+                    "range": true,
+                    "refId": "A"
                 }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 36
-      },
-      "id": 14,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
+            ],
+            "title": "Allocated bytes",
+            "type": "timeseries"
         },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
         {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_token_lookup_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "Lookups",
-          "range": true,
-          "refId": "B"
-        }
-      ],
-      "title": "Token lookups",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "datasource": {
-        "uid": "${datasource}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 42
-      },
-      "id": 20,
-      "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Audit",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 0,
-        "y": 43
-      },
-      "id": 97,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "max"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "max(idelta(vault_audit_log_request_failure{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "format": "time_series",
-          "interval": "",
-          "legendFormat": "Request",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Log request failures",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Requests per second",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+            "collapsed": false,
+            "datasource": {
+                "uid": "${datasource}"
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 15
             },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 11,
-        "x": 3,
-        "y": 43
-      },
-      "id": 4,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_audit_log_request_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Request ",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_audit_log_response_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "format": "time_series",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Response",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_core_handle_request_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "format": "time_series",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Handled",
-          "range": true,
-          "refId": "C"
-        }
-      ],
-      "title": "Log requests",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "Requests per second",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 10,
-        "x": 14,
-        "y": 43
-      },
-      "id": 61,
-      "options": {
-        "legend": {
-          "calcs": [
-            "mean",
-            "lastNotNull",
-            "max",
-            "min"
-          ],
-          "displayMode": "table",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_consul_get_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "GET",
-          "range": true,
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_consul_put_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "interval": "",
-          "legendFormat": "PUT",
-          "range": true,
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_consul_delete_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "interval": "",
-          "legendFormat": "DELETE",
-          "range": true,
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "irate(vault_consul_list_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
-          "interval": "",
-          "legendFormat": "LIST",
-          "range": true,
-          "refId": "D"
-        }
-      ],
-      "title": "Consul requests",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 0,
-        "y": 48
-      },
-      "id": 98,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "max"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "max(idelta(vault_audit_log_response_failure{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "format": "time_series",
-          "interval": "",
-          "legendFormat": "Request",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Log response failures",
-      "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "datasource": {
-        "uid": "${datasource}"
-      },
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 53
-      },
-      "id": 18,
-      "panels": [],
-      "targets": [
-        {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "refId": "A"
-        }
-      ],
-      "title": "Policy",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "set"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#629e51",
-                  "mode": "fixed"
+            "id": 16,
+            "panels": [],
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "refId": "A"
                 }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 54
-      },
-      "id": 10,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+            ],
+            "title": "Tokens",
+            "type": "row"
         },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
         {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_policy_set_policy_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "SET",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Policy set",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "noValue": "N/A",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "purple",
+                                "value": null
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
             },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 0,
+                "y": 16
             },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "decimals": 0,
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "GET"
+            "id": 53,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["lastNotNull"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
             },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#1f78c1",
-                  "mode": "fixed"
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(vault_token_count{job=~\"$job\", instance=~\"$instance\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "range": true,
+                    "refId": "A"
                 }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 54
-      },
-      "id": 12,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+            ],
+            "title": "Available tokens",
+            "type": "stat"
         },
-        "tooltip": {
-          "mode": "multi",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.2.7",
-      "targets": [
         {
-          "datasource": {
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "avg(irate(vault_policy_get_policy_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
-          "format": "time_series",
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "GET",
-          "range": true,
-          "refId": "A"
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "continuous-BlPu"
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 21,
+                "x": 3,
+                "y": 16
+            },
+            "id": 108,
+            "options": {
+                "displayMode": "basic",
+                "minVizHeight": 10,
+                "minVizWidth": 0,
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": ["lastNotNull"],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "exemplar": false,
+                    "expr": "sum by(policy) (vault_token_count_by_policy{job=~\"$job\", instance=~\"$instance\"})",
+                    "format": "table",
+                    "instant": false,
+                    "interval": "",
+                    "legendFormat": "{{ policy }}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Tokens by policy",
+            "transformations": [
+                {
+                    "id": "sortBy",
+                    "options": {
+                        "fields": {},
+                        "sort": [
+                            {
+                                "desc": true,
+                                "field": "Value"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "prepareTimeSeries",
+                    "options": {
+                        "format": "many"
+                    }
+                }
+            ],
+            "type": "bargauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "noValue": "0",
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "blue",
+                                "value": null
+                            },
+                            {
+                                "color": "orange",
+                                "value": 1
+                            },
+                            {
+                                "color": "red",
+                                "value": 3
+                            }
+                        ]
+                    },
+                    "unit": "none"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 4,
+                "w": 3,
+                "x": 0,
+                "y": 20
+            },
+            "id": 8,
+            "links": [],
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "fieldOptions": {
+                    "calcs": ["lastNotNull"]
+                },
+                "graphMode": "none",
+                "justifyMode": "auto",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": ["last"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(vault_token_create_count{job=~\"$job\", instance=~\"$instance\"} - vault_token_store_count{job=~\"$job\", instance=~\"$instance\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Pending tokens",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "continuous-BlPu"
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 0,
+                "y": 24
+            },
+            "id": 102,
+            "options": {
+                "displayMode": "basic",
+                "minVizHeight": 10,
+                "minVizWidth": 0,
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": ["lastNotNull"],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg by(creation_ttl) (vault_token_count_by_ttl{job=~\"$job\", instance=~\"$instance\"})",
+                    "format": "table",
+                    "interval": "",
+                    "legendFormat": "{{ creation_ttl }}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Tokens by TTL",
+            "transformations": [
+                {
+                    "id": "sortBy",
+                    "options": {
+                        "fields": {},
+                        "sort": [
+                            {
+                                "desc": true,
+                                "field": "Value"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "prepareTimeSeries",
+                    "options": {
+                        "format": "many"
+                    }
+                }
+            ],
+            "type": "bargauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "continuous-BlPu"
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 12,
+                "y": 24
+            },
+            "id": 100,
+            "options": {
+                "displayMode": "basic",
+                "minVizHeight": 10,
+                "minVizWidth": 0,
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": ["lastNotNull"],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg by(auth_method) (vault_token_count_by_auth{job=~\"$job\", instance=~\"$instance\"})",
+                    "format": "table",
+                    "interval": "",
+                    "legendFormat": "{{ auth_method }}",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Tokens by auth method",
+            "transformations": [
+                {
+                    "id": "sortBy",
+                    "options": {
+                        "fields": {},
+                        "sort": [
+                            {
+                                "desc": true,
+                                "field": "Value"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "id": "prepareTimeSeries",
+                    "options": {
+                        "format": "many"
+                    }
+                }
+            ],
+            "type": "bargauge"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "bars",
+                        "fillOpacity": 25,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 0,
+                "y": 30
+            },
+            "id": 65,
+            "interval": "1m",
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg by(auth_method, creation_ttl) (sum_over_time(vault_token_creation{job=~\"$job\", instance=~\"$instance\"}[$__interval]))",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "{{ auth_method }} - {{ creation_ttl }}",
+                    "refId": "A"
+                }
+            ],
+            "title": "Tokens creation by method and TTL",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "bars",
+                        "fillOpacity": 25,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Store"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "dark-blue",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 12,
+                "y": 30
+            },
+            "id": 6,
+            "interval": "1m",
+            "links": [],
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "single",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg without(instance) (vault_token_create_count{job=~\"$job\", instance=~\"$instance\"})",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Create",
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg without(instance) (vault_token_store_count{job=~\"$job\", instance=~\"$instance\"})",
+                    "format": "time_series",
+                    "hide": false,
+                    "instant": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Store",
+                    "refId": "B"
+                }
+            ],
+            "title": "Token creation/storage",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "Lookups per second",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Lookup"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "#0a50a1",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Lookups"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "blue",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 24,
+                "x": 0,
+                "y": 36
+            },
+            "id": 14,
+            "links": [],
+            "options": {
+                "legend": {
+                    "calcs": ["mean", "lastNotNull", "max", "min"],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_token_lookup_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "Lookups",
+                    "range": true,
+                    "refId": "B"
+                }
+            ],
+            "title": "Token lookups",
+            "type": "timeseries"
+        },
+        {
+            "collapsed": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 42
+            },
+            "id": 20,
+            "panels": [],
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "refId": "A"
+                }
+            ],
+            "title": "Audit",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 1
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 5,
+                "w": 3,
+                "x": 0,
+                "y": 43
+            },
+            "id": 97,
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["max"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "max(idelta(vault_audit_log_request_failure{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "legendFormat": "Request",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Log request failures",
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "Requests per second",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 10,
+                "w": 11,
+                "x": 3,
+                "y": 43
+            },
+            "id": 4,
+            "links": [],
+            "options": {
+                "legend": {
+                    "calcs": ["mean", "lastNotNull", "max", "min"],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_audit_log_request_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "format": "time_series",
+                    "instant": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Request ",
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_audit_log_response_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "format": "time_series",
+                    "hide": false,
+                    "instant": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Response",
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_core_handle_request_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "format": "time_series",
+                    "hide": false,
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "Handled",
+                    "range": true,
+                    "refId": "C"
+                }
+            ],
+            "title": "Log requests",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "Requests per second",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 10,
+                "w": 10,
+                "x": 14,
+                "y": 43
+            },
+            "id": 61,
+            "options": {
+                "legend": {
+                    "calcs": ["mean", "lastNotNull", "max", "min"],
+                    "displayMode": "table",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_consul_get_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "GET",
+                    "range": true,
+                    "refId": "A"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_consul_put_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "interval": "",
+                    "legendFormat": "PUT",
+                    "range": true,
+                    "refId": "B"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_consul_delete_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "interval": "",
+                    "legendFormat": "DELETE",
+                    "range": true,
+                    "refId": "C"
+                },
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "irate(vault_consul_list_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval])",
+                    "interval": "",
+                    "legendFormat": "LIST",
+                    "range": true,
+                    "refId": "D"
+                }
+            ],
+            "title": "Consul requests",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 1
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 5,
+                "w": 3,
+                "x": 0,
+                "y": 48
+            },
+            "id": 98,
+            "maxDataPoints": 100,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "area",
+                "justifyMode": "auto",
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": ["max"],
+                    "fields": "",
+                    "values": false
+                },
+                "textMode": "auto"
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "max(idelta(vault_audit_log_response_failure{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "legendFormat": "Request",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Log response failures",
+            "type": "stat"
+        },
+        {
+            "collapsed": false,
+            "datasource": {
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 53
+            },
+            "id": 18,
+            "panels": [],
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "refId": "A"
+                }
+            ],
+            "title": "Policy",
+            "type": "row"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "set"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "#629e51",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 0,
+                "y": 54
+            },
+            "id": 10,
+            "links": [],
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_policy_set_policy_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "SET",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Policy set",
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "decimals": 0,
+                    "links": [],
+                    "mappings": [],
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "GET"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "#1f78c1",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 6,
+                "w": 12,
+                "x": 12,
+                "y": 54
+            },
+            "id": 12,
+            "links": [],
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "9.2.7",
+            "targets": [
+                {
+                    "datasource": {
+                        "uid": "${datasource}"
+                    },
+                    "editorMode": "code",
+                    "expr": "avg(irate(vault_policy_get_policy_count{job=~\"$job\", instance=~\"$instance\"}[$__rate_interval]))",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 1,
+                    "legendFormat": "GET",
+                    "range": true,
+                    "refId": "A"
+                }
+            ],
+            "title": "Policy get",
+            "type": "timeseries"
         }
-      ],
-      "title": "Policy get",
-      "type": "timeseries"
-    }
-  ],
-  "refresh": "30s",
-  "schemaVersion": 37,
-  "style": "dark",
-  "tags": [
-    "vault"
-  ],
-  "templating": {
-    "list": [
-      {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "Data Source",
-        "multi": false,
-        "name": "datasource",
-        "options": [],
-        "query": "prometheus",
-        "queryValue": "",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
-      },
-      {
-        "allValue": "",
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(vault_core_active, job)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "job",
-        "multi": true,
-        "name": "job",
-        "options": [],
-        "query": {
-          "query": "label_values(vault_core_active, job)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": ".+",
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(vault_core_active{job=~\"$job\"}, instance)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "instance",
-        "multi": true,
-        "name": "instance",
-        "options": [],
-        "query": {
-          "query": "label_values(vault_core_active{job=~\"$job\"}, instance)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      },
-      {
-        "allValue": "",
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(vault_secret_kv_count{job=~\"$job\",instance=~\"$instance\"}, mount_point)",
-        "hide": 0,
-        "includeAll": true,
-        "label": "mountpoint",
-        "multi": true,
-        "name": "mountpoint",
-        "options": [],
-        "query": {
-          "query": "label_values(vault_secret_kv_count{job=~\"$job\",instance=~\"$instance\"}, mount_point)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 2,
-        "regex": "(.+)/",
-        "skipUrlSync": false,
-        "sort": 1,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      }
-    ]
-  },
-  "time": {
-    "from": "now-1h",
-    "to": "now"
-  },
-  "timepicker": {
-    "refresh_intervals": [
-      "10s",
-      "30s",
-      "1m",
-      "5m",
-      "15m",
-      "30m",
-      "1h",
-      "2h",
-      "1d"
     ],
-    "time_options": [
-      "5m",
-      "15m",
-      "1h",
-      "6h",
-      "12h",
-      "24h",
-      "2d",
-      "7d",
-      "30d"
-    ]
-  },
-  "timezone": "",
-  "title": "Hashicorp Vault",
-  "uid": "vaults",
-  "version": 24,
-  "weekStart": ""
+    "refresh": "30s",
+    "schemaVersion": 37,
+    "style": "dark",
+    "tags": ["vault"],
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": false,
+                    "text": "Prometheus",
+                    "value": "Prometheus"
+                },
+                "hide": 0,
+                "includeAll": false,
+                "label": "Prometheus data source",
+                "multi": false,
+                "name": "datasource",
+                "options": [],
+                "query": "prometheus",
+                "queryValue": "",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "type": "datasource"
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "selected": true,
+                    "text": ["All"],
+                    "value": ["$__all"]
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${datasource}"
+                },
+                "definition": "label_values(vault_core_active, job)",
+                "hide": 0,
+                "includeAll": true,
+                "label": "job",
+                "multi": true,
+                "name": "job",
+                "options": [],
+                "query": {
+                    "query": "label_values(vault_core_active, job)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": ".+",
+                "current": {
+                    "selected": true,
+                    "text": ["All"],
+                    "value": ["$__all"]
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${datasource}"
+                },
+                "definition": "label_values(vault_core_active{job=~\"$job\"}, instance)",
+                "hide": 0,
+                "includeAll": true,
+                "label": "Instance",
+                "multi": true,
+                "name": "instance",
+                "options": [],
+                "query": {
+                    "query": "label_values(vault_core_active{job=~\"$job\"}, instance)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            },
+            {
+                "allValue": "",
+                "current": {
+                    "selected": true,
+                    "text": ["All"],
+                    "value": ["$__all"]
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "${datasource}"
+                },
+                "definition": "label_values(vault_secret_kv_count{job=~\"$job\",instance=~\"$instance\"}, mount_point)",
+                "hide": 0,
+                "includeAll": true,
+                "label": "mountpoint",
+                "multi": true,
+                "name": "mountpoint",
+                "options": [],
+                "query": {
+                    "query": "label_values(vault_secret_kv_count{job=~\"$job\",instance=~\"$instance\"}, mount_point)",
+                    "refId": "StandardVariableQuery"
+                },
+                "refresh": 2,
+                "regex": "(.+)/",
+                "skipUrlSync": false,
+                "sort": 1,
+                "tagValuesQuery": "",
+                "tagsQuery": "",
+                "type": "query",
+                "useTags": false
+            }
+        ]
+    },
+    "time": {
+        "from": "now-1h",
+        "to": "now"
+    },
+    "timepicker": {
+        "refresh_intervals": [
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+        ],
+        "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+        ]
+    },
+    "timezone": "",
+    "title": "Hashicorp Vault",
+    "uid": "vaults",
+    "version": 24,
+    "weekStart": ""
 }

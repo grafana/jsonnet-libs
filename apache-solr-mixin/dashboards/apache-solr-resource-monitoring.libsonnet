@@ -11,11 +11,11 @@ local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
 
-local connectionsPanel = {
+local connectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (solr_metrics_node_connections{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}) > 0',
+      'avg by (job, solr_cluster, base_url, item) (solr_metrics_node_connections{' + matcher + '}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - {{item}}',
       format='time_series',
@@ -87,17 +87,17 @@ local connectionsPanel = {
   },
 };
 
-local threadsPanel = {
+local threadsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_submitted_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", executor="updateOnlyExecutor"}[$__interval:])) > 0',
+      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_submitted_total{' + matcher + ', executor="updateOnlyExecutor"}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - submitted',
       format='time_series',
     ),
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_completed_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", executor="updateOnlyExecutor"}[$__interval:])) > 0',
+      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_node_thread_pool_completed_total{' + matcher + ', executor="updateOnlyExecutor"}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - completed',
       format='time_series',
@@ -169,11 +169,11 @@ local threadsPanel = {
   },
 };
 
-local nodeCoreFSUsagePanel = {
+local nodeCoreFSUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (solr_metrics_node_core_root_fs_bytes{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}) > 0',
+      'avg by (job, solr_cluster, base_url, item) (solr_metrics_node_core_root_fs_bytes{' + matcher + '}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - {{item}}',
       format='time_series',
@@ -245,11 +245,11 @@ local nodeCoreFSUsagePanel = {
   },
 };
 
-local garbageCollectionsPanel = {
+local garbageCollectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}[$__interval:])) > 0',
+      'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_total{' + matcher + '}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - {{item}}',
       format='time_series',
@@ -322,11 +322,11 @@ local garbageCollectionsPanel = {
   },
 };
 
-local garbageCollectionTimePanel = {
+local garbageCollectionTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}[$__interval:]), 1)) > 0',
+      'avg by (job, solr_cluster, base_url, item) (increase(solr_metrics_jvm_gc_seconds_total{' + matcher + '}[$__interval:]) / clamp_min(increase(solr_metrics_jvm_gc_total{' + matcher + '}[$__interval:]), 1)) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - {{item}}',
       format='time_series',
@@ -407,11 +407,11 @@ local jvmMetricsRow = {
   collapsed: false,
 };
 
-local cpuAverageLoadPanel = {
+local cpuAverageLoadPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", item="systemCpuLoad"}) > 0',
+      'avg by (job, solr_cluster, base_url) (100 * solr_metrics_jvm_os_cpu_load{' + matcher + ', item="systemCpuLoad"}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}}',
       format='time_series',
@@ -492,23 +492,23 @@ local cpuAverageLoadPanel = {
   },
 };
 
-local osMemoryPanel = {
+local osMemoryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", item="freePhysicalMemorySize"}) > 0',
+      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{' + matcher + ', item="freePhysicalMemorySize"}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - free physical',
       format='time_series',
     ),
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", item="totalPhysicalMemorySize"}) > 0',
+      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{' + matcher + ', item="totalPhysicalMemorySize"}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - total physical',
       format='time_series',
     ),
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", item="committedVirtualMemorySize"}) > 0',
+      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_os_memory_bytes{' + matcher + ', item="committedVirtualMemorySize"}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - committed virtual',
       format='time_series',
@@ -580,11 +580,11 @@ local osMemoryPanel = {
   },
 };
 
-local numberOfFileDescriptorsPanel = {
+local numberOfFileDescriptorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url, item) (solr_metrics_jvm_os_file_descriptors{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}) > 0',
+      'avg by (job, solr_cluster, base_url, item) (solr_metrics_jvm_os_file_descriptors{' + matcher + '}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - {{item}}',
       format='time_series',
@@ -656,17 +656,17 @@ local numberOfFileDescriptorsPanel = {
   },
 };
 
-local memoryUsedPanel = {
+local memoryUsedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", item="used"}) > 0',
+      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{' + matcher + ', item="used"}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - heap',
       format='time_series',
     ),
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", item="used"}) > 0',
+      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{' + matcher + ', item="used"}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - non-heap',
       format='time_series',
@@ -738,17 +738,17 @@ local memoryUsedPanel = {
   },
 };
 
-local memoryCommittedPanel = {
+local memoryCommittedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", item="committed"}) > 0',
+      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_heap_bytes{' + matcher + ', item="committed"}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - heap',
       format='time_series',
     ),
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster", item="committed"}) > 0',
+      'avg by (job, solr_cluster, base_url) (solr_metrics_jvm_memory_non_heap_bytes{' + matcher + ', item="committed"}) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - non-heap',
       format='time_series',
@@ -828,11 +828,11 @@ local jettyMetricsRow = {
   collapsed: false,
 };
 
-local requestsPanel = {
+local requestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url, method) (increase(solr_metrics_jetty_requests_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}[$__interval:])) > 0',
+      'avg by (job, solr_cluster, base_url, method) (increase(solr_metrics_jetty_requests_total{' + matcher + '}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - {{method}}',
       format='time_series',
@@ -905,11 +905,11 @@ local requestsPanel = {
   },
 };
 
-local responsesPanel = {
+local responsesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url, status) (increase(solr_metrics_jetty_response_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}[$__interval:])) > 0',
+      'avg by (job, solr_cluster, base_url, status) (increase(solr_metrics_jetty_response_total{' + matcher + '}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}} - {{status}}',
       format='time_series',
@@ -982,11 +982,11 @@ local responsesPanel = {
   },
 };
 
-local dispatchesPanel = {
+local dispatchesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_jetty_dispatches_total{job=~"$job", base_url=~"$base_url", solr_cluster=~"$solr_cluster"}[$__interval:])) > 0',
+      'avg by (job, solr_cluster, base_url) (increase(solr_metrics_jetty_dispatches_total{' + matcher + '}[$__interval:])) > 0',
       datasource=promDatasource,
       legendFormat='{{base_url}}',
       format='time_series',
@@ -1059,6 +1059,8 @@ local dispatchesPanel = {
   },
 };
 
+local getMatcher(cfg) = '%(solrSelector)s, solr_cluster="$solr_cluster", base_url=~"$base_url"' % cfg;
+
 {
   grafanaDashboards+:: {
     'apache-solr-resource-monitoring.json':
@@ -1099,9 +1101,21 @@ local dispatchesPanel = {
             sort=1
           ),
           template.new(
+            'cluster',
+            promDatasource,
+            'label_values(solr_metrics_core_errors_total{%(multiclusterSelector)s}, cluster)' % $._config,
+            label='Cluster',
+            refresh=2,
+            includeAll=true,
+            multi=true,
+            allValues='.*',
+            hide=if $._config.enableMultiCluster then '' else 'variable',
+            sort=0
+          ),
+          template.new(
             'base_url',
             promDatasource,
-            'label_values(solr_metrics_core_errors_total{job=~"$job"}, base_url)',
+            'label_values(solr_metrics_core_errors_total{%(solrSelector)s}, base_url)' % $._config,
             label='Instance',
             refresh=2,
             includeAll=true,
@@ -1112,7 +1126,7 @@ local dispatchesPanel = {
           template.new(
             'solr_cluster',
             promDatasource,
-            'label_values(solr_metrics_core_errors_total{job=~"$job"}, solr_cluster)',
+            'label_values(solr_metrics_core_errors_total{%(solrSelector)s}, solr_cluster)' % $._config,
             label='Solr cluster',
             refresh=2,
             includeAll=true,
@@ -1124,21 +1138,21 @@ local dispatchesPanel = {
       )
       .addPanels(
         [
-          connectionsPanel { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
-          threadsPanel { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
-          nodeCoreFSUsagePanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-          numberOfFileDescriptorsPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+          connectionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
+          threadsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
+          nodeCoreFSUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+          numberOfFileDescriptorsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
           jvmMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 12 } },
-          garbageCollectionsPanel { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
-          garbageCollectionTimePanel { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
-          cpuAverageLoadPanel { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
-          osMemoryPanel { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
-          memoryUsedPanel { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
-          memoryCommittedPanel { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+          garbageCollectionsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 13 } },
+          garbageCollectionTimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 13 } },
+          cpuAverageLoadPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 19 } },
+          osMemoryPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 19 } },
+          memoryUsedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+          memoryCommittedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
           jettyMetricsRow { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
-          requestsPanel { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
-          responsesPanel { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
-          dispatchesPanel { gridPos: { h: 6, w: 24, x: 0, y: 43 } },
+          requestsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 37 } },
+          responsesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 37 } },
+          dispatchesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 43 } },
         ]
       ),
   },

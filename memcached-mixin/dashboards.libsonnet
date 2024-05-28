@@ -1,7 +1,7 @@
 local g = (import 'grafana-builder/grafana.libsonnet');
 
 {
-  grafanaDashboards+: {
+  grafanaDashboards+:: {
     'memcached-overview.json':
       (
         g.dashboard('Memcached Overview') +

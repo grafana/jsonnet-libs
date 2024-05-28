@@ -20,11 +20,11 @@ local m1 = signal.init(
     testResult: test.suite({
       testLegend: {
         actual: m1.asTarget().legendFormat,
-        expect: '{{job}}/{{instance}}: API server duration',
+        expect: '{{job}}: API server duration',
       },
       testExpression: {
         actual: m1.asTarget().expr,
-        expect: 'avg by (job,instance) (histogram_quantile(0.95, sum(rate(apiserver_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job,instance)))',
+        expect: 'avg by (job) (\n  histogram_quantile(0.95, sum(rate(apiserver_request_duration_seconds_bucket{job="abc",job=~"$job",instance=~"$instance"}[10m])) by (le,job))\n)',
       },
     }),
   },
@@ -51,7 +51,7 @@ local m1 = signal.init(
         testTSUid: {
           actual: m1.asTimeSeries().datasource,
           expect: {
-            uid: 'DS_PROMETHEUS',
+            uid: '${datasource}',
             type: 'prometheus',
           },
         },

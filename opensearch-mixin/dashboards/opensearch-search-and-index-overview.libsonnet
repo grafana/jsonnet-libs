@@ -39,7 +39,7 @@ local instanceLabels = ['index'];
     filteringSelector=$._config.filteringSelector,
     groupLabels=$._config.groupLabels,
     instanceLabels=instanceLabels,
-    varMetric='opensearch_index_search_fetch_count'
+    varMetric='opensearch_index_search_fetch_count',
   ),
 
   local promDatasource = {
@@ -1848,7 +1848,6 @@ local instanceLabels = ['index'];
       },
     }
     + g.panel.timeSeries.standardOptions.withOverridesMixin(hideZeros),
-
 
   grafanaDashboards+:: {
     'search-and-index-overview.json':

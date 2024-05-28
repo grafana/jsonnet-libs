@@ -3,12 +3,13 @@ local test = import 'jsonnetunit/test.libsonnet';
 
 local gauge1 = signal.init(
   aggLevel='group',
+  filteringSelector=['job="integrations/agent"'],
 ).addSignal(
   name='Up metric',
   type='gauge',
   unit='short',
   description='abc',
-  expr='up{%(queriesSelector)s}'
+  expr='up{%(queriesSelector)s}',
 );
 
 {
@@ -18,11 +19,11 @@ local gauge1 = signal.init(
     testResult: test.suite({
       testLegend: {
         actual: gauge1.asTarget().legendFormat,
-        expect: '{{job}}/{{instance}}: Up metric',
+        expect: '{{job}}: Up metric',
       },
       testExpression: {
         actual: gauge1.asTarget().expr,
-        expect: 'avg by (job,instance) (up{job=integrations/agent,job=~"$job",instance=~"$instance"})',
+        expect: 'avg by (job) (\n  up{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },
@@ -49,7 +50,7 @@ local gauge1 = signal.init(
         testTSUid: {
           actual: gauge1.asTimeSeries().datasource,
           expect: {
-            uid: 'DS_PROMETHEUS',
+            uid: '${datasource}',
             type: 'prometheus',
           },
         },

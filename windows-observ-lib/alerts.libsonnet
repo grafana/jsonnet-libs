@@ -7,6 +7,7 @@
           windows_ad_replication_pending_operations{%(filteringSelector)s} >= %(alertsHighPendingReplicationOperations)s 
         ||| % this.config,
         'for': '10m',
+        keep_firing_for: '5m',
         labels: {
           severity: 'warning',
         },
@@ -24,6 +25,7 @@
           increase(windows_ad_replication_sync_requests_schema_mismatch_failure_total{%(filteringSelector)s}[5m]) > %(alertsHighReplicationSyncRequestFailures)s 
         ||| % this.config,
         'for': '5m',
+        keep_firing_for: '5m',
         labels: {
           severity: 'critical',
         },
@@ -43,12 +45,13 @@
         'for': '5m',
         labels: {
           severity: 'warning',
+          keep_firing_for: '24h',
         },
         annotations: {
           summary: 'There is a high number of password changes. This may indicate unauthorized changes or attacks.',
           description:
             (
-              'The number of password changes on {{$labels.instance}} is {{ printf "%%.0f" $value }} which is greater than the threshold of %(alertsHighPasswordChanges)s'
+              'The number of password changes on {{$labels.instance}} is {{ printf "%%.0f" $value }} which is greater than the threshold of %(alertsHighPasswordChanges)s. This alert would resolve itself if no new anomalies are detected within 24 hours.'
             ) % this.config,
         },
       },
@@ -80,6 +83,7 @@
               100 - (avg without (mode, core) (rate(windows_cpu_time_total{%(filteringSelector)s, mode="idle"}[2m])) * 100) > %(alertsCPUThresholdWarning)s
             ||| % this.config,
             'for': '15m',
+            keep_firing_for: '5m',
             labels: {
               severity: 'warning',
             },
@@ -98,6 +102,7 @@
               windows_cs_physical_memory_bytes{%(filteringSelector)s}) * 100) > %(alertMemoryUsageThresholdCritical)s
             ||| % this.config,
             'for': '15m',
+            keep_firing_for: '5m',
             labels: {
               severity: 'critical',
             },
@@ -114,6 +119,7 @@
               100 - ((windows_logical_disk_free_bytes{%(filteringSelector)s} ) / (windows_logical_disk_size_bytes{%(filteringSelector)s})) * 100  > %(alertDiskUsageThresholdCritical)s
             ||| % this.config,
             'for': '15m',
+            keep_firing_for: '5m',
             labels: {
               severity: 'critical',
             },
@@ -163,6 +169,7 @@
               windows_time_ntp_round_trip_delay_seconds{%(filteringSelector)s} > 1
             ||| % this.config,
             'for': '5m',
+            keep_firing_for: '5m',
             labels: {
               severity: 'warning',
             },
@@ -179,6 +186,7 @@
               windows_time_computed_time_offset_seconds{%(filteringSelector)s} > 1
             ||| % this.config,
             'for': '5m',
+            keep_firing_for: '5m',
             labels: {
               severity: 'warning',
             },

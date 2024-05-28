@@ -9,7 +9,6 @@ local m1 = signal.init(
   description='Go version.',
   expr='go_info{%(queriesSelector)s}',
   infoLabel='version'
-
 );
 
 {
@@ -42,7 +41,7 @@ local m1 = signal.init(
         testTSUid: {
           actual: m1.asStat().datasource,
           expect: {
-            uid: 'DS_PROMETHEUS',
+            uid: '${datasource}',
             type: 'prometheus',
           },
         },

@@ -18,22 +18,11 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
       fleet:
         g.dashboard.new(prefix + 'Helloworld fleet')
         + g.dashboard.withPanels(
-
           // wrapPanels returns an array of panels organized in a grid,
           // wrapping up to next 'row' if total width exceeds full grid of 24 columns.
           // 'panelHeight' and 'panelWidth' are used unless panels already have height and width defined.
           // https://grafana.github.io/grafonnet/API/util.html#fn-gridwrappanels
-          g.util.grid.wrapPanels(
-            [
-              g.panel.row.new('Row 1'),
-              panels.overviewTable1 { gridPos+: { w: 24, h: 16 } },
-              panels.timeSeriesPanel1 { gridPos+: { w: 24 } },
-              panels.timeSeriesPanel1 { gridPos+: { w: 24 } },
-              panels.timeSeriesPanel1 { gridPos+: { w: 12 } },
-              panels.timeSeriesPanel1 { gridPos+: { w: 12 } },
-              panels.timeSeriesPanel1 { gridPos+: { w: 24 } },
-            ], 12, 7
-          )
+          g.util.grid.wrapPanels(this.grafana.rows.fleet, 12, 7)
         )
         // hide link to self
         + root.applyCommon(vars.multiInstance, uid + '-fleet', tags, links { backToFleet+:: {}, backToOverview+:: {} }, annotations, timezone, refresh, period),
@@ -42,29 +31,13 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         g.dashboard.new(prefix + 'Helloworld overview')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
-            [
-              g.panel.row.new('Row 1'),
-              panels.statPanel1,
-              panels.statPanel1,
-              panels.statPanel1,
-              panels.statPanel1,
-              panels.statPanel1,
-              panels.statPanel1,
-              panels.statPanel1,
-              panels.statPanel1,
-              g.panel.row.new('Row 2'),
-              panels.timeSeriesPanel1 { gridPos+: { w: 6, h: 6 } },
-              panels.timeSeriesPanel1 { gridPos+: { w: 18, h: 6 } },
-              g.panel.row.new('Row 3'),
-              panels.timeSeriesPanel2 { gridPos+: { w: 6, h: 6 } },
-              panels.timeSeriesPanel2 { gridPos+: { w: 18, h: 6 } },
-              g.panel.row.new('Row 4'),
-              panels.timeSeriesPanel2 { gridPos+: { w: 12, h: 8 } },
-              panels.timeSeriesPanel2 { gridPos+: { w: 12, h: 8 } },
-              g.panel.row.new('Row 5'),
-              panels.timeSeriesPanel2 { gridPos+: { w: 12, h: 8 } },
-              panels.timeSeriesPanel2 { gridPos+: { w: 12, h: 8 } },
-            ], 6, 2
+            std.flattenArrays([
+              this.grafana.rows.overview_1,
+              this.grafana.rows.overview_2,
+              this.grafana.rows.overview_3,
+              this.grafana.rows.overview_4,
+              this.grafana.rows.overview_5,
+            ]), 6, 2
           )
         )
         + root.applyCommon(vars.singleInstance, uid + '-overview', tags, links { backToOverview+:: {} }, annotations, timezone, refresh, period),
@@ -73,15 +46,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         g.dashboard.new(prefix + 'Helloworld dashboard 3')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
-            [
-              g.panel.row.new('Row 1'),
-              panels.timeSeriesPanel1,
-              panels.timeSeriesPanel1,
-              panels.timeSeriesPanel1,
-              panels.timeSeriesPanel1,
-              panels.timeSeriesPanel1,
-              panels.timeSeriesPanel1,
-            ], 12, 8
+            this.grafana.rows.dashboard_3_row, 12, 8
           )
         )
         + root.applyCommon(vars.singleInstance, uid + '-dashboard3', tags, links, annotations, timezone, refresh, period),
