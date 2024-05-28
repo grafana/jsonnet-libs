@@ -50,7 +50,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Bottom average success request ratio by test name',
           targets=[t.bottomAvgRequestSuccessRatioTestName],
-          description='Worst average succesful request ratio by test name.'
+          description='The lowest average success request ratio among all test names over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withMax(1)
