@@ -14,7 +14,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average total load time by test name',
           targets=[t.topAvgLoadTimeTestName],
-          description='Average total time it took to load the webpage by test name, helping assess the responsiveness and speed of the monitored webpage.'
+          description='The top average total load time among all test names over the specified interval.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
