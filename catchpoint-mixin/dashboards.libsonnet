@@ -26,7 +26,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.topAvgDocumentCompletionTimeNodeName,
               g.panel.row.new('Requests'),
               panels.bottomAvgRequestRatioTestName,
-              panels.topAvgFailedRequestRatioNodeName,
+              panels.bottomAvgRequestSuccessRatioNodeName,
               g.panel.row.new('Connectivity'),
               panels.topAvgConnectionSetupTimeTestName,
               panels.topAvgConnectionSetupTimeNodeName,

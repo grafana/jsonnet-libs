@@ -57,11 +57,11 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
-      topAvgFailedRequestRatioNodeName:
+      bottomAvgRequestSuccessRatioNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average failed request ratio by node name',
-          targets=[t.topAvgFailedRequestRatioNodeName],
-          description='Highest average failed request ratios.'
+          'Bottom average success request ratio by node name',
+          targets=[t.bottomAvgRequestSuccessRatioNodeName],
+          description='The lowest average success request ratio among all node names over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withMax(1)
