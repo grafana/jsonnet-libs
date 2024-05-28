@@ -264,7 +264,6 @@ local utils = commonlib.utils;
           barGauge.thresholdStep.withColor('super-light-green'),
         ]),
 
-
       errors:
         barGauge.new(title='Errors')
         + barGauge.queryOptions.withTargets([t.objectLoadedError, t.DNSError, t.loadError, t.timeoutError, t.connectionError, t.transactionError])
@@ -358,7 +357,6 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.standardOptions.withUnit('hosts')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
-
       cacheAccessNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Cache access',
@@ -405,7 +403,6 @@ local utils = commonlib.utils;
         + barGauge.standardOptions.thresholds.withSteps([
           barGauge.thresholdStep.withColor('super-light-green'),
         ]),
-
 
       errorsNodeName:
         barGauge.new(title='Errors')
