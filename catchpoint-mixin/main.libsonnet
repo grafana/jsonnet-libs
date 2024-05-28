@@ -27,7 +27,7 @@ local variables = import './variables.libsonnet';
     },
 
     prometheus: {
-      alerts: {},
+      alerts: alerts.new(this),
       recordingRules: {},
     },
   },

@@ -16,5 +16,13 @@
   dashboardRefresh: '1m',
 
   // Alert thresholds
-
+  alertsHighServerResponseTime: 1000,
+  alertsHighServerResponseTimePercent: 1.2,
+  alertsTotalTimeExceeded: 5000,
+  alertsTotalTimeExceededPercent: 1.2,
+  alertsHighDNSResolutionTime: 500,
+  alertsHighDNSResolutionTimePercent: 1.2,
+  alertsContentLoadingDelay: 3000,
+  alertsContentLoadingDelayPercent: 1.2,
+  alertsHighFailedRequestRatioPercent: 0.1,
 }
