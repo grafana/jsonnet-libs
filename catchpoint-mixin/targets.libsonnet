@@ -48,12 +48,12 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testNameLabel)),
 
-    topAvgFailedRequestRatioNodeName:
+    bottomAvgRequestSuccessRatioNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'topk(1, avg by (node_name) (avg_over_time(((catchpoint_failed_requests_count{%(pureTestNameSelector)s}) / clamp_min(catchpoint_requests_count{%(pureTestNameSelector)s},1))[$__interval:])))' % vars
+        'bottomk(1, avg by (node_name) (avg_over_time(((catchpoint_requests_count{%(pureTestNameSelector)s} - catchpoint_failed_requests_count{%(pureTestNameSelector)s}) / clamp_min(catchpoint_requests_count{%(pureTestNameSelector)s},1))[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s - failure' % utils.labelsToPanelLegend(nodeNameLabel)),
+      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(nodeNameLabel)),
 
     topAvgConnectionSetupTimeTestName:
       prometheusQuery.new(
