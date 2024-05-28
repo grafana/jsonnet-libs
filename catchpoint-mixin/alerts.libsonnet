@@ -19,7 +19,7 @@
             annotations: {
               summary: 'High server response time.',
               description: |||
-                High server response times can lead to slow user experiences. The current value is {{ $value | printf "%%.2f" }} milliseconds.
+                High server response times can lead to slow user experiences. The current value is {{ $value | printf "%%.2f" }} milliseconds found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
               ||| % this.config,
             },
           },
@@ -37,7 +37,7 @@
             annotations: {
               summary: 'Total time exceeded.',
               description: |||
-                Webpage takes too long to load, potentially indicating issues with server response, network latency, or resource-heavy pages. The current value is {{ $value | printf "%%.2f" }} milliseconds.
+                Webpage takes too long to load, potentially indicating issues with server response, network latency, or resource-heavy pages. The current value is {{ $value | printf "%%.2f" }} milliseconds found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
               ||| % this.config,
             },
           },
@@ -55,7 +55,7 @@
             annotations: {
               summary: 'High DNS resolution time.',
               description: |||
-                DNS resolution time is high, which could indicate DNS server issues or misconfigurations affecting website accessibility. The current value is {{ $value | printf "%%.2f" }} milliseconds.
+                DNS resolution time is high, which could indicate DNS server issues or misconfigurations affecting website accessibility. The current value is {{ $value | printf "%%.2f" }} milliseconds found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
               ||| % this.config,
             },
           },
@@ -73,7 +73,7 @@
             annotations: {
               summary: 'Content loading delays.',
               description: |||
-                Significant delays in content loading could impact user experience and webpage usability. The current value is {{ $value | printf "%%.2f" }} milliseconds.
+                Significant delays in content loading could impact user experience and webpage usability. The current value is {{ $value | printf "%%.2f" }} milliseconds found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
               ||| % this.config,
             },
           },
@@ -89,7 +89,7 @@
             annotations: {
               summary: 'High failed request ratio.',
               description: |||
-                Monitors the ratio of failed requests to total requests to quickly identify deteriorations in service quality, which could affect user experience and compliance with SLA. The current value is {{ $value | printf "%%.2f" }} percent.
+                Monitors the ratio of failed requests to total requests to quickly identify deteriorations in service quality, which could affect user experience and compliance with SLA. The current value is {{ $value | printf "%%.2f" }} percent found on: {{ $labels.node_name }} in {{ $labels.test_name }}.
               ||| % this.config,
             },
           },
