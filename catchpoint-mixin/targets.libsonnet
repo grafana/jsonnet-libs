@@ -118,7 +118,6 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
-
     // Web performance by test name dashboard
     pageCompletionTime:
       prometheusQuery.new(
@@ -161,7 +160,6 @@ local utils = commonlib.utils {
         'sum by (node_name) (catchpoint_content_load_time{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - load' % utils.labelsToPanelLegend(nodeNameLabel)),
-
 
     contentHandlingRender:
       prometheusQuery.new(
@@ -450,7 +448,6 @@ local utils = commonlib.utils {
         'sum by (test_name) (catchpoint_content_load_time{%(testNameSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - load' % utils.labelsToPanelLegend(testNameLabel)),
-
 
     contentHandlingRenderNodeName:
       prometheusQuery.new(
