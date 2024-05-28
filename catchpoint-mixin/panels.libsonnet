@@ -128,7 +128,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top errors by test name',
           targets=[t.topErrorsByTestName],
-          description='Errors encountered by test name.'
+          description='The top number of errors encountered among all test names over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
     },
