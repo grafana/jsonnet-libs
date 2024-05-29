@@ -107,8 +107,10 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.vmMemoryUtilization,
               panels.vmModifiedMemory { gridPos+: { w: 24 } },
               panels.vmNetworkThroughputRate,
-              panels.vmPacketRate,
+              panels.vmPacketDropRate,
               g.panel.row.new('Disks row'),
+              panels.vmDiskUsage,
+              panels.vmDiskUtilization,
               panels.vmDisksTable { gridPos+: { w: 24 } },
             ], 12, 6
           )
