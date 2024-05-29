@@ -43,27 +43,63 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { catchpointOverview+:: {} }, annotations, timezone, refresh, period),
       testNameOverview:
-        g.dashboard.new(prefix + ' web performance by node name')
+        g.dashboard.new(prefix + ' web performance by test name')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-
+              panels.pageCompletionTime,
+              panels.DNSResolution,
+              panels.contentHandling { gridPos+: { w: 8 } },
+              panels.clientProcessing { gridPos+: { w: 8 } },
+              panels.additionalDelay { gridPos+: { w: 8 } },
+              g.panel.row.new('Response'),
+              panels.responseContentSize,
+              panels.totalContentSize,
+              g.panel.row.new('Network activity'),
+              panels.networkConnections { gridPos+: { w: 8 } },
+              panels.hostsContacted { gridPos+: { w: 8 } },
+              panels.cacheAccess { gridPos+: { w: 8 } },
+              g.panel.row.new('Request'),
+              panels.requestSucessRatio,
+              panels.redirections,
+              g.panel.row.new('Errors and content types'),
+              panels.errors { gridPos+: { w: 8 } },
+              panels.contentTypesLoadedBySize { gridPos+: { w: 8 } },
+              panels.contentLoadedByType { gridPos+: { w: 8 } },
             ], 12, 6
           )
         )
         // hide link to self
-        + root.applyCommon(vars, uid + '-testname-overview', tags, links { catchpointTestNameOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.testNameVariable, uid + '-testname-overview', tags, links { catchpointTestNameOverview+:: {} }, annotations, timezone, refresh, period),
       nodeNameOverview:
         g.dashboard.new(prefix + ' web performance by node name')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-
+              panels.pageCompletionTimeNodeName,
+              panels.DNSResolutionNodeName,
+              panels.contentHandlingNodeName { gridPos+: { w: 8 } },
+              panels.clientProcessingNodeName { gridPos+: { w: 8 } },
+              panels.additionalDelayNodeName { gridPos+: { w: 8 } },
+              g.panel.row.new('Response'),
+              panels.responseContentSizeNodeName,
+              panels.totalContentSizeNodeName,
+              g.panel.row.new('Network activity'),
+              panels.networkConnectionsNodeName { gridPos+: { w: 8 } },
+              panels.hostsContactedNodeName { gridPos+: { w: 8 } },
+              panels.cacheAccessNodeName { gridPos+: { w: 8 } },
+              g.panel.row.new('Request'),
+              panels.requestSucessRatioNodeName,
+              panels.redirectionsNodeName,
+              g.panel.row.new('Errors and content types'),
+              panels.errorsNodeName { gridPos+: { w: 8 } },
+              panels.contentTypesLoadedBySizeNodeName { gridPos+: { w: 8 } },
+              panels.contentLoadedByTypeNodeName { gridPos+: { w: 8 } },
             ], 12, 6
           )
         )
         // hide link to self
-        + root.applyCommon(vars, uid + '-nodename-overview', tags, links { catchpointNodeNameOverview+:: {} }, annotations, timezone, refresh, period),
+        + root.applyCommon(vars.nodeNameVariable, uid + '-nodename-overview', tags, links { catchpointNodeNameOverview+:: {} }, annotations, timezone, refresh, period),
     },
 
   //Apply common options(uids, tags, annotations etc..) to all dashboards above
