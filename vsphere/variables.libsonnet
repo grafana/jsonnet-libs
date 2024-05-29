@@ -3,19 +3,59 @@ local var = g.dashboard.variable;
 local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
 
+local extendedUtils = utils + {
+    toSentenceCase(string)::
+      local noUnderscore = std.join(' ', std.split(string, '_'));
+      local noNameSuffix = if std.endsWith(noUnderscore, " name") then std.substr(noUnderscore, 0, std.length(noUnderscore) - 5) else noUnderscore;
+      local noVcenterPrefix = if std.startsWith(noNameSuffix, "vcenter ") then std.substr(noNameSuffix, 8, std.length(noNameSuffix) - 8) else noNameSuffix;
+      std.asciiUpper(noVcenterPrefix[0]) + std.slice(noVcenterPrefix, 1, std.length(noVcenterPrefix), 1),
+
+    labelsToPromQLSelector(labels, optionalLabels)::
+      std.join(',',
+        [
+          if std.member(optionalLabels, label)
+          then '%s=~"$%s|"' % [label, label]
+          else '%s=~"$%s"' % [label, label]
+          for label in labels
+        ]
+      ),
+
+    labelsToPromQLSelectorWithEmptyOptions(labels, optionalLabels, emptyLabels)::
+      std.join(',',
+        [
+          if std.member(optionalLabels, label)
+          then '%s=~"$%s|"' % [label, label]
+          else if std.member(emptyLabels, label)
+          then '%s=""' % [label]
+          else '%s=~"$%s"' % [label, label]
+          for label in labels
+        ]
+      ),
+};
+
 // Generates chained variables to use on on all dashboards
 {
   new(this, varMetric):
     {
+      local virtualMachineOptionalLabels = ['vcenter_cluster_name', 'vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'],
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
-      local instanceLabels = this.config.instanceLabels,
-      local hostLabels = this.config.hostLabels,
-      local resourcePoolLabels = this.config.resourcePoolLabels,
       local virtualMachineLabels = this.config.virtualMachineLabels,
       local datastoreLabels = this.config.datastoreLabels,
+      local clusterLabel = 'vcenter_cluster_name',
+      local clusterSelector = 'job=~"integrations/vsphere",job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name"',
+      local hostLabel = 'vcenter_host_name',
+      local hostQuery = 'query_result(sum(vcenter_vm_memory_usage_mebibytes{job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|"}) by (vcenter_host_name))',
+      local hostRegex = '/vcenter_host_name="([^"]*)/',
+      local resourcePoolLabel = 'vcenter_resource_pool_inventory_path',
+      local resourcePoolSelector = 'job=~"integrations/vsphere",job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|",vcenter_host_name=~"$vcenter_host_name"',
+      local virtualAppLabel = 'vcenter_virtual_app_inventory_path',
+      local virtualAppSelector = 'job=~"integrations/vsphere",job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|",vcenter_host_name=~"$vcenter_host_name"',
+      local vmLabel = 'vcenter_vm_name',
+      local vmQuery = 'query_result((sum(label_join(sgn(sum by(vcenter_resource_pool_inventory_path,vcenter_vm_name)(vcenter_vm_memory_usage_mebibytes{job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|",vcenter_host_name=~"$vcenter_host_name",vcenter_resource_pool_inventory_path=~"$vcenter_resource_pool_inventory_path",vcenter_resource_pool_inventory_path!=""})),"vm_path","/","vcenter_resource_pool_inventory_path","vcenter_vm_name")) by (vm_path,vcenter_vm_name)) or (sum(label_join(sgn(sum by(vcenter_virtual_app_inventory_path,vcenter_vm_name)(vcenter_vm_memory_usage_mebibytes{job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|",vcenter_host_name=~"$vcenter_host_name",vcenter_virtual_app_inventory_path=~"$vcenter_virtual_app_inventory_path",vcenter_virtual_app_inventory_path!=""})),"vm_path","/","vcenter_virtual_app_inventory_path","vcenter_vm_name")) by (vm_path,vcenter_vm_name)) or (sum(label_replace(sgn(sum by(vcenter_resource_pool_inventory_path,vcenter_virtual_app_inventory_path,vcenter_vm_name)(vcenter_vm_memory_usage_mebibytes{job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name",vcenter_cluster_name=~"$vcenter_cluster_name|",vcenter_host_name=~"$vcenter_host_name",vcenter_resource_pool_inventory_path="",vcenter_virtual_app_inventory_path=""})),"vm_path","$1","vcenter_vm_name","(.*)")) by (vm_path,vcenter_vm_name)))',
+      local vmRegex = '/vcenter_vm_name="(?<value>[^"]*)",vm_path="(?<text>[^"]*)"/',
 
-      local varMetric = 'vcenter_vm_network_throughput_bytes_per_sec',
+      local varMetric = 'vcenter_vm_memory_usage_mebibytes',
       local topClusterSelector =
         var.custom.new(
           'top_cluster_count',
@@ -26,7 +66,7 @@ local utils = commonlib.utils;
         )
         + var.custom.generalOptions.withLabel('Top cluster count'),
       local root = self,
-      local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
+      local groupVariablesFromLabels(groupLabels, filteringSelector) =
         local chainVarProto(index, chainVar) =
           var.query.new(chainVar.label)
           + var.query.withDatasourceFromVariable(root.datasources.prometheus)
@@ -34,13 +74,13 @@ local utils = commonlib.utils;
             chainVar.label,
             '%s{%s}' % [varMetric, chainVar.chainSelector],
           )
-          + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
+          + var.query.generalOptions.withLabel(extendedUtils.toSentenceCase(chainVar.label))
           + var.query.selectionOptions.withIncludeAll(
-            value=if (!multiInstance && std.member(instanceLabels, chainVar.label)) then false else true,
+            value=true,
             customAllValue='.+'
           )
           + var.query.selectionOptions.withMulti(
-            if (!multiInstance && std.member(instanceLabels, chainVar.label)) then false else true,
+            true,
           )
           + var.query.refresh.onTime()
           + var.query.withSort(
@@ -49,7 +89,7 @@ local utils = commonlib.utils;
             asc=true,
             caseInsensitive=false
           );
-        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
+        std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels, [filteringSelector])),
       datasources: {
         prometheus:
           var.datasource.new('prometheus_datasource', 'prometheus')
@@ -62,28 +102,60 @@ local utils = commonlib.utils;
           + var.datasource.generalOptions.showOnDashboard.withNothing(),
       },
 
-      // Use on dashboards where multiple entities can be selected, like fleet dashboards
-      multiInstance:
-        [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector),
-      // Use on dashboards where only single entity can be selected, like drill-down dashboards
-      singleInstance:
-        [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
-      // Use on dashboards where multiple entities can be selected, like fleet dashboards
+      local createQueryVariable(name, displayName, query, regex, includeAll) =
+        local variable =
+          var.query.new(name, query)
+          + var.query.generalOptions.withLabel(displayName)
+          + var.query.withDatasourceFromVariable(root.datasources.prometheus)
+          + var.query.withRegex(regex)
+          + var.query.selectionOptions.withIncludeAll(value=includeAll)
+          + var.query.selectionOptions.withMulti(true)
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false,
+          );
+        [variable],
+      local createLabelValueVariable(name, displayName, metric, selector, label, includeAll) =
+        local variable =
+          var.query.new(name)
+          + var.query.generalOptions.withLabel(displayName)
+          + var.query.withDatasourceFromVariable(root.datasources.prometheus)
+          + var.query.queryTypes.withLabelValues(
+            label,
+            '%s{%s}' % [metric, selector],
+          )
+          + var.query.selectionOptions.withIncludeAll(value=includeAll)
+          + var.query.selectionOptions.withMulti(true)
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false,
+          );
+        [variable],
+
       clusterVariables:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, [], filteringSelector),
+        + groupVariablesFromLabels(groupLabels, filteringSelector),
       // Use on dashboards where only single entity can be selected, like drill-down dashboards
       overviewVariables:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, [], filteringSelector, multiInstance=true) + [topClusterSelector],
+        + groupVariablesFromLabels(groupLabels, filteringSelector) + [topClusterSelector],
       hostsVariable:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, hostLabels, filteringSelector, multiInstance=true),
+        + groupVariablesFromLabels(groupLabels, filteringSelector),
       virtualMachinesVariables:
         [root.datasources.prometheus]
-        + variablesFromLabels(groupLabels, hostLabels + resourcePoolLabels + virtualMachineLabels, filteringSelector, multiInstance=true),
+        + groupVariablesFromLabels(groupLabels, filteringSelector)
+        + createLabelValueVariable(clusterLabel, 'vSphere cluster', varMetric, clusterSelector, clusterLabel, true)
+        + createQueryVariable(hostLabel, 'ESXi host', hostQuery, hostRegex, true)
+        + createLabelValueVariable(resourcePoolLabel, 'Resource pool', varMetric, resourcePoolSelector, resourcePoolLabel, true)
+        + createLabelValueVariable(virtualAppLabel, 'Virtual app', varMetric, virtualAppSelector, virtualAppLabel, true)
+        + createQueryVariable(vmLabel, 'Virtual machine', vmQuery, vmRegex, true),
 
       queriesSelector:
         '%s' % [
@@ -93,23 +165,29 @@ local utils = commonlib.utils;
         '%s' % [
           utils.labelsToPromQLSelector(datastoreLabels),
         ],
-
       hostQueriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + hostLabels),
+          utils.labelsToPromQLSelector(groupLabels),
         ],
       virtualMachinesQueriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + hostLabels + resourcePoolLabels + virtualMachineLabels),
+          extendedUtils.labelsToPromQLSelector(groupLabels + virtualMachineLabels, virtualMachineOptionalLabels),
+        ],
+      virtualMachinesNoRPoolQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path']),
+        ],
+      virtualMachinesNoVAppQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_virtual_app_inventory_path']),
+        ],
+      virtualMachinesNoRPoolOrVAppQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
         ],
       queriesGroupSelectorAdvanced:
         '%s' % [
           utils.labelsToPromQLSelectorAdvanced(groupLabels),
         ],
     }
-    + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},
-  withLokiLogs(this): {
-    multiInstance+: [this.grafana.variables.datasources.loki],
-    singleInstance+: [this.grafana.variables.datasources.loki],
-  },
 }

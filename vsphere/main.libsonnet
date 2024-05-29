@@ -7,13 +7,11 @@ local targets = import './targets.libsonnet';
 local variables = import './variables.libsonnet';
 
 {
-
   withConfigMixin(config): {
     config+: config,
   },
 
   new(): {
-
     local this = self,
     config: config,
 

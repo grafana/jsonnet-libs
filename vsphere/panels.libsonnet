@@ -678,7 +678,7 @@ local utils = commonlib.utils;
           description='The amount of memory used by the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+        + g.panel.timeSeries.standardOptions.withUnit('mbytes'),
 
       vmMemoryUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
@@ -689,11 +689,29 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
+      vmDiskUsage:
+        commonlib.panels.generic.timeSeries.base.new(
+          'Disk usage',
+          targets=[t.vmDiskUsage],
+          description='The amount of disk space used by the VMs.'
+        )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.standardOptions.withUnit('bytes'),
+
+      vmDiskUtilization:
+        commonlib.panels.memory.timeSeries.usagePercent.new(
+          'Disk utilization',
+          targets=[t.vmDiskUtilization],
+          description='The disk utilization percentage of VMs.'
+        )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.standardOptions.withUnit('percent'),
+
       vmModifiedMemory:
         commonlib.panels.generic.timeSeries.base.new(
           'Modified memory',
           targets=[t.vmModifiedMemoryBallooned, t.vmModifiedMemorySwapped],
-          description='The amount of memory that has been modified or ballooned on the VMs.'
+          description='The amount of memory that has been swapped or ballooned on the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right')
@@ -701,73 +719,69 @@ local utils = commonlib.utils;
 
       vmNetworkThroughputRate:
         commonlib.panels.generic.timeSeries.base.new(
-          'Network throughput rate',
+          'Avg network throughput rate',
           targets=[t.vmNetworkReceivedThroughputRate, t.vmNetworkTransmittedThroughputRate],
-          description='The rate of data transmitted or received over the network of the VMs.'
+          description='The 20s average rate of data transmitted or received over the network of the VMs.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.standardOptions.withUnit('KiBs'),
+        + g.panel.timeSeries.options.legend.withPlacement('bottom')
+        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
 
-      vmPacketRate:
+      vmPacketDropRate:
         commonlib.panels.generic.timeSeries.base.new(
-          'Packet rate',
-          targets=[t.vmPacketReceivedRate, t.vmPacketTransmittedRate],
-          description='The rate of packets received or transmitted over the VMs network.'
+          'Avg packet drops',
+          targets=[t.vmPacketReceivedDropRate, t.vmPacketTransmittedDropRate],
+          description='The 20s average of received or transmitted packets dropped over the VMs network compared to the overall packets received or transmitted.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right')
-        + g.panel.timeSeries.standardOptions.withUnit('packet/s'),
+        + g.panel.timeSeries.options.legend.withPlacement('bottom')
+        + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       vmDisksTable:
         commonlib.panels.generic.table.base.new(
           'Disks table',
           targets=[
-            t.vmDiskUtilization + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true)
-            ,
-            t.vmDiskLatency + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true)
-            ,
-            t.vmNetDiskThroughput + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true)
-            ,
-            t.vmDiskUsage + g.query.prometheus.withFormat('table')
+            t.vmDiskReadThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true),
+            t.vmDiskReadLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true),
+            t.vmDiskWriteThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true),
+            t.vmDiskWriteLatency + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the disks associated with the virtual machines.'
         )
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Latency')
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('ms')
-          ),
-        ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Throughput')
+          fieldOverride.byName.new('Throughput (R)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Usage')
+          fieldOverride.byName.new('Delay (R)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('decbytes')
+            table.standardOptions.withUnit('ms')
           ),
         ])
-        +
-        table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Throughput (W)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
+            table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Delay (W)')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('ms')
           ),
         ])
         +
@@ -775,7 +789,7 @@ local utils = commonlib.utils;
           {
             id: 'joinByField',
             options: {
-              byField: 'vcenter_host_name',
+              byField: 'disk_path',
               mode: 'outer',
             },
           },
@@ -784,12 +798,10 @@ local utils = commonlib.utils;
             options: {
               include: {
                 names: [
-                  'vcenter_host_name',
-                  'vcenter_vm_name 1',
-                  'Value #C',
-                  'disk_type',
+                  'disk_path',
                   'Value #A',
                   'Value #B',
+                  'Value #C',
                   'Value #D',
                 ],
               },
@@ -801,22 +813,18 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 3,
-                'Value #B': 6,
-                'Value #C': 4,
-                'Value #D': 5,
-                disk_type: 2,
-                vcenter_host_name: 0,
-                'vcenter_vm_name 1': 1,
+                'Value #A': 1,
+                'Value #B': 2,
+                'Value #C': 3,
+                'Value #D': 4,
+                disk_path: 0,
               },
               renameByName: {
-                'Value #A': 'Latency',
-                'Value #B': 'Throughput',
-                'Value #C': 'Utilization',
-                'Value #D': 'Usage',
-                disk_type: 'Type',
-                vcenter_host_name: 'Host',
-                'vcenter_vm_name 1': 'VM name',
+                'Value #A': 'Throughput (R)',
+                'Value #B': 'Delay (R)',
+                'Value #C': 'Throughput (W)',
+                'Value #D': 'Delay (W)',
+                disk_path: 'Disk',
               },
             },
           },
