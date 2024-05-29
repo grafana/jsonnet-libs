@@ -11,4 +11,13 @@ exclusions:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   panel-title-description-rule:
     reason: "Not required for logs volume"
-
+  panel-units-rule:
+    reason: "Panels are better suited with custom units"
+    entries:
+      - panel: "Network connections"
+      - panel: "Hosts contacted"
+      - panel: "Cache access"
+      - panel: "Redirects"
+      - panel: "Top average redirects by test name"
+      - panel: "Top average redirects by node name"
+      - panel: "Top errors by test name"
