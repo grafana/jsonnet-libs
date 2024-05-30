@@ -5,8 +5,8 @@ The Catchpoint mixin is a set of configurable Grafana dashboards and alerts.
 The Catchpoint mixin contains the following dashboards:
 
 - Catchpoint overview
-- Catchpoint web performance by test name
-- Catchpoint web performance by node name
+- Catchpoint web performance by tests
+- Catchpoint web performance by nodes
 
 and the following alerts:
 
@@ -22,17 +22,17 @@ The Catchpoint overview dashboard provides details on alerts, load times, reques
 
 ![Catchpoint overview dashboard]()
 
-## Catchpoint web performance by test name
+## Catchpoint web performance by tests
 
-The Catchpoint web performance by test name dashboard provides details on page completion times, response sizes, network connections, requests, content types, and errors. These metrics are all grouped by test name.
+The Catchpoint web performance by tests dashboard provides details on page completion times, response sizes, network connections, requests, content types, and errors. These metrics are all grouped by tests.
 
-![Catchpoint web performance by test name]()
+![Catchpoint web performance by tests]()
 
-## Catchpoint web performance by node name
+## Catchpoint web performance by nodes
 
-The Catchpoint web performance by node name dashboard provides details on page completion times, response sizes, network connections, requests, content types, and errors. These metrics are all grouped by node name.
+The Catchpoint web performance by nodes dashboard provides details on page completion times, response sizes, network connections, requests, content types, and errors. These metrics are all grouped by nodes.
 
-![Catchpoint web performance by node name]()
+![Catchpoint web performance by nodes]()
 
 ## Alerts Overview
 

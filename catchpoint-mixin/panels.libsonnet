@@ -17,7 +17,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average total load time by tests',
           targets=[t.topAvgLoadTimeTestName],
-          description='The top average total load time among all test names over the specified interval.'
+          description='The top average total load time among all tests over the specified interval.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
@@ -26,7 +26,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average total load time by nodes',
           targets=[t.topAvgTotalLoadTimeNodeName],
-          description='The top average total load time among all node names over the specified interval.'
+          description='The top average total load time among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -35,7 +35,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average document completion time by tests',
           targets=[t.topAvgDocumentCompletionTimeTestName],
-          description='The top average document completion time among all test names over the specified interval.'
+          description='The top average document completion time among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -44,7 +44,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average document completion time by nodes',
           targets=[t.topAvgDocumentCompletionTimeNodeName],
-          description='The top average document completion time among all node names over the specified interval.'
+          description='The top average document completion time among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -53,29 +53,27 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Bottom average success request ratio by tests',
           targets=[t.bottomAvgRequestSuccessRatioTestName],
-          description='The lowest average success request ratio among all test names over the specified interval.'
+          description='The lowest average success request ratio among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.standardOptions.withMax(1)
-        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
       bottomAvgRequestSuccessRatioNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Bottom average success request ratio by nodes',
           targets=[t.bottomAvgRequestSuccessRatioNodeName],
-          description='The lowest average success request ratio among all node names over the specified interval.'
+          description='The lowest average success request ratio among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
-        + g.panel.timeSeries.standardOptions.withMax(1)
-        + g.panel.timeSeries.standardOptions.withMin(0)
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
         + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
 
       topAvgConnectionSetupTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
           'Top average connection setup time by tests',
           targets=[t.topAvgConnectionSetupTimeTestName],
-          description='The top average connection setup time among all test names over the specified interval.'
+          description='The top average connection setup time among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -84,7 +82,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average connection setup time by nodes',
           targets=[t.topAvgConnectionSetupTimeNodeName],
-          description='The top average connection setup time among all node names over the specified interval.'
+          description='The top average connection setup time among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -93,7 +91,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average content loading time',
           targets=[t.topAvgContentLoadingTimeTestName],
-          description='The top average content loading time among all test names over the specified interval.'
+          description='The top average content loading time among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -102,7 +100,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average content loading time by nodes',
           targets=[t.topAvgContentLoadingTimeNodeName],
-          description='The top average content loading time among all node names over the specified interval.'
+          description='The top average content loading time among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true')
         + g.panel.timeSeries.standardOptions.withUnit('ms'),
@@ -111,7 +109,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average redirects by tests',
           targets=[t.topAvgRedirectsTestName],
-          description='The top average number of redirects among all test names over the specified interval.'
+          description='The top average number of redirects among all tests over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
@@ -119,7 +117,7 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top average redirects by nodes',
           targets=[t.topAvgRedirectsNodeName],
-          description='The top average number of redirects among all node names over the specified interval.'
+          description='The top average number of redirects among all nodes over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
@@ -131,8 +129,11 @@ local utils = commonlib.utils;
         commonlib.panels.generic.timeSeries.base.new(
           'Top errors by tests',
           targets=[t.topErrorsByTestName],
-          description='The top number of errors encountered among all test names over the specified interval.'
+          description='The top number of errors encountered among all tests over the specified interval.'
         )
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       // Web Performance by Tests Dashboard Panels
@@ -143,6 +144,9 @@ local utils = commonlib.utils;
           description='Time taken for the browser to fully render the page after all resources are downloaded.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       DNSResolution:
@@ -152,6 +156,9 @@ local utils = commonlib.utils;
           description='Time taken to establish an SSL handshake, DNS resolution, and connect.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       contentHandling:
@@ -161,6 +168,9 @@ local utils = commonlib.utils;
           description='Time taken to load and render content on the webpage.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       clientProcessing:
@@ -179,6 +189,9 @@ local utils = commonlib.utils;
           description='Additional delays encountered due to redirects, as well as time from successful connection to receiving the first byte.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       responseContentSize:
@@ -232,8 +245,6 @@ local utils = commonlib.utils;
           description='Success ratio of requests made.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-        + g.panel.timeSeries.standardOptions.withMax(1)
-        + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       redirections:
@@ -283,6 +294,9 @@ local utils = commonlib.utils;
           description='Time taken for the browser to fully render the page after all resources are downloaded.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       DNSResolutionNodeName:
@@ -292,6 +306,9 @@ local utils = commonlib.utils;
           description='Time taken establish an SSL handshake, DNS resolution and connect.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       contentHandlingNodeName:
@@ -301,6 +318,9 @@ local utils = commonlib.utils;
           description='Time taken to load and render content on the webpage.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       clientProcessingNodeName:
@@ -319,6 +339,9 @@ local utils = commonlib.utils;
           description='Additional delays encountered due to redirects as well as time from successful connection to receiving the first byte.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('ms')
+        + g.panel.timeSeries.options.legend.withCalcs('lastNotNull')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       responseContentSizeNodeName:
@@ -372,8 +395,6 @@ local utils = commonlib.utils;
           description='Success ratio of requests made.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percentunit')
-        + g.panel.timeSeries.standardOptions.withMax(1)
-        + g.panel.timeSeries.standardOptions.withMin(0)
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       redirectionsNodeName:

@@ -20,6 +20,10 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
+              g.panel.row.new('Errors'),
+              panels.topErrorsByTestName { gridPos+: { w: 16 } },
+              panels.alertsPanel { gridPos+: { w: 8 } },
+              g.panel.row.new('Content handling and loading'),
               panels.topAvgLoadTimeTestName,
               panels.topAvgTotalLoadTimeNodeName,
               panels.topAvgDocumentCompletionTimeTestName,
@@ -34,9 +38,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.topAvgContentLoadingTimeNodeName,
               panels.topAvgRedirectsTestName,
               panels.topAvgRedirectsNodeName,
-              g.panel.row.new('Errors'),
-              panels.topErrorsByTestName,
-              panels.alertsPanel,
             ], 12, 6
           )
         )
@@ -47,11 +48,16 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.pageCompletionTime,
-              panels.DNSResolution,
-              panels.contentHandling { gridPos+: { w: 8 } },
+              g.panel.row.new('Errors and content types'),
+              panels.errors { gridPos+: { w: 8 } },
+              panels.contentTypesLoadedBySize { gridPos+: { w: 8 } },
+              panels.contentLoadedByType { gridPos+: { w: 8 } },
+              g.panel.row.new('Content handling and loading'),
+              panels.pageCompletionTime { gridPos+: { w: 16 } },
               panels.clientProcessing { gridPos+: { w: 8 } },
-              panels.additionalDelay { gridPos+: { w: 8 } },
+              panels.DNSResolution { gridPos+: { w: 24 } },
+              panels.contentHandling { gridPos+: { w: 24 } },
+              panels.additionalDelay { gridPos+: { w: 24 } },
               g.panel.row.new('Response'),
               panels.responseContentSize,
               panels.totalContentSize,
@@ -62,10 +68,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               g.panel.row.new('Request'),
               panels.requestSucessRatio,
               panels.redirections,
-              g.panel.row.new('Errors and content types'),
-              panels.errors { gridPos+: { w: 8 } },
-              panels.contentTypesLoadedBySize { gridPos+: { w: 8 } },
-              panels.contentLoadedByType { gridPos+: { w: 8 } },
             ], 12, 6
           )
         )
@@ -76,11 +78,16 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.pageCompletionTimeNodeName,
-              panels.DNSResolutionNodeName,
-              panels.contentHandlingNodeName { gridPos+: { w: 8 } },
+              g.panel.row.new('Errors and content types'),
+              panels.errorsNodeName { gridPos+: { w: 8 } },
+              panels.contentTypesLoadedBySizeNodeName { gridPos+: { w: 8 } },
+              panels.contentLoadedByTypeNodeName { gridPos+: { w: 8 } },
+              g.panel.row.new('Content handling and loading'),
+              panels.pageCompletionTimeNodeName { gridPos+: { w: 16 } },
               panels.clientProcessingNodeName { gridPos+: { w: 8 } },
-              panels.additionalDelayNodeName { gridPos+: { w: 8 } },
+              panels.DNSResolutionNodeName { gridPos+: { w: 24 } },
+              panels.contentHandlingNodeName { gridPos+: { w: 24 } },
+              panels.additionalDelayNodeName { gridPos+: { w: 24 } },
               g.panel.row.new('Response'),
               panels.responseContentSizeNodeName,
               panels.totalContentSizeNodeName,
@@ -91,10 +98,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               g.panel.row.new('Request'),
               panels.requestSucessRatioNodeName,
               panels.redirectionsNodeName,
-              g.panel.row.new('Errors and content types'),
-              panels.errorsNodeName { gridPos+: { w: 8 } },
-              panels.contentTypesLoadedBySizeNodeName { gridPos+: { w: 8 } },
-              panels.contentLoadedByTypeNodeName { gridPos+: { w: 8 } },
             ], 12, 6
           )
         )

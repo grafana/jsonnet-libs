@@ -11,7 +11,6 @@ local utils = commonlib.utils {
     local config = this.config,
     local testNameLabel = config.testNameLabel,
     local nodeNameLabel = config.nodeNameLabel,
-    local testAndNodeLabel = config.nodeNameLabel + config.testNameLabel,
 
     topAvgLoadTimeTestName:
       prometheusQuery.new(
@@ -46,14 +45,14 @@ local utils = commonlib.utils {
         '${' + vars.datasources.prometheus.name + '}',
         'bottomk(1, avg by (test_name) (avg_over_time(((catchpoint_requests_count{%(pureTestNameSelector)s} - catchpoint_failed_requests_count{%(pureTestNameSelector)s}) / clamp_min(catchpoint_requests_count{%(pureTestNameSelector)s},1))[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(testNameLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
     bottomAvgRequestSuccessRatioNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'bottomk(1, avg by (node_name) (avg_over_time(((catchpoint_requests_count{%(pureTestNameSelector)s} - catchpoint_failed_requests_count{%(pureTestNameSelector)s}) / clamp_min(catchpoint_requests_count{%(pureTestNameSelector)s},1))[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s - success' % utils.labelsToPanelLegend(nodeNameLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
     topAvgConnectionSetupTimeTestName:
       prometheusQuery.new(
@@ -81,7 +80,7 @@ local utils = commonlib.utils {
         '${' + vars.datasources.prometheus.name + '}',
         'topk(1, avg by (node_name) (avg_over_time(catchpoint_content_load_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
     topAvgRedirectsTestName:
       prometheusQuery.new(
@@ -95,7 +94,7 @@ local utils = commonlib.utils {
         '${' + vars.datasources.prometheus.name + '}',
         'topk(1, avg by (node_name) (avg_over_time(catchpoint_redirect_time{%(pureTestNameSelector)s}[$__interval:])))' % vars
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testAndNodeLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
     topErrorsByTestName:
       prometheusQuery.new(
@@ -104,7 +103,7 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(testNameLabel)),
 
-    // Web performance by test name dashboard
+    // Web performance by tests dashboard
     pageCompletionTime:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -392,7 +391,7 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(nodeNameLabel)),
 
-    // Web performance by node name dashboard
+    // Web performance by nodes dashboard
     pageCompletionTimeNodeName:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
