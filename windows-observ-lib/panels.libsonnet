@@ -138,7 +138,7 @@ local utils = commonlib.utils;
               options: {
                 include: {
                   //' 1' - would only match first occurence of group label, so no duplicates
-                  pattern: std.join(' 1|', this.config.groupLabels) + ' 1|' + instanceLabel + '|product|^hostname$|Value.+',
+                  pattern: std.join(' 1$|', this.config.groupLabels) + ' 1$|' + instanceLabel + '|product|^hostname$|Value.+',
                 },
               },
             },
