@@ -43,7 +43,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         // hide link to self
         + root.applyCommon(vars.overviewVariables, uid + '-overview', tags, links { catchpointOverview+:: {} }, annotations, timezone, refresh, period),
       testNameOverview:
-        g.dashboard.new(prefix + ' web performance by test name')
+        g.dashboard.new(prefix + ' web performance by test')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
@@ -72,7 +72,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         // hide link to self
         + root.applyCommon(vars.testNameVariable, uid + '-testname-overview', tags, links { catchpointTestNameOverview+:: {} }, annotations, timezone, refresh, period),
       nodeNameOverview:
-        g.dashboard.new(prefix + ' web performance by node name')
+        g.dashboard.new(prefix + ' web performance by node')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [

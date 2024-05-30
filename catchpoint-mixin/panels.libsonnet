@@ -15,7 +15,7 @@ local utils = commonlib.utils;
       // Catchpoint Overview dashboard Panels
       topAvgLoadTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average total load time by test name',
+          'Top average total load time by tests',
           targets=[t.topAvgLoadTimeTestName],
           description='The top average total load time among all test names over the specified interval.'
         )
@@ -24,7 +24,7 @@ local utils = commonlib.utils;
 
       topAvgTotalLoadTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average total load time by node name',
+          'Top average total load time by nodes',
           targets=[t.topAvgTotalLoadTimeNodeName],
           description='The top average total load time among all node names over the specified interval.'
         )
@@ -33,7 +33,7 @@ local utils = commonlib.utils;
 
       topAvgDocumentCompletionTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average document completion time by test name',
+          'Top average document completion time by tests',
           targets=[t.topAvgDocumentCompletionTimeTestName],
           description='The top average document completion time among all test names over the specified interval.'
         )
@@ -42,7 +42,7 @@ local utils = commonlib.utils;
 
       topAvgDocumentCompletionTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average document completion time by node name',
+          'Top average document completion time by nodes',
           targets=[t.topAvgDocumentCompletionTimeNodeName],
           description='The top average document completion time among all node names over the specified interval.'
         )
@@ -51,7 +51,7 @@ local utils = commonlib.utils;
 
       bottomAvgRequestRatioTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Bottom average success request ratio by test name',
+          'Bottom average success request ratio by tests',
           targets=[t.bottomAvgRequestSuccessRatioTestName],
           description='The lowest average success request ratio among all test names over the specified interval.'
         )
@@ -62,7 +62,7 @@ local utils = commonlib.utils;
 
       bottomAvgRequestSuccessRatioNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Bottom average success request ratio by node name',
+          'Bottom average success request ratio by nodes',
           targets=[t.bottomAvgRequestSuccessRatioNodeName],
           description='The lowest average success request ratio among all node names over the specified interval.'
         )
@@ -73,7 +73,7 @@ local utils = commonlib.utils;
 
       topAvgConnectionSetupTimeTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average connection setup time by test name',
+          'Top average connection setup time by tests',
           targets=[t.topAvgConnectionSetupTimeTestName],
           description='The top average connection setup time among all test names over the specified interval.'
         )
@@ -82,7 +82,7 @@ local utils = commonlib.utils;
 
       topAvgConnectionSetupTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average connection setup time by node name',
+          'Top average connection setup time by nodes',
           targets=[t.topAvgConnectionSetupTimeNodeName],
           description='The top average connection setup time among all node names over the specified interval.'
         )
@@ -100,7 +100,7 @@ local utils = commonlib.utils;
 
       topAvgContentLoadingTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average content loading time by node name',
+          'Top average content loading time by nodes',
           targets=[t.topAvgContentLoadingTimeNodeName],
           description='The top average content loading time among all node names over the specified interval.'
         )
@@ -109,7 +109,7 @@ local utils = commonlib.utils;
 
       topAvgRedirectsTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average redirects by test name',
+          'Top average redirects by tests',
           targets=[t.topAvgRedirectsTestName],
           description='The top average number of redirects among all test names over the specified interval.'
         )
@@ -117,7 +117,7 @@ local utils = commonlib.utils;
 
       topAvgRedirectsNodeName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top average redirects by node name',
+          'Top average redirects by nodes',
           targets=[t.topAvgRedirectsNodeName],
           description='The top average number of redirects among all node names over the specified interval.'
         )
@@ -129,13 +129,13 @@ local utils = commonlib.utils;
 
       topErrorsByTestName:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top errors by test name',
+          'Top errors by tests',
           targets=[t.topErrorsByTestName],
           description='The top number of errors encountered among all test names over the specified interval.'
         )
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
-      // Web Performance by Test Name Dashboard Panels
+      // Web Performance by Tests Dashboard Panels
       pageCompletionTime:
         commonlib.panels.generic.timeSeries.base.new(
           'Page completion time',
@@ -267,7 +267,7 @@ local utils = commonlib.utils;
       errors:
         barGauge.new(title='Errors')
         + barGauge.queryOptions.withTargets([t.objectLoadedError, t.DNSError, t.loadError, t.timeoutError, t.connectionError, t.transactionError])
-        + barGauge.panelOptions.withDescription('Indicates various potential errors that are occuring.')
+        + barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
         + barGauge.options.withOrientation('horizontal')
         + barGauge.standardOptions.withMax(1)
         + barGauge.standardOptions.thresholds.withSteps([
@@ -275,7 +275,7 @@ local utils = commonlib.utils;
           barGauge.standardOptions.threshold.step.withValue(1) + barGauge.thresholdStep.withColor('super-light-red'),
         ]),
 
-      // Web Performance by Node Name Dashboard Panels
+      // Web Performance by Nodes Dashboard Panels
       pageCompletionTimeNodeName:
         commonlib.panels.generic.timeSeries.base.new(
           'Page completion time',
@@ -407,7 +407,7 @@ local utils = commonlib.utils;
       errorsNodeName:
         barGauge.new(title='Errors')
         + barGauge.queryOptions.withTargets([t.objectLoadedErrorNodeName, t.DNSErrorNodeName, t.loadErrorNodeName, t.timeoutErrorNodeName, t.connectionErrorNodeName, t.transactionErrorNodeName])
-        + barGauge.panelOptions.withDescription('Indicates various potential errors that are occuring.')
+        + barGauge.panelOptions.withDescription('Indicates various errors that are occuring.')
         + barGauge.options.withOrientation('horizontal')
         + barGauge.standardOptions.withMax(1)
         + barGauge.standardOptions.thresholds.withSteps([

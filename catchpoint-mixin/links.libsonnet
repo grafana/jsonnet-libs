@@ -7,10 +7,10 @@ local g = import './g.libsonnet';
         link.link.new('Catchpoint overview', '/d/' + this.grafana.dashboards.overview.uid)
         + link.link.options.withKeepTime(true),
       catchpointTestNameOverview:
-        link.link.new('Catchpoint test name', '/d/' + this.grafana.dashboards.testNameOverview.uid)
+        link.link.new('Catchpoint web performance by tests', '/d/' + this.grafana.dashboards.testNameOverview.uid)
         + link.link.options.withKeepTime(true),
       catchpointNodeNameOverview:
-        link.link.new('Catchpoint node name', '/d/' + this.grafana.dashboards.nodeNameOverview.uid)
+        link.link.new('Catchpoint web performance by nodes', '/d/' + this.grafana.dashboards.nodeNameOverview.uid)
         + link.link.options.withKeepTime(true),
     },
 }
