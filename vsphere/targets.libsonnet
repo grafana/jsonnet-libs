@@ -9,10 +9,12 @@ local utils = commonlib.utils {
   new(this): {
     local vars = this.grafana.variables,
     local config = this.config,
-    local clusterLegendLabel = ['vcenter_datacenter_name', 'vcenter_cluster_name'],
+    local clusterLegendLabel = ['vcenter_cluster_name'],
     local hostLegendLabel = clusterLegendLabel + ['vcenter_host_name'],
     local vmLegend = '{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}',
-    local vmSumWithout = 'sum without(object)',
+    local sumWithout = 'sum without(object)',
+    local sumWithoutDirection = 'sum without(object, direction)',
+    local hostSumBy = 'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name)',
 
     vmNumberTotal:
       prometheusQuery.new(
@@ -205,23 +207,126 @@ local utils = commonlib.utils {
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(hostLegendLabel)),
 
-    hostDiskLatency:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_disk_latency_avg_milliseconds{%(hostQueriesSelector)s})' % vars
-      ),
-    hostPacketDropRate:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_network_packet_drop_rate{%(hostQueriesSelector)s})' % vars
-      ),
-
     hostMemoryUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'vcenter_host_memory_utilization_percent{%(hostQueriesSelector)s}' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(hostLegendLabel)),
+
+    hostModifiedMemoryBallooned:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_ballooned_mebibytes{%(hostQueriesSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - ballooned' % utils.labelsToPanelLegend(hostLegendLabel)),
+
+    hostModifiedMemorySwapped:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_swapped_mebibytes{%(hostQueriesSelector)s})' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s - swapped' % utils.labelsToPanelLegend(hostLegendLabel)),
+
+    hostNetworkTransmittedThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        '%(sumWithout)s (vcenter_host_network_throughput{direction="transmitted", %(hostQueriesSelector)s})' % vars {sumWithout: sumWithout}
+      )
+      + prometheusQuery.withLegendFormat('%s - transmitted' % utils.labelsToPanelLegend(hostLegendLabel)),
+
+    hostNetworkReceivedThroughputRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        '%(sumWithout)s (vcenter_host_network_throughput{direction="received", %(hostQueriesSelector)s})' % vars {sumWithout: sumWithout}
+      )
+      + prometheusQuery.withLegendFormat('%s - received' % utils.labelsToPanelLegend(hostLegendLabel)),
+
+    hostPacketReceivedErrorRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        '%(sumWithout)s (vcenter_host_network_packet_error_rate{direction="received", %(hostQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_host_network_packet_rate{direction="received", %(hostQueriesSelector)s}), 1)' % vars {sumWithout: sumWithout}
+      )
+      + prometheusQuery.withLegendFormat('%s - received' % utils.labelsToPanelLegend(hostLegendLabel)),
+
+    hostPacketTransmittedErrorRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        '%(sumWithout)s (vcenter_host_network_packet_error_rate{direction="transmitted", %(hostQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_host_network_packet_rate{direction="transmitted", %(hostQueriesSelector)s}), 1)' % vars {sumWithout: sumWithout}
+      )
+      + prometheusQuery.withLegendFormat('%s - transmitted' % utils.labelsToPanelLegend(hostLegendLabel)),
+
+    hostDiskReadLatency:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_host_disk_latency_avg_milliseconds{direction="read", object!="", %(hostNoClusterQueriesSelector)s}, "disk_path", "/", "vcenter_host_name","object") or label_join(vcenter_host_disk_latency_avg_milliseconds{direction="read", object!="", %(hostWithClusterQueriesSelector)s}, "disk_path", "/", "vcenter_cluster_name","vcenter_host_name","object")' % vars
+      ),
+
+    hostDiskWriteLatency:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_host_disk_latency_avg_milliseconds{direction="write", object!="", %(hostNoClusterQueriesSelector)s}, "disk_path", "/", "vcenter_host_name","object") or label_join(vcenter_host_disk_latency_avg_milliseconds{direction="write", object!="", %(hostWithClusterQueriesSelector)s}, "disk_path", "/", "vcenter_cluster_name","vcenter_host_name","object")' % vars
+      ),
+
+    hostDiskReadThroughput:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_host_disk_throughput{direction="read", object!="", %(hostNoClusterQueriesSelector)s}, "disk_path", "/", "vcenter_host_name","object") or label_join(vcenter_host_disk_throughput{direction="read", object!="", %(hostWithClusterQueriesSelector)s}, "disk_path", "/", "vcenter_cluster_name","vcenter_host_name","object")' % vars
+      ),
+
+    hostDiskWriteThroughput:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_host_disk_throughput{direction="write", object!="", %(hostNoClusterQueriesSelector)s}, "disk_path", "/", "vcenter_host_name","object") or label_join(vcenter_host_disk_throughput{direction="write", object!="", %(hostWithClusterQueriesSelector)s}, "disk_path", "/", "vcenter_cluster_name","vcenter_host_name","object")' % vars
+      ),
+
+    hostVMCPUUsage:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_cpu_usage_MHz{%(hostNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_cpu_usage_MHz{%(hostNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_cpu_usage_MHz{%(hostNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    hostVMCPUUtilization:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_cpu_utilization_percent{%(hostNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_cpu_utilization_percent{%(hostNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_cpu_utilization_percent{%(hostNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    hostVMDiskUsage:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_disk_usage_bytes{%(hostNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_disk_usage_bytes{%(hostNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_disk_usage_bytes{%(hostNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    hostVMDiskUtilization:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_disk_utilization_percent{%(hostNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_disk_utilization_percent{%(hostNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_disk_utilization_percent{%(hostNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    hostVMMemoryUsage:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_memory_usage_mebibytes{%(hostNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_memory_usage_mebibytes{%(hostNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_memory_usage_mebibytes{%(hostNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    hostVMMemoryUtilization:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_memory_utilization_percent{%(hostNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_memory_utilization_percent{%(hostNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_memory_utilization_percent{%(hostNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    hostVMNetworkThroughput:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(%(sumWithout)s (vcenter_vm_network_usage{%(hostNoVAppQueriesSelector)s}), "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(%(sumWithout)s (vcenter_vm_network_usage{%(hostNoRPoolQueriesSelector)s}), "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(%(sumWithout)s (vcenter_vm_network_usage{%(hostNoRPoolOrVAppQueriesSelector)s}), "vm_path", "/", "vcenter_vm_name")' % vars {sumWithout: sumWithout}
+      ),
+
+    hostVMPacketDropRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(hostNoVAppQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(hostNoVAppQueriesSelector)s}), 1), "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(hostNoRPoolQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(hostNoRPoolQueriesSelector)s}), 1), "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(hostNoRPoolOrVAppQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(hostNoRPoolOrVAppQueriesSelector)s}), 1), "vm_path", "/", "vcenter_vm_name")' % vars {sumWithoutDirection: sumWithoutDirection}
+      ),
 
     vmCPUUtilizationHost:
       prometheusQuery.new(
@@ -244,62 +349,16 @@ local utils = commonlib.utils {
     modifiedMemoryBallooned:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_ballooned_mebibytes{%(hostQueriesSelector)s})' % vars
+        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_ballooned_mebibytes{%(hostQueriesSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - ballooned' % utils.labelsToPanelLegend(hostLegendLabel)),
 
     modifiedMemorySwapped:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_swapped_mebibytes{%(hostQueriesSelector)s})' % vars
+        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_swapped_mebibytes{%(hostQueriesSelector)s})' % vars
       )
       + prometheusQuery.withLegendFormat('%s - swapped' % utils.labelsToPanelLegend(hostLegendLabel)),
-
-    modifiedMemorySwappedSSD:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_swapped_ssd_kibibytes{%(hostQueriesSelector)s})' % vars
-      ),
-
-    networkTransmittedThroughputRate:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_network_throughput{direction="transmitted", %(hostQueriesSelector)s})' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s - transmitted' % utils.labelsToPanelLegend(hostLegendLabel)),
-
-    networkReceivedThroughputRate:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_network_throughput{direction="received", %(hostQueriesSelector)s})' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s - received' % utils.labelsToPanelLegend(hostLegendLabel)),
-
-    networkThroughputRate:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_host_name) (vcenter_host_network_throughput{direction="received", %(hostQueriesSelector)s}) + sum by (vcenter_host_name) (vcenter_host_network_throughput{direction="transmitted", %(hostQueriesSelector)s})' % vars
-      ),
-
-    diskThroughputRate:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_disk_throughput{direction="read", %(hostQueriesSelector)s}) + sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_host_disk_throughput{direction="write", %(hostQueriesSelector)s})' % vars
-      ),
-
-    packetReceivedRate:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_network_packet_count{direction="received", %(hostQueriesSelector)s})' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s - received' % utils.labelsToPanelLegend(hostLegendLabel)),
-
-    packetTransmittedRate:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_network_packet_count{direction="transmitted", %(hostQueriesSelector)s})' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s - transmitted' % utils.labelsToPanelLegend(hostLegendLabel)),
 
     vmCPUUsage:
       prometheusQuery.new(
@@ -360,28 +419,28 @@ local utils = commonlib.utils {
     vmNetworkTransmittedThroughputRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '%(vmSumWithout)s (vcenter_vm_network_throughput_bytes_per_sec{direction="transmitted", %(virtualMachinesQueriesSelector)s})' % vars {vmSumWithout: vmSumWithout}
+        '%(sumWithout)s (vcenter_vm_network_throughput_bytes_per_sec{direction="transmitted", %(virtualMachinesQueriesSelector)s})' % vars {sumWithout: sumWithout}
       )
       + prometheusQuery.withLegendFormat('%s - transmitted' % vmLegend),
 
     vmNetworkReceivedThroughputRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '%(vmSumWithout)s (vcenter_vm_network_throughput_bytes_per_sec{direction="received", %(virtualMachinesQueriesSelector)s})' % vars {vmSumWithout: vmSumWithout}
+        '%(sumWithout)s (vcenter_vm_network_throughput_bytes_per_sec{direction="received", %(virtualMachinesQueriesSelector)s})' % vars {sumWithout: sumWithout}
       )
       + prometheusQuery.withLegendFormat('%s - received' % vmLegend),
 
     vmPacketReceivedDropRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '%(vmSumWithout)s (vcenter_vm_network_packet_drop_rate{direction="received", %(virtualMachinesQueriesSelector)s}) / clamp_min(%(vmSumWithout)s (vcenter_vm_network_packet_rate{direction="received", %(virtualMachinesQueriesSelector)s}), 1)' % vars {vmSumWithout: vmSumWithout}
+        '%(sumWithout)s (vcenter_vm_network_packet_drop_rate{direction="received", %(virtualMachinesQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_vm_network_packet_rate{direction="received", %(virtualMachinesQueriesSelector)s}), 1)' % vars {sumWithout: sumWithout}
       )
       + prometheusQuery.withLegendFormat('%s - received' % vmLegend),
 
     vmPacketTransmittedDropRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '%(vmSumWithout)s (vcenter_vm_network_packet_drop_rate{direction="transmitted", %(virtualMachinesQueriesSelector)s}) / clamp_min(%(vmSumWithout)s (vcenter_vm_network_packet_rate{direction="transmitted", %(virtualMachinesQueriesSelector)s}), 1)' % vars {vmSumWithout: vmSumWithout}
+        '%(sumWithout)s (vcenter_vm_network_packet_drop_rate{direction="transmitted", %(virtualMachinesQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_vm_network_packet_rate{direction="transmitted", %(virtualMachinesQueriesSelector)s}), 1)' % vars {sumWithout: sumWithout}
       )
       + prometheusQuery.withLegendFormat('%s - transmitted' % vmLegend),
 
@@ -512,11 +571,6 @@ local utils = commonlib.utils {
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_network_packet_drop_rate{%(queriesSelector)s})' % vars
-      ),
-    packetErrorEsxiHostsCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_network_packet_errors{direction="recieved", %(queriesSelector)s} + vcenter_host_network_packet_errors{direction="transmitted", %(queriesSelector)s}' % vars
       ),
   },
 }
