@@ -42,37 +42,6 @@ local utils = commonlib.utils;
           description='The number of virtual machine templates available.'
         )
         + stat.options.withGraphMode('none'),
-      vmOnStatusCluster:
-        commonlib.panels.generic.stat.info.new(
-          'VMs on',
-          targets=[t.vmOnStatusCluster],
-          description='The number of virtual machines currently powered on within the cluster.'
-        )
-        + stat.options.withGraphMode('none'),
-
-      vmOffStatusCluster:
-        commonlib.panels.generic.stat.info.new(
-          'VMs off',
-          targets=[t.vmOffStatusCluster],
-          description='The number of virtual machines currently powered off within the cluster.'
-        )
-        + stat.options.withGraphMode('none'),
-
-      vmSuspendedStatusCluster:
-        commonlib.panels.generic.stat.info.new(
-          'VMs suspended',
-          targets=[t.vmSuspendedStatusCluster],
-          description='The number of virtual machines currently in a suspended state within the cluster.'
-        )
-        + stat.options.withGraphMode('none'),
-
-      vmTemplateStatusCluster:
-        commonlib.panels.generic.stat.info.new(
-          'VM templates',
-          targets=[t.vmTemplateStatusCluster],
-          description='The number of virtual machine templates available within the cluster.'
-        )
-        + stat.options.withGraphMode('none'),
 
       clusterCountStatus:
         commonlib.panels.generic.stat.info.new(
@@ -103,22 +72,6 @@ local utils = commonlib.utils;
           'Inactive ESXi hosts',
           targets=[t.esxiHostsInactiveStatus],
           description='The number of ESXi hosts that are currently in an inactive state.'
-        )
-        + stat.options.withGraphMode('none'),
-
-      esxiHostsActiveStatusCluster:
-        commonlib.panels.generic.stat.info.new(
-          'Active ESXi hosts',
-          targets=[t.esxiHostsActiveStatusCluster],
-          description='The number of ESXi hosts that are currently in an active state within the cluster.'
-        )
-        + stat.options.withGraphMode('none'),
-
-      esxiHostsInactiveStatusCluster:
-        commonlib.panels.generic.stat.info.new(
-          'Inactive ESXi hosts',
-          targets=[t.esxiHostsInactiveStatusCluster],
-          description='The number of ESXi hosts that are currently in an inactive state within the cluster.'
         )
         + stat.options.withGraphMode('none'),
 
@@ -446,48 +399,80 @@ local utils = commonlib.utils;
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
-      VMTableCluster:
+      hostVMsTable:
         commonlib.panels.generic.table.base.new(
           'VMs table',
           targets=[
-            t.vmCPUUtilizationCluster + g.query.prometheus.withFormat('table')
+            t.hostVMCPUUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.vmMemoryUtilizationCluster + g.query.prometheus.withFormat('table')
+            t.hostVMCPUUtilization + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.vmModifiedMemoryBalloonedCluster + g.query.prometheus.withFormat('table')
+            t.hostVMMemoryUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.vmModifiedMemorySwappedCluster + g.query.prometheus.withFormat('table')
+            t.hostVMMemoryUtilization + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.vmNetDiskThroughputCluster + g.query.prometheus.withFormat('table')
+            t.hostVMDiskUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.packetDropRateCluster + g.query.prometheus.withFormat('table')
+            t.hostVMDiskUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.hostVMNetworkThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.hostVMPacketDropRate + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='Information about the virtual machines in the vCenter environment.'
+          description='Information about the VMs associated with the ESXi hosts.'
         )
+        + table.standardOptions.withNoValue('NA')
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('VM')
+          + table.fieldOverride.byName.withProperty('links', [
+            {
+              title: '',
+              url: 'd/vsphere-virtual-machines?var-datasource=${datasource}&${__all_variables}&var-vcenter_vm_name=${__value.raw}&${__url_time_range}',
+            },
+          ]),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('CPU usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('rotmhz')
+          ),
+        ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU utilization')
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withProperty('custom.minWidth', 250)
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
             + table.standardOptions.withMin(0)
             + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('mbytes')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory utilization')
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withProperty('custom.minWidth', 250)
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
@@ -497,31 +482,40 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory ballooned')
+          fieldOverride.byName.new('Disk usage')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
+            table.standardOptions.withUnit('bytes')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Packet drop rate')
+          fieldOverride.byName.new('Disk utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('packet/s')
+            table.standardOptions.withUnit('percent')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
+            + table.standardOptions.withDecimals(1)
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory swapped')
+          fieldOverride.byName.new('Net throughput')
           + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
-          ),
-        ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk throughput')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Packet drops')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percent')
           ),
         ])
         +
@@ -529,23 +523,24 @@ local utils = commonlib.utils;
           {
             id: 'joinByField',
             options: {
-              byField: 'vcenter_host_name',
+              byField: 'vm_path',
               mode: 'outer',
             },
           },
           {
             id: 'filterFieldsByName',
             options: {
-              byVariable: false,
               include: {
                 names: [
-                  'vcenter_host_name',
+                  'vm_path',
                   'Value #A',
                   'Value #B',
                   'Value #C',
                   'Value #D',
                   'Value #E',
                   'Value #F',
+                  'Value #G',
+                  'Value #H',
                 ],
               },
             },
@@ -562,22 +557,20 @@ local utils = commonlib.utils;
                 'Value #D': 4,
                 'Value #E': 5,
                 'Value #F': 6,
-                vcenter_host_name: 0,
+                'Value #G': 7,
+                'Value #H': 8,
+                vm_path: 0,
               },
               renameByName: {
-                'Value #A': 'CPU utilization',
-                'Value #B': 'Memory utilization',
-                'Value #C': 'Memory ballooned',
-                'Value #D': 'Memory swapped',
-                'Value #E': 'Disk throughput',
-                'Value #F': 'Packet drop rate',
-                vcenter_cluster_name: 'Cluster',
-                'vcenter_cluster_name 1': 'Cluster',
-                vcenter_host_name: 'Host',
-                'vcenter_host_name 1': 'Host',
-                vcenter_vm_name: 'Name',
-                'vcenter_vm_name 1': 'Name',
-                'vcenter_vm_name 2': '',
+                'Value #A': 'CPU usage',
+                'Value #B': 'CPU utilization',
+                'Value #C': 'Memory usage',
+                'Value #D': 'Memory utilization',
+                'Value #E': 'Disk usage',
+                'Value #F': 'Disk utilization',
+                'Value #G': 'Net throughput',
+                'Value #H': 'Packet drops',
+                vm_path: 'VM',
               },
             },
           },
@@ -853,35 +846,324 @@ local utils = commonlib.utils;
           },
         ]),
 
-      hostVMsTable:
+      clusterVMsOnStatus:
+        commonlib.panels.generic.stat.info.new(
+          'VMs on',
+          targets=[t.clusterVMsOnCount],
+          description='The number of virtual machines currently powered on within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      clusterVMsOffStatus:
+        commonlib.panels.generic.stat.info.new(
+          'VMs off',
+          targets=[t.clusterVMsOffCount],
+          description='The number of virtual machines currently powered off within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      clusterVMsSuspendedStatus:
+        commonlib.panels.generic.stat.info.new(
+          'VMs suspended',
+          targets=[t.clusterVMsSuspendedCount],
+          description='The number of virtual machines currently in a suspended state within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      clusterHostsActiveStatus:
+        commonlib.panels.generic.stat.info.new(
+          'Active ESXi hosts',
+          targets=[t.clusterHostsActiveCount],
+          description='The number of ESXi hosts that are currently running (responding and not in maintenance mode) within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      clusterHostsInactiveStatus:
+        commonlib.panels.generic.stat.info.new(
+          'Inactive ESXi hosts',
+          targets=[t.clusterHostsInactiveCount],
+          description='The number of ESXi hosts that are currently not running (not responding or in maintenance mode) within the cluster.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      clusterResourcePoolsStatus:
+        commonlib.panels.generic.stat.info.new(
+          'Resource pools',
+          targets=[t.clusterResourcePoolsCount],
+          description='The number of resource pools within the cluster (including nested).'
+        )
+        + stat.options.withGraphMode('none'),
+
+      clusterCPULimit:
+        barGauge.new(title='Cluster CPU limit')
+        + barGauge.queryOptions.withTargets([
+          t.clusterCPULimit,
+        ])
+        + barGauge.panelOptions.withDescription('The available CPU capacity of the cluster.')
+        + barGauge.options.withOrientation('horizontal')
+        + barGauge.standardOptions.thresholds.withSteps([
+          barGauge.thresholdStep.withColor('super-light-green'),
+        ])
+        + barGauge.standardOptions.withUnit('rotmhz'),
+
+      clusterCPUEffective:
+        barGauge.new(title='Cluster CPU effective')
+        + barGauge.queryOptions.withTargets([
+          t.clusterCPUEffective,
+        ])
+        + barGauge.panelOptions.withDescription('The effective CPU capacity of the cluster.')
+        + barGauge.options.withOrientation('horizontal')
+        + barGauge.standardOptions.thresholds.withSteps([
+          barGauge.thresholdStep.withColor('super-light-green'),
+        ])
+        + barGauge.standardOptions.withUnit('rotmhz'),
+
+      clusterCPUUtilization:
+        commonlib.panels.memory.timeSeries.usagePercent.new(
+          'Cluster CPU utilization',
+          targets=[t.clusterCPUUtilization],
+          description='The CPU utilization percentage of the cluster.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+
+      clusterMemoryLimit:
+        barGauge.new(title='Cluster memory limit')
+        + barGauge.queryOptions.withTargets([
+          t.clusterMemoryLimit,
+        ])
+        + barGauge.panelOptions.withDescription('The available memory capacity of the cluster.')
+        + barGauge.options.withOrientation('horizontal')
+        + barGauge.standardOptions.thresholds.withSteps([
+          barGauge.thresholdStep.withColor('super-light-green'),
+        ])
+        + barGauge.standardOptions.withUnit('bytes'),
+
+      clusterMemoryEffective:
+        barGauge.new(title='Cluster memory effective')
+        + barGauge.queryOptions.withTargets([
+          t.clusterMemoryEffective,
+        ])
+        + barGauge.panelOptions.withDescription('The effective memory capacity of the cluster.')
+        + barGauge.options.withOrientation('horizontal')
+        + barGauge.standardOptions.thresholds.withSteps([
+          barGauge.thresholdStep.withColor('super-light-green'),
+        ])
+        + barGauge.standardOptions.withUnit('bytes'),
+
+      clusterMemoryUtilization:
+        commonlib.panels.memory.timeSeries.usagePercent.new(
+          'Cluster memory utilization',
+          targets=[t.clusterMemoryUtilization],
+          description='The memory utilization percentage of the cluster.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
+        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+
+      clusterHostsTable:
+        commonlib.panels.generic.table.base.new(
+          'ESXi hosts table',
+          targets=[
+            t.clusterHostCPUUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.clusterHostCPUUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.clusterHostMemoryUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.clusterHostMemoryUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.clusterHostDiskThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.clusterHostDiskLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.clusterHostNetworkThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.clusterHostPacketErrorRate + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true),
+          ],
+          description='Information about the ESXi hosts associated with the clusters.'
+        )
+        + table.standardOptions.withNoValue('NA')
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('ESXi host')
+          + table.fieldOverride.byName.withProperty('links', [
+            {
+              title: '',
+              url: 'd/vsphere-hosts?var-datasource=${datasource}&${__all_variables}&var-vcenter_host_name=${__value.raw}&${__url_time_range}',
+            },
+          ]),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('CPU usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('rotmhz')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('CPU utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percent')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
+            + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('mbytes')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percent')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
+            + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Disk throughput')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Disk delay')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('ms')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Net throughput')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Packet drops')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percent')
+          ),
+        ])
+        +
+        table.queryOptions.withTransformationsMixin([
+          {
+            id: 'joinByField',
+            options: {
+              byField: 'vcenter_host_name',
+              mode: 'outer',
+            },
+          },
+          {
+            id: 'filterFieldsByName',
+            options: {
+              include: {
+                names: [
+                  'vcenter_cluster_name 3',
+                  'vcenter_host_name',
+                  'Value #A',
+                  'Value #B',
+                  'Value #C',
+                  'Value #D',
+                  'Value #E',
+                  'Value #F',
+                  'Value #G',
+                  'Value #H',
+                ],
+              },
+            },
+          },
+          {
+            id: 'organize',
+            options: {
+              excludeByName: {},
+              includeByName: {},
+              indexByName: {
+                'Value #A': 2,
+                'Value #B': 3,
+                'Value #C': 4,
+                'Value #D': 5,
+                'Value #E': 6,
+                'Value #F': 7,
+                'Value #G': 8,
+                'Value #H': 9,
+                'vcenter_cluster_name 3': 0,
+                vcenter_host_name: 1,
+              },
+              renameByName: {
+                'Value #A': 'CPU usage',
+                'Value #B': 'CPU utilization',
+                'Value #C': 'Memory usage',
+                'Value #D': 'Memory utilization',
+                'Value #E': 'Disk throughput',
+                'Value #F': 'Disk delay',
+                'Value #G': 'Net throughput',
+                'Value #H': 'Packet drops',
+                'vcenter_cluster_name 3': 'Cluster',
+                vcenter_host_name: 'ESXi host',
+              },
+            },
+          },
+        ]),
+
+      clusterVMsTable:
         commonlib.panels.generic.table.base.new(
           'VMs table',
           targets=[
-            t.hostVMCPUUsage + g.query.prometheus.withFormat('table')
+            t.clusterVMCPUUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMCPUUtilization + g.query.prometheus.withFormat('table')
+            t.clusterVMCPUUtilization + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMMemoryUsage + g.query.prometheus.withFormat('table')
+            t.clusterVMMemoryUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMMemoryUtilization + g.query.prometheus.withFormat('table')
+            t.clusterVMMemoryUtilization + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMDiskUsage + g.query.prometheus.withFormat('table')
+            t.clusterVMDiskUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMDiskUtilization + g.query.prometheus.withFormat('table')
+            t.clusterVMDiskUtilization + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMNetworkThroughput + g.query.prometheus.withFormat('table')
+            t.clusterVMNetworkThroughput + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostVMPacketDropRate + g.query.prometheus.withFormat('table')
+            t.clusterVMPacketDropRate + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='Information about the VMs associated with the ESXi hosts.'
+          description='Information about the VMs associated with the clusters.'
         )
         + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
@@ -1029,186 +1311,5 @@ local utils = commonlib.utils;
             },
           },
         ]),
-
-      clusterCPUEffective:
-        barGauge.new(title='Cluster CPU effective')
-        + barGauge.queryOptions.withTargets([
-          t.clusterCPUEffective,
-        ])
-        + barGauge.panelOptions.withDescription('The effective CPU capacity of the cluster.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.withUnit('rotmhz')
-        + barGauge.standardOptions.color.withMode('continuous-YlRd'),
-
-      clusterCPULimit:
-        barGauge.new(title='Cluster CPU limit')
-        + barGauge.queryOptions.withTargets([
-          t.clusterCPULimit,
-        ])
-        + barGauge.panelOptions.withDescription('The available CPU capacity of the cluster.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.withUnit('rotmhz')
-        + barGauge.standardOptions.color.withMode('continuous-YlRd'),
-
-      clusterCPUUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Cluster CPU utilization',
-          targets=[t.clusterCPUUtilization],
-          description='The CPU utilization percentage of the cluster.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
-
-      clusterMemoryEffective:
-        barGauge.new(title='Cluster memory effective')
-        + barGauge.queryOptions.withTargets([
-          t.clusterMemoryEffective,
-        ])
-        + barGauge.panelOptions.withDescription('The effective memory capacity of the cluster.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.withUnit('decbytes')
-        + barGauge.standardOptions.color.withMode('continuous-YlRd'),
-
-      clusterMemoryLimit:
-        barGauge.new(title='Cluster memory limit')
-        + barGauge.queryOptions.withTargets([
-          t.clusterMemoryLimit,
-        ])
-        + barGauge.panelOptions.withDescription('The available memory capacity of the cluster.')
-        + barGauge.options.withOrientation('horizontal')
-        + barGauge.standardOptions.withUnit('decbytes')
-        + barGauge.standardOptions.color.withMode('continuous-YlRd'),
-
-      clusterMemoryUtilization:
-        commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Cluster memory utilization',
-          targets=[t.clusterMemoryUtilization],
-          description='The memory utilization percentage of the cluster.'
-        )
-        + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
-
-      esxiHostsTable:
-        commonlib.panels.generic.table.base.new(
-          'ESXi hosts table',
-          targets=[
-            t.hostCPUUtilizationCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true)
-            ,
-            t.hostMemoryUtilizationCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true)
-            ,
-            t.networkThroughputRateCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true)
-            ,
-            t.hostCPUUsageCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true)
-            ,
-            t.hostMemoryUsageCluster + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true),
-          ]
-          ,
-          description='Information about the ESXi hosts in the vCenter environment.'
-        )
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withProperty('custom.minWidth', 250)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
-          ),
-        ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Network throughput')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('KiBs')
-          ),
-        ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('rotmhz')
-          ),
-        ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory usage')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
-          ),
-        ])
-        +
-        table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory utilization')
-          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
-          + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withProperty('custom.minWidth', 250)
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('percent')
-            + table.standardOptions.color.withMode('continuous-BlPu')
-            + table.standardOptions.withMin(0)
-            + table.standardOptions.withMax(100)
-            + table.standardOptions.withDecimals(1)
-          ),
-        ])
-        +
-        table.queryOptions.withTransformationsMixin([
-          {
-            id: 'joinByField',
-            options: {
-              byField: 'vcenter_host_name',
-              mode: 'outer',
-            },
-          },
-          {
-            id: 'filterFieldsByName',
-            options: {
-              include: {
-                names: [
-                  'vcenter_host_name',
-                  'vcenter_cluster_name 1',
-                  'Value #A',
-                  'Value #B',
-                  'Value #C',
-                  'Value #D',
-                  'Value #F',
-                  'Value #E',
-                ],
-              },
-            },
-          },
-          {
-            id: 'organize',
-            options: {
-              excludeByName: {},
-              includeByName: {},
-              indexByName: {
-                'Value #A': 2,
-                'Value #B': 4,
-                'Value #C': 6,
-                'Value #D': 3,
-                'Value #E': 5,
-                'vcenter_cluster_name 1': 0,
-                vcenter_host_name: 1,
-              },
-              renameByName: {
-                'Value #A': 'CPU utilization',
-                'Value #B': 'Memory utilization',
-                'Value #C': 'Network throughput',
-                'Value #D': 'CPU usage',
-                'Value #E': 'Memory usage',
-                'vcenter_cluster_name 1': 'Cluster',
-                vcenter_host_name: 'Host',
-              },
-            },
-          },
-        ]),
-    },
+      },
 }
