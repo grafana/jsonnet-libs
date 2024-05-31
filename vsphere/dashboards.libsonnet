@@ -54,22 +54,22 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
             [
-              panels.vmOnStatusCluster { gridPos+: { w: 4, h: 4 } },
-              panels.vmOffStatusCluster { gridPos+: { w: 4, h: 4 } },
-              panels.vmSuspendedStatusCluster { gridPos+: { w: 4, h: 4 } },
-              panels.vmTemplateStatusCluster { gridPos+: { w: 4, h: 4 } },
-              panels.esxiHostsActiveStatusCluster { gridPos+: { w: 4, h: 4 } },
-              panels.esxiHostsInactiveStatusCluster { gridPos+: { w: 4, h: 4 } },
-              panels.clusterCPUEffective { gridPos+: { w: 8, h: 8 } },
+              panels.clusterVMsOnStatus { gridPos+: { w: 4, h: 4 } },
+              panels.clusterVMsOffStatus { gridPos+: { w: 4, h: 4 } },
+              panels.clusterVMsSuspendedStatus { gridPos+: { w: 4, h: 4 } },
+              panels.clusterHostsActiveStatus { gridPos+: { w: 4, h: 4 } },
+              panels.clusterHostsInactiveStatus { gridPos+: { w: 4, h: 4 } },
+              panels.clusterResourcePoolsStatus { gridPos+: { w: 4, h: 4 } },
               panels.clusterCPULimit { gridPos+: { w: 8, h: 8 } },
+              panels.clusterCPUEffective { gridPos+: { w: 8, h: 8 } },
               panels.clusterCPUUtilization { gridPos+: { w: 8, h: 8 } },
-              panels.clusterMemoryEffective { gridPos+: { w: 8, h: 8 } },
               panels.clusterMemoryLimit { gridPos+: { w: 8, h: 8 } },
+              panels.clusterMemoryEffective { gridPos+: { w: 8, h: 8 } },
               panels.clusterMemoryUtilization { gridPos+: { w: 8, h: 8 } },
-              g.panel.row.new('ESXi host row'),
-              panels.esxiHostsTable { gridPos+: { w: 24 } },
+              g.panel.row.new('ESXi hosts row'),
+              panels.clusterHostsTable { gridPos+: { w: 24 } },
               g.panel.row.new('VMs row'),
-              panels.VMTableCluster { gridPos+: { w: 24 } },
+              panels.clusterVMsTable { gridPos+: { w: 24 } },
             ], 12, 6
           )
         )

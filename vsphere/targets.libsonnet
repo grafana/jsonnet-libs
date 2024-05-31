@@ -14,6 +14,7 @@ local utils = commonlib.utils {
     local vmLegend = '{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}',
     local sumWithout = 'sum without(object)',
     local sumWithoutDirection = 'sum without(object, direction)',
+    local clusterSumBy = 'sum by (job, vcenter_datacenter_name, vcenter_cluster_name)',
     local hostSumBy = 'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name)',
 
     vmNumberTotal:
@@ -45,30 +46,6 @@ local utils = commonlib.utils {
         'vcenter_cluster_vm_template_count{%(queriesSelector)s}' % vars
       ),
 
-    vmOnStatusCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_vm_count{power_state="on", %(queriesSelector)s}' % vars
-      ),
-
-    vmOffStatusCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_vm_count{power_state="off", %(queriesSelector)s}' % vars
-      ),
-
-    vmSuspendedStatusCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_vm_count{power_state="suspended", %(queriesSelector)s}' % vars
-      ),
-
-    vmTemplateStatusCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_vm_template_count{%(queriesSelector)s}' % vars
-      ),
-
     clusterCountStatus:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -82,17 +59,6 @@ local utils = commonlib.utils {
       ),
 
     esxiHostsActiveStatus:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_host_count{effective="true", %(queriesSelector)s}' % vars
-      ),
-
-    esxiHostsInactiveStatusCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_host_count{effective="false", %(queriesSelector)s}' % vars
-      ),
-    esxiHostsActiveStatusCluster:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'vcenter_cluster_host_count{effective="true", %(queriesSelector)s}' % vars
@@ -328,38 +294,6 @@ local utils = commonlib.utils {
         'label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(hostNoVAppQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(hostNoVAppQueriesSelector)s}), 1), "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(hostNoRPoolQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(hostNoRPoolQueriesSelector)s}), 1), "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(hostNoRPoolOrVAppQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(hostNoRPoolOrVAppQueriesSelector)s}), 1), "vm_path", "/", "vcenter_vm_name")' % vars {sumWithoutDirection: sumWithoutDirection}
       ),
 
-    vmCPUUtilizationHost:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_vm_cpu_utilization_percent{%(hostQueriesSelector)s}' % vars
-      ),
-
-    vmMemoryUtilizationHost:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_vm_memory_utilization_percent{%(hostQueriesSelector)s}' % vars
-      ),
-
-    vmNetDiskThroughputHost:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_disk_throughput{%(hostQueriesSelector)s})' % vars
-      ),
-
-    modifiedMemoryBallooned:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_ballooned_mebibytes{%(hostQueriesSelector)s})' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s - ballooned' % utils.labelsToPanelLegend(hostLegendLabel)),
-
-    modifiedMemorySwapped:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_swapped_mebibytes{%(hostQueriesSelector)s})' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s - swapped' % utils.labelsToPanelLegend(hostLegendLabel)),
-
     vmCPUUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -468,22 +402,60 @@ local utils = commonlib.utils {
         'label_join(vcenter_vm_disk_throughput{direction="write", object!="", %(virtualMachinesNoVAppQueriesSelector)s}, "disk_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name","object") or label_join(vcenter_vm_disk_throughput{direction="write", object!="", %(virtualMachinesNoRPoolQueriesSelector)s}, "disk_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name","object") or label_join(vcenter_vm_disk_throughput{direction="write", object!="", %(virtualMachinesNoRPoolOrVAppQueriesSelector)s}, "disk_path", "/", "vcenter_vm_name","object")' % vars
       ),
 
+    clusterVMsOnCount:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'vcenter_cluster_vm_count{power_state="on", %(clusterQueriesSelector)s}' % vars
+      ),
+
+    clusterVMsOffCount:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'vcenter_cluster_vm_count{power_state="off", %(clusterQueriesSelector)s}' % vars
+      ),
+
+    clusterVMsSuspendedCount:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'vcenter_cluster_vm_count{power_state="suspended", %(clusterQueriesSelector)s}' % vars
+      ),
+
+    clusterHostsActiveCount:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'vcenter_cluster_host_count{effective="true", %(clusterQueriesSelector)s}' % vars
+      ),
+
+    clusterHostsInactiveCount:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'vcenter_cluster_host_count{effective="false", %(clusterQueriesSelector)s}' % vars
+      ),
+
+    clusterResourcePoolsCount:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'count(vcenter_resource_pool_cpu_shares{%(clusterQueriesSelector)s})' % vars
+      ),
+
     clusterCPUEffective:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_cpu_effective{%(queriesSelector)s}' % vars
-      ),
+        'vcenter_cluster_cpu_effective{%(clusterQueriesSelector)s}' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(clusterLegendLabel)),
 
     clusterCPULimit:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_cluster_cpu_limit{%(queriesSelector)s}' % vars
-      ),
+        'vcenter_cluster_cpu_limit{%(clusterQueriesSelector)s}' % vars
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(clusterLegendLabel)),
 
     clusterCPUUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '(100 * vcenter_cluster_cpu_effective{%(queriesSelector)s} / clamp_min(vcenter_cluster_cpu_limit{%(queriesSelector)s}, 1))' % vars
+        '(100 * %(clusterSumBy)s (vcenter_host_cpu_usage_MHz{%(clusterQueriesSelector)s}) / clamp_min(vcenter_cluster_cpu_effective{%(clusterQueriesSelector)s}, 1))' % vars {clusterSumBy: clusterSumBy}
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(clusterLegendLabel)),
 
@@ -491,86 +463,117 @@ local utils = commonlib.utils {
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'vcenter_cluster_memory_effective_bytes{%(queriesSelector)s}' % vars
-      ),
+      )
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(clusterLegendLabel)),
+
     clusterMemoryLimit:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'vcenter_cluster_memory_limit_bytes{%(queriesSelector)s}' % vars
-      ),
-    clusterMemoryUtilization:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        ' 100 * vcenter_cluster_memory_effective_bytes{%(queriesSelector)s} / clamp_min(vcenter_cluster_memory_limit_bytes{%(queriesSelector)s}, 1)' % vars
       )
       + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(clusterLegendLabel)),
 
-    hostCPUUsageCluster:
+    clusterMemoryUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_cpu_usage_MHz{%(queriesSelector)s}' % vars
+        ' 104857600 * %(clusterSumBy)s (vcenter_host_memory_usage_mebibytes{%(clusterQueriesSelector)s}) / clamp_min(vcenter_cluster_memory_effective_bytes{%(clusterQueriesSelector)s}, 1)' % vars {clusterSumBy: clusterSumBy}
       )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(hostLegendLabel)),
+      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(clusterLegendLabel)),
 
-    hostCPUUtilizationCluster:
+    clusterHostCPUUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_cpu_utilization_percent{%(queriesSelector)s}' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(hostLegendLabel)),
-
-    hostMemoryUsageCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_memory_usage_mebibytes{%(queriesSelector)s}' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(hostLegendLabel)),
-
-    hostMemoryUtilizationCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_host_memory_utilization_percent{%(queriesSelector)s}' % vars
-      )
-      + prometheusQuery.withLegendFormat('%s' % utils.labelsToPanelLegend(hostLegendLabel)),
-
-    networkThroughputRateCluster:
-      prometheusQuery.new(
-        '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_host_name) (vcenter_host_network_throughput{direction="received", %(queriesSelector)s}) + sum by (vcenter_host_name) (vcenter_host_network_throughput{direction="transmitted", %(queriesSelector)s})' % vars
+        'vcenter_host_cpu_usage_MHz{%(clusterQueriesSelector)s}' % vars
       ),
 
-    vmCPUUtilizationCluster:
+    clusterHostCPUUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_vm_cpu_utilization_percent{%(queriesSelector)s}' % vars
+        'vcenter_host_cpu_utilization_percent{%(clusterQueriesSelector)s}' % vars
       ),
 
-    vmMemoryUtilizationCluster:
+    clusterHostMemoryUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_vm_memory_utilization_percent{%(queriesSelector)s}' % vars
+        'vcenter_host_memory_usage_mebibytes{%(clusterQueriesSelector)s}' % vars
       ),
 
-    vmModifiedMemoryBalloonedCluster:
+    clusterHostMemoryUtilization:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_ballooned_mebibytes{%(queriesSelector)s})' % vars
+        'vcenter_host_memory_utilization_percent{%(clusterQueriesSelector)s}' % vars
       ),
 
-    vmModifiedMemorySwappedCluster:
+    clusterHostDiskThroughput:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_memory_swapped_mebibytes{%(queriesSelector)s})' % vars
+        '%(sumWithoutDirection)s (vcenter_host_disk_throughput{%(clusterQueriesSelector)s})' % vars {sumWithoutDirection: sumWithoutDirection}
       ),
 
-    vmNetDiskThroughputCluster:
+    clusterHostDiskLatency:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_disk_throughput{%(queriesSelector)s})' % vars
+        '%(sumWithoutDirection)s (vcenter_host_disk_latency_avg_milliseconds{%(clusterQueriesSelector)s})' % vars {sumWithoutDirection: sumWithoutDirection}
       ),
-    packetDropRateCluster:
+
+    clusterHostNetworkThroughput:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name, vcenter_resource_pool_name, vcenter_vm_id) (vcenter_vm_network_packet_drop_rate{%(queriesSelector)s})' % vars
+        '%(sumWithout)s (vcenter_host_network_usage{%(clusterQueriesSelector)s})' % vars {sumWithout: sumWithout}
+      ),
+
+    clusterHostPacketErrorRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        '%(sumWithoutDirection)s (vcenter_host_network_packet_error_rate{%(clusterQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_host_network_packet_rate{%(clusterQueriesSelector)s}), 1)' % vars {sumWithoutDirection: sumWithoutDirection}
+      ),
+
+    clusterVMCPUUsage:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_cpu_usage_MHz{%(clusterNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_cpu_usage_MHz{%(clusterNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_cpu_usage_MHz{%(clusterNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    clusterVMCPUUtilization:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_cpu_utilization_percent{%(clusterNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_cpu_utilization_percent{%(clusterNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_cpu_utilization_percent{%(clusterNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    clusterVMDiskUsage:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_disk_usage_bytes{%(clusterNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_disk_usage_bytes{%(clusterNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_disk_usage_bytes{%(clusterNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    clusterVMDiskUtilization:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_disk_utilization_percent{%(clusterNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_disk_utilization_percent{%(clusterNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_disk_utilization_percent{%(clusterNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    clusterVMMemoryUsage:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_memory_usage_mebibytes{%(clusterNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_memory_usage_mebibytes{%(clusterNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_memory_usage_mebibytes{%(clusterNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    clusterVMMemoryUtilization:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(vcenter_vm_memory_utilization_percent{%(clusterNoVAppQueriesSelector)s}, "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_memory_utilization_percent{%(clusterNoRPoolQueriesSelector)s}, "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(vcenter_vm_memory_utilization_percent{%(clusterNoRPoolOrVAppQueriesSelector)s}, "vm_path", "/", "vcenter_vm_name")' % vars
+      ),
+
+    clusterVMNetworkThroughput:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(%(sumWithout)s (vcenter_vm_network_usage{%(clusterNoVAppQueriesSelector)s}), "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(%(sumWithout)s (vcenter_vm_network_usage{%(clusterNoRPoolQueriesSelector)s}), "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(%(sumWithout)s (vcenter_vm_network_usage{%(clusterNoRPoolOrVAppQueriesSelector)s}), "vm_path", "/", "vcenter_vm_name")' % vars {sumWithout: sumWithout}
+      ),
+
+    clusterVMPacketDropRate:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(clusterNoVAppQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(clusterNoVAppQueriesSelector)s}), 1), "vm_path", "/", "vcenter_resource_pool_inventory_path","vcenter_vm_name") or label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(clusterNoRPoolQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(clusterNoRPoolQueriesSelector)s}), 1), "vm_path", "/", "vcenter_virtual_app_inventory_path","vcenter_vm_name") or label_join(%(sumWithoutDirection)s (vcenter_vm_network_packet_drop_rate{%(clusterNoRPoolOrVAppQueriesSelector)s}) / clamp_min(%(sumWithoutDirection)s (vcenter_vm_network_packet_rate{%(clusterNoRPoolOrVAppQueriesSelector)s}), 1), "vm_path", "/", "vcenter_vm_name")' % vars {sumWithoutDirection: sumWithoutDirection}
       ),
   },
 }

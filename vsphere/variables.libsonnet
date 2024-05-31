@@ -37,13 +37,14 @@ local extendedUtils = utils + {
 {
   new(this, varMetric):
     {
-      local virtualMachineLabels = this.config.virtualMachineLabels,
-      local virtualMachineOptionalLabels = ['vcenter_cluster_name', 'vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'],
-      local hostLabels = this.config.hostLabels,
-      local hostOptionalLabels = ['vcenter_cluster_name'],
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
       local datastoreLabels = this.config.datastoreLabels,
+      local clusterLabels = this.config.clusterLabels,
+      local hostLabels = this.config.hostLabels,
+      local hostOptionalLabels = ['vcenter_cluster_name'],
+      local virtualMachineLabels = this.config.virtualMachineLabels,
+      local virtualMachineOptionalLabels = ['vcenter_cluster_name', 'vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'],
       local clusterLabel = 'vcenter_cluster_name',
       local clusterSelector = 'job=~"integrations/vsphere",job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name"',
       local hostLabel = 'vcenter_host_name',
@@ -140,13 +141,13 @@ local extendedUtils = utils + {
           );
         [variable],
 
-      clusterVariables:
-        [root.datasources.prometheus]
-        + groupVariablesFromLabels(groupLabels, filteringSelector),
-      // Use on dashboards where only single entity can be selected, like drill-down dashboards
       overviewVariables:
         [root.datasources.prometheus]
         + groupVariablesFromLabels(groupLabels, filteringSelector) + [topClusterSelector],
+      clusterVariables:
+        [root.datasources.prometheus]
+        + groupVariablesFromLabels(groupLabels, filteringSelector)
+        + createLabelValueVariable(clusterLabel, 'vSphere cluster', varMetric, clusterSelector, clusterLabel, true),
       hostsVariable:
         [root.datasources.prometheus]
         + groupVariablesFromLabels(groupLabels, filteringSelector)
@@ -168,6 +169,22 @@ local extendedUtils = utils + {
       datastoreSelector:
         '%s' % [
           utils.labelsToPromQLSelector(datastoreLabels),
+        ],
+      clusterQueriesSelector:
+        '%s' % [
+          utils.labelsToPromQLSelector(groupLabels + clusterLabels),
+        ],
+      clusterNoRPoolQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + clusterLabels + ['vcenter_resource_pool_inventory_path'], [], ['vcenter_resource_pool_inventory_path']),
+        ],
+      clusterNoVAppQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + clusterLabels + ['vcenter_virtual_app_inventory_path'], [], ['vcenter_virtual_app_inventory_path']),
+        ],
+      clusterNoRPoolOrVAppQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + clusterLabels + ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'], [], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
         ],
       hostQueriesSelector:
         '%s' % [
