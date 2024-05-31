@@ -27,8 +27,6 @@ function(
       + custom.withDrawStyle('bars')
       + custom.stacking.withMode('normal')
       + custom.withFillOpacity(50)
-      // should be set, otherwise interval is around 1s by default
-      + timeSeries.queryOptions.withInterval('30s')
       + options.tooltip.withMode('multi')
       + options.tooltip.withSort('desc')
       + timeSeries.standardOptions.withUnit('none')
