@@ -37,10 +37,12 @@ local extendedUtils = utils + {
 {
   new(this, varMetric):
     {
+      local virtualMachineLabels = this.config.virtualMachineLabels,
       local virtualMachineOptionalLabels = ['vcenter_cluster_name', 'vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'],
+      local hostLabels = this.config.hostLabels,
+      local hostOptionalLabels = ['vcenter_cluster_name'],
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
-      local virtualMachineLabels = this.config.virtualMachineLabels,
       local datastoreLabels = this.config.datastoreLabels,
       local clusterLabel = 'vcenter_cluster_name',
       local clusterSelector = 'job=~"integrations/vsphere",job=~"$job",vcenter_datacenter_name=~"$vcenter_datacenter_name"',
@@ -147,7 +149,9 @@ local extendedUtils = utils + {
         + groupVariablesFromLabels(groupLabels, filteringSelector) + [topClusterSelector],
       hostsVariable:
         [root.datasources.prometheus]
-        + groupVariablesFromLabels(groupLabels, filteringSelector),
+        + groupVariablesFromLabels(groupLabels, filteringSelector)
+        + createLabelValueVariable(clusterLabel, 'vSphere cluster', varMetric, clusterSelector, clusterLabel, true)
+        + createQueryVariable(hostLabel, 'ESXi host', hostQuery, hostRegex, true),
       virtualMachinesVariables:
         [root.datasources.prometheus]
         + groupVariablesFromLabels(groupLabels, filteringSelector)
@@ -167,7 +171,27 @@ local extendedUtils = utils + {
         ],
       hostQueriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels),
+          extendedUtils.labelsToPromQLSelector(groupLabels + hostLabels, hostOptionalLabels),
+        ],
+      hostWithClusterQueriesSelector:
+        '%s' % [
+          utils.labelsToPromQLSelector(groupLabels + hostLabels),
+        ],
+      hostNoClusterQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + hostLabels, [], hostOptionalLabels),
+        ],
+      hostNoRPoolQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + hostLabels + ['vcenter_resource_pool_inventory_path'], ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path']),
+        ],
+      hostNoVAppQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + hostLabels + ['vcenter_virtual_app_inventory_path'], ['vcenter_cluster_name'], ['vcenter_virtual_app_inventory_path']),
+        ],
+      hostNoRPoolOrVAppQueriesSelector:
+        '%s' % [
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + hostLabels + ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'], ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
         ],
       virtualMachinesQueriesSelector:
         '%s' % [

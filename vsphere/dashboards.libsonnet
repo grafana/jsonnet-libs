@@ -84,13 +84,13 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
               panels.hostCPUUtilization,
               panels.hostMemoryUsage,
               panels.hostMemoryUtilization,
-              panels.modifiedMemory { gridPos+: { w: 24 } },
-              panels.networkThroughputRate,
-              panels.packetRate,
+              panels.hostModifiedMemory { gridPos+: { w: 24 } },
+              panels.hostNetworkThroughputRate,
+              panels.hostPacketErrorRate,
               g.panel.row.new('VMs row'),
-              panels.VMTableHost { gridPos+: { w: 24 } },
+              panels.hostVMsTable { gridPos+: { w: 24 } },
               g.panel.row.new('Disks row'),
-              panels.disksTable { gridPos+: { w: 24 } },
+              panels.hostDisksTable { gridPos+: { w: 24 } },
             ], 12, 6
           )
         )

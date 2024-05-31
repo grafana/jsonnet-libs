@@ -382,7 +382,7 @@ local utils = commonlib.utils;
 
       hostCPUUsage:
         commonlib.panels.generic.timeSeries.base.new(
-          'Host CPU usage',
+          'CPU usage',
           targets=[t.hostCPUUsage],
           description='The amount of CPU used by the ESXi host.'
         )
@@ -391,7 +391,7 @@ local utils = commonlib.utils;
 
       hostCPUUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Host CPU utilization',
+          'CPU utilization',
           targets=[t.hostCPUUtilization],
           description='The CPU utilization percentage of the ESXi host.'
         )
@@ -400,7 +400,7 @@ local utils = commonlib.utils;
 
       hostMemoryUsage:
         commonlib.panels.generic.timeSeries.base.new(
-          'Host memory usage',
+          'Memory usage',
           targets=[t.hostMemoryUsage],
           description='The amount of memory used by the ESXi host.'
         )
@@ -409,41 +409,42 @@ local utils = commonlib.utils;
 
       hostMemoryUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Host memory utilization',
+          'Memory utilization',
           targets=[t.hostMemoryUtilization],
           description='The memory utilization percentage of the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
         + g.panel.timeSeries.options.legend.withDisplayMode('table'),
 
-      modifiedMemory:
+      hostModifiedMemory:
         commonlib.panels.generic.timeSeries.base.new(
           'Modified memory',
-          targets=[t.modifiedMemoryBallooned, t.modifiedMemorySwapped],
-          description='The amount of memory that has been modified or ballooned on the ESXi host.'
-        ) + g.panel.timeSeries.standardOptions.withUnit('mbytes')
+          targets=[t.hostModifiedMemoryBallooned, t.hostModifiedMemorySwapped],
+          description='The amount of memory that has been swapped or ballooned on the ESXi host.'
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('mbytes')
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
-      networkThroughputRate:
+      hostNetworkThroughputRate:
         commonlib.panels.generic.timeSeries.base.new(
-          'Network throughput rate',
-          targets=[t.networkTransmittedThroughputRate, t.networkReceivedThroughputRate],
-          description='The rate of data transmitted or received over the network of the ESXi host.'
+          'Avg network throughput rate',
+          targets=[t.hostNetworkTransmittedThroughputRate, t.hostNetworkReceivedThroughputRate],
+          description='The 20s average rate of data transmitted or received over the network of the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('KiBs')
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right'),
+        + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
-      packetRate:
+      hostPacketErrorRate:
         commonlib.panels.generic.timeSeries.base.new(
-          'Packet rate',
-          targets=[t.packetReceivedRate, t.packetTransmittedRate],
-          description='The rate of packets received or transmitted over the ESXi hosts networks.'
+          'Avg packet errors',
+          targets=[t.hostPacketReceivedErrorRate, t.hostPacketTransmittedErrorRate],
+          description='The 20s average of received or transmitted packets dropped over the ESXi hosts network compared to the overall packets received or transmitted.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('packet/s')
+        + g.panel.timeSeries.standardOptions.withUnit('percent')
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
-        + g.panel.timeSeries.options.legend.withPlacement('right'),
+        + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
       VMTableCluster:
         commonlib.panels.generic.table.base.new(
@@ -582,31 +583,51 @@ local utils = commonlib.utils;
           },
         ]),
 
-      disksTable:
+      hostDisksTable:
         commonlib.panels.generic.table.base.new(
           'Disks table',
           targets=[
-            t.hostDiskLatency + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true)
-            ,
-            t.diskThroughputRate + g.query.prometheus.withFormat('table')
+            t.hostDiskReadThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true),
+            t.hostDiskReadLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true),
+            t.hostDiskWriteThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true),
+            t.hostDiskWriteLatency + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='Information about the disks associated with the virtual machines.'
+          description='Information about the disks associated with the ESXi hosts.'
         )
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Latency')
+          fieldOverride.byName.new('Throughput (R)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
-
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Delay (R)')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('ms')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Throughput')
+          fieldOverride.byName.new('Throughput (W)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Delay (W)')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('ms')
           ),
         ])
         +
@@ -614,7 +635,7 @@ local utils = commonlib.utils;
           {
             id: 'joinByField',
             options: {
-              byField: 'vcenter_host_name',
+              byField: 'disk_path',
               mode: 'outer',
             },
           },
@@ -623,9 +644,11 @@ local utils = commonlib.utils;
             options: {
               include: {
                 names: [
-                  'vcenter_host_name',
+                  'disk_path',
                   'Value #A',
                   'Value #B',
+                  'Value #C',
+                  'Value #D',
                 ],
               },
             },
@@ -636,18 +659,18 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 2,
-                'Value #B': 6,
-                'Value #D': 3,
-                'Value #E': 4,
-                'Value #F': 5,
-                vcenter_host_name: 0,
-                'vcenter_vm_name 1': 1,
+                'Value #A': 1,
+                'Value #B': 2,
+                'Value #C': 3,
+                'Value #D': 4,
+                disk_path: 0,
               },
               renameByName: {
-                'Value #A': 'Latency',
-                'Value #B': 'Throughput',
-                vcenter_host_name: 'Host',
+                'Value #A': 'Throughput (R)',
+                'Value #B': 'Delay (R)',
+                'Value #C': 'Throughput (W)',
+                'Value #D': 'Delay (W)',
+                disk_path: 'Disk',
               },
             },
           },
@@ -725,7 +748,7 @@ local utils = commonlib.utils;
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.options.legend.withPlacement('bottom')
-        + g.panel.timeSeries.standardOptions.withUnit('Bps'),
+        + g.panel.timeSeries.standardOptions.withUnit('KiBs'),
 
       vmPacketDropRate:
         commonlib.panels.generic.timeSeries.base.new(
@@ -830,48 +853,80 @@ local utils = commonlib.utils;
           },
         ]),
 
-      VMTableHost:
+      hostVMsTable:
         commonlib.panels.generic.table.base.new(
           'VMs table',
           targets=[
-            t.vmCPUUtilizationHost + g.query.prometheus.withFormat('table')
+            t.hostVMCPUUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.vmMemoryUtilizationHost + g.query.prometheus.withFormat('table')
+            t.hostVMCPUUtilization + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.modifiedMemoryBallooned + g.query.prometheus.withFormat('table')
+            t.hostVMMemoryUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.modifiedMemorySwapped + g.query.prometheus.withFormat('table')
+            t.hostVMMemoryUtilization + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.vmNetDiskThroughputHost + g.query.prometheus.withFormat('table')
+            t.hostVMDiskUsage + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.hostPacketDropRate + g.query.prometheus.withFormat('table')
+            t.hostVMDiskUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.hostVMNetworkThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.hostVMPacketDropRate + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='Information about the virtual machines in the vCenter environment.'
+          description='Information about the VMs associated with the ESXi hosts.'
         )
+        + table.standardOptions.withNoValue('NA')
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('VM')
+          + table.fieldOverride.byName.withProperty('links', [
+            {
+              title: '',
+              url: 'd/vsphere-virtual-machines?var-datasource=${datasource}&${__all_variables}&var-vcenter_vm_name=${__value.raw}&${__url_time_range}',
+            },
+          ]),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('CPU usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('rotmhz')
+          ),
+        ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU utilization')
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withProperty('custom.minWidth', 250)
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
             + table.standardOptions.withMin(0)
             + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Memory usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('mbytes')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory utilization')
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
-          + fieldOverride.byName.withProperty('custom.minWidth', 250)
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
@@ -881,27 +936,40 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory ballooned')
+          fieldOverride.byName.new('Disk usage')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
+            table.standardOptions.withUnit('bytes')
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory swapped')
+          fieldOverride.byName.new('Disk utilization')
+          + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('mbytes')
+            table.standardOptions.withUnit('percent')
+            + table.standardOptions.color.withMode('continuous-BlPu')
+            + table.standardOptions.withMin(0)
+            + table.standardOptions.withMax(100)
+            + table.standardOptions.withDecimals(1)
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Packet drop rate')
-          + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('packet/s')
-          ),
-        ])
-        + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Disk throughput')
+          fieldOverride.byName.new('Net throughput')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('KiBs')
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Packet drops')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('percent')
           ),
         ])
         +
@@ -909,7 +977,7 @@ local utils = commonlib.utils;
           {
             id: 'joinByField',
             options: {
-              byField: 'vcenter_host_name',
+              byField: 'vm_path',
               mode: 'outer',
             },
           },
@@ -918,13 +986,15 @@ local utils = commonlib.utils;
             options: {
               include: {
                 names: [
-                  'vcenter_host_name',
+                  'vm_path',
                   'Value #A',
                   'Value #B',
                   'Value #C',
                   'Value #D',
                   'Value #E',
                   'Value #F',
+                  'Value #G',
+                  'Value #H',
                 ],
               },
             },
@@ -935,29 +1005,26 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 2,
-                'Value #B': 3,
-                'Value #C': 4,
-                'Value #D': 5,
-                'Value #E': 6,
-                'Value #F': 7,
-                vcenter_host_name: 0,
-                'vcenter_vm_name 1': 1,
+                'Value #A': 1,
+                'Value #B': 2,
+                'Value #C': 3,
+                'Value #D': 4,
+                'Value #E': 5,
+                'Value #F': 6,
+                'Value #G': 7,
+                'Value #H': 8,
+                vm_path: 0,
               },
               renameByName: {
-                'Value #A': 'CPU utilization',
-                'Value #B': 'Memory utilization',
-                'Value #C': 'Memory ballooned',
-                'Value #D': 'Memory swapped',
-                'Value #E': 'Disk throughput',
-                'Value #F': 'Packet drop rate',
-                vcenter_cluster_name: 'Cluster',
-                'vcenter_cluster_name 1': 'Cluster',
-                vcenter_host_name: 'Host',
-                'vcenter_host_name 1': 'Host',
-                vcenter_vm_name: 'Name',
-                'vcenter_vm_name 1': 'Name',
-                'vcenter_vm_name 2': '',
+                'Value #A': 'CPU usage',
+                'Value #B': 'CPU utilization',
+                'Value #C': 'Memory usage',
+                'Value #D': 'Memory utilization',
+                'Value #E': 'Disk usage',
+                'Value #F': 'Disk utilization',
+                'Value #G': 'Net throughput',
+                'Value #H': 'Packet drops',
+                vm_path: 'VM',
               },
             },
           },
