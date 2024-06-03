@@ -210,6 +210,7 @@ local utils = commonlib.utils;
           description='Total size of the HTTP response content and headers.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       networkConnections:
@@ -360,6 +361,7 @@ local utils = commonlib.utils;
           description='Total size of the HTTP response content and headers in bytes.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+        + g.panel.timeSeries.fieldConfig.defaults.custom.withStacking({ mode: 'normal' })
         + g.panel.timeSeries.fieldConfig.defaults.custom.withSpanNulls('true'),
 
       networkConnectionsNodeName:

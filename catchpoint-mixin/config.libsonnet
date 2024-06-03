@@ -22,7 +22,7 @@
   alertsTotalTimeExceededPercent: 1.2,  // 120%
   alertsHighDNSResolutionTime: 500,  //ms
   alertsHighDNSResolutionTimePercent: 1.2,  // 120%
-  alertsContentLoadingDelay: 3000,  //ms
+  alertsContentLoadingDelay: 1500,  //ms
   alertsContentLoadingDelayPercent: 1.2,  // 120%
   alertsHighFailedRequestRatioPercent: 0.1,  // 10%
 }
