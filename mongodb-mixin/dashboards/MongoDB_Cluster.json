@@ -1591,7 +1591,7 @@
           "refId": "A"
         }
       ],
-      "title": "Currrent Connections per Instance",
+      "title": "Current Connections per Instance",
       "type": "timeseries"
     },
     {
@@ -1672,7 +1672,7 @@
           "refId": "A"
         }
       ],
-      "title": "Currrent Connections per Instance",
+      "title": "Current Connections per Instance",
       "type": "timeseries"
     },
     {
@@ -1834,7 +1834,7 @@
           "refId": "A"
         }
       ],
-      "title": "Currrent Connections per Shard",
+      "title": "Current Connections per Shard",
       "type": "timeseries"
     },
     {
