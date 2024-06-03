@@ -23,7 +23,7 @@ function(
       + timeSeries.queryOptions.withDatasource(
         logsVolumeTarget.datasource.type, logsVolumeTarget.datasource.uid
       )
-      + timeSeries.queriesSelector.withMaxDataPoints(100)
+      + timeSeries.queryOptions.withMaxDataPoints(100)
       + custom.withDrawStyle('bars')
       + custom.stacking.withMode('normal')
       + custom.withFillOpacity(50)
