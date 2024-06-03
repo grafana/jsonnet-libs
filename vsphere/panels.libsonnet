@@ -11,67 +11,83 @@ local utils = commonlib.utils;
       local barGauge = g.panel.barGauge,
       local fieldOverride = g.panel.table.fieldOverride,
 
-      vmOnStatus:
+      clustersCountStatus:
         commonlib.panels.generic.stat.info.new(
-          'VMs on',
-          targets=[t.vmOnStatus],
-          description='The number of virtual machines currently powered on.'
+          'Clusters',
+          targets=[t.clustersCount],
+          description='The number of clusters in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
 
-      vmOffStatus:
+      hostsCountStatus:
         commonlib.panels.generic.stat.info.new(
-          'VMs off',
-          targets=[t.vmOffStatus],
-          description='The number of virtual machines currently powered off.'
+          'ESXi hosts',
+          targets=[t.hostsCount],
+          description='The number of ESXi hosts in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
 
-      vmSuspendedStatus:
+      resourcePoolsCountStatus:
         commonlib.panels.generic.stat.info.new(
-          'VMs suspended',
-          targets=[t.vmSuspendedStatus],
-          description='The number of virtual machines currently in a suspended state.'
+          'Resource pools',
+          targets=[t.resourcePoolsCount],
+          description='The number of resource pools in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
 
-      vmTemplateStatus:
+      vmsCountStatus:
         commonlib.panels.generic.stat.info.new(
-          'VM templates',
-          targets=[t.vmTemplateStatus],
-          description='The number of virtual machine templates available.'
+          'VMs',
+          targets=[t.vmsCount],
+          description='The number of virtual machines in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
 
-      clusterCountStatus:
+      clusteredVMsOnStatus:
         commonlib.panels.generic.stat.info.new(
-          'Cluster count',
-          targets=[t.clusterCountStatus],
-          description='The total number of clusters in the vCenter environment.'
+          'Clustered VMs on',
+          targets=[t.clusteredVMsOnCount],
+          description='The number of virtual machines currently powered on that belong to a cluster in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
 
-      resourcePoolCountStatus:
+      clusteredVMsOffStatus:
         commonlib.panels.generic.stat.info.new(
-          'Resource pool count',
-          targets=[t.resourcePoolCountStatus],
-          description='The total number of resource pools in the vCenter environment.'
+          'Clustered VMs off',
+          targets=[t.clusteredVMsOffCount],
+          description='The number of virtual machines currently powered off that belong to a cluster in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
 
-      esxiHostsActiveStatus:
+      clusteredVMsSuspendedStatus:
         commonlib.panels.generic.stat.info.new(
-          'Active ESXi hosts',
-          targets=[t.esxiHostsActiveStatus],
-          description='The number of ESXi hosts that are currently in an active state.'
+          'Clustered VMs suspended',
+          targets=[t.clusteredVMsSuspendedCount],
+          description='The number of virtual machines currently in a suspended state that belong to a cluster in the datacenter.'
         )
         + stat.options.withGraphMode('none'),
 
-      esxiHostsInactiveStatus:
+      clusteredVMTemplatesCountStatus:
         commonlib.panels.generic.stat.info.new(
-          'Inactive ESXi hosts',
-          targets=[t.esxiHostsInactiveStatus],
-          description='The number of ESXi hosts that are currently in an inactive state.'
+          'Clustered VM templates',
+          targets=[t.clusteredVMTemplatesCount],
+          description='The number of virtual machine templates that belong to a cluster in the datacenter.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      clusteredHostsActiveStatus:
+        commonlib.panels.generic.stat.info.new(
+          'Clustered active ESXi hosts',
+          targets=[t.clusteredHostsActiveCount],
+          description='The number of ESXi hosts that are currently running (responding and not in maintenance mode) that belong to a cluster within the datacenter.'
+        )
+        + stat.options.withGraphMode('none'),
+
+      clusteredHostsInactiveStatus:
+        commonlib.panels.generic.stat.info.new(
+          'Clustered inactive ESXi hosts',
+          targets=[t.clusteredHostsInactiveCount],
+          description='The number of ESXi hosts that are currently not running (not responding or in maintenance mode) that belong to a cluster within the datacenter.'
         )
         + stat.options.withGraphMode('none'),
 
@@ -79,7 +95,7 @@ local utils = commonlib.utils;
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Top CPU utilization by cluster',
           targets=[t.topCPUUtilizationClusters],
-          description='The clusters with the highest CPU utilization percentage.'
+          description='The clusters with the highest CPU utilization percentage in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
@@ -88,30 +104,67 @@ local utils = commonlib.utils;
         commonlib.panels.memory.timeSeries.usagePercent.new(
           'Top memory utilization by cluster',
           targets=[t.topMemoryUtilizationClusters],
-          description='The clusters with the highest memory utilization percentage.'
+          description='The clusters with the highest memory utilization percentage in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       clustersTable:
         commonlib.panels.generic.table.base.new(
-          'Cluster summary',
+          'Clusters table',
           targets=[
-            t.topMemoryUtilizationClusters + g.query.prometheus.withFormat('table')
+            t.effectiveCPUClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
             t.topCPUUtilizationClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
-            t.vmNumberTotal + g.query.prometheus.withFormat('table')
+            t.effectiveMemoryClusters + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.topMemoryUtilizationClusters + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.hostsActiveClustersCount + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.hostsInactiveClustersCount + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.vmsOnClustersCount + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.vmsOffClustersCount + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.vmsSuspendedClustersCount + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the clusters in the vCenter environment.'
         )
+        + table.standardOptions.withNoValue('NA')
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Cluster')
+          + table.fieldOverride.byName.withProperty('links', [
+            {
+              title: '',
+              url: 'd/vsphere-clusters?var-datasource=${datasource}&${__all_variables}&var-vcenter_cluster_name=${__value.raw}&${__url_time_range}',
+            },
+          ]),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('CPU (limit)')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('rotmhz')
+          ),
+        ])
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('CPU utilization')
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
@@ -121,14 +174,19 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Number of VMs')
-          + fieldOverride.byName.withProperty('custom.align', 'left'),
+          fieldOverride.byName.new('Memory (limit)')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('bytes')
+          ),
         ])
         +
         table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Memory utilization')
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
@@ -136,6 +194,31 @@ local utils = commonlib.utils;
             + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
           ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Active ESXi')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Inactive ESXi')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('VMs on')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('VMs off')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('VMs suspended')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('custom.width', 140),
         ])
         +
         table.queryOptions.withTransformationsMixin([
@@ -155,6 +238,12 @@ local utils = commonlib.utils;
                   'Value #A',
                   'Value #B',
                   'Value #C',
+                  'Value #D',
+                  'Value #E',
+                  'Value #F',
+                  'Value #G',
+                  'Value #H',
+                  'Value #I',
                   'vcenter_datacenter_name 1',
                 ],
               },
@@ -169,15 +258,26 @@ local utils = commonlib.utils;
                 'Value #A': 2,
                 'Value #B': 3,
                 'Value #C': 4,
+                'Value #D': 5,
+                'Value #E': 6,
+                'Value #F': 7,
+                'Value #G': 8,
+                'Value #H': 9,
+                'Value #I': 10,
                 vcenter_cluster_name: 1,
                 'vcenter_datacenter_name 1': 0,
               },
               renameByName: {
-                'Value #A': 'CPU utilization',
-                'Value #B': 'Memory utilization',
-                'Value #C': 'Number of VMs',
+                'Value #A': 'CPU (limit)',
+                'Value #B': 'CPU utilization',
+                'Value #C': 'Memory (limit)',
+                'Value #D': 'Memory utilization',
+                'Value #E': 'Active ESXi',
+                'Value #F': 'Inactive ESXi',
+                'Value #G': 'VMs on',
+                'Value #H': 'VMs off',
+                'Value #I': 'VMs suspended',
                 vcenter_cluster_name: 'Cluster',
-                'vcenter_cluster_name 1': 'Cluster',
                 'vcenter_datacenter_name 1': 'Datacenter',
               },
             },
@@ -186,34 +286,46 @@ local utils = commonlib.utils;
 
       datastoreTable:
         commonlib.panels.generic.table.base.new(
-          'Datastores summary',
+          'Datastores table',
           targets=[
-            t.datastoreDiskUsage + g.query.prometheus.withFormat('table')
+            t.datastoreDiskTotal + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             ,
             t.datastoreDiskUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRange(true)
+            ,
+            t.datastoreDiskAvailable + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true),
           ],
-          description='Information about the clusters in the vCenter environment.'
+          description='Information about the datastores in the vCenter environment.'
         )
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory usage')
+          fieldOverride.byName.new('Disk total')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('min.width', 140)
           + fieldOverride.byName.withPropertiesFromOptions(
-            table.standardOptions.withUnit('decbytes')
+            table.standardOptions.withUnit('bytes')
           ),
         ])
-        +
-        table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory utilization')
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Disk utilization')
           + fieldOverride.byName.withProperty('custom.displayMode', 'gradient-gauge')
           + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('min.width', 157)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
             + table.standardOptions.color.withMode('continuous-BlPu')
             + table.standardOptions.withMin(0)
             + table.standardOptions.withMax(100)
             + table.standardOptions.withDecimals(1)
+          ),
+        ])
+        + table.standardOptions.withOverridesMixin([
+          fieldOverride.byName.new('Disk free')
+          + fieldOverride.byName.withProperty('custom.align', 'left')
+          + table.fieldOverride.byName.withProperty('min.width', 140)
+          + fieldOverride.byName.withPropertiesFromOptions(
+            table.standardOptions.withUnit('bytes')
           ),
         ])
         +
@@ -230,10 +342,11 @@ local utils = commonlib.utils;
             options: {
               include: {
                 names: [
+                  'vcenter_datacenter_name 1',
                   'vcenter_datastore_name',
                   'Value #A',
                   'Value #B',
-                  'disk_state',
+                  'Value #C',
                 ],
               },
             },
@@ -246,16 +359,15 @@ local utils = commonlib.utils;
               indexByName: {
                 'Value #A': 2,
                 'Value #B': 3,
-                disk_state: 1,
-                vcenter_datastore_name: 0,
+                'Value #C': 4,
+                'vcenter_datacenter_name 1': 0,
+                vcenter_datastore_name: 1,
               },
               renameByName: {
-                'Value #A': 'Memory usage',
-                'Value #B': 'Memory utilization',
-                disk_state: 'State',
-                'disk_state 1': 'State',
-                'disk_state 2': '',
-                'vcenter_cluster_name 1': 'Cluster',
+                'Value #A': 'Disk total',
+                'Value #B': 'Disk utilization',
+                'Value #C': 'Disk free',
+                'vcenter_datacenter_name 1': 'Datacenter',
                 vcenter_datastore_name: 'Datastore',
               },
             },
@@ -264,74 +376,75 @@ local utils = commonlib.utils;
 
       topCPUUsageResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top CPU usage resource pools',
+          'Top CPU usage by resource pools',
           targets=[t.topCPUUsageResourcePools],
-          description='The resource pools with the highest CPU usage.'
+          description='The resource pools with the highest CPU usage in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('rotmhz'),
 
       topMemoryUsageResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top memory usage resource pools',
+          'Top memory usage by resource pools',
           targets=[t.topMemoryUsageResourcePools],
-          description='The resource pools with the highest memory usage.'
+          description='The resource pools with the highest memory usage in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('mbytes'),
 
       topCPUShareResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top CPU share resource pools',
+          'Top CPU shares by resource pools',
           targets=[t.topCPUShareResourcePools],
-          description='The resource pools with the highest amount of CPU shares allocated.'
+          description='The resource pools with the highest amount of CPU shares allocated in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('shares'),
 
       topMemoryShareResourcePools:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top memory share resource pools',
+          'Top memory shares by resource pools',
           targets=[t.topMemoryShareResourcePools],
-          description='The resource pools with the highest amount of memory shares allocated.'
+          description='The resource pools with the highest amount of memory shares allocated in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('shares'),
 
-      topCPUUtilizationEsxiHosts:
+      topCPUUtilizationHosts:
         commonlib.panels.memory.timeSeries.usagePercent.new(
-          'Top CPU utilization ESXi hosts',
-          targets=[t.topCPUUtilizationEsxiHosts],
-          description='The ESXi hosts with the highest CPU utilization percentage.'
+          'Top CPU utilization by ESXi hosts',
+          targets=[t.topCPUUtilizationHosts],
+          description='The ESXi hosts with the highest CPU utilization in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
-      topMemoryUtilizationEsxiHosts:
+      topMemoryUtilizationHosts:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top memory usage ESXi hosts',
-          targets=[t.topMemoryUtilizationEsxiHosts],
-          description='The ESXi hosts with the highest memory utilization.'
+          'Top memory usage by ESXi hosts',
+          targets=[t.topMemoryUtilizationHosts],
+          description='The ESXi hosts with the highest memory utilization in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
-      topNetworksActiveEsxiHosts:
+      topDiskAvgLatencyHosts:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top networks active ESXi hosts',
-          targets=[t.topNetworksActiveEsxiHosts],
-          description='The ESXi hosts with the highest network throughput.'
+          'Top avg disk latency by ESXi hosts',
+          targets=[t.topDiskAvgLatencyHosts],
+          description='The ESXi hosts with the highest average disk latency in the datacenter.'
         )
         + g.panel.timeSeries.options.legend.withDisplayMode('table')
-      ,
+        + g.panel.timeSeries.standardOptions.withUnit('ms'),
 
-      topPacketErrorEsxiHosts:
+      topPacketErrorRateHosts:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top packet error ESXi hosts / $__interval',
-          targets=[t.topPacketErrorEsxiHosts],
-          description='The ESXi hosts with the highest number of packet errors.'
+          'Top packet errors by ESXi hosts',
+          targets=[t.topPacketErrorRateHosts],
+          description='The ESXi hosts with the highest percentage of packet errors in the datacenter.'
         )
-        + g.panel.timeSeries.standardOptions.withUnit('err'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       hostCPUUsage:
         commonlib.panels.generic.timeSeries.base.new(
