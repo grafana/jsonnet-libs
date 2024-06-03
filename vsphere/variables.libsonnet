@@ -39,7 +39,6 @@ local extendedUtils = utils + {
     {
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
-      local datastoreLabels = this.config.datastoreLabels,
       local clusterLabels = this.config.clusterLabels,
       local hostLabels = this.config.hostLabels,
       local hostOptionalLabels = ['vcenter_cluster_name'],
@@ -59,15 +58,15 @@ local extendedUtils = utils + {
       local vmRegex = '/vcenter_vm_name="(?<value>[^"]*)",vm_path="(?<text>[^"]*)"/',
 
       local varMetric = 'vcenter_vm_memory_usage_mebibytes',
-      local topClusterSelector =
+      local topResourceSelector =
         var.custom.new(
-          'top_cluster_count',
+          'top_resource_count',
           values=[2, 4, 6, 8, 10],
         )
         + var.custom.generalOptions.withDescription(
-          'This variable allows for modification of top cluster value.'
+          'This variable allows for modification of top resource value.'
         )
-        + var.custom.generalOptions.withLabel('Top cluster count'),
+        + var.custom.generalOptions.withLabel('Top resource count'),
       local root = self,
       local groupVariablesFromLabels(groupLabels, filteringSelector) =
         local chainVarProto(index, chainVar) =
@@ -143,7 +142,7 @@ local extendedUtils = utils + {
 
       overviewVariables:
         [root.datasources.prometheus]
-        + groupVariablesFromLabels(groupLabels, filteringSelector) + [topClusterSelector],
+        + groupVariablesFromLabels(groupLabels, filteringSelector) + [topResourceSelector],
       clusterVariables:
         [root.datasources.prometheus]
         + groupVariablesFromLabels(groupLabels, filteringSelector)
@@ -165,10 +164,6 @@ local extendedUtils = utils + {
       queriesSelector:
         '%s' % [
           utils.labelsToPromQLSelector(groupLabels),
-        ],
-      datastoreSelector:
-        '%s' % [
-          utils.labelsToPromQLSelector(datastoreLabels),
         ],
       clusterQueriesSelector:
         '%s' % [
