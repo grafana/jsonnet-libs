@@ -704,7 +704,7 @@
           "datasource": {
             "uid": "$prometheus_datasource"
           },
-          "expr": "max by (ifDescr) (ifSpeed{job_snmp=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\", ifDescr=~\"$interface\"})",
+          "expr": "max by (ifDescr) (ifHighSpeed{job_snmp=~\"$job\", instance=~\"$instance\", snmp_target=~\"$snmp_target\", ifDescr=~\"$interface\"})",
           "format": "table",
           "instant": true,
           "intervalFactor": 2,
