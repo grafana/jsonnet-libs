@@ -26,9 +26,8 @@
           "subdir": "logs-lib"
         }
       },
-      "version": "7da6c9ca7dcebce1ce060d55311a71d118624749"
+      "version": "master"
     }
   ],
   "legacyImports": true
 }
-
