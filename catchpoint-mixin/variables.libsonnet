@@ -89,7 +89,7 @@ local utils = commonlib.utils;
 
       queriesGroupSelectorAdvanced:
         '%s' % [
-          utils.labelsToPromQLSelectorAdvanced(groupLabels),
+          utils.labelsToPromQLSelectorAdvanced(groupLabels + instanceLabels),
         ],
     },
 }
