@@ -882,14 +882,14 @@ local errorsPanel =
       },
     ],
     transformations: [
-        {
-          id: "renameByRegex",
-          options: {
-            regex: "(\\d).+",
-            renamePattern: "HTTP $100-$199"
-          }
-        }
-      ],
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: '(\\d).+',
+          renamePattern: 'HTTP $100-$199',
+        },
+      },
+    ],
     description: 'Ratio of 4xx and 5xx HTTP responses to all calls.',
   };
 {

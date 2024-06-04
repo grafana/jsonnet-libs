@@ -206,14 +206,14 @@ local logsByHTTPcodes =
       },
     },
     transformations: [
-        {
-          id: "renameByRegex",
-          options: {
-            regex: "(\\d).+",
-            renamePattern: "HTTP $100-$199"
-          }
-        }
-      ],
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: '(\\d).+',
+          renamePattern: 'HTTP $100-$199',
+        },
+      },
+    ],
   };
 {
   grafanaDashboards+::
