@@ -20,19 +20,22 @@ and the following alerts:
 
 The Catchpoint overview dashboard provides details on alerts, load times, request success rates, connections, and errors.
 
-![Catchpoint overview dashboard]()
+![Catchpoint overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/catchpoint/catchpoint_overview_1.png)
+![Catchpoint overview dashboard (connectivity)](https://storage.googleapis.com/grafanalabs-integration-assets/catchpoint/catchpoint_overview_2.png)
 
 ## Catchpoint web performance by tests
 
 The Catchpoint web performance by tests dashboard provides details on page completion times, response sizes, network connections, requests, content types, and errors. These metrics are all grouped by tests.
 
-![Catchpoint web performance by tests]()
+![Catchpoint web performance by tests](https://storage.googleapis.com/grafanalabs-integration-assets/catchpoint/catchpoint_test_overview_1.png)
+![Catchpoint web performance by tests (network)](https://storage.googleapis.com/grafanalabs-integration-assets/catchpoint/catchpoint_test_overview_2.png)
 
 ## Catchpoint web performance by nodes
 
 The Catchpoint web performance by nodes dashboard provides details on page completion times, response sizes, network connections, requests, content types, and errors. These metrics are all grouped by nodes.
 
-![Catchpoint web performance by nodes]()
+![Catchpoint web performance by nodes](https://storage.googleapis.com/grafanalabs-integration-assets/catchpoint/catchpoint_node_overview_1.png)
+![Catchpoint web performance by nodes](https://storage.googleapis.com/grafanalabs-integration-assets/catchpoint/catchpoint_node_overview_2.png)
 
 ## Alerts Overview
 
