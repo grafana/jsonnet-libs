@@ -1424,5 +1424,5 @@ local utils = commonlib.utils;
             },
           },
         ]),
-      },
+    },
 }

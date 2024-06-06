@@ -20,35 +20,38 @@ and the following alerts:
 
 ## vSphere overview
 
-The vSphere overview dashboard provides both overview and CPU, memory, network throughput details for clusters, resource pools, ESXi hosts, and datastores.
+The vSphere overview dashboard provides an overview on CPU, memory, and network throughput details for clusters, resource pools, ESXi hosts, and datastores.
 
-![vSphere overview dashboard]()
+![vSphere overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_overview_1.png)
+![vSphere overview dashboard (hosts)](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_overview_2.png)
 
 ## vSphere clusters
 
-The vSphere clusters dashboard provides details on cluster and resource pool CPU and memory while giving a high-level view of resource pools, ESXi hosts and VMs.
+The vSphere clusters dashboard provides details on cluster CPU and memory while giving a high-level view of their ESXi hosts and VMs.
 
-![vSphere clusters dashboard]()
+![vSphere clusters dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_clusters.png)
 
 ## vSphere hosts
 
-The vSphere hosts dashboard provides details on ESXi host CPU, memory, network, disks, and VMs.
+The vSphere hosts dashboard provides details on ESXi host CPU, memory, network while giving a high-level view of their disks and VMs.
 
-![vSphere hosts dashboard]()
+![vSphere hosts dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_hosts_1.png)
+![vSphere hosts dashboard (disks)](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_hosts_2.png)
 
 ## vSphere virtual machines
 
-The vSphere virtual machines dashboard provides details on VM CPU, memory, network, and disks.
+The vSphere virtual machines dashboard provides details on virtual machine CPU, memory, network, and disks.
 
-![vSphere virtual machines dashboard]()
+![vSphere virtual machines dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_virtual_machines_1.png)
+![vSphere virtual machines dashboard (disks)](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_virtual_machines_2.png)
 
 ## vSphere logs
 
-The vSphere logs dashboard provides details on the vSphere system. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
+The vSphere logs dashboard provides details on the vSphere system. VMware Appliance Management Service (applmgmt), VMware Analytics (analytics), and VMware vCenter Server (vpxd) logs are collected. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
 
 In addition, logs must be forwarded from your ESXi hosts to a vCenter server as described [here](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vcenter-configuration/GUID-9633A961-A5C3-4658-B099-B81E0512DC21.html).
 
-![vSphere logs dashboard]()
+![vSphere logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_logs.png)
 
 vSphere logs are enabled by default in the `config.libsonnet` and can be removed by setting `enableLokiLogs` to `false`. Then run `make` again to regenerate the dashboard:
 
