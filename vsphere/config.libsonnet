@@ -2,7 +2,8 @@
   // Static selector to apply to ALL dashboard variables of type query, panel queries, alerts and recording rules.
   filteringSelector: 'job=~"integrations/vsphere"',
   // Used to identify 'group' of instances.
-  groupLabels: ['job', 'vcenter_datacenter_name'],
+  groupLabels: ['job'],
+  datacenterLabels: ['vcenter_datacenter_name'],
   clusterLabels: ['vcenter_cluster_name'],
   hostLabels: ['vcenter_cluster_name', 'vcenter_host_name'],
   virtualMachineLabels: ['vcenter_cluster_name', 'vcenter_host_name', 'vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path', 'vcenter_vm_name'],
@@ -21,10 +22,9 @@
   alertsWarningDiskUtilization: 75,
   alertsCriticalDiskUtilization: 90,
   alertsHighPacketErrors: 20,
-  
   // Logs lib related
   // Set to false to disable logs dashboard and logs annotations
   enableLokiLogs: true,
-  extraLogLabels: ['level'],
+  extraLogLabels: ['instance', 'log_type', 'level'],
   showLogsVolume: true,
 }

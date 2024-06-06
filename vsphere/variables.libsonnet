@@ -3,34 +3,36 @@ local var = g.dashboard.variable;
 local commonlib = import 'common-lib/common/main.libsonnet';
 local utils = commonlib.utils;
 
-local extendedUtils = utils + {
-    toSentenceCase(string)::
-      local noUnderscore = std.join(' ', std.split(string, '_'));
-      local noNameSuffix = if std.endsWith(noUnderscore, " name") then std.substr(noUnderscore, 0, std.length(noUnderscore) - 5) else noUnderscore;
-      local noVcenterPrefix = if std.startsWith(noNameSuffix, "vcenter ") then std.substr(noNameSuffix, 8, std.length(noNameSuffix) - 8) else noNameSuffix;
-      std.asciiUpper(noVcenterPrefix[0]) + std.slice(noVcenterPrefix, 1, std.length(noVcenterPrefix), 1),
+local extendedUtils = utils {
+  toSentenceCase(string)::
+    local noUnderscore = std.join(' ', std.split(string, '_'));
+    local noNameSuffix = if std.endsWith(noUnderscore, ' name') then std.substr(noUnderscore, 0, std.length(noUnderscore) - 5) else noUnderscore;
+    local noVcenterPrefix = if std.startsWith(noNameSuffix, 'vcenter ') then std.substr(noNameSuffix, 8, std.length(noNameSuffix) - 8) else noNameSuffix;
+    std.asciiUpper(noVcenterPrefix[0]) + std.slice(noVcenterPrefix, 1, std.length(noVcenterPrefix), 1),
 
-    labelsToPromQLSelector(labels, optionalLabels)::
-      std.join(',',
-        [
-          if std.member(optionalLabels, label)
-          then '%s=~"$%s|"' % [label, label]
-          else '%s=~"$%s"' % [label, label]
-          for label in labels
-        ]
-      ),
+  labelsToPromQLSelector(labels, optionalLabels)::
+    std.join(
+      ',',
+      [
+        if std.member(optionalLabels, label)
+        then '%s=~"$%s|"' % [label, label]
+        else '%s=~"$%s"' % [label, label]
+        for label in labels
+      ]
+    ),
 
-    labelsToPromQLSelectorWithEmptyOptions(labels, optionalLabels, emptyLabels)::
-      std.join(',',
-        [
-          if std.member(optionalLabels, label)
-          then '%s=~"$%s|"' % [label, label]
-          else if std.member(emptyLabels, label)
-          then '%s=""' % [label]
-          else '%s=~"$%s"' % [label, label]
-          for label in labels
-        ]
-      ),
+  labelsToPromQLSelectorWithEmptyOptions(labels, optionalLabels, emptyLabels)::
+    std.join(
+      ',',
+      [
+        if std.member(optionalLabels, label)
+        then '%s=~"$%s|"' % [label, label]
+        else if std.member(emptyLabels, label)
+        then '%s=""' % [label]
+        else '%s=~"$%s"' % [label, label]
+        for label in labels
+      ]
+    ),
 };
 
 // Generates chained variables to use on on all dashboards
@@ -39,6 +41,7 @@ local extendedUtils = utils + {
     {
       local filteringSelector = this.config.filteringSelector,
       local groupLabels = this.config.groupLabels,
+      local datacenterLabels = this.config.datacenterLabels,
       local clusterLabels = this.config.clusterLabels,
       local hostLabels = this.config.hostLabels,
       local hostOptionalLabels = ['vcenter_cluster_name'],
@@ -142,19 +145,19 @@ local extendedUtils = utils + {
 
       overviewVariables:
         [root.datasources.prometheus]
-        + groupVariablesFromLabels(groupLabels, filteringSelector) + [topResourceSelector],
+        + groupVariablesFromLabels(groupLabels + datacenterLabels, filteringSelector) + [topResourceSelector],
       clusterVariables:
         [root.datasources.prometheus]
-        + groupVariablesFromLabels(groupLabels, filteringSelector)
+        + groupVariablesFromLabels(groupLabels + datacenterLabels, filteringSelector)
         + createLabelValueVariable(clusterLabel, 'vSphere cluster', varMetric, clusterSelector, clusterLabel, true),
       hostsVariable:
         [root.datasources.prometheus]
-        + groupVariablesFromLabels(groupLabels, filteringSelector)
+        + groupVariablesFromLabels(groupLabels + datacenterLabels, filteringSelector)
         + createLabelValueVariable(clusterLabel, 'vSphere cluster', varMetric, clusterSelector, clusterLabel, true)
         + createQueryVariable(hostLabel, 'ESXi host', hostQuery, hostRegex, true),
       virtualMachinesVariables:
         [root.datasources.prometheus]
-        + groupVariablesFromLabels(groupLabels, filteringSelector)
+        + groupVariablesFromLabels(groupLabels + datacenterLabels, filteringSelector)
         + createLabelValueVariable(clusterLabel, 'vSphere cluster', varMetric, clusterSelector, clusterLabel, true)
         + createQueryVariable(hostLabel, 'ESXi host', hostQuery, hostRegex, true)
         + createLabelValueVariable(resourcePoolLabel, 'Resource pool', varMetric, resourcePoolSelector, resourcePoolLabel, true)
@@ -163,67 +166,67 @@ local extendedUtils = utils + {
 
       queriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels),
+          utils.labelsToPromQLSelector(groupLabels + datacenterLabels),
         ],
       clusterQueriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + clusterLabels),
+          utils.labelsToPromQLSelector(groupLabels + datacenterLabels + clusterLabels),
         ],
       clusterNoRPoolQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + clusterLabels + ['vcenter_resource_pool_inventory_path'], [], ['vcenter_resource_pool_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + clusterLabels + ['vcenter_resource_pool_inventory_path'], [], ['vcenter_resource_pool_inventory_path']),
         ],
       clusterNoVAppQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + clusterLabels + ['vcenter_virtual_app_inventory_path'], [], ['vcenter_virtual_app_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + clusterLabels + ['vcenter_virtual_app_inventory_path'], [], ['vcenter_virtual_app_inventory_path']),
         ],
       clusterNoRPoolOrVAppQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + clusterLabels + ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'], [], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + clusterLabels + ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'], [], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
         ],
       hostQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelector(groupLabels + hostLabels, hostOptionalLabels),
+          extendedUtils.labelsToPromQLSelector(groupLabels + datacenterLabels + hostLabels, hostOptionalLabels),
         ],
       hostWithClusterQueriesSelector:
         '%s' % [
-          utils.labelsToPromQLSelector(groupLabels + hostLabels),
+          utils.labelsToPromQLSelector(groupLabels + datacenterLabels + hostLabels),
         ],
       hostNoClusterQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + hostLabels, [], hostOptionalLabels),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + hostLabels, [], hostOptionalLabels),
         ],
       hostNoRPoolQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + hostLabels + ['vcenter_resource_pool_inventory_path'], ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + hostLabels + ['vcenter_resource_pool_inventory_path'], ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path']),
         ],
       hostNoVAppQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + hostLabels + ['vcenter_virtual_app_inventory_path'], ['vcenter_cluster_name'], ['vcenter_virtual_app_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + hostLabels + ['vcenter_virtual_app_inventory_path'], ['vcenter_cluster_name'], ['vcenter_virtual_app_inventory_path']),
         ],
       hostNoRPoolOrVAppQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + hostLabels + ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'], ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + hostLabels + ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path'], ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
         ],
       virtualMachinesQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelector(groupLabels + virtualMachineLabels, virtualMachineOptionalLabels),
+          extendedUtils.labelsToPromQLSelector(groupLabels + datacenterLabels + virtualMachineLabels, virtualMachineOptionalLabels),
         ],
       virtualMachinesNoRPoolQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path']),
         ],
       virtualMachinesNoVAppQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_virtual_app_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_virtual_app_inventory_path']),
         ],
       virtualMachinesNoRPoolOrVAppQueriesSelector:
         '%s' % [
-          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
+          extendedUtils.labelsToPromQLSelectorWithEmptyOptions(groupLabels + datacenterLabels + virtualMachineLabels, ['vcenter_cluster_name'], ['vcenter_resource_pool_inventory_path', 'vcenter_virtual_app_inventory_path']),
         ],
       queriesGroupSelectorAdvanced:
         '%s' % [
-          utils.labelsToPromQLSelectorAdvanced(groupLabels),
+          utils.labelsToPromQLSelectorAdvanced(groupLabels + datacenterLabels),
         ],
-    }
+    },
 }
