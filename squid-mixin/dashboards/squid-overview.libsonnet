@@ -1449,12 +1449,12 @@ local accessLogsPanel(matcher) = {
             serverReceivedThroughputPanel(getMatcher($._config)) { gridPos: { h: 8, w: 8, x: 16, y: 32 } },
           ],
           if $._config.enableLokiLogs then [
-            cacheLogsPanel { gridPos: { h: 6, w: 24, x: 0, y: 40 } },
+            cacheLogsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 40 } },
           ] else [],
           [
           ],
           if $._config.enableLokiLogs then [
-            accessLogsPanel { gridPos: { h: 6, w: 24, x: 0, y: 46 } },
+            accessLogsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 46 } },
           ] else [],
           [
           ],
