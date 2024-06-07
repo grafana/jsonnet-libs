@@ -8,6 +8,7 @@ local dashboardUid = 'squid-overview';
 
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
+local getMatcher(cfg) = '%(squidSelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -25,11 +26,11 @@ local clientRow = {
   collapsed: false,
 };
 
-local clientRequestsPanel = {
+local clientRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_client_http_requests_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_client_http_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -104,11 +105,11 @@ local clientRequestsPanel = {
   },
 };
 
-local clientRequestErrorsPanel = {
+local clientRequestErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_client_http_errors_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_client_http_errors_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -183,11 +184,11 @@ local clientRequestErrorsPanel = {
   },
 };
 
-local clientCacheHitRatioPanel = {
+local clientCacheHitRatioPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '(rate(squid_client_http_hits_total{job=~"$job", instance=~"$instance"}[$__rate_interval]) / clamp_min(rate(squid_client_http_requests_total{job=~"$job", instance=~"$instance"}[$__rate_interval]),1)) * 100',
+      '(rate(squid_client_http_hits_total{' + matcher + '}[$__rate_interval]) / clamp_min(rate(squid_client_http_requests_total{' + matcher + '}[$__rate_interval]),1)) * 100',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -262,11 +263,11 @@ local clientCacheHitRatioPanel = {
   },
 };
 
-local clientRequestSentThroughputPanel = {
+local clientRequestSentThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_client_http_kbytes_out_kbytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_client_http_kbytes_out_kbytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -341,11 +342,11 @@ local clientRequestSentThroughputPanel = {
   },
 };
 
-local clientHTTPReceivedThroughputPanel = {
+local clientHTTPReceivedThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_client_http_kbytes_in_kbytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_client_http_kbytes_in_kbytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -420,11 +421,11 @@ local clientHTTPReceivedThroughputPanel = {
   },
 };
 
-local clientCacheHitThroughputPanel = {
+local clientCacheHitThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_client_http_hit_kbytes_out_bytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_client_http_hit_kbytes_out_bytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -499,21 +500,21 @@ local clientCacheHitThroughputPanel = {
   },
 };
 
-local httpRequestServiceTimePanel = {
+local httpRequestServiceTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'squid_HTTP_Requests_All_50{job=~"$job", instance=~"$instance"} ',
+      'squid_HTTP_Requests_All_50{' + matcher + '} ',
       datasource=promDatasource,
       legendFormat='50%',
     ),
     prometheus.target(
-      'squid_HTTP_Requests_All_75{job=~"$job", instance=~"$instance"}',
+      'squid_HTTP_Requests_All_75{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='75%',
     ),
     prometheus.target(
-      'squid_HTTP_Requests_All_95{job=~"$job", instance=~"$instance"}',
+      'squid_HTTP_Requests_All_95{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='95%',
     ),
@@ -588,21 +589,21 @@ local httpRequestServiceTimePanel = {
   },
 };
 
-local cacheHitServiceTimePanel = {
+local cacheHitServiceTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'squid_Cache_Hits_50{job=~"$job", instance=~"$instance"}',
+      'squid_Cache_Hits_50{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='50%',
     ),
     prometheus.target(
-      'squid_Cache_Hits_75{job=~"$job", instance=~"$instance"}',
+      'squid_Cache_Hits_75{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='75%',
     ),
     prometheus.target(
-      'squid_Cache_Hits_95{job=~"$job", instance=~"$instance"}',
+      'squid_Cache_Hits_95{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='95%',
     ),
@@ -677,21 +678,21 @@ local cacheHitServiceTimePanel = {
   },
 };
 
-local cacheMissesServiceTimePanel = {
+local cacheMissesServiceTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'squid_Cache_Misses_50{job=~"$job", instance=~"$instance"}',
+      'squid_Cache_Misses_50{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='50%',
     ),
     prometheus.target(
-      'squid_Cache_Misses_75{job=~"$job", instance=~"$instance"}',
+      'squid_Cache_Misses_75{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='75%',
     ),
     prometheus.target(
-      'squid_Cache_Misses_95{job=~"$job", instance=~"$instance"}',
+      'squid_Cache_Misses_95{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='95%',
     ),
@@ -774,21 +775,21 @@ local serverRow = {
   collapsed: false,
 };
 
-local serverRequestsPanel = {
+local serverRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_server_ftp_requests_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_ftp_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='FTP',
     ),
     prometheus.target(
-      'rate(squid_server_http_requests_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_http_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='HTTP',
     ),
     prometheus.target(
-      'rate(squid_server_other_requests_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_other_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='other',
     ),
@@ -863,21 +864,21 @@ local serverRequestsPanel = {
   },
 };
 
-local serverRequestErrorsPanel = {
+local serverRequestErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_server_ftp_errors_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_ftp_errors_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='FTP',
     ),
     prometheus.target(
-      'rate(squid_server_http_errors_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_http_errors_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='HTTP',
     ),
     prometheus.target(
-      'rate(squid_server_other_errors_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_other_errors_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='other',
     ),
@@ -952,21 +953,21 @@ local serverRequestErrorsPanel = {
   },
 };
 
-local serverRequestSentThroughputPanel = {
+local serverRequestSentThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_server_ftp_kbytes_out_kbytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_ftp_kbytes_out_kbytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='FTP',
     ),
     prometheus.target(
-      'rate(squid_server_http_kbytes_out_kbytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_http_kbytes_out_kbytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='HTTP',
     ),
     prometheus.target(
-      'rate(squid_server_other_kbytes_out_kbytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_other_kbytes_out_kbytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='other',
     ),
@@ -1041,16 +1042,16 @@ local serverRequestSentThroughputPanel = {
   },
 };
 
-local serverObjectSwapPanel = {
+local serverObjectSwapPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_swap_ins_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_swap_ins_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - read',
     ),
     prometheus.target(
-      'rate(squid_swap_outs_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_swap_outs_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - saved',
     ),
@@ -1125,21 +1126,21 @@ local serverObjectSwapPanel = {
   },
 };
 
-local dnsLookupServiceTimePanel = {
+local dnsLookupServiceTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'squid_DNS_Lookups_50{job=~"$job", instance=~"$instance"}',
+      'squid_DNS_Lookups_50{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='50%',
     ),
     prometheus.target(
-      'squid_DNS_Lookups_75{job=~"$job", instance=~"$instance"}',
+      'squid_DNS_Lookups_75{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='75%',
     ),
     prometheus.target(
-      'squid_DNS_Lookups_95{job=~"$job", instance=~"$instance"}',
+      'squid_DNS_Lookups_95{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='95%',
     ),
@@ -1214,21 +1215,21 @@ local dnsLookupServiceTimePanel = {
   },
 };
 
-local serverReceivedThroughputPanel = {
+local serverReceivedThroughputPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'rate(squid_server_ftp_kbytes_in_kbytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_ftp_kbytes_in_kbytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='FTP',
     ),
     prometheus.target(
-      'rate(squid_server_http_kbytes_in_kbytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_http_kbytes_in_kbytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='HTTP',
     ),
     prometheus.target(
-      'rate(squid_server_other_kbytes_in_kbytes_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'rate(squid_server_other_kbytes_in_kbytes_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='other',
     ),
@@ -1303,13 +1304,13 @@ local serverReceivedThroughputPanel = {
   },
 };
 
-local cacheLogsPanel = {
+local cacheLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/squid/cache.log", job=~"$job", instance=~"$instance"} |= ``',
+      expr: '{filename="/var/log/squid/cache.log", ' + matcher + '} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -1329,13 +1330,13 @@ local cacheLogsPanel = {
   },
 };
 
-local accessLogsPanel = {
+local accessLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/squid/access.log", job=~"$job", instance=~"$instance"} |= ``',
+      expr: '{filename="/var/log/squid/access.log", ' + matcher + '} |= ``',
       queryType: 'range',
       refId: 'A',
     },
@@ -1401,9 +1402,21 @@ local accessLogsPanel = {
               sort=0
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(squid_server_http_requests_total{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(squid_server_http_requests_total{job=~"$job"},instance)',
+              'label_values(squid_server_http_requests_total{%(multiclusterSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
