@@ -1219,7 +1219,7 @@ local logTypesPanel(cfg) = {
   },
 };
 
-local systemLogsPanel(cfg) = if cfg.enableMultiCluster then {
+local systemLogsPanel(cfg) = if !cfg.enableMultiCluster then {
   datasource: lokiDatasource,
   targets: [
     {
