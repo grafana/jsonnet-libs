@@ -115,30 +115,39 @@ local utils = commonlib.utils;
           targets=[
             t.effectiveCPUClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('effective_cpu')
             ,
             t.topCPUUtilizationClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('cpu_utilization')
             ,
             t.effectiveMemoryClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('effective_memory')
             ,
             t.topMemoryUtilizationClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('memory_utilization')
             ,
             t.hostsActiveClustersCount + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('hosts_active')
             ,
             t.hostsInactiveClustersCount + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('hosts_inactive')
             ,
             t.vmsOnClustersCount + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('vms_on')
             ,
             t.vmsOffClustersCount + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('vms_off')
             ,
             t.vmsSuspendedClustersCount + g.query.prometheus.withFormat('table')
-            + g.query.prometheus.withRange(true),
+            + g.query.prometheus.withRange(true)
+            + g.query.prometheus.withRefId('vms_suspended'),
           ],
           description='Information about the clusters in the vCenter environment.'
         )
@@ -235,15 +244,15 @@ local utils = commonlib.utils;
               include: {
                 names: [
                   'vcenter_cluster_name',
-                  'Value #A',
-                  'Value #B',
-                  'Value #C',
-                  'Value #D',
-                  'Value #E',
-                  'Value #F',
-                  'Value #G',
-                  'Value #H',
-                  'Value #I',
+                  'Value #effective_cpu',
+                  'Value #cpu_utilization',
+                  'Value #effective_memory',
+                  'Value #memory_utilization',
+                  'Value #hosts_active',
+                  'Value #hosts_inactive',
+                  'Value #vms_on',
+                  'Value #vms_off',
+                  'Value #vms_suspended',
                   'vcenter_datacenter_name 1',
                 ],
               },
@@ -255,28 +264,28 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 2,
-                'Value #B': 3,
-                'Value #C': 4,
-                'Value #D': 5,
-                'Value #E': 6,
-                'Value #F': 7,
-                'Value #G': 8,
-                'Value #H': 9,
-                'Value #I': 10,
+                'Value #effective_cpu': 2,
+                'Value #cpu_utilization': 3,
+                'Value #effective_memory': 4,
+                'Value #memory_utilization': 5,
+                'Value #hosts_active': 6,
+                'Value #hosts_inactive': 7,
+                'Value #vms_on': 8,
+                'Value #vms_off': 9,
+                'Value #vms_suspended': 10,
                 vcenter_cluster_name: 1,
                 'vcenter_datacenter_name 1': 0,
               },
               renameByName: {
-                'Value #A': 'CPU (limit)',
-                'Value #B': 'CPU utilization',
-                'Value #C': 'Memory (limit)',
-                'Value #D': 'Memory utilization',
-                'Value #E': 'Active ESXi',
-                'Value #F': 'Inactive ESXi',
-                'Value #G': 'VMs on',
-                'Value #H': 'VMs off',
-                'Value #I': 'VMs suspended',
+                'Value #effective_cpu': 'CPU (limit)',
+                'Value #cpu_utilization': 'CPU utilization',
+                'Value #effective_memory': 'Memory (limit)',
+                'Value #memory_utilization': 'Memory utilization',
+                'Value #hosts_active': 'Active ESXi',
+                'Value #hosts_inactive': 'Inactive ESXi',
+                'Value #vms_on': 'VMs on',
+                'Value #vms_off': 'VMs off',
+                'Value #vms_suspended': 'VMs suspended',
                 vcenter_cluster_name: 'Cluster',
                 'vcenter_datacenter_name 1': 'Datacenter',
               },
@@ -289,12 +298,15 @@ local utils = commonlib.utils;
           'Datastores table',
           targets=[
             t.datastoreDiskTotal + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_total')
             + g.query.prometheus.withRange(true)
             ,
             t.datastoreDiskUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.datastoreDiskAvailable + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_available')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the datastores in the vCenter environment.'
@@ -344,9 +356,9 @@ local utils = commonlib.utils;
                 names: [
                   'vcenter_datacenter_name 1',
                   'vcenter_datastore_name',
-                  'Value #A',
-                  'Value #B',
-                  'Value #C',
+                  'Value #disk_total',
+                  'Value #disk_utilization',
+                  'Value #disk_available',
                 ],
               },
             },
@@ -357,16 +369,16 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 2,
-                'Value #B': 3,
-                'Value #C': 4,
+                'Value #disk_total': 2,
+                'Value #disk_utilization': 3,
+                'Value #disk_available': 4,
                 'vcenter_datacenter_name 1': 0,
                 vcenter_datastore_name: 1,
               },
               renameByName: {
-                'Value #A': 'Disk total',
-                'Value #B': 'Disk utilization',
-                'Value #C': 'Disk free',
+                'Value #disk_total': 'Disk total',
+                'Value #disk_utilization': 'Disk utilization',
+                'Value #disk_available': 'Disk free',
                 'vcenter_datacenter_name 1': 'Datacenter',
                 vcenter_datastore_name: 'Datastore',
               },
@@ -517,27 +529,35 @@ local utils = commonlib.utils;
           'VMs table',
           targets=[
             t.hostVMCPUUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('cpu_usage')
             + g.query.prometheus.withRange(true)
             ,
             t.hostVMCPUUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('cpu_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.hostVMMemoryUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('memory_usage')
             + g.query.prometheus.withRange(true)
             ,
             t.hostVMMemoryUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('memory_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.hostVMDiskUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_usage')
             + g.query.prometheus.withRange(true)
             ,
             t.hostVMDiskUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.hostVMNetworkThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('netowrk_throughput')
             + g.query.prometheus.withRange(true)
             ,
             t.hostVMPacketDropRate + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('packet_drop_rate')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the VMs associated with the ESXi hosts.'
@@ -646,14 +666,14 @@ local utils = commonlib.utils;
               include: {
                 names: [
                   'vm_path',
-                  'Value #A',
-                  'Value #B',
-                  'Value #C',
-                  'Value #D',
-                  'Value #E',
-                  'Value #F',
-                  'Value #G',
-                  'Value #H',
+                  'Value #cpu_usage',
+                  'Value #cpu_utilization',
+                  'Value #memory_usage',
+                  'Value #memory_utilization',
+                  'Value #disk_usage',
+                  'Value #disk_utilization',
+                  'Value #netowrk_throughput',
+                  'Value #packet_drop_rate',
                 ],
               },
             },
@@ -664,25 +684,25 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 1,
-                'Value #B': 2,
-                'Value #C': 3,
-                'Value #D': 4,
-                'Value #E': 5,
-                'Value #F': 6,
-                'Value #G': 7,
-                'Value #H': 8,
+                'Value #cpu_usage': 1,
+                'Value #cpu_utilization': 2,
+                'Value #memory_usage': 3,
+                'Value #memory_utilization': 4,
+                'Value #disk_usage': 5,
+                'Value #disk_utilization': 6,
+                'Value #netowrk_throughput': 7,
+                'Value #packet_drop_rate': 8,
                 vm_path: 0,
               },
               renameByName: {
-                'Value #A': 'CPU usage',
-                'Value #B': 'CPU utilization',
-                'Value #C': 'Memory usage',
-                'Value #D': 'Memory utilization',
-                'Value #E': 'Disk usage',
-                'Value #F': 'Disk utilization',
-                'Value #G': 'Net throughput',
-                'Value #H': 'Packet drops',
+                'Value #cpu_usage': 'CPU usage',
+                'Value #cpu_utilization': 'CPU utilization',
+                'Value #memory_usage': 'Memory usage',
+                'Value #memory_utilization': 'Memory utilization',
+                'Value #disk_usage': 'Disk usage',
+                'Value #disk_utilization': 'Disk utilization',
+                'Value #netowrk_throughput': 'Net throughput',
+                'Value #packet_drop_rate': 'Packet drops',
                 vm_path: 'VM',
               },
             },
@@ -694,12 +714,16 @@ local utils = commonlib.utils;
           'Disks table',
           targets=[
             t.hostDiskReadThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_reads')
             + g.query.prometheus.withRange(true),
             t.hostDiskReadLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_read_latency')
             + g.query.prometheus.withRange(true),
             t.hostDiskWriteThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_writes')
             + g.query.prometheus.withRange(true),
             t.hostDiskWriteLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_write_latency')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the disks associated with the ESXi hosts.'
@@ -751,10 +775,10 @@ local utils = commonlib.utils;
               include: {
                 names: [
                   'disk_path',
-                  'Value #A',
-                  'Value #B',
-                  'Value #C',
-                  'Value #D',
+                  'Value #disk_reads',
+                  'Value #disk_read_latency',
+                  'Value #disk_writes',
+                  'Value #disk_write_latency',
                 ],
               },
             },
@@ -765,17 +789,17 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 1,
-                'Value #B': 2,
-                'Value #C': 3,
-                'Value #D': 4,
+                'Value #disk_reads': 1,
+                'Value #disk_read_latency': 2,
+                'Value #disk_writes': 3,
+                'Value #disk_write_latency': 4,
                 disk_path: 0,
               },
               renameByName: {
-                'Value #A': 'Throughput (R)',
-                'Value #B': 'Delay (R)',
-                'Value #C': 'Throughput (W)',
-                'Value #D': 'Delay (W)',
+                'Value #disk_reads': 'Throughput (R)',
+                'Value #disk_read_latency': 'Delay (R)',
+                'Value #disk_writes': 'Throughput (W)',
+                'Value #disk_write_latency': 'Delay (W)',
                 disk_path: 'Disk',
               },
             },
@@ -871,12 +895,16 @@ local utils = commonlib.utils;
           'Disks table',
           targets=[
             t.vmDiskReadThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_reads')
             + g.query.prometheus.withRange(true),
             t.vmDiskReadLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_read_latency')
             + g.query.prometheus.withRange(true),
             t.vmDiskWriteThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_writes')
             + g.query.prometheus.withRange(true),
             t.vmDiskWriteLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_write_latency')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the disks associated with the virtual machines.'
@@ -928,10 +956,10 @@ local utils = commonlib.utils;
               include: {
                 names: [
                   'disk_path',
-                  'Value #A',
-                  'Value #B',
-                  'Value #C',
-                  'Value #D',
+                  'Value #disk_reads',
+                  'Value #disk_read_latency',
+                  'Value #disk_writes',
+                  'Value #disk_write_latency',
                 ],
               },
             },
@@ -942,17 +970,17 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 1,
-                'Value #B': 2,
-                'Value #C': 3,
-                'Value #D': 4,
+                'Value #disk_reads': 1,
+                'Value #disk_read_latency': 2,
+                'Value #disk_writes': 3,
+                'Value #disk_write_latency': 4,
                 disk_path: 0,
               },
               renameByName: {
-                'Value #A': 'Throughput (R)',
-                'Value #B': 'Delay (R)',
-                'Value #C': 'Throughput (W)',
-                'Value #D': 'Delay (W)',
+                'Value #disk_reads': 'Throughput (R)',
+                'Value #disk_read_latency': 'Delay (R)',
+                'Value #disk_writes': 'Throughput (W)',
+                'Value #disk_write_latency': 'Delay (W)',
                 disk_path: 'Disk',
               },
             },
@@ -1078,27 +1106,35 @@ local utils = commonlib.utils;
           'ESXi hosts table',
           targets=[
             t.clusterHostCPUUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('cpu_usage')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterHostCPUUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('cpu_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterHostMemoryUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('memory_usage')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterHostMemoryUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('memory_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterHostDiskThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_throughput')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterHostDiskLatency + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_latency')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterHostNetworkThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('network_throughput')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterHostPacketErrorRate + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('packet_error_rate')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the ESXi hosts associated with the clusters.'
@@ -1180,7 +1216,7 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Packet drops')
+          fieldOverride.byName.new('Packet errors')
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + table.fieldOverride.byName.withProperty('custom.width', 140)
           + fieldOverride.byName.withPropertiesFromOptions(
@@ -1203,14 +1239,14 @@ local utils = commonlib.utils;
                 names: [
                   'vcenter_cluster_name 3',
                   'vcenter_host_name',
-                  'Value #A',
-                  'Value #B',
-                  'Value #C',
-                  'Value #D',
-                  'Value #E',
-                  'Value #F',
-                  'Value #G',
-                  'Value #H',
+                  'Value #cpu_usage',
+                  'Value #cpu_utilization',
+                  'Value #memory_usage',
+                  'Value #memory_utilization',
+                  'Value #disk_throughput',
+                  'Value #disk_latency',
+                  'Value #network_throughput',
+                  'Value #packet_error_rate',
                 ],
               },
             },
@@ -1221,26 +1257,26 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 2,
-                'Value #B': 3,
-                'Value #C': 4,
-                'Value #D': 5,
-                'Value #E': 6,
-                'Value #F': 7,
-                'Value #G': 8,
-                'Value #H': 9,
+                'Value #cpu_usage': 2,
+                'Value #cpu_utilization': 3,
+                'Value #memory_usage': 4,
+                'Value #memory_utilization': 5,
+                'Value #disk_throughput': 6,
+                'Value #disk_latency': 7,
+                'Value #network_throughput': 8,
+                'Value #packet_error_rate': 9,
                 'vcenter_cluster_name 3': 0,
                 vcenter_host_name: 1,
               },
               renameByName: {
-                'Value #A': 'CPU usage',
-                'Value #B': 'CPU utilization',
-                'Value #C': 'Memory usage',
-                'Value #D': 'Memory utilization',
-                'Value #E': 'Disk throughput',
-                'Value #F': 'Disk delay',
-                'Value #G': 'Net throughput',
-                'Value #H': 'Packet drops',
+                'Value #cpu_usage': 'CPU usage',
+                'Value #cpu_utilization': 'CPU utilization',
+                'Value #memory_usage': 'Memory usage',
+                'Value #memory_utilization': 'Memory utilization',
+                'Value #disk_throughput': 'Disk throughput',
+                'Value #disk_latency': 'Disk delay',
+                'Value #network_throughput': 'Net throughput',
+                'Value #packet_error_rate': 'Packet errors',
                 'vcenter_cluster_name 3': 'Cluster',
                 vcenter_host_name: 'ESXi host',
               },
@@ -1253,27 +1289,35 @@ local utils = commonlib.utils;
           'VMs table',
           targets=[
             t.clusterVMCPUUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('cpu_usage')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterVMCPUUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('cpu_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterVMMemoryUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('memory_usage')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterVMMemoryUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('memory_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterVMDiskUsage + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_usage')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterVMDiskUtilization + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('disk_utilization')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterVMNetworkThroughput + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('network_throughput')
             + g.query.prometheus.withRange(true)
             ,
             t.clusterVMPacketDropRate + g.query.prometheus.withFormat('table')
+            + g.query.prometheus.withRefId('packet_drop_rate')
             + g.query.prometheus.withRange(true),
           ],
           description='Information about the VMs associated with the clusters.'
@@ -1382,14 +1426,14 @@ local utils = commonlib.utils;
               include: {
                 names: [
                   'vm_path',
-                  'Value #A',
-                  'Value #B',
-                  'Value #C',
-                  'Value #D',
-                  'Value #E',
-                  'Value #F',
-                  'Value #G',
-                  'Value #H',
+                  'Value #cpu_usage',
+                  'Value #cpu_utilization',
+                  'Value #memory_usage',
+                  'Value #memory_utilization',
+                  'Value #disk_usage',
+                  'Value #disk_utilization',
+                  'Value #network_throughput',
+                  'Value #packet_drop_rate',
                 ],
               },
             },
@@ -1400,25 +1444,25 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #A': 1,
-                'Value #B': 2,
-                'Value #C': 3,
-                'Value #D': 4,
-                'Value #E': 5,
-                'Value #F': 6,
-                'Value #G': 7,
-                'Value #H': 8,
+                'Value #cpu_usage': 1,
+                'Value #cpu_utilization': 2,
+                'Value #memory_usage': 3,
+                'Value #memory_utilization': 4,
+                'Value #disk_usage': 5,
+                'Value #disk_utilization': 6,
+                'Value #network_throughput': 7,
+                'Value #packet_drop_rate': 8,
                 vm_path: 0,
               },
               renameByName: {
-                'Value #A': 'CPU usage',
-                'Value #B': 'CPU utilization',
-                'Value #C': 'Memory usage',
-                'Value #D': 'Memory utilization',
-                'Value #E': 'Disk usage',
-                'Value #F': 'Disk utilization',
-                'Value #G': 'Net throughput',
-                'Value #H': 'Packet drops',
+                'Value #cpu_usage': 'CPU usage',
+                'Value #cpu_utilization': 'CPU utilization',
+                'Value #memory_usage': 'Memory usage',
+                'Value #memory_utilization': 'Memory utilization',
+                'Value #disk_usage': 'Disk usage',
+                'Value #disk_utilization': 'Disk utilization',
+                'Value #network_throughput': 'Net throughput',
+                'Value #packet_drop_rate': 'Packet drops',
                 vm_path: 'VM',
               },
             },
