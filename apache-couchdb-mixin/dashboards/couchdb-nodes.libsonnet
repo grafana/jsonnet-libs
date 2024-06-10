@@ -1219,13 +1219,37 @@ local logTypesPanel(cfg) = {
   },
 };
 
-local systemLogsPanel(cfg) = {
+local systemLogsPanel(cfg) = if cfg.enableMultiCluster then {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
       expr: '{' + getMatcher(cfg) + ', filename="/var/log/couchdb/couchdb.log"} |~ "$log_level"',
+      queryType: 'range',
+      refId: 'A',
+    },
+  ],
+  type: 'logs',
+  title: 'System logs',
+  description: 'Recent logs from the Apache CouchDB logs file for a node.',
+  options: {
+    dedupStrategy: 'none',
+    enableLogDetails: true,
+    prettifyLogMessage: false,
+    showCommonLabels: false,
+    showLabels: false,
+    showTime: false,
+    sortOrder: 'Descending',
+    wrapLogMessage: false,
+  },
+} else {
+  datasource: lokiDatasource,
+  targets: [
+    {
+      datasource: lokiDatasource,
+      editorMode: 'code',
+      expr: '{' + getMatcher(cfg) + '} |~ "$log_level"',
       queryType: 'range',
       refId: 'A',
     },
