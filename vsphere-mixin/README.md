@@ -49,7 +49,7 @@ The vSphere virtual machines dashboard provides details on virtual machine CPU, 
 
 The vSphere logs dashboard provides details on the vSphere system. VMware Appliance Management Service (applmgmt), VMware Analytics (analytics), and VMware vCenter Server (vpxd) logs are collected. [Promtail and Loki needs to be installed](https://grafana.com/docs/loki/latest/installation/) and provisioned for logs with your Grafana instance.
 
-In addition, logs must be forwarded from your ESXi hosts to a vCenter server as described [here](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vcenter-configuration/GUID-9633A961-A5C3-4658-B099-B81E0512DC21.html).
+In addition, logs must be forwarded from your vCenter server to a remote syslog server as described [here](https://docs.vmware.com/en/VMware-vSphere/8.0/vsphere-vcenter-configuration/GUID-9633A961-A5C3-4658-B099-B81E0512DC21.html).
 
 ![vSphere logs dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_logs.png)
 
