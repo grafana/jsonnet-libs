@@ -1,13 +1,16 @@
 # https://help.github.com/articles/about-codeowners/
 # https://git-scm.com/docs/gitignore#_pattern_format
 
+# Wildcard permissions should be loaded first
+/*-mixin/ @grafana/cloud-integrations
 /consul*/ @grafana/mimir-maintainers @grafana/loki-team
+/memcached*/ @grafana/mimir-maintainers @grafana/loki-team
+
+# Individual permissions override previous
 /etcd-operator/ @grafana/mimir-maintainers
 /jaeger-agent-mixin/ @grafana/grafana-alloy-maintainers
-/memcached*/ @grafana/mimir-maintainers @grafana/loki-team
 /prometheus-ksonnet/ @grafana/mimir-maintainers
 /enterprise-metrics/ @grafana/backend-enterprise
-/*-mixin/ @grafana/cloud-integrations
 /common-lib/ @grafana/cloud-integrations
 /grafana-cloud-integration-utils/ @grafana/cloud-integrations
 /logs-lib/ @grafana/cloud-integrations
