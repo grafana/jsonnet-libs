@@ -3,6 +3,7 @@
 
 /consul*/ @grafana/mimir-maintainers @grafana/loki-team
 /etcd-operator/ @grafana/mimir-maintainers
+/jaeger-agent-mixin/ @grafana/grafana-alloy-maintainers
 /memcached*/ @grafana/mimir-maintainers @grafana/loki-team
 /prometheus-ksonnet/ @grafana/mimir-maintainers
 /enterprise-metrics/ @grafana/backend-enterprise
