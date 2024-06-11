@@ -7,6 +7,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     jaeger_agent_host: null,
     //TODO: Deprecate with_otel_resource_attrs. All traces colleciton should use OTel semantics.
     with_otel_resource_attrs: false,
+    with_otel_container_resource_attrs: false,
   },
 
   local container = k.core.v1.container,
@@ -16,7 +17,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     then {}
     else
       {
-        local containerAttributes = if 'name' in self then ',k8s.container.name=%s' % self.name else '',
+        local containerAttributes = if $._config.with_otel_container_resource_attrs && 'name' in self then ',k8s.container.name=%s' % self.name else '',
 
         local jaegerTags = if $._config.with_otel_resource_attrs then
           ('namespace=%s,service.namespace=%s,cluster=%s' % [$._config.namespace, $._config.namespace, $._config.cluster])
