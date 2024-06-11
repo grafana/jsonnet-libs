@@ -7,6 +7,7 @@ local lib = (import './jaeger.libsonnet') {
     namespace: 'NAMESPACE',
     jaeger_agent_host: 'JAEGER_AGENT_HOST',
     with_otel_resource_attrs: true,
+    with_otel_container_resource_attrs: true,
   },
 };
 
