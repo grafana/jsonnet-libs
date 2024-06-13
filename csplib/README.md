@@ -13,4 +13,4 @@ A collection of dashboards and their component parts for cloud service provider 
   * `Availability` is an available metric. It may not make sense to graph this, but perhaps it is useful to have an alert?
   * There are latency metrics. In our test environment there is very little (no?) traffic. What I have observed is that E2E latency, and server latency is the same value in our limited dataset. Perhaps this should only show a delta, I.E. if E2E is greater than server.
   * Network throughput (ingress/egress) metrics for azure are gauges, not counters. Right now, the promql uses rate, which produces "odd" results. The other option, using `deriv` produces negative values with the available data, which is also suboptimal. We *could* just put the raw gauge value on the timeseries, and call it a day. :thinking:
-  
+* AWS - TODO
