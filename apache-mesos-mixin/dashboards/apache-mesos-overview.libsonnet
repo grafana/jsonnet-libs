@@ -1334,7 +1334,7 @@ local agentLogsPanel(matcher) = {
             template.new(
               'instance',
               promDatasource,
-              'label_values(mesos_exporter_build_info{%(mssqlSelector)s}, instance)' % $._config,
+              'label_values(mesos_exporter_build_info{%(mesosSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -1345,7 +1345,7 @@ local agentLogsPanel(matcher) = {
             template.new(
               'mesos_cluster',
               promDatasource,
-              'label_values(mesos_exporter_build_info{%(mssqlSelector)s, instance=~"$instance"}, mesos_cluster)' % $._config,
+              'label_values(mesos_exporter_build_info{%(mesosSelector)s, instance=~"$instance"}, mesos_cluster)' % $._config,
               label='Mesos cluster',
               refresh=2,
               includeAll=true,
