@@ -1,18 +1,18 @@
 {
   _config+:: {
     local this = self,
-    dashboardTags: ['gcp'],
+    dashboardTags: ['azure'],
     dashboardPeriod: 'now-1h',
     dashboardTimezone: 'default',
     dashboardRefresh: '1m',
-    dashboardNamePrefix: 'GCP ',
+    dashboardNamePrefix: 'Azure ',
     // UID Prefix for each dashboard
-    uid: 'gcp',
-    filteringSelector: 'job="integrations/gcp"',
+    uid: 'azure',
+    filteringSelector: 'job="integrations/azure"',
 
-    groupLabels: ['job'],
-    instanceLabels: ['bucket_name'],
-    metricsSource: 'stackdriver',
+    groupLabels: ['job', 'resourceGroup', 'subscriptionName'],
+    instanceLabels: ['resourceName'],
+    metricsSource: 'azuremonitor',
     signals:
       {
         blobstore: (import './signals/blobstore.libsonnet')(this),
