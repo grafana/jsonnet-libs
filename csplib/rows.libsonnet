@@ -24,13 +24,13 @@ local g = import './g.libsonnet';
         g.panel.row.new('API'),
         this.grafana.panels.apiRequestCount
         + g.panel.timeSeries.gridPos.withW(24)
-        + g.panel.timeSeries.gridPos.withH(8),
+        + g.panel.timeSeries.gridPos.withH(12),
       ],
       network: [
         g.panel.row.new('Network'),
         this.grafana.panels.network
         + g.panel.timeSeries.gridPos.withW(24)
-        + g.panel.timeSeries.gridPos.withH(8),
+        + g.panel.timeSeries.gridPos.withH(12),
       ],
     },
 }

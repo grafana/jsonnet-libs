@@ -25,11 +25,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       this.signals.blobstore.apiRequestCount.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
-      + g.panel.timeSeries.options.legend.withPlacement('right'),
+      + g.panel.timeSeries.options.legend.withPlacement('bottom'),
     network:
       commonlib.panels.network.timeSeries.traffic.new('Network traffic', targets=[])
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
       + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('bottom')
       + this.signals.blobstore.networkRx.asPanelMixin()
       + this.signals.blobstore.networkTx.asPanelMixin(),
   },
