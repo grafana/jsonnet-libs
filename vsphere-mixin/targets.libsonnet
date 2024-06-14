@@ -10,7 +10,7 @@ local utils = commonlib.utils {
     local vars = this.grafana.variables,
     local config = this.config,
     local clusterLegendLabel = ['vcenter_cluster_name'],
-    local hostLegendLabel = clusterLegendLabel + ['vcenter_host_name'],
+    local hostLegendLabel = ['vcenter_host_name'],
     local vmLegend = '{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}',
     local rPoolLegend = '{{vcenter_resource_pool_inventory_path}}',
     local sumWithout = 'sum without(object)',
@@ -243,14 +243,14 @@ local utils = commonlib.utils {
     hostModifiedMemoryBallooned:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_ballooned_mebibytes{%(hostQueriesSelector)s})' % vars
+        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_ballooned_mebibytes{%(hostQueriesSelector)s}) != 0' % vars
       )
       + prometheusQuery.withLegendFormat('%s - ballooned' % utils.labelsToPanelLegend(hostLegendLabel)),
 
     hostModifiedMemorySwapped:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_swapped_mebibytes{%(hostQueriesSelector)s})' % vars
+        'sum by (job, vcenter_datacenter_name, vcenter_cluster_name, vcenter_host_name) (vcenter_vm_memory_swapped_mebibytes{%(hostQueriesSelector)s}) != 0' % vars
       )
       + prometheusQuery.withLegendFormat('%s - swapped' % utils.labelsToPanelLegend(hostLegendLabel)),
 
@@ -271,14 +271,14 @@ local utils = commonlib.utils {
     hostPacketReceivedErrorRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '%(sumWithout)s (vcenter_host_network_packet_error_rate{direction="received", %(hostQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_host_network_packet_rate{direction="received", %(hostQueriesSelector)s}), 1)' % vars { sumWithout: sumWithout }
+        '%(sumWithout)s (vcenter_host_network_packet_error_rate{direction="received", %(hostQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_host_network_packet_rate{direction="received", %(hostQueriesSelector)s}), 1) != 0' % vars { sumWithout: sumWithout }
       )
       + prometheusQuery.withLegendFormat('%s - received' % utils.labelsToPanelLegend(hostLegendLabel)),
 
     hostPacketTransmittedErrorRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '%(sumWithout)s (vcenter_host_network_packet_error_rate{direction="transmitted", %(hostQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_host_network_packet_rate{direction="transmitted", %(hostQueriesSelector)s}), 1)' % vars { sumWithout: sumWithout }
+        '%(sumWithout)s (vcenter_host_network_packet_error_rate{direction="transmitted", %(hostQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_host_network_packet_rate{direction="transmitted", %(hostQueriesSelector)s}), 1) != 0' % vars { sumWithout: sumWithout }
       )
       + prometheusQuery.withLegendFormat('%s - transmitted' % utils.labelsToPanelLegend(hostLegendLabel)),
 
@@ -399,14 +399,14 @@ local utils = commonlib.utils {
     vmModifiedMemoryBallooned:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_vm_memory_ballooned_mebibytes{%(virtualMachinesQueriesSelector)s}' % vars
+        'vcenter_vm_memory_ballooned_mebibytes{%(virtualMachinesQueriesSelector)s} != 0' % vars
       )
       + prometheusQuery.withLegendFormat('%s - ballooned' % vmLegend),
 
     vmModifiedMemorySwapped:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'vcenter_vm_memory_swapped_mebibytes{%(virtualMachinesQueriesSelector)s}' % vars
+        'vcenter_vm_memory_swapped_mebibytes{%(virtualMachinesQueriesSelector)s} != 0' % vars
       )
       + prometheusQuery.withLegendFormat('%s - swapped' % vmLegend),
 
@@ -427,14 +427,14 @@ local utils = commonlib.utils {
     vmPacketReceivedDropRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '%(sumWithout)s (vcenter_vm_network_packet_drop_rate{direction="received", %(virtualMachinesQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_vm_network_packet_rate{direction="received", %(virtualMachinesQueriesSelector)s}), 1)' % vars { sumWithout: sumWithout }
+        '%(sumWithout)s (vcenter_vm_network_packet_drop_rate{direction="received", %(virtualMachinesQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_vm_network_packet_rate{direction="received", %(virtualMachinesQueriesSelector)s}), 1) != 0' % vars { sumWithout: sumWithout }
       )
       + prometheusQuery.withLegendFormat('%s - received' % vmLegend),
 
     vmPacketTransmittedDropRate:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        '%(sumWithout)s (vcenter_vm_network_packet_drop_rate{direction="transmitted", %(virtualMachinesQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_vm_network_packet_rate{direction="transmitted", %(virtualMachinesQueriesSelector)s}), 1)' % vars { sumWithout: sumWithout }
+        '%(sumWithout)s (vcenter_vm_network_packet_drop_rate{direction="transmitted", %(virtualMachinesQueriesSelector)s}) / clamp_min(%(sumWithout)s (vcenter_vm_network_packet_rate{direction="transmitted", %(virtualMachinesQueriesSelector)s}), 1) != 0' % vars { sumWithout: sumWithout }
       )
       + prometheusQuery.withLegendFormat('%s - transmitted' % vmLegend),
 

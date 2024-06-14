@@ -1,4 +1,4 @@
-# vSphere Mixin
+# vSphere mixin
 
 The vSphere mixin is a set of configurable Grafana dashboards and alerts.
 
@@ -22,7 +22,7 @@ and the following alerts:
 
 The vSphere overview dashboard provides an overview on CPU, memory, and network throughput details for clusters, resource pools, ESXi hosts, and datastores.
 
-![vSphere overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_overview_1.png)
+![vSphere overview dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_overview_1.png)  
 ![vSphere overview dashboard (hosts)](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_overview_2.png)
 
 ## vSphere clusters
@@ -35,14 +35,14 @@ The vSphere clusters dashboard provides details on cluster CPU and memory while 
 
 The vSphere hosts dashboard provides details on ESXi host CPU, memory, network while giving a high-level view of their disks and VMs.
 
-![vSphere hosts dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_hosts_1.png)
+![vSphere hosts dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_hosts_1.png)  
 ![vSphere hosts dashboard (disks)](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_hosts_2.png)
 
 ## vSphere virtual machines
 
 The vSphere virtual machines dashboard provides details on virtual machine CPU, memory, network, and disks.
 
-![vSphere virtual machines dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_virtual_machines_1.png)
+![vSphere virtual machines dashboard](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_virtual_machines_1.png)  
 ![vSphere virtual machines dashboard (disks)](https://storage.googleapis.com/grafanalabs-integration-assets/vsphere/screenshots/vsphere_virtual_machines_2.png)
 
 ## vSphere logs
@@ -69,7 +69,7 @@ In order for the selectors to properly work for system logs ingested into your l
 
 ```
 
-## Alerts Overview
+## Alerts overview
 
 | Alert                                   | Summary                                                                                                                                                                                   |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -93,7 +93,7 @@ Default thresholds can be configured in `config.libsonnet`
 }
 ```
 
-## Install Tools
+## Install tools
 
 ```bash
 go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
@@ -113,7 +113,7 @@ into your Grafana server. The exact details will be depending on your environmen
 
 `prometheus_alerts.yaml` needs to be imported into Prometheus.
 
-## Generate Dashboards And Alerts
+## Generate dashboards and alerts
 
 Edit `config.libsonnet` if required and then build JSON dashboard files for Grafana:
 

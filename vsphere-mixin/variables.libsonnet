@@ -107,7 +107,7 @@ local extendedUtils = utils {
         loki:
           var.datasource.new('loki_datasource', 'loki')
           + var.datasource.generalOptions.withLabel('Loki data source')
-          + var.datasource.withRegex('(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+')
+          + var.datasource.withRegex('')
           + var.datasource.generalOptions.showOnDashboard.withNothing(),
       },
 

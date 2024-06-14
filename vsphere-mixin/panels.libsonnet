@@ -97,7 +97,7 @@ local utils = commonlib.utils;
           targets=[t.topCPUUtilizationClusters],
           description='The clusters with the highest CPU utilization percentage in the datacenter.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       topMemoryUtilizationClusters:
@@ -106,7 +106,7 @@ local utils = commonlib.utils;
           targets=[t.topMemoryUtilizationClusters],
           description='The clusters with the highest memory utilization percentage in the datacenter.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       clustersTable:
@@ -465,7 +465,7 @@ local utils = commonlib.utils;
           description='The amount of CPU used by the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('rotmhz')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       hostCPUUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
@@ -474,7 +474,7 @@ local utils = commonlib.utils;
           description='The CPU utilization percentage of the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       hostMemoryUsage:
         commonlib.panels.generic.timeSeries.base.new(
@@ -483,7 +483,7 @@ local utils = commonlib.utils;
           description='The amount of memory used by the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('mbytes')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       hostMemoryUtilization:
         commonlib.panels.memory.timeSeries.usagePercent.new(
@@ -492,7 +492,7 @@ local utils = commonlib.utils;
           description='The memory utilization percentage of the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       hostModifiedMemory:
         commonlib.panels.generic.timeSeries.base.new(
@@ -501,7 +501,7 @@ local utils = commonlib.utils;
           description='The amount of memory that has been swapped or ballooned on the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('mbytes')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('right'),
 
       hostNetworkThroughputRate:
@@ -511,7 +511,7 @@ local utils = commonlib.utils;
           description='The 20s average rate of data transmitted or received over the network of the ESXi host.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('KiBs')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
       hostPacketErrorRate:
@@ -521,7 +521,7 @@ local utils = commonlib.utils;
           description='The 20s average of received or transmitted packets dropped over the ESXi hosts network compared to the overall packets received or transmitted.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('bottom'),
 
       hostVMsTable:
@@ -812,7 +812,7 @@ local utils = commonlib.utils;
           targets=[t.vmCPUUsage],
           description='The amount of CPU used by the VMs.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.standardOptions.withUnit('rotmhz'),
 
       vmCPUUtilization:
@@ -821,7 +821,7 @@ local utils = commonlib.utils;
           targets=[t.vmCPUUtilization],
           description='The CPU utilization percentage of VMs.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       vmMemoryUsage:
@@ -830,7 +830,7 @@ local utils = commonlib.utils;
           targets=[t.vmMemoryUsage],
           description='The amount of memory used by the VMs.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.standardOptions.withUnit('mbytes'),
 
       vmMemoryUtilization:
@@ -839,7 +839,7 @@ local utils = commonlib.utils;
           targets=[t.vmMemoryUtilization],
           description='The memory utilization percentage of the VMs.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       vmDiskUsage:
@@ -848,7 +848,7 @@ local utils = commonlib.utils;
           targets=[t.vmDiskUsage],
           description='The amount of disk space used by the VMs.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.standardOptions.withUnit('bytes'),
 
       vmDiskUtilization:
@@ -857,7 +857,7 @@ local utils = commonlib.utils;
           targets=[t.vmDiskUtilization],
           description='The disk utilization percentage of VMs.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
       vmModifiedMemory:
@@ -866,7 +866,7 @@ local utils = commonlib.utils;
           targets=[t.vmModifiedMemoryBallooned, t.vmModifiedMemorySwapped],
           description='The amount of memory that has been swapped or ballooned on the VMs.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('right')
         + g.panel.timeSeries.standardOptions.withUnit('mbytes'),
 
@@ -876,7 +876,7 @@ local utils = commonlib.utils;
           targets=[t.vmNetworkReceivedThroughputRate, t.vmNetworkTransmittedThroughputRate],
           description='The 20s average rate of data transmitted or received over the network of the VMs.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('bottom')
         + g.panel.timeSeries.standardOptions.withUnit('KiBs'),
 
@@ -886,7 +886,7 @@ local utils = commonlib.utils;
           targets=[t.vmPacketReceivedDropRate, t.vmPacketTransmittedDropRate],
           description='The 20s average of received or transmitted packets dropped over the VMs network compared to the overall packets received or transmitted.'
         )
-        + g.panel.timeSeries.options.legend.withDisplayMode('table')
+        + g.panel.timeSeries.options.legend.withDisplayMode('list')
         + g.panel.timeSeries.options.legend.withPlacement('bottom')
         + g.panel.timeSeries.standardOptions.withUnit('percent'),
 
@@ -1066,7 +1066,7 @@ local utils = commonlib.utils;
           description='The CPU utilization percentage of the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       clusterMemoryLimit:
         barGauge.new(title='Cluster memory limit')
@@ -1099,7 +1099,7 @@ local utils = commonlib.utils;
           description='The memory utilization percentage of the cluster.'
         )
         + g.panel.timeSeries.standardOptions.withUnit('percent')
-        + g.panel.timeSeries.options.legend.withDisplayMode('table'),
+        + g.panel.timeSeries.options.legend.withDisplayMode('list'),
 
       clusterHostsTable:
         commonlib.panels.generic.table.base.new(
