@@ -9,16 +9,30 @@ local g = import './g.libsonnet';
         + g.dashboard.withUid(this.config.uid + '-jvm-dashboard')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
-            std.flattenArrays([
-              this.grafana.rows.overview,
-              this.process.grafana.rows.process,
-              this.grafana.rows.memory,
-              this.grafana.rows.gc,
-              this.grafana.rows.threads,
-              this.grafana.rows.buffers,
-              this.grafana.rows.hikari,
-              this.grafana.rows.logback,
-            ])
+            std.flattenArrays(
+              [
+                this.grafana.rows.overview,
+                this.process.grafana.rows.process,
+                this.grafana.rows.memory,
+                this.grafana.rows.gc,
+                this.grafana.rows.threads,
+                this.grafana.rows.buffers,
+              ]
+              + (
+                if this.config.metricsSource == 'java_micrometer' || this.config.metricsSource == 'otel' then
+                  [
+                    this.grafana.rows.hikari,
+                  ]
+                else []
+              )
+              + (
+                if this.config.metricsSource == 'java_micrometer' then
+                  [
+                    this.grafana.rows.logback,
+                  ]
+                else []
+              )
+            )
           ),
           setPanelIDs=false
         ),
