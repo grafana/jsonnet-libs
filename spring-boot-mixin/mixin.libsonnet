@@ -1,5 +1,6 @@
-{
-  grafanaDashboards: {
-    'spring-boot-dashboard.json': (import 'dashboards/spring-boot-statistics_rev2.json'),
-  },
-}
+local config = import './config.libsonnet';
+local jvmlib = import 'jvm-observ-lib/main.libsonnet';
+local jvm =
+  jvmlib.new()
+  + jvmlib.withConfigMixin(config);
+jvm.asMonitoringMixin()
