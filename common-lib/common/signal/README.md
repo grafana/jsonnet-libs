@@ -44,6 +44,7 @@ Init level:
 |interval| The interval used in `counters` and `histogram` auto transformations. |1m,5m.1h..., $__rate_interval, $__interval...|`5m`,|`$__rate_interval`|
 |alertsInterval| The interval used in  `counters` and `histogram` auto transformations in alerts. Grafana's $__rate_interval or similar are not supported. |1m,5m.1h...|`5m`,|`5m`|
 |aggLevel| Metrics aggregation level. |none, instance, group|`group`|`none`|
+|aggKeepLabels| Extra labels to keep when aggregating with by() clause. |`['pool','level']`|`[]`|
 |aggFunction| A function used to aggregate metrics. |avg,min,max,sum...|`sum`|`avg`|
 |varMetric| A Metric used for variables discovery. |*|`up`|`node_uname_info`|
 |legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{instance}}`|
@@ -60,6 +61,8 @@ Signal's level:
 |expr| Signal's BASE expression in simplest form. Simplified jsonnet templating is supported (see below). Depending on signal's type(not `raw`) could autotransform to different form. |*|network_bytes_received_total{%(queriesSelector)s}|-|
 |exprWrappers| Signal's additional wrapper functions that could be added as an array, [<left_part>, <right_part>]. Functions would be applied AFTER any autotransformation takes place.  |*|`['topk(10,',')']`|[]|
 |aggLevel| Metrics aggregation level. |none, instance, group|`group`|`none`|
+|aggFunction| A function used to aggregate metrics. |avg,min,max,sum...|`sum`|`avg`|
+|aggKeepLabels| Extra labels to keep when aggregating with by() clause.  |`['pool','level']`|`[]`|
 |infoLabel| Only applicable to `info` metrics. Points to label name used to extract info. |*|-|-|
 |valueMapping| Define signal's valueMapping in the same way defined in Grafana Dashboard Schema. |*|-|-|
 |legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{instance}}`|
@@ -73,7 +76,8 @@ The following is supported in expressions and legends:
 - `%(filteringSelector)s` - expands to filteringSelector matchers
 - `%(groupLabels)s` - expands to groupLabels list
 - `%(instanceLabels)s` - expands to instanceLabels list
-- `%(agg)s` - expands to list of labels according to `aggLevel` choosen
+- `%(agg)s` - expands to list of labels according to `aggLevel` and `aggKeepLabels` choosen
+- `%(aggLegend)s` - expands to list of labels in legend format (i.e. `{{<label1>}}/{{label2}}`) according to `aggLevel` and `aggKeepLabels` choosen
 - `%(aggFunction)s` - expands to aggregation function
 - `%(interval)s` - expands to `interval` value
 - `%(alertsInterval)s` - expands to `interval` value
