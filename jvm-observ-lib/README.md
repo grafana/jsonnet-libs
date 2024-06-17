@@ -14,3 +14,26 @@ Supports the following sources:
 jb init
 jb install https://github.com/grafana/jsonnet-libs/jvm-observ-lib
 ```
+
+## Example: Generate monitoring-mixin
+
+```
+local config = import './config.libsonnet';
+local jvmlib = import 'jvm-observ-lib/main.libsonnet';
+local jvm =
+  jvmlib.new()
+  + jvmlib.withConfigMixin(
+    {
+        filteringSelector: 'job!=""',
+        groupLabels: ['job'],
+        instanceLabels: ['instance'],
+        uid: 'jvm-sample',
+        dashboardNamePrefix: 'JVM',
+        dashboardTags: ['java', 'jvm'],
+        metricsSource: 'java_micrometer', // or java_otel, prometheus,
+    }
+  );
+jvm.asMonitoringMixin()
+```
+
+![image](https://github.com/grafana/jsonnet-libs/assets/14870891/c5fb3763-66a1-478e-ade9-5cb3aaff81bb)
