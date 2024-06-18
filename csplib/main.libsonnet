@@ -3,7 +3,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(): {
     local this = self,
-    config: (import './gcpconfig.libsonnet')._config,
+    config: (import './config.libsonnet')._config,
     signals:
       {
         blobstore: commonlib.signals.unmarshallJsonMulti(this.config.signals.blobstore, type=this.config.metricsSource),

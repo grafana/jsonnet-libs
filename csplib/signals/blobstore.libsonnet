@@ -13,6 +13,18 @@ function(this)
       azuremonitor: 'azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count',
     },
     signals: {
+      availability: {
+        name: 'Availability',
+        description: '',
+        type: 'gauge',
+        unit: 'percent',
+        sources: {
+          azuremonitor: {
+            expr: 'azure_microsoft_storage_storageaccounts_blobservices_availability_average_percent{%(queriesSelector)s}'
+          }
+        }
+      },
+
       objectCountTotal: {
         name: 'Object Count',
         description: 'Number of objects stored.',
