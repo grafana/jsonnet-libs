@@ -32,7 +32,7 @@ function(this)
               expr: 'time()-process_start_time_seconds{%(queriesSelector)s}',
             },
           otel: {
-            expr: 'runtime_uptime{%(queriesSelector)s}/1000',
+            expr: 'process_uptime{%(queriesSelector)s}',
           },
           java_otel: self.otel,
           java_micrometer: {
