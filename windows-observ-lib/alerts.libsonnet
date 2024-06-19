@@ -176,7 +176,7 @@
             annotations: {
               summary: 'NTP client delay.',
               description: |||
-                'Round-trip time of NTP client on instance {{ $labels.instance }} is greater than 1 second. Delay is {{ $value }} sec.'
+                Round-trip time of NTP client on instance {{ $labels.instance }} is greater than 1 second. Delay is {{ $value }} sec.
               ||| % this.config,
             },
           },
@@ -193,7 +193,7 @@
             annotations: {
               summary: 'NTP time offset is too large.',
               description: |||
-                'NTP time offset for instance {{ $labels.instance }} is greater than 1 second. Offset is {{ $value }} sec.'
+                NTP time offset for instance {{ $labels.instance }} is greater than 1 second. Offset is {{ $value }} sec.
               ||| % this.config,
             },
           },
