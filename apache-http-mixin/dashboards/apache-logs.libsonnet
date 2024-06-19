@@ -188,12 +188,9 @@ local logsByHTTPcodes =
     targets: [
       {
         expr: |||
-          label_replace(
-            sum by (le,job, instance) (increase(apache_response_http_codes_bucket{le!="+Inf", %s}[$__rate_interval])),
-            "alias", "HTTP ${1}00-${1}99", "le", "(.).+"
-          )
+          sum by (le,job, instance) (increase(apache_response_http_codes_bucket{le!="+Inf", %s}[$__rate_interval]))
         ||| % matcher,
-        legendFormat: '{{ alias }}',
+        legendFormat: '',
         format: 'heatmap',
       },
     ],
@@ -208,6 +205,15 @@ local logsByHTTPcodes =
         calcs: ['sum'],
       },
     },
+    transformations: [
+      {
+        id: 'renameByRegex',
+        options: {
+          regex: '(\\d).+',
+          renamePattern: 'HTTP $100-$199',
+        },
+      },
+    ],
   };
 {
   grafanaDashboards+::

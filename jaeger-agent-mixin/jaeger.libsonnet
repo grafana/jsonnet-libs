@@ -5,7 +5,9 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     cluster: error 'Must define a cluster',
     namespace: error 'Must define a namespace',
     jaeger_agent_host: null,
+    //TODO: Deprecate with_otel_resource_attrs. All traces colleciton should use OTel semantics.
     with_otel_resource_attrs: false,
+    with_otel_container_resource_attrs: false,
   },
 
   local container = k.core.v1.container,
@@ -14,13 +16,18 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     if $._config.jaeger_agent_host == null
     then {}
     else
-      local jaegerTags = if $._config.with_otel_resource_attrs then
-        'namespace=%s,service.namespace=%s,cluster=%s' % [$._config.namespace, $._config.namespace, $._config.cluster]
-      else
-        'namespace=%s,cluster=%s' % [$._config.namespace, $._config.cluster];
-      container.withEnvMixin([
-        container.envType.new('JAEGER_AGENT_HOST', $._config.jaeger_agent_host),
-        container.envType.new('JAEGER_TAGS', jaegerTags),
-        container.envType.new('JAEGER_SAMPLER_MANAGER_HOST_PORT', 'http://%s:5778/sampling' % $._config.jaeger_agent_host),
-      ]),
+      {
+        local containerAttributes = if $._config.with_otel_container_resource_attrs && 'name' in self then ',k8s.container.name=%s' % self.name else '',
+
+        local jaegerTags = if $._config.with_otel_resource_attrs then
+          ('namespace=%s,service.namespace=%s,cluster=%s' % [$._config.namespace, $._config.namespace, $._config.cluster])
+          + containerAttributes
+        else
+          'namespace=%s,cluster=%s' % [$._config.namespace, $._config.cluster] + containerAttributes,
+        env+: [
+          { name: 'JAEGER_AGENT_HOST', value: $._config.jaeger_agent_host },
+          { name: 'JAEGER_TAGS', value: jaegerTags },
+          { name: 'JAEGER_SAMPLER_MANAGER_HOST_PORT', value: 'http://%s:5778/sampling' % $._config.jaeger_agent_host },
+        ],
+      },
 }
