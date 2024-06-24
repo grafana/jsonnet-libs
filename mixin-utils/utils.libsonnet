@@ -38,7 +38,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
     },
 
   // The ncHistogramSumRate (native classic histogram sum rate) function is
-  // used to calculate the histogram sum of rate from native histograms or
+  // used to calculate the histogram rate of the sum from native histograms or
   // classic histograms. Metric name should be provided without _sum suffix.
   // If from_recording is true, the function will assume :sum_rate metric
   // suffix and no rate needed.
@@ -66,7 +66,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
 
 
   // The ncHistogramCountRate (native classic histogram count rate) function is
-  // used to calculate the histogram count of rate from native histograms or
+  // used to calculate the histogram rate of count from native histograms or
   // classic histograms. Metric name should be provided without _count suffix.
   // If from_recording is true, the function will assume :sum_rate metric
   // suffix and no rate needed.

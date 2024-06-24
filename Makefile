@@ -41,6 +41,7 @@ lint-mixins:
 
 tests:
 	pushd . && cd ./common-lib && make vendor && make tests
+	pushd . && cd ./mixin-utils/test && make tests
 
 drone:
 	drone jsonnet --stream --source .drone/drone.jsonnet --target .drone/drone.yml --format yaml
