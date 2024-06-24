@@ -126,6 +126,39 @@ local g = import 'grafana-builder/grafana.libsonnet';
       },
     },
 
+  // nativeClassicLeRate calculates the rate of requests that have a value
+  // less than or equal to the given "le" value. The "le" value matcher
+  // for classic histograms can handle both Prometheus or OpenMetrics formats,
+  // where whole numbers may or may not have ".0" at the end.
+  nativeClassicLeRate(metric, selector, le, rate_interval='$__rate_interval')::
+    local isWholeNumber(str) = str != '' && std.foldl(function(acc, c) acc && (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9'), std.stringChars(str), true);
+    {
+      native: 'histogram_fraction(0, %(le)s, rate(%(metric)s{%(selector)s}[%(rateInterval)s]))*histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
+        le: if isWholeNumber(le) then le + '.0' else le,  // Treated as float number.
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+      classic: 'rate(%(metric)s_bucket{%(selector)s, le=~"%(le)s"}[%(rateInterval)s])' % {
+        // le is treated as string, thus it needs to account for Prometheus text format not having '.0', but OpenMetrics having it.
+        // Also the resulting string in yaml is stored directly, so the \\ needs to be escaped to \\\\.
+        le: if isWholeNumber(le) then '%(le)s|%(le)s\\\\.0' % { le: le } else le,
+        metric: metric,
+        rateInterval: rate_interval,
+        selector: selector,
+      },
+    },
+
+  // nativeClassicComment helps attach comments to the query and also keep multiline strings where applicable.
+  nativeClassicComment(query, comment):: {
+    native: |||
+      %s%s
+    ||| % [comment, query.native],
+    classic: |||
+      %s%s
+    ||| % [comment, query.classic],
+  },
+
   // showClassicHistogramQuery wraps a query defined as map {classic: q, native: q}, and compares the classic query
   // to dashboard variable which should take -1 or +1 as values in order to hide or show the classic query.
   showClassicHistogramQuery(query, dashboard_variable='latency_metrics'):: '%s < ($%s * +Inf)' % [query.classic, dashboard_variable],
