@@ -1,12 +1,10 @@
 local csplib = import './main.libsonnet';
+local baseconfig = (import './config.libsonnet')._config;
 
 local gcp =
-  csplib.new() +
-  csplib.withConfigMixin((import './gcpconfig.libsonnet')._config);
+  csplib.new(baseconfig + (import './gcpconfig.libsonnet')._config);
 
 local azure =
-  csplib.new() +
-  csplib.withConfigMixin((import './azureconfig.libsonnet')._config);
+  csplib.new(baseconfig + (import './azureconfig.libsonnet')._config);
 
-gcp.asMonitoringMixin()
-+ azure.asMonitoringMixin()
+azure.asMonitoringMixin() + gcp.asMonitoringMixin()

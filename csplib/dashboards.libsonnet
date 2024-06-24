@@ -1,21 +1,17 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
-  new(this):
+  new(csplib):
+    local this = self;
     {
-      _common::
-        g.dashboard.withTags(this.config.dashboardTags)
-        + g.dashboard.withTimezone(this.config.dashboardTimezone)
-        + g.dashboard.withRefresh(this.config.dashboardRefresh)
-        + g.dashboard.timepicker.withTimeOptions(this.config.dashboardPeriod),
-    }
-    +
-    {
-      [this.config.uid + '-blobstorage.json']:
-        local variables = this.signals.blobstore.getVariablesMultiChoice();
-        g.dashboard.new(this.config.dashboardNamePrefix + 'Blob Storage')
-        + g.dashboard.withUid(this.config.uid + '-blobstorage')
-        + self._common
+      [csplib.config.uid + '-blobstorage.json']:
+        local variables = csplib.signals.blobstore.getVariablesMultiChoice();
+        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Blob Storage')
+        + g.dashboard.withUid(csplib.config.uid + '-blobstorage')
+        + g.dashboard.withTags(csplib.config.dashboardTags)
+        + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+        + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+        + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
         + g.dashboard.withVariables([
           if v.label == 'Bucket_name'
           then v { label: 'Bucket Name' }
@@ -24,9 +20,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ])
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
-            this.grafana.rows.overview
-            + this.grafana.rows.api
-            + this.grafana.rows.network
+            csplib.grafana.rows.overview
+            + csplib.grafana.rows.api
+            + csplib.grafana.rows.network
           )
         ),
     },

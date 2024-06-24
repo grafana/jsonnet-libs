@@ -1,9 +1,9 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
-  new(): {
+  new(config): {
     local this = self,
-    config: (import './config.libsonnet')._config,
+    config: config,
     signals:
       {
         blobstore: commonlib.signals.unmarshallJsonMulti(this.config.signals.blobstore, type=this.config.metricsSource),
