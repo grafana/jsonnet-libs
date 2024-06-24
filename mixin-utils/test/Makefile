@@ -1,9 +1,6 @@
 .PHONY: tests
 
-jsonnetfile.lock.json: jsonnetfile.json
-	jb install
-
-vendor: jsonnetfile.lock.json
+vendor jsonnetfile.lock.json: jsonnetfile.json
 	jb install
 
 tests: jsonnetfile.lock.json vendor
