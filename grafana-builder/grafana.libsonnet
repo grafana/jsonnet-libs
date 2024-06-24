@@ -531,13 +531,13 @@ local utils = import 'mixin-utils/utils.libsonnet';
     },
     targets: [
       {
-        expr: utils.showClassicHistogramQuery(sumByStatus(utils.nativeClassicHistogramCountRate(metricName, selector))),
+        expr: utils.showClassicHistogramQuery(sumByStatus(utils.ncHistogramCountRate(metricName, selector))),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A_classic',
       },
       {
-        expr: utils.showNativeHistogramQuery(sumByStatus(utils.nativeClassicHistogramCountRate(metricName, selector))),
+        expr: utils.showNativeHistogramQuery(sumByStatus(utils.ncHistogramCountRate(metricName, selector))),
         format: 'time_series',
         legendFormat: '{{status}}',
         refId: 'A',
@@ -583,37 +583,37 @@ local utils = import 'mixin-utils/utils.libsonnet';
     },
     targets: [
       {
-        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: '99th percentile',
         refId: 'A',
       },
       {
-        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.99', metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: '99th percentile',
         refId: 'A_classic',
       },
       {
-        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: '50th percentile',
         refId: 'B',
       },
       {
-        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramQuantile('0.50', metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: '50th percentile',
         refId: 'B_classic',
       },
       {
-        expr: utils.showNativeHistogramQuery(utils.nativeClassicHistogramAverageRate(metricName, selector, multiplier=multiplier)),
+        expr: utils.showNativeHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: 'Average',
         refId: 'C',
       },
       {
-        expr: utils.showClassicHistogramQuery(utils.nativeClassicHistogramAverageRate(metricName, selector, multiplier=multiplier)),
+        expr: utils.showClassicHistogramQuery(utils.ncHistogramAverageRate(metricName, selector, multiplier=multiplier)),
         format: 'time_series',
         legendFormat: 'Average',
         refId: 'C_classic',
