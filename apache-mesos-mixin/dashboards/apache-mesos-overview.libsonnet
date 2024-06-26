@@ -1229,7 +1229,7 @@ local masterLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + ', (filename=~"/var/log/mesos/master/.*" | log_type="master")} |= ``',
+      expr: '{' + matcher + ', filename=~"/var/log/mesos/master/.*"} |= ``',
       queryType: 'range',
       refId: 'A',
     },
