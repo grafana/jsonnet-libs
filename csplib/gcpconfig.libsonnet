@@ -4,6 +4,7 @@
     dashboardPeriod: 'now-1h',
     dashboardTags: ['gcp'],
     dashboardNamePrefix: 'GCP ',
+    bucketLabel: 'bucket_name',
     // UID Prefix for each dashboard
     uid: 'gcp',
     filteringSelector: 'job="integrations/gcp"',

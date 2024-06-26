@@ -3,6 +3,8 @@
     local this = self,
     dashboardTags: ['azure'],
     dashboardNamePrefix: 'Azure ',
+    enableAvailability: true,
+    bucketLabel: 'resourceName',
     // UID Prefix for each dashboard
     uid: 'azure',
     filteringSelector: 'job="integrations/azure"',

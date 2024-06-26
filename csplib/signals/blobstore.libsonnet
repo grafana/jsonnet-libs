@@ -20,9 +20,9 @@ function(this)
         unit: 'percent',
         sources: {
           azuremonitor: {
-            expr: 'azure_microsoft_storage_storageaccounts_blobservices_availability_average_percent{%(queriesSelector)s}'
-          }
-        }
+            expr: 'azure_microsoft_storage_storageaccounts_blobservices_availability_average_percent{%(queriesSelector)s}',
+          },
+        },
       },
 
       objectCountTotal: {
@@ -57,18 +57,18 @@ function(this)
       },
 
       objectCountTopK: {
-        name: 'Top 10 Buckets - Object Count',
+        name: 'Top 5 Buckets - Object Count',
         description: 'Number of objects stored.',
         type: 'gauge',
         unit: 'locale',
         sources: {
           stackdriver: {
             expr: 'stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{%(queriesSelector)s}',
-            exprWrappers: [['topk(10,', ')']],
+            exprWrappers: [['topk(5,', ')']],
           },
           azuremonitor: {
             expr: 'azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count{%(queriesSelector)s}',
-            exprWrappers: [['topk(10,', ')']],
+            exprWrappers: [['topk(5,', ')']],
           },
         },
       },
@@ -88,18 +88,38 @@ function(this)
         },
       },
 
-      apiRequestCount: {
-        name: 'API Requests',
-        description: 'Count of API requests',
+      // stackdriver response_code="OK"
+      // azuremonitor dimensionResponseType="Success"
+
+      apiRequestByTypeCount: {
+        name: 'API requests by type',
+        description: 'Count of all API requests',
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum by (bucket_name, method, response_code) (rate(stackdriver_gcs_bucket_storage_googleapis_com_api_request_count{%(queriesSelector)s}[$__rate_interval]))',
-            legendCustomTemplate: '{{bucket_name}}: {{method}} - {{response_code}}',
+            expr: 'sum by (method) (rate(stackdriver_gcs_bucket_storage_googleapis_com_api_request_count{%(queriesSelector)s}[$__rate_interval]))',
+            legendCustomTemplate: '{{method}}',
           },
           azuremonitor: {
-            expr: 'sum by (resourceName, dimensionApiname, dimensionResponsetype) (azure_microsoft_storage_storageaccounts_blobservices_transactions_total_count{dimensionApiname!="",%(queriesSelector)s})',
-            legendCustomTemplate: '{{resourceName}}: {{dimensionApiname}} - {{dimensionResponsetype}}',
+            expr: 'sum by (dimensionApiname) (azure_microsoft_storage_storageaccounts_blobservices_transactions_total_count{dimensionApiname!="",%(queriesSelector)s})',
+            legendCustomTemplate: '{{dimensionApiname}}',
+          },
+        },
+      },
+
+      apiRequestErrorRate: {
+        name: 'API error rate by type',
+        description: 'Percentage of api request failure by type',
+        type: 'raw',
+        unit: 'percentunit',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (method) (rate(stackdriver_gcs_bucket_storage_googleapis_com_api_request_count{response_code!="OK", %(queriesSelector)s}[$__rate_interval])) / ' + s.signals.apiRequestByTypeCount.sources.stackdriver.expr,
+            legendCustomTemplate: '{{method}}',
+          },
+          azuremonitor: {
+            expr: 'sum by (dimensionApiname) (azure_microsoft_storage_storageaccounts_blobservices_transactions_total_count{dimensionApiname!="",dimensionResponseType!="Success",%(queriesSelector)s}) / ' + s.signals.apiRequestByTypeCount.sources.azuremonitor.expr,
+            legendCustomTemplate: '{{dimensionApiname}}',
           },
         },
       },
@@ -130,6 +150,58 @@ function(this)
           },
           azuremonitor: {
             expr: 'azure_microsoft_storage_storageaccounts_blobservices_egress_total_bytes{%(queriesSelector)s}',
+          },
+        },
+      },
+
+      // TODO: Have not tested the azure queries for network. It's likely that these are gauges, and need to drop the `increase` aggregator
+      networkThroughputTopK: {
+        name: 'Network bits throughput',
+        description: 'Total network throughput in bits for the selected timerange',
+        type: 'raw',
+        unit: 'bits',
+        sources: {
+          stackdriver: {
+            expr: |||
+              topk(5, sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{%(queriesSelector)s}[$__range]))
+              + sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{%(queriesSelector)s}[$__range])))
+            |||,
+          },
+          azuremonitor: {
+            expr: |||
+              topk(5, sum by (job, resourceName) (increase(azure_microsoft_storage_storageaccounts_blobservices_ingress_total_bytes{%(queriesSelector)s}[$__range]))
+              + sum by (job, resourceName) (increase(azure_microsoft_storage_storageaccounts_blobservices_egress_total_bytes{%(queriesSelector)s}[$__range])))
+            |||,
+          },
+        },
+      },
+
+      networkRxTopK: {
+        name: 'Network bits received',
+        description: 'Total network throughput in bits for the selected timerange',
+        type: 'raw',
+        unit: 'bits',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{%(queriesSelector)s}[$__range])) and ' + s.signals.networkThroughputTopK.sources.stackdriver.expr,
+          },
+          azuremonitor: {
+            expr: 'sum by (job, resourceName) (increase(azure_microsoft_storage_storageaccounts_blobservices_ingress_total_bytes{%(queriesSelector)s}[$__range])) and ' + s.signals.networkThroughputTopK.sources.azuremonitor.expr,
+          },
+        },
+      },
+
+      networkTxTopK: {
+        name: 'Network bits transmitted',
+        description: 'Total network throughput in bits for the selected timerange',
+        type: 'raw',
+        unit: 'bits',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{%(queriesSelector)s}[$__range])) and ' + s.signals.networkThroughputTopK.sources.stackdriver.expr,
+          },
+          azuremonitor: {
+            expr: 'increase(azure_microsoft_storage_storageaccounts_blobservices_egress_total_bytes{%(queriesSelector)s}[$__range]) and ' + s.signals.networkThroughputTopK.sources.azuremonitor.expr,
           },
         },
       },
@@ -173,19 +245,18 @@ function(this)
       },
 
       totalBytesTopK: {
-        name: 'Top 10 Buckets - Total Bytes',
+        name: 'Top 5 Buckets - Total Bytes',
         description: 'Total bytes stored',
         type: 'gauge',
         unit: 'bytes',
-        rangeFunction: 'none',
         sources: {
           stackdriver: {
             expr: 'stackdriver_gcs_bucket_storage_googleapis_com_storage_total_bytes{%(queriesSelector)s}',
-            exprWrappers: [['topk(10,', ')']],
+            exprWrappers: [['topk(5,', ')']],
           },
           azuremonitor: {
             expr: 'azure_microsoft_storage_storageaccounts_blobservices_blobcapacity_average_bytes{%(queriesSelector)s}',
-            exprWrappers: [['topk(10,', ')']],
+            exprWrappers: [['topk(5,', ')']],
           },
         },
       },

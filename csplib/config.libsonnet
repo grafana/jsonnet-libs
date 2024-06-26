@@ -8,5 +8,6 @@
       {
         blobstore: (import './signals/blobstore.libsonnet')(this),
       },
+    enableAvailability: false,
   },
 }
