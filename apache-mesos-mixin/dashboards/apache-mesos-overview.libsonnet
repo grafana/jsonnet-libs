@@ -1359,25 +1359,25 @@ local agentLogsPanel(matcher) = {
       .addPanels(
         std.flattenArrays([
           [
-            masterUptimePanel { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
-            cpusAvailablePanel { gridPos: { h: 6, w: 5, x: 4, y: 0 } },
-            memoryAvailablePanel { gridPos: { h: 6, w: 5, x: 9, y: 0 } },
-            gpusAvailablePanel { gridPos: { h: 6, w: 5, x: 14, y: 0 } },
-            diskAvailablePanel { gridPos: { h: 6, w: 5, x: 19, y: 0 } },
-            memoryUtilizationPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-            diskUtilizationPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-            eventsInQueuePanel { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
-            messagesPanel { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
-            registrarStatePanel { gridPos: { h: 6, w: 18, x: 0, y: 18 } },
-            registrarLogRecoveredPanel { gridPos: { h: 6, w: 6, x: 18, y: 18 } },
+            masterUptimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 4, x: 0, y: 0 } },
+            cpusAvailablePanel(getMatcher($._config)) { gridPos: { h: 6, w: 5, x: 4, y: 0 } },
+            memoryAvailablePanel(getMatcher($._config)) { gridPos: { h: 6, w: 5, x: 9, y: 0 } },
+            gpusAvailablePanel(getMatcher($._config)) { gridPos: { h: 6, w: 5, x: 14, y: 0 } },
+            diskAvailablePanel(getMatcher($._config)) { gridPos: { h: 6, w: 5, x: 19, y: 0 } },
+            memoryUtilizationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+            diskUtilizationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+            eventsInQueuePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
+            messagesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+            registrarStatePanel(getMatcher($._config)) { gridPos: { h: 6, w: 18, x: 0, y: 18 } },
+            registrarLogRecoveredPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 18 } },
             allocatorRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
-            allocationRunsPanel { gridPos: { h: 6, w: 6, x: 0, y: 25 } },
-            allocationDurationPanel { gridPos: { h: 6, w: 6, x: 6, y: 25 } },
-            allocationLatencyPanel { gridPos: { h: 6, w: 6, x: 12, y: 25 } },
-            eventQueueDispatchesPanel { gridPos: { h: 6, w: 6, x: 18, y: 25 } },
+            allocationRunsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 0, y: 25 } },
+            allocationDurationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 6, y: 25 } },
+            allocationLatencyPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 12, y: 25 } },
+            eventQueueDispatchesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 6, x: 18, y: 25 } },
             agentsRow { gridPos: { h: 1, w: 24, x: 0, y: 31 } },
-            agentMemoryUtilizationPanel { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
-            agentDiskUtilizationPanel { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
+            agentMemoryUtilizationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 32 } },
+            agentDiskUtilizationPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 32 } },
           ],
           if $._config.enableLokiLogs then [
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 38 } },
@@ -1385,12 +1385,12 @@ local agentLogsPanel(matcher) = {
           [
           ],
           if $._config.enableLokiLogs then [
-            masterLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 39 } },
+            masterLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 39 } },
           ] else [],
           [
           ],
           if $._config.enableLokiLogs then [
-            agentLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 47 } },
+            agentLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 47 } },
           ] else [],
           [
           ],
