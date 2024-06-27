@@ -311,6 +311,7 @@ local utils = commonlib.utils;
           ],
           description='Information about the datastores in the vCenter environment.'
         )
+        + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Disk total')
           + fieldOverride.byName.withProperty('custom.align', 'left')
@@ -728,6 +729,7 @@ local utils = commonlib.utils;
           ],
           description='Information about the disks associated with the ESXi hosts.'
         )
+        + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Throughput (R)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
@@ -909,6 +911,7 @@ local utils = commonlib.utils;
           ],
           description='Information about the disks associated with the virtual machines.'
         )
+        + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Throughput (R)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
