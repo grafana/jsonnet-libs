@@ -72,7 +72,7 @@
           {
             alert: 'VSphereHostWarningHighPacketErrors',
             expr: |||
-              100 * sum without (direction, object) (vcenter_host_network_packet_errors{%(filteringSelector)s}) / clamp_min(sum without (direction, object) (vcenter_host_network_packet_count{%(filteringSelector)s}), 1) > %(alertsHighPacketErrors)s
+              100 * sum without (direction, object) (vcenter_host_network_packet_error_rate{%(filteringSelector)s}) / clamp_min(sum without (direction, object) (vcenter_host_network_packet_rate{%(filteringSelector)s}), 1) > %(alertsHighPacketErrors)s
             ||| % this.config,
             'for': '5m',
             labels: {
