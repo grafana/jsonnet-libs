@@ -1310,7 +1310,7 @@ local cacheLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/squid/cache.log", ' + matcher + '} |= ``',
+      expr: '{' + matcher + '} |= `` | (filename="/var/log/squid/cache.log" or log_type="cache")',
       queryType: 'range',
       refId: 'A',
     },
@@ -1336,7 +1336,7 @@ local accessLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename="/var/log/squid/access.log", ' + matcher + '} |= ``',
+      expr: '{' + matcher + '} |= `` | (filename="/var/log/squid/access.log" or log_type="access")',
       queryType: 'range',
       refId: 'A',
     },
