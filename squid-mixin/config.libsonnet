@@ -9,5 +9,8 @@
     alertsCriticalHighPercentageRequestErrors: 5,
     alertsWarningLowCacheHitRatio: 85,
     enableLokiLogs: true,
+    enableMultiCluster: false,
+    multiclusterSelector: 'job=~"$job"',
+    squidSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
   },
 }
