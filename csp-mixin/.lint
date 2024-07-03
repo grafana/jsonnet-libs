@@ -1,4 +1,20 @@
 ---
 exclusions:
+  target-instance-rule:
+    reason: "Using 'Bucket' as instance label"
+    entries:
+    - dashboard: "Azure Blob Storage"
+    - dashboard: "GCP Blob Storage"
   target-job-rule:
       reason: "Using filtering selector with job"
+  template-instance-rule:
+    reason: "Using 'Bucket' as instance label"
+    entries:
+    - dashboard: "Azure Blob Storage"
+    - dashboard: "GCP Blob Storage"
+  panel-datasource-rule:
+    reason: "Many panels use --Mixed-- DS"
+  panel-units-rule:
+    reason: "Unit not necessary or provided in an override"
+    entries:
+    - panel: "API requests by type"

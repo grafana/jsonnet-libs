@@ -15,7 +15,7 @@ function(this)
     signals: {
       availability: {
         name: 'Availability',
-        description: '',
+        description: 'Percent availability by API request.',
         type: 'gauge',
         unit: 'percent',
         sources: {
