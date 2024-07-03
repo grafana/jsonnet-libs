@@ -1,0 +1,4 @@
+---
+exclusions:
+  target-job-rule:
+      reason: "Using filtering selector with job"
