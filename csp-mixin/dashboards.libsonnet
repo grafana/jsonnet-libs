@@ -13,7 +13,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
         + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
         + g.dashboard.withVariables([
-          if std.asciiLower(v.label) == std.asciiLower(csplib.config.bucketLabel)  //v.label == 'Bucket_name'
+          if std.asciiLower(v.label) == std.asciiLower(csplib.config.blobStorage.bucketLabel)  //v.label == 'Bucket_name'
           then v { label: 'Bucket Name' }
           else v
           for v in variables

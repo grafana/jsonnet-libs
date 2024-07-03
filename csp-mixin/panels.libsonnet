@@ -2,17 +2,18 @@ local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this): {
+    // Blob Storage
     _tableCommon(valueName)::
       g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
         + g.panel.table.queryOptions.transformation.withOptions({
           include: {
-            pattern: '%s.*|Value.*' % this.config.bucketLabel,
+            pattern: '%s.*|Value.*' % this.config.blobStorage.bucketLabel,
           },
         }),
         g.panel.table.queryOptions.transformation.withId('joinByField')
         + g.panel.table.queryOptions.transformation.withOptions({
-          byField: this.config.bucketLabel,
+          byField: this.config.blobStorage.bucketLabel,
           mode: 'outer',
         }),
       ])
@@ -20,7 +21,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: this.config.bucketLabel,
+            options: this.config.blobStorage.bucketLabel,
           },
           properties: [
             {
@@ -35,7 +36,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             //       title: 'Filter to bucket',
             //       url: '/d/%(uid)s/%(uid)s?${datasource:queryparam}&var-%(bucketLabel)s=${__data.fields.%(bucketLabel)s}' % {
             //         uid: this.config.uid + '-blobstorage',
-            //         bucketLabel: this.config.bucketLabel,
+            //         bucketLabel: this.config.blobStorage.bucketLabel,
             //       },
             //     },
             //   ],

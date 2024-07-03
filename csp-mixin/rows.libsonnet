@@ -28,7 +28,7 @@ local g = import './g.libsonnet';
           g.panel.row.new('API'),
         ] +
         [
-          if this.config.enableAvailability then
+          if this.config.blobStorage.enableAvailability then
             this.grafana.panels.availabilityTs
             + g.panel.timeSeries.gridPos.withW(24)
             + g.panel.timeSeries.gridPos.withH(6),
