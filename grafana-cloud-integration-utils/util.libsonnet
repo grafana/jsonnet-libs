@@ -208,53 +208,53 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
         ],
     },
 
-  # Adds asserts specific variables to the dashboards
+  // Adds asserts specific variables to the dashboards
   add_asserts_variables(dashboard)::
     {
       templating: {
         list: [
-            var.query.new('env')
-            + var.query.withDatasource('prometheus','${datasource}')
-            + var.query.queryTypes.withLabelValues(
-              'asserts_env',
-              'asserts:mixin_workload_job',
-            )
-            + var.query.generalOptions.withLabel('Asserts environment')
-            + var.query.selectionOptions.withIncludeAll(
-              value=true,
-              customAllValue='.+'
-            )
-            + var.query.selectionOptions.withMulti(
-              false
-            )
-            + var.query.refresh.onLoad()
-            + var.query.withSort(
-              i=1,
-              type='alphabetical',
-              asc=true,
-              caseInsensitive=false
-            ),
+          var.query.new('env')
+          + var.query.withDatasource('prometheus', '${datasource}')
+          + var.query.queryTypes.withLabelValues(
+            'asserts_env',
+            'asserts:mixin_workload_job',
+          )
+          + var.query.generalOptions.withLabel('Asserts environment')
+          + var.query.selectionOptions.withIncludeAll(
+            value=true,
+            customAllValue='.+'
+          )
+          + var.query.selectionOptions.withMulti(
+            false
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false
+          ),
           var.query.new('site')
-            + var.query.withDatasource('prometheus','${datasource}')
-            + var.query.queryTypes.withLabelValues(
-              'asserts_site',
-              'asserts:mixin_workload_job{asserts_env=~"$env"}',
-            )
-            + var.query.generalOptions.withLabel('Asserts site')
-            + var.query.selectionOptions.withIncludeAll(
-              value=true,
-              customAllValue='.+'
-            )
-            + var.query.selectionOptions.withMulti(
-              false
-            )
-            + var.query.refresh.onLoad()
-            + var.query.withSort(
-              i=1,
-              type='alphabetical',
-              asc=true,
-              caseInsensitive=false
-            )
+          + var.query.withDatasource('prometheus', '${datasource}')
+          + var.query.queryTypes.withLabelValues(
+            'asserts_site',
+            'asserts:mixin_workload_job{asserts_env=~"$env"}',
+          )
+          + var.query.generalOptions.withLabel('Asserts site')
+          + var.query.selectionOptions.withIncludeAll(
+            value=true,
+            customAllValue='.+'
+          )
+          + var.query.selectionOptions.withMulti(
+            false
+          )
+          + var.query.refresh.onTime()
+          + var.query.withSort(
+            i=1,
+            type='alphabetical',
+            asc=true,
+            caseInsensitive=false
+          ),
         ] + dashboard.templating.list,
       },
       panels: [
@@ -266,10 +266,10 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
               }
             else target
             for target in panel.targets
-          ]
+          ],
         }
         for panel in dashboard.panels
-      ]
+      ],
     },
 
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {
