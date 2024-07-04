@@ -215,7 +215,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
         templating: {
           list: [
             var.query.new('env')
-            + var.query.withDatasource('prometheus', '${datasource}')
+            + var.query.withDatasource('prometheus', config.statusPanelsDatasourceNameMetrics)
             + var.query.queryTypes.withLabelValues(
               'asserts_env',
               'asserts:mixin_workload_job',
@@ -236,7 +236,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
               caseInsensitive=false
             ),
             var.query.new('site')
-            + var.query.withDatasource('prometheus', '${datasource}')
+            + var.query.withDatasource('prometheus', config.statusPanelsDatasourceNameMetrics)
             + var.query.queryTypes.withLabelValues(
               'asserts_site',
               'asserts:mixin_workload_job{asserts_env=~"$env"}',
