@@ -207,6 +207,21 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
         ],
     },
 
+  add_promql_variables(dashboard, variables)::
+    dashboard {
+      panels: [
+        panel {
+          targets: [
+            target {
+              
+            }
+            for target in dashboard.panels
+          ]
+        }
+        for panel in dashboard.panels
+      ]
+    },
+
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {
     [k]: {
       dashboard: $.decorate_dashboard(dashboards[k], tags, refresh, timeFrom),
