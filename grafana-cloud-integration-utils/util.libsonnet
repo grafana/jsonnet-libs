@@ -2,6 +2,7 @@ local g = import 'grafonnet-latest/main.libsonnet';
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local statusPanels = import 'status-panels-lib/status-panels/main.libsonnet';
 local xtd = import 'xtd/main.libsonnet';
+local var = g.dashboard.variable;
 
 local debug(obj) =
   std.trace(std.toString(obj), obj);
@@ -207,15 +208,64 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
         ],
     },
 
-  add_promql_variables(dashboard, variables)::
-    dashboard {
+  # Adds asserts specific variables to the dashboards
+  add_asserts_variables(dashboard)::
+    {
+      templating: {
+        list: [
+            var.query.new('env')
+            + var.query.withDatasource('prometheus','${datasource}')
+            + var.query.queryTypes.withLabelValues(
+              'asserts_env',
+              'asserts:mixin_workload_job',
+            )
+            + var.query.generalOptions.withLabel('Asserts environment')
+            + var.query.selectionOptions.withIncludeAll(
+              value=true,
+              customAllValue='.+'
+            )
+            + var.query.selectionOptions.withMulti(
+              false
+            )
+            + var.query.refresh.onLoad()
+            + var.query.withSort(
+              i=1,
+              type='alphabetical',
+              asc=true,
+              caseInsensitive=false
+            ),
+          var.query.new('site')
+            + var.query.withDatasource('prometheus','${datasource}')
+            + var.query.queryTypes.withLabelValues(
+              'asserts_site',
+              'asserts:mixin_workload_job{asserts_env=~"$env"}',
+            )
+            + var.query.generalOptions.withLabel('Asserts site')
+            + var.query.selectionOptions.withIncludeAll(
+              value=true,
+              customAllValue='.+'
+            )
+            + var.query.selectionOptions.withMulti(
+              false
+            )
+            + var.query.refresh.onLoad()
+            + var.query.withSort(
+              i=1,
+              type='alphabetical',
+              asc=true,
+              caseInsensitive=false
+            )
+        ] + dashboard.templating.list,
+      },
       panels: [
         panel {
           targets: [
-            target {
-              
-            }
-            for target in dashboard.panels
+            if std.objectHas(target, 'expr') then
+              target {
+                expr: std.strReplace(target.expr, '{', '{asserts_env="$env", asserts_site="$site", '),
+              }
+            else target
+            for target in panel.targets
           ]
         }
         for panel in dashboard.panels
