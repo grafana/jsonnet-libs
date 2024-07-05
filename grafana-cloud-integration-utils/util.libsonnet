@@ -211,6 +211,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
   // Adds asserts specific variables to the dashboards
   add_asserts_variables(dashboard, config)::
     if std.member(config.statusPanelsDashboardsMetrics, dashboard.title) then
+      dashboard
       {
         templating: {
           list: [
@@ -223,7 +224,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
             + var.query.generalOptions.withLabel('Asserts environment')
             + var.query.selectionOptions.withIncludeAll(
               value=true,
-              customAllValue='.+'
+              customAllValue='.*'
             )
             + var.query.selectionOptions.withMulti(
               false
@@ -244,7 +245,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
             + var.query.generalOptions.withLabel('Asserts site')
             + var.query.selectionOptions.withIncludeAll(
               value=true,
-              customAllValue='.+'
+              customAllValue='.*'
             )
             + var.query.selectionOptions.withMulti(
               false
@@ -259,19 +260,20 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
           ] + dashboard.templating.list,
         },
         panels: [
-          panel {
-            targets: [
-              if std.objectHas(target, 'expr') then
-                target {
-                  expr: std.strReplace(target.expr, '{', '{asserts_env="$env", asserts_site="$site", '),
-                }
-              else target
-              for target in panel.targets
-            ],
-          }
+          if std.objectHas(panel, 'targets') then
+            panel {
+              targets: [
+                if std.objectHas(target, 'expr') then
+                  target {
+                    expr: std.strReplace(target.expr, '{', '{asserts_env=~"$env", asserts_site=~"$site", '),
+                  }
+                else target
+                for target in panel.targets
+              ],
+            } else panel
           for panel in dashboard.panels
         ],
-      } else {},
+      } else dashboard,
 
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {
     [k]: {
