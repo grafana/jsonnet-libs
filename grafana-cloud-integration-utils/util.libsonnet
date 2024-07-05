@@ -209,7 +209,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
     },
 
   // Adds asserts specific variables to the dashboards
-  add_asserts_variables(dashboard, config)::
+  add_asserts_variables(dashboard, config, hidden=false)::
     if std.member(config.statusPanelsDashboardsMetrics, dashboard.title) then
       dashboard
       {
@@ -222,6 +222,9 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
               'asserts:mixin_workload_job',
             )
             + var.query.generalOptions.withLabel('Asserts environment')
+            + (
+              if hidden then var.query.generalOptions.showOnDashboard.withNothing() else var.query.generalOptions.showOnDashboard.withLabelAndValue()
+            )
             + var.query.selectionOptions.withIncludeAll(
               value=true,
               customAllValue='.*'
@@ -243,6 +246,9 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
               'asserts:mixin_workload_job{asserts_env=~"$env"}',
             )
             + var.query.generalOptions.withLabel('Asserts site')
+            + (
+              if hidden then var.query.generalOptions.showOnDashboard.withNothing() else var.query.generalOptions.showOnDashboard.withLabelAndValue()
+            )
             + var.query.selectionOptions.withIncludeAll(
               value=true,
               customAllValue='.*'
