@@ -2,6 +2,7 @@ local g = import 'grafonnet-latest/main.libsonnet';
 local grafana = (import 'grafonnet/grafana.libsonnet');
 local statusPanels = import 'status-panels-lib/status-panels/main.libsonnet';
 local xtd = import 'xtd/main.libsonnet';
+local var = g.dashboard.variable;
 
 local debug(obj) =
   std.trace(std.toString(obj), obj);
@@ -206,6 +207,79 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
 
         ],
     },
+
+  // Adds asserts specific variables to the dashboards
+  add_asserts_variables(dashboard, config, hidden=true)::
+    if std.member(config.statusPanelsDashboardsMetrics, dashboard.title) then
+      dashboard
+      {
+        templating: {
+          list: [
+            var.query.new('env')
+            + var.query.withDatasource('prometheus', config.statusPanelsDatasourceNameMetrics)
+            + var.query.queryTypes.withLabelValues(
+              'asserts_env',
+              'asserts:mixin_workload_job',
+            )
+            + var.query.generalOptions.withLabel('Asserts environment')
+            + (
+              if hidden then var.query.generalOptions.showOnDashboard.withNothing() else var.query.generalOptions.showOnDashboard.withLabelAndValue()
+            )
+            + var.query.selectionOptions.withIncludeAll(
+              value=true,
+              customAllValue='.*'
+            )
+            + var.query.selectionOptions.withMulti(
+              false
+            )
+            + var.query.refresh.onTime()
+            + var.query.withSort(
+              i=1,
+              type='alphabetical',
+              asc=true,
+              caseInsensitive=false
+            ),
+            var.query.new('site')
+            + var.query.withDatasource('prometheus', config.statusPanelsDatasourceNameMetrics)
+            + var.query.queryTypes.withLabelValues(
+              'asserts_site',
+              'asserts:mixin_workload_job{asserts_env=~"$env"}',
+            )
+            + var.query.generalOptions.withLabel('Asserts site')
+            + (
+              if hidden then var.query.generalOptions.showOnDashboard.withNothing() else var.query.generalOptions.showOnDashboard.withLabelAndValue()
+            )
+            + var.query.selectionOptions.withIncludeAll(
+              value=true,
+              customAllValue='.*'
+            )
+            + var.query.selectionOptions.withMulti(
+              false
+            )
+            + var.query.refresh.onTime()
+            + var.query.withSort(
+              i=1,
+              type='alphabetical',
+              asc=true,
+              caseInsensitive=false
+            ),
+          ] + dashboard.templating.list,
+        },
+        panels: [
+          if std.objectHas(panel, 'targets') then
+            panel {
+              targets: [
+                if std.objectHas(target, 'expr') then
+                  target {
+                    expr: std.strReplace(target.expr, '{', '{asserts_env=~"$env", asserts_site=~"$site", '),
+                  }
+                else target
+                for target in panel.targets
+              ],
+            } else panel
+          for panel in dashboard.panels
+        ],
+      } else dashboard,
 
   prepare_dashboards(dashboards, tags, folderName, ignoreDashboards=[], refresh='30s', timeFrom='now-30m'):: {
     [k]: {
