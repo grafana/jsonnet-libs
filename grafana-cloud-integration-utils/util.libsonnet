@@ -209,7 +209,7 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
     },
 
   // Adds asserts specific variables to the dashboards
-  add_asserts_variables(dashboard, config, hidden=false)::
+  add_asserts_variables(dashboard, config, hidden=true)::
     if std.member(config.statusPanelsDashboardsMetrics, dashboard.title) then
       dashboard
       {
