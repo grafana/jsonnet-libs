@@ -113,17 +113,17 @@ local utils = commonlib.utils;
         commonlib.panels.generic.table.base.new(
           'Clusters table',
           targets=[
-            t.effectiveCPUClusters + g.query.prometheus.withFormat('table')
+            t.totalCPUClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
-            + g.query.prometheus.withRefId('effective_cpu')
+            + g.query.prometheus.withRefId('total_cpu')
             ,
             t.topCPUUtilizationClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
             + g.query.prometheus.withRefId('cpu_utilization')
             ,
-            t.effectiveMemoryClusters + g.query.prometheus.withFormat('table')
+            t.totalMemoryClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
-            + g.query.prometheus.withRefId('effective_memory')
+            + g.query.prometheus.withRefId('total_memory')
             ,
             t.topMemoryUtilizationClusters + g.query.prometheus.withFormat('table')
             + g.query.prometheus.withRange(true)
@@ -162,7 +162,7 @@ local utils = commonlib.utils;
           ]),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('CPU (limit)')
+          fieldOverride.byName.new('CPU')
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + table.fieldOverride.byName.withProperty('custom.width', 140)
           + fieldOverride.byName.withPropertiesFromOptions(
@@ -183,7 +183,7 @@ local utils = commonlib.utils;
           ),
         ])
         + table.standardOptions.withOverridesMixin([
-          fieldOverride.byName.new('Memory (limit)')
+          fieldOverride.byName.new('Memory')
           + fieldOverride.byName.withProperty('custom.align', 'left')
           + table.fieldOverride.byName.withProperty('custom.width', 140)
           + fieldOverride.byName.withPropertiesFromOptions(
@@ -244,9 +244,9 @@ local utils = commonlib.utils;
               include: {
                 names: [
                   'vcenter_cluster_name',
-                  'Value #effective_cpu',
+                  'Value #total_cpu',
                   'Value #cpu_utilization',
-                  'Value #effective_memory',
+                  'Value #total_memory',
                   'Value #memory_utilization',
                   'Value #hosts_active',
                   'Value #hosts_inactive',
@@ -264,9 +264,9 @@ local utils = commonlib.utils;
               excludeByName: {},
               includeByName: {},
               indexByName: {
-                'Value #effective_cpu': 2,
+                'Value #total_cpu': 2,
                 'Value #cpu_utilization': 3,
-                'Value #effective_memory': 4,
+                'Value #total_memory': 4,
                 'Value #memory_utilization': 5,
                 'Value #hosts_active': 6,
                 'Value #hosts_inactive': 7,
@@ -277,9 +277,9 @@ local utils = commonlib.utils;
                 'vcenter_datacenter_name 1': 0,
               },
               renameByName: {
-                'Value #effective_cpu': 'CPU (limit)',
+                'Value #total_cpu': 'CPU',
                 'Value #cpu_utilization': 'CPU utilization',
-                'Value #effective_memory': 'Memory (limit)',
+                'Value #total_memory': 'Memory',
                 'Value #memory_utilization': 'Memory utilization',
                 'Value #hosts_active': 'Active ESXi',
                 'Value #hosts_inactive': 'Inactive ESXi',
@@ -311,6 +311,7 @@ local utils = commonlib.utils;
           ],
           description='Information about the datastores in the vCenter environment.'
         )
+        + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Disk total')
           + fieldOverride.byName.withProperty('custom.align', 'left')
@@ -433,7 +434,7 @@ local utils = commonlib.utils;
 
       topMemoryUtilizationHosts:
         commonlib.panels.generic.timeSeries.base.new(
-          'Top memory usage by ESXi hosts',
+          'Top memory utilization by ESXi hosts',
           targets=[t.topMemoryUtilizationHosts],
           description='The ESXi hosts with the highest memory utilization in the datacenter.'
         )
@@ -728,6 +729,7 @@ local utils = commonlib.utils;
           ],
           description='Information about the disks associated with the ESXi hosts.'
         )
+        + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Throughput (R)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
@@ -909,6 +911,7 @@ local utils = commonlib.utils;
           ],
           description='Information about the disks associated with the virtual machines.'
         )
+        + table.standardOptions.withNoValue('NA')
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byName.new('Throughput (R)')
           + fieldOverride.byName.withProperty('custom.align', 'left')
