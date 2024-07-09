@@ -6,7 +6,7 @@ A collection of dashboards and their component parts for cloud service provider 
 
 ## Blob Storage
 * GCP - https://cloud.google.com/monitoring/api/metrics_gcp#gcp-storage
-  * The `quota` metrics are alpha, and don't seem to be getting fetched by alloy, even when enabled as a metrics prefix. Perhaps this needs to be enabled for a project?
+  * The `quota` metrics are alpha, and don't seem to be getting fetched by Grafana Alloy, even when enabled as a metrics prefix. Perhaps this needs to be enabled for a project?
   * `replication` metrics are beta. The only metric which is being retrieved by alloy is `replication/meeting_rpo` which is consistently 1 for all buckets. It may not make sense to graph these metrics, but perhaps it's useful to have an alert?
   * `storage` metrics (object_count, total_bytes), have a "v2" which is beta. As such, this lib is using the (implied) v1 metrics which are GA.
   * There are no latency metrics available
