@@ -83,7 +83,7 @@ function(this)
             expr: 'count(sum by (bucket_name) (stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{%(queriesSelector)s}))',
           },
           azuremonitor: {
-            expr: 'azure_microsoft_storage_storageaccounts_blobservices_containercount_average_count{%(queriesSelector)s}',
+            expr: 'sum by (resourceName) (azure_microsoft_storage_storageaccounts_blobservices_containercount_average_count{%(queriesSelector)s})',
           },
         },
       },
