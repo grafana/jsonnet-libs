@@ -6,7 +6,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     {
       [csplib.config.uid + '-blobstorage.json']:
         local variables = csplib.signals.blobstore.getVariablesMultiChoice();
-        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Blob Storage')
+        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Blob storage')
         + g.dashboard.withUid(csplib.config.uid + '-blobstorage')
         + g.dashboard.withTags(csplib.config.dashboardTags)
         + g.dashboard.withTimezone(csplib.config.dashboardTimezone)

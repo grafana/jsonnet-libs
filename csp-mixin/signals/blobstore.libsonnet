@@ -26,7 +26,7 @@ function(this)
       },
 
       objectCountTotal: {
-        name: 'Object Count',
+        name: 'Object count',
         description: 'Number of objects stored.',
         type: 'raw',
         unit: 'locale',
@@ -42,7 +42,7 @@ function(this)
       },
 
       objectCount: {
-        name: 'Object Count',
+        name: 'Object count',
         description: 'Number of objects stored.',
         type: 'gauge',
         unit: 'locale',
@@ -57,7 +57,7 @@ function(this)
       },
 
       objectCountTopK: {
-        name: 'Top 5 Buckets - Object Count',
+        name: 'Top 5 buckets - object count',
         description: 'Number of objects stored.',
         type: 'gauge',
         unit: 'locale',
@@ -74,7 +74,7 @@ function(this)
       },
 
       bucketCount: {
-        name: 'Bucket Count',
+        name: 'Bucket count',
         description: 'Number of storage buckets.',
         type: 'raw',
         unit: 'locale',
@@ -207,7 +207,7 @@ function(this)
       },
 
       totalBytesTotal: {
-        name: 'Total Bytes',
+        name: 'Total bytes',
         description: 'Total bytes stored',
         type: 'raw',
         unit: 'bytes',
@@ -229,7 +229,7 @@ function(this)
       },
 
       totalBytes: {
-        name: 'Total Bytes',
+        name: 'Total bytes',
         description: 'Total bytes stored',
         type: 'gauge',
         unit: 'bytes',
@@ -245,7 +245,7 @@ function(this)
       },
 
       totalBytesTopK: {
-        name: 'Top 5 Buckets - Total Bytes',
+        name: 'Top 5 buckets - total bytes',
         description: 'Total bytes stored',
         type: 'gauge',
         unit: 'bytes',
