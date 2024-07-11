@@ -12,7 +12,7 @@ function(this)
     signals: {
       storageAllocTbl: {
         name: 'Allocated',
-        description: 'Storage allocated per elasticpool.',
+        description: 'Storage allocated per elastic pool.',
         type: 'gauge',
         unit: 'bytes',
         sources: {
@@ -24,7 +24,7 @@ function(this)
 
       storageUsedTbl: {
         name: 'Used',
-        description: 'Storage allocated per elasticpool.',
+        description: 'Storage allocated per elastic pool.',
         type: 'gauge',
         unit: 'bytes',
         sources: {
@@ -36,7 +36,7 @@ function(this)
 
       storageLimitTbl: {
         name: 'Limit',
-        description: 'Storage allocated per elasticpool.',
+        description: 'Storage allocated per elastic pool.',
         type: 'gauge',
         unit: 'bytes',
         sources: {
@@ -48,7 +48,7 @@ function(this)
 
       cpu: {
         name: 'CPU utilization',
-        description: 'CPU utilization per elasticpool.',
+        description: 'CPU utilization per elastic pool.',
         type: 'gauge',
         unit: 'percent',
         sources: {
@@ -60,7 +60,7 @@ function(this)
 
       memory: {
         name: 'Memory utilization',
-        description: 'Memory utilization per elasticpool.',
+        description: 'Memory utilization per elastic pool.',
         type: 'gauge',
         unit: 'percent',
         sources: {
@@ -72,7 +72,7 @@ function(this)
 
       edtu: {
         name: 'eDTU utilization',
-        description: 'eDTU utilization per elasticpool.',
+        description: 'eDTU utilization per elastic pool.',
         type: 'gauge',
         sources: {
           azuremonitor: {
@@ -83,7 +83,7 @@ function(this)
 
       session: {
         name: 'Concurrent sessions',
-        description: 'Average sessions per elasticpool.',
+        description: 'Average sessions per elastic pool.',
         type: 'gauge',
         sources: {
           azuremonitor: {

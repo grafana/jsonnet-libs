@@ -31,7 +31,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     {      
       [csplib.config.uid + '-elasticpool.json']:
         local variables = csplib.signals.azureelasticpool.getVariablesMultiChoice();
-        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Elasticpool')
+        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Elastic pool')
         + g.dashboard.withUid(csplib.config.uid + '-elasticpool')
         + g.dashboard.withTags(csplib.config.dashboardTags)
         + g.dashboard.withTimezone(csplib.config.dashboardTimezone)

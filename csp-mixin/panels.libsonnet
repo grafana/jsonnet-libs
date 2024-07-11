@@ -190,7 +190,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           properties: [
             {
               id: 'displayName',
-              value: 'Elasticpool',
+              value: 'Elastic pool',
             },
           ],
         },
@@ -235,7 +235,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     aep_storage:
       this.signals.azureelasticpool.storageAllocTbl.common
       + commonlib.panels.generic.table.base.new(
-        'Elasticpool storage',
+        'Elastic pool storage',
         [
           this.signals.azureelasticpool.storageAllocTbl.asTarget()
           + g.query.prometheus.withFormat('table')
