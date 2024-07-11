@@ -1,6 +1,8 @@
 {
   filteringSelector: 'job="integrations/openstack"',
   groupLabels: ['job'],
+  // instance of openstack cluster
+  // instance of openstack cluster
   instanceLabels: ['instance'],
 
   uid: 'openstack',
@@ -11,6 +13,10 @@
 
   alertsWarningPlacementHighMemoryUsage: 80,  // %
   alertsCriticalPlacementHighMemoryUsage: 90,  // %
+  alertsWarningPlacementHighVcpuUsage: 80,  // %
+  alertsCriticalPlacementHighVcpuUsage: 90,  // %
+  alertsWarningNeutronHighNetworkUsage: 80,  // %
+  alertsCriticalNeutronHighNetworkUsage: 90,  // %
   alertsWarningNovaHighVMMemoryUsage: 80,  // %
   alertsWarningNovaHighVMVCPUUsage: 80,  // %
   alertsCriticalNeutronHighDisconnectedPortRate: 25,  // %
@@ -18,6 +24,9 @@
   alertsWarningCinderHighBackupMemoryUsage: 80,  // %
   alertsWarningCinderHighVolumeMemoryUsage: 80,  // %
   alertsWarningCinderHighPoolCapacityUsage: 80,  // %
+
+  // regex to match network names where we should track IP address utilization:
+  alertsIPutilizationNetworksMatcher: '.+',
 
   // logs lib related
   enableLokiLogs: true,

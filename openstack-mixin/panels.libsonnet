@@ -8,6 +8,7 @@ local utils = commonlib.utils;
     local stat = g.panel.stat,
     local timeSeries = g.panel.timeSeries,
     local table = g.panel.table,
+    local gauge = g.panel.gauge,
 
     placementStatus:
       commonlib.panels.generic.stat.base.new(
@@ -185,7 +186,7 @@ local utils = commonlib.utils;
         {
           id: 'joinByField',
           options: {
-            byField: 'instance',
+            byField: 'Time',
             mode: 'outer',
           },
         },
@@ -224,45 +225,27 @@ local utils = commonlib.utils;
               'resourcetype 4': true,
               'resourcetype 5': true,
               'resourcetype 6': true,
+              'cluster 1': false,
+              'cluster 2': true,
+              'cluster 3': true,
+              'cluster 4': true,
+              'cluster 5': true,
+              'cluster 6': true,
             },
             indexByName: {
-              instance: 0,
-              '__name__ 1': 1,
-              'resourcetype 1': 2,
-              'Value #A': 3,
-              'Value #B': 4,
-              'Value #C': 5,
-              'Value #D': 6,
-              'Value #E': 7,
-              'Value #F': 8,
-              'Time 2': 9,
-              '__name__ 2': 10,
-              'hostname 2': 11,
-              'job 2': 12,
-              'resourcetype 2': 13,
-              'Time 3': 14,
-              '__name__ 3': 15,
-              'hostname 3': 16,
-              'job 3': 17,
-              'resourcetype 3': 18,
-              'Time 4': 19,
-              '__name__ 4': 20,
-              'hostname 4': 21,
-              'job 4': 22,
-              'resourcetype 4': 23,
-              'Time 5': 24,
-              '__name__ 5': 25,
-              'hostname 5': 26,
-              'job 5': 27,
-              'resourcetype 5': 28,
-              'Time 6': 29,
-              '__name__ 6': 30,
-              'hostname 6': 31,
-              'job 6': 32,
-              'resourcetype 6': 33,
-              'Time 1': 34,
-              'hostname 1': 35,
-              'job 1': 36,
+              'cluster 1': 0,
+              'Value #A': 1,
+              'Value #B': 2,
+              'Value #C': 3,
+              'Value #D': 4,
+              'Value #E': 5,
+              'Value #F': 6,
+              Time: 7,
+              'cluster 2': 8,
+              'cluster 3': 9,
+              'cluster 4': 10,
+              'cluster 5': 11,
+              'cluster 6': 12,
             },
             renameByName: {
               Time: '',
@@ -277,10 +260,61 @@ local utils = commonlib.utils;
               openstack_placement_resource_total: 'Total',
               openstack_placement_resource_usage: 'In use',
               resourcetype: 'Resource',
+              'cluster 1': 'cluster',
             },
             includeByName: {},
           },
         },
+        {
+          id: 'filterFieldsByName',
+          options: {
+            include: {
+              pattern: 'Disk.*|Memory.*|VCPU.*|cluster',
+            },
+          },
+        },
+      ]),
+
+    vCPUusedStat:
+      gauge.new(
+        'vCPU used'
+      )
+      + gauge.queryOptions.withTargetsMixin(t.vCPUused)
+      + gauge.standardOptions.withUnit('percent')
+      + gauge.standardOptions.withMin('0')
+      + gauge.standardOptions.withMax('150')
+      + gauge.standardOptions.thresholds.withSteps([
+        gauge.standardOptions.threshold.step.withValue(0) +
+        gauge.standardOptions.threshold.step.withColor('green'),
+        gauge.standardOptions.threshold.step.withValue(99) +
+        gauge.standardOptions.threshold.step.withColor('red'),
+      ]),
+
+    RAMusedStat:
+      gauge.new(
+        'Memory used'
+      )
+      + gauge.queryOptions.withTargetsMixin(t.RAMused)
+      + gauge.standardOptions.withUnit('percent')
+      + gauge.standardOptions.withMin('0')
+      + gauge.standardOptions.withMax('150')
+      + gauge.standardOptions.thresholds.withSteps([
+        gauge.standardOptions.threshold.step.withValue(0) +
+        gauge.standardOptions.threshold.step.withColor('green'),
+        gauge.standardOptions.threshold.step.withValue(99) +
+        gauge.standardOptions.threshold.step.withColor('red'),
+      ]),
+
+    freeIPsStat:
+      stat.new(
+        'Free IPs',
+      )
+      + stat.queryOptions.withTargetsMixin(t.freeIPs)
+      + stat.standardOptions.thresholds.withSteps([
+        stat.standardOptions.threshold.step.withValue(0) +
+        stat.standardOptions.threshold.step.withColor('red'),
+        stat.standardOptions.threshold.step.withValue(20) +
+        stat.standardOptions.threshold.step.withColor('green'),
       ]),
 
     domains:
@@ -399,37 +433,46 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withDecimals(0),
 
     instanceUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
-        'Instance usage',
+      commonlib.panels.generic.timeSeries.base.new(
+        'Instance count',
         targets=[t.instanceUsage],
-        description='Percentage of the maximum number of instances in use for each project.'
+        description='Number of instances in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('short')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     vCPUUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      commonlib.panels.generic.timeSeries.base.new(
         'VCPU usage',
         targets=[t.vCPUUsage],
-        description='Percentage of the maximum number of virtual CPUs in use for each project.'
+        description='Number of virtual CPUs in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('short')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     memoryUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      commonlib.panels.generic.timeSeries.base.new(
         'Memory usage',
         targets=[t.memoryUsage],
-        description='Percentage of the maximum amount of memory in use for each project.'
+        description='Maximum amount of memory in use for each project.'
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('bytes')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     novaAgents:
       table.new('Agents')
@@ -726,15 +769,18 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withDecimals(0),
 
     ipsUsed:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      commonlib.panels.generic.timeSeries.base.new(
         'IPs used',
         targets=[t.ipsUsed],
         description='The usage of available IP addresses broken down by subnet.',
       )
       + timeSeries.standardOptions.withUnit('percentunit')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     securityGroups:
       commonlib.panels.generic.timeSeries.base.new(
@@ -838,29 +884,35 @@ local utils = commonlib.utils;
       + timeSeries.standardOptions.withDecimals(0),
 
     volumeUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
-        'Volume usage',
+      commonlib.panels.generic.timeSeries.base.new(
+        'Volume usage in GB',
         targets=[t.volumeUsage],
-        description='The percent of volume storage in use for Cinder.',
+        description='Volume storage usage in bytes in use for Cinder.',
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('decgbytes')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     backupUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
-        'Backup usage',
+      commonlib.panels.generic.timeSeries.base.new(
+        'Backup usage in GB',
         targets=[t.backupUsage],
-        description='The percent of backup storage in use for Cinder.',
+        description='Backup storage usage in bytes in use for Cinder.',
       )
-      + timeSeries.standardOptions.withUnit('percentunit')
+      + timeSeries.standardOptions.withUnit('decgbytes')
       + timeSeries.options.legend.withPlacement('right')
-      + timeSeries.standardOptions.withMax(1)
-      + timeSeries.standardOptions.withMin(0),
+      + timeSeries.options.legend.withCalcs('lastNotNull')
+      + timeSeries.options.legend.withDisplayMode('table')
+      + timeSeries.options.legend.withSortBy('Last *')
+      + timeSeries.options.legend.withSortDesc(true)
+      + timeSeries.fieldConfig.defaults.custom.withLineWidth('1'),
 
     poolUsage:
-      commonlib.panels.generic.timeSeries.percentage.new(
+      commonlib.panels.generic.timeSeries.base.new(
         'Pool usage',
         targets=[t.poolUsage],
         description='The percent of pool capacity in use for Cinder.',
