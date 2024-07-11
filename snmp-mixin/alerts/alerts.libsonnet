@@ -28,6 +28,18 @@
             },
             'for': '5m',
           },
+          {
+            alert: 'SNMPRestarted',
+            expr: 'sysUpTime < 60',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              summary: 'SNMP Target Restarted',
+              description: 'The SNMP target on instance {{$labels.instance}} from job {{$labels.job}} has restarted (sysUpTime < 60 seconds).',
+            },
+            'for': '1m',
+          },
         ],
       },
     ],
