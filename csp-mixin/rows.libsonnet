@@ -77,5 +77,44 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(6),
       ],
+
+      // Azure SQL Database
+      asql_connections: [
+        g.panel.row.new('Connections'),
+        this.grafana.panels.asql_conns
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.asql_deadlocks
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.asql_sessions
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      asql_resources: [
+        g.panel.row.new('Resources'),
+        this.grafana.panels.asql_cpu
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(8),
+        
+        this.grafana.panels.asql_storagebytes
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.asql_storagepercent
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+        
+        this.grafana.panels.asql_dtuts
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.asql_dtutbl
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ]
     },
 }
