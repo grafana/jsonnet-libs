@@ -7,7 +7,7 @@ function(this)
     instanceLabels: this.instanceLabels,
     aggLevel: 'instance',
     discoveryMetric: {
-      azuremonitor: 'azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count',
+      azuremonitor: 'azure_microsoft_sql_servers_elasticpools_sessions_count_average_count',
     },
     signals: {
       storageAllocTbl: {
