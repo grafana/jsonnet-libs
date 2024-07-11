@@ -269,7 +269,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
 
-    // Azure SQL Database    
+    // Azure SQL Database
     _asql_tableCommon()::
       g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
@@ -376,7 +376,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           this.signals.azuresqldb.dtuPercent.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true),
-          
+
           this.signals.azuresqldb.dtuLimit.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true),

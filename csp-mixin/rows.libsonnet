@@ -99,7 +99,7 @@ local g = import './g.libsonnet';
         this.grafana.panels.asql_cpu
         + g.panel.timeSeries.gridPos.withW(24)
         + g.panel.timeSeries.gridPos.withH(8),
-        
+
         this.grafana.panels.asql_storagebytes
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
@@ -107,7 +107,7 @@ local g = import './g.libsonnet';
         this.grafana.panels.asql_storagepercent
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
-        
+
         this.grafana.panels.asql_dtuts
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
@@ -115,6 +115,6 @@ local g = import './g.libsonnet';
         this.grafana.panels.asql_dtutbl
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
-      ]
+      ],
     },
 }

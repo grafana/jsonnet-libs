@@ -34,7 +34,7 @@ function(this)
           },
         },
       },
-      
+
       sessions: {
         name: 'Average sessions by database',
         description: 'Average number of sessions by database',
@@ -46,7 +46,7 @@ function(this)
           },
         },
       },
-      
+
       cpuPercent: {
         name: 'CPU utilization by database',
         description: 'Percent of CPU utilization by database. If database uses vCores, the vCore percent utilization is shown',
@@ -59,7 +59,7 @@ function(this)
           },
         },
       },
-      
+
       vCoreCpuPercent: {
         name: 'vCore utilization by database',
         description: 'Percent of CPU utilization by database. If database uses vCores, the vCore percent utilization is shown',
@@ -72,7 +72,7 @@ function(this)
           },
         },
       },
-      
+
       storageBytes: {
         name: 'Storage utilization by database',
         description: 'Bytes of storage by database',
@@ -85,7 +85,7 @@ function(this)
           },
         },
       },
-      
+
       storagePercent: {
         name: 'Storage % of limit by database',
         description: 'Percent used of storage limitby database',
@@ -98,7 +98,7 @@ function(this)
           },
         },
       },
-      
+
       dtuUsed: {
         name: 'Used',
         description: 'Average number of DTUs utilized by database',
@@ -110,7 +110,7 @@ function(this)
           },
         },
       },
-      
+
       dtuPercent: {
         name: 'Percent of limit',
         description: 'Average percent of DTU limit utilized by database',
@@ -122,7 +122,7 @@ function(this)
           },
         },
       },
-      
+
       dtuLimit: {
         name: 'Limit',
         description: 'DTU limit by database',

@@ -44,7 +44,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               csplib.grafana.rows.aep_resources
             )
           ),
-          
+
         [csplib.config.uid + '-sqldb.json']:
           local variables = csplib.signals.azuresqldb.getVariablesMultiChoice();
           g.dashboard.new(csplib.config.dashboardNamePrefix + 'SQL database')
