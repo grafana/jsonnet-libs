@@ -50,6 +50,7 @@
             alert: 'OpenStackPlacementIsDown',
             expr: |||
               openstack_placement_up{%(filteringSelector)s} == 0
+              openstack_placement_up{%(filteringSelector)s} == 0
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -83,7 +84,7 @@
             },
           },
           {
-            alert: 'OpenStackPlacementHighMemoryUsageCritical',
+            alert: 'OpenStackNovaAgentDown',
             expr: |||
               100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
               /
@@ -226,6 +227,7 @@
             },
             annotations: {
               summary: 'OpenStack Nova agent is down on the specific node.',
+              summary: 'OpenStack Nova agent is down on the specific node.',
               description:
                 'An OpenStack Nova agent is down on hostname {{ $labels.hostname }} on OpenStack cluster {{ $labels.%(instanceFirstLabel)s }}.'
                 % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
@@ -234,6 +236,7 @@
           {
             alert: 'OpenStackNovaHighVMMemoryUsage',
             expr: |||
+              100 * openstack_nova_limits_memory_used{%(filteringSelector)s} / (openstack_nova_limits_memory_max{%(filteringSelector)s} > 0) > %(alertsWarningNovaHighVMMemoryUsage)s
               100 * openstack_nova_limits_memory_used{%(filteringSelector)s} / (openstack_nova_limits_memory_max{%(filteringSelector)s} > 0) > %(alertsWarningNovaHighVMMemoryUsage)s
             ||| % this.config,
             'for': '5m',
@@ -246,11 +249,16 @@
                 Virtual machines on OpenStack {{ $labels.%(instanceFirstLabel)s }} are using {{ printf "%%.0f" $value }} percent of their allocated memory,
                 which is above the threshold of %(alertsWarningNovaHighVMMemoryUsage)s percent.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              description: |||
+                Virtual machines on OpenStack {{ $labels.%(instanceFirstLabel)s }} are using {{ printf "%%.0f" $value }} percent of their allocated memory,
+                which is above the threshold of %(alertsWarningNovaHighVMMemoryUsage)s percent.
+              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
           {
             alert: 'OpenStackNovaHighVMVCPUUsage',
             expr: |||
+              100 * openstack_nova_limits_vcpus_used{%(filteringSelector)s} / (openstack_nova_limits_vcpus_max{%(filteringSelector)s} > 0) > %(alertsWarningNovaHighVMVCPUUsage)s
               100 * openstack_nova_limits_vcpus_used{%(filteringSelector)s} / (openstack_nova_limits_vcpus_max{%(filteringSelector)s} > 0) > %(alertsWarningNovaHighVMVCPUUsage)s
             ||| % this.config,
             'for': '5m',
@@ -336,6 +344,10 @@
                 {{ printf "%%.0f" $value }} percent of ports managed by the Neutron service on OpenStack cluster {{$labels.%(instanceFirstLabel)s}} have no IP addresses assigned to them,
                 which is above the threshold of %(alertsCriticalNeutronHighDisconnectedPortRate)s.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              description: |||
+                {{ printf "%%.0f" $value }} percent of ports managed by the Neutron service on OpenStack cluster {{$labels.%(instanceFirstLabel)s}} have no IP addresses assigned to them,
+                which is above the threshold of %(alertsCriticalNeutronHighDisconnectedPortRate)s.
+              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
           {
@@ -374,11 +386,14 @@
               description: (
                 'OpenStack Cinder service is down on cluster {{ $labels.%(instanceFirstLabel)s }}.'
               ) % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+                'OpenStack Cinder service is down on cluster {{ $labels.%(instanceFirstLabel)s }}.'
+              ) % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
           {
             alert: 'OpenStackCinderAgentIsDown',
             expr: |||
+              openstack_cinder_agent_state{%(filteringSelector)s,adminState="enabled"} != 1
               openstack_cinder_agent_state{%(filteringSelector)s,adminState="enabled"} != 1
             ||| % this.config,
             'for': '5m',
@@ -407,11 +422,17 @@
                 Pools managed by the Cinder service on cluster {{$labels.%(instanceFirstLabel)s}} are using {{ printf "%%.0f" $value }} percent of their allocated capacity,
                 which is above the threshold of %(alertsWarningCinderHighPoolCapacityUsage)s percent.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              summary: 'Cinder pools are using a large amount of their maximum capacity.',
+              description: |||
+                Pools managed by the Cinder service on cluster {{$labels.%(instanceFirstLabel)s}} are using {{ printf "%%.0f" $value }} percent of their allocated capacity,
+                which is above the threshold of %(alertsWarningCinderHighPoolCapacityUsage)s percent.
+              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
           {
             alert: 'OpenStackCinderHighVolumeMemoryUsage',
             expr: |||
+              100 * openstack_cinder_limits_volume_used_gb{%(filteringSelector)s} / (openstack_cinder_limits_volume_max_gb{%(filteringSelector)s} > 0) > %(alertsWarningCinderHighVolumeMemoryUsage)s
               100 * openstack_cinder_limits_volume_used_gb{%(filteringSelector)s} / (openstack_cinder_limits_volume_max_gb{%(filteringSelector)s} > 0) > %(alertsWarningCinderHighVolumeMemoryUsage)s
             ||| % this.config,
             'for': '5m',
@@ -424,11 +445,17 @@
                 Volumes managed by the Cinder service on cluster {{$labels.%(instanceFirstLabel)s}} are using {{ printf "%%.0f" $value }} percent of their allocated memory,
                 which is above the threshold of %(alertsWarningCinderHighVolumeMemoryUsage)s percent.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
+              description: |||
+                Volumes managed by the Cinder service on cluster {{$labels.%(instanceFirstLabel)s}} are using {{ printf "%%.0f" $value }} percent of their allocated memory,
+                which is above the threshold of %(alertsWarningCinderHighVolumeMemoryUsage)s percent.
+              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
           {
             alert: 'OpenStackCinderHighBackupMemoryUsage',
+            alert: 'OpenStackCinderHighBackupMemoryUsage',
             expr: |||
+              100 * openstack_cinder_limits_backup_used_gb{%(filteringSelector)s} / (openstack_cinder_limits_backup_max_gb{%(filteringSelector)s} > 0) > %(alertsWarningCinderHighBackupMemoryUsage)s
               100 * openstack_cinder_limits_backup_used_gb{%(filteringSelector)s} / (openstack_cinder_limits_backup_max_gb{%(filteringSelector)s} > 0) > %(alertsWarningCinderHighBackupMemoryUsage)s
             ||| % this.config,
             'for': '5m',
@@ -436,6 +463,11 @@
               severity: 'warning',
             },
             annotations: {
+              summary: 'Cinder backups are using a large amount of their maximum memory.',
+              description: |||
+                Backups managed by the Cinder service on cluster {{$labels.%(instanceFirstLabel)s}} are using {{ printf "%%.0f" $value }} percent of their allocated memory,
+                which is above the threshold of %(alertsWarningCinderHighBackupMemoryUsage)s percent.
+              ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
               summary: 'Cinder backups are using a large amount of their maximum memory.',
               description: |||
                 Backups managed by the Cinder service on cluster {{$labels.%(instanceFirstLabel)s}} are using {{ printf "%%.0f" $value }} percent of their allocated memory,
