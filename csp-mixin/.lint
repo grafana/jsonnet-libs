@@ -1,20 +1,28 @@
 ---
 exclusions:
   target-instance-rule:
-    reason: "Using 'Bucket' as instance label"
     entries:
     - dashboard: "Azure Blob storage"
+      reason: "Using 'Bucket' as instance label"
     - dashboard: "GCP Blob storage"
+      reason: "Using 'Bucket' as instance label"
+    - dashboard: "Azure Elastic pool"
+      reason: "Using 'resourceName' as instance label"
   target-job-rule:
       reason: "Using filtering selector with job"
-  template-instance-rule:
-    reason: "Using 'Bucket' as instance label"
+  template-instance-rule:  
     entries:
     - dashboard: "Azure Blob storage"
+      reason: "Using 'Bucket' as instance label"
     - dashboard: "GCP Blob storage"
+      reason: "Using 'Bucket' as instance label"
+    - dashboard: "Azure Elastic pool"
+      reason: "Using 'resourceName' as instance label"
   panel-datasource-rule:
     reason: "Many panels use --Mixed-- DS"
   panel-units-rule:
     reason: "Unit not necessary or provided in an override"
     entries:
     - panel: "API requests by type"
+    - panel: "eDTU utilization"
+    - panel: "Concurrent sessions"
