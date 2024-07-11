@@ -2,6 +2,7 @@
   filteringSelector: 'job="integrations/openstack"',
   groupLabels: ['job'],
   // instance of openstack cluster
+  // instance of openstack cluster
   instanceLabels: ['instance'],
 
   uid: 'openstack',
@@ -14,8 +15,8 @@
   alertsCriticalPlacementHighMemoryUsage: 90,  // %
   alertsWarningPlacementHighVcpuUsage: 80,  // %
   alertsCriticalPlacementHighVcpuUsage: 90,  // %
-  alertsWarningNeutronHighNetworkUsage: 80,  // %
-  alertsCriticalNeutronHighNetworkUsage: 90,  // %
+  alertsWarningNeutronHighIPsUsage: 80,  // %
+  alertsCriticalNeutronHighIPSUsage: 90,  // %
   alertsWarningNovaHighVMMemoryUsage: 80,  // %
   alertsWarningNovaHighVMVCPUUsage: 80,  // %
   alertsCriticalNeutronHighDisconnectedPortRate: 25,  // %
@@ -23,6 +24,9 @@
   alertsWarningCinderHighBackupMemoryUsage: 80,  // %
   alertsWarningCinderHighVolumeMemoryUsage: 80,  // %
   alertsWarningCinderHighPoolCapacityUsage: 80,  // %
+
+  // legend is used by panels 'Users', 'VMs', 'Networks', 'Subnets', 'Security Groups', 'Volumes', 'Snapshots', 'Image count'
+  legendTemplate: '{{instance}}',
 
   // regex to match network names where we should track IP address utilization:
   alertsIPutilizationNetworksMatcher: '.+',

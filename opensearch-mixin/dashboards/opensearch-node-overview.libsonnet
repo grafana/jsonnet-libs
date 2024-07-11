@@ -6,7 +6,6 @@ local prometheus = grafana.prometheus;
 
 local dashboardUidSuffix = '-node-overview';
 
-
 {
 
   // variables
@@ -14,7 +13,8 @@ local dashboardUidSuffix = '-node-overview';
     filteringSelector=$._config.filteringSelector,
     groupLabels=$._config.groupLabels,
     instanceLabels=$._config.instanceLabels,
-    varMetric='opensearch_os_cpu_percent'
+    varMetric='opensearch_os_cpu_percent',
+    enableLokiLogs=$._config.enableLokiLogs,
   ),
 
   local panels = (import '../panels.libsonnet').new(
@@ -1144,7 +1144,6 @@ local dashboardUidSuffix = '-node-overview';
       wrapLogMessage: false,
     },
   },
-
 
   grafanaDashboards+:: {
     'node-overview.json':
