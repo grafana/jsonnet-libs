@@ -28,21 +28,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     }
     +
     if csplib.config.uid == 'azure' then
-    {      
-      [csplib.config.uid + '-elasticpool.json']:
-        local variables = csplib.signals.azureelasticpool.getVariablesMultiChoice();
-        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Elastic pool')
-        + g.dashboard.withUid(csplib.config.uid + '-elasticpool')
-        + g.dashboard.withTags(csplib.config.dashboardTags)
-        + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
-        + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
-        + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
-        + g.dashboard.withVariables(variables)
-        + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            csplib.grafana.rows.aep_storage+
-            csplib.grafana.rows.aep_resources
-          )
-        ),
-    } else {},
+      {
+        [csplib.config.uid + '-elasticpool.json']:
+          local variables = csplib.signals.azureelasticpool.getVariablesMultiChoice();
+          g.dashboard.new(csplib.config.dashboardNamePrefix + 'Elastic pool')
+          + g.dashboard.withUid(csplib.config.uid + '-elasticpool')
+          + g.dashboard.withTags(csplib.config.dashboardTags)
+          + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+          + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+          + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+          + g.dashboard.withVariables(variables)
+          + g.dashboard.withPanels(
+            g.util.grid.wrapPanels(
+              csplib.grafana.rows.aep_storage +
+              csplib.grafana.rows.aep_resources
+            )
+          ),
+      } else {},
 }

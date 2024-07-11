@@ -56,7 +56,7 @@ local g = import './g.libsonnet';
         g.panel.row.new('Storage'),
         this.grafana.panels.aep_storage
         + g.panel.timeSeries.gridPos.withW(24)
-        + g.panel.timeSeries.gridPos.withH(6)
+        + g.panel.timeSeries.gridPos.withH(6),
       ],
 
       aep_resources: [
@@ -76,6 +76,6 @@ local g = import './g.libsonnet';
         this.grafana.panels.aep_session
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(6),
-      ]
+      ],
     },
 }
