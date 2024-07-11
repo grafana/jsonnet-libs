@@ -6,7 +6,7 @@
         {
           alert: 'HAProxyDroppingLogs',
           expr: 'rate(haproxy_process_dropped_logs_total[5m]) != 0',
-          'for': '5s',
+          'for': '10m',
           labels: {
             severity: 'critical',
           },
@@ -18,7 +18,7 @@
         {
           alert: 'HAProxyBackendCheckFlapping',
           expr: 'rate(haproxy_backend_check_up_down_total[5m]) != 0',
-          'for': '1m',
+          'for': '10m',
           labels: {
             severity: 'critical',
           },
@@ -30,7 +30,7 @@
         {
           alert: 'HAProxyServerCheckFlapping',
           expr: 'rate(haproxy_server_check_up_down_total[5m]) != 0',
-          'for': '1m',
+          'for': '10m',
           labels: {
             severity: 'critical',
           },

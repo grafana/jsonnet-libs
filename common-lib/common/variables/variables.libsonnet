@@ -10,6 +10,8 @@ local utils = import '../utils.libsonnet';
     varMetric='up',
     enableLokiLogs=false,
     customAllValue='.+',
+    prometheusDatasourceName='datasource',
+    prometheusDatasourceLabel='Data source',
   ): {
 
        local root = self,
@@ -39,14 +41,9 @@ local utils = import '../utils.libsonnet';
          std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
        datasources: {
          prometheus:
-           var.datasource.new('datasource', 'prometheus')
-           + var.datasource.generalOptions.withLabel('Data source')
+           var.datasource.new(prometheusDatasourceName, 'prometheus')
+           + var.datasource.generalOptions.withLabel(prometheusDatasourceLabel)
            + var.datasource.withRegex(''),
-         loki:
-           var.datasource.new('loki_datasource', 'loki')
-           + var.datasource.generalOptions.withLabel('Loki data source')
-           + var.datasource.withRegex('')
-           + var.datasource.generalOptions.showOnDashboard.withNothing(),
        },
        // Use on dashboards where multiple entities can be selected, like fleet dashboards
        multiInstance:
@@ -69,11 +66,14 @@ local utils = import '../utils.libsonnet';
      }
      + if enableLokiLogs then self.withLokiLogs() else {},
 
-  withLokiLogs(): {
+  withLokiLogs(
+    lokiDatasourceName='loki_datasource',
+    lokiDatasourceLabel='Loki data source',
+  ): {
     datasources+: {
       loki:
-        var.datasource.new('loki_datasource', 'loki')
-        + var.datasource.generalOptions.withLabel('Loki data source')
+        var.datasource.new(lokiDatasourceName, 'loki')
+        + var.datasource.generalOptions.withLabel(lokiDatasourceLabel)
         + var.datasource.withRegex('')
         + var.datasource.generalOptions.showOnDashboard.withNothing(),
     },

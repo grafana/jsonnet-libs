@@ -30,7 +30,8 @@ local stub = import './stub.libsonnet';
   // }
   unmarshallJson(signalsJson):
     self.init(
-      datasource='${datasource}',
+      datasource=std.get(signalsJson, 'datasource', 'datasource'),
+      datasourceLabel=std.get(signalsJson, 'datasourceLabel', 'Data source'),
       filteringSelector=[signalsJson.filteringSelector],
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
@@ -39,6 +40,7 @@ local stub = import './stub.libsonnet';
       varMetric=std.get(signalsJson, 'discoveryMetric', 'up'),
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
+      aggKeepLabels=std.get(signalsJson, 'aggKeepLabels', []),
       legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
       rangeFunction=std.get(signalsJson, 'rangeFunction', 'rate'),  // rate, irate , delta, increase, idelta...
     )
@@ -52,6 +54,8 @@ local stub = import './stub.libsonnet';
         expr=std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
         exprWrappers=std.get(signalsJson.signals[s], 'exprWrappers', []),
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
+        aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
+        aggKeepLabels=std.get(signalsJson.signals[s], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
         valueMapping=std.get(signalsJson.signals[s], 'valueMapping', {}),
         legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
@@ -63,7 +67,8 @@ local stub = import './stub.libsonnet';
   unmarshallJsonMulti(signalsJson, type='prometheus'):
 
     self.init(
-      datasource='${datasource}',
+      datasource=std.get(signalsJson, 'datasource', 'datasource'),
+      datasourceLabel=std.get(signalsJson, 'datasourceLabel', 'Data source'),
       filteringSelector=[signalsJson.filteringSelector],
       groupLabels=signalsJson.groupLabels,
       instanceLabels=signalsJson.instanceLabels,
@@ -72,6 +77,7 @@ local stub = import './stub.libsonnet';
       varMetric=if std.objectHas(signalsJson, 'discoveryMetric') then std.get(signalsJson.discoveryMetric, type, 'up') else 'up',
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
+      aggKeepLabels=std.get(signalsJson, 'aggKeepLabels', []),
       legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
       rangeFunction=std.get(signalsJson, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
     )
@@ -89,6 +95,8 @@ local stub = import './stub.libsonnet';
             expr=std.get(signalsJson.signals[s].sources[type], 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [signalsJson.signals[s].name, type]),
             exprWrappers=std.get(signalsJson.signals[s].sources[type], 'exprWrappers', []),
             aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
+            aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
+            aggKeepLabels=std.get(signalsJson.signals[s].sources[type], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
             infoLabel=std.get(signalsJson.signals[s].sources[type], 'infoLabel', null),
             valueMapping=std.get(signalsJson.signals[s].sources[type], 'valueMapping', {}),
             legendCustomTemplate=std.get(signalsJson.signals[s].sources[type], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
@@ -107,7 +115,8 @@ local stub = import './stub.libsonnet';
     },
 
   init(
-    datasource='${datasource}',
+    datasource='datasource',
+    datasourceLabel='Data source',
     filteringSelector=['job!=""'],
     groupLabels=['job'],
     instanceLabels=['instance'],
@@ -116,6 +125,7 @@ local stub = import './stub.libsonnet';
     alertsInterval='5m',
     //default aggregation level
     aggLevel='none',
+    aggKeepLabels=[],
     aggFunction='avg',
     //metric used in variables discovery by default
     varMetric='up',
@@ -126,6 +136,8 @@ local stub = import './stub.libsonnet';
     local this = self,
     datasource:: datasource,
     aggLevel:: aggLevel,
+    aggKeepLabels:: aggKeepLabels,
+    aggFunction:: aggFunction,
 
     // vars used in dashboards' variables
     local grafanaVariables = variables.new(
@@ -133,6 +145,8 @@ local stub = import './stub.libsonnet';
       groupLabels,
       instanceLabels,
       varMetric=varMetric,
+      prometheusDatasourceName=datasource,
+      prometheusDatasourceLabel=datasourceLabel,
     ),
     // vars are used in templating(legend+expressions)
     templatingVariables: {
@@ -140,16 +154,6 @@ local stub = import './stub.libsonnet';
       groupLabels: groupLabels,
       instanceLabels: instanceLabels,
       queriesSelector: grafanaVariables.queriesSelector,
-      //used in aggregation queries
-      agg: if this.aggLevel == 'group' then std.join(',', self.groupLabels)
-      else if this.aggLevel == 'instance' then std.join(',', self.groupLabels + self.instanceLabels)
-      else if this.aggLevel == 'none' then std.join(',', []),
-      aggFunction: aggFunction,
-      //prefix for legend when aggregation is used
-      aggLegend:
-        if aggLevel == 'group' then utils.labelsToPanelLegend(self.groupLabels)
-        else if aggLevel == 'instance' then utils.labelsToPanelLegend(self.instanceLabels)
-        else if aggLevel == 'none' then '',
       interval: interval,
       alertsInterval: alertsInterval,
     },
@@ -176,6 +180,8 @@ local stub = import './stub.libsonnet';
       expr,
       exprWrappers=[],
       aggLevel=self.aggLevel,
+      aggFunction=self.aggFunction,
+      aggKeepLabels=self.aggKeepLabels,
       infoLabel=null,
       valueMapping={},
       legendCustomTemplate=null,
@@ -201,6 +207,8 @@ local stub = import './stub.libsonnet';
           expr=expr,
           exprWrappers=exprWrappers,
           aggLevel=aggLevel,
+          aggFunction=aggFunction,
+          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
@@ -215,6 +223,8 @@ local stub = import './stub.libsonnet';
           expr=expr,
           exprWrappers=exprWrappers,
           aggLevel=aggLevel,
+          aggFunction=aggFunction,
+          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
@@ -230,6 +240,8 @@ local stub = import './stub.libsonnet';
           expr=expr,
           exprWrappers=exprWrappers,
           aggLevel=aggLevel,
+          aggFunction=aggFunction,
+          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
@@ -245,6 +257,8 @@ local stub = import './stub.libsonnet';
           expr=expr,
           exprWrappers=exprWrappers,
           aggLevel=aggLevel,
+          aggFunction=aggFunction,
+          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
@@ -260,6 +274,8 @@ local stub = import './stub.libsonnet';
           expr=expr,
           exprWrappers=exprWrappers,
           aggLevel=aggLevel,
+          aggFunction=aggFunction,
+          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
           valueMapping=valueMapping,
@@ -271,5 +287,4 @@ local stub = import './stub.libsonnet';
           type=type,
         ),
   },
-
 }

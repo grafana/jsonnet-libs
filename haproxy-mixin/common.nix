@@ -9,7 +9,6 @@ with pkgs;
     bash
     coreutils
     cue
-    drone-cli
     findutils
     git
     gnumake

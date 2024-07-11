@@ -6,7 +6,7 @@
         {
           alert: 'JvmMemoryFillingUp',
           expr: |||
-            jvm_memory_bytes_used / jvm_memory_bytes_max{area="heap"} > 0.8
+            jvm_memory_used_bytes / jvm_memory_max_bytes{area="heap"} > 0.8
           |||,
           'for': '5m',
           labels: {

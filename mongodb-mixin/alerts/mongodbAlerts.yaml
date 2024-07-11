@@ -3,16 +3,24 @@ groups:
   rules:
   - alert: MongodbDown
     expr: mongodb_up == 0
-    for: 0m
+    for: 5m
     labels:
       severity: critical
     annotations:
       summary: MongoDB Instance is Down.
       description: "MongoDB instance is down\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
+  - alert: MongodbReplicaMemberUnhealthy
+    expr: mongodb_mongod_replset_member_health == 0
+    labels:
+      severity: critical
+    annotations:
+      summary: MongoDB replica member unhealthy.
+      description: "Mongodb replica member unhealthy (instance {{ $labels.instance }})"
+
   - alert: MongodbReplicationLag
-    expr: mongodb_mongod_replset_member_optime_date{state="PRIMARY"} - ON (set) mongodb_mongod_replset_member_optime_date{state="SECONDARY"} > 10
-    for: 0m
+    expr: mongodb_mongod_replset_member_replication_lag{state="SECONDARY"} > 60
+    for: 5m
     labels:
       severity: critical
     annotations:
@@ -21,7 +29,7 @@ groups:
 
   - alert: MongodbReplicationHeadroom
     expr: (avg(mongodb_mongod_replset_oplog_tail_timestamp - mongodb_mongod_replset_oplog_head_timestamp) - (avg(mongodb_mongod_replset_member_optime_date{state="PRIMARY"}) - avg(mongodb_mongod_replset_member_optime_date{state="SECONDARY"}))) <= 0
-    for: 0m
+    for: 5m
     labels:
       severity: critical
     annotations:
@@ -63,3 +71,22 @@ groups:
     annotations:
       summary: MongoDB virtual memory usage is too high.
       description: "High memory usage\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  # If the queue for read/write locks keeps growing
+  - alert: MongodbReadRequestsQueueingUp
+    expr: delta(mongodb_mongod_global_lock_current_queue{type="reader"}[1m]) > 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: MongoDB read requests queuing up.
+      description: "MongoDB requests are queuing up\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: MongodbWriteRequestsQueueingUp
+    expr: delta(mongodb_mongod_global_lock_current_queue{type="writer"}[1m]) > 0
+    for: 5m
+    labels:
+      severity: warning
+    annotations:
+      summary: MongoDB write requests queuing up.
+      description: "MongoDB write requests are queueing up\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"

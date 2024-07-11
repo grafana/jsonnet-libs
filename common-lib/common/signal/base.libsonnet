@@ -11,6 +11,8 @@ local signalUtils = import './utils.libsonnet';
     exprBase,
     exprWrappers,
     aggLevel,
+    aggFunction,
+    aggKeepLabels,
     vars,
     datasource,
     valueMapping,
@@ -19,16 +21,53 @@ local signalUtils = import './utils.libsonnet';
   ): {
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
+    local this = self,
+
+    vars::
+      vars
+      {
+        //add additional templatedVars
+        local aggLabels =
+          []
+          + (
+            if aggLevel == 'group' then super.groupLabels
+            else if aggLevel == 'instance' then super.groupLabels + super.instanceLabels
+            else if aggLevel == 'none' then []
+          )
+          + (
+            if std.length(aggKeepLabels) > 0 then aggKeepLabels
+            else []
+          ),
+        agg: std.join(',', aggLabels),
+
+        //prefix for legend when aggregation is used
+        local legendLabels =
+          []
+          +
+          (
+            if aggLevel == 'group' then super.groupLabels
+            else if aggLevel == 'instance' then super.instanceLabels
+            else if aggLevel == 'none' then []
+          )
+          +
+          (
+            if std.length(aggKeepLabels) > 0 then aggKeepLabels
+            else []
+          ),
+        aggLegend: utils.labelsToPanelLegend(legendLabels),
+        aggFunction: aggFunction,
+      },
+
 
     unit:: signalUtils.generateUnits(type, unit, rangeFunction),
     //Return as grafana panel target(query+legend)
     asTarget()::
       prometheusQuery.new(
-        datasource,
+        '${%s}' % datasource,
         self.asPanelExpression(),
       )
       + prometheusQuery.withRefId(name)
-      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % vars),
+      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % this.vars),
 
     //Return as grafana panel mixin target(query+legend) + overrides(like units)
     asPanelMixin()::
@@ -46,23 +85,22 @@ local signalUtils = import './utils.libsonnet';
     //Return query
     asPanelExpression()::
       signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel=aggLevel, rangeFunction=rangeFunction).applyFunctions()
-      % vars,
+      % this.vars,
     //Return query, usable in alerts/recording rules.
     asRuleExpression()::
-      signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel=aggLevel, rangeFunction=rangeFunction).applyFunctions()
-      % vars
+      //override aggLevel to 'none', to avoid loosing labels in alerts due to by() clause:
+      signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel='none', rangeFunction=rangeFunction).applyFunctions()
+      % this.vars
         {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
-        interval: vars.alertsInterval,
+        interval: this.vars.alertsInterval,
         // keep only filteringSelector, remove any Grafana dashboard variables:
-        queriesSelector: vars.filteringSelector[0],
-        // never aggregate if rule to avoid lossing labels.
-        aggLegend: 'none',
+        queriesSelector: this.vars.filteringSelector[0],
       },
 
 
     common::
       // override panel-wide --mixed-- datasource
-      prometheusQuery.withDatasource(datasource)
+      prometheusQuery.withDatasource('${%s}' % datasource)
       + g.panel.timeSeries.panelOptions.withDescription(description)
       + g.panel.timeSeries.standardOptions.withUnit(self.unit)
       + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
