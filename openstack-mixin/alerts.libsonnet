@@ -5,7 +5,7 @@
         name: 'openstack-alerts-' + this.config.uid,
         rules: [
           {
-            alert: 'OpenStackGlanceDown',
+            alert: 'OpenStackGlanceIsDown',
             expr: |||
               openstack_glance_up{%(filteringSelector)s} == 0
             ||| % this.config,
@@ -19,7 +19,7 @@
             },
           },
           {
-            alert: 'OpenStackHeatDown',
+            alert: 'OpenStackHeatIsDown',
             expr: |||
               openstack_heat_up{%(filteringSelector)s} == 0
             ||| % this.config,
@@ -33,7 +33,7 @@
             },
           },
           {
-            alert: 'OpenStackIdentityDown',
+            alert: 'OpenStackIdentityIsDown',
             expr: |||
               openstack_identity_up{%(filteringSelector)s} == 0
             ||| % this.config,
@@ -47,7 +47,7 @@
             },
           },
           {
-            alert: 'OpenStackPlacementDown',
+            alert: 'OpenStackPlacementIsDown',
             expr: |||
               openstack_placement_up{%(filteringSelector)s} == 0
             ||| % this.config,
@@ -62,7 +62,7 @@
             },
           },
           {
-            alert: 'OpenStackPlacementHighMemoryUsage',
+            alert: 'OpenStackPlacementHighMemoryUsageWarning',
             expr: |||
               100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
               /
@@ -83,7 +83,7 @@
             },
           },
           {
-            alert: 'OpenStackPlacementHighMemoryUsage',
+            alert: 'OpenStackPlacementHighMemoryUsageCritical',
             expr: |||
               100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="MEMORY_MB"})
               /
@@ -99,17 +99,17 @@
               summary: 'OpenStack is using a large percentage of its allocated memory, consider allocating more resources.',
               description: |||
                 OpenStack {{$labels.%(instanceFirstLabel)s}} is using {{ printf "%%.0f" $value }} percent of its allocated memory,
-                which is above the threshold of %(alertsWarningPlacementHighMemoryUsage)s percent.
+                which is above the threshold of %(alertsCriticalPlacementHighMemoryUsage)s percent.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
           {
-            alert: 'OpenStackPlacementHighVcpuUsage',
+            alert: 'OpenStackPlacementHighVCPUUsageWarning',
             expr: |||
               100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
               /
               (sum by (%(agg)s) (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="VCPU"}) > 0)
-              > %(alertsWarningPlacementHighVcpuUsage)s
+              > %(alertsWarningPlacementHighVCPUUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             keep_firing_for: '5m',
@@ -120,18 +120,18 @@
               summary: 'OpenStack is using a significant percentage of its allocated vCPU.',
               description: |||
                 OpenStack {{$labels.%(instanceFirstLabel)s}} is using {{ printf "%%.0f" $value }} percent of its allocated vCPU,
-                which is above the threshold of %(alertsWarningPlacementHighVcpuUsage)s percent.
+                which is above the threshold of %(alertsWarningPlacementHighVCPUUsage)s percent.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
           {
-            alert: 'OpenStackPlacementHighVcpuUsage',
+            alert: 'OpenStackPlacementHighVCPUUsageCritical',
 
             expr: |||
               100 * sum by (%(agg)s) (openstack_placement_resource_usage{%(filteringSelector)s, resourcetype="VCPU"})
               /
               (sum by (%(agg)s) (openstack_placement_resource_total{%(filteringSelector)s, resourcetype="VCPU"}) > 0)
-              > %(alertsCriticalPlacementHighVcpuUsage)s
+              > %(alertsCriticalPlacementHighVCPUUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             keep_firing_for: '5m',
@@ -142,19 +142,19 @@
               summary: 'OpenStack is using a large percentage of its allocated vCPU, consider allocating more resources.',
               description: |||
                 OpenStack {{$labels.%(instanceFirstLabel)s}} is using {{ printf "%%.0f" $value }} percent of its allocated vCPU,
-                which is above the threshold of %(alertsWarningPlacementHighVcpuUsage)s percent.
+                which is above the threshold of %(alertsCriticalPlacementHighVCPUUsage)s percent.
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
           {
-            alert: 'OpenStackNetworkIpAvailabilities',
+            alert: 'OpenStackNeutronHighIPsUsageWarning',
             expr: |||
               100 * 
               sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_used{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"}) 
               /
               (sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_total{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"})
               > 0)
-              > %(alertsWarningNeutronHighNetworkUsage)s
+              > %(alertsWarningNeutronHighIPsUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             keep_firing_for: '5m',
@@ -171,14 +171,14 @@
             },
           },
           {
-            alert: 'OpenStackNetworkIpAvailabilities',
+            alert: 'OpenStackNeutronHighIPsUsageCritical',
             expr: |||
               100 * 
               sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_used{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"}) 
               /
               (sum by (%(agg)s, network_name) (openstack_neutron_network_ip_availabilities_total{%(filteringSelector)s, network_name=~"%(alertsIPutilizationNetworksMatcher)s"})
               > 0)
-              > %(alertsCriticalNeutronHighNetworkUsage)s
+              > %(alertsCriticalNeutronHighIPsUsage)s
             ||| % this.config { agg: std.join(',', this.config.groupLabels + this.config.instanceLabels) },
             'for': '5m',
             keep_firing_for: '5m',
@@ -200,7 +200,7 @@
         name: 'openstack-nova-alerts' + this.config.uid,
         rules: [
           {
-            alert: 'OpenStackNovaDown',
+            alert: 'OpenStackNovaIsDown',
             expr: |||
               openstack_nova_up{%(filteringSelector)s} == 0
             ||| % this.config,
@@ -216,7 +216,7 @@
             },
           },
           {
-            alert: 'OpenStackNovaAgentDown',
+            alert: 'OpenStackNovaAgentIsDown',
             expr: |||
               openstack_nova_agent_state{%(filteringSelector)s,adminState="enabled"} != 1
             ||| % this.config,
@@ -227,7 +227,7 @@
             annotations: {
               summary: 'OpenStack Nova agent is down on the specific node.',
               description:
-                'OpenStack Nova agent is down on hostname {{ $labels.hostname }} on openstack cluster {{ $labels.%(instanceFirstLabel)s }}.'
+                'An OpenStack Nova agent is down on hostname {{ $labels.hostname }} on OpenStack cluster {{ $labels.%(instanceFirstLabel)s }}.'
                 % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
@@ -271,7 +271,7 @@
         name: 'openstack-neutron-alerts' + this.config.uid,
         rules: [
           {
-            alert: 'OpenStackNeutronDown',
+            alert: 'OpenStackNeutronIsDown',
             expr: |||
               openstack_neutron_up{%(filteringSelector)s} == 0
             ||| % this.config,
@@ -287,7 +287,7 @@
             },
           },
           {
-            alert: 'OpenStackNeutronAgentDown',
+            alert: 'OpenStackNeutronAgentIsDown',
             expr: |||
               openstack_neutron_agent_state{%(filteringSelector)s,adminState="up"} != 1
             ||| % this.config,
@@ -298,15 +298,15 @@
             annotations: {
               summary: 'OpenStack Neutron agent is down on the specific node.',
               description: |||
-                OpenStack Neutron agent`s service {{ $labels.service }} is down on hostname {{ $labels.hostname }} on openstack cluster {{ $labels.%(instanceFirstLabel)s }}.
+                OpenStack Neutron agent`s service {{ $labels.service }} is down on hostname {{ $labels.hostname }} on OpenStack cluster {{ $labels.%(instanceFirstLabel)s }}.
                 If {{ $labels.service }} is no longer required on this host, disable it administratively by running:
-                openstack network agent set {{ $labels.id }} --disable
+                OpenStack network agent set {{ $labels.id }} --disable
               ||| % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
               runbook_url: 'https://docs.openstack.org/neutron/zed/admin/config-services-agent.html#agent-s-admin-state-specific-config-options',
             },
           },
           {
-            alert: 'OpenStackNeutronL3AgentDown',
+            alert: 'OpenStackNeutronL3AgentIsDown',
             expr: |||
               openstack_neutron_l3_agent_of_router{%(filteringSelector)s,agent_admin_up="true"} != 1
             ||| % this.config,
@@ -361,7 +361,7 @@
         name: 'openstack-cinder-alerts' + this.config.uid,
         rules: [
           {
-            alert: 'OpenStackCinderDown',
+            alert: 'OpenStackCinderIsDown',
             expr: |||
               openstack_cinder_up{%(filteringSelector)s} == 0
             ||| % this.config,
@@ -377,7 +377,7 @@
             },
           },
           {
-            alert: 'OpenStackCinderAgentDown',
+            alert: 'OpenStackCinderAgentIsDown',
             expr: |||
               openstack_cinder_agent_state{%(filteringSelector)s,adminState="enabled"} != 1
             ||| % this.config,
@@ -388,7 +388,7 @@
             annotations: {
               summary: 'OpenStack Cinder agent is down on the specific node.',
               description: (
-                'OpenStack Cinder agent is down on hostname {{ $labels.hostname }} on openstack cluster {{ $labels.%(instanceFirstLabel)s }}.'
+                'OpenStack Cinder agent is down on hostname {{ $labels.hostname }} on OpenStack cluster {{ $labels.%(instanceFirstLabel)s }}.'
               ) % this.config { instanceFirstLabel: this.config.instanceLabels[0] },
             },
           },
