@@ -108,22 +108,6 @@ level =  WARNING
 - OpenStackCinderHighBackupMemoryUsage: Cinder backups are using a large amount of their maximum memory.
 - OpenStackCinderHighVolumeMemoryUsage: Cinder volumes are using a large amount of their maximum memory.
 - OpenStackCinderHighPoolCapacityUsage: Cinder pools are using a large amount of their maximum capacity.
-- OpenStackNeutronHighIPsUsageWarning: Free IP addresses are running out.
-- OpenStackNeutronHighIPsUsageCritical: There are practically no free IP addresses left.
-- OpenStackGlanceIsDown: OpenStack Glance service is down.
-- OpenStackHeatIsDown: OpenStack Heat service is down.
-- OpenStackIdentityIsDown: OpenStack Identity service is down.
-- OpenStackPlacementIsDown: OpenStack Placement service is down.
-- OpenStackPlacementHighVCPUUsageWarning: OpenStack is using a significant percentage of its allocated vCPU.
-- OpenStackPlacementHighVCPUUsageCritical: OpenStack is using a large percentage of its allocated vCPU, consider allocating more resources.
-- OpenStackNovaIsDown: OpenStack Nova service is down.
-- OpenStackNovaAgentIsDown: OpenStack Nova agent is down on the specific node.
-- OpenStackNovaHighVMMemoryUsage: VMs are using a high percentage of their allocated memory.
-- OpenStackNeutronIsDown: OpenStack Neutron is down.
-- OpenStackNeutronAgentIsDown: OpenStack Neutron agent is down on the specific node.
-- OpenStackNeutronL3AgentIsDown: OpenStack Neutron L3 agent is down on the specific node.
-- OpenStackCinderIsDown: OpenStack Cinder service is down.
-- OpenStackCinderAgentIsDown: OpenStack Cinder agent is down on the specific node.
 
 Default thresholds can be configured in `config.libsonnet`.
 
@@ -135,8 +119,8 @@ Default thresholds can be configured in `config.libsonnet`.
       alertsCriticalPlacementHighMemoryUsage: 90,  // %
       alertsWarningPlacementHighVcpuUsage: 80,  // %
       alertsCriticalPlacementHighVcpuUsage: 90,  // %
-      alertsWarningNeutronHighIPsUsage: 80,  // %
-      alertsCriticalNeutronHighIPSUsage: 90,  // %
+      alertsWarningNeutronHighNetworkUsage: 80,  // %
+      alertsCriticalNeutronHighNetworkUsage: 90,  // %
       alertsWarningNovaHighVMMemoryUsage: 80,  // %
       alertsWarningNovaHighVMVCPUUsage: 80,  // %
       alertsCriticalNeutronHighDisconnectedPortRate: 25,  // %

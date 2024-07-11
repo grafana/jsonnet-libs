@@ -107,7 +107,7 @@ local lokiQuery = g.query.loki;
         'openstack_identity_users{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat(config.legendTemplate),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
 
     projectDetails:
       prometheusQuery.new(
@@ -122,7 +122,7 @@ local lokiQuery = g.query.loki;
         'openstack_nova_total_vms{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat(config.legendTemplate),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     instanceUsage:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -163,14 +163,14 @@ local lokiQuery = g.query.loki;
         'openstack_neutron_networks{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat(config.legendTemplate),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     subnets:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
         'openstack_neutron_subnets{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat(config.legendTemplate),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     routers:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -256,7 +256,7 @@ local lokiQuery = g.query.loki;
         'openstack_neutron_security_groups{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat(config.legendTemplate),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     neutronAgentState:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -270,7 +270,7 @@ local lokiQuery = g.query.loki;
         'openstack_cinder_volumes{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat(config.legendTemplate),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     volumeErrorStatus:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -319,7 +319,7 @@ local lokiQuery = g.query.loki;
         'openstack_cinder_snapshots{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat(config.legendTemplate),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     cinderAgentState:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
@@ -333,7 +333,7 @@ local lokiQuery = g.query.loki;
         'openstack_glance_images{%(queriesSelector)s}' % vars
       )
       + panel.timeSeries.queryOptions.withInterval('1m')
-      + prometheusQuery.withLegendFormat(config.legendTemplate),
+      + prometheusQuery.withLegendFormat('{{cluster}}'),
     imageDetails:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
