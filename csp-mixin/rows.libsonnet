@@ -2,6 +2,7 @@ local g = import './g.libsonnet';
 {
   new(this):
     {
+      // Blob Storage
       overview: [
         g.panel.row.new('Overview'),
         this.grafana.panels.bucketCount
@@ -48,6 +49,33 @@ local g = import './g.libsonnet';
         this.grafana.panels.network
         + g.panel.timeSeries.gridPos.withW(24)
         + g.panel.timeSeries.gridPos.withH(12),
+      ],
+
+      // Azure elasticpool
+      aep_storage: [
+        g.panel.row.new('Storage'),
+        this.grafana.panels.aep_storage
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(6),
+      ],
+
+      aep_resources: [
+        g.panel.row.new('Resources'),
+        this.grafana.panels.aep_cpu
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(6),
+
+        this.grafana.panels.aep_mem
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(6),
+
+        this.grafana.panels.aep_dtu
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(6),
+
+        this.grafana.panels.aep_session
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(6),
       ],
     },
 }
