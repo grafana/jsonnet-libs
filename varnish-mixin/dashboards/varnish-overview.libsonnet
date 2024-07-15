@@ -1174,7 +1174,7 @@ local frontendLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + '} |= `` | (' + frontendLogFilter + ' or log_type="frontend")',
+      expr: '{' + matcher + ', ' + frontendLogFilter + '}',
       queryType: 'range',
       refId: 'A',
     },
@@ -1200,7 +1200,7 @@ local backendLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + '} |= `` | (' + backendLogFilter + ' or log_type="backend")',
+      expr: '{' + matcher + ', ' + backendLogFilter + '}',
       queryType: 'range',
       refId: 'A',
     },
