@@ -1266,9 +1266,21 @@ local backendLogsPanel(matcher) = {
               sort=0
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(varnish_main_sessions{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(varnish_main_sessions,instance)',
+              'label_values(varnish_main_sessions{%(multiclusterSelector)s},instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
