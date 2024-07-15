@@ -1262,7 +1262,7 @@ local backendLogsPanel(matcher) = {
               refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
@@ -1285,7 +1285,7 @@ local backendLogsPanel(matcher) = {
               refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
           ],
