@@ -9,6 +9,10 @@ local dashboardUid = 'varnish-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
+local getMatcher(cfg) = '%(varnishSelector)s, instance=~"$instance"' % cfg;
+local frontendLogFilter = 'filename=~"/var/log/varnish/varnishncsa-frontend.*.log|/opt/varnish/log/varnishncsa-frontend.*.log"';
+local backendLogFilter = 'filename=~"/var/log/varnish/varnishncsa-backend.*.log|/opt/varnish/log/varnishncsa-backend.*.log"';
+
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
@@ -17,11 +21,11 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local cacheHitRatePanel = {
+local cacheHitRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg((rate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]) + rate(varnish_main_cache_miss{job=~"$job",instance=~"$instance"}[$__rate_interval]), 1))) * 100\n',
+      'avg((rate(varnish_main_cache_hit{' + matcher + '}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{' + matcher + '}[$__rate_interval]) + rate(varnish_main_cache_miss{' + matcher + '}[$__rate_interval]), 1))) * 100\n',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -76,11 +80,11 @@ local cacheHitRatePanel = {
   transparent: true,
 };
 
-local frontendRequestsPanel = {
+local frontendRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_client_req{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_client_req{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{nstance}}',
     ),
@@ -125,11 +129,11 @@ local frontendRequestsPanel = {
   transparent: true,
 };
 
-local backendRequestsPanel = {
+local backendRequestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_backend_req{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_backend_req{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -174,11 +178,11 @@ local backendRequestsPanel = {
   transparent: true,
 };
 
-local sessionsRatePanel = {
+local sessionsRatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_sessions_total{job=~"$job", instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_sessions_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -223,11 +227,11 @@ local sessionsRatePanel = {
   transparent: true,
 };
 
-local cacheHitsPanel = {
+local cacheHitsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_cache_hit{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -272,11 +276,11 @@ local cacheHitsPanel = {
   transparent: true,
 };
 
-local cacheHitPassPanel = {
+local cacheHitPassPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_cache_hitpass{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_cache_hitpass{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -321,11 +325,11 @@ local cacheHitPassPanel = {
   transparent: true,
 };
 
-local sessionQueueLengthPanel = {
+local sessionQueueLengthPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'varnish_main_thread_queue_len{job=~"$job",instance=~"$instance"}',
+      'varnish_main_thread_queue_len{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -370,11 +374,11 @@ local sessionQueueLengthPanel = {
   transparent: true,
 };
 
-local poolsPanel = {
+local poolsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'varnish_main_pools{job=~"$job",instance=~"$instance"}',
+      'varnish_main_pools{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -419,31 +423,31 @@ local poolsPanel = {
   transparent: true,
 };
 
-local backendConnectionsPanel = {
+local backendConnectionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_backend_conn{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_backend_conn{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Accepted',
     ),
     prometheus.target(
-      'irate(varnish_main_backend_recycle{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_backend_recycle{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Recycled',
     ),
     prometheus.target(
-      'irate(varnish_main_backend_reuse{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_backend_reuse{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Reused',
     ),
     prometheus.target(
-      'irate(varnish_main_backend_busy{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_backend_busy{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Busy',
     ),
     prometheus.target(
-      'irate(varnish_main_backend_unhealthy{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_backend_unhealthy{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Unhealthy',
     ),
@@ -517,21 +521,21 @@ local backendConnectionsPanel = {
   },
 };
 
-local sessionsPanel = {
+local sessionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_sessions{job=~"$job",instance=~"$instance",type="conn"}[$__rate_interval])',
+      'irate(varnish_main_sessions{' + matcher + ',type="conn"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Connected',
     ),
     prometheus.target(
-      'irate(varnish_main_sessions{job=~"$job",instance=~"$instance",type="queued"}[$__rate_interval])',
+      'irate(varnish_main_sessions{' + matcher + ',type="queued"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Queued',
     ),
     prometheus.target(
-      'irate(varnish_main_sessions{job=~"$job",instance=~"$instance",type="dropped"}[$__rate_interval])',
+      'irate(varnish_main_sessions{' + matcher + ',type="dropped"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Dropped',
     ),
@@ -602,16 +606,16 @@ local sessionsPanel = {
   },
 };
 
-local requestsPanel = {
+local requestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_client_req{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_client_req{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Frontend',
     ),
     prometheus.target(
-      'irate(varnish_main_backend_req{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_backend_req{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Backend',
     ),
@@ -682,11 +686,11 @@ local requestsPanel = {
   },
 };
 
-local cacheHitRatioPanel = {
+local cacheHitRatioPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'avg by (instance, job) ((rate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{job=~"$job",instance=~"$instance"}[$__rate_interval]) + rate(varnish_main_cache_miss{job=~"$job",instance=~"$instance"}[$__rate_interval]), 1))) * 100',
+      'avg by (instance, job) ((rate(varnish_main_cache_hit{' + matcher + '}[$__rate_interval]) / clamp_min(rate(varnish_main_cache_hit{' + matcher + '}[$__rate_interval]) + rate(varnish_main_cache_miss{' + matcher + '}[$__rate_interval]), 1))) * 100',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -770,11 +774,11 @@ local cacheHitRatioPanel = {
   },
 };
 
-local memoryUsedPanel = {
+local memoryUsedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'varnish_sma_g_bytes{job=~"$job",instance=~"$instance",type="s0"}',
+      'varnish_sma_g_bytes{' + matcher + ',type="s0"}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -849,16 +853,16 @@ local memoryUsedPanel = {
   },
 };
 
-local cacheEventsPanel = {
+local cacheEventsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_n_expired{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_n_expired{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Expired',
     ),
     prometheus.target(
-      'irate(varnish_main_n_lru_nuked{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_n_lru_nuked{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Nuked',
     ),
@@ -933,26 +937,26 @@ local cacheEventsPanel = {
   },
 };
 
-local networkPanel = {
+local networkPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'irate(varnish_main_s_resp_hdrbytes{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_s_resp_hdrbytes{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} -  Frontend header',
     ),
     prometheus.target(
-      'irate(varnish_main_s_resp_bodybytes{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_main_s_resp_bodybytes{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Frontend body',
     ),
     prometheus.target(
-      'irate(varnish_backend_beresp_hdrbytes{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_backend_beresp_hdrbytes{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} -  {{backend}} - Backend header',
     ),
     prometheus.target(
-      'irate(varnish_backend_beresp_bodybytes{job=~"$job",instance=~"$instance"}[$__rate_interval])',
+      'irate(varnish_backend_beresp_bodybytes{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} -  {{backend}} - Backend body',
     ),
@@ -1023,32 +1027,32 @@ local networkPanel = {
   },
 };
 
-local threadsPanel = {
+local threadsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(varnish_main_threads_failed{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'increase(varnish_main_threads_failed{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Failed',
       format='time_series',
       interval='1m',
     ),
     prometheus.target(
-      'increase(varnish_main_threads_created{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'increase(varnish_main_threads_created{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Created',
       format='time_series',
       interval='1m',
     ),
     prometheus.target(
-      'increase(varnish_main_threads_limited{job=~"$job",instance=~"$instance"}[$__interval:])',
+      'increase(varnish_main_threads_limited{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - Limited',
       format='time_series',
       interval='1m',
     ),
     prometheus.target(
-      'varnish_main_threads{job=~"$job",instance=~"$instance"}',
+      'varnish_main_threads{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - Total',
     ),
@@ -1164,13 +1168,13 @@ local logsRow = {
   collapsed: false,
 };
 
-local frontendLogsPanel = {
+local frontendLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/var/log/varnish/varnishncsa-frontend.*.log|/opt/varnish/log/varnishncsa-frontend.*.log", job=~"$job", instance=~"$instance"}',
+      expr: '{' + matcher + '} |= `` | (' + frontendLogFilter + ' or log_type="frontend")',
       queryType: 'range',
       refId: 'A',
     },
@@ -1190,13 +1194,13 @@ local frontendLogsPanel = {
   },
 };
 
-local backendLogsPanel = {
+local backendLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/var/log/varnish/varnishncsa-backend.*.log|/opt/varnish/log/varnishncsa-backend.*.log", job=~"$job", instance=~"$instance"}',
+      expr: '{' + matcher + '} |= `` | (' + backendLogFilter + ' or log_type="backend")',
       queryType: 'range',
       refId: 'A',
     },
@@ -1278,31 +1282,31 @@ local backendLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            cacheHitRatePanel { gridPos: { h: 4, w: 3, x: 0, y: 0 } },
-            frontendRequestsPanel { gridPos: { h: 4, w: 3, x: 3, y: 0 } },
-            backendRequestsPanel { gridPos: { h: 4, w: 3, x: 6, y: 0 } },
-            sessionsRatePanel { gridPos: { h: 4, w: 3, x: 9, y: 0 } },
-            cacheHitsPanel { gridPos: { h: 4, w: 3, x: 12, y: 0 } },
-            cacheHitPassPanel { gridPos: { h: 4, w: 3, x: 15, y: 0 } },
-            sessionQueueLengthPanel { gridPos: { h: 4, w: 3, x: 18, y: 0 } },
-            poolsPanel { gridPos: { h: 4, w: 3, x: 21, y: 0 } },
-            backendConnectionsPanel { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
-            sessionsPanel { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
-            requestsPanel { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
-            cacheHitRatioPanel { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
-            memoryUsedPanel { gridPos: { h: 7, w: 12, x: 0, y: 20 } },
-            cacheEventsPanel { gridPos: { h: 7, w: 12, x: 12, y: 20 } },
-            networkPanel { gridPos: { h: 10, w: 12, x: 0, y: 27 } },
-            threadsPanel { gridPos: { h: 10, w: 12, x: 12, y: 27 } },
+            cacheHitRatePanel(getMatcher($._config)) { gridPos: { h: 4, w: 3, x: 0, y: 0 } },
+            frontendRequestsPanel(getMatcher($._config)) { gridPos: { h: 4, w: 3, x: 3, y: 0 } },
+            backendRequestsPanel(getMatcher($._config)) { gridPos: { h: 4, w: 3, x: 6, y: 0 } },
+            sessionsRatePanel(getMatcher($._config)) { gridPos: { h: 4, w: 3, x: 9, y: 0 } },
+            cacheHitsPanel(getMatcher($._config)) { gridPos: { h: 4, w: 3, x: 12, y: 0 } },
+            cacheHitPassPanel(getMatcher($._config)) { gridPos: { h: 4, w: 3, x: 15, y: 0 } },
+            sessionQueueLengthPanel(getMatcher($._config)) { gridPos: { h: 4, w: 3, x: 18, y: 0 } },
+            poolsPanel(getMatcher($._config)) { gridPos: { h: 4, w: 3, x: 21, y: 0 } },
+            backendConnectionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 4 } },
+            sessionsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 4 } },
+            requestsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 0, y: 12 } },
+            cacheHitRatioPanel(getMatcher($._config)) { gridPos: { h: 8, w: 12, x: 12, y: 12 } },
+            memoryUsedPanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 0, y: 20 } },
+            cacheEventsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 12, x: 12, y: 20 } },
+            networkPanel(getMatcher($._config)) { gridPos: { h: 10, w: 12, x: 0, y: 27 } },
+            threadsPanel(getMatcher($._config)) { gridPos: { h: 10, w: 12, x: 12, y: 27 } },
             logsRow { gridPos: { h: 1, w: 24, x: 0, y: 37 } },
           ],
           if $._config.enableLokiLogs then [
-            frontendLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 38 } },
+            frontendLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 38 } },
           ] else [],
           [
           ],
           if $._config.enableLokiLogs then [
-            backendLogsPanel { gridPos: { h: 7, w: 24, x: 0, y: 46 } },
+            backendLogsPanel(getMatcher($._config)) { gridPos: { h: 7, w: 24, x: 0, y: 46 } },
           ] else [],
           [
           ],
