@@ -2,7 +2,6 @@
   filteringSelector: 'job="integrations/openstack"',
   groupLabels: ['job'],
   // instance of openstack cluster
-  // instance of openstack cluster
   instanceLabels: ['instance'],
 
   uid: 'openstack',
