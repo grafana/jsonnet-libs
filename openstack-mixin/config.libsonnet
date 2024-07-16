@@ -24,8 +24,6 @@
   alertsWarningCinderHighVolumeMemoryUsage: 80,  // %
   alertsWarningCinderHighPoolCapacityUsage: 80,  // %
 
-  // legend is used by panels 'Users', 'VMs', 'Networks', 'Subnets', 'Security Groups', 'Volumes', 'Snapshots', 'Image count'
-  legendTemplate: '{{instance}}',
 
   // regex to match network names where we should track IP address utilization:
   alertsIPutilizationNetworksMatcher: '.+',
