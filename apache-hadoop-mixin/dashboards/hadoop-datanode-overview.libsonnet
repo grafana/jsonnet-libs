@@ -8,6 +8,8 @@ local dashboardUid = 'apache-hadoop-datanode-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
+local getMatcher(cfg) = '%(hadoopSelector)s, instance=~"$instance"' % cfg;
+
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
@@ -30,11 +32,11 @@ local datanodesRow = {
   collapsed: false,
 };
 
-local unreadBlocksEvictedPanel = {
+local unreadBlocksEvictedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hadoop_datanode_ramdiskblocksevictedwithoutread{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}[$__interval:])',
+      'increase(hadoop_datanode_ramdiskblocksevictedwithoutread{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -107,11 +109,11 @@ local unreadBlocksEvictedPanel = {
   },
 };
 
-local blocksRemovedPanel = {
+local blocksRemovedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hadoop_datanode_blocksremoved{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}[$__interval:])',
+      'increase(hadoop_datanode_blocksremoved{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -184,11 +186,11 @@ local blocksRemovedPanel = {
   },
 };
 
-local volumeFailuresPanel = {
+local volumeFailuresPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hadoop_datanode_volumefailures{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}[$__interval:])',
+      'increase(hadoop_datanode_volumefailures{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -261,13 +263,13 @@ local volumeFailuresPanel = {
   },
 };
 
-local datanodeLogsPanel = {
+local datanodeLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-datanode.*.log"} |= ``',
+      expr: '{' + matcher + '} |= `` | (filename=~".*/hadoop/logs/.*-datanode.*.log" or log_type="datanode")',
       queryType: 'range',
       refId: 'A',
     },
@@ -339,9 +341,21 @@ local datanodeLogsPanel = {
               sort=1
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(hadoop_datanode_ramdiskblocksevictedwithoutread{%(hadoopSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(hadoop_datanode_ramdiskblocksevictedwithoutread{job=~"$job"}, instance)',
+              'label_values(hadoop_datanode_ramdiskblocksevictedwithoutread{%(hadoopSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -352,7 +366,7 @@ local datanodeLogsPanel = {
             template.new(
               'hadoop_cluster',
               promDatasource,
-              'label_values(hadoop_datanode_ramdiskblocksevictedwithoutread{job=~"$job"}, hadoop_cluster)',
+              'label_values(hadoop_datanode_ramdiskblocksevictedwithoutread{%(hadoopSelector)s}, hadoop_cluster)' % $._config,
               label='Hadoop cluster',
               refresh=2,
               includeAll=true,
@@ -367,12 +381,12 @@ local datanodeLogsPanel = {
         std.flattenArrays([
           [
             datanodesRow { gridPos: { h: 1, w: 24, x: 0, y: 0 } },
-            unreadBlocksEvictedPanel { gridPos: { h: 6, w: 8, x: 0, y: 1 } },
-            blocksRemovedPanel { gridPos: { h: 6, w: 8, x: 8, y: 1 } },
-            volumeFailuresPanel { gridPos: { h: 6, w: 8, x: 16, y: 1 } },
+            unreadBlocksEvictedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 0, y: 1 } },
+            blocksRemovedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 8, y: 1 } },
+            volumeFailuresPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 16, y: 1 } },
           ],
           if $._config.enableLokiLogs then [
-            datanodeLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 7 } },
+            datanodeLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 7 } },
           ] else [],
           [
           ],
