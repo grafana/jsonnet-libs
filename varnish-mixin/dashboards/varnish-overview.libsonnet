@@ -1280,7 +1280,7 @@ local backendLogsPanel(matcher) = {
             template.new(
               'instance',
               promDatasource,
-              'label_values(varnish_main_sessions{%(multiclusterSelector)s},instance)' % $._config,
+              'label_values(varnish_main_sessions{%(varnishSelector)s},instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
