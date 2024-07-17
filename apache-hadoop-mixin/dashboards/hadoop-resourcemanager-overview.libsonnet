@@ -8,6 +8,8 @@ local dashboardUid = 'apache-hadoop-resourcemanager-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
+local getMatcher(cfg) = '%(hadoopSelector)s, instance=~"$instance"' % cfg;
+
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
@@ -16,36 +18,36 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local nodeManagersStatePanel = {
+local nodeManagersStatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_resourcemanager_numactivenms{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="ClusterMetrics",}',
+      'hadoop_resourcemanager_numactivenms{' + matcher + ', name="ClusterMetrics",}',
       datasource=promDatasource,
       legendFormat='active',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_numdecommissionednms{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="ClusterMetrics",}',
+      'hadoop_resourcemanager_numdecommissionednms{' + matcher + ', name="ClusterMetrics",}',
       datasource=promDatasource,
       legendFormat='decommissioned',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_numlostnms{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="ClusterMetrics"}',
+      'hadoop_resourcemanager_numlostnms{' + matcher + ', name="ClusterMetrics"}',
       datasource=promDatasource,
       legendFormat='lost',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_numunhealthynms{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="ClusterMetrics"}',
+      'hadoop_resourcemanager_numunhealthynms{' + matcher + ', name="ClusterMetrics"}',
       datasource=promDatasource,
       legendFormat='healthy',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_numrebootednms{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="ClusterMetrics"}',
+      'hadoop_resourcemanager_numrebootednms{' + matcher + ', name="ClusterMetrics"}',
       datasource=promDatasource,
       legendFormat='rebooted',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_numshutdownnms{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="ClusterMetrics"}',
+      'hadoop_resourcemanager_numshutdownnms{' + matcher + ', name="ClusterMetrics"}',
       datasource=promDatasource,
       legendFormat='shutdown',
     ),
@@ -103,36 +105,36 @@ local applicationsRow = {
   collapsed: false,
 };
 
-local applicationsStatePanel = {
+local applicationsStatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_resourcemanager_appsrunning{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_appsrunning{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='running',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_appspending{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_appspending{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='pending',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_appskilled{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_appskilled{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='killed',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_appssubmitted{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_appssubmitted{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='submitted',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_appscompleted{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_appscompleted{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='completed',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_appsfailed{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_appsfailed{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='failed',
     ),
@@ -206,17 +208,17 @@ local applicationsStatePanel = {
   },
 };
 
-local availableMemoryPanel = {
+local availableMemoryPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_resourcemanager_allocatedmb{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_allocatedmb{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='allocated',
       format='time_series',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_availablemb{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_availablemb{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='available',
       format='time_series',
@@ -288,17 +290,17 @@ local availableMemoryPanel = {
   },
 };
 
-local availableVirtualCoresPanel = {
+local availableVirtualCoresPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_resourcemanager_availablevcores{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_availablevcores{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='available',
       format='time_series',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_allocatedvcores{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="QueueMetrics",q0="root", q1="default"}',
+      'hadoop_resourcemanager_allocatedvcores{' + matcher + ', name="QueueMetrics",q0="root", q1="default"}',
       datasource=promDatasource,
       legendFormat='allocated',
       format='time_series',
@@ -384,17 +386,17 @@ local jvmRow = {
   collapsed: false,
 };
 
-local memoryUsedPanel = {
+local memoryUsedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_resourcemanager_memheapusedm{name="JvmMetrics", job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}',
+      'hadoop_resourcemanager_memheapusedm{name="JvmMetrics", ' + matcher + '}',
       datasource=promDatasource,
       legendFormat='heap',
       format='time_series',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_memnonheapusedm{name="JvmMetrics", job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}',
+      'hadoop_resourcemanager_memnonheapusedm{name="JvmMetrics", ' + matcher + '}',
       datasource=promDatasource,
       legendFormat='nonheap',
       format='time_series',
@@ -467,17 +469,17 @@ local memoryUsedPanel = {
   pluginVersion: '10.0.2-cloud.1.94a6f396',
 };
 
-local memoryCommittedPanel = {
+local memoryCommittedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_resourcemanager_memheapcommittedm{name="JvmMetrics", job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}',
+      'hadoop_resourcemanager_memheapcommittedm{name="JvmMetrics", ' + matcher + '}',
       datasource=promDatasource,
       legendFormat='heap',
       format='time_series',
     ),
     prometheus.target(
-      'hadoop_resourcemanager_memnonheapcommittedm{name="JvmMetrics", job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}',
+      'hadoop_resourcemanager_memnonheapcommittedm{name="JvmMetrics", ' + matcher + '}',
       datasource=promDatasource,
       legendFormat='nonheap',
       format='time_series',
@@ -549,11 +551,11 @@ local memoryCommittedPanel = {
   },
 };
 
-local garbageCollectionCountPanel = {
+local garbageCollectionCountPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hadoop_resourcemanager_gccount{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}[$__interval:])',
+      'increase(hadoop_resourcemanager_gccount{' + matcher + '}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -626,11 +628,11 @@ local garbageCollectionCountPanel = {
   },
 };
 
-local averageGarbageCollectionTimePanel = {
+local averageGarbageCollectionTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hadoop_resourcemanager_gctimemillis{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}[$__interval:]) / clamp_min(increase(hadoop_resourcemanager_gccount{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}[$__interval:]), 1)',
+      'increase(hadoop_resourcemanager_gctimemillis{' + matcher + '}[$__interval:]) / clamp_min(increase(hadoop_resourcemanager_gccount{' + matcher + '}[$__interval:]), 1)',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -703,13 +705,13 @@ local averageGarbageCollectionTimePanel = {
   },
 };
 
-local resourcemanagerLogsPanel = {
+local resourcemanagerLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-resourcemanager.*.log"} |= ``',
+      expr: '{' + matcher + '} |= `` | (filename=~".*/hadoop/logs/.*-resourcemanager.*.log" or log_type="resourcemanager")',
       queryType: 'range',
       refId: 'A',
     },
@@ -781,9 +783,21 @@ local resourcemanagerLogsPanel = {
               sort=1
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(hadoop_resourcemanager_activeapplications{%(hadoopSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(hadoop_resourcemanager_activeapplications{job=~"$job"}, instance)',
+              'label_values(hadoop_resourcemanager_activeapplications{%(hadoopSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -794,7 +808,7 @@ local resourcemanagerLogsPanel = {
             template.new(
               'hadoop_cluster',
               promDatasource,
-              'label_values(hadoop_resourcemanager_activeapplications{job=~"$job"}, hadoop_cluster)',
+              'label_values(hadoop_resourcemanager_activeapplications{%(hadoopSelector)s}, hadoop_cluster)' % $._config,
               label='Hadoop cluster',
               refresh=2,
               includeAll=true,
@@ -808,19 +822,19 @@ local resourcemanagerLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            nodeManagersStatePanel { gridPos: { h: 9, w: 24, x: 0, y: 0 } },
+            nodeManagersStatePanel(getMatcher($._config)) { gridPos: { h: 9, w: 24, x: 0, y: 0 } },
             applicationsRow { gridPos: { h: 1, w: 24, x: 0, y: 9 } },
-            applicationsStatePanel { gridPos: { h: 8, w: 24, x: 0, y: 10 } },
-            availableMemoryPanel { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
-            availableVirtualCoresPanel { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
+            applicationsStatePanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 10 } },
+            availableMemoryPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 18 } },
+            availableVirtualCoresPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 18 } },
             jvmRow { gridPos: { h: 1, w: 24, x: 0, y: 24 } },
-            memoryUsedPanel { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
-            memoryCommittedPanel { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
-            garbageCollectionCountPanel { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
-            averageGarbageCollectionTimePanel { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
+            memoryUsedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 25 } },
+            memoryCommittedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 25 } },
+            garbageCollectionCountPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 31 } },
+            averageGarbageCollectionTimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 31 } },
           ],
           if $._config.enableLokiLogs then [
-            resourcemanagerLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 37 } },
+            resourcemanagerLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 37 } },
           ] else [],
           [
           ],
