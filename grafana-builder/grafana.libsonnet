@@ -332,17 +332,25 @@ local utils = import 'mixin-utils/utils.libsonnet';
   },
 
   statPanel(query, format='percentunit'):: {
+    local isNativeClassic = utils.isNativeClassicQuery(query),
     type: 'singlestat',
     thresholds: '70,80',
     format: format,
     targets: [
       {
-        expr: query,
+        expr: if isNativeClassic then utils.showClassicHistogramQuery(query) else query,
+        format: 'time_series',
+        instant: true,
+        refId: if isNativeClassic then 'A_classic' else 'A',
+      },
+    ] + if isNativeClassic then [
+      {
+        expr: utils.showNativeHistogramQuery(query),
         format: 'time_series',
         instant: true,
         refId: 'A',
       },
-    ],
+    ] else [],
   },
 
   tablePanel(queries, labelStyles):: {

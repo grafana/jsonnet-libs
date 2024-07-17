@@ -1,6 +1,8 @@
 local g = import 'grafana-builder/grafana.libsonnet';
 
 {
+  isNativeClassicQuery(query):: if std.isObject(query) then std.objectHas(query, 'native') && std.objectHas(query, 'classic') else false,
+
   // The ncHistogramQuantile (native classic histogram quantile) function is
   // used to calculate histogram quantiles from native histograms or classic
   // histograms. Metric name should be provided without _bucket suffix.
