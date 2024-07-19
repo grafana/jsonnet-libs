@@ -58,7 +58,14 @@ scrape_configs:
 
 To collect logs from Varnish Cache when running in a kubernetes environment, `varnishncsa` and Alloy sidecars must be added to the deployment configuration. Additional ConfigMaps for custom Alloy configurations must be created. The deployment will need an additional volume for logs and all sidecars will need `volumeMounts` for that volume.
 
-For `varnishncsa` to run, the log file needs to already exist. This can be accomplished with an `initContainer`. 
+> For `varnishncsa` to run, the log file needs to already exist. This can be accomplished with an `initContainer`.
+
+The mixin is expecting `filename` to match with the following regex patterns for frontend and/or backend logs:
+```regex
+/var/log/varnish/varnishncsa-frontend.*.log|/opt/varnish/log/varnishncsa-frontend.*.log
+/var/log/varnish/varnishncsa-backend.*.log|/opt/varnish/log/varnishncsa-backend.*.log
+```
+It is necessary for the log location in your deployment to match these patterns.
 
 The `varnishncsa` sidecars need to run as a user with the appropriate permissions to write to the log file(s). If there are
 frontend and backend logs, two separate sidecars will need to be defined, customized to start `varnishncsa` with the appropriate flags.
