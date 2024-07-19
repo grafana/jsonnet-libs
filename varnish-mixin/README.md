@@ -54,6 +54,20 @@ scrape_configs:
           __path__: /var/log/varnish/varnishncsa*.log*
 ```
 
+#### Varnish Cache logs in Kubernetes
+
+To collect logs from Varnish Cache when running in a kubernetes environment, `varnishncsa` and Alloy sidecars must be added to the deployment configuration. Additional ConfigMaps for custom Alloy configurations must be created. The deployment will need an additional volume for logs and all sidecars will need `volumeMounts` for that volume.
+
+For `varnishncsa` to run, the log file needs to already exist. This can be accomplished with an `initContainer`. 
+
+The `varnishncsa` sidecars need to run as a user with the appropriate permissions to write to the log file(s). If there are
+frontend and backend logs, two separate sidecars will need to be defined, customized to start `varnishncsa` with the appropriate flags.
+
+Refer to [this documentation](https://grafana.com/docs/grafana-cloud/monitor-infrastructure/integrations/integration-reference/integration-varnish-cache/#set-up-varnish-cache-logging) for more information on the commands and flags needed for frontend/backend logging. Additionally, for further details on varnishncsa refer to [this documentation](https://varnish-cache.org/docs/trunk/reference/varnishncsa.html).
+
+A single Alloy sidecar with a custom configuration can be defined to collect all the logs, assuming the appropriate volumes are 
+mounted and that the log files are all located in the same location.
+
 ## Alerts overview
 
 | Alert                             | Summary                                                                             |
