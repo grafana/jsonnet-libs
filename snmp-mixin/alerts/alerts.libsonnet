@@ -36,7 +36,7 @@
             },
             annotations: {
               summary: 'SNMP target restarted',
-              description: 'The SNMP target on instance {{$labels.instance}} from job {{$labels.job}} has restarted (sysUpTime < 60 seconds).',
+              description: 'The SNMP target on instance {{$labels.instance}} from job {{$labels.job}} has restarted.',
             },
             'for': '5s',
           },
