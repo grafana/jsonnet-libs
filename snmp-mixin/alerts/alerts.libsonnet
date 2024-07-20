@@ -35,7 +35,7 @@
               severity: 'info',
             },
             annotations: {
-              summary: 'SNMP target restarted',
+              summary: 'SNMP target restarted.',
               description: 'The SNMP target on instance {{$labels.instance}} from job {{$labels.job}} has restarted.',
             },
             'for': '5s',
