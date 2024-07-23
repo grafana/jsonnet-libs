@@ -122,7 +122,7 @@ local signals = signal.unmarshallJson(jsonSignals);
         },
         testVersion: {
           actual: panel.pluginVersion,
-          expect: 'v10.0.0',
+          expect: 'v11.0.0',
         },
         testUid: {
           actual: panel.datasource,
