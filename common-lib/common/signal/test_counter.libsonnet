@@ -38,7 +38,7 @@ local m1 = signal.init(
           expect: 'API server requests',
         },
         testUnit: {
-          actual: m1.asTimeSeries().fieldConfig.defaults.unit,
+          actual: m1.asTimeSeries().fieldConfig.overrides[0].properties[1].value,
           expect: 'rps',
         },
         testTStype: {

@@ -36,7 +36,7 @@ local gauge1 = signal.init(
           expect: 'Up metric',
         },
         testUnit: {
-          actual: gauge1.asTimeSeries().fieldConfig.defaults.unit,
+          actual: gauge1.asTimeSeries().fieldConfig.overrides[0].properties[1].value,
           expect: 'short',
         },
         testTStype: {
