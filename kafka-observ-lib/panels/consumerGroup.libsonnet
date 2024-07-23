@@ -5,6 +5,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     consumerGroupLag:
       signals.consumerGroup.consumerGroupLag.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
+    consumerGroupLagTime:
+      signals.consumerGroup.consumerGroupLagTime.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
     consumerGroupConsumeRate:
       signals.consumerGroup.consumerGroupConsumeRate.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
@@ -14,6 +17,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         format='time_series'
       )
       + signals.consumerGroup.consumerGroupLag.asTableColumn(override='byName', format='time_series')
+      + signals.consumerGroup.consumerGroupLagTime.asTableColumn(override='byName', format='time_series')
       + g.panel.table.queryOptions.withTransformationsMixin(
         [
           g.panel.table.queryOptions.transformation.withId('filterByValue')

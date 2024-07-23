@@ -4,10 +4,8 @@ This lib can be used to generate dashboards, rows, panels for Kafka signals.
 
 The library supports two metricsSources:
 
-- `prometheus`: JMX configs from [prometheus/jmx_exporter](https://github.com/prometheus/jmx_exporter/blob/main/example_configs/kafka-2_0_0.yml)
-- `grafanacloud`: JMX configs from [kafka-mixin](../kafka-mixin/jmx)
-
-Both sources also uses metrics from https://github.com/danielqsj/kafka_exporter.
+- `prometheus`: JMX configs from [prometheus/jmx_exporter](https://github.com/prometheus/jmx_exporter/blob/main/example_configs/kafka-2_0_0.yml) and [kafka_exporter](https://github.com/danielqsj/kafka_exporter)
+- `grafanacloud`: JMX configs from [kafka-mixin](../kafka-mixin/jmx) and [kafka_exporter fork](https://github.com/grafana/kafka_exporter) (used in grafana-agent/alloy)
 
 ## Import
 

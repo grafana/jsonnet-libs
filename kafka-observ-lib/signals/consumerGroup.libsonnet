@@ -17,7 +17,8 @@ function(this)
         name: 'Consumer group lag',
         description: 'Current approximate lag of a ConsumerGroup at Topic/Partition.',
         type: 'gauge',
-        unit: 's',
+        unit: 'short',
+        aggFunction: 'sum',
         sources: {
           prometheus: {
             aggKeepLabels: ['consumergroup', 'topic'],
@@ -26,6 +27,21 @@ function(this)
           grafanacloud: self.prometheus,
         },
       },
+      consumerGroupLagTime: {
+        name: 'Consumer group lag in ms',
+        description: 'Current approximate lag of a ConsumerGroup at Topic/Partition.',
+        type: 'gauge',
+        unit: 'ms',
+        optional: true,
+        sources: {
+          // prometheus: {}, n/a in danielqsj/kafka_exporter
+          grafanacloud: {
+            aggKeepLabels: ['consumergroup', 'topic'],
+            expr: 'kafka_consumer_lag_millis{%(queriesSelector)s}',
+          },
+        },
+      },
+
       consumerGroupConsumeRate: {
         name: 'Consumer group consume rate',
         description: 'Consumer group consume rate.',
