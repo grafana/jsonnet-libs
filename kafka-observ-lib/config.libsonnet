@@ -1,12 +1,12 @@
 {
   local this = self,
   filteringSelector: 'job!=""',
-  groupLabels: ['cluster', 'kafka_cluster'],
+  groupLabels: ['kafka_cluster'],
   instanceLabels: ['instance'],
   uid: 'kafka',
   dashboardNamePrefix: 'Kafka',
   dashboardTags: ['kafka'],
-  metricsSource: 'prometheus',
+  metricsSource: 'prometheus',  //or grafanacloud
   //Can be regex:
   topicsIgnoreSelector: '__consumer_offsets',
   signals+:
