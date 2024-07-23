@@ -12,11 +12,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
     grafana: {
       panels: (import './panels/main.libsonnet').new(this.signals),
-      rows: (import './rows.libsonnet').new(this.grafana.panels, type=this.config.metricSource),
+      rows: (import './rows.libsonnet').new(this.grafana.panels, type=this.config.metricsSource),
       dashboards: (import './dashboards.libsonnet').new(this),
     },
     prometheus: {
-      alerts: {},
+      alerts: (import './alerts.libsonnet').new(this),
       recordingRules: {},
     },
     asMonitoringMixin(): {
