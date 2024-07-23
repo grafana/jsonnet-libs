@@ -326,7 +326,7 @@ local lokiQuery = g.query.loki;
     freeIPs:
       prometheusQuery.new(
         '${' + vars.datasources.prometheus.name + '}',
-        'openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s,network_name=~"%(alertsIPutilizationNetworksMatcher)s"}-openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s,network_name=~"%(alertsIPutilizationNetworksMatcher)s"}' % vars {alertsIPutilizationNetworksMatcher: config.alertsIPutilizationNetworksMatcher}
+        'openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s,network_name=~"%(alertsIPutilizationNetworksMatcher)s"}-openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s,network_name=~"%(alertsIPutilizationNetworksMatcher)s"}' % vars { alertsIPutilizationNetworksMatcher: config.alertsIPutilizationNetworksMatcher }
       )
       + prometheusQuery.withLegendFormat('{{network_name}}'),
 

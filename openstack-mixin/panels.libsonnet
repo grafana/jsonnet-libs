@@ -232,7 +232,7 @@ local utils = commonlib.utils;
               'cluster 5': true,
               'cluster 6': true,
             },
-            'indexByName': {
+            indexByName: {
               'cluster 1': 0,
               'Value #A': 1,
               'Value #B': 2,
@@ -240,12 +240,12 @@ local utils = commonlib.utils;
               'Value #D': 4,
               'Value #E': 5,
               'Value #F': 6,
-              'Time': 7,
+              Time: 7,
               'cluster 2': 8,
               'cluster 3': 9,
               'cluster 4': 10,
               'cluster 5': 11,
-              'cluster 6': 12
+              'cluster 6': 12,
             },
             renameByName: {
               Time: '',
@@ -260,7 +260,7 @@ local utils = commonlib.utils;
               openstack_placement_resource_total: 'Total',
               openstack_placement_resource_usage: 'In use',
               resourcetype: 'Resource',
-              'cluster 1': 'cluster'
+              'cluster 1': 'cluster',
             },
             includeByName: {},
           },
