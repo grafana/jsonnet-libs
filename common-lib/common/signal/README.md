@@ -9,9 +9,10 @@ This shifts focus of dashboard building from panels to actual signals we want to
 Workflow to generate dashboards would be as follows:
 
 - Define key indicators(signals) your want to observe.
-- Use built-in functions to render each signal as a panel (i.e. `signal.asTimeSeries()`, `signal.asStat()`, `signal.asGauge()`, `signal.asStatusHistory()`)
+- Use built-in functions to render each signal as a panel (i.e. `signal.asTimeSeries()`, `signal.asStat()`, `signal.asGauge()`, `signal.asStatusHistory()`, `signal.asTable(format='table|timeseries'))`, `signal.asTableColumn()`)
 - If you want to combine multiple signals inside a single panel, render signal not as [Grafana panel](https://grafana.github.io/grafonnet/API/panel/index.html), but as a [Target](https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-queryoptionswithtargets), which is attachable to existing panel. (`signal.asTarget()`)
 - If you need to put multiple signals inside single panel use `signal.asPanelMixin()` function. It would add `Target` And overrides relevant to it (units, value mappings...)
+- If you need to put multiple columns inside single table use `signal.asTableColumn(format='table|timeseries')` function. It would add `Target` And overrides relevant to it (units, value mappings...).
 - Variables required for signals are also generated and can be attached to any dashboard
 - Bonus: use stylize() functions from commonlib/panels to apply common styles to signals.
 
