@@ -7,5 +7,6 @@
     ksqldbFilteringSelector: 'job=~"integrations/kafka-ksqldb|integrations/kafka"',
     groupLabels: ['job', 'kafka_cluster'],
     instanceLabels: ['instance'],
+    dashboardTags: ['kafka-integration'],
   },
 }

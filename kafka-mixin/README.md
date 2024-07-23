@@ -4,12 +4,11 @@ The Kafka Mixin is a set of configurable, reusable, and extensible dashboards ba
 
 This mixin includes the following dashboards:
 Kafka Overview - Gives an overview of your Kafka cluster resource usage, throughput, and general healthiness 
-kafka-topics - Gives informations about the throughput of specific (filterable) topics
+Kafka topics overview - Gives informations about the throughput of specific (filterable) topics and consumer groups (rate, lag)
 Zookeeper Overview - Gives an overview of your Zookeeper nodes resource usage and general healthiness 
 Ksqldb Overview - Gives an overview of your ksqldb cluster as queries resource usage, throughput, and general healthiness 
 Connect Overview - Gives an overview of your Kafka Connect cluster and tasks resource usage, throughput, and general healthiness
 Schema Registry Overview - Gives an overview of your Kafka Schema Registry cluster resource usage, throughput, and general healthiness
-Kafka Lag Overview - Gives Lag metrics by time and offset count on topics and partitions of the cluster
 
 To use them, you need to have `mixtool` and `jsonnetfmt` installed. If you have a working Go development environment, it's easiest to run the following:
 
