@@ -67,7 +67,9 @@ local signalUtils = import './utils.libsonnet';
         self.asPanelExpression(),
       )
       + prometheusQuery.withRefId(name)
-      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % this.vars),
+      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % this.vars)
+      + prometheusQuery.withFormat('time_series')
+      + prometheusQuery.withInstant(false),
 
     //Useful to compose table with instant values
     asTableTarget()::
@@ -84,8 +86,8 @@ local signalUtils = import './utils.libsonnet';
     asTableColumn(override='byName', format='table')::
       g.panel.table.queryOptions.withTargetsMixin(
         if format == 'table' then self.asTableTarget()
-        else if format == 'timeseries' then self.asTarget()
-        else error 'Unknown format, must be "table" or "timeseries"'
+        else if format == 'time_series' then self.asTarget()
+        else error 'Unknown format, must be "table" or "time_series"'
       )
       + self.asOverride(override=override),
 
@@ -171,7 +173,7 @@ local signalUtils = import './utils.libsonnet';
             ),
           ]
         )
-      else if format == 'timeseries' then
+      else if format == 'time_series' then
         self.asPanelMixin(override='byName')
         + g.panel.table.queryOptions.withTransformations(
           [
@@ -184,7 +186,7 @@ local signalUtils = import './utils.libsonnet';
             }),
           ]
         )
-      else error 'Table format must be "timeseries" or "table"',
+      else error 'Table format must be "time_series" or "table"',
 
 
     //Return as gauge panel
