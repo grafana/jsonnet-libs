@@ -7,7 +7,7 @@ function(this)
     instanceLabels: this.instanceLabels + ['topic', 'consumergroup'],
     aggLevel: 'group',
     aggFunction: 'avg',
-    legendCustomTemplate: '%(aggLegend)s',
+    legendCustomTemplate: '{{ consumergroup }} ({{ topic }})',
     discoveryMetric: {
       prometheus: 'kafka_consumergroup_lag',  //https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
       grafanacloud: self.prometheus,

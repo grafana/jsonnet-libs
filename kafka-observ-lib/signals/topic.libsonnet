@@ -7,7 +7,7 @@ function(this)
     instanceLabels: this.instanceLabels + ['topic'],
     aggLevel: 'group',
     aggFunction: 'sum',
-    legendCustomTemplate: '%(aggLegend)s',
+    legendCustomTemplate: '{{ topic }}',
     discoveryMetric: {
       prometheus: 'kafka_topic_partition_current_offset',  //https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
       grafanacloud: self.prometheus,
@@ -32,6 +32,7 @@ function(this)
         description: 'Messages in per second.',
         type: 'counter',
         unit: 'mps',
+        legendCustomTemplate: '{{ topic }}/{{ partition }}',
         sources: {
           prometheus: {
             aggKeepLabels: ['topic', 'partition'],
@@ -79,6 +80,7 @@ function(this)
         type: 'gauge',
         unit: 'none',
         aggFunction: 'max',
+        legendCustomTemplate: '{{ topic }}/{{ partition }}',
         sources: {
           prometheus: {
             aggKeepLabels: ['topic', 'partition'],
@@ -96,6 +98,7 @@ function(this)
         type: 'gauge',
         unit: 'none',
         aggFunction: 'max',
+        legendCustomTemplate: '{{ topic }}/{{ partition }}',
         sources: {
           prometheus: {
 
@@ -111,6 +114,7 @@ function(this)
         type: 'gauge',
         unit: 'decbytes',
         aggFunction: 'max',
+        legendCustomTemplate: '{{ topic }}/{{ partition }}',
         sources: {
           prometheus: {
             aggKeepLabels: ['topic', 'partition'],
