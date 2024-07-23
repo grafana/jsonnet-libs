@@ -313,5 +313,22 @@ local lokiQuery = g.query.loki;
       )
       + prometheusQuery.withFormat('table')
       + prometheusQuery.withInstant(true),
+    vCPUUsed:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        '(100*sum(openstack_placement_resource_usage{%(queriesSelector)s,resourcetype="VCPU"}))/sum(openstack_placement_resource_total{%(queriesSelector)s,resourcetype="VCPU"})' % vars
+      ),
+    RAMUsed:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        '(100*sum(openstack_placement_resource_usage{%(queriesSelector)s,resourcetype="MEMORY_MB"}))/sum(openstack_placement_resource_total{%(queriesSelector)s,resourcetype="MEMORY_MB"})' % vars
+      ),
+    freeIPs:
+      prometheusQuery.new(
+        '${' + vars.datasources.prometheus.name + '}',
+        'openstack_neutron_network_ip_availabilities_total{%(queriesSelector)s,network_name=~"%(alertsIPutilizationNetworksMatcher)s"}-openstack_neutron_network_ip_availabilities_used{%(queriesSelector)s,network_name=~"%(alertsIPutilizationNetworksMatcher)s"}' % vars {alertsIPutilizationNetworksMatcher: config.alertsIPutilizationNetworksMatcher}
+      )
+      + prometheusQuery.withLegendFormat('{{network_name}}'),
+
   },
 }
