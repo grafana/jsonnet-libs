@@ -13,5 +13,8 @@
     alertsCriticalSessionsDropped: 0,
     alertsCriticalBackendUnhealthy: 0,
     enableLokiLogs: true,
+    enableMultiCluster: false,
+    multiclusterSelector: 'job=~"$job"',
+    varnishSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
   },
 }
