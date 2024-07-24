@@ -37,7 +37,7 @@ local m1 = signal.init(
           expect: 'API server duration',
         },
         testUnit: {
-          actual: m1.asTimeSeries().fieldConfig.defaults.unit,
+          actual: m1.asTimeSeries().fieldConfig.overrides[0].properties[1].value,
           expect: 'seconds',
         },
         testTStype: {
@@ -46,7 +46,7 @@ local m1 = signal.init(
         },
         testTSversion: {
           actual: m1.asTimeSeries().pluginVersion,
-          expect: 'v10.0.0',
+          expect: 'v11.0.0',
         },
         testTSUid: {
           actual: m1.asTimeSeries().datasource,
