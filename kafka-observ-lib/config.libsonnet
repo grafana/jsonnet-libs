@@ -6,7 +6,8 @@
   uid: 'kafka',
   dashboardNamePrefix: 'Kafka',
   dashboardTags: ['kafka'],
-  kafkaLagThreshold: '100',
+  alertKafkaLagTooHighThreshold: '100',
+  alertKafkaLagTooHighSeverity: 'critical',
   metricsSource: 'prometheus',  //or grafanacloud
   //Can be regex:
   topicsIgnoreSelector: '__consumer_offsets',

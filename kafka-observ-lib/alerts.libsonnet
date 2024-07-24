@@ -26,12 +26,12 @@
               expr: 'sum without (partition) (%s) > %s' %
                     [
                       this.signals.consumerGroup.consumerGroupLag.asRuleExpression(),
-                      this.config.kafkaLagThreshold,
+                      this.config.alertKafkaLagTooHighThreshold,
                     ],
               'for': '15m',
               keep_firing_for: '5m',
               labels: {
-                severity: 'critical',
+                severity: this.config.alertKafkaLagTooHighSeverity,
               },
               annotations: {
                 summary: 'Kafka lag is too high.',
