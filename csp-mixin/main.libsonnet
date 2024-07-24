@@ -7,6 +7,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     signals:
       {
         blobstore: commonlib.signals.unmarshallJsonMulti(this.config.signals.blobstore, type=this.config.metricsSource),
+        azureelasticpool: commonlib.signals.unmarshallJsonMulti(this.config.signals.azureelasticpool, type=this.config.metricsSource),
       },
     grafana: {
       panels: (import './panels.libsonnet').new(this),

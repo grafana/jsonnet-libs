@@ -46,6 +46,20 @@
               summary: 'Memcached connections at critical level.',
             },
           },
+          {
+            alert: 'MemcachedOutOfMemoryErrors',
+            expr: |||
+              sum without (slab) (rate(memcached_slab_items_outofmemory_total[5m])) > 0
+            |||,
+            'for': '15m',
+            labels: {
+              severity: 'warning',
+            },
+            annotations: {
+              description: 'Memcached instance {{ $labels.job }} / {{ $labels.instance }} has OutOfMemory errors for at least 15 minutes, current rate is {{ printf "%0.0f" $value }}',
+              summary: 'Memcached has OutOfMemory errors.',
+            },
+          },
         ],
       },
     ],

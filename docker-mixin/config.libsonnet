@@ -32,7 +32,7 @@
     logsFilteringSelector: self.filteringSelector + ', namespace="" ,container!=""',
     logsExtraFilters: |||
       | label_format timestamp="{{__timestamp__}}"
-      | line_format `{{ if eq "[[instance]]" ".*" }}{ {{alignLeft 25 .instance}}|{{ alignLeft 25 .container }}|{{else}}{{ alignLeft 25 .container}}|{{end}} {{__line__}}`
+      | line_format `{{ if eq "[[instance]]" ".*" }}{{alignLeft 25 .instance}}|{{ alignLeft 25 .container }}|{{else}}{{ alignLeft 25 .container}}|{{end}} {{__line__}}`
     |||,
 
     logsLabels: this.groupLabels + this.instanceLabels + ['container'],

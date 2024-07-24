@@ -4,7 +4,7 @@ local signalUtils = import './utils.libsonnet';
 
 {
   new(
-    name,
+    signalName,
     type,
     unit,
     description,
@@ -61,24 +61,52 @@ local signalUtils = import './utils.libsonnet';
 
     unit:: signalUtils.generateUnits(type, unit, rangeFunction),
     //Return as grafana panel target(query+legend)
-    asTarget()::
+    asTarget(name=signalName)::
       prometheusQuery.new(
         '${%s}' % datasource,
         self.asPanelExpression(),
       )
       + prometheusQuery.withRefId(name)
-      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % this.vars),
+      + prometheusQuery.withLegendFormat(signalUtils.wrapLegend(name, aggLevel, legendCustomTemplate) % this.vars)
+      + prometheusQuery.withFormat('time_series')
+      + prometheusQuery.withInstant(false),
+
+    //Useful to compose table with instant values
+    asTableTarget()::
+      self.asTarget()
+      + prometheusQuery.withFormat('table')
+      + prometheusQuery.withInstant(true),
 
     //Return as grafana panel mixin target(query+legend) + overrides(like units)
-    asPanelMixin()::
+    asPanelMixin(override='byQuery')::
       g.panel.timeSeries.queryOptions.withTargetsMixin(self.asTarget())
-      + g.panel.timeSeries.standardOptions.withOverridesMixin(
+      + self.asOverride(override=override),
+
+    //Return table target (instant=true, format=table) + overrides
+    asTableColumn(override='byName', format='table')::
+      g.panel.table.queryOptions.withTargetsMixin(
+        if format == 'table' then self.asTableTarget()
+        else if format == 'time_series' then self.asTarget()
+        else error 'Unknown format, must be "table" or "time_series"'
+      )
+      + self.asOverride(override=override),
+
+    asOverride(name=signalName, override='byQuery')::
+      g.panel.timeSeries.standardOptions.withOverridesMixin(
         [
-          g.panel.timeSeries.fieldOverride.byQuery.new(name)
-          + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
-            g.panel.timeSeries.standardOptions.withUnit(self.unit)
-            + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
-          ),
+          if override == 'byQuery' then
+            g.panel.timeSeries.fieldOverride.byQuery.new(name)
+            + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
+              g.panel.timeSeries.standardOptions.withUnit(self.unit)
+              + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
+            )
+          else if override == 'byName' then
+            g.panel.timeSeries.fieldOverride.byName.new(name)
+            + g.panel.timeSeries.fieldOverride.byName.withPropertiesFromOptions(
+              g.panel.timeSeries.standardOptions.withUnit(self.unit)
+              + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
+            )
+          else error 'Unknown override type, only "byName", "byQuery" are supported.',
         ],
       ),
 
@@ -86,6 +114,7 @@ local signalUtils = import './utils.libsonnet';
     asPanelExpression()::
       signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel=aggLevel, rangeFunction=rangeFunction).applyFunctions()
       % this.vars,
+
     //Return query, usable in alerts/recording rules.
     asRuleExpression()::
       //override aggLevel to 'none', to avoid loosing labels in alerts due to by() clause:
@@ -102,28 +131,70 @@ local signalUtils = import './utils.libsonnet';
       // override panel-wide --mixed-- datasource
       prometheusQuery.withDatasource('${%s}' % datasource)
       + g.panel.timeSeries.panelOptions.withDescription(description)
-      + g.panel.timeSeries.standardOptions.withUnit(self.unit)
-      + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
       + g.panel.timeSeries.queryOptions.withTargets(
         self.asTarget()
-      ),
+      )
+      + self.asOverride(),
 
     //Return as timeSeriesPanel
-    asTimeSeries()::
+    asTimeSeries(name=signalName)::
       g.panel.timeSeries.new(name)
       + self.common,
 
     //Return as statPanel
-    asStat()::
+    asStat(name=signalName)::
       g.panel.stat.new(name)
       + self.common,
+    // Return as table
+    // Table format: all targets must have format=table, instant=true, and matching labels set.
+    // Timeseries format: all targets must have format=timeseries, instant=false, and matching labels set.
+    // Useful to show Table trends.
+    asTable(name=signalName, format='table')::
+      prometheusQuery.withDatasource('${%s}' % datasource)
+      + g.panel.table.new(name)
+      +
+      if format == 'table' then
+        self.asTableColumn()
+        + g.panel.table.queryOptions.withTransformations(
+          [
+            g.panel.table.queryOptions.transformation.withId('merge'),
+            g.panel.table.queryOptions.transformation.withId('renameByRegex')
+            + g.panel.table.queryOptions.transformation.withOptions({
+              regex: 'Value #(.*)',
+              renamePattern: '$1',
+            }),
+            g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
+            + g.panel.table.queryOptions.transformation.withOptions(
+              {
+                include: {
+                  pattern: '^(?!Time).*$',
+                },
+              }
+            ),
+          ]
+        )
+      else if format == 'time_series' then
+        self.asPanelMixin(override='byName')
+        + g.panel.table.queryOptions.withTransformations(
+          [
+            g.panel.table.queryOptions.transformation.withId('timeSeriesTable'),
+            g.panel.table.queryOptions.transformation.withId('merge'),
+            g.panel.table.queryOptions.transformation.withId('renameByRegex')
+            + g.panel.table.queryOptions.transformation.withOptions({
+              regex: 'Trend #(.*)',
+              renamePattern: '$1',
+            }),
+          ]
+        )
+      else error 'Table format must be "time_series" or "table"',
+
 
     //Return as gauge panel
-    asGauge()::
+    asGauge(name=signalName)::
       g.panel.gauge.new(name)
       + self.common,
     //Return as statusHistory
-    asStatusHistory()::
+    asStatusHistory(name=signalName)::
       g.panel.statusHistory.new(name)
       + self.common
       // limit number of DPs

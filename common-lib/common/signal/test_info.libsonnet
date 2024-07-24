@@ -36,7 +36,7 @@ local m1 = signal.init(
         },
         testTSversion: {
           actual: m1.asStat().pluginVersion,
-          expect: 'v10.0.0',
+          expect: 'v11.0.0',
         },
         testTSUid: {
           actual: m1.asStat().datasource,

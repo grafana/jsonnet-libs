@@ -7,7 +7,7 @@
     signals:
       {
         blobstore: (import './signals/blobstore.libsonnet')(this),
-        sql: (import './signals/sql.libsonnet')(this),
+        azureelasticpool: (import './signals/azureelasticpool.libsonnet')(this),
       },
     blobStorage: {
       enableAvailability: false,
