@@ -23,7 +23,7 @@
             },
             {
               alert: 'KafkaLagIsTooHigh',
-              expr: 'sum without (partition) (%s) > %s)' %
+              expr: 'sum without (partition) (%s) > %s' %
                     [
                       this.signals.consumerGroup.consumerGroupLag.asRuleExpression(),
                       this.config.kafkaLagThreshold,
