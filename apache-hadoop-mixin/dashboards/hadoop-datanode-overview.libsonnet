@@ -343,7 +343,7 @@ local datanodeLogsPanel(matcher) = {
             template.new(
               'cluster',
               promDatasource,
-              'label_values(hadoop_datanode_ramdiskblocksevictedwithoutread{%(hadoopSelector)s}, cluster)' % $._config,
+              'label_values(hadoop_datanode_ramdiskblocksevictedwithoutread{%(multiclusterSelector)s}, cluster)' % $._config,
               label='Cluster',
               refresh=2,
               includeAll=true,

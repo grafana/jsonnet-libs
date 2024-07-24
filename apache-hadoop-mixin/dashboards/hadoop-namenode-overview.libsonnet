@@ -771,7 +771,7 @@ local namenodeLogsPanel(matcher) = {
             template.new(
               'cluster',
               promDatasource,
-              'label_values(hadoop_namenode_blockstotal{%(hadoopSelector)s}, cluster)' % $._config,
+              'label_values(hadoop_namenode_blockstotal{%(multiclusterSelector)s}, cluster)' % $._config,
               label='Cluster',
               refresh=2,
               includeAll=true,

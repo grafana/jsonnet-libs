@@ -785,7 +785,7 @@ local resourcemanagerLogsPanel(matcher) = {
             template.new(
               'cluster',
               promDatasource,
-              'label_values(hadoop_resourcemanager_activeapplications{%(hadoopSelector)s}, cluster)' % $._config,
+              'label_values(hadoop_resourcemanager_activeapplications{%(multiclusterSelector)s}, cluster)' % $._config,
               label='Cluster',
               refresh=2,
               includeAll=true,
