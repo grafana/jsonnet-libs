@@ -18,6 +18,6 @@
     enableLokiLogs: true,
     enableMultiCluster: false,
     multiclusterSelector: 'job=~"$job"',
-    hadoopSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster", hadoop_cluster=~"$hadoop_cluster"' else 'job=~"$job", hadoop_cluster=~"$hadoop_cluster"',
+    hadoopSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
   },
 }
