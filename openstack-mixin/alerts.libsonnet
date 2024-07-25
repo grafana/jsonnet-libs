@@ -50,7 +50,6 @@
             alert: 'OpenStackPlacementIsDown',
             expr: |||
               openstack_placement_up{%(filteringSelector)s} == 0
-              openstack_placement_up{%(filteringSelector)s} == 0
             ||| % this.config,
             'for': '5m',
             labels: {
