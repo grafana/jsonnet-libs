@@ -4,7 +4,7 @@ local signalUtils = import './utils.libsonnet';
 
 {
   new(
-    name,
+    signalName,
     type,
   ): {
 
@@ -18,21 +18,21 @@ local signalUtils = import './utils.libsonnet';
     //Return query, usable in alerts/recording rules. No aggregation is applied.
     asRuleExpression():: {},
     //Return as timeSeriesPanel
-    asTimeSeries(name)::
+    asTimeSeries(name=signalName)::
       g.panel.text.new('')
       + g.panel.text.panelOptions.withTransparent(true)
       + g.panel.text.panelOptions.withDescription(name + ': Signal not found.')
       + g.panel.text.options.withContent(''),
 
     //Return as statPanel
-    asStat(name)::
+    asStat(name=signalName)::
       self.asTimeSeries(),
 
-    asTable(name, format)::
+    asTable(name=signalName, format)::
       self.asTimeSeries(),
 
     //Return as timeSeriesPanel
-    asGauge(name)::
+    asGauge(name=signalName)::
       self.asTimeSeries(),
     asTableColumn(override, format):: {},
   },

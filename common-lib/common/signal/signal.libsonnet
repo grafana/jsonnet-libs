@@ -283,7 +283,7 @@ local stub = import './stub.libsonnet';
         )
       else if type == 'stub' then
         stub.new(
-          name=name,
+          signalName=name,
           type=type,
         ),
   },
