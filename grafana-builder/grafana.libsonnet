@@ -43,7 +43,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
       },
     },
 
-    addMultiTemplate(name, metric_name, label_name, hide=0, allValue='.+', sort=2):: self {
+    addMultiTemplate(name, metric_name, label_name, hide=0, allValue='.+', sort=2, includeAll=true):: self {
       templating+: {
         list+: [{
           allValue: allValue,
@@ -54,7 +54,7 @@ local utils = import 'mixin-utils/utils.libsonnet';
           },
           datasource: '$datasource',
           hide: hide,
-          includeAll: true,
+          includeAll: includeAll,
           label: name,
           multi: true,
           name: name,
