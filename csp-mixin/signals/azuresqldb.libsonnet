@@ -67,7 +67,8 @@ function(this)
         unit: 'percent',
         sources: {
           azuremonitor: {
-            expr: '100 * (label_replace(azure_microsoft_sql_servers_databases_cpu_used_average_count{%(queriesSelector)s}, "database", "$1", "resourceID", ".+/(.*)") / label_replace(azure_microsoft_sql_servers_databases_cpu_limit_average_count{%(queriesSelector)s}, "database", "$1", "resourceID", ".+/(.*)"))',
+            expr: 'label_replace(azure_microsoft_sql_servers_databases_cpu_used_average_count{%(queriesSelector)s}, "database", "$1", "resourceID", ".+/(.*)") / label_replace(azure_microsoft_sql_servers_databases_cpu_limit_average_count{%(queriesSelector)s}, "database", "$1", "resourceID", ".+/(.*)")',
+            exprWrappers: [['100 * (', ')']],
             legendCustomTemplate: '{{database}} vCore',
           },
         },
