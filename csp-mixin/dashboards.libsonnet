@@ -44,5 +44,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               csplib.grafana.rows.aep_resources
             )
           ),
+
+        [csplib.config.uid + '-sqldb.json']:
+          local variables = csplib.signals.azuresqldb.getVariablesMultiChoice();
+          g.dashboard.new(csplib.config.dashboardNamePrefix + 'SQL database')
+          + g.dashboard.withUid(csplib.config.uid + '-sqldb')
+          + g.dashboard.withTags(csplib.config.dashboardTags)
+          + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+          + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+          + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+          + g.dashboard.withVariables(variables)
+          + g.dashboard.withPanels(
+            g.util.grid.wrapPanels(
+              csplib.grafana.rows.asql_connections +
+              csplib.grafana.rows.asql_resources
+            )
+          ),
       } else {},
 }
