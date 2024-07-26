@@ -12,8 +12,8 @@
 
   alertsWarningPlacementHighMemoryUsage: 80,  // %
   alertsCriticalPlacementHighMemoryUsage: 90,  // %
-  alertsWarningPlacementHighVcpuUsage: 80,  // %
-  alertsCriticalPlacementHighVcpuUsage: 90,  // %
+  alertsWarningPlacementHighVCPUUsage: 80,  // %
+  alertsCriticalPlacementHighVCPUUsage: 90,  // %
   alertsWarningNeutronHighIPsUsage: 80,  // %
   alertsCriticalNeutronHighIPsUsage: 90,  // %
   alertsWarningNovaHighVMMemoryUsage: 80,  // %
