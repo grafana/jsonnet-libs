@@ -44,7 +44,7 @@ local utils = commonlib.utils;
         loki:
           var.datasource.new('loki_datasource', 'loki')
           + var.datasource.generalOptions.withLabel('Loki data source')
-          + var.datasource.withRegex('(?!grafanacloud.+usage-insights|grafanacloud.+alert-state-history).+')
+          + var.datasource.withRegex('')
           + var.datasource.generalOptions.showOnDashboard.withNothing(),
       },
       // Use on dashboards where multiple entities can be selected, like fleet dashboards
@@ -62,7 +62,7 @@ local utils = commonlib.utils;
         ],
       queriesGroupSelectorAdvanced:
         '%s' % [
-          utils.labelsToPromQLSelectorAdvanced(groupLabels),
+          utils.labelsToPromQLSelectorAdvanced([filteringSelector] + groupLabels),
         ],
     }
     + if this.config.enableLokiLogs then self.withLokiLogs(this) else {},

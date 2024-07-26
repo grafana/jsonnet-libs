@@ -35,7 +35,7 @@
               },
               annotations: {
                 summary: 'Kafka lag is too high.',
-                description: 'Total kafka lag across all partitions is too high ({{ printf "%%.0f" $value }}) for consumer group: {{$labels.consumergroup}}, topic: {{$labels.topic}}.',
+                description: 'Total kafka lag across all partitions is too high ({{ printf "%.0f" $value }}) for consumer group: {{$labels.consumergroup}}, topic: {{$labels.topic}}.',
               },
             },
           ],
