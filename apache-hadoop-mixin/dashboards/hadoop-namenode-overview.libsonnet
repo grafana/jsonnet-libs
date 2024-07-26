@@ -8,7 +8,7 @@ local dashboardUid = 'apache-hadoop-namenode-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
-local getMatcher(cfg) = '%(hadoopSelector)s, instance=~"$instance"' % cfg;
+local getMatcher(cfg) = '%(hadoopSelector)s, instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
