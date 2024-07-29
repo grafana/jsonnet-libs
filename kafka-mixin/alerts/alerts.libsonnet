@@ -33,7 +33,7 @@
             },
           },
           {
-            alert: 'KafkaActiveController',
+            alert: 'KafkaNoActiveController',
             expr: 'sum without(' + std.join(',', $._config.instanceLabels) + ') (kafka_controller_kafkacontroller_activecontrollercount{%(kafkaFilteringSelector)s}) != 1' % $._config,
             'for': '5m',
             labels: {
@@ -62,12 +62,13 @@
               sum without() (rate(kafka_server_replicamanager_isrexpandspersec{%(kafkaFilteringSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
+            keep_firing_for: '15m',
             labels: {
               severity: 'warning',
             },
             annotations: {
-              summary: 'Kafka ISR Expansion Rate is expanding.',
-              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} ISR is expanding by {{ $value }} per second. If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR expansion rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.',
+              summary: 'Kafka ISR expansion rate is expanding.',
+              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} In-Sync Replica (ISR) is expanding by {{ $value }} per second. If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR expansion rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.',
             },
           },
           {
@@ -76,12 +77,13 @@
               sum without() (rate(kafka_server_replicamanager_isrshrinkspersec{%(kafkaFilteringSelector)s}[5m])) != 0
             ||| % $._config,
             'for': '5m',
+            keep_firing_for: '15m',
             labels: {
               severity: 'warning',
             },
             annotations: {
-              summary: 'Kafka ISR Expansion Rate is shrinking.',
-              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} ISR is shrinking by {{ $value }} per second. If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR shrink rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.',
+              summary: 'Kafka ISR expansion rate is shrinking.',
+              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} In-Sync Replica (ISR) is shrinking by {{ $value }} per second. If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR shrink rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.',
             },
           },
           {
@@ -92,7 +94,7 @@
               severity: 'critical',
             },
             annotations: {
-              summary: 'Kafka has no Brokers online.',
+              summary: 'Kafka has no brokers online.',
               description: 'Kafka cluster {{ $labels.kafka_cluster }} broker count is 0.',
             },
           },
@@ -106,8 +108,8 @@
               severity: 'warning',
             },
             annotations: {
-              summary: 'Kafka Zookeeper Sync Disconected.',
-              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} Zookeeper Sync Disconected.',
+              summary: 'Kafka Zookeeper sync disconected.',
+              description: 'Kafka instance {{ $labels.instance }} in cluster {{ $labels.kafka_cluster }} Zookeeper sync disconected.',
             },
           },
         ],
