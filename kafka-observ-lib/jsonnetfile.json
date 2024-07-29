@@ -3,6 +3,15 @@
   "dependencies": [
     {
       "source": {
+        "git": {
+          "remote": "https://github.com/grafana/grafonnet.git",
+          "subdir": "gen/grafonnet-v11.0.0"
+        }
+      },
+      "version": "main"
+    },
+    {
+      "source": {
         "local": {
           "directory": "../common-lib"
         }
@@ -11,12 +20,12 @@
     },
     {
       "source": {
-        "git": {
-          "remote": "https://github.com/grafana/grafonnet.git",
-          "subdir": "gen/grafonnet-v11.0.0"
+        "local": {
+          "directory": "../zookeeper-observ-lib"
         }
       },
-      "version": "main"
+      "version": ""
     }
-  ]
+  ],
+  "legacyImports": true
 }

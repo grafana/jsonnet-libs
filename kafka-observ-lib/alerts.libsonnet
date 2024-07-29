@@ -1,8 +1,8 @@
 {
   new(this): {
-    groups: [
+    groups+: [
       {
-        name: this.config.uid + '-alerts',
+        name: this.config.uid + '-kafka-alerts',
         rules:
           [
             {
