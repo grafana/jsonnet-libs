@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "dependencies": [
+    {
+      "source": {
+        "local": {
+          "directory": "../common-lib"
+        }
+      },
+      "version": ""
+    },
+    {
+      "source": {
+        "local": {
+          "directory": "../jvm-observ-lib"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "legacyImports": true
+}
