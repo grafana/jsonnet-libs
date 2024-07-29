@@ -4,7 +4,7 @@
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   uid: 'jvm',
-  dashboardNamePrefix: 'JVM',
+  dashboardNamePrefix: '',
   dashboardTags: ['java', 'jvm'],
   metricsSource: 'java_micrometer',
   signals+:
