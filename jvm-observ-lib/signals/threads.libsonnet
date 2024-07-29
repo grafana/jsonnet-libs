@@ -11,6 +11,7 @@ function(this)
       java_micrometer: 'jvm_threads_live_threads',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmThreadMetrics.java
       prometheus: 'jvm_threads_current',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       otel: 'process_runtime_jvm_threads_count',
+      prometheus_old: 'jvm_threads_current',
     },
     signals: {
       threads: {
@@ -28,6 +29,7 @@ function(this)
           otel: {
             expr: 'sum without (daemon) (process_runtime_jvm_threads_count{%(queriesSelector)s})',
           },
+          prometheus_old: self.prometheus,
         },
       },
       threadsDaemon: {
@@ -45,6 +47,7 @@ function(this)
           otel: {
             expr: 'process_runtime_jvm_threads_count{daemon="true", %(queriesSelector)s}',
           },
+          prometheus_old: self.prometheus,
         },
       },
       threadsPeak: {
@@ -60,6 +63,7 @@ function(this)
           prometheus: {
             expr: 'jvm_threads_peak{%(queriesSelector)s}',
           },
+          prometheus_old: self.prometheus,
           //   otel: {
           //     expr: '?{daemon="true", %(queriesSelector)s}',
           //   },
@@ -78,6 +82,7 @@ function(this)
           prometheus: {
             expr: 'jvm_threads_deadlocked{%(queriesSelector)s}',
           },
+          prometheus_old: self.prometheus,
           //   otel: {
           //     expr: '?{%(queriesSelector)s}',
           //   },
@@ -99,6 +104,7 @@ function(this)
             expr: 'sum by (state, %(agg)s) (jvm_threads_state{%(queriesSelector)s})',
             legendCustomTemplate: '{{ state }}',
           },
+          prometheus_old: self.prometheus,
           //   otel: {
           //     expr: '?{%(queriesSelector)s}',
           //   },

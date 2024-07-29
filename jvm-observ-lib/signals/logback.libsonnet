@@ -10,8 +10,9 @@ function(this)
     aggKeepLabels: ['level'],
     discoveryMetric: {
       java_micrometer: 'logback_events_total',
-      prometheus: '?',
-      otel: '?',
+      // prometheus: '?',
+      // otel: '?',
+      // prometheus_old: '?',
     },
     signals: {
       events: {

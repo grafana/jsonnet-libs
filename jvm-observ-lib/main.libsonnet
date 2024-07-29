@@ -16,11 +16,12 @@ local processlib = import 'process-observ-lib/main.libsonnet';
           groupLabels: this.config.groupLabels,
           instanceLabels: this.config.instanceLabels,
           uid: this.config.uid,
-          dashboardNamePrefix: this.cofnig.dashboardNamePrefix,
-          dashboardTags: this.cofnig.dashboardTags,
+          dashboardNamePrefix: this.config.dashboardNamePrefix,
+          dashboardTags: this.config.dashboardTags,
           metricsSource:
             if this.config.metricsSource == 'otel' then 'java_otel'
             else if this.config.metricsSource == 'prometheus' then 'prometheus'
+            else if this.config.metricsSource == 'prometheus_old' then 'prometheus'
             else if this.config.metricsSource == 'java_micrometer' then 'java_micrometer'
             else error 'no such metricsSource for processlib',
         }

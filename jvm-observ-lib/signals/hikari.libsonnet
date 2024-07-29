@@ -9,7 +9,8 @@ function(this)
     aggFunction: 'avg',
     discoveryMetric: {
       java_micrometer: 'hikaricp_connections',  // https://github.com/brettwooldridge/HikariCP/blob/dev/src/main/java/com/zaxxer/hikari/metrics/micrometer/MicrometerMetricsTracker.java
-      prometheus: '?',
+      // prometheus: '?',
+      // prometheus_old: '?',
       otel: 'hikaricp_connections',
     },
     signals: {

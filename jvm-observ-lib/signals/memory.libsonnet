@@ -9,6 +9,7 @@ function(this)
       java_micrometer: 'jvm_memory_used_bytes',
       prometheus: 'jvm_memory_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       otel: 'process_runtime_jvm_memory_usage',
+      prometheus_old: 'jvm_memory_bytes_max',
     },
     signals: {
       //memory
@@ -28,6 +29,9 @@ function(this)
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_usage{type="heap", %(queriesSelector)s})',
           },
+          prometheus_old: {
+            expr: 'sum without (id) (jvm_memory_bytes_used{area="heap", %(queriesSelector)s})',
+          },
         },
       },
       memoryMaxHeap: {
@@ -46,17 +50,14 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
-            expr: 'sum without (id) (jvm_memory_max_bytes{area="heap", %(queriesSelector)s})',
-            exprWrappers: [
-              ['', ' != -1'],
-            ],
+            expr: 'sum without (id) (jvm_memory_max_bytes{area="heap", %(queriesSelector)s} != -1)',
           },
           prometheus: self.java_micrometer,
           otel: {
-            expr: 'sum without (pool) (process_runtime_jvm_memory_limit{type="heap", %(queriesSelector)s})',
-            exprWrappers: [
-              ['', ' != -1'],
-            ],
+            expr: 'sum without (pool) (process_runtime_jvm_memory_limit{type="heap", %(queriesSelector)s} != -1)',
+          },
+          prometheus_old: {
+            expr: 'sum without (id) (jvm_memory_bytes_max{area="heap", %(queriesSelector)s} != -1)',
           },
         },
       },
@@ -74,6 +75,9 @@ function(this)
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_usage{type="non_heap", %(queriesSelector)s})',
           },
+          prometheus_old: {
+            expr: 'sum without (id) (jvm_memory_bytes_used{area="nonheap", %(queriesSelector)s})',
+          },
         },
       },
       memoryMaxNonHeap: {
@@ -83,12 +87,16 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
-            expr: 'sum without (id) (jvm_memory_max_bytes{area="nonheap", %(queriesSelector)s})',
+            expr: 'sum without (id) (jvm_memory_max_bytes{area="nonheap", %(queriesSelector)s} != -1)',
           },
           prometheus: self.java_micrometer,
           otel: {
-            expr: 'sum without (pool) (process_runtime_jvm_memory_limit{type="non_heap", %(queriesSelector)s})',
+            expr: 'sum without (pool) (process_runtime_jvm_memory_limit{type="non_heap", %(queriesSelector)s} != -1)',
           },
+          prometheus_old: {
+            expr: 'sum without (id) (jvm_memory_bytes_max{area="nonheap", %(queriesSelector)s} != -1)',
+          },
+
         },
       },
       memoryCommittedHeap: {
@@ -106,6 +114,9 @@ function(this)
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_committed{type="heap", %(queriesSelector)s})',
           },
+          prometheus_old: {
+            expr: 'sum without (id) (jvm_memory_bytes_committed{area="heap", %(queriesSelector)s})',
+          },
         },
       },
       memoryCommittedNonHeap: {
@@ -122,6 +133,9 @@ function(this)
           prometheus: self.java_micrometer,
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_committed{type="non_heap", %(queriesSelector)s})',
+          },
+          prometheus_old: {
+            expr: 'sum without (id) (jvm_memory_bytes_committed{area="nonheap", %(queriesSelector)s})',
           },
         },
       },

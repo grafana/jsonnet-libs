@@ -11,6 +11,7 @@ function(this)
       java_micrometer: 'jvm_classes_loaded_classes',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/ClassLoaderMetrics.java
       prometheus: 'jvm_classes_loaded',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-class-loading-metrics
       otel: 'process_runtime_jvm_classes_loaded',
+      prometheus_old: 'jvm_classes_loaded',
     },
     signals: {
       classesLoaded: {
@@ -27,6 +28,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_jvm_classes_loaded{%(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_classes_loaded{%(queriesSelector)s}',
           },
         },
       },
