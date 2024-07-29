@@ -5,6 +5,5 @@
     'kafka-ksqldb-overview.json': (import 'kafka-ksqldb-overview.json'),
     'kafka-overview.json': (import 'kafka-overview.json'),
     'schema-registry-overview.json': (import 'schema-registry-overview.json'),
-    'zookeeper-overview.json': (import 'zookeeper-overview.json'),
   },
 }
