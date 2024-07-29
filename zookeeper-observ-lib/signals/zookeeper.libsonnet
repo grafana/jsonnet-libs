@@ -45,8 +45,8 @@ function(this)
         },
       },
       aliveConnections: {
-        name: 'znodes count',
-        description: 'Number of znodes.',
+        name: 'Alive connections',
+        description: 'Number of alive connections.',
         type: 'gauge',
         unit: 'short',
         aggFunction: 'max',
