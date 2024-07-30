@@ -8,8 +8,8 @@ local g = import './g.libsonnet';
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withUid(this.config.uid + '-jvm-dashboard')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            std.flattenArrays(
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
               [
                 this.grafana.rows.overview,
                 this.process.grafana.rows.process,
@@ -32,6 +32,7 @@ local g = import './g.libsonnet';
                   ]
                 else []
               )
+
             )
           ),
           setPanelIDs=false

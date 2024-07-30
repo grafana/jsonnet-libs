@@ -1,16 +1,16 @@
 local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
-local processlib = import 'process-observ-lib/main.libsonnet';
+local jvmlib = import 'jvm-observ-lib/main.libsonnet';
 
 {
   new(): {
     local this = self,
     config: import './config.libsonnet',
 
-    //include process lib
-    process::
-      processlib.new()
-      + processlib.withConfigMixin(
+    //include jvm lib
+    jvm::
+      jvmlib.new()
+      + jvmlib.withConfigMixin(
         {
           filteringSelector: this.config.filteringSelector,
           groupLabels: this.config.groupLabels,
@@ -18,12 +18,7 @@ local processlib = import 'process-observ-lib/main.libsonnet';
           uid: this.config.uid,
           dashboardNamePrefix: this.config.dashboardNamePrefix,
           dashboardTags: this.config.dashboardTags,
-          metricsSource:
-            if this.config.metricsSource == 'otel' then 'java_otel'
-            else if this.config.metricsSource == 'prometheus' then 'prometheus'
-            else if this.config.metricsSource == 'prometheus_old' then 'prometheus'
-            else if this.config.metricsSource == 'java_micrometer' then 'java_micrometer'
-            else error 'no such metricsSource for processlib',
+          metricsSource: 'prometheus_old',
         }
       ),
     signals:
@@ -32,18 +27,15 @@ local processlib = import 'process-observ-lib/main.libsonnet';
         for sig in std.objectFields(this.config.signals)
       },
     grafana: {
-      panels:
-        (import './panels.libsonnet').new(this.signals)
-        // add panels from process lib
-        + this.process.grafana.panels,
-      rows:
-        (import './rows.libsonnet').new(this.grafana.panels, type=this.config.metricSource)
-        // add rows from process lib
-        + this.process.grafana.rows,
+      panels: (import './panels/main.libsonnet').new(this.signals)
+              { jvm: this.jvm.grafana.panels },
+      rows: (import './rows.libsonnet').new(this.grafana.panels, type=this.config.metricsSource)
+            { jvm: this.jvm.grafana.rows },
       dashboards: (import './dashboards.libsonnet').new(this),
     },
     prometheus: {
-      alerts: (import './alerts.libsonnet').new(this),
+      alerts: (import './alerts.libsonnet').new(this)
+              + { groups+: this.jvm.prometheus.alerts.groups },
       recordingRules: {},
     },
     asMonitoringMixin(): {

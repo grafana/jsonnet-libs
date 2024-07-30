@@ -5,7 +5,7 @@ The Kafka Mixin is a set of configurable, reusable, and extensible dashboards ba
 This mixin includes the following dashboards:
 Kafka Overview - Gives an overview of your Kafka cluster resource usage, throughput, and general healthiness 
 Kafka topics overview - Gives informations about the throughput of specific (filterable) topics and consumer groups (rate, lag)
-Zookeeper Overview - Gives an overview of your Zookeeper nodes resource usage and general healthiness 
+Zookeeper overview - Gives an overview of your Zookeeper nodes resource usage and general healthiness 
 Ksqldb Overview - Gives an overview of your ksqldb cluster as queries resource usage, throughput, and general healthiness 
 Connect Overview - Gives an overview of your Kafka Connect cluster and tasks resource usage, throughput, and general healthiness
 Schema Registry Overview - Gives an overview of your Kafka Schema Registry cluster resource usage, throughput, and general healthiness

@@ -10,8 +10,8 @@
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   dashboardTags: [self.uid],
-  uid: 'proc',
   dashboardNamePrefix: '',
+  uid: 'proc',
 
   // additional params can be added if needed
   dashboardPeriod: 'now-1h',

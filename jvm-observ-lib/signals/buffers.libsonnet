@@ -11,6 +11,7 @@ function(this)
       java_micrometer: 'jvm_buffer_memory_used_bytes',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java
       prometheus: 'jvm_buffer_pool_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-buffer-pool-metrics
       otel: 'process_runtime_jvm_buffer_usage',
+      prometheus_old: 'jvm_buffer_pool_used_bytes',
     },
     signals: {
       directBufferUsed: {
@@ -27,6 +28,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_jvm_buffer_usage{pool="direct", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_buffer_pool_used_bytes{pool="direct", %(queriesSelector)s}',
           },
         },
       },
@@ -45,6 +49,9 @@ function(this)
           otel: {
             expr: 'process_runtime_jvm_buffer_limit{pool="direct", %(queriesSelector)s}',
           },
+          prometheus_old: {
+            expr: 'jvm_buffer_pool_capacity_bytes{pool="direct", %(queriesSelector)s}',
+          },
         },
       },
       mappedBufferUsed: {
@@ -62,6 +69,9 @@ function(this)
           otel: {
             expr: 'process_runtime_jvm_buffer_usage{pool="mapped", %(queriesSelector)s}',
           },
+          prometheus_old: {
+            expr: 'jvm_buffer_pool_used_bytes{pool="mapped", %(queriesSelector)s}',
+          },
         },
       },
       mappedBufferCapacity: {
@@ -78,6 +88,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_jvm_buffer_limit{pool="mapped", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_buffer_pool_capacity_bytes{pool="mapped", %(queriesSelector)s}',
           },
         },
       },

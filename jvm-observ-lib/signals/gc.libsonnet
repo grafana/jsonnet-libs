@@ -8,6 +8,7 @@ function(this)
     discoveryMetric: {
       java_micrometer: 'jvm_memory_used_bytes',
       prometheus: 'jvm_memory_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
+      prometheus_old: 'jvm_memory_bytes_used',
       otel: 'process_runtime_jvm_memory_usage',  //https://opentelemetry.io/docs/specs/semconv/runtime/jvm-metrics/
     },
     signals: {
@@ -37,6 +38,7 @@ function(this)
             aggKeepLabels: ['gc'],
             legendCustomTemplate: '%(aggLegend)s',
           },
+          prometheus_old: self.prometheus,
           otel: {
             expr: 'process_runtime_jvm_gc_duration_count{%(queriesSelector)s}',
             legendCustomTemplate: '%(aggLegend)s',
@@ -62,12 +64,6 @@ function(this)
               actionLabelPrettify,
             ],
           },
-          // prometheus: {
-          //   expr: '',
-          // },
-          // otel: {
-          //   expr: '',
-          // },
         },
       },
       collectionsTimeAvg: {
@@ -101,9 +97,7 @@ function(this)
             legendCustomTemplate: '{{ %(agg)s }}: {{ gc }} (avg)',
 
           },
-          // otel: {
-          //   expr: '',
-          // },
+          prometheus_old: self.prometheus,
         },
       },
       collectionsTimeP95: {
@@ -150,8 +144,9 @@ function(this)
             expr: 'jvm_gc_memory_allocated_bytes_total{%(queriesSelector)s}',
           },
           prometheus: {
-            expr: 'jvm_memory_pool_allocated_bytes_total{pool="PS Eden Space",%(queriesSelector)s}',
+            expr: 'jvm_memory_pool_allocated_bytes_total{pool=~"(G1 |PS )?Eden Space",%(queriesSelector)s}',
           },
+          prometheus_old: self.prometheus,
         },
       },
       memAllocated: {
@@ -183,13 +178,16 @@ function(this)
         sources: {
           //spring
           java_micrometer: {
-            expr: 'jvm_memory_used_bytes{id=~"(G1 )?Eden Space", area="heap", %(queriesSelector)s}',
+            expr: 'jvm_memory_used_bytes{id=~"(G1 |PS )?Eden Space", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
-            expr: 'jvm_memory_pool_collection_used_bytes{pool="PS Eden Space", %(queriesSelector)s}',
+            expr: 'jvm_memory_pool_used_bytes{pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_used{pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
           },
           otel: {
-            expr: 'process_runtime_jvm_memory_usage{type="heap", pool=~"(G1 )?Eden Space", %(queriesSelector)s}',
+            expr: 'process_runtime_jvm_memory_usage{type="heap", pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
           },
         },
       },
@@ -215,10 +213,13 @@ function(this)
             ],
           },
           prometheus: {
-            expr: 'jvm_memory_pool_collection_used_bytes{pool="PS Eden Space", %(queriesSelector)s}',
+            expr: 'jvm_memory_pool_max_bytes{pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_max{pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
           },
           otel: {
-            expr: 'process_runtime_jvm_memory_limit{pool=~"(G1 )?Eden Space", type="heap", %(queriesSelector)s}',
+            expr: 'process_runtime_jvm_memory_limit{pool=~"(G1 |PS )?Eden Space", type="heap", %(queriesSelector)s}',
             exprWrappers: [
               ['', ' != -1'],
             ],
@@ -234,13 +235,16 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
-            expr: 'jvm_memory_committed_bytes{id=~"(G1 )?Eden Space", area="heap", %(queriesSelector)s}',
+            expr: 'jvm_memory_committed_bytes{id=~"(G1 |PS )?Eden Space", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
-            expr: 'jvm_memory_pool_committed_bytes{pool="PS Eden Space", %(queriesSelector)s}',
+            expr: 'jvm_memory_pool_committed_bytes{pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_committed{pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
           },
           otel: {
-            expr: 'process_runtime_jvm_memory_committed{pool=~"(G1 )?Eden Space", type="heap", %(queriesSelector)s}',
+            expr: 'process_runtime_jvm_memory_committed{pool=~"(G1 |PS )?Eden Space", type="heap", %(queriesSelector)s}',
           },
         },
       },
@@ -255,13 +259,16 @@ function(this)
         sources: {
           //spring
           java_micrometer: {
-            expr: 'jvm_memory_used_bytes{id="Survivor Space", area="heap", %(queriesSelector)s}',
+            expr: 'jvm_memory_used_bytes{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
-            expr: 'jvm_memory_pool_collection_used_bytes{pool="PS Survivor Space", %(queriesSelector)s}',
+            expr: 'jvm_memory_pool_used_bytes{pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_used{pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s}',
           },
           otel: {
-            expr: 'process_runtime_jvm_memory_usage{type="heap", pool=~"(G1 )?Survivor Space", %(queriesSelector)s}',
+            expr: 'process_runtime_jvm_memory_usage{type="heap", pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s}',
           },
         },
       },
@@ -281,19 +288,16 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
-            expr: 'jvm_memory_max_bytes{id="Survivor Space", area="heap", %(queriesSelector)s}',
-            exprWrappers: [
-              ['', ' != -1'],
-            ],
+            expr: 'jvm_memory_max_bytes{id=~"(G1 |PS )?Survivor Space"", area="heap", %(queriesSelector)s} != -1',
           },
           prometheus: {
-            expr: 'jvm_memory_pool_collection_used_bytes{pool="PS Survivor Space", %(queriesSelector)s}',
+            expr: 'jvm_memory_pool_max_bytes{pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s} != -1',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_max{pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s} != -1',
           },
           otel: {
-            expr: 'process_runtime_jvm_memory_limit{pool=~"(G1 )?Survivor Space", type="heap", %(queriesSelector)s}',
-            exprWrappers: [
-              ['', ' != -1'],
-            ],
+            expr: 'process_runtime_jvm_memory_limit{pool=~"(G1 |PS )?Survivor Space", type="heap", %(queriesSelector)s} != -1',
           },
         },
       },
@@ -306,13 +310,16 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
-            expr: 'jvm_memory_committed_bytes{id="Survivor Space", area="heap", %(queriesSelector)s}',
+            expr: 'jvm_memory_committed_bytes{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
-            expr: 'jvm_memory_pool_committed_bytes{pool="PS Survivor Space", %(queriesSelector)s}',
+            expr: 'jvm_memory_pool_committed_bytes{pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_committed{pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s}',
           },
           otel: {
-            expr: 'process_runtime_jvm_memory_committed{pool=~"(G1 )?Survivor Space", type="heap", %(queriesSelector)s}',
+            expr: 'process_runtime_jvm_memory_committed{pool=~"(G1 |PS )?Survivor Space", type="heap", %(queriesSelector)s}',
           },
         },
       },
@@ -329,7 +336,10 @@ function(this)
             expr: 'jvm_memory_used_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s}',
           },
           prometheus: {
-            expr: 'jvm_memory_pool_collection_used_bytes{pool="PS Old Gen", %(queriesSelector)s}',
+            expr: 'jvm_memory_pool_used_bytes{pool="PS Old Gen", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_used{pool="G1 Old Gen", %(queriesSelector)s}',
           },
           otel: {
             expr: 'process_runtime_jvm_memory_usage{type="heap", pool=~"G1 Old Gen|Tenured Gen", %(queriesSelector)s}',
@@ -352,16 +362,16 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
-            expr: 'jvm_memory_max_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s}',
-            exprWrappers: [
-              ['', ' != -1'],
-            ],
+            expr: 'jvm_memory_max_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s} != -1',
           },
           prometheus: {
-            expr: 'jvm_memory_pool_collection_used_bytes{pool="PS Old Gen", %(queriesSelector)s}',
+            expr: 'jvm_memory_pool_used_bytes{pool="PS Old Gen", %(queriesSelector)s} != -1',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_max{pool="G1 Old Gen", %(queriesSelector)s} != -1',
           },
           otel: {
-            expr: 'process_runtime_jvm_memory_limit{pool=~"G1 Old Gen|Tenured Gen", type="heap", %(queriesSelector)s}',
+            expr: 'process_runtime_jvm_memory_limit{pool=~"G1 Old Gen|Tenured Gen", type="heap", %(queriesSelector)s} != -1',
             exprWrappers: [
               ['', ' != -1'],
             ],
@@ -381,6 +391,9 @@ function(this)
           },
           prometheus: {
             expr: 'jvm_memory_pool_committed_bytes{pool="PS Old Gen", %(queriesSelector)s}',
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_committed{pool="G1 Old Gen", %(queriesSelector)s}',
           },
           otel: {
             expr: 'process_runtime_jvm_memory_committed{pool=~"G1 Old Gen|Tenured Gen", type="heap", %(queriesSelector)s}',

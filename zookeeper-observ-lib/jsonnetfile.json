@@ -21,7 +21,7 @@
     {
       "source": {
         "local": {
-          "directory": "../zookeeper-observ-lib"
+          "directory": "../jvm-observ-lib"
         }
       },
       "version": ""

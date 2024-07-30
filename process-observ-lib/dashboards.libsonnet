@@ -8,10 +8,12 @@ local g = import './g.libsonnet';
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withUid(this.config.uid + '-process')
         + g.dashboard.withPanels(
-          g.util.grid.wrapPanels(
-            std.flattenArrays([
-              this.grafana.rows.process,
-            ])
+          g.util.panel.resolveCollapsedFlagOnRows(
+            g.util.grid.wrapPanels(
+              [
+                this.grafana.rows.process,
+              ]
+            ),
           ),
           setPanelIDs=false
         ),
