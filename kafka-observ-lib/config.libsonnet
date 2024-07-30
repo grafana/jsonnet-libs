@@ -1,7 +1,7 @@
 {
   local this = self,
   filteringSelector: 'job!=""',
-  groupLabels: ['cluster'],
+  groupLabels: ['kafka_cluster'],
   instanceLabels: ['instance'],
   uid: 'kafka',
   dashboardNamePrefix: '',
@@ -11,7 +11,7 @@
   metricsSource: 'prometheus',  //or grafanacloud
   //Can be regex:
   topicsIgnoreSelector: '__consumer_offsets',
-  zookeeperEnabled: false,
+  zookeeperEnabled: true,
   signals+:
     {
       topic: (import './signals/topic.libsonnet')(this),

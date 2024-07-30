@@ -10,15 +10,12 @@ function(this)
     aggKeepLabels: ['level'],
     discoveryMetric: {
       java_micrometer: 'logback_events_total',
-      // prometheus: '?',
-      // otel: '?',
-      // prometheus_old: '?',
     },
     signals: {
       events: {
         name: 'Logback events',
         description: 'Logback events.',
-        type: 'counter',  // counter
+        type: 'counter',
         unit: 'short',
         optional: true,
         sources: {
@@ -30,18 +27,12 @@ function(this)
               ['topk(10,', ')'],
             ],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
-          //   otel: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
         },
       },
       errors: {
         name: 'Logback events (errors)',
         description: 'Logback events with error level.',
-        type: 'counter',  // counter
+        type: 'counter',
         unit: 'short',
         optional: true,
         sources: {
@@ -51,12 +42,6 @@ function(this)
               ['topk(10,', ')'],
             ],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
-          //   otel: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
         },
       },
 

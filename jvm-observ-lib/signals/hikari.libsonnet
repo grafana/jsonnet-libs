@@ -9,8 +9,6 @@ function(this)
     aggFunction: 'avg',
     discoveryMetric: {
       java_micrometer: 'hikaricp_connections',  // https://github.com/brettwooldridge/HikariCP/blob/dev/src/main/java/com/zaxxer/hikari/metrics/micrometer/MicrometerMetricsTracker.java
-      // prometheus: '?',
-      // prometheus_old: '?',
       otel: 'hikaricp_connections',
     },
     signals: {
@@ -25,9 +23,6 @@ function(this)
             expr: 'hikaricp_connections{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           otel: {
             expr: 'hikaricp_connections{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
@@ -45,12 +40,6 @@ function(this)
             expr: 'hikaricp_connections_timeout_total{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
-          //   otel: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
         },
       },
       connectionsActive: {
@@ -64,9 +53,6 @@ function(this)
             expr: 'hikaricp_connections_active{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           otel: {
             expr: 'hikaricp_connections_active{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
@@ -84,9 +70,6 @@ function(this)
             expr: 'hikaricp_connections_idle{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           otel: {
             expr: 'hikaricp_connections_idle{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
@@ -104,9 +87,6 @@ function(this)
             expr: 'hikaricp_connections_pending{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           otel: {
             expr: 'hikaricp_connections_pending{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
@@ -127,11 +107,6 @@ function(this)
             |||,
             aggKeepLabels: ['pool'],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
-          //   otel: {
-          //   },
         },
       },
       connectionsUsageDurationAvg: {
@@ -148,11 +123,6 @@ function(this)
             |||,
             aggKeepLabels: ['pool'],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
-          //   otel: {
-          //   },
         },
       },
       connectionsAcquireDurationAvg: {
@@ -169,11 +139,6 @@ function(this)
             |||,
             aggKeepLabels: ['pool'],
           },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
-          //   otel: {
-          //   },
         },
       },
       connectionsCreationDurationP95: {
@@ -183,12 +148,6 @@ function(this)
         unit: 's',
         optional: true,
         sources: {
-          //   java_micrometer: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           otel: {
             expr: 'hikaricp_connections_creation_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
@@ -202,12 +161,6 @@ function(this)
         unit: 's',
         optional: true,
         sources: {
-          //   java_micrometer: {
-
-          //   },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           otel: {
             expr: 'hikaricp_connections_usage_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
@@ -221,12 +174,6 @@ function(this)
         unit: 's',
         optional: true,
         sources: {
-          //   java_micrometer: {
-
-          //   },
-          //   prometheus: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           otel: {
             expr: 'hikaricp_connections_acquire_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],

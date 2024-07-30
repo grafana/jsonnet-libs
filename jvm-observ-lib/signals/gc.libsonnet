@@ -64,12 +64,6 @@ function(this)
               actionLabelPrettify,
             ],
           },
-          // prometheus: {
-          //   expr: '',
-          // },
-          // otel: {
-          //   expr: '',
-          // },
         },
       },
       collectionsTimeAvg: {
@@ -104,9 +98,6 @@ function(this)
 
           },
           prometheus_old: self.prometheus,
-          // otel: {
-          //   expr: '',
-          // },
         },
       },
       collectionsTimeP95: {
