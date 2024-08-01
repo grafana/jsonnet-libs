@@ -8,6 +8,8 @@ local dashboardUid = 'apache-hadoop-namenode-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
+local getMatcher(cfg) = '%(hadoopSelector)s, instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"' % cfg;
+
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
@@ -16,26 +18,26 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local datanodeStatePanel = {
+local datanodeStatePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_namenode_numlivedatanodes{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_numlivedatanodes{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}} - live DataNodes',
     ),
     prometheus.target(
-      'hadoop_namenode_numdeaddatanodes{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_numdeaddatanodes{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}} - dead DataNodes',
     ),
     prometheus.target(
-      'hadoop_namenode_numstaledatanodes{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster"}',
+      'hadoop_namenode_numstaledatanodes{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}} - stale DataNodes',
     ),
     prometheus.target(
-      'hadoop_namenode_numdecommissioningdatanodes{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_numdecommissioningdatanodes{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}} - decommissioning DataNodes',
     ),
@@ -80,11 +82,11 @@ local datanodeStatePanel = {
   },
 };
 
-local capacityUtilizationPanel = {
+local capacityUtilizationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      '100 * hadoop_namenode_capacityused{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"} / clamp_min(hadoop_namenode_capacitytotal{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}, 1)',
+      '100 * hadoop_namenode_capacityused{' + matcher + ', name="FSNamesystem"} / clamp_min(hadoop_namenode_capacitytotal{' + matcher + ', name="FSNamesystem"}, 1)',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -156,11 +158,11 @@ local capacityUtilizationPanel = {
   },
 };
 
-local totalBlocksPanel = {
+local totalBlocksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_namenode_blockstotal{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_blockstotal{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -232,11 +234,11 @@ local totalBlocksPanel = {
   },
 };
 
-local missingBlocksPanel = {
+local missingBlocksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_namenode_missingblocks{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_missingblocks{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -308,11 +310,11 @@ local missingBlocksPanel = {
   },
 };
 
-local underreplicatedBlocksPanel = {
+local underreplicatedBlocksPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_namenode_underreplicatedblocks{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_underreplicatedblocks{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -384,11 +386,11 @@ local underreplicatedBlocksPanel = {
   },
 };
 
-local transactionsSinceLastCheckpointPanel = {
+local transactionsSinceLastCheckpointPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_namenode_transactionssincelastcheckpoint{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_transactionssincelastcheckpoint{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -460,11 +462,11 @@ local transactionsSinceLastCheckpointPanel = {
   },
 };
 
-local volumeFailuresPanel = {
+local volumeFailuresPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(hadoop_namenode_volumefailurestotal{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}[$__interval:])',
+      'increase(hadoop_namenode_volumefailurestotal{' + matcher + ', name="FSNamesystem"}[$__interval:])',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -537,11 +539,11 @@ local volumeFailuresPanel = {
   },
 };
 
-local totalFilesPanel = {
+local totalFilesPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_namenode_filestotal{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_filestotal{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -613,11 +615,11 @@ local totalFilesPanel = {
   },
 };
 
-local totalLoadPanel = {
+local totalLoadPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'hadoop_namenode_totalload{job=~"$job", instance=~"$instance", hadoop_cluster=~"$hadoop_cluster", name="FSNamesystem"}',
+      'hadoop_namenode_totalload{' + matcher + ', name="FSNamesystem"}',
       datasource=promDatasource,
       legendFormat='{{hadoop_cluster}} - {{instance}}',
       format='time_series',
@@ -689,13 +691,13 @@ local totalLoadPanel = {
   },
 };
 
-local namenodeLogsPanel = {
+local namenodeLogsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", hadoop_cluster=~"$hadoop_cluster", instance=~"$instance", filename=~".*/hadoop/logs/.*-namenode.*.log"} |= ``',
+      expr: '{' + matcher + '} |= `` | (filename=~".*/hadoop/logs/.*-namenode.*.log" or log_type="namenode")',
       queryType: 'range',
       refId: 'A',
     },
@@ -767,9 +769,21 @@ local namenodeLogsPanel = {
               sort=1
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(hadoop_namenode_blockstotal{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(hadoop_namenode_blockstotal{job=~"$job"}, instance)',
+              'label_values(hadoop_namenode_blockstotal{%(hadoopSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -780,7 +794,7 @@ local namenodeLogsPanel = {
             template.new(
               'hadoop_cluster',
               promDatasource,
-              'label_values(hadoop_namenode_blockstotal{job=~"$job"}, hadoop_cluster)',
+              'label_values(hadoop_namenode_blockstotal{%(hadoopSelector)s}, hadoop_cluster)' % $._config,
               label='Hadoop cluster',
               refresh=2,
               includeAll=true,
@@ -794,18 +808,18 @@ local namenodeLogsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            datanodeStatePanel { gridPos: { h: 9, w: 12, x: 0, y: 0 } },
-            capacityUtilizationPanel { gridPos: { h: 9, w: 12, x: 12, y: 0 } },
-            totalBlocksPanel { gridPos: { h: 6, w: 8, x: 0, y: 9 } },
-            missingBlocksPanel { gridPos: { h: 6, w: 8, x: 8, y: 9 } },
-            underreplicatedBlocksPanel { gridPos: { h: 6, w: 8, x: 16, y: 9 } },
-            transactionsSinceLastCheckpointPanel { gridPos: { h: 6, w: 12, x: 0, y: 15 } },
-            volumeFailuresPanel { gridPos: { h: 6, w: 12, x: 12, y: 15 } },
-            totalFilesPanel { gridPos: { h: 6, w: 12, x: 0, y: 21 } },
-            totalLoadPanel { gridPos: { h: 6, w: 12, x: 12, y: 21 } },
+            datanodeStatePanel(getMatcher($._config)) { gridPos: { h: 9, w: 12, x: 0, y: 0 } },
+            capacityUtilizationPanel(getMatcher($._config)) { gridPos: { h: 9, w: 12, x: 12, y: 0 } },
+            totalBlocksPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 0, y: 9 } },
+            missingBlocksPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 8, y: 9 } },
+            underreplicatedBlocksPanel(getMatcher($._config)) { gridPos: { h: 6, w: 8, x: 16, y: 9 } },
+            transactionsSinceLastCheckpointPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 15 } },
+            volumeFailuresPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 15 } },
+            totalFilesPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 21 } },
+            totalLoadPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 21 } },
           ],
           if $._config.enableLokiLogs then [
-            namenodeLogsPanel { gridPos: { h: 8, w: 24, x: 0, y: 27 } },
+            namenodeLogsPanel(getMatcher($._config)) { gridPos: { h: 8, w: 24, x: 0, y: 27 } },
           ] else [],
           [
           ],

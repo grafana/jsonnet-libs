@@ -16,5 +16,8 @@
     alertsCriticalResourceManagerMemoryUsage: 80,  // %
 
     enableLokiLogs: true,
+    enableMultiCluster: false,
+    multiclusterSelector: 'job=~"$job"',
+    hadoopSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
   },
 }
