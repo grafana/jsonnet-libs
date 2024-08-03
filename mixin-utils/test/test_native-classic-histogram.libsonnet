@@ -169,6 +169,26 @@ test.new(std.thisFile)
   )
 )
 + test.case.new(
+  name='histogram le rate defaults and le is +Inf',
+  test=test.expect.eq(
+    actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '+Inf'),
+    expected={
+      classic: 'rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le=~"\\+Inf"}[$__rate_interval])',
+      native: 'histogram_fraction(0, +Inf, rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))*histogram_count(rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))',
+    },
+  )
+)
++ test.case.new(
+  name='histogram le rate defaults and le is -Inf',
+  test=test.expect.eq(
+    actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '-Inf'),
+    expected={
+      classic: 'rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le=~"-Inf"}[$__rate_interval])',
+      native: 'histogram_fraction(0, -Inf, rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))*histogram_count(rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))',
+    },
+  )
+)
++ test.case.new(
   name='histogram le rate defaults and le is float with different interval',
   test=test.expect.eq(
     actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '0.1', '5m'),
