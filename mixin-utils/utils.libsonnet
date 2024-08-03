@@ -145,14 +145,24 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // The "le" value matcher for classic histograms can handle both Prometheus
   // or OpenMetrics formats, where whole numbers may or may not have ".0" at
   // the end.
-  ncHistogramLeRate(metric, selector, le, rate_interval='$__rate_interval')::
+  ncHistogramLeRate(metric, selector, le, rate_interval='$__rate_interval', sum_by=[])::
+    local sumBy = if std.length(sum_by) > 0 then ' by (%(lbls)s) ' % { lbls: std.join(', ', sum_by) } else ' ';
     local isWholeNumber(str) = str != '' && std.foldl(function(acc, c) acc && (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9'), std.stringChars(str), true);
     {
-      native: 'histogram_fraction(0, %(le)s, rate(%(metric)s{%(selector)s}[%(rateInterval)s]))*histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
+      native: |||
+        histogram_fraction(0, %(le)s, sum%(sumBy)s(
+          rate(%(metric)s{%(selector)s}[%(rateInterval)s]))
+        )
+        *
+        histogram_count(sum%(sumBy)s(
+          rate(%(metric)s{%(selector)s}[%(rateInterval)s]))
+        )
+      ||| % {
         le: if isWholeNumber(le) then le + '.0' else le,  // Treated as float number.
         metric: metric,
         rateInterval: rate_interval,
         selector: selector,
+        sumBy: sumBy,
       },
       classic: 'rate(%(metric)s_bucket{%(selector)s, %(le)s}[%(rateInterval)s])' % {
         // le is treated as string, thus it needs to account for Prometheus text format not having '.0', but OpenMetrics having it.
