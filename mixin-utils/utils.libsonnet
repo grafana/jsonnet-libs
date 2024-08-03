@@ -157,7 +157,7 @@ local g = import 'grafana-builder/grafana.libsonnet';
       classic: 'rate(%(metric)s_bucket{%(selector)s, %(le)s}[%(rateInterval)s])' % {
         // le is treated as string, thus it needs to account for Prometheus text format not having '.0', but OpenMetrics having it.
         // Also the resulting string in yaml is stored directly, so the \\ needs to be escaped to \\\\.
-        le: if isWholeNumber(le) then 'le=~"%(le)s|%(le)s\\\\.0"' % {le: le} else 'le="%s"' % le,
+        le: if isWholeNumber(le) then 'le=~"%(le)s|%(le)s\\\\.0"' % { le: le } else 'le="%s"' % le,
         metric: metric,
         rateInterval: rate_interval,
         selector: selector,
