@@ -147,7 +147,6 @@ local g = import 'grafana-builder/grafana.libsonnet';
   // the end.
   ncHistogramLeRate(metric, selector, le, rate_interval='$__rate_interval')::
     local isWholeNumber(str) = str != '' && std.foldl(function(acc, c) acc && (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9'), std.stringChars(str), true);
-    local encodeInf(str) = if str == '+Inf' then '\\+Inf' else str;
     {
       native: 'histogram_fraction(0, %(le)s, rate(%(metric)s{%(selector)s}[%(rateInterval)s]))*histogram_count(rate(%(metric)s{%(selector)s}[%(rateInterval)s]))' % {
         le: if isWholeNumber(le) then le + '.0' else le,  // Treated as float number.
@@ -155,10 +154,10 @@ local g = import 'grafana-builder/grafana.libsonnet';
         rateInterval: rate_interval,
         selector: selector,
       },
-      classic: 'rate(%(metric)s_bucket{%(selector)s, le=~"%(le)s"}[%(rateInterval)s])' % {
+      classic: 'rate(%(metric)s_bucket{%(selector)s, %(le)s}[%(rateInterval)s])' % {
         // le is treated as string, thus it needs to account for Prometheus text format not having '.0', but OpenMetrics having it.
         // Also the resulting string in yaml is stored directly, so the \\ needs to be escaped to \\\\.
-        le: if isWholeNumber(le) then '%(le)s|%(le)s\\\\.0' % { le: le } else encodeInf(le),
+        le: if isWholeNumber(le) then 'le=~"%(le)s|%(le)s\\\\.0"' % {le: le} else 'le="%s"' % le,
         metric: metric,
         rateInterval: rate_interval,
         selector: selector,
