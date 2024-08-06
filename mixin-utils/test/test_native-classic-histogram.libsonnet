@@ -153,8 +153,8 @@ test.new(std.thisFile)
   test=test.expect.eq(
     actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '0.1'),
     expected={
-      classic: 'sum (\n  rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="0.1"}[$__rate_interval])\n)\n',
-      native: 'histogram_fraction(0, 0.1, sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n*\nhistogram_count(sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n',
+      classic: 'sum (rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="0.1"}[$__rate_interval]))',
+      native: 'histogram_fraction(0, 0.1, sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))*histogram_count(sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))',
     },
   )
 )
@@ -163,8 +163,8 @@ test.new(std.thisFile)
   test=test.expect.eq(
     actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '10'),
     expected={
-      classic: 'sum (\n  rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le=~"10|10\\\\.0"}[$__rate_interval])\n)\n',
-      native: 'histogram_fraction(0, 10.0, sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n*\nhistogram_count(sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n',
+      classic: 'sum (rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le=~"10|10\\\\.0"}[$__rate_interval]))',
+      native: 'histogram_fraction(0, 10.0, sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))*histogram_count(sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))',
     },
   )
 )
@@ -173,8 +173,8 @@ test.new(std.thisFile)
   test=test.expect.eq(
     actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '+Inf'),
     expected={
-      classic: 'sum (\n  rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="+Inf"}[$__rate_interval])\n)\n',
-      native: 'histogram_fraction(0, +Inf, sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n*\nhistogram_count(sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n',
+      classic: 'sum (rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="+Inf"}[$__rate_interval]))',
+      native: 'histogram_fraction(0, +Inf, sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))*histogram_count(sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))',
     },
   )
 )
@@ -183,8 +183,8 @@ test.new(std.thisFile)
   test=test.expect.eq(
     actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '-Inf'),
     expected={
-      classic: 'sum (\n  rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="-Inf"}[$__rate_interval])\n)\n',
-      native: 'histogram_fraction(0, -Inf, sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n*\nhistogram_count(sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n',
+      classic: 'sum (rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="-Inf"}[$__rate_interval]))',
+      native: 'histogram_fraction(0, -Inf, sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))*histogram_count(sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))',
     },
   )
 )
@@ -193,8 +193,8 @@ test.new(std.thisFile)
   test=test.expect.eq(
     actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '0.1', '5m'),
     expected={
-      classic: 'sum (\n  rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="0.1"}[5m])\n)\n',
-      native: 'histogram_fraction(0, 0.1, sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[5m]))\n)\n*\nhistogram_count(sum (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[5m]))\n)\n',
+      classic: 'sum (rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="0.1"}[5m]))',
+      native: 'histogram_fraction(0, 0.1, sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[5m])))*histogram_count(sum (rate(request_duration_seconds{cluster="cluster1", job="job1"}[5m])))',
     },
   )
 )
@@ -203,8 +203,8 @@ test.new(std.thisFile)
   test=test.expect.eq(
     actual=utils.ncHistogramLeRate('request_duration_seconds', 'cluster="cluster1", job="job1"', '0.1', sum_by=['cluster', 'namespace']),
     expected={
-      classic: 'sum by (cluster, namespace) (\n  rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="0.1"}[$__rate_interval])\n)\n',
-      native: 'histogram_fraction(0, 0.1, sum by (cluster, namespace) (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n*\nhistogram_count(sum by (cluster, namespace) (\n  rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval]))\n)\n',
+      classic: 'sum by (cluster, namespace) (rate(request_duration_seconds_bucket{cluster="cluster1", job="job1", le="0.1"}[$__rate_interval]))',
+      native: 'histogram_fraction(0, 0.1, sum by (cluster, namespace) (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))*histogram_count(sum by (cluster, namespace) (rate(request_duration_seconds{cluster="cluster1", job="job1"}[$__rate_interval])))',
     },
   )
 )
