@@ -48,8 +48,25 @@ local zookeeperlib = import 'zookeeper-observ-lib/main.libsonnet';
             + { jvm: this.jvm.grafana.rows }
             + if this.config.zookeeperEnabled then { zookeeper: this.zookeeper.grafana.rows } else {},
 
+      // common links here
+      links: {
+        local link = g.dashboard.link,
+        otherDashboards:
+          link.dashboards.new('All Kafka dashboards', this.config.dashboardTags)
+          + link.dashboards.options.withIncludeVars(true)
+          + link.dashboards.options.withKeepTime(true)
+          + link.dashboards.options.withAsDropdown(false),
+      },
+
       dashboards: (import './dashboards.libsonnet').new(this)
-                  + if this.config.zookeeperEnabled then this.zookeeper.grafana.dashboards else {},
+                  + if this.config.zookeeperEnabled then
+                    {
+                      'zookeeper-overview.json':
+                        this.zookeeper.grafana.dashboards['zookeeper-overview.json']
+                        + g.dashboard.withLinks(this.grafana.links.otherDashboards),
+                    }
+
+                  else {},
     },
     prometheus: {
       alerts: (import './alerts.libsonnet').new(this)

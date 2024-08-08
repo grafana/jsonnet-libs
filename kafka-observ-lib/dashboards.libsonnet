@@ -7,6 +7,7 @@ local g = import './g.libsonnet';
         + g.dashboard.withVariables(this.signals.consumerGroup.getVariablesMultiChoice())
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withUid(this.config.uid + '-kafka-topic-dashboard')
+        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
@@ -19,9 +20,10 @@ local g = import './g.libsonnet';
         ),
       'kafka-overview-dashboard.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'Kafka overview')
-        + g.dashboard.withVariables(this.signals.replicaManager.getVariablesMultiChoice())
+        + g.dashboard.withVariables(this.signals.broker.getVariablesMultiChoice())
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withUid(this.config.uid + '-kafka-overview-dashboard')
+        + g.dashboard.withLinks(this.grafana.links.otherDashboards)
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
