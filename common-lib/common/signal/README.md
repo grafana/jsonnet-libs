@@ -65,7 +65,7 @@ Signal's level:
 |aggFunction| A function used to aggregate metrics. |avg,min,max,sum...|`sum`|`avg`|
 |aggKeepLabels| Extra labels to keep when aggregating with by() clause.  |`['pool','level']`|`[]`|
 |infoLabel| Only applicable to `info` metrics. Points to label name used to extract info. |*|-|-|
-|valueMapping| Define signal's valueMapping in the same way defined in Grafana Dashboard Schema. |*|-|-|
+|valueMappings| Define signal's valueMappings in the same way defined in Grafana Dashboard Schema. |*|-|-|
 |legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{instance}}`|
 |rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
 
@@ -178,21 +178,24 @@ local jsonSignals =
         description: 'status',
         unit: 'short',
         expr: 'status{%(queriesSelector)s}',
-        valueMapping: {
-          type: 'value',
-          options: {
-            '1': {
-              text: 'Up',
-              color: 'light-green',
-              index: 1,
+        valueMappings: 
+          [
+            {
+              type: 'value',
+              options: {
+                '1': {
+                  text: 'Up',
+                  color: 'light-green',
+                  index: 1,
+                },
+                '0': {
+                  text: 'Down',
+                  color: 'light-red',
+                  index: 0,
+                },
+              }
             },
-            '0': {
-              text: 'Down',
-              color: 'light-red',
-              index: 0,
-            },
-          },
-        },
+          ],
       },
     },
   };

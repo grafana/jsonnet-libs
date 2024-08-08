@@ -15,7 +15,7 @@ local signalUtils = import './utils.libsonnet';
     aggKeepLabels,
     vars,
     datasource,
-    valueMapping,
+    valueMappings,
     legendCustomTemplate,
     rangeFunction,
   ): {
@@ -98,13 +98,13 @@ local signalUtils = import './utils.libsonnet';
             g.panel.timeSeries.fieldOverride.byQuery.new(name)
             + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
               g.panel.timeSeries.standardOptions.withUnit(self.unit)
-              + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
+              + g.panel.timeSeries.standardOptions.withMappings(valueMappings)
             )
           else if override == 'byName' then
             g.panel.timeSeries.fieldOverride.byName.new(name)
             + g.panel.timeSeries.fieldOverride.byName.withPropertiesFromOptions(
               g.panel.timeSeries.standardOptions.withUnit(self.unit)
-              + g.panel.timeSeries.standardOptions.withMappings(valueMapping)
+              + g.panel.timeSeries.standardOptions.withMappings(valueMappings)
             )
           else error 'Unknown override type, only "byName", "byQuery" are supported.',
         ],

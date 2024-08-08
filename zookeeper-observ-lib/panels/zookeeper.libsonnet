@@ -2,6 +2,9 @@ local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(signals):: {
+    clusterRoles:
+      signals.cluster.role.asStatusHistory()
+      + commonlib.panels.generic.statusHistory.base.stylize(),
     aliveConnections:
       signals.zookeeper.aliveConnections.asStat()
       + commonlib.panels.generic.stat.info.stylize(),

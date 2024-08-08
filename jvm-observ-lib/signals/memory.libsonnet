@@ -10,6 +10,7 @@ function(this)
       prometheus: 'jvm_memory_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       otel: 'process_runtime_jvm_memory_usage',
       prometheus_old: 'jvm_memory_bytes_max',
+      jmx_exporter: 'java_lang_memory_heapmemoryusage_used',  //https://github.com/prometheus/jmx_exporter/blob/main/collector/src/test/java/io/prometheus/jmx/JmxCollectorTest.java#L195
     },
     signals: {
       //memory
@@ -31,6 +32,9 @@ function(this)
           },
           prometheus_old: {
             expr: 'sum without (id) (jvm_memory_bytes_used{area="heap", %(queriesSelector)s})',
+          },
+          jmx_exporter: {
+            expr: 'java_lang_memory_heapmemoryusage_used{%(queriesSelector)s}',
           },
         },
       },
@@ -59,6 +63,9 @@ function(this)
           prometheus_old: {
             expr: 'sum without (id) (jvm_memory_bytes_max{area="heap", %(queriesSelector)s} != -1)',
           },
+          jmx_exporter: {
+            expr: 'java_lang_memory_heapmemoryusage_max{%(queriesSelector)s} != -1',
+          },
         },
       },
       memoryUsedNonHeap: {
@@ -78,11 +85,14 @@ function(this)
           prometheus_old: {
             expr: 'sum without (id) (jvm_memory_bytes_used{area="nonheap", %(queriesSelector)s})',
           },
+          jmx_exporter: {
+            expr: 'java_lang_memory_nonheapmemoryusage_used{%(queriesSelector)s}',
+          },
         },
       },
       memoryMaxNonHeap: {
         name: 'JVM memory max(nonheap)',
-        description: 'Measure of memory max possible (non-heap).',
+        description: 'Measure of memory max possible (non-heap). Returns -1 if the maximum memory size is undefined.',
         type: 'gauge',
         unit: 'bytes',
         sources: {
@@ -96,7 +106,9 @@ function(this)
           prometheus_old: {
             expr: 'sum without (id) (jvm_memory_bytes_max{area="nonheap", %(queriesSelector)s} != -1)',
           },
-
+          jmx_exporter: {
+            expr: 'java_lang_memory_nonheapmemoryusage_max{%(queriesSelector)s} != -1',
+          },
         },
       },
       memoryCommittedHeap: {
@@ -117,6 +129,9 @@ function(this)
           prometheus_old: {
             expr: 'sum without (id) (jvm_memory_bytes_committed{area="heap", %(queriesSelector)s})',
           },
+          jmx_exporter: {
+            expr: 'java_lang_memory_heapmemoryusage_committed{%(queriesSelector)s}',
+          },
         },
       },
       memoryCommittedNonHeap: {
@@ -136,6 +151,9 @@ function(this)
           },
           prometheus_old: {
             expr: 'sum without (id) (jvm_memory_bytes_committed{area="nonheap", %(queriesSelector)s})',
+          },
+          jmx_exporter: {
+            expr: 'java_lang_memory_nonheapmemoryusage_committed{%(queriesSelector)s}',
           },
         },
       },

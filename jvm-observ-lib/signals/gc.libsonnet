@@ -24,6 +24,7 @@ function(this)
         description: 'Major and minor garbage collection',
         type: 'counter',
         unit: 'ops',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_gc_pause_seconds_count{%(queriesSelector)s}',
@@ -175,6 +176,7 @@ function(this)
         description: 'Memory used for G1 Eden Space Collection.',
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           //spring
           java_micrometer: {
@@ -205,6 +207,7 @@ function(this)
         |||,
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_memory_max_bytes{id=~"(G1 )?Eden Space", area="heap", %(queriesSelector)s}',
@@ -233,6 +236,7 @@ function(this)
         |||,
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_memory_committed_bytes{id=~"(G1 |PS )?Eden Space", area="heap", %(queriesSelector)s}',
@@ -256,6 +260,7 @@ function(this)
         description: 'Memory used for Survival collection.',
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           //spring
           java_micrometer: {
@@ -286,6 +291,7 @@ function(this)
         |||,
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_memory_max_bytes{id=~"(G1 |PS )?Survivor Space"", area="heap", %(queriesSelector)s} != -1',
@@ -308,6 +314,7 @@ function(this)
         |||,
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_memory_committed_bytes{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s}',
@@ -330,6 +337,7 @@ function(this)
         description: 'Memory used for Tenured(Old Gen) collection.',
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           //spring
           java_micrometer: {
@@ -360,6 +368,7 @@ function(this)
         |||,
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_memory_max_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s} != -1',
@@ -385,6 +394,7 @@ function(this)
         |||,
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_memory_committed_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s}',

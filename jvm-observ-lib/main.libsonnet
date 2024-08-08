@@ -21,6 +21,7 @@ local processlib = import 'process-observ-lib/main.libsonnet';
           metricsSource:
             if this.config.metricsSource == 'otel' then 'java_otel'
             else if this.config.metricsSource == 'prometheus' then 'prometheus'
+            else if this.config.metricsSource == 'jmx_exporter' then 'jmx_exporter'
             else if this.config.metricsSource == 'prometheus_old' then 'prometheus'
             else if this.config.metricsSource == 'java_micrometer' then 'java_micrometer'
             else error 'no such metricsSource for processlib',

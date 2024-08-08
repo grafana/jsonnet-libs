@@ -15,7 +15,7 @@ local jvmlib = import 'jvm-observ-lib/main.libsonnet';
           filteringSelector: this.config.filteringSelector,
           groupLabels: this.config.groupLabels,
           instanceLabels: this.config.instanceLabels,
-          uid: this.config.uid,
+          uid: this.config.uid + '-zookeeper',
           dashboardNamePrefix: this.config.dashboardNamePrefix,
           dashboardTags: this.config.dashboardTags,
           metricsSource: 'prometheus_old',

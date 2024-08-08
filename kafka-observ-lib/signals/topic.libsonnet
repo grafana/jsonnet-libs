@@ -4,7 +4,7 @@ function(this)
   {
     filteringSelector: this.filteringSelector + ', topic!~"%s"' % this.topicsIgnoreSelector,
     groupLabels: this.groupLabels,
-    instanceLabels: this.instanceLabels + ['topic'],
+    instanceLabels: ['topic'],  // this.instanceLabels is ommitted, as it would point to kafka_exporter instance.
     aggLevel: 'group',
     aggFunction: 'sum',
     legendCustomTemplate: '{{ topic }}',

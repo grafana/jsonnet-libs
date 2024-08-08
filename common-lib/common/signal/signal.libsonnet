@@ -57,7 +57,7 @@ local stub = import './stub.libsonnet';
         aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
         aggKeepLabels=std.get(signalsJson.signals[s], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
         infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
-        valueMapping=std.get(signalsJson.signals[s], 'valueMapping', {}),
+        valueMappings=std.get(signalsJson.signals[s], 'valueMappings', []),
         legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
         rangeFunction=std.get(signalsJson.signals[s], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
       )
@@ -98,7 +98,7 @@ local stub = import './stub.libsonnet';
             aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
             aggKeepLabels=std.get(signalsJson.signals[s].sources[type], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
             infoLabel=std.get(signalsJson.signals[s].sources[type], 'infoLabel', null),
-            valueMapping=std.get(signalsJson.signals[s].sources[type], 'valueMapping', {}),
+            valueMappings=std.get(signalsJson.signals[s].sources[type], 'valueMappings', []),
             legendCustomTemplate=std.get(signalsJson.signals[s].sources[type], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
             rangeFunction=std.get(signalsJson.signals[s].sources[type], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
           )
@@ -183,7 +183,7 @@ local stub = import './stub.libsonnet';
       aggFunction=self.aggFunction,
       aggKeepLabels=self.aggKeepLabels,
       infoLabel=null,
-      valueMapping={},
+      valueMappings=[],
       legendCustomTemplate=null,
       rangeFunction='rate'
     ):
@@ -211,7 +211,7 @@ local stub = import './stub.libsonnet';
           aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMapping=valueMapping,
+          valueMappings=valueMappings,
           legendCustomTemplate=legendCustomTemplate,
         )
       else if type == 'raw' then
@@ -227,7 +227,7 @@ local stub = import './stub.libsonnet';
           aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMapping=valueMapping,
+          valueMappings=valueMappings,
           legendCustomTemplate=legendCustomTemplate,
           rangeFunction=rangeFunction,
         )
@@ -244,7 +244,7 @@ local stub = import './stub.libsonnet';
           aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMapping=valueMapping,
+          valueMappings=valueMappings,
           legendCustomTemplate=legendCustomTemplate,
           rangeFunction=rangeFunction,
         )
@@ -261,7 +261,7 @@ local stub = import './stub.libsonnet';
           aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMapping=valueMapping,
+          valueMappings=valueMappings,
           legendCustomTemplate=legendCustomTemplate,
           rangeFunction=rangeFunction,
         )
@@ -278,7 +278,7 @@ local stub = import './stub.libsonnet';
           aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMapping=valueMapping,
+          valueMappings=valueMappings,
           legendCustomTemplate=legendCustomTemplate,
         )
       else if type == 'stub' then

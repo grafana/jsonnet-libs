@@ -8,6 +8,7 @@ Supports the following sources:
 - otel
 - java_otel
 - java_micrometer (springboot)
+- jmx_exporter
 
 ## Import
 

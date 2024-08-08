@@ -13,6 +13,9 @@ function(this)
 
       // acceptable if container has single process running
       cadvisor: 'container_cpu_usage_seconds_total',
+
+      //https://github.com/prometheus/jmx_exporter/blob/main/collector/src/test/java/io/prometheus/jmx/JmxCollectorTest.java#L195
+      jmx_exporter: 'java_lang_operatingsystem_processcputime',
     },
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
@@ -38,6 +41,13 @@ function(this)
           java_micrometer: {
             expr: 'process_uptime_seconds{%(queriesSelector)s}',
           },
+          jmx_exporter: {
+            expr: 'java_lang_runtime_uptime{%(queriesSelector)s}',
+            exprWrappers: [
+              //ms
+              ['', '/1000'],
+            ],
+          },
         },
       },
       startTime: {
@@ -60,6 +70,9 @@ function(this)
           cadvisor: {
             cadvisor: 'container_start_time_seconds{%(queriesSelector)s}',
           },
+          jmx_exporter: {
+            expr: 'java_lang_runtime_starttime{%(queriesSelector)s}',
+          },
         },
       },
       // cpuUsage
@@ -73,10 +86,6 @@ function(this)
           java_micrometer: {
             expr: 'process_cpu_usage{%(queriesSelector)s} * 100',
           },
-          // otel: {
-          //   // expr: 'process_runtime_jvm_cpu_utilization{%(queriesSelector)s}',
-          //   expr: '?',
-          // },
           java_otel: {
             expr: 'process_runtime_jvm_cpu_utilization{%(queriesSelector)s} * 100',
           },
@@ -86,6 +95,13 @@ function(this)
           },
           cadvisor: {
             expr: 'rate(container_cpu_usage_seconds_total{cpu="total", %(queriesSelector)s}[%(interval)s]) * 100',
+          },
+          jmx_exporter: {
+            expr: 'rate(java_lang_operatingsystem_processcputime{%(queriesSelector)s}[%(interval)s])',
+            exprWrappers: [
+              //nanoseconds
+              ['', '/1000000000 * 100'],
+            ],
           },
         },
       },
@@ -97,17 +113,15 @@ function(this)
         unit: 'bytes',
         optional: true,
         sources: {
-          // java_micrometer: {
-          //   expr: '?{%(queriesSelector)s}',
-          // },
-          // otel: {
-          //   expr: '?{%(queriesSelector)s}',
-          // },
           prometheus: {
             expr: 'process_resident_memory_bytes{%(queriesSelector)s}',
           },
           cadvisor: {
             expr: 'container_memory_rss{%(queriesSelector)s}',
+          },
+          //best could be found:
+          jmx_exporter: {
+            expr: 'java_lang_memory_heapmemoryusage_used{%(queriesSelector)s} + java_lang_memory_nonheapmemoryusage_used{%(queriesSelector)s}',
           },
         },
       },
@@ -118,12 +132,6 @@ function(this)
         unit: 'bytes',
         optional: true,
         sources: {
-          // java_micrometer: {
-          //   expr: '?{%(queriesSelector)s}',
-          // },
-          // otel: {
-          //   expr: '?{%(queriesSelector)s}',
-          // },
           prometheus: {
             expr: 'process_virtual_memory_bytes{%(queriesSelector)s}',
           },
