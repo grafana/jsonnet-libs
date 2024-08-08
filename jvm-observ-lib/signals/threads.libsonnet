@@ -12,6 +12,7 @@ function(this)
       prometheus: 'jvm_threads_current',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       otel: 'process_runtime_jvm_threads_count',
       prometheus_old: 'jvm_threads_current',
+      jmx_exporter: 'java_lang_threading_threadcount',
     },
     signals: {
       threads: {
@@ -30,6 +31,9 @@ function(this)
             expr: 'sum without (daemon) (process_runtime_jvm_threads_count{%(queriesSelector)s})',
           },
           prometheus_old: self.prometheus,
+          jmx_exporter: {
+            expr: 'java_lang_threading_threadcount{%(queriesSelector)s}',
+          },
         },
       },
       threadsDaemon: {
@@ -48,7 +52,12 @@ function(this)
             expr: 'process_runtime_jvm_threads_count{daemon="true", %(queriesSelector)s}',
           },
           prometheus_old: self.prometheus,
+          jmx_exporter: {
+            expr: 'java_lang_threading_daemonthreadcount{%(queriesSelector)s}',
+          },
         },
+
+
       },
       threadsPeak: {
         name: 'Threads (peak)',
@@ -64,9 +73,9 @@ function(this)
             expr: 'jvm_threads_peak{%(queriesSelector)s}',
           },
           prometheus_old: self.prometheus,
-          //   otel: {
-          //     expr: '?{daemon="true", %(queriesSelector)s}',
-          //   },
+          jmx_exporter: {
+            expr: 'java_lang_threading_peakthreadcount{%(queriesSelector)s}',
+          },
         },
       },
       threadsDeadlocked: {
@@ -76,16 +85,13 @@ function(this)
         unit: 'short',
         optional: true,
         sources: {
-          //   java_micrometer: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           prometheus: {
             expr: 'jvm_threads_deadlocked{%(queriesSelector)s}',
           },
           prometheus_old: self.prometheus,
-          //   otel: {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
+          jmx_exporter: {
+            expr: 'java_lang_threading_peakthreadcount{%(queriesSelector)s}',
+          },
         },
       },
       threadStates: {

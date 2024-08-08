@@ -8,6 +8,7 @@ Supports the following sources:
 - `otel` (https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/jmx-metrics/docs/target-systems/jvm.md)
 - `java_micrometer` (springboot) (https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java)
 - `prometheus_old` client_java instrumentation prior to 1.0.0 release: (https://github.com/prometheus/client_java/releases/tag/v1.0.0-alpha-4)
+- `jmx_exporter` https://github.com/prometheus/jmx_exporter/blob/main/collector/src/test/java/io/prometheus/jmx/JmxCollectorTest.java#L195
 `
 ## Import
 

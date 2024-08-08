@@ -12,6 +12,7 @@ function(this)
       prometheus: 'jvm_classes_loaded',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-class-loading-metrics
       otel: 'process_runtime_jvm_classes_loaded',
       prometheus_old: 'jvm_classes_loaded',
+      jmx_exporter: 'java_lang_classloading_loadedclasscount',
     },
     signals: {
       classesLoaded: {
@@ -31,6 +32,9 @@ function(this)
           },
           prometheus_old: {
             expr: 'jvm_classes_loaded{%(queriesSelector)s}',
+          },
+          jmx_exporter: {
+            expr: 'java_lang_classloading_loadedclasscount{%(queriesSelector)s}',
           },
         },
       },

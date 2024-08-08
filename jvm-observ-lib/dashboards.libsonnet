@@ -14,10 +14,10 @@ local g = import './g.libsonnet';
                 this.grafana.rows.overview,
                 this.process.grafana.rows.process,
                 this.grafana.rows.memory,
-                this.grafana.rows.gc,
-                this.grafana.rows.threads,
-                this.grafana.rows.buffers,
               ]
+              + (if this.config.metricsSource != 'jmx_exporter' then [this.grafana.rows.gc] else [])
+              + [this.grafana.rows.threads]
+              + (if this.config.metricsSource != 'jmx_exporter' then [this.grafana.rows.buffers] else [])
               + (
                 if this.config.metricsSource == 'java_micrometer' || this.config.metricsSource == 'otel' then
                   [
