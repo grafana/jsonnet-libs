@@ -24,7 +24,7 @@ local zookeeperlib = import 'zookeeper-observ-lib/main.libsonnet';
       zookeeperlib.new()
       + zookeeperlib.withConfigMixin(
         {
-          filteringSelector: this.config.filteringSelector,
+          filteringSelector: this.config.zookeeperfilteringSelector,
           groupLabels: this.config.groupLabels,
           instanceLabels: this.config.instanceLabels,
           uid: this.config.uid,
@@ -33,11 +33,13 @@ local zookeeperlib = import 'zookeeper-observ-lib/main.libsonnet';
           metricsSource: this.config.metricsSource,
         }
       ),
+
     signals:
       {
         [sig]: commonlib.signals.unmarshallJsonMulti(this.config.signals[sig], type=this.config.metricsSource)
         for sig in std.objectFields(this.config.signals)
-      },
+      }
+      + if this.config.zookeeperEnabled then { zookeeper: this.zookeeper.signals } else {},
     grafana: {
       panels: (import './panels/main.libsonnet').new(this.signals, this.config)
               + { jvm: this.jvm.grafana.panels }
