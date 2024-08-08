@@ -18,5 +18,11 @@ jb install https://github.com/grafana/jsonnet-libs/kafka-observ-lib
 
 ## Example
 
+Kafka broker overview dashboard:
+![broker](image.png)
+
 Kafka topic overview dashboard:
 ![image](https://github.com/user-attachments/assets/2396de66-f782-4efc-9edf-66af5d836f3e)
+
+Zookeeper overview dashboard:
+![zookeeper](image-zookeeper.png)
