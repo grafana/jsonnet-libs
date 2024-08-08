@@ -25,18 +25,14 @@ function(this)
         unit: 'short',
         optional: true,
         sources: {
-          // prometheus:
-          //   {
-          //     expr: '?{%(queriesSelector)s}',
-          //   },
           java_otel: {
             expr: 'process_runtime_jvm_system_cpu_load_1m{%(queriesSelector)s}',
           },
-          // otel: {
-          //   expr: ?
-          // },
           java_micrometer: {
             expr: 'system_load_average_1m{%(queriesSelector)s}',
+          },
+          jmx_exporter: {
+            expr: 'java_lang_operatingsystem_systemloadaverage{%(queriesSelector)s}',
           },
         },
       },
@@ -53,9 +49,13 @@ function(this)
           java_otel: {
             expr: 'process_runtime_jvm_system_cpu_utilization{%(queriesSelector)s}',
           },
-          // otel: {
-          // ?
-          // }
+          jmx_exporter: {
+            expr: 'java_lang_operatingsystem_cpuload{%(queriesSelector)s}',
+            exprWrappers: [
+              //nanoseconds
+              ['', '* 100'],
+            ],
+          },
         },
 
       },
