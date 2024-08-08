@@ -16,7 +16,7 @@ base {
     aggKeepLabels,
     vars,
     datasource,
-    valueMapping,
+    valueMappings,
     legendCustomTemplate,
     rangeFunction,
   ):
@@ -32,7 +32,7 @@ base {
       aggKeepLabels,
       vars,
       datasource,
-      valueMapping,
+      valueMappings,
       legendCustomTemplate,
       rangeFunction,
     )
