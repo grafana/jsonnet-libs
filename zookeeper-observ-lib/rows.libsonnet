@@ -12,6 +12,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           panels.zookeeper.outstandingRequests { gridPos+: { w: 16, h: 8 } },
           panels.zookeeper.znodes { gridPos+: { w: 4, h: 4 } },
           panels.zookeeper.watchers { gridPos+: { w: 4, h: 4 } },
+          panels.zookeeper.clusterRoles { gridPos+: { w: 24, h: 6 } },
         ]
       ),
 
