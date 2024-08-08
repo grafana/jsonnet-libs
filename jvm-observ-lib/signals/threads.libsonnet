@@ -89,9 +89,6 @@ function(this)
             expr: 'jvm_threads_deadlocked{%(queriesSelector)s}',
           },
           prometheus_old: self.prometheus,
-          jmx_exporter: {
-            expr: 'java_lang_threading_peakthreadcount{%(queriesSelector)s}',
-          },
         },
       },
       threadStates: {
