@@ -6,6 +6,7 @@ local kafka =
   + kafkalib.withConfigMixin(
     {
       filteringSelector: config.kafkaFilteringSelector,
+      zookeeperfilteringSelector: config.zookeeperFilteringSelector,
       groupLabels: config.groupLabels,
       instanceLabels: config.instanceLabels,
       dashboardTags: config.dashboardTags,
