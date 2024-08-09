@@ -9,6 +9,8 @@ local dashboardUid = 'apache-tomcat-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
+local filenameLogFilter = 'filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out|/Program Files/Apache Software Foundation/Tomcat .*..*/logs/catalina.out"';
+
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
@@ -646,7 +648,7 @@ local logsPanel = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out|/Program Files/Apache Software Foundation/Tomcat .*..*/logs/catalina.out",job=~"$job", instance=~"$instance"} |= ``',
+      expr: '{job=~"$job", instance=~"$instance"} |= `` | (' + filenameLogFilter + ' or log_type="catalina.out")',
       queryType: 'range',
       refId: 'A',
     },
