@@ -12,5 +12,8 @@
     ApacheTomcatAlertsWarningProcessingTime: 300,  //ms
 
     enableLokiLogs: true,
+    multiclusterSelector: 'job=~"$job"',
+    
+    tomcatSelector: if self.enableMultiCluster then 'job=~"$job", cluster=~"$cluster"' else 'job=~"$job"',
   },
 }

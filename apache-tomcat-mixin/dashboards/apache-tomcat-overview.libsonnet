@@ -11,6 +11,8 @@ local lokiDatasourceName = 'loki_datasource';
 
 local filenameLogFilter = 'filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out|/Program Files/Apache Software Foundation/Tomcat .*..*/logs/catalina.out"';
 
+local getMatcher(cfg) = '%(tomcatSelector)s, instance=~"$instance"' % cfg;
+
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
 };
@@ -19,11 +21,11 @@ local lokiDatasource = {
   uid: '${%s}' % lokiDatasourceName,
 };
 
-local memoryUsagePanel = {
+local memoryUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'jvm_memory_usage_used_bytes{job=~"$job", instance=~"$instance"}',
+      'jvm_memory_usage_used_bytes{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{area}}',
     ),
@@ -101,11 +103,11 @@ local memoryUsagePanel = {
   },
 };
 
-local cpuUsagePanel = {
+local cpuUsagePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'jvm_process_cpu_load{job=~"$job", instance=~"$instance"}',
+      'jvm_process_cpu_load{' + matcher + '}',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
@@ -180,16 +182,16 @@ local cpuUsagePanel = {
   },
 };
 
-local trafficSentPanel = {
+local trafficSentPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(tomcat_bytessent_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
+      'sum(rate(tomcat_bytessent_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
     ),
     prometheus.target(
-      'rate(tomcat_bytessent_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval])',
+      'rate(tomcat_bytessent_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}}',
     ),
@@ -264,16 +266,16 @@ local trafficSentPanel = {
   },
 };
 
-local trafficReceivedPanel = {
+local trafficReceivedPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(tomcat_bytesreceived_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
+      'sum(rate(tomcat_bytesreceived_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
     ),
     prometheus.target(
-      'rate(tomcat_bytesreceived_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval])',
+      'rate(tomcat_bytesreceived_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}}',
     ),
@@ -348,26 +350,26 @@ local trafficReceivedPanel = {
   },
 };
 
-local requestsPanel = {
+local requestsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(rate(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
+      'sum(rate(tomcat_requestcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total requests',
     ),
     prometheus.target(
-      'sum(rate(tomcat_errorcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
+      'sum(rate(tomcat_errorcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__rate_interval])) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total errors',
     ),
     prometheus.target(
-      'rate(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval])',
+      'rate(tomcat_requestcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}} - requests',
     ),
     prometheus.target(
-      'rate(tomcat_errorcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__rate_interval])',
+      'rate(tomcat_errorcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}} - errors',
     ),
@@ -442,17 +444,17 @@ local requestsPanel = {
   },
 };
 
-local processingTimePanel = {
+local processingTimePanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(increase(tomcat_processingtime_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
+      'sum(increase(tomcat_processingtime_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
       interval='1m',
     ),
     prometheus.target(
-      'increase(tomcat_processingtime_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)',
+      'increase(tomcat_processingtime_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}}',
       interval='1m',
@@ -529,46 +531,46 @@ local processingTimePanel = {
   },
 };
 
-local threadsPanel = {
+local threadsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'sum(tomcat_threadpool_connectioncount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}) by (job, instance)',
+      'sum(tomcat_threadpool_connectioncount{' + matcher + ', protocol=~"$protocol", port=~"$port"}) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total connections',
     ),
     prometheus.target(
-      'sum(tomcat_threadpool_pollerthreadcount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}) by (job, instance)',
+      'sum(tomcat_threadpool_pollerthreadcount{' + matcher + ', protocol=~"$protocol", port=~"$port"}) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - poller total',
     ),
     prometheus.target(
-      'sum(tomcat_threadpool_keepalivecount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}) by (job, instance)',
+      'sum(tomcat_threadpool_keepalivecount{' + matcher + ', protocol=~"$protocol", port=~"$port"}) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - idle total',
     ),
     prometheus.target(
-      'sum(tomcat_threadpool_currentthreadcount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}) by (job, instance)',
+      'sum(tomcat_threadpool_currentthreadcount{' + matcher + ', protocol=~"$protocol", port=~"$port"}) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - active total',
     ),
     prometheus.target(
-      'tomcat_threadpool_connectioncount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}',
+      'tomcat_threadpool_connectioncount{' + matcher + ', protocol=~"$protocol", port=~"$port"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}} - connections',
     ),
     prometheus.target(
-      'tomcat_threadpool_pollerthreadcount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}',
+      'tomcat_threadpool_pollerthreadcount{' + matcher + ', protocol=~"$protocol", port=~"$port"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}} - poller',
     ),
     prometheus.target(
-      'tomcat_threadpool_keepalivecount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}',
+      'tomcat_threadpool_keepalivecount{' + matcher + ', protocol=~"$protocol", port=~"$port"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}} - idle',
     ),
     prometheus.target(
-      'tomcat_threadpool_currentthreadcount{job=~"$job", instance=~"$instance", protocol=~"$protocol", port=~"$port"}',
+      'tomcat_threadpool_currentthreadcount{' + matcher + ', protocol=~"$protocol", port=~"$port"}',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}} - active',
     ),
@@ -642,13 +644,13 @@ local threadsPanel = {
   },
 };
 
-local logsPanel = {
+local logsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{job=~"$job", instance=~"$instance"} |= `` | (' + filenameLogFilter + ' or log_type="catalina.out")',
+      expr: '{' + matcher + '} |= `` | (' + filenameLogFilter + ' or log_type="catalina.out")',
       queryType: 'range',
       refId: 'A',
     },
@@ -722,36 +724,48 @@ local logsPanel = {
               sort=0
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(tomcat_bytesreceived_total{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total, instance)',
+              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=1,
-              includeAll=false,
-              multi=false,
-              allValues='',
+              includeAll=true,
+              multi=true,
+              allValues='.+',
               sort=0
             ),
             template.new(
               'protocol',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total, protocol)',
+              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, protocol)' % $._config,
               label='Protocol',
               refresh=1,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
               'port',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total, port)',
+              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, port)' % $._config,
               label='Port',
               refresh=1,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
           ],
@@ -760,16 +774,16 @@ local logsPanel = {
       .addPanels(
         std.flattenArrays([
           [
-            memoryUsagePanel { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
-            cpuUsagePanel { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
-            trafficSentPanel { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
-            trafficReceivedPanel { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
-            requestsPanel { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
-            processingTimePanel { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
-            threadsPanel { gridPos: { h: 6, w: 24, x: 0, y: 18 } },
+            memoryUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 0 } },
+            cpuUsagePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 0 } },
+            trafficSentPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 6 } },
+            trafficReceivedPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 6 } },
+            requestsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 0, y: 12 } },
+            processingTimePanel(getMatcher($._config)) { gridPos: { h: 6, w: 12, x: 12, y: 12 } },
+            threadsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 18 } },
           ],
           if $._config.enableLokiLogs then [
-            logsPanel { gridPos: { h: 6, w: 24, x: 0, y: 24 } },
+            logsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 24 } },
           ] else [],
           [
           ],
