@@ -740,7 +740,7 @@ local logsPanel(matcher) = {
               promDatasource,
               'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, instance)' % $._config,
               label='Instance',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
               allValues='.+',
