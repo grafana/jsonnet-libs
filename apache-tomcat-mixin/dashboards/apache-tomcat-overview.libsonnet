@@ -164,7 +164,7 @@ local cpuUsagePanel(matcher) = {
           },
         ],
       },
-      unit: 'percentunit',
+      unit: 'percent',
     },
     overrides: [],
   },
@@ -674,7 +674,7 @@ local logsPanel(matcher) = {
   grafanaDashboards+:: {
     'apache-tomcat-overview.json':
       dashboard.new(
-        'Apache Tomcat overview',
+        'Apache Tomcat Overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -740,11 +740,11 @@ local logsPanel(matcher) = {
               promDatasource,
               'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, instance)' % $._config,
               label='Instance',
-              refresh=1,
+              refresh=2,
               includeAll=true,
               multi=true,
               allValues='.+',
-              sort=0
+              sort=1
             ),
             template.new(
               'protocol',

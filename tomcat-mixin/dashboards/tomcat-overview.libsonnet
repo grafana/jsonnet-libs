@@ -9,8 +9,9 @@ local dashboardUid = 'apache-tomcat-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
-local getMatcher(cfg) = '%(tomcatSelector)s' % cfg;
-local logExpr(cfg) = '%(logExpression)s' % cfg;
+local filenameLogFilter = 'filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out|/Program Files/Apache Software Foundation/Tomcat .*..*/logs/catalina.out"';
+
+local getMatcher(cfg) = '%(tomcatSelector)s, instance=~"$instance"' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -450,11 +451,13 @@ local processingTimePanel(matcher) = {
       'sum(increase(tomcat_processingtime_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
+      interval='1m',
     ),
     prometheus.target(
       'increase(tomcat_processingtime_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}}',
+      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -641,13 +644,13 @@ local threadsPanel(matcher) = {
   },
 };
 
-local logsPanel(cfg) = {
+local logsPanel(matcher) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: logExpr(cfg),
+      expr: '{' + matcher + '} |= `` | (' + filenameLogFilter + ' or log_type="catalina.out")',
       queryType: 'range',
       refId: 'A',
     },
@@ -713,9 +716,21 @@ local logsPanel(cfg) = {
               sort=0
             ),
             template.new(
+              'cluster',
+              promDatasource,
+              'label_values(tomcat_bytesreceived_total{%(multiclusterSelector)s}, cluster)' % $._config,
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='.*',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
+              sort=0
+            ),
+            template.new(
               'instance',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total, instance)',
+              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, instance)' % $._config,
               label='Instance',
               refresh=2,
               includeAll=true,
@@ -726,35 +741,23 @@ local logsPanel(cfg) = {
             template.new(
               'protocol',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total, protocol)',
+              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, protocol)' % $._config,
               label='Protocol',
               refresh=1,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.+',
               sort=0
             ),
             template.new(
               'port',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total, port)',
+              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, port)' % $._config,
               label='Port',
               refresh=1,
               includeAll=true,
               multi=true,
-              allValues='',
-              sort=0
-            ),
-            template.new(
-              'cluster',
-              promDatasource,
-              'label_values(tomcat_bytesreceived_total{job=~"$job"}, cluster)',
-              label='Cluster',
-              refresh=2,
-              includeAll=true,
-              multi=true,
-              allValues='',
-              hide=if $._config.enableMultiCluster then '' else 'variable',
+              allValues='.+',
               sort=0
             ),
           ],
@@ -772,7 +775,7 @@ local logsPanel(cfg) = {
             threadsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 18 } },
           ],
           if $._config.enableLokiLogs then [
-            logsPanel($._config) { gridPos: { h: 6, w: 24, x: 0, y: 24 } },
+            logsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 24 } },
           ] else [],
           [
           ],
