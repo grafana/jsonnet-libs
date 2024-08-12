@@ -9,9 +9,8 @@ local dashboardUid = 'apache-tomcat-overview';
 local promDatasourceName = 'prometheus_datasource';
 local lokiDatasourceName = 'loki_datasource';
 
-local filenameLogFilter = 'filename=~"/var/log/tomcat.*/catalina.out|/opt/tomcat/logs/catalina.out|/Program Files/Apache Software Foundation/Tomcat .*..*/logs/catalina.out"';
-
-local getMatcher(cfg) = '%(tomcatSelector)s, instance=~"$instance"' % cfg;
+local getMatcher(cfg) = '%(tomcatSelector)s' % cfg;
+local logExpr(cfg) = '%(logExpression)s' % cfg;
 
 local promDatasource = {
   uid: '${%s}' % promDatasourceName,
@@ -164,7 +163,7 @@ local cpuUsagePanel(matcher) = {
           },
         ],
       },
-      unit: 'percentunit',
+      unit: 'percent',
     },
     overrides: [],
   },
@@ -451,13 +450,11 @@ local processingTimePanel(matcher) = {
       'sum(increase(tomcat_processingtime_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)) by (job, instance)',
       datasource=promDatasource,
       legendFormat='{{instance}} - total',
-      interval='1m',
     ),
     prometheus.target(
       'increase(tomcat_processingtime_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval) / clamp_min(increase(tomcat_requestcount_total{' + matcher + ', protocol=~"$protocol", port=~"$port"}[$__interval:] offset -$__interval), 1)',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{protocol}}-{{port}}',
-      interval='1m',
     ),
   ],
   type: 'timeseries',
@@ -644,13 +641,13 @@ local threadsPanel(matcher) = {
   },
 };
 
-local logsPanel(matcher) = {
+local logsPanel(cfg) = {
   datasource: lokiDatasource,
   targets: [
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{' + matcher + '} |= `` | (' + filenameLogFilter + ' or log_type="catalina.out")',
+      expr: logExpr(cfg),
       queryType: 'range',
       refId: 'A',
     },
@@ -674,7 +671,7 @@ local logsPanel(matcher) = {
   grafanaDashboards+:: {
     'apache-tomcat-overview.json':
       dashboard.new(
-        'Apache Tomcat overview',
+        'Apache Tomcat Overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
@@ -682,14 +679,6 @@ local logsPanel(matcher) = {
         description='',
         uid=dashboardUid,
       )
-
-      .addLink(grafana.link.dashboards(
-        asDropdown=false,
-        title='Other Apache Tomcat dashboards',
-        includeVars=true,
-        keepTime=true,
-        tags=($._config.dashboardTags),
-      ))
 
       .addTemplates(
         std.flattenArrays([
@@ -724,48 +713,48 @@ local logsPanel(matcher) = {
               sort=0
             ),
             template.new(
-              'cluster',
+              'instance',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total{%(multiclusterSelector)s}, cluster)' % $._config,
-              label='Cluster',
+              'label_values(tomcat_bytesreceived_total, instance)',
+              label='Instance',
               refresh=2,
               includeAll=true,
               multi=true,
-              allValues='.*',
-              hide=if $._config.enableMultiCluster then '' else 'variable',
-              sort=0
-            ),
-            template.new(
-              'instance',
-              promDatasource,
-              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, instance)' % $._config,
-              label='Instance',
-              refresh=1,
-              includeAll=true,
-              multi=true,
               allValues='.+',
-              sort=0
+              sort=1
             ),
             template.new(
               'protocol',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, protocol)' % $._config,
+              'label_values(tomcat_bytesreceived_total, protocol)',
               label='Protocol',
               refresh=1,
               includeAll=true,
               multi=true,
-              allValues='.+',
+              allValues='',
               sort=0
             ),
             template.new(
               'port',
               promDatasource,
-              'label_values(tomcat_bytesreceived_total{%(tomcatSelector)s}, port)' % $._config,
+              'label_values(tomcat_bytesreceived_total, port)',
               label='Port',
               refresh=1,
               includeAll=true,
               multi=true,
-              allValues='.+',
+              allValues='',
+              sort=0
+            ),
+            template.new(
+              'cluster',
+              promDatasource,
+              'label_values(tomcat_bytesreceived_total{job=~"$job"}, cluster)',
+              label='Cluster',
+              refresh=2,
+              includeAll=true,
+              multi=true,
+              allValues='',
+              hide=if $._config.enableMultiCluster then '' else 'variable',
               sort=0
             ),
           ],
@@ -783,7 +772,7 @@ local logsPanel(matcher) = {
             threadsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 18 } },
           ],
           if $._config.enableLokiLogs then [
-            logsPanel(getMatcher($._config)) { gridPos: { h: 6, w: 24, x: 0, y: 24 } },
+            logsPanel($._config) { gridPos: { h: 6, w: 24, x: 0, y: 24 } },
           ] else [],
           [
           ],
