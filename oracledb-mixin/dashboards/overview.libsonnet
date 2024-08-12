@@ -279,7 +279,7 @@ local alertLogPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'builder',
-      expr: '{' + matcher + '} |= `` | (filename=~"/.*/.*/diag/rdbms/.*/.*/trace/alert_.*log or log_type="oracledb")',
+      expr: '{' + matcher + '} |= `` | (filename=~"/.*/.*/diag/rdbms/.*/.*/trace/alert_.*log or log_type="oracledb-alert")',
       queryType: 'range',
       refId: 'A',
     },
