@@ -19,6 +19,7 @@ function(this)
         description: "Direct buffer is allocated outside the Java heap and represents the OS native memory used by the JVM process. It is generally used for I/O operations. Note that direct buffers aren't freed up by GC.",
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_buffer_memory_used_bytes{%(queriesSelector)s}',
@@ -39,6 +40,7 @@ function(this)
         description: "Direct buffer is allocated outside the Java heap and represents the OS native memory used by the JVM process. It is generally used for I/O operations. Note that direct buffers aren't freed up by GC.",
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_buffer_total_capacity_bytes{%(queriesSelector)s}',
@@ -59,6 +61,7 @@ function(this)
         description: 'The mapped buffer pool is used for its FileChannel instances.',
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_buffer_memory_used_bytes{%(queriesSelector)s}',
@@ -79,6 +82,7 @@ function(this)
         description: 'The mapped buffer pool is used for its FileChannel instances.',
         type: 'gauge',
         unit: 'bytes',
+        optional: true,
         sources: {
           java_micrometer: {
             expr: 'jvm_buffer_total_capacity_bytes{%(queriesSelector)s}',

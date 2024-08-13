@@ -16,4 +16,4 @@ jb install https://github.com/grafana/jsonnet-libs/zookeeper-observ-lib
 
 ## Example
 
-![alt text](image.png)
+![zookeeper](image.png)

@@ -26,9 +26,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
       filesUsed:
-        g.panel.timeSeries.new('Process files open')
+        signals.process.filesOpen.asTimeSeries()
         + signals.process.filesMax.asPanelMixin()
-        + signals.process.filesOpen.asPanelMixin()
         + commonlib.panels.generic.timeSeries.base.stylize(),
     },
 }
