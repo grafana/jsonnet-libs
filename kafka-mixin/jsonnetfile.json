@@ -12,11 +12,12 @@
     },
     {
       "source": {
-        "local": {
-          "directory": "../kafka-observ-lib"
+        "git": {
+          "remote": "https://github.com/grafana/jsonnet-libs.git",
+          "subdir": "kafka-observ-lib"
         }
       },
-      "version": ""
+      "version": "master"
     }
   ],
   "legacyImports": true
