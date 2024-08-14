@@ -9,7 +9,7 @@ function(this)
     aggFunction: 'sum',
     legendCustomTemplate: '{{ topic }}',
     discoveryMetric: {
-      prometheus: 'kafka_topic_partition_current_offset',  //https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
+      prometheus: 'kafka_log_log_logstartoffset',  //https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
       grafanacloud: self.prometheus,
     },
     signals: {
