@@ -132,7 +132,7 @@ function(this)
         sources: {
           prometheus: {
             legendCustomTemplate: '%s: bytes in' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
-            expr: 'kafka_server_brokertopicmetrics_bytesinpersec_count{%(queriesSelector)s}',
+            expr: 'kafka_server_brokertopicmetrics_bytesin_total{%(queriesSelector)s}',
           },
           grafanacloud: {
             legendCustomTemplate: '%s: bytes in' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
@@ -148,7 +148,7 @@ function(this)
         sources: {
           prometheus: {
             legendCustomTemplate: '%s: bytes out' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
-            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}',
+            expr: 'kafka_server_brokertopicmetrics_bytesout_total{%(queriesSelector)s}',
           },
           grafanacloud: {
             legendCustomTemplate: '%s: bytes out' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
