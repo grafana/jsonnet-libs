@@ -22,7 +22,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
       memoryUsage:
         signals.process.memoryUsedResident.asTimeSeries()
-        + signals.process.memoryUsedVirtual.asPanelMixin()
+        + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
+
+      memoryUsageVirtual:
+        signals.process.memoryUsedVirtual.asTimeSeries()
         + commonlib.panels.memory.timeSeries.usageBytes.stylize(),
 
       filesUsed:
