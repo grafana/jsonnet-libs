@@ -164,7 +164,7 @@ local cpuUsagePanel(matcher) = {
           },
         ],
       },
-      unit: 'percent',
+      unit: 'percentunit',
     },
     overrides: [],
   },
