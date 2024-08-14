@@ -25,15 +25,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             {
               filters: [
                 {
-                  fieldName: 'Messages in per second',
                   config: {
-                    id: 'isNotNull',
+                    id: 'isNull',
                     options: {},
                   },
+                  fieldName: 'Messages in per second',
                 },
               ],
-              type: 'include',
               match: 'all',
+              type: 'exclude',
             }
           ),
 
