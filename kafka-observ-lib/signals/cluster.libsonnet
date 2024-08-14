@@ -1,5 +1,5 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
-
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -45,7 +45,7 @@ function(this)
           grafanacloud:
             {
               expr: 'kafka_controller_kafkacontroller_activecontrollercount{%(queriesSelector)s}',
-              legendCustomTemplate: '{{ %s }}' % this.instanceLabels[0],
+              legendCustomTemplate: '{{ %s }}' % xtd.array.slice(this.instanceLabels, -1),
               aggKeepLabels: this.instanceLabels,
               valueMappings: [{
                 type: 'value',
@@ -67,7 +67,7 @@ function(this)
             {
               expr: 'kafka_controller_kafkacontroller_activecontrollercount{%(queriesSelector)s}',
               aggKeepLabels: this.instanceLabels,
-              legendCustomTemplate: '{{ %s }}' % this.instanceLabels[0],
+              legendCustomTemplate: '{{ %s }}' % xtd.array.slice(this.instanceLabels, -1),
               valueMappings: [
                 {
                   type: 'value',
@@ -115,11 +115,9 @@ function(this)
         unit: 'mps',
         sources: {
           prometheus: {
-            legendCustomTemplate: '%s: messages in' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
             expr: 'kafka_server_brokertopicmetrics_messagesin_total{%(queriesSelector)s}',
           },
           grafanacloud: {
-            legendCustomTemplate: '%s: messages in' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
             expr: 'kafka_server_brokertopicmetrics_messagesinpersec{%(queriesSelector)s}',
           },
         },
@@ -131,11 +129,9 @@ function(this)
         unit: 'Bps',
         sources: {
           prometheus: {
-            legendCustomTemplate: '%s: bytes in' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
-            expr: 'kafka_server_brokertopicmetrics_bytesinpersec_count{%(queriesSelector)s}',
+            expr: 'kafka_server_brokertopicmetrics_bytesin_total{%(queriesSelector)s}',
           },
           grafanacloud: {
-            legendCustomTemplate: '%s: bytes in' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
             expr: 'kafka_server_brokertopicmetrics_bytesinpersec{%(queriesSelector)s}',
           },
         },
@@ -147,11 +143,9 @@ function(this)
         unit: 'Bps',
         sources: {
           prometheus: {
-            legendCustomTemplate: '%s: bytes out' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
-            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}',
+            expr: 'kafka_server_brokertopicmetrics_bytesout_total{%(queriesSelector)s}',
           },
           grafanacloud: {
-            legendCustomTemplate: '%s: bytes out' % commonlib.utils.labelsToPanelLegend(this.groupLabels),
             expr: 'kafka_server_brokertopicmetrics_bytesoutpersec{%(queriesSelector)s}',
           },
         },

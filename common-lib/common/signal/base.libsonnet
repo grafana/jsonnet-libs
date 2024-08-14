@@ -1,7 +1,7 @@
 local g = import '../g.libsonnet';
 local utils = import '../utils.libsonnet';
 local signalUtils = import './utils.libsonnet';
-
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 {
   new(
     signalName,
@@ -54,7 +54,7 @@ local signalUtils = import './utils.libsonnet';
             if std.length(aggKeepLabels) > 0 then aggKeepLabels
             else []
           ),
-        aggLegend: utils.labelsToPanelLegend(legendLabels),
+        aggLegend: utils.labelsToPanelLegend(xtd.array.slice(legendLabels, -1)),
         aggFunction: aggFunction,
       },
 

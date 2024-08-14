@@ -17,7 +17,7 @@ local zookeeperlib = import 'zookeeper-observ-lib/main.libsonnet';
           uid: this.config.uid,
           dashboardNamePrefix: this.config.dashboardNamePrefix,
           dashboardTags: this.config.dashboardTags,
-          metricsSource: 'jmx_exporter',
+          metricsSource: this.config.jvmMetricsSource,
         }
       ),
     zookeeper::

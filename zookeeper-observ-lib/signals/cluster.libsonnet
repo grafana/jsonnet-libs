@@ -1,5 +1,5 @@
 local commonlib = import 'common-lib/common/main.libsonnet';
-
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 function(this)
   {
     filteringSelector: this.filteringSelector,
@@ -25,7 +25,7 @@ function(this)
           grafanacloud:
             {
               expr: 'clamp_max(zookeeper_leaderuptime{%(queriesSelector)s}, 1) or clamp_max(zookeeper_numaliveconnections{%(queriesSelector)s}, 0)',
-              legendCustomTemplate: '{{ %s }}' % this.instanceLabels[0],
+              legendCustomTemplate: '{{ %s }}' % xtd.array.slice(this.instanceLabels, -1),
               aggKeepLabels: this.instanceLabels,
               valueMappings: [
                 {
@@ -49,7 +49,7 @@ function(this)
             {
               expr: 'clamp_max(leader_uptime{%(queriesSelector)s}, 1) or clamp_max(num_alive_connections{%(queriesSelector)s}, 0)',
               aggKeepLabels: this.instanceLabels,
-              legendCustomTemplate: '{{ %s }}' % this.instanceLabels[0],
+              legendCustomTemplate: '{{ %s }}' % xtd.array.slice(this.instanceLabels, -1),
               valueMappings: [
                 {
                   type: 'value',

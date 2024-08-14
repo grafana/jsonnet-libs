@@ -9,7 +9,13 @@
   dashboardTags: ['kafka'],
   alertKafkaLagTooHighThreshold: '100',
   alertKafkaLagTooHighSeverity: 'critical',
-  metricsSource: 'prometheus',  //or grafanacloud
+  metricsSource: 'prometheus',  //or grafanacloud. See README
+
+  // 'jmx_exporter' if you use jmx_exporter in http mode or javaagent mode with the additional config snippet (see README)
+  // 'prometheus_old' if you use jmx_exporter in javaagent mode and version prior to 1.0.1
+  // 'prometheus' if you use jmx_exporter in javaagent mode and version 1.0.1 or newer
+  jvmMetricsSource: 'prometheus_old',
+
   //Can be regex:
   topicsIgnoreSelector: '__consumer_offsets',
   zookeeperEnabled: true,

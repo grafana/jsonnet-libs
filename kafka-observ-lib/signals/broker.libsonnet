@@ -19,11 +19,9 @@ function(this)
         unit: 'mps',
         sources: {
           prometheus: {
-            legendCustomTemplate: '{{ %s }}: messages in' % this.instanceLabels[0],
             expr: 'kafka_server_brokertopicmetrics_messagesin_total{%(queriesSelector)s}',
           },
           grafanacloud: {
-            legendCustomTemplate: '{{ %s }}: messages in' % this.instanceLabels[0],
             expr: 'kafka_server_brokertopicmetrics_messagesinpersec{%(queriesSelector)s}',
           },
         },
@@ -35,11 +33,9 @@ function(this)
         unit: 'Bps',
         sources: {
           prometheus: {
-            legendCustomTemplate: '{{ %s }}: bytes in' % this.instanceLabels[0],
-            expr: 'kafka_server_brokertopicmetrics_bytesinpersec_count{%(queriesSelector)s}',
+            expr: 'kafka_server_brokertopicmetrics_bytesin_total{%(queriesSelector)s}',
           },
           grafanacloud: {
-            legendCustomTemplate: '{{ %s }}: bytes in' % this.instanceLabels[0],
             expr: 'kafka_server_brokertopicmetrics_bytesinpersec{%(queriesSelector)s}',
           },
         },
@@ -51,11 +47,9 @@ function(this)
         unit: 'Bps',
         sources: {
           prometheus: {
-            legendCustomTemplate: '{{ %s }}: bytes out' % this.instanceLabels[0],
-            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}',
+            expr: 'kafka_server_brokertopicmetrics_bytesout_total{%(queriesSelector)s}',
           },
           grafanacloud: {
-            legendCustomTemplate: '{{ %s }}: bytes out' % this.instanceLabels[0],
             expr: 'kafka_server_brokertopicmetrics_bytesoutpersec{%(queriesSelector)s}',
           },
         },

@@ -4,12 +4,24 @@ This lib can be used to generate dashboards, rows, panels, and alerts for JVM mo
 
 Supports the following sources:
 
-- `prometheus` (https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics)
+- `prometheus` (https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics). This also works for jmx_exporter (javaagent mode) starting from 1.0.1 release.
 - `otel` (https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/jmx-metrics/docs/target-systems/jvm.md)
 - `java_micrometer` (springboot) (https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java)
-- `prometheus_old` client_java instrumentation prior to 1.0.0 release: (https://github.com/prometheus/client_java/releases/tag/v1.0.0-alpha-4)
-- `jmx_exporter` https://github.com/prometheus/jmx_exporter/blob/main/collector/src/test/java/io/prometheus/jmx/JmxCollectorTest.java#L195
-`
+- `prometheus_old` client_java instrumentation prior to 1.0.0 release: (https://github.com/prometheus/client_java/releases/tag/v1.0.0-alpha-4). This also works for jmx_exporter (javaagent mode) prior to 1.0.1 release.
+- `jmx_exporter`. Works with jmx_exporter (both http and javaagent modes) and the folllowing snippet:
+
+```yaml
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+rules:
+  - pattern: java.lang<type=(.+), name=(.+)><(.+)>(\w+)
+    name: java_lang_$1_$4_$3_$2
+  - pattern: java.lang<type=(.+), name=(.+)><>(\w+)
+    name: java_lang_$1_$3_$2
+  - pattern : java.lang<type=(.*)>
+```
+
+
 ## Import
 
 ```sh

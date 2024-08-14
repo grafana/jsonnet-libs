@@ -11,6 +11,7 @@ local kafka =
       instanceLabels: config.instanceLabels,
       dashboardTags: config.dashboardTags,
       metricsSource: 'grafanacloud',
+      jvmMetricsSource: 'prometheus_old',
     }
   );
 

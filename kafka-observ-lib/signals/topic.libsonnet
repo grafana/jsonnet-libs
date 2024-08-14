@@ -50,7 +50,7 @@ function(this)
         sources: {
           prometheus: {
             aggKeepLabels: ['topic'],
-            expr: 'kafka_server_brokertopicmetrics_bytesinpersec_count{%(queriesSelector)s}',
+            expr: 'kafka_server_brokertopicmetrics_bytesin_total{%(queriesSelector)s}',
           },
           grafanacloud: {
             aggKeepLabels: ['topic'],
@@ -66,7 +66,7 @@ function(this)
         sources: {
           prometheus: {
             aggKeepLabels: ['topic'],
-            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}',
+            expr: 'kafka_server_brokertopicmetrics_bytesout_total{%(queriesSelector)s}',
           },
           grafanacloud: {
             aggKeepLabels: ['topic'],
