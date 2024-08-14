@@ -4,7 +4,13 @@ local g = import './g.libsonnet';
     {
       'kafka-topic-dashboard.json':
         g.dashboard.new(this.config.dashboardNamePrefix + 'Kafka topic overview')
-        + g.dashboard.withVariables(this.signals.topic.getVariablesMultiChoice())
+        + g.dashboard.withVariables(
+          std.setUnion(
+            this.signals.topic.getVariablesMultiChoice(),
+            this.signals.consumerGroup.getVariablesMultiChoice(),
+            keyF=function(x) x.name
+          )
+        )
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withUid(this.config.uid + '-kafka-topic-dashboard')
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
