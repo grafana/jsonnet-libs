@@ -78,7 +78,7 @@ The following is supported in expressions and legends:
 - `%(groupLabels)s` - expands to groupLabels list
 - `%(instanceLabels)s` - expands to instanceLabels list
 - `%(agg)s` - expands to list of labels according to `aggLevel` and `aggKeepLabels` choosen
-- `%(aggLegend)s` - expands to list of labels in legend format (i.e. `{{<label1>}}/{{label2}}`) according to `aggLevel` and `aggKeepLabels` choosen
+- `%(aggLegend)s` - expands to label in legend format (i.e. `{{<label1>}}`) according to `aggLevel` and `aggKeepLabels` choosen
 - `%(aggFunction)s` - expands to aggregation function
 - `%(interval)s` - expands to `interval` value
 - `%(alertsInterval)s` - expands to `interval` value
