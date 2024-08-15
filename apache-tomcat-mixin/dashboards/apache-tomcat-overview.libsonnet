@@ -674,7 +674,7 @@ local logsPanel(matcher) = {
   grafanaDashboards+:: {
     'apache-tomcat-overview.json':
       dashboard.new(
-        'Apache Tomcat Overview',
+        'Apache Tomcat overview',
         time_from='%s' % $._config.dashboardPeriod,
         tags=($._config.dashboardTags),
         timezone='%s' % $._config.dashboardTimezone,
