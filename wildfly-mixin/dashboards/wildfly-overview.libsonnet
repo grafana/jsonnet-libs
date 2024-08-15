@@ -340,7 +340,7 @@ local serverLogsPanel(matcher) = {
     {
       datasource: lokiDatasource,
       editorMode: 'code',
-      expr: '{filename=~"/opt/wildfly/.*/server.log",' + matcher + '}',
+      expr: '{' + matcher + '} |= `` | (filename=~"/opt/wildfly/.*/server.log" or log_type="wildfly")',
       queryType: 'range',
       refId: 'A',
     },
