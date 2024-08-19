@@ -7,8 +7,8 @@
           {
             alert: 'ApacheTomcatAlertsHighCpuUsage',
             expr: |||
-              sum by (job, instance) (jvm_process_cpu_load{job=~"integrations/tomcat"}) > %(ApacheTomcatAlertsCriticalCpuUsage)s
-            ||| % $._config,
+              sum by (%(agg)s) (jvm_process_cpu_load{%(filteringSelector)s}) > %(ApacheTomcatAlertsCriticalCpuUsage)s
+            ||| % $._config { agg: std.join(',', $._config.groupLabels + $._config.instanceLabels) },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -25,8 +25,8 @@
           {
             alert: 'ApacheTomcatAlertsHighMemoryUsage',
             expr: |||
-              sum(jvm_memory_usage_used_bytes{job=~"integrations/tomcat"}) by (job, instance) / sum(jvm_physical_memory_bytes{job=~"integrations/tomcat"}) by (job, instance) * 100 > %(ApacheTomcatAlertsCriticalMemoryUsage)s
-            ||| % $._config,
+              sum(jvm_memory_usage_used_bytes{%(filteringSelector)s}) by (%(agg)s) / sum(jvm_physical_memory_bytes{%(filteringSelector)s}) by (%(agg)s) * 100 > %(ApacheTomcatAlertsCriticalMemoryUsage)s
+            ||| % $._config { agg: std.join(',', $._config.groupLabels + $._config.instanceLabels) },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -43,8 +43,8 @@
           {
             alert: 'ApacheTomcatAlertsHighRequestErrorPercent',
             expr: |||
-              sum by (job, instance) (increase(tomcat_errorcount_total[5m]) / increase(tomcat_requestcount_total[5m]) * 100) > %(ApacheTomcatAlertsCriticalRequestErrorPercentage)s
-            ||| % $._config,
+              sum by (%(agg)s) (increase(tomcat_errorcount_total{%(filteringSelector)s}[5m]) / increase(tomcat_requestcount_total{%(filteringSelector)s}[5m]) * 100) > %(ApacheTomcatAlertsCriticalRequestErrorPercentage)s
+            ||| % $._config { agg: std.join(',', $._config.groupLabels + $._config.instanceLabels) },
             'for': '5m',
             labels: {
               severity: 'critical',
@@ -61,8 +61,8 @@
           {
             alert: 'ApacheTomcatAlertsModeratelyHighProcessingTime',
             expr: |||
-              sum by (job, instance) (increase(tomcat_processingtime_total[5m]) / increase(tomcat_requestcount_total[5m])) > %(ApacheTomcatAlertsWarningProcessingTime)s
-            ||| % $._config,
+              sum by (%(agg)s) (increase(tomcat_processingtime_total{%(filteringSelector)s}[5m]) / increase(tomcat_requestcount_total{%(filteringSelector)s}[5m])) > %(ApacheTomcatAlertsWarningProcessingTime)s
+            ||| % $._config { agg: std.join(',', $._config.groupLabels + $._config.instanceLabels) },
             'for': '5m',
             labels: {
               severity: 'warning',
