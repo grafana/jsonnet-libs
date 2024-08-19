@@ -142,6 +142,22 @@ local integration_version_panel(version, statusPanelDataSource, height, width, x
       },
     },
 
+  // This function can be used to patch dashboards variables, matching by name:
+  // patch format:
+  // {
+  //   cluster: {
+  //     allValues: ".*"
+  //   },
+  // }
+  patch_variables(dashboard, patch)::
+    {
+      templating: {
+        list+: [
+          t + std.get(patch, t.name, default={})
+          for t in dashboard.templating.list
+        ],
+      },
+    },
 
   // This function can be used to patch alert rules:
   // prometheusAlerts format (as in mixin):
