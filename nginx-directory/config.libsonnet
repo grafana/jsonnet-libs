@@ -2,6 +2,8 @@
   _config+:: {
     namespace: error 'namespace required',
     cluster_dns_suffix: error 'cluster_dns_suffix required',
+    // log_format is enclosed in single quotes in the config file. Make sure to escape them properly if you want to use them.
+    log_format: '$remote_addr - $remote_user [$time_local]  $status "$request" $body_bytes_sent "$http_referer" "$http_user_agent" "$http_x_forwarded_for"',
     title: 'Admin',
 
     admin_services+: [
