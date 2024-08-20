@@ -9,8 +9,8 @@ function(this)
     aggFunction: 'avg',
     legendCustomTemplate: '{{ consumergroup }} ({{ topic }})',
     discoveryMetric: {
-      prometheus: 'kafka_consumergroup_lag',  //https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
-      grafanacloud: self.prometheus,
+      prometheus: 'kafka_consumergroup_lag',  // https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
+      grafanacloud: 'kafka_consumergroup_uncomitted_offsets',  // https://github.com/grafana/kafka_exporter/blob/master/exporter/exporter.go#L887
     },
     signals: {
       consumerGroupLag: {
@@ -24,9 +24,13 @@ function(this)
             aggKeepLabels: ['consumergroup', 'topic'],
             expr: 'kafka_consumergroup_lag{%(queriesSelector)s}',
           },
-          grafanacloud: self.prometheus,
+          grafanacloud: {
+            aggKeepLabels: ['consumergroup', 'topic'],
+            expr: 'kafka_consumergroup_uncomitted_offsets{%(queriesSelector)s}',
+          },
         },
       },
+
       consumerGroupLagTime: {
         name: 'Consumer group lag in ms',
         description: 'Current approximate lag of a ConsumerGroup at Topic/Partition.',
