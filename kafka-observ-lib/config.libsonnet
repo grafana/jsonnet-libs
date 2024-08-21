@@ -2,7 +2,7 @@
   local this = self,
   filteringSelector: 'job!=""',
   zookeeperfilteringSelector: this.filteringSelector,
-  groupLabels: ['cluster', 'namespace'],  // label(s) that defines kafka cluster
+  groupLabels: ['kafka_cluster'],  // label(s) that defines kafka cluster
   instanceLabels: ['instance'],  // label(s) that defines single broker
   uid: 'kafka',
   dashboardNamePrefix: '',
