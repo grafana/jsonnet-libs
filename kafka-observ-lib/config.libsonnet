@@ -2,14 +2,14 @@
   local this = self,
   filteringSelector: 'job!=""',
   zookeeperfilteringSelector: this.filteringSelector,
-  groupLabels: ['kafka_cluster'],  // label(s) that defines kafka cluster
+  groupLabels: ['cluster', 'namespace'],  // label(s) that defines kafka cluster
   instanceLabels: ['instance'],  // label(s) that defines single broker
   uid: 'kafka',
   dashboardNamePrefix: '',
   dashboardTags: ['kafka'],
   alertKafkaLagTooHighThreshold: '100',
   alertKafkaLagTooHighSeverity: 'critical',
-  metricsSource: 'prometheus',  //or grafanacloud. See README
+  metricsSource: 'prometheus',  //or grafanacloud, bitnami. See README
 
   // 'jmx_exporter' if you use jmx_exporter in http mode or javaagent mode with the additional config snippet (see README)
   // 'prometheus_old' if you use jmx_exporter in javaagent mode and version prior to 1.0.1

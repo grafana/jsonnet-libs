@@ -53,7 +53,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 
         +
-        if type == 'prometheus' then
+        if type == 'prometheus' || type == "bitnami" then
           [
             panels.consumerGroup.consumerGroupConsumeRate { gridPos+: { w: 12, h: 8 } },
             panels.consumerGroup.consumerGroupLag { gridPos+: { w: 12, h: 8 } },

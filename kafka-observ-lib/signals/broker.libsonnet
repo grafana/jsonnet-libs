@@ -10,6 +10,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'kafka_controller_kafkacontroller_activecontrollercount',
       grafanacloud: 'kafka_controller_kafkacontroller_activecontrollercount',
+      bitnami: 'kafka_controller_kafkacontroller_activecontrollercount_value',
     },
     signals: {
       brokerMessagesInPerSec: {
@@ -23,6 +24,9 @@ function(this)
           },
           grafanacloud: {
             expr: 'kafka_server_brokertopicmetrics_messagesinpersec{%(queriesSelector)s}',
+          },
+          bitnami: {
+            expr: 'kafka_server_brokertopicmetrics_messagesinpersec_count{%(queriesSelector)s}',
           },
         },
       },
@@ -38,6 +42,9 @@ function(this)
           grafanacloud: {
             expr: 'kafka_server_brokertopicmetrics_bytesinpersec{%(queriesSelector)s}',
           },
+          bitnami: {
+            expr: 'kafka_server_brokertopicmetrics_bytesinpersec_count{%(queriesSelector)s}',
+          },
         },
       },
       brokerBytesOutPerSec: {
@@ -52,6 +59,9 @@ function(this)
           grafanacloud: {
             expr: 'kafka_server_brokertopicmetrics_bytesoutpersec{%(queriesSelector)s}',
           },
+          bitnami: {
+            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}'
+          }
         },
       },
 

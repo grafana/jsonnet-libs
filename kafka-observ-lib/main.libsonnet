@@ -30,7 +30,10 @@ local zookeeperlib = import 'zookeeper-observ-lib/main.libsonnet';
           uid: this.config.uid,
           dashboardNamePrefix: this.config.dashboardNamePrefix,
           dashboardTags: this.config.dashboardTags,
-          metricsSource: this.config.metricsSource,
+          metricsSource: 
+            if this.config.metricsSource == "prometheus" then "prometheus"
+            else if this.config.metricsSource == "grafanacloud" then "grafanacloud"
+            else if this.config.metricsSource == "bitnami" then "prometheus",
         }
       ),
 
