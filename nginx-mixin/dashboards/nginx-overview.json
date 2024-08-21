@@ -1566,7 +1566,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "topk(10, sum by (http_referer) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"} | json |  http_referer != \"\" and http_referer !~ \".*?$host.*?\" and http_referer !~ \".*?\\\\*\\\\*\\\\*.*?\" | __error__=\"\" [15m])))",
+          "expr": "topk(10, sum by (http_referer) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"} | json |  http_referer != \"\" and http_referer !~ \".*?$host.*?\" and http_referer !~ \".*?\\\\*\\\\*\\\\*.*?\" | __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{http_referer}}",
           "range": false,
@@ -1687,7 +1687,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "topk(10, sum by (http_user_agent) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"} | json |  __error__=\"\" [15m])))",
+          "expr": "topk(10, sum by (http_user_agent) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"} | json |  __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{http_user_agent}}",
           "range": false,
@@ -1835,7 +1835,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "topk(10, sum by (remote_addr, geoip_country_code) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"} | json |  __error__=\"\" [15m])))",
+          "expr": "topk(10, sum by (remote_addr, geoip_country_code) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"} | json |  __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{remote_addr}}",
           "range": false,
@@ -1963,7 +1963,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "topk(10, sum by (request_uri) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"} !~ `\\.ico|\\.svg|\\.css|\\.png|\\.txt|\\.js|\\.xml` | json | status = 200 and request_uri != \"/\" | __error__=\"\" [15m])))",
+          "expr": "topk(10, sum by (request_uri) (count_over_time({$label_name=~\"$label_value\", job=~\"$job\", instance=~\"$instance\", cluster=~\"$cluster\"} !~ `\\.ico|\\.svg|\\.css|\\.png|\\.txt|\\.js|\\.xml` | json | status = 200 and request_uri != \"/\" | __error__=\"\" [$__interval])))",
           "instant": true,
           "legendFormat": "{{request_uri}}",
           "range": false,
