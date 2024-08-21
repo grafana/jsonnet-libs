@@ -24,8 +24,8 @@ function(this)
           },
           grafanacloud: self.prometheus,
           bitnami: {
-            expr: 'kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms_count{%(queriesSelector)s}'
-          }
+            expr: 'kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms_count{%(queriesSelector)s}',
+          },
         },
       },
       zookeeperConnections: {

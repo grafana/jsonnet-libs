@@ -61,7 +61,7 @@ function(this)
           grafanacloud: self.prometheus,
           bitnami: self.prometheus,
         },
-        
+
       },
     },
   }

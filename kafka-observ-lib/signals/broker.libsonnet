@@ -60,8 +60,8 @@ function(this)
             expr: 'kafka_server_brokertopicmetrics_bytesoutpersec{%(queriesSelector)s}',
           },
           bitnami: {
-            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}'
-          }
+            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}',
+          },
         },
       },
 
