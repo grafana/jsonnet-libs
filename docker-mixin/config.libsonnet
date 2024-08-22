@@ -9,7 +9,7 @@
     //prefix
     uid: 'integration-docker',
     // ignore k8s nodes by default
-    filteringSelector: 'job!="kubelet"',
+    filteringSelector: 'job!="kubelet", name!=""',
 
 
     //signals related
