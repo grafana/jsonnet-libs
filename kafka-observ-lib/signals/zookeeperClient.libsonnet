@@ -10,6 +10,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms',
       grafanacloud: self.prometheus,
+      bitnami: 'kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms_count',
     },
     signals: {
       zookeeperRequestLatency: {
@@ -22,6 +23,9 @@ function(this)
             expr: 'kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms{%(queriesSelector)s}',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_server_zookeeperclientmetrics_zookeeperrequestlatencyms_count{%(queriesSelector)s}',
+          },
         },
       },
       zookeeperConnections: {
@@ -29,6 +33,7 @@ function(this)
         description: 'Zookeeper connections rate.',
         type: 'counter',
         unit: 'short',
+        optional: true,
         sources: {
           grafanacloud: {
             expr: 'kafka_server_sessionexpirelistener_zookeepersyncconnectspersec{%(queriesSelector)s}',
@@ -43,6 +48,7 @@ function(this)
         description: 'Zookeeper expired connections rate.',
         type: 'counter',
         unit: 'short',
+        optional: true,
         sources: {
           grafanacloud: {
             expr: 'kafka_server_sessionexpirelistener_zookeeperexpirespersec{%(queriesSelector)s}',
@@ -57,6 +63,7 @@ function(this)
         description: 'Zookeeper disconnects rate.',
         type: 'counter',
         unit: 'short',
+        optional: true,
         sources: {
           grafanacloud: {
             expr: 'kafka_server_sessionexpirelistener_zookeeperdisconnectspersec{%(queriesSelector)s}',
@@ -71,6 +78,7 @@ function(this)
         description: 'Zookeeper auth failures from Kafka.',
         type: 'counter',
         unit: 'short',
+        optional: true,
         sources: {
           grafanacloud: {
             expr: 'kafka_server_sessionexpirelistener_zookeeperauthfailurespersec{%(queriesSelector)s}',

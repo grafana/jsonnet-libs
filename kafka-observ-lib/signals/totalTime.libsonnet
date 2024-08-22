@@ -11,6 +11,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'kafka_network_requestmetrics_requestqueuetimems',
       grafanacloud: self.prometheus,
+      bitnami: 'kafka_network_requestmetrics_requestqueuetimems_count',
     },
     signals: {
 
@@ -46,6 +47,10 @@ function(this)
             legendCustomTemplate: 'request queue time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_requestqueuetimems_count{%(queriesSelector)s, request="Fetch"}',
+            legendCustomTemplate: 'request queue time',
+          },
         },
       },
       fetchLocalTime: {
@@ -60,6 +65,10 @@ function(this)
             legendCustomTemplate: 'local time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_localtimems_count{%(queriesSelector)s, request="Fetch"}',
+            legendCustomTemplate: 'local time',
+          },
         },
       },
       fetchRemoteTime: {
@@ -75,6 +84,10 @@ function(this)
             legendCustomTemplate: 'remote time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_remotetimems_count{%(queriesSelector)s, request="Fetch"}',
+            legendCustomTemplate: 'remote time',
+          },
         },
       },
       fetchResponseQueue: {
@@ -88,6 +101,10 @@ function(this)
             legendCustomTemplate: 'response queue time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_responsequeuetimems_count{%(queriesSelector)s, request="Fetch"}',
+            legendCustomTemplate: 'response queue time',
+          },
         },
       },
       fetchResponseTime: {
@@ -101,6 +118,10 @@ function(this)
             legendCustomTemplate: 'response time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_responsesendtimems_count{%(queriesSelector)s, request="Fetch"}',
+            legendCustomTemplate: 'response time',
+          },
         },
       },
 
@@ -116,6 +137,10 @@ function(this)
             legendCustomTemplate: 'request queue time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_requestqueuetimems_count{%(queriesSelector)s, request="FetchFollower"}',
+            legendCustomTemplate: 'request queue time',
+          },
         },
       },
       fetchFollowerLocalTime: {
@@ -129,6 +154,10 @@ function(this)
             legendCustomTemplate: 'local time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_localtimems_count{%(queriesSelector)s, request="FetchFollower"}',
+            legendCustomTemplate: 'local time',
+          },
         },
       },
       fetchFollowerRemoteTime: {
@@ -143,6 +172,10 @@ function(this)
             legendCustomTemplate: 'remote time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_remotetimems_count{%(queriesSelector)s, request="FetchFollower"}',
+            legendCustomTemplate: 'remote time',
+          },
         },
       },
       fetchFollowerResponseQueue: {
@@ -156,6 +189,10 @@ function(this)
             legendCustomTemplate: 'response queue time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_responsequeuetimems_count{%(queriesSelector)s, request="FetchFollower"}',
+            legendCustomTemplate: 'response queue time',
+          },
         },
       },
       fetchFollowerResponseTime: {
@@ -169,6 +206,10 @@ function(this)
             legendCustomTemplate: 'response time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_responsesendtimems_count{%(queriesSelector)s, request="FetchFollower"}',
+            legendCustomTemplate: 'response time',
+          },
         },
       },
 
@@ -184,6 +225,10 @@ function(this)
             legendCustomTemplate: 'request queue time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_requestqueuetimems_count{%(queriesSelector)s, request="Produce"}',
+            legendCustomTemplate: 'request queue time',
+          },
         },
       },
       producerLocalTime: {
@@ -197,6 +242,10 @@ function(this)
             legendCustomTemplate: 'local time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_localtimems_count{%(queriesSelector)s, request="Produce"}',
+            legendCustomTemplate: 'local time',
+          },
         },
       },
       producerRemoteTime: {
@@ -211,6 +260,10 @@ function(this)
             legendCustomTemplate: 'remote time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_remotetimems_count{%(queriesSelector)s, request="Produce"}',
+            legendCustomTemplate: 'remote time',
+          },
         },
       },
       producerResponseQueue: {
@@ -224,6 +277,10 @@ function(this)
             legendCustomTemplate: 'response queue time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_responsequeuetimems_count{%(queriesSelector)s, request="Produce"}',
+            legendCustomTemplate: 'response queue time',
+          },
         },
       },
       producerResponseTime: {
@@ -237,6 +294,10 @@ function(this)
             legendCustomTemplate: 'response time',
           },
           grafanacloud: self.prometheus,
+          bitnami: {
+            expr: 'kafka_network_requestmetrics_responsesendtimems_count{%(queriesSelector)s, request="Produce"}',
+            legendCustomTemplate: 'response time',
+          },
         },
       },
     },

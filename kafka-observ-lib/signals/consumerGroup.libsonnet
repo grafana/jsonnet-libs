@@ -11,6 +11,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'kafka_consumergroup_lag',  // https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
       grafanacloud: 'kafka_consumergroup_uncomitted_offsets',  // https://github.com/grafana/kafka_exporter/blob/master/exporter/exporter.go#L887
+      bitnami: self.prometheus,
     },
     signals: {
       consumerGroupLag: {
@@ -28,6 +29,7 @@ function(this)
             aggKeepLabels: ['consumergroup', 'topic'],
             expr: 'kafka_consumergroup_uncomitted_offsets{%(queriesSelector)s}',
           },
+          bitnami: self.prometheus,
         },
       },
 
@@ -57,7 +59,9 @@ function(this)
             expr: 'kafka_consumergroup_current_offset{%(queriesSelector)s}',
           },
           grafanacloud: self.prometheus,
+          bitnami: self.prometheus,
         },
+
       },
     },
   }

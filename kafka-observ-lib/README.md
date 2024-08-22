@@ -6,6 +6,7 @@ The library supports two metrics sources (`metricsSource`):
 
 - `prometheus`: JMX configs from [prometheus/jmx_exporter](https://github.com/prometheus/jmx_exporter/blob/main/example_configs/kafka-2_0_0.yml) and [kafka_exporter](https://github.com/danielqsj/kafka_exporter)
 - `grafanacloud`: JMX configs from [kafka-mixin](../kafka-mixin/jmx) and [kafka_exporter fork](https://github.com/grafana/kafka_exporter) (used in grafana-agent/alloy).
+- `bitnami`: JMX configs from [bitnami](https://github.com/bitnami/charts/blob/main/bitnami/kafka/templates/metrics/jmx-configmap.yaml) helm chart
 
 You can also pick on the three JVM metrics sources (`jvmMetricsSource`):
   - `jmx_exporter` if you use jmx_exporter in http mode or javaagent mode with the additional config snippet (see README)

@@ -11,6 +11,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'kafka_log_log_logstartoffset',  //https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
       grafanacloud: self.prometheus,
+      bitnami: 'kafka_log_log_logstartoffset',
     },
     signals: {
       topicMessagesPerSec: {
@@ -24,6 +25,7 @@ function(this)
             expr: 'kafka_topic_partition_current_offset{%(queriesSelector)s}',
           },
           grafanacloud: self.prometheus,
+          bitnami: self.prometheus,
         },
       },
       // used in table:
@@ -39,6 +41,7 @@ function(this)
             expr: 'kafka_topic_partition_current_offset{%(queriesSelector)s}',
           },
           grafanacloud: self.prometheus,
+          bitnami: self.prometheus,
         },
       },
       // JMX exporter extras
@@ -56,6 +59,10 @@ function(this)
             aggKeepLabels: ['topic'],
             expr: 'kafka_server_brokertopicmetrics_bytesinpersec{%(queriesSelector)s}',
           },
+          bitnami: {
+            aggKeepLabels: ['topic'],
+            expr: 'kafka_server_brokertopicmetrics_bytesinpersec_count{%(queriesSelector)s}',
+          },
         },
       },
       topicBytesOutPerSec: {
@@ -71,6 +78,10 @@ function(this)
           grafanacloud: {
             aggKeepLabels: ['topic'],
             expr: 'kafka_server_brokertopicmetrics_bytesoutpersec{%(queriesSelector)s}',
+          },
+          bitnami: {
+            aggKeepLabels: ['topic'],
+            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}',
           },
         },
       },
@@ -90,6 +101,10 @@ function(this)
             aggKeepLabels: ['topic', 'partition'],
             expr: 'kafka_log_log_logstartoffset{%(queriesSelector)s}',
           },
+          bitnami: {
+            aggKeepLabels: ['topic', 'partition'],
+            expr: 'kafka_log_log_logstartoffset{%(queriesSelector)s}',
+          },
         },
       },
       topicLogEndOffset: {
@@ -106,6 +121,7 @@ function(this)
             expr: 'kafka_log_log_logendoffset{%(queriesSelector)s}',
           },
           grafanacloud: self.prometheus,
+          bitnami: self.prometheus,
         },
       },
       topicLogSize: {
@@ -121,6 +137,7 @@ function(this)
             expr: 'kafka_log_log_size{%(queriesSelector)s}',
           },
           grafanacloud: self.prometheus,
+          bitnami: self.prometheus,
         },
       },
 

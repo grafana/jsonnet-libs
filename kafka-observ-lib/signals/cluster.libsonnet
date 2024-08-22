@@ -11,6 +11,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'kafka_controller_kafkacontroller_activecontrollercount',
       grafanacloud: 'kafka_controller_kafkacontroller_activecontrollercount',
+      bitnami: 'kafka_controller_kafkacontroller_activecontrollercount_value',
     },
     signals: {
       activeControllers: {
@@ -29,6 +30,10 @@ function(this)
           prometheus:
             {
               expr: 'kafka_controller_kafkacontroller_activecontrollercount{%(queriesSelector)s}',
+            },
+          bitnami:
+            {
+              expr: 'kafka_controller_kafkacontroller_activecontrollercount_value{%(queriesSelector)s}',
             },
         },
       },
@@ -86,6 +91,29 @@ function(this)
                 },
               ],
             },
+          bitnami:
+            {
+              expr: 'kafka_controller_kafkacontroller_activecontrollercount_value{%(queriesSelector)s}',
+              aggKeepLabels: this.instanceLabels,
+              legendCustomTemplate: '{{ %s }}' % xtd.array.slice(this.instanceLabels, -1),
+              valueMappings: [
+                {
+                  type: 'value',
+                  options: {
+                    '0': {
+                      text: 'follower',
+                      color: 'light-purple',
+                      index: 0,
+                    },
+                    '1': {
+                      text: 'controller',
+                      color: 'light-blue',
+                      index: 1,
+                    },
+                  },
+                },
+              ],
+            },
         },
       },
       brokersCount: {
@@ -105,6 +133,10 @@ function(this)
             {
               expr: 'kafka_server_kafkaserver_brokerstate{%(queriesSelector)s}',
             },
+          bitnami:
+            {
+              expr: 'kafka_server_kafkaserver_total_brokerstate_value{%(queriesSelector)s}',
+            },
         },
       },
 
@@ -120,6 +152,9 @@ function(this)
           grafanacloud: {
             expr: 'kafka_server_brokertopicmetrics_messagesinpersec{%(queriesSelector)s}',
           },
+          bitnami: {
+            expr: 'kafka_server_brokertopicmetrics_messagesinpersec_count{%(queriesSelector)s}',
+          },
         },
       },
       clusterBytesInPerSec: {
@@ -134,6 +169,9 @@ function(this)
           grafanacloud: {
             expr: 'kafka_server_brokertopicmetrics_bytesinpersec{%(queriesSelector)s}',
           },
+          bitnami: {
+            expr: 'kafka_server_brokertopicmetrics_bytesinpersec_count{%(queriesSelector)s}',
+          },
         },
       },
       clusterBytesOutPerSec: {
@@ -147,6 +185,9 @@ function(this)
           },
           grafanacloud: {
             expr: 'kafka_server_brokertopicmetrics_bytesoutpersec{%(queriesSelector)s}',
+          },
+          bitnami: {
+            expr: 'kafka_server_brokertopicmetrics_bytesoutpersec_count{%(queriesSelector)s}',
           },
         },
       },

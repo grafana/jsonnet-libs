@@ -9,7 +9,7 @@
   dashboardTags: ['kafka'],
   alertKafkaLagTooHighThreshold: '100',
   alertKafkaLagTooHighSeverity: 'critical',
-  metricsSource: 'prometheus',  //or grafanacloud. See README
+  metricsSource: 'prometheus',  //or grafanacloud, bitnami. See README
 
   // 'jmx_exporter' if you use jmx_exporter in http mode or javaagent mode with the additional config snippet (see README)
   // 'prometheus_old' if you use jmx_exporter in javaagent mode and version prior to 1.0.1

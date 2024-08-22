@@ -10,6 +10,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'kafka_server_brokertopicmetrics_producemessageconversions_total',
       grafanacloud: 'kafka_server_brokertopicmetrics_producemessageconversionspersec',
+      bitnami: 'kafka_server_brokertopicmetrics_total_producemessageconversionspersec_count',
     },
     signals: {
       producerConversion: {
@@ -24,6 +25,9 @@ function(this)
           grafanacloud: {
             expr: 'kafka_server_brokertopicmetrics_producemessageconversionspersec{%(queriesSelector)s}',
           },
+          bitnami: {
+            expr: 'kafka_server_brokertopicmetrics_producemessageconversionspersec_count{%(queriesSelector)s}',
+          },
         },
       },
       consumerConversion: {
@@ -37,6 +41,9 @@ function(this)
           },
           grafanacloud: {
             expr: 'kafka_server_brokertopicmetrics_fetchmessageconversionspersec{%(queriesSelector)s}',
+          },
+          bitnami: {
+            expr: 'kafka_server_brokertopicmetrics_fetchmessageconversionspersec_count{%(queriesSelector)s}',
           },
         },
       },

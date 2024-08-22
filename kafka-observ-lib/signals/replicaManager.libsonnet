@@ -10,6 +10,7 @@ function(this)
     discoveryMetric: {
       prometheus: 'kafka_server_replicamanager_isrshrinks_total',
       grafanacloud: 'kafka_server_replicamanager_isrshrinkspersec',
+      bitnami: 'kafka_server_replicamanager_total_isrshrinkspersec_count',
     },
     signals: {
       local s = this,
@@ -39,6 +40,10 @@ function(this)
             {
               expr: '%(aggFunction)s by (%(agg)s)  (rate(kafka_server_replicamanager_isrshrinks_total{%(queriesSelector)s}[%(interval)s]))',
             },
+          bitnami:
+            {
+              expr: '%(aggFunction)s by (%(agg)s)  (rate(kafka_server_replicamanager_total_isrshrinkspersec_count{%(queriesSelector)s}[%(interval)s]))',
+            },
         },
       },
       isrExpands: {
@@ -67,6 +72,9 @@ function(this)
             {
               expr: '%(aggFunction)s by (%(agg)s) (rate(kafka_server_replicamanager_isrexpands_total{%(queriesSelector)s}[%(interval)s]))',
             },
+          bitnami: {
+            expr: '%(aggFunction)s by (%(agg)s) (rate(kafka_server_replicamanager_total_isrexpandspersec_count{%(queriesSelector)s}[%(interval)s]))',
+          },
         },
       },
       onlinePartitions: {
@@ -85,6 +93,10 @@ function(this)
           prometheus:
             {
               expr: 'kafka_server_replicamanager_partitioncount{%(queriesSelector)s}',
+            },
+          bitnami:
+            {
+              expr: 'kafka_server_replicamanager_total_partitioncount_value{%(queriesSelector)s}',
             },
         },
       },
@@ -105,6 +117,9 @@ function(this)
             {
               expr: 'kafka_controller_kafkacontroller_offlinepartitionscount{%(queriesSelector)s}',
             },
+          bitnami: {
+            expr: 'kafka_controller_kafkacontroller_offlinepartitionscount_value{%(queriesSelector)s}',
+          },
         },
       },
       underReplicatedPartitions: {
@@ -115,6 +130,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         aggFunction: 'sum',
+        optional: true,
         sources: {
           grafanacloud:
             {
@@ -134,6 +150,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         aggFunction: 'sum',
+        optional: true,
         sources: {
           grafanacloud:
             {
@@ -153,6 +170,7 @@ function(this)
         type: 'raw',
         unit: 'short',
         aggFunction: 'sum',
+        optional: true,
         sources: {
           grafanacloud:
             {
@@ -181,6 +199,9 @@ function(this)
             {
               expr: 'kafka_controller_kafkacontroller_preferredreplicaimbalancecount{%(queriesSelector)s}',
             },
+          bitnami: {
+            expr: 'kafka_controller_kafkacontroller_preferredreplicaimbalancecount_value{%(queriesSelector)s}',
+          },
         },
       },
 
