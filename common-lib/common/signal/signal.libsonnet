@@ -64,7 +64,27 @@ local stub = import './stub.libsonnet';
       for s in std.objectFieldsAll(signalsJson.signals)
     },
 
-  unmarshallJsonMulti(signalsJson, type='prometheus'):
+  unmarshallJsonMulti(signalsJson, typeArg='prometheus'):
+    local getVarMetric(signalsJson, type) =
+      if std.objectHas(signalsJson, 'discoveryMetric')
+      then
+        if std.type(type) == 'array' then
+          std.prune(
+            [std.get(signalsJson.discoveryMetric, t, null) for t in type]
+          )
+        else
+          std.get(signalsJson.discoveryMetric, type, 'up')
+      else 'up'
+    ;
+
+    //STUB. REMOVE WHEN implement array support for 'sources'
+    local type =
+      (
+        if std.type(typeArg) == 'string' then
+          typeArg
+        else  //array
+          typeArg[0]
+      );
 
     self.init(
       datasource=std.get(signalsJson, 'datasource', 'datasource'),
@@ -74,7 +94,7 @@ local stub = import './stub.libsonnet';
       instanceLabels=signalsJson.instanceLabels,
       interval=std.get(signalsJson, 'interval', '$__rate_interval'),
       alertsInterval=std.get(signalsJson, 'alertsInterval', '5m'),
-      varMetric=if std.objectHas(signalsJson, 'discoveryMetric') then std.get(signalsJson.discoveryMetric, type, 'up') else 'up',
+      varMetric=getVarMetric(signalsJson, typeArg),
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
       aggKeepLabels=std.get(signalsJson, 'aggKeepLabels', []),
