@@ -19,7 +19,7 @@ local jsonSignals =
         unit: 's',
         sources: {
           otel: {
-            expr: 'abc{%(queriesSelector)s}',
+            expr: 'abc2{%(queriesSelector)s}',
           },
           prometheus: {
             expr: 'abc{%(queriesSelector)s}',
@@ -129,7 +129,7 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, ['otel', 'prometheus']);
     testResult: test.suite({
       testExpression: {
         actual: panel.expr,
-        expect: 'avg by (job) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
+        expect: 'avg by (job) (\n  abc2{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)\nor\navg by (job) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },
