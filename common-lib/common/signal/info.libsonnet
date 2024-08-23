@@ -20,6 +20,7 @@ base {
     datasource,
     valueMappings,
     legendCustomTemplate,
+    sourceMaps,
   ):
     base.new(
       name,
@@ -36,10 +37,23 @@ base {
       valueMappings,
       legendCustomTemplate,
       rangeFunction=null,
+      sourceMaps=sourceMaps,
     )
     {
       local prometheusQuery = g.query.prometheus,
       local lokiQuery = g.query.loki,
+      local infoLabel =
+        std.join(
+          '|',
+          std.uniq(  // keep unique only
+            std.sort(
+              [
+                source.infoLabel
+                for source in sourceMaps
+              ]
+            )
+          )
+        ),
 
       unit:: 'short',
       //Return as grafana panel target(query+legend)
