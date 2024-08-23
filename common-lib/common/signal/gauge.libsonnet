@@ -17,6 +17,7 @@ base {
     datasource,
     valueMappings,
     legendCustomTemplate,
+    sourceMaps,
   ):
     base.new(
       name,
@@ -33,6 +34,7 @@ base {
       valueMappings,
       legendCustomTemplate,
       rangeFunction=null,
+      sourceMaps=sourceMaps,
     )
     {
     },

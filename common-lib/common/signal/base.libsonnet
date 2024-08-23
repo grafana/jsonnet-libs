@@ -18,7 +18,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     valueMappings,
     legendCustomTemplate,
     rangeFunction,
+    sourceMaps,
   ): {
+
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
     local this = self,
@@ -112,19 +114,39 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
     //Return query
     asPanelExpression()::
-      signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel=aggLevel, rangeFunction=rangeFunction).applyFunctions()
-      % this.vars,
+      std.join(
+        '\nor\n',
+        std.uniq(  // keep unique only
+          std.sort(
+            [
+              signalUtils.wrapExpr(type, source.exprBase, exprWrappers=source.exprWrappers, aggLevel=aggLevel, rangeFunction=source.rangeFunction).applyFunctions()
+              % this.vars
+              for source in sourceMaps
+            ]
+          )
+        )
+      ),
 
     //Return query, usable in alerts/recording rules.
     asRuleExpression()::
-      //override aggLevel to 'none', to avoid loosing labels in alerts due to by() clause:
-      signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel='none', rangeFunction=rangeFunction).applyFunctions()
-      % this.vars
-        {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
-        interval: this.vars.alertsInterval,
-        // keep only filteringSelector, remove any Grafana dashboard variables:
-        queriesSelector: this.vars.filteringSelector[0],
-      },
+      std.join(
+        '\nor\n',
+        std.uniq(  // keep unique only
+          std.sort(
+            [
+              //override aggLevel to 'none', to avoid loosing labels in alerts due to by() clause:
+              signalUtils.wrapExpr(type, source.exprBase, exprWrappers=source.exprWrappers, aggLevel='none', rangeFunction=source.rangeFunction).applyFunctions()
+              % this.vars
+                {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
+                interval: this.vars.alertsInterval,
+                // keep only filteringSelector, remove any Grafana dashboard variables:
+                queriesSelector: this.vars.filteringSelector[0],
+              }
+              for source in sourceMaps
+            ]
+          )
+        )
+      ),
 
 
     common::
