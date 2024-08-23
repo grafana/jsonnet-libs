@@ -11,7 +11,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.memory.memoryUsedHeap.asTarget()
           // actually override with new expression:
           + g.query.prometheus.withExpr(
-            '(%s/%s) * 100' %
+            '((%s)/(%s)) * 100' %
             [
               signals.memory.memoryUsedHeap.asPanelExpression(),
               signals.memory.memoryMaxHeap.asPanelExpression(),
@@ -27,7 +27,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           signals.memory.memoryUsedNonHeap.asTarget()
           // actually override with new expression:
           + g.query.prometheus.withExpr(
-            '(%s/%s) * 100' %
+            '((%s)/(%s)) * 100' %
             [
               signals.memory.memoryUsedNonHeap.asPanelExpression(),
               signals.memory.memoryMaxNonHeap.asPanelExpression(),
