@@ -9,7 +9,7 @@ local signalUtils = import './utils.libsonnet';
   ): {
 
     asTarget():: {},
-    asTableTarget:: {},
+    asTableTarget():: {},
 
     //Return as grafana panel mixin target(query+legend) + overrides(like units)
     asPanelMixin():: {},
