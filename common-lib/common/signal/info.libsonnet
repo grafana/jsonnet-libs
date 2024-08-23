@@ -58,7 +58,8 @@ base {
       asStat()::
         super.asStat()
         + panels.generic.stat.info.stylize()
-          { options+: { reduceOptions+: { fields: '/^' + infoLabel + '$/' } } },
+          //TODO update infoLabel to multi
+          { options+: { reduceOptions+: { fields: '/^(' + infoLabel + ')$/' } } },
 
       //Return as gauge panel
       asGauge()::

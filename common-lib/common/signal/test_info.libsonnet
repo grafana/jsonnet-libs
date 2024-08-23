@@ -45,6 +45,10 @@ local m1 = signal.init(
             type: 'prometheus',
           },
         },
+        testInfoLabel: {
+          actual: m1.asStat().options.reduceOptions.fields,
+          expect: '/^(' + 'version' + ')$/',
+        },
       }),
     },
 
