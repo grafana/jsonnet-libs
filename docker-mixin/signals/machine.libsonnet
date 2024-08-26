@@ -46,7 +46,7 @@ function(this)
                 )
               / 
               avg(
-                  machine_memory_bytes{%(queriesSelector)s}
+                  machine_memory_bytes{%(machineSelector)s}
               ) * 100
             |||,
           },
@@ -63,7 +63,7 @@ function(this)
               avg(
                 sum by (instance) (container_memory_usage_bytes{%(queriesSelector)s})
                 /
-                avg by (instance) (machine_memory_bytes{%(queriesSelector)s})
+                avg by (instance) (machine_memory_bytes{%(machineSelector)s})
               ) * 100
             |||,
           },
