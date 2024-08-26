@@ -9,7 +9,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     unit,
     description,
     exprBase,
-    exprWrappers,
     aggLevel,
     aggFunction,
     aggKeepLabels,

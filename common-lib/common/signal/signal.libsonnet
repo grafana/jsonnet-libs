@@ -53,7 +53,6 @@ local stub = import './stub.libsonnet';
         unit=std.get(signalsJson.signals[s], 'unit', ''),
         description=std.get(signalsJson.signals[s], 'description', ''),
         expr=std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
-        exprWrappers=std.get(signalsJson.signals[s], 'exprWrappers', []),
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
         aggKeepLabels=std.get(signalsJson.signals[s], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
@@ -123,7 +122,6 @@ local stub = import './stub.libsonnet';
             unit=std.get(signalsJson.signals[s], 'unit', ''),
             description=std.get(signalsJson.signals[s], 'description', ''),
             expr=std.get(signalsJson.signals[s].sources[metricsSource], 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [signalsJson.signals[s].name, metricsSource]),
-            exprWrappers=std.get(signalsJson.signals[s].sources[metricsSource], 'exprWrappers', []),
             aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
             aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
             aggKeepLabels=std.get(signalsJson.signals[s].sources[metricsSource], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
@@ -223,7 +221,6 @@ local stub = import './stub.libsonnet';
       unit='short',
       description,
       expr,
-      exprWrappers=[],
       aggLevel=self.aggLevel,
       aggFunction=self.aggFunction,
       aggKeepLabels=self.aggKeepLabels,
@@ -233,7 +230,7 @@ local stub = import './stub.libsonnet';
       sourceMaps=[
         {
           expr: expr,
-          exprWrappers: exprWrappers,
+          exprWrappers: [],
           rangeFunction: rangeFunction,
           aggFunction: aggFunction,
           aggKeepLabels: aggKeepLabels,
@@ -251,8 +248,7 @@ local stub = import './stub.libsonnet';
           checks: [
             if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub') then error "type must be one of 'gauge','histogram','counter','raw','info' Got %s for %s" % [type, name],
             if (aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'group','instance' or 'none'",
-            if (exprWrappers != null && !std.isArray(exprWrappers)) then error 'exprWrappers must be an array.',
-          ],
+          ]
         }
       ) +
       if type == 'gauge' then
@@ -262,7 +258,6 @@ local stub = import './stub.libsonnet';
           unit=unit,
           description=description,
           expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
@@ -279,7 +274,6 @@ local stub = import './stub.libsonnet';
           unit=unit,
           description=description,
           expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
@@ -297,7 +291,6 @@ local stub = import './stub.libsonnet';
           unit=unit,
           description=description,
           expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
@@ -315,7 +308,6 @@ local stub = import './stub.libsonnet';
           unit=unit,
           description=description,
           expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
@@ -332,7 +324,7 @@ local stub = import './stub.libsonnet';
           type=type,
           description=description,
           expr=expr,
-          exprWrappers=exprWrappers,
+
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
