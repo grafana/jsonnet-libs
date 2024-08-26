@@ -9,7 +9,6 @@ base {
   new(
     name,
     type,
-    infoLabel,
     description,
     expr,
     exprWrappers,

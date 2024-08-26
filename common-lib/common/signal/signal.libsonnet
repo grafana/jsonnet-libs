@@ -28,6 +28,7 @@ local stub = import './stub.libsonnet';
   //     signal3:....
   //   }
   // }
+  // DEPRECATED. Use unmarshallJsonMulti instead.
   unmarshallJson(signalsJson):
     self.init(
       datasource=std.get(signalsJson, 'datasource', 'datasource'),
@@ -56,7 +57,6 @@ local stub = import './stub.libsonnet';
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
         aggKeepLabels=std.get(signalsJson.signals[s], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
-        infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
         valueMappings=std.get(signalsJson.signals[s], 'valueMappings', []),
         legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
         rangeFunction=std.get(signalsJson.signals[s], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
@@ -78,8 +78,6 @@ local stub = import './stub.libsonnet';
     },
 
   unmarshallJsonMulti(signalsJson, type='prometheus'):
-
-
     //TODO REMOVE WHEN implement array support for 'sources'
     local metricsSource =
       (
@@ -129,7 +127,6 @@ local stub = import './stub.libsonnet';
             aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
             aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
             aggKeepLabels=std.get(signalsJson.signals[s].sources[metricsSource], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
-            infoLabel=std.get(signalsJson.signals[s].sources[metricsSource], 'infoLabel', null),
             valueMappings=std.get(signalsJson.signals[s].sources[metricsSource], 'valueMappings', []),
             legendCustomTemplate=std.get(signalsJson.signals[s].sources[metricsSource], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
             rangeFunction=std.get(signalsJson.signals[s].sources[metricsSource], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
@@ -230,7 +227,6 @@ local stub = import './stub.libsonnet';
       aggLevel=self.aggLevel,
       aggFunction=self.aggFunction,
       aggKeepLabels=self.aggKeepLabels,
-      infoLabel=null,
       valueMappings=[],
       legendCustomTemplate=null,
       rangeFunction='rate',
@@ -241,7 +237,7 @@ local stub = import './stub.libsonnet';
           rangeFunction: rangeFunction,
           aggFunction: aggFunction,
           aggKeepLabels: aggKeepLabels,
-          infoLabel: infoLabel,
+          infoLabel: null,
           type: type,
           legendCustomTemplate: legendCustomTemplate,
           valueMappings: valueMappings,
@@ -334,7 +330,6 @@ local stub = import './stub.libsonnet';
         info.new(
           name=name,
           type=type,
-          infoLabel=infoLabel,
           description=description,
           expr=expr,
           exprWrappers=exprWrappers,

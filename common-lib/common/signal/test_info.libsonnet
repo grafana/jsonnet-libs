@@ -8,7 +8,13 @@ local m1 = signal.init(
   type='info',
   description='Go version.',
   expr='go_info{%(queriesSelector)s}',
-  infoLabel='version'
+  sourceMaps=[
+    {
+      exprBase: 'go_info{%(queriesSelector)s}',
+      exprWrappers: [],
+      infoLabel: 'version',
+    },
+  ]
 );
 
 {
