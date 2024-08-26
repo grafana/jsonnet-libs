@@ -62,7 +62,7 @@ local stub = import './stub.libsonnet';
         rangeFunction=std.get(signalsJson.signals[s], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
         sourceMaps=[
           {
-            exprBase: std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
+            expr: std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
             exprWrappers: std.get(signalsJson.signals[s], 'exprWrappers', []),
             rangeFunction: std.get(signalsJson.signals[s], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
             aggFunction: std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
@@ -133,7 +133,7 @@ local stub = import './stub.libsonnet';
             sourceMaps=
             [
               {
-                exprBase: std.get(source.value, 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [signalsJson.signals[s].name, metricsSource]),
+                expr: std.get(source.value, 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [signalsJson.signals[s].name, metricsSource]),
                 exprWrappers: std.get(source.value, 'exprWrappers', []),
                 rangeFunction: std.get(source.value, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
                 aggFunction: std.get(source.value, 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
@@ -232,7 +232,7 @@ local stub = import './stub.libsonnet';
       rangeFunction='rate',
       sourceMaps=[
         {
-          exprBase: expr,
+          expr: expr,
           exprWrappers: exprWrappers,
           rangeFunction: rangeFunction,
           aggFunction: aggFunction,

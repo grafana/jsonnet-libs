@@ -10,7 +10,7 @@ local m1 = signal.init(
   expr='go_info{%(queriesSelector)s}',
   sourceMaps=[
     {
-      exprBase: 'go_info{%(queriesSelector)s}',
+      expr: 'go_info{%(queriesSelector)s}',
       exprWrappers: [],
       infoLabel: 'version',
     },
