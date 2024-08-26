@@ -18,7 +18,7 @@ function(this)
         type: 'raw',
         sources: {
           cadvisor: {
-            expr: 'count(container_last_seen{%%(queriesSelector)s, %(containerSelector)s})' % {containerSelector: this.containerSelector},
+            expr: 'count(container_last_seen{%%(queriesSelector)s, %(containerSelector)s})' % { containerSelector: this.containerSelector },
           },
         },
       },
@@ -28,7 +28,7 @@ function(this)
         type: 'raw',
         sources: {
           cadvisor: {
-            expr: 'count (sum by (image) (container_last_seen{%%(queriesSelector)s, %(containerSelector)s}))' % {containerSelector: this.containerSelector},
+            expr: 'count (sum by (image) (container_last_seen{%%(queriesSelector)s, %(containerSelector)s}))' % { containerSelector: this.containerSelector },
           },
         },
       },
@@ -48,7 +48,7 @@ function(this)
               avg(
                   machine_memory_bytes{%%(queriesSelector)s}
               ) * 100
-            ||| % {containerSelector: this.containerSelector},
+            ||| % { containerSelector: this.containerSelector },
           },
         },
       },
@@ -65,7 +65,7 @@ function(this)
                 /
                 avg by (instance) (machine_memory_bytes{%%(queriesSelector)s})
               ) * 100
-            ||| % {containerSelector: this.containerSelector},
+            ||| % { containerSelector: this.containerSelector },
           },
         },
       },
@@ -76,7 +76,7 @@ function(this)
         unit: 'percent',
         sources: {
           cadvisor: {
-            expr: 'avg by (%%(agg)s, name) (rate(container_cpu_usage_seconds_total{%%(queriesSelector)s, %(containerSelector)s}[$__rate_interval])) * 100' % {containerSelector: this.containerSelector},
+            expr: 'avg by (%%(agg)s, name) (rate(container_cpu_usage_seconds_total{%%(queriesSelector)s, %(containerSelector)s}[$__rate_interval])) * 100' % { containerSelector: this.containerSelector },
             legendCustomTemplate: commonlib.utils.labelsToPanelLegend(this.instanceLabels),
           },
         },
