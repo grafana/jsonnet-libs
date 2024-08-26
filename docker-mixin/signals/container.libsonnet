@@ -2,7 +2,7 @@ local commonlib = import './common-lib/common/main.libsonnet';
 function(this)
   {
     local s = self,
-    filteringSelector: this.filteringSelector,
+    filteringSelector: this.filteringSelector + ', ' + this.containerSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels + s.legendLabels,
     legendLabels: ['name'],
