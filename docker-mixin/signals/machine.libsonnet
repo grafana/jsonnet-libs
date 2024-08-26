@@ -18,7 +18,7 @@ function(this)
         type: 'raw',
         sources: {
           cadvisor: {
-            expr: 'count(container_last_seen{%(queriesSelector)s})',
+            expr: 'count(container_last_seen{%%(queriesSelector)s, %(containerSelector)s})' % {containerSelector: this.containerSelector},
           },
         },
       },
@@ -28,7 +28,7 @@ function(this)
         type: 'raw',
         sources: {
           cadvisor: {
-            expr: 'count (sum by (image) (container_last_seen{%(queriesSelector)s}))',
+            expr: 'count (sum by (image) (container_last_seen{%%(queriesSelector)s, %(containerSelector)s}))' % {containerSelector: this.containerSelector},
           },
         },
       },
@@ -42,13 +42,13 @@ function(this)
           cadvisor: {
             expr: |||
               sum(
-                container_spec_memory_reservation_limit_bytes{%(queriesSelector)s}
+                container_spec_memory_reservation_limit_bytes{%%(queriesSelector)s, %(containerSelector)s}
                 )
               / 
               avg(
-                  machine_memory_bytes{%(machineSelector)s}
+                  machine_memory_bytes{%%(queriesSelector)s}
               ) * 100
-            |||,
+            ||| % {containerSelector: this.containerSelector},
           },
         },
       },
@@ -61,11 +61,11 @@ function(this)
           cadvisor: {
             expr: |||
               avg(
-                sum by (instance) (container_memory_usage_bytes{%(queriesSelector)s})
+                sum by (instance) (container_memory_usage_bytes{%%(queriesSelector)s, %(containerSelector)s})
                 /
-                avg by (instance) (machine_memory_bytes{%(machineSelector)s})
+                avg by (instance) (machine_memory_bytes{%%(queriesSelector)s})
               ) * 100
-            |||,
+            ||| % {containerSelector: this.containerSelector},
           },
         },
       },
@@ -76,7 +76,7 @@ function(this)
         unit: 'percent',
         sources: {
           cadvisor: {
-            expr: 'avg by (%(agg)s, name) (rate(container_cpu_usage_seconds_total{%(queriesSelector)s}[$__rate_interval])) * 100',
+            expr: 'avg by (%%(agg)s, name) (rate(container_cpu_usage_seconds_total{%%(queriesSelector)s, %(containerSelector)s}[$__rate_interval])) * 100' % {containerSelector: this.containerSelector},
             legendCustomTemplate: commonlib.utils.labelsToPanelLegend(this.instanceLabels),
           },
         },

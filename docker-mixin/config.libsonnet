@@ -9,8 +9,8 @@
     //prefix
     uid: 'integration-docker',
     // ignore k8s nodes by default
-    filteringSelector: 'job!="kubelet", id=~"/system.slice/docker.+", name!=""',
-    machineSelector: 'job!="kubelet"',
+    filteringSelector: 'job!="kubelet"',
+    containerSelector: 'id=~"/system.slice/docker.+", name!=""',
 
     //signals related
     groupLabels: ['job'],
