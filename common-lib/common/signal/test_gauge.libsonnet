@@ -9,7 +9,11 @@ local gauge1 = signal.init(
   type='gauge',
   unit='short',
   description='abc',
-  expr='up{%(queriesSelector)s}',
+  sourceMaps=[
+    {
+      expr: 'up{%(queriesSelector)s}',
+    },
+  ]
 );
 
 {

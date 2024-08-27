@@ -11,7 +11,11 @@ local m1 = signal.init(
   type='counter',
   unit='requests',
   description='API server calls.',
-  expr='apiserver_request_total{%(queriesSelector)s}',
+  sourceMaps=[
+    {
+      expr: 'apiserver_request_total{%(queriesSelector)s}',
+    },
+  ],
 );
 
 {

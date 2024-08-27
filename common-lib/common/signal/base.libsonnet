@@ -8,7 +8,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     type,
     unit,
     description,
-    exprBase,
     aggLevel,
     aggFunction,
     aggKeepLabels,
@@ -123,7 +122,13 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     asPanelExpression()::
       self.combineUniqueExpressions(
         [
-          signalUtils.wrapExpr(type, source.expr, exprWrappers=source.exprWrappers, aggLevel=aggLevel, rangeFunction=source.rangeFunction).applyFunctions()
+          signalUtils.wrapExpr(
+            type,
+            source.expr,
+            exprWrappers=std.get(source, 'exprWrappers', default=[]),
+            aggLevel=aggLevel,
+            rangeFunction=std.get(source, 'rangeFunction', default=rangeFunction)
+          ).applyFunctions()
           % this.vars
           for source in sourceMaps
         ]
@@ -134,7 +139,13 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       self.combineUniqueExpressions(
         [
           //override aggLevel to 'none', to avoid loosing labels in alerts due to by() clause:
-          signalUtils.wrapExpr(type, source.expr, exprWrappers=source.exprWrappers, aggLevel='none', rangeFunction=source.rangeFunction).applyFunctions()
+          signalUtils.wrapExpr(
+            type,
+            source.expr,
+            exprWrappers=std.get(source, 'exprWrappers', default=[]),
+            aggLevel='none',
+            rangeFunction=std.get(source, 'rangeFunction', default=rangeFunction)
+          ).applyFunctions()
           % this.vars
             {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
             interval: this.vars.alertsInterval,

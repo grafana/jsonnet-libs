@@ -12,6 +12,14 @@ local m1 = signal.init(
       expr: 'go_info{%(queriesSelector)s}',
       infoLabel: 'version',
     },
+    {
+      expr: 'go_info{%(queriesSelector)s}',
+      infoLabel: 'version2',
+    },
+    {
+      expr: 'go_info{%(queriesSelector)s}',
+      infoLabel: 'version',
+    },
   ]
 );
 
@@ -51,7 +59,7 @@ local m1 = signal.init(
         },
         testInfoLabel: {
           actual: m1.asStat().options.reduceOptions.fields,
-          expect: '/^(' + 'version' + ')$/',
+          expect: '/^' + '(version|version2)' + '$/',
         },
       }),
     },

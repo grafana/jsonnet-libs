@@ -52,7 +52,6 @@ local stub = import './stub.libsonnet';
         type=std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
         unit=std.get(signalsJson.signals[s], 'unit', ''),
         description=std.get(signalsJson.signals[s], 'description', ''),
-        expr=std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
         aggKeepLabels=std.get(signalsJson.signals[s], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
@@ -121,7 +120,6 @@ local stub = import './stub.libsonnet';
             type=metricType,
             unit=std.get(signalsJson.signals[s], 'unit', ''),
             description=std.get(signalsJson.signals[s], 'description', ''),
-            expr=std.get(signalsJson.signals[s].sources[metricsSource], 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [signalsJson.signals[s].name, metricsSource]),
             aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
             aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
             aggKeepLabels=std.get(signalsJson.signals[s].sources[metricsSource], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
@@ -220,7 +218,6 @@ local stub = import './stub.libsonnet';
       type,
       unit='short',
       description,
-      expr,
       aggLevel=self.aggLevel,
       aggFunction=self.aggFunction,
       aggKeepLabels=self.aggKeepLabels,
@@ -229,7 +226,7 @@ local stub = import './stub.libsonnet';
       rangeFunction='rate',
       sourceMaps=[
         {
-          expr: expr,
+          expr: error 'must define expression',
           exprWrappers: [],
           rangeFunction: rangeFunction,
           aggFunction: aggFunction,
@@ -248,7 +245,7 @@ local stub = import './stub.libsonnet';
           checks: [
             if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub') then error "type must be one of 'gauge','histogram','counter','raw','info' Got %s for %s" % [type, name],
             if (aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'group','instance' or 'none'",
-          ]
+          ],
         }
       ) +
       if type == 'gauge' then
@@ -257,7 +254,6 @@ local stub = import './stub.libsonnet';
           type=type,
           unit=unit,
           description=description,
-          expr=expr,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
@@ -273,7 +269,6 @@ local stub = import './stub.libsonnet';
           type=type,
           unit=unit,
           description=description,
-          expr=expr,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
@@ -290,7 +285,6 @@ local stub = import './stub.libsonnet';
           type=type,
           unit=unit,
           description=description,
-          expr=expr,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
@@ -307,7 +301,6 @@ local stub = import './stub.libsonnet';
           type=type,
           unit=unit,
           description=description,
-          expr=expr,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,
@@ -323,8 +316,6 @@ local stub = import './stub.libsonnet';
           name=name,
           type=type,
           description=description,
-          expr=expr,
-
           aggLevel=aggLevel,
           aggFunction=aggFunction,
           aggKeepLabels=aggKeepLabels,

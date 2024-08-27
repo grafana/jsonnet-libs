@@ -59,12 +59,12 @@ Signal's level:
 |type|Signal's type. Depending on the type, some opinionated autotransformations would happen with queries, units. |gauge,counter,histogram,info,raw|gauge|-|
 |unit| Signal's units. |*|bytes|``|
 |description| Signal's description. Used to populate panel's description. |*|CPU usage time in percent.|``|
-|expr| Signal's BASE expression in simplest form. Simplified jsonnet templating is supported (see below). Depending on signal's type(not `raw`) could autotransform to different form. |*|network_bytes_received_total{%(queriesSelector)s}|-|
-|exprWrappers| Signal's additional wrapper functions that could be added as an array, [<left_part>, <right_part>]. Functions would be applied AFTER any autotransformation takes place.  |*|`['topk(10,',')']`|[]|
+|sourceMaps[].expr| Signal's BASE expression in simplest form. Simplified jsonnet templating is supported (see below). Depending on signal's type(not `raw`) could autotransform to different form. |*|network_bytes_received_total{%(queriesSelector)s}|-|
+|sourceMaps[].exprWrappers| Signal's additional wrapper functions that could be added as an array, [<left_part>, <right_part>]. Functions would be applied AFTER any autotransformation takes place.  |*|`['topk(10,',')']`|[]|
 |aggLevel| Metrics aggregation level. |none, instance, group|`group`|`none`|
 |aggFunction| A function used to aggregate metrics. |avg,min,max,sum...|`sum`|`avg`|
 |aggKeepLabels| Extra labels to keep when aggregating with by() clause.  |`['pool','level']`|`[]`|
-|infoLabel| Only applicable to `info` metrics. Points to label name used to extract info. |*|-|-|
+|sourceMaps[].infoLabel| Only applicable to `info` metrics. Points to label name used to extract info. |*|-|-|
 |valueMappings| Define signal's valueMappings in the same way defined in Grafana Dashboard Schema. |*|-|-|
 |legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{instance}}`|
 |rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
