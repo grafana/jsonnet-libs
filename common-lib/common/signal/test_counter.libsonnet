@@ -16,6 +16,7 @@ local m1 = signal.init(
       expr: 'apiserver_request_total{%(queriesSelector)s}',
       rangeFunction: 'rate',
       aggKeepLabels: [],
+      legendCustomTemplate: null,
     },
   ],
 )

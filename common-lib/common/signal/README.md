@@ -66,7 +66,7 @@ Signal's level:
 |sourceMaps[].aggKeepLabels| Extra labels to keep when aggregating with by() clause.  |`['pool','level']`|`[]`|
 |sourceMaps[].infoLabel| Only applicable to `info` metrics. Points to label name used to extract info. |*|-|-|
 |sourceMaps[].valueMappings| Define signal's valueMappings in the same way defined in Grafana Dashboard Schema. |*|-|-|
-|legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{instance}}`|
+|sourceMaps[].legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{topic}}`|
 |sourceMaps[].rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
 
 ## Expressions templating

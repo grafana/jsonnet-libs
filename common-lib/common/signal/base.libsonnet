@@ -12,13 +12,14 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     aggFunction,
     vars,
     datasource,
-    legendCustomTemplate,
     sourceMaps,
   ): {
 
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
     local this = self,
+
+    local legendCustomTemplate = sourceMaps[0].legendCustomTemplate,
 
     combineUniqueExpressions(expressions)::
       std.join(

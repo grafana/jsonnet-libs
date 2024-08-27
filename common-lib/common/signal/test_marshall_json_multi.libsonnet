@@ -34,6 +34,7 @@ local jsonSignals =
         sources: {
           otel: {
             expr: 'bar{%(queriesSelector)s}',
+            aggKeepLabels: ['bar'],
           },
           prometheus: {
             expr: 'bar{%(queriesSelector)s}',
@@ -130,6 +131,10 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
       testExpression: {
         actual: panel.expr,
         expect: 'avg by (job,xxx) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
+      },
+      testLegend: {
+        actual: panel.legendFormat,
+        expect: '{{xxx}}: ABC',  // only last label is kept
       },
     }),
   },

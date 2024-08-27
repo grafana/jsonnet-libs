@@ -54,7 +54,6 @@ local stub = import './stub.libsonnet';
         description=std.get(signalsJson.signals[s], 'description', ''),
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
-        legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
         sourceMaps=[
           {
             expr: std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
@@ -119,7 +118,6 @@ local stub = import './stub.libsonnet';
             description=std.get(signalsJson.signals[s], 'description', ''),
             aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
             aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
-            legendCustomTemplate=std.get(signalsJson.signals[s].sources[metricsSource], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
             sourceMaps=
             [
               {
@@ -214,7 +212,6 @@ local stub = import './stub.libsonnet';
       description,
       aggLevel=self.aggLevel,
       aggFunction=self.aggFunction,
-      legendCustomTemplate=null,
       sourceMaps=[
         {
           expr: error 'must define expression',
@@ -224,7 +221,7 @@ local stub = import './stub.libsonnet';
           aggKeepLabels: self.aggKeepLabels,
           infoLabel: null,
           type: type,
-          legendCustomTemplate: legendCustomTemplate,
+          legendCustomTemplate: null,
           valueMappings: [],
         },
       ],
@@ -248,7 +245,6 @@ local stub = import './stub.libsonnet';
           aggFunction=aggFunction,
           datasource=datasource,
           vars=this.templatingVariables,
-          legendCustomTemplate=legendCustomTemplate,
           sourceMaps=sourceMaps,
         )
       else if type == 'raw' then
@@ -261,7 +257,6 @@ local stub = import './stub.libsonnet';
           aggFunction=aggFunction,
           datasource=datasource,
           vars=this.templatingVariables,
-          legendCustomTemplate=legendCustomTemplate,
           sourceMaps=sourceMaps,
         )
       else if type == 'counter' then
@@ -274,7 +269,6 @@ local stub = import './stub.libsonnet';
           aggFunction=aggFunction,
           datasource=datasource,
           vars=this.templatingVariables,
-          legendCustomTemplate=legendCustomTemplate,
           sourceMaps=sourceMaps,
         )
       else if type == 'histogram' then
@@ -287,7 +281,6 @@ local stub = import './stub.libsonnet';
           aggFunction=aggFunction,
           datasource=datasource,
           vars=this.templatingVariables,
-          legendCustomTemplate=legendCustomTemplate,
           sourceMaps=sourceMaps,
         )
       else if type == 'info' then
@@ -299,7 +292,6 @@ local stub = import './stub.libsonnet';
           aggFunction=aggFunction,
           datasource=datasource,
           vars=this.templatingVariables,
-          legendCustomTemplate=legendCustomTemplate,
           sourceMaps=sourceMaps,
         )
       else if type == 'stub' then

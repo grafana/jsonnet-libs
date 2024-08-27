@@ -13,7 +13,6 @@ base {
     aggFunction,
     vars,
     datasource,
-    legendCustomTemplate,
     sourceMaps,
   ):
     base.new(
@@ -25,7 +24,6 @@ base {
       aggFunction,
       vars,
       datasource,
-      legendCustomTemplate,
       sourceMaps=sourceMaps,
     )
 
