@@ -13,6 +13,7 @@ local gauge1 = signal.init(
     {
       expr: 'up{%(queriesSelector)s}',
       rangeFunction: null,
+      aggKeepLabels: [],
     },
   ]
 );

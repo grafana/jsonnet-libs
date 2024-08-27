@@ -7,6 +7,7 @@ local jsonSignals =
     groupLabels: ['job'],
     instanceLabels: ['instance'],
     filteringSelector: 'job="integrations/agent"',
+    aggKeepLabels: ['xxx'],
     discoveryMetric: {
       otel: 'up2',
     },
@@ -128,7 +129,7 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
     testResult: test.suite({
       testExpression: {
         actual: panel.expr,
-        expect: 'avg by (job) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
+        expect: 'avg by (job,xxx) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },

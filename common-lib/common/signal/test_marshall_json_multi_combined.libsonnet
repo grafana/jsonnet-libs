@@ -7,6 +7,7 @@ local jsonSignals =
     groupLabels: ['job'],
     instanceLabels: ['instance'],
     filteringSelector: 'job="integrations/agent"',
+    aggKeepLabels: ['xxx'],
     discoveryMetric: {
       otel: 'up2',
       prometheus: 'up3',
@@ -23,6 +24,7 @@ local jsonSignals =
           },
           prometheus: {
             expr: 'abc{%(queriesSelector)s}',
+            aggKeepLabels: ['abc'],
           },
         },
       },
@@ -37,6 +39,7 @@ local jsonSignals =
           },
           prometheus: {
             expr: 'bar{%(queriesSelector)s}',
+            aggKeepLabels: ['bar'],
           },
         },
       },
@@ -131,7 +134,7 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, ['otel', 'prometheus']);
     testResult: test.suite({
       testExpression: {
         actual: panel.expr,
-        expect: 'avg by (job) (\n  abc2{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)\nor\navg by (job) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
+        expect: 'avg by (job,abc) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)\nor\navg by (job,xxx) (\n  abc2{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },

@@ -11,14 +11,17 @@ local m1 = signal.init(
     {
       expr: 'go_info{%(queriesSelector)s}',
       infoLabel: 'version',
+      aggKeepLabels: [],
     },
     {
       expr: 'go_info{%(queriesSelector)s}',
       infoLabel: 'version2',
+      aggKeepLabels: [],
     },
     {
       expr: 'go_info{%(queriesSelector)s}',
       infoLabel: 'version',
+      aggKeepLabels: [],
     },
   ]
 );

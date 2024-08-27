@@ -10,7 +10,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     description,
     aggLevel,
     aggFunction,
-    aggKeepLabels,
     vars,
     datasource,
     legendCustomTemplate,
@@ -29,6 +28,15 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
         )
       ),
 
+    combineUniqueKeepLabels(sourceMaps)::
+      std.uniq(  // keep unique only
+        std.sort(
+          std.foldl(function(total, source) total + std.get(source, 'aggKeepLabels', []), sourceMaps, init=[]),
+        )
+      ),
+
+    //calculate aggKeepLabels to be used in legendLabelsCalculation
+    local aggKeepLabels = self.combineUniqueKeepLabels(sourceMaps),
     vars::
       vars
       {
@@ -124,6 +132,19 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     asPanelExpression()::
       self.combineUniqueExpressions(
         [
+          //override aggLabels for specific source.
+          local aggLabels =
+            []
+            + (
+              if aggLevel == 'group' then this.vars.groupLabels
+              else if aggLevel == 'instance' then this.vars.groupLabels + this.vars.instanceLabels
+              else if aggLevel == 'none' then []
+            )
+            + (
+              if std.length(source.aggKeepLabels) > 0 then source.aggKeepLabels
+              else []
+            );
+          local vars = this.vars { agg: std.join(',', aggLabels) };
           signalUtils.wrapExpr(
             type,
             source.expr,
@@ -131,7 +152,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             aggLevel=aggLevel,
             rangeFunction=source.rangeFunction,
           ).applyFunctions()
-          % this.vars
+          % vars
           for source in sourceMaps
         ]
       ),
