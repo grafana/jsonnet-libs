@@ -65,7 +65,7 @@ Signal's level:
 |aggFunction| A function used to aggregate metrics. |avg,min,max,sum...|`sum`|`avg`|
 |aggKeepLabels| Extra labels to keep when aggregating with by() clause.  |`['pool','level']`|`[]`|
 |sourceMaps[].infoLabel| Only applicable to `info` metrics. Points to label name used to extract info. |*|-|-|
-|valueMappings| Define signal's valueMappings in the same way defined in Grafana Dashboard Schema. |*|-|-|
+|sourceMaps[].valueMappings| Define signal's valueMappings in the same way defined in Grafana Dashboard Schema. |*|-|-|
 |legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{instance}}`|
 |rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
 

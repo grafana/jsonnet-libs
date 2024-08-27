@@ -13,7 +13,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     aggKeepLabels,
     vars,
     datasource,
-    valueMappings,
     legendCustomTemplate,
     rangeFunction,
     sourceMaps,
@@ -99,6 +98,10 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       )
       + self.asOverride(override=override),
 
+
+    getValueMappings(sourceMaps):
+      std.foldl(function(total, source) total + std.get(source, 'valueMappings', []), sourceMaps, init=[]),
+
     asOverride(name=signalName, override='byQuery')::
       g.panel.timeSeries.standardOptions.withOverridesMixin(
         [
@@ -106,13 +109,13 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             g.panel.timeSeries.fieldOverride.byQuery.new(name)
             + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
               g.panel.timeSeries.standardOptions.withUnit(self.unit)
-              + g.panel.timeSeries.standardOptions.withMappings(valueMappings)
+              + g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
             )
           else if override == 'byName' then
             g.panel.timeSeries.fieldOverride.byName.new(name)
             + g.panel.timeSeries.fieldOverride.byName.withPropertiesFromOptions(
               g.panel.timeSeries.standardOptions.withUnit(self.unit)
-              + g.panel.timeSeries.standardOptions.withMappings(valueMappings)
+              + g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
             )
           else error 'Unknown override type, only "byName", "byQuery" are supported.',
         ],

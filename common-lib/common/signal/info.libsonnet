@@ -15,7 +15,6 @@ base {
     aggKeepLabels,
     vars,
     datasource,
-    valueMappings,
     legendCustomTemplate,
     sourceMaps,
   ):
@@ -29,7 +28,6 @@ base {
       aggKeepLabels,
       vars,
       datasource,
-      valueMappings,
       legendCustomTemplate,
       rangeFunction=null,
       sourceMaps=sourceMaps,

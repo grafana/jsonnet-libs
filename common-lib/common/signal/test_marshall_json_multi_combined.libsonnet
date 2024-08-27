@@ -62,21 +62,23 @@ local jsonSignals =
         sources: {
           otel: {
             expr: 'status{%(queriesSelector)s}',
-            valueMapping: {
-              type: 'value',
-              options: {
-                '1': {
-                  text: 'Up',
-                  color: 'light-green',
-                  index: 1,
-                },
-                '0': {
-                  text: 'Down',
-                  color: 'light-red',
-                  index: 0,
+            valueMappings: [
+              {
+                type: 'value',
+                options: {
+                  '1': {
+                    text: 'Up',
+                    color: 'light-green',
+                    index: 1,
+                  },
+                  '0': {
+                    text: 'Down',
+                    color: 'light-red',
+                    index: 0,
+                  },
                 },
               },
-            },
+            ],
           },
         },
 
