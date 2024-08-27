@@ -56,7 +56,6 @@ local stub = import './stub.libsonnet';
         aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
         aggKeepLabels=std.get(signalsJson.signals[s], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
         legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
-        rangeFunction=std.get(signalsJson.signals[s], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
         sourceMaps=[
           {
             expr: std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
@@ -123,7 +122,6 @@ local stub = import './stub.libsonnet';
             aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
             aggKeepLabels=std.get(signalsJson.signals[s].sources[metricsSource], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
             legendCustomTemplate=std.get(signalsJson.signals[s].sources[metricsSource], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
-            rangeFunction=std.get(signalsJson.signals[s].sources[metricsSource], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
             sourceMaps=
             [
               {
@@ -220,12 +218,11 @@ local stub = import './stub.libsonnet';
       aggFunction=self.aggFunction,
       aggKeepLabels=self.aggKeepLabels,
       legendCustomTemplate=null,
-      rangeFunction='rate',
       sourceMaps=[
         {
           expr: error 'must define expression',
           exprWrappers: [],
-          rangeFunction: rangeFunction,
+          rangeFunction: 'rate',
           aggFunction: aggFunction,
           aggKeepLabels: aggKeepLabels,
           infoLabel: null,
@@ -235,7 +232,6 @@ local stub = import './stub.libsonnet';
         },
       ],
     ):
-
       // validate inputs
       std.prune(
         {
@@ -271,7 +267,6 @@ local stub = import './stub.libsonnet';
           datasource=datasource,
           vars=this.templatingVariables,
           legendCustomTemplate=legendCustomTemplate,
-          rangeFunction=rangeFunction,
           sourceMaps=sourceMaps,
         )
       else if type == 'counter' then
@@ -286,7 +281,6 @@ local stub = import './stub.libsonnet';
           datasource=datasource,
           vars=this.templatingVariables,
           legendCustomTemplate=legendCustomTemplate,
-          rangeFunction=rangeFunction,
           sourceMaps=sourceMaps,
         )
       else if type == 'histogram' then
@@ -301,7 +295,6 @@ local stub = import './stub.libsonnet';
           datasource=datasource,
           vars=this.templatingVariables,
           legendCustomTemplate=legendCustomTemplate,
-          rangeFunction=rangeFunction,
           sourceMaps=sourceMaps,
         )
       else if type == 'info' then

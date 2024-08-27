@@ -14,9 +14,10 @@ local m1 = signal.init(
   sourceMaps=[
     {
       expr: 'apiserver_request_duration_seconds_bucket{%(queriesSelector)s}',
+      rangeFunction: 'rate',
     },
   ],
-  
+
 );
 
 {

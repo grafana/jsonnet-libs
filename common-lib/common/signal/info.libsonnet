@@ -29,7 +29,6 @@ base {
       vars,
       datasource,
       legendCustomTemplate,
-      rangeFunction=null,
       sourceMaps=sourceMaps,
     )
     {

@@ -15,7 +15,6 @@ base {
     vars,
     datasource,
     legendCustomTemplate,
-    rangeFunction,
     sourceMaps,
   ):
     base.new(
@@ -29,7 +28,6 @@ base {
       vars,
       datasource,
       legendCustomTemplate,
-      rangeFunction,
       sourceMaps=sourceMaps,
     )
 

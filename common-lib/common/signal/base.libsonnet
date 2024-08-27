@@ -14,7 +14,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     vars,
     datasource,
     legendCustomTemplate,
-    rangeFunction,
     sourceMaps,
   ): {
 
@@ -66,7 +65,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       },
 
 
-    unit:: signalUtils.generateUnits(type, unit, rangeFunction),
+    unit:: signalUtils.generateUnits(type, unit, sourceMaps[0].rangeFunction),
     //Return as grafana panel target(query+legend)
     asTarget(name=signalName)::
       prometheusQuery.new(
@@ -130,7 +129,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             source.expr,
             exprWrappers=std.get(source, 'exprWrappers', default=[]),
             aggLevel=aggLevel,
-            rangeFunction=std.get(source, 'rangeFunction', default=rangeFunction)
+            rangeFunction=source.rangeFunction,
           ).applyFunctions()
           % this.vars
           for source in sourceMaps
@@ -147,7 +146,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             source.expr,
             exprWrappers=std.get(source, 'exprWrappers', default=[]),
             aggLevel='none',
-            rangeFunction=std.get(source, 'rangeFunction', default=rangeFunction)
+            rangeFunction=source.rangeFunction,
           ).applyFunctions()
           % this.vars
             {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:

@@ -14,9 +14,11 @@ local m1 = signal.init(
   sourceMaps=[
     {
       expr: 'apiserver_request_total{%(queriesSelector)s}',
+      rangeFunction: 'rate',
     },
   ],
-);
+)
+;
 
 {
 

@@ -12,6 +12,7 @@ local gauge1 = signal.init(
   sourceMaps=[
     {
       expr: 'up{%(queriesSelector)s}',
+      rangeFunction: null,
     },
   ]
 );
