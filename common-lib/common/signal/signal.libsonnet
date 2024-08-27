@@ -140,7 +140,6 @@ local stub = import './stub.libsonnet';
           super.addSignal(
             name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
             type='stub',
-            expr='',
             description=std.get(signalsJson.signals[s], 'description', ''),
           )
 
