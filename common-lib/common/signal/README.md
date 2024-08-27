@@ -83,7 +83,121 @@ The following is supported in expressions and legends:
 - `%(interval)s` - expands to `interval` value
 - `%(alertsInterval)s` - expands to `interval` value
 
-## Example 1
+
+## Example 1: From JSON
+
+Define signals in json/jsonnet and unmarshall to signals. You can define multiple signals' sources:
+
+```jsonnet
+//config.libsonnet
+
+local jsonSignals =
+  {
+    aggLevel: 'group',
+    groupLabels: ['job'],
+    instanceLabels: ['instance'],
+    filteringSelector: 'job="integrations/agent"',
+    discoveryMetric: {
+      prometheus: 'up',
+      opentelemetry: 'target_info',
+    },
+    signals: {
+      abc: {
+        name: 'ABC',
+        type: 'gauge',
+        description: 'ABC',
+        unit: 's',
+        sources: {
+          "prometheus": {
+            expr: 'abc_total{%(queriesSelector)s}',
+          },
+          "opentelemetry": {
+            expr: 'otel_metric{%(queriesSelector)s}',
+          }
+        },
+      },
+      bar: {
+        name: 'BAR',
+        type: 'counter',
+        description: 'BAR',
+        unit: 'ns',
+        sources: {
+          "prometheus": {
+            expr: 'bar_total{%(queriesSelector)s}',
+          },
+          "opentelemetry": {
+            expr: 'otel_bar{%(queriesSelector)s}',
+          }
+        },
+        
+      },
+      foo_info: {
+        name: 'foo info',
+        type: 'info',
+        description: 'foo',
+        unit: 'short',
+        optional: true, // set optional:true, if not all sources are available.
+        sources: {
+          "prometheus": {
+            expr: 'foo_info{%(queriesSelector)s}',
+            infoLabel: 'version',
+          },
+        },
+        
+      },
+      status: {
+        name: 'Status',
+        type: 'gauge',
+        description: 'status',
+        unit: 'short',
+        optional: true,
+        sources: {
+          "prometheus": {
+            expr: 'status{%(queriesSelector)s}',
+            valueMappings: 
+              [
+                {
+                  type: 'value',
+                  options: {
+                    '1': {
+                      text: 'Up',
+                      color: 'light-green',
+                      index: 1,
+                    },
+                    '0': {
+                      text: 'Down',
+                      color: 'light-red',
+                      index: 0,
+                    },
+                  }
+                },
+              ],
+          },
+        },
+        
+      },
+    },
+  };
+
+local signals = signal.unmarshallJsonMulti(jsonSignals,type=['prometheus']);
+
+```
+
+## Example 2: Generate 'combined' dashboard/alerts
+
+Same as example 1, but you can actually merge multiple sources together in one query by using 'or':
+
+```jsonnet
+local jsonSignals = <see example1>;
+local signals = signal.unmarshallJsonMulti(jsonSignals,type=['prometheus','opentelemetry]);
+```
+
+This would make your dashboards and alerts universal, suitable for multiple sources.
+
+
+## Example 3: low-level
+
+Rarely used, but it is also possible to skip JSON unmarshalling: 
 
 ```
 local g = import 'g.libsonnet';
@@ -105,14 +219,29 @@ local g = import 'g.libsonnet';
         type='counter',
         unit='bytes',
         description='Bytes in through interface',
-        expr='node_network_receive_bytes_total{%(queriesSelector)s}',
+        sourceMaps=[
+          {
+            expr: 'node_network_receive_bytes_total{%(queriesSelector)s}',
+            rangeFunction: null,
+            aggKeepLabels: [],
+            legendCustomTemplate: null,
+          },
+        ],
     ),
     bytesOut: s.addSignal(
         name='Bytes out',
         type='counter',
         unit='bytes',
         description='Bytes out through interface',
-        expr='node_network_transmit_bytes_total{%(queriesSelector)s}',
+        sourceMaps=[
+          {
+            expr: 'node_network_transmit_bytes_total{%(queriesSelector)s}',
+            rangeFunction: null,
+            aggKeepLabels: [],
+            legendCustomTemplate: null,
+          },
+        ],
+        
     ),
 };
 
@@ -134,76 +263,6 @@ g.dashboard.new('Device')
     ]
 )
 ```
-
-
-## Example 2
-
-Define signals in json/jsonnet and unmarshall to signals:
-
-```jsonnet
-//config.libsonnet
-
-local jsonSignals =
-  {
-    aggLevel: 'group',
-    groupLabels: ['job'],
-    instanceLabels: ['instance'],
-    filteringSelector: 'job="integrations/agent"',
-    signals: {
-      abc: {
-        name: 'ABC',
-        type: 'gauge',
-        description: 'ABC',
-        unit: 's',
-        expr: 'abc{%(queriesSelector)s}',
-      },
-      bar: {
-        name: 'BAR',
-        type: 'counter',
-        description: 'BAR',
-        unit: 'ns',
-        expr: 'bar{%(queriesSelector)s}',
-      },
-      foo_info: {
-        name: 'foo info',
-        type: 'info',
-        description: 'foo',
-        unit: 'short',
-        infoLabel: 'version',
-        expr: 'foo_info{%(queriesSelector)s}',
-      },
-      status: {
-        name: 'Status',
-        type: 'gauge',
-        description: 'status',
-        unit: 'short',
-        expr: 'status{%(queriesSelector)s}',
-        valueMappings: 
-          [
-            {
-              type: 'value',
-              options: {
-                '1': {
-                  text: 'Up',
-                  color: 'light-green',
-                  index: 1,
-                },
-                '0': {
-                  text: 'Down',
-                  color: 'light-red',
-                  index: 0,
-                },
-              }
-            },
-          ],
-      },
-    },
-  };
-
-local signals = signal.unmarshallJson(jsonSignals);
-
-```
-
 
 ## Running tests
 
