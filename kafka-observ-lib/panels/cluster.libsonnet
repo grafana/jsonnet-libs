@@ -11,6 +11,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     clusterRoles:
       signals.cluster.role.asStatusHistory()
       + signals.zookeeper.cluster.role.asPanelMixin()
+      + signals.cluster.kraftBrokerRole.asPanelMixin()
       + commonlib.panels.generic.statusHistory.base.stylize(),
 
     clusterBytesBothPerSec:

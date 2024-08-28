@@ -9,9 +9,9 @@ function(this)
     aggLevel: 'group',
     aggFunction: 'sum',
     discoveryMetric: {
-      prometheus: 'kafka_controller_kafkacontroller_activecontrollercount',
-      grafanacloud: 'kafka_controller_kafkacontroller_activecontrollercount',
-      bitnami: 'kafka_controller_kafkacontroller_activecontrollercount_value',
+      prometheus: 'kafka_server_brokertopicmetrics_messagesin_total',
+      grafanacloud: 'kafka_server_brokertopicmetrics_messagesinpersec',
+      bitnami: 'kafka_server_brokertopicmetrics_messagesinpersec_count',
     },
     signals: {
       activeControllers: {
@@ -114,6 +114,42 @@ function(this)
                 },
               ],
             },
+        },
+      },
+      kraftBrokerRole: {
+        name: 'Current role (kraft)',
+        description: |||
+          Any value - broker in kraft.
+        |||,
+        type: 'gauge',
+        unit: 'short',
+        aggFunction: 'sum',
+        sources: {
+          grafanacloud:
+            {
+              //metric from kafka_exporter
+              expr: 'kafka_server_kafkaserver_brokerstate{%(queriesSelector)s}',
+              legendCustomTemplate: '{{ %s }}' % xtd.array.slice(this.instanceLabels, -1),
+              aggKeepLabels: this.instanceLabels,
+              valueMappings: [
+                {
+                  type: 'range',
+                  options: {
+                    from: 0,
+                    to: 999,
+                    result: {
+                      text: 'broker(kraft)',
+                      color: 'green',
+                      index: 0,
+                    },
+                  },
+                },
+              ],
+            },
+          prometheus:
+            self.grafanacloud,
+          bitnami:
+            self.grafanacloud,
         },
       },
       brokersCount: {
