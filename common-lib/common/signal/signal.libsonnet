@@ -72,14 +72,7 @@ local stub = import './stub.libsonnet';
     },
 
   unmarshallJsonMulti(signalsJson, type='prometheus'):
-    //TODO REMOVE WHEN implement array support for 'sources'
-    local metricsSource =
-      (
-        if std.type(type) == 'string' then
-          type
-        else  //array
-          type[0]
-      );
+
     local typeArr =
       (
         if std.type(type) == 'string' then
@@ -108,20 +101,22 @@ local stub = import './stub.libsonnet';
       [s]:
         //validate name:
         (if !std.objectHas(signalsJson.signals[s], 'name') then error ('Must provide name') else {}) +
-        if std.objectHas(signalsJson.signals[s], 'sources') && std.objectHas(signalsJson.signals[s].sources, metricsSource) then
+        if std.objectHas(signalsJson.signals[s], 'sources') && std.length(signalsJson.signals[s]) > 0 then
           local name = std.get(signalsJson.signals[s], 'name', error 'Must provide name');
-          local metricType = std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name);
-          super.addSignal(
-            name=name,
-            type=metricType,
-            unit=std.get(signalsJson.signals[s], 'unit', ''),
-            description=std.get(signalsJson.signals[s], 'description', ''),
-            aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
-            aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
-            sourceMaps=
+          local metricType = std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % s);
+          local validatedArr = [
+            if
+              std.get(signalsJson.signals[s], 'optional', false) == false
+              &&
+              !std.objectHas(signalsJson.signals[s].sources, sourceName)
+            then error 'must provide source for signal %s of type=%s' % [s, sourceName]
+            else sourceName
+            for sourceName in typeArr
+          ];
+          local sourceMaps =
             [
               {
-                expr: std.get(source.value, 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [signalsJson.signals[s].name, metricsSource]),
+                expr: std.get(source.value, 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [s, source.key]),
                 exprWrappers: std.get(source.value, 'exprWrappers', []),
                 rangeFunction: std.get(source.value, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
                 aggFunction: std.get(source.value, 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
@@ -131,17 +126,28 @@ local stub = import './stub.libsonnet';
                 valueMappings: std.get(source.value, 'valueMappings', []),
               }
               for source in std.objectKeysValues(signalsJson.signals[s].sources)
-              if std.member(typeArr, source.key)
-            ]
+              if std.member(validatedArr, source.key)
+            ];
 
-          )
-        else if std.get(signalsJson.signals[s], 'optional', false) == false then error 'must provide source for signal %s of type=%s' % [signalsJson.signals[s].name, metricsSource] else
-          //maybe add stub signal?
-          super.addSignal(
-            name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
-            type='stub',
-            description=std.get(signalsJson.signals[s], 'description', ''),
-          )
+          (if std.length(sourceMaps) > 0 then
+
+             super.addSignal(
+               name=name,
+               type=metricType,
+               unit=std.get(signalsJson.signals[s], 'unit', ''),
+               description=std.get(signalsJson.signals[s], 'description', ''),
+               aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
+               aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
+               sourceMaps=sourceMaps
+             )
+           else
+             super.addSignal(
+               name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
+               type='stub',
+               description=std.get(signalsJson.signals[s], 'description', ''),
+             ))
+
+        else error 'please provide sources for %s' % s
 
       for s in std.objectFieldsAll(signalsJson.signals)
     },
