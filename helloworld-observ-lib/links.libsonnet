@@ -4,10 +4,10 @@ local g = import './g.libsonnet';
     {
       local link = g.dashboard.link,
       backToFleet:
-        link.link.new('Back to Helloworld fleet', '/d/' + this.grafana.dashboards.fleet.uid)
+        link.link.new('Back to Helloworld fleet', '/d/' + this.grafana.dashboards['fleet.json'].uid)
         + link.link.options.withKeepTime(true),
       backToOverview:
-        link.link.new('Back to Helloworld overview', '/d/' + this.grafana.dashboards.overview.uid)
+        link.link.new('Back to Helloworld overview', '/d/' + this.grafana.dashboards['overview.json'].uid)
         + link.link.options.withKeepTime(true),
       otherDashboards:
         link.dashboards.new('All Helloworld dashboards', this.config.dashboardTags)
