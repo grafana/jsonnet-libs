@@ -108,7 +108,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
 
     getValueMappings(sourceMaps):
-      std.foldl(function(total, source) total + std.get(source, 'valueMappings', []), sourceMaps, init=[]),
+      std.uniq(
+        std.foldl(function(total, source) total + std.get(source, 'valueMappings', []), sourceMaps, init=[])
+      ),
 
     asOverride(name=signalName, override='byQuery')::
       g.panel.timeSeries.standardOptions.withOverridesMixin(
