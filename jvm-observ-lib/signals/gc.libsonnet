@@ -134,7 +134,7 @@ function(this)
         },
       },
       memAllocatedBytes: {
-        name: 'Allocated',
+        name: 'Allocated (bytes)',
         description: 'Memory allocated to Eden Space.',
         type: 'counter',
         rangeFunction: 'increase',
