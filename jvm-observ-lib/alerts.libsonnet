@@ -8,7 +8,7 @@
           [
             {
               alert: 'JvmMemoryFillingUp',
-              expr: '(%s/%s) * 100 > %s' %
+              expr: '((%s)/(%s)) * 100 > %s' %
                     [
                       this.signals.memory.memoryUsedHeap.asRuleExpression(),
                       this.signals.memory.memoryMaxHeap.asRuleExpression(),
@@ -34,7 +34,7 @@
               [
                 {
                   alert: 'JvmThreadsDeadlocked',
-                  expr: '%s > 0' % this.signals.threads.threadsDeadlocked.asRuleExpression(),
+                  expr: '(%s) > 0' % this.signals.threads.threadsDeadlocked.asRuleExpression(),
                   'for': '2m',
                   keep_firing_for: '5m',
                   labels: {

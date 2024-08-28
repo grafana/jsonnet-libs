@@ -19,12 +19,12 @@ local processlib = import 'process-observ-lib/main.libsonnet';
           dashboardNamePrefix: this.config.dashboardNamePrefix,
           dashboardTags: this.config.dashboardTags,
           metricsSource:
-            if this.config.metricsSource == 'otel' then 'java_otel'
-            else if this.config.metricsSource == 'prometheus' then 'prometheus'
-            else if this.config.metricsSource == 'jmx_exporter' then 'jmx_exporter'
-            else if this.config.metricsSource == 'prometheus_old' then 'prometheus'
-            else if this.config.metricsSource == 'java_micrometer' then 'java_micrometer'
-            else error 'no such metricsSource for processlib',
+            []
+            + (if std.member(this.config.metricsSource, 'otel') then ['java_otel'] else [])
+            + (if std.member(this.config.metricsSource, 'prometheus') then ['prometheus'] else [])
+            + (if std.member(this.config.metricsSource, 'jmx_exporter') then ['jmx_exporter'] else [])
+            + (if std.member(this.config.metricsSource, 'prometheus_old') then ['prometheus'] else [])
+            + (if std.member(this.config.metricsSource, 'java_micrometer') then ['java_micrometer'] else []),
         }
       ),
     signals:
