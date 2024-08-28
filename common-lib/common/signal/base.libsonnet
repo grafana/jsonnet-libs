@@ -8,21 +8,36 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     type,
     unit,
     description,
-    exprBase,
-    exprWrappers,
     aggLevel,
     aggFunction,
-    aggKeepLabels,
     vars,
     datasource,
-    valueMappings,
-    legendCustomTemplate,
-    rangeFunction,
+    sourceMaps,
   ): {
+
     local prometheusQuery = g.query.prometheus,
     local lokiQuery = g.query.loki,
     local this = self,
 
+    local legendCustomTemplate = sourceMaps[0].legendCustomTemplate,
+
+    combineUniqueExpressions(expressions)::
+      std.join(
+        '\nor\n',
+        std.uniq(  // keep unique only
+          std.sort(expressions)
+        )
+      ),
+
+    combineUniqueKeepLabels(sourceMaps)::
+      std.uniq(  // keep unique only
+        std.sort(
+          std.foldl(function(total, source) total + std.get(source, 'aggKeepLabels', []), sourceMaps, init=[]),
+        )
+      ),
+
+    //calculate aggKeepLabels to be used in legendLabelsCalculation
+    local aggKeepLabels = self.combineUniqueKeepLabels(sourceMaps),
     vars::
       vars
       {
@@ -59,7 +74,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       },
 
 
-    unit:: signalUtils.generateUnits(type, unit, rangeFunction),
+    unit:: signalUtils.generateUnits(type, unit, sourceMaps[0].rangeFunction),
     //Return as grafana panel target(query+legend)
     asTarget(name=signalName)::
       prometheusQuery.new(
@@ -91,6 +106,12 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       )
       + self.asOverride(override=override),
 
+
+    getValueMappings(sourceMaps):
+      std.uniq(
+        std.foldl(function(total, source) total + std.get(source, 'valueMappings', []), sourceMaps, init=[])
+      ),
+
     asOverride(name=signalName, override='byQuery')::
       g.panel.timeSeries.standardOptions.withOverridesMixin(
         [
@@ -98,13 +119,13 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             g.panel.timeSeries.fieldOverride.byQuery.new(name)
             + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
               g.panel.timeSeries.standardOptions.withUnit(self.unit)
-              + g.panel.timeSeries.standardOptions.withMappings(valueMappings)
+              + g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
             )
           else if override == 'byName' then
             g.panel.timeSeries.fieldOverride.byName.new(name)
             + g.panel.timeSeries.fieldOverride.byName.withPropertiesFromOptions(
               g.panel.timeSeries.standardOptions.withUnit(self.unit)
-              + g.panel.timeSeries.standardOptions.withMappings(valueMappings)
+              + g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
             )
           else error 'Unknown override type, only "byName", "byQuery" are supported.',
         ],
@@ -112,19 +133,54 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
     //Return query
     asPanelExpression()::
-      signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel=aggLevel, rangeFunction=rangeFunction).applyFunctions()
-      % this.vars,
+      self.combineUniqueExpressions(
+        [
+          //override aggLabels for specific source.
+          local aggLabels =
+            []
+            + (
+              if aggLevel == 'group' then this.vars.groupLabels
+              else if aggLevel == 'instance' then this.vars.groupLabels + this.vars.instanceLabels
+              else if aggLevel == 'none' then []
+            )
+            + (
+              if std.length(source.aggKeepLabels) > 0 then source.aggKeepLabels
+              else []
+            );
+          local vars = this.vars { agg: std.join(',', aggLabels) };
+          signalUtils.wrapExpr(
+            type,
+            source.expr,
+            exprWrappers=std.get(source, 'exprWrappers', default=[]),
+            aggLevel=aggLevel,
+            rangeFunction=source.rangeFunction,
+          ).applyFunctions()
+          % vars
+          for source in sourceMaps
+        ]
+      ),
 
     //Return query, usable in alerts/recording rules.
     asRuleExpression()::
-      //override aggLevel to 'none', to avoid loosing labels in alerts due to by() clause:
-      signalUtils.wrapExpr(type, exprBase, exprWrappers=exprWrappers, aggLevel='none', rangeFunction=rangeFunction).applyFunctions()
-      % this.vars
-        {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
-        interval: this.vars.alertsInterval,
-        // keep only filteringSelector, remove any Grafana dashboard variables:
-        queriesSelector: this.vars.filteringSelector[0],
-      },
+      self.combineUniqueExpressions(
+        [
+          //override aggLevel to 'none', to avoid loosing labels in alerts due to by() clause:
+          signalUtils.wrapExpr(
+            type,
+            source.expr,
+            exprWrappers=std.get(source, 'exprWrappers', default=[]),
+            aggLevel='none',
+            rangeFunction=source.rangeFunction,
+          ).applyFunctions()
+          % this.vars
+            {  // ensure that interval doesn't have Grafana dashboard dynamic intervals:
+            interval: this.vars.alertsInterval,
+            // keep only filteringSelector, remove any Grafana dashboard variables:
+            queriesSelector: this.vars.filteringSelector[0],
+          }
+          for source in sourceMaps
+        ]
+      ),
 
 
     common::

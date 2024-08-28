@@ -28,6 +28,7 @@ local stub = import './stub.libsonnet';
   //     signal3:....
   //   }
   // }
+  // DEPRECATED. Use unmarshallJsonMulti instead.
   unmarshallJson(signalsJson):
     self.init(
       datasource=std.get(signalsJson, 'datasource', 'datasource'),
@@ -51,20 +52,34 @@ local stub = import './stub.libsonnet';
         type=std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
         unit=std.get(signalsJson.signals[s], 'unit', ''),
         description=std.get(signalsJson.signals[s], 'description', ''),
-        expr=std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
-        exprWrappers=std.get(signalsJson.signals[s], 'exprWrappers', []),
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
-        aggKeepLabels=std.get(signalsJson.signals[s], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
-        infoLabel=std.get(signalsJson.signals[s], 'infoLabel', null),
-        valueMappings=std.get(signalsJson.signals[s], 'valueMappings', []),
-        legendCustomTemplate=std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
-        rangeFunction=std.get(signalsJson.signals[s], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
+        sourceMaps=[
+          {
+            expr: std.get(signalsJson.signals[s], 'expr', error 'Must provide expression "expr" for signal %s' % signalsJson.signals[s].name),
+            exprWrappers: std.get(signalsJson.signals[s], 'exprWrappers', []),
+            rangeFunction: std.get(signalsJson.signals[s], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
+            aggFunction: std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
+            aggKeepLabels: std.get(signalsJson.signals[s], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
+            infoLabel: std.get(signalsJson.signals[s], 'infoLabel', null),
+            type: std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
+            legendCustomTemplate: std.get(signalsJson.signals[s], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
+            valueMappings: std.get(signalsJson.signals[s], 'valueMappings', []),
+          },
+        ],
       )
       for s in std.objectFieldsAll(signalsJson.signals)
     },
 
   unmarshallJsonMulti(signalsJson, type='prometheus'):
+
+    local typeArr =
+      (
+        if std.type(type) == 'string' then
+          [type]
+        else  //array
+          type
+      );
 
     self.init(
       datasource=std.get(signalsJson, 'datasource', 'datasource'),
@@ -74,7 +89,7 @@ local stub = import './stub.libsonnet';
       instanceLabels=signalsJson.instanceLabels,
       interval=std.get(signalsJson, 'interval', '$__rate_interval'),
       alertsInterval=std.get(signalsJson, 'alertsInterval', '5m'),
-      varMetric=if std.objectHas(signalsJson, 'discoveryMetric') then std.get(signalsJson.discoveryMetric, type, 'up') else 'up',
+      varMetric=self.getVarMetric(signalsJson, type),
       aggLevel=std.get(signalsJson, 'aggLevel', 'none'),
       aggFunction=std.get(signalsJson, 'aggFunction', 'avg'),
       aggKeepLabels=std.get(signalsJson, 'aggKeepLabels', []),
@@ -86,30 +101,53 @@ local stub = import './stub.libsonnet';
       [s]:
         //validate name:
         (if !std.objectHas(signalsJson.signals[s], 'name') then error ('Must provide name') else {}) +
-        if std.objectHas(signalsJson.signals[s], 'sources') && std.objectHas(signalsJson.signals[s].sources, type) then
-          super.addSignal(
-            name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
-            type=std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
-            unit=std.get(signalsJson.signals[s], 'unit', ''),
-            description=std.get(signalsJson.signals[s], 'description', ''),
-            expr=std.get(signalsJson.signals[s].sources[type], 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [signalsJson.signals[s].name, type]),
-            exprWrappers=std.get(signalsJson.signals[s].sources[type], 'exprWrappers', []),
-            aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
-            aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
-            aggKeepLabels=std.get(signalsJson.signals[s].sources[type], 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
-            infoLabel=std.get(signalsJson.signals[s].sources[type], 'infoLabel', null),
-            valueMappings=std.get(signalsJson.signals[s].sources[type], 'valueMappings', []),
-            legendCustomTemplate=std.get(signalsJson.signals[s].sources[type], 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
-            rangeFunction=std.get(signalsJson.signals[s].sources[type], 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
-          )
-        else if std.get(signalsJson.signals[s], 'optional', false) == false then error 'must provide source for signal %s of type=%s' % [signalsJson.signals[s].name, type] else
-          //maybe add stub signal?
-          super.addSignal(
-            name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
-            type='stub',
-            expr='',
-            description=std.get(signalsJson.signals[s], 'description', ''),
-          )
+        if std.objectHas(signalsJson.signals[s], 'sources') && std.length(signalsJson.signals[s]) > 0 then
+          local name = std.get(signalsJson.signals[s], 'name', error 'Must provide name');
+          local metricType = std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % s);
+          local validatedArr = [
+            if
+              std.get(signalsJson.signals[s], 'optional', false) == false
+              &&
+              !std.objectHas(signalsJson.signals[s].sources, sourceName)
+            then error 'must provide source for signal %s of type=%s' % [s, sourceName]
+            else sourceName
+            for sourceName in typeArr
+          ];
+          local sourceMaps =
+            [
+              {
+                expr: std.get(source.value, 'expr', error 'Must provide expression "expr" for signal %s and type=%s' % [s, source.key]),
+                exprWrappers: std.get(source.value, 'exprWrappers', []),
+                rangeFunction: std.get(source.value, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),
+                aggFunction: std.get(source.value, 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
+                aggKeepLabels: std.get(source.value, 'aggKeepLabels', std.get(signalsJson, 'aggKeepLabels', [])),
+                infoLabel: std.get(source.value, 'infoLabel', null),
+                legendCustomTemplate: std.get(source.value, 'legendCustomTemplate', std.get(signalsJson, 'legendCustomTemplate', null)),
+                valueMappings: std.get(source.value, 'valueMappings', []),
+              }
+              for source in std.objectKeysValues(signalsJson.signals[s].sources)
+              if std.member(validatedArr, source.key)
+            ];
+
+          (if std.length(sourceMaps) > 0 then
+
+             super.addSignal(
+               name=name,
+               type=metricType,
+               unit=std.get(signalsJson.signals[s], 'unit', ''),
+               description=std.get(signalsJson.signals[s], 'description', ''),
+               aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
+               aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
+               sourceMaps=sourceMaps
+             )
+           else
+             super.addSignal(
+               name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
+               type='stub',
+               description=std.get(signalsJson.signals[s], 'description', ''),
+             ))
+
+        else error 'please provide sources for %s' % s
 
       for s in std.objectFieldsAll(signalsJson.signals)
     },
@@ -177,24 +215,28 @@ local stub = import './stub.libsonnet';
       type,
       unit='short',
       description,
-      expr,
-      exprWrappers=[],
       aggLevel=self.aggLevel,
       aggFunction=self.aggFunction,
-      aggKeepLabels=self.aggKeepLabels,
-      infoLabel=null,
-      valueMappings=[],
-      legendCustomTemplate=null,
-      rangeFunction='rate'
+      sourceMaps=[
+        {
+          expr: error 'must define expression',
+          exprWrappers: [],
+          rangeFunction: 'rate',
+          aggFunction: aggFunction,
+          aggKeepLabels: self.aggKeepLabels,
+          infoLabel: null,
+          type: type,
+          legendCustomTemplate: null,
+          valueMappings: [],
+        },
+      ],
     ):
-
       // validate inputs
       std.prune(
         {
           checks: [
             if (type != 'gauge' && type != 'histogram' && type != 'counter' && type != 'raw' && type != 'info' && type != 'stub') then error "type must be one of 'gauge','histogram','counter','raw','info' Got %s for %s" % [type, name],
             if (aggLevel != 'none' && aggLevel != 'instance' && aggLevel != 'group') then error "aggLevel must be one of 'group','instance' or 'none'",
-            if (exprWrappers != null && !std.isArray(exprWrappers)) then error 'exprWrappers must be an array.',
           ],
         }
       ) +
@@ -204,15 +246,11 @@ local stub = import './stub.libsonnet';
           type=type,
           unit=unit,
           description=description,
-          expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMappings=valueMappings,
-          legendCustomTemplate=legendCustomTemplate,
+          sourceMaps=sourceMaps,
         )
       else if type == 'raw' then
         raw.new(
@@ -220,16 +258,11 @@ local stub = import './stub.libsonnet';
           type=type,
           unit=unit,
           description=description,
-          expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMappings=valueMappings,
-          legendCustomTemplate=legendCustomTemplate,
-          rangeFunction=rangeFunction,
+          sourceMaps=sourceMaps,
         )
       else if type == 'counter' then
         counter.new(
@@ -237,16 +270,11 @@ local stub = import './stub.libsonnet';
           type=type,
           unit=unit,
           description=description,
-          expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMappings=valueMappings,
-          legendCustomTemplate=legendCustomTemplate,
-          rangeFunction=rangeFunction,
+          sourceMaps=sourceMaps,
         )
       else if type == 'histogram' then
         histogram.new(
@@ -254,32 +282,22 @@ local stub = import './stub.libsonnet';
           type=type,
           unit=unit,
           description=description,
-          expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMappings=valueMappings,
-          legendCustomTemplate=legendCustomTemplate,
-          rangeFunction=rangeFunction,
+          sourceMaps=sourceMaps,
         )
       else if type == 'info' then
         info.new(
           name=name,
           type=type,
-          infoLabel=infoLabel,
           description=description,
-          expr=expr,
-          exprWrappers=exprWrappers,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
-          aggKeepLabels=aggKeepLabels,
           datasource=datasource,
           vars=this.templatingVariables,
-          valueMappings=valueMappings,
-          legendCustomTemplate=legendCustomTemplate,
+          sourceMaps=sourceMaps,
         )
       else if type == 'stub' then
         stub.new(
@@ -287,4 +305,15 @@ local stub = import './stub.libsonnet';
           type=type,
         ),
   },
+
+  getVarMetric(signalsJson, type):
+    if std.objectHas(signalsJson, 'discoveryMetric')
+    then
+      if std.type(type) == 'array' then
+        std.prune(
+          [std.get(signalsJson.discoveryMetric, t, null) for t in type]
+        )
+      else
+        std.get(signalsJson.discoveryMetric, type, 'up')
+    else 'up',
 }

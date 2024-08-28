@@ -10,6 +10,7 @@ local jsonSignals =
     aggKeepLabels: ['xxx'],
     discoveryMetric: {
       otel: 'up2',
+      prometheus: 'up3',
     },
     signals: {
       abc: {
@@ -19,10 +20,11 @@ local jsonSignals =
         unit: 's',
         sources: {
           otel: {
-            expr: 'abc{%(queriesSelector)s}',
+            expr: 'abc2{%(queriesSelector)s}',
           },
           prometheus: {
             expr: 'abc{%(queriesSelector)s}',
+            aggKeepLabels: ['abc'],
           },
         },
       },
@@ -34,10 +36,10 @@ local jsonSignals =
         sources: {
           otel: {
             expr: 'bar{%(queriesSelector)s}',
-            aggKeepLabels: ['bar'],
           },
           prometheus: {
             expr: 'bar{%(queriesSelector)s}',
+            aggKeepLabels: ['bar'],
           },
         },
       },
@@ -63,21 +65,23 @@ local jsonSignals =
         sources: {
           otel: {
             expr: 'status{%(queriesSelector)s}',
-            valueMapping: {
-              type: 'value',
-              options: {
-                '1': {
-                  text: 'Up',
-                  color: 'light-green',
-                  index: 1,
-                },
-                '0': {
-                  text: 'Down',
-                  color: 'light-red',
-                  index: 0,
+            valueMappings: [
+              {
+                type: 'value',
+                options: {
+                  '1': {
+                    text: 'Up',
+                    color: 'light-green',
+                    index: 1,
+                  },
+                  '0': {
+                    text: 'Down',
+                    color: 'light-red',
+                    index: 0,
+                  },
                 },
               },
-            },
+            ],
           },
         },
 
@@ -85,7 +89,7 @@ local jsonSignals =
     },
   };
 
-local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
+local signals = signal.unmarshallJsonMulti(jsonSignals, ['otel', 'prometheus']);
 
 {
   multiChoice: {
@@ -98,11 +102,11 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
       },
       testGroupSelector: {
         actual: raw[1],
-        expect: { allValue: '.+', datasource: { type: 'prometheus', uid: '${datasource}' }, includeAll: true, label: 'Job', multi: true, name: 'job', query: 'label_values(up2{job="integrations/agent"}, job)', refresh: 2, sort: 1, type: 'query' },
+        expect: { allValue: '.+', datasource: { type: 'prometheus', uid: '${datasource}' }, includeAll: true, label: 'Job', multi: true, name: 'job', query: 'label_values({__name__=~"up2|up3",job="integrations/agent"}, job)', refresh: 2, sort: 1, type: 'query' },
       },
       testInstanceSelector: {
         actual: raw[2],
-        expect: { allValue: '.+', datasource: { type: 'prometheus', uid: '${datasource}' }, includeAll: true, label: 'Instance', multi: true, name: 'instance', query: 'label_values(up2{job="integrations/agent",job=~"$job"}, instance)', refresh: 2, sort: 1, type: 'query' },
+        expect: { allValue: '.+', datasource: { type: 'prometheus', uid: '${datasource}' }, includeAll: true, label: 'Instance', multi: true, name: 'instance', query: 'label_values({__name__=~"up2|up3",job="integrations/agent",job=~"$job"}, instance)', refresh: 2, sort: 1, type: 'query' },
       },
     }),
   },
@@ -116,11 +120,11 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
       },
       testGroupSelector: {
         actual: raw[1],
-        expect: { allValue: '.+', datasource: { type: 'prometheus', uid: '${datasource}' }, includeAll: true, label: 'Job', multi: true, name: 'job', query: 'label_values(up2{job="integrations/agent"}, job)', refresh: 2, sort: 1, type: 'query' },
+        expect: { allValue: '.+', datasource: { type: 'prometheus', uid: '${datasource}' }, includeAll: true, label: 'Job', multi: true, name: 'job', query: 'label_values({__name__=~"up2|up3",job="integrations/agent"}, job)', refresh: 2, sort: 1, type: 'query' },
       },
       testInstanceSelector: {
         actual: raw[2],
-        expect: { allValue: '.+', datasource: { type: 'prometheus', uid: '${datasource}' }, includeAll: false, label: 'Instance', multi: false, name: 'instance', query: 'label_values(up2{job="integrations/agent",job=~"$job"}, instance)', refresh: 2, sort: 1, type: 'query' },
+        expect: { allValue: '.+', datasource: { type: 'prometheus', uid: '${datasource}' }, includeAll: false, label: 'Instance', multi: false, name: 'instance', query: 'label_values({__name__=~"up2|up3",job="integrations/agent",job=~"$job"}, instance)', refresh: 2, sort: 1, type: 'query' },
       },
     }),
   },
@@ -130,11 +134,7 @@ local signals = signal.unmarshallJsonMulti(jsonSignals, 'otel');
     testResult: test.suite({
       testExpression: {
         actual: panel.expr,
-        expect: 'avg by (job,xxx) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
-      },
-      testLegend: {
-        actual: panel.legendFormat,
-        expect: '{{xxx}}: ABC',  // only last label is kept
+        expect: 'avg by (job,abc) (\n  abc{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)\nor\navg by (job,xxx) (\n  abc2{job="integrations/agent",job=~"$job",instance=~"$instance"}\n)',
       },
     }),
   },

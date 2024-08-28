@@ -134,7 +134,7 @@ function(this)
         },
       },
       memAllocatedBytes: {
-        name: 'Allocated',
+        name: 'Allocated (bytes)',
         description: 'Memory allocated to Eden Space.',
         type: 'counter',
         rangeFunction: 'increase',
@@ -294,7 +294,7 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
-            expr: 'jvm_memory_max_bytes{id=~"(G1 |PS )?Survivor Space"", area="heap", %(queriesSelector)s} != -1',
+            expr: 'jvm_memory_max_bytes{id=~"(G1 |PS )?Survivor Space", area="heap", %(queriesSelector)s} != -1',
           },
           prometheus: {
             expr: 'jvm_memory_pool_max_bytes{pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s} != -1',

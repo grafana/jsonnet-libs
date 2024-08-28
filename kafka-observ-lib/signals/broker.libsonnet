@@ -8,9 +8,9 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'sum',
     discoveryMetric: {
-      prometheus: 'kafka_controller_kafkacontroller_activecontrollercount',
-      grafanacloud: 'kafka_controller_kafkacontroller_activecontrollercount',
-      bitnami: 'kafka_controller_kafkacontroller_activecontrollercount_value',
+      prometheus: 'kafka_server_brokertopicmetrics_messagesin_total',
+      grafanacloud: 'kafka_server_brokertopicmetrics_messagesinpersec',
+      bitnami: 'kafka_server_brokertopicmetrics_messagesinpersec_count',
     },
     signals: {
       brokerMessagesInPerSec: {
@@ -64,7 +64,5 @@ function(this)
           },
         },
       },
-
-
     },
   }

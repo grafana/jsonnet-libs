@@ -5,7 +5,7 @@ local golang =
   + golanglib.withConfigMixin(
     {
       filteringSelector: 'job!=""',
-      metricsSource: 'otel',
+      metricsSource: ['otel', 'prometheus'],
     }
   );
 

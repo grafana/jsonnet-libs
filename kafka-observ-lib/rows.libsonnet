@@ -53,16 +53,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 
         +
-        if type == 'prometheus' || type == 'bitnami' then
-          [
-            panels.consumerGroup.consumerGroupConsumeRate { gridPos+: { w: 12, h: 8 } },
-            panels.consumerGroup.consumerGroupLag { gridPos+: { w: 12, h: 8 } },
-          ]
-        else if type == 'grafanacloud' then
+        if std.member(type, 'grafanacloud') then
           [
             panels.consumerGroup.consumerGroupConsumeRate { gridPos+: { w: 8, h: 8 } },
             panels.consumerGroup.consumerGroupLag { gridPos+: { w: 8, h: 8 } },
             panels.consumerGroup.consumerGroupLagTime { gridPos+: { w: 8, h: 8 } },
+          ]
+        else
+          [
+            panels.consumerGroup.consumerGroupConsumeRate { gridPos+: { w: 12, h: 8 } },
+            panels.consumerGroup.consumerGroupLag { gridPos+: { w: 12, h: 8 } },
           ]
       ),
     replication:

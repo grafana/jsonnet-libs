@@ -6,7 +6,7 @@
   uid: 'jvm',
   dashboardNamePrefix: '',
   dashboardTags: ['java', 'jvm'],
-  metricsSource: 'java_micrometer',
+  metricsSource: ['java_micrometer', 'prometheus', 'prometheus_old', 'otel', 'jmx_exporter'],
   signals+:
     {
       memory: (import './signals/memory.libsonnet')(this),
@@ -17,6 +17,5 @@
       logback: (import './signals/logback.libsonnet')(this),
       hikari: (import './signals/hikari.libsonnet')(this),
     },
-
   alertHeapWarning: 80,  // %
 }

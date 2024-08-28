@@ -13,7 +13,12 @@ local utils = import '../utils.libsonnet';
     prometheusDatasourceName='datasource',
     prometheusDatasourceLabel='Data source',
   ): {
-
+       local varMetricTemplate =
+         if std.type(varMetric) == 'array'
+         then '{__name__=~"%s",%%s}' % std.join('|', std.uniq(varMetric))
+         else if std.type(varMetric) == 'string'
+         then '%s{%%s}' % varMetric
+         else error ('varMetric must be array or string'),
        local root = self,
        local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
          local chainVarProto(index, chainVar) =
@@ -21,7 +26,7 @@ local utils = import '../utils.libsonnet';
            + var.query.withDatasourceFromVariable(root.datasources.prometheus)
            + var.query.queryTypes.withLabelValues(
              chainVar.label,
-             '%s{%s}' % [varMetric, chainVar.chainSelector],
+             varMetricTemplate % [chainVar.chainSelector],
            )
            + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
            + var.query.selectionOptions.withIncludeAll(

@@ -11,7 +11,15 @@ local m1 = signal.init(
   type='histogram',
   unit='seconds',
   description='API server call duration.',
-  expr='apiserver_request_duration_seconds_bucket{%(queriesSelector)s}',
+  sourceMaps=[
+    {
+      expr: 'apiserver_request_duration_seconds_bucket{%(queriesSelector)s}',
+      rangeFunction: 'rate',
+      aggKeepLabels: [],
+      legendCustomTemplate: null,
+    },
+  ],
+
 );
 
 {

@@ -20,6 +20,6 @@
 
   // otel: https://pkg.go.dev/go.opentelemetry.io/contrib/instrumentation/runtime
   // or prometheus
-  metricsSource: 'prometheus',
+  metricsSource: ['prometheus'],
   signals: (import './signals/golang.libsonnet')(this),
 }

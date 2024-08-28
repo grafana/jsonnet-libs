@@ -10,7 +10,7 @@ function(this)
     legendCustomTemplate: '{{ consumergroup }} ({{ topic }})',
     discoveryMetric: {
       prometheus: 'kafka_consumergroup_lag',  // https://github.com/danielqsj/kafka_exporter?tab=readme-ov-file#metrics
-      grafanacloud: 'kafka_consumergroup_uncomitted_offsets',  // https://github.com/grafana/kafka_exporter/blob/master/exporter/exporter.go#L887
+      grafanacloud: 'kafka_consumergroup_uncommitted_offsets',  // https://github.com/grafana/kafka_exporter/blob/master/exporter/exporter.go#L887
       bitnami: self.prometheus,
     },
     signals: {
@@ -27,7 +27,7 @@ function(this)
           },
           grafanacloud: {
             aggKeepLabels: ['consumergroup', 'topic'],
-            expr: 'kafka_consumergroup_uncomitted_offsets{%(queriesSelector)s}',
+            expr: 'kafka_consumergroup_uncommitted_offsets{%(queriesSelector)s}',
           },
           bitnami: self.prometheus,
         },
