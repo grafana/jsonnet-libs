@@ -7,9 +7,8 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     jaeger_agent_host: null,
     jaeger_sampler_type: null,
     jaeger_sampler_param: null,
-    //TODO: Deprecate with_otel_resource_attrs. All traces colleciton should use OTel semantics.
-    with_otel_resource_attrs: false,
-    with_otel_container_resource_attrs: false,
+    with_otel_resource_attrs: true,
+    with_otel_container_resource_attrs: true,
   },
 
   local container = k.core.v1.container,
