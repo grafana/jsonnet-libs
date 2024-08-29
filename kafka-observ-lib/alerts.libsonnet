@@ -3,7 +3,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 {
   new(this): {
     local instanceLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
-    local groupLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
+    local groupLabel = xtd.array.slice(this.config.groupLabels, -1)[0],
     groups+: [
       {
         name: this.config.uid + '-kafka-alerts',
