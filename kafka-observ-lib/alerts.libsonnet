@@ -2,6 +2,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
 {
   new(this): {
+    local instanceLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
+    local groupLabel = xtd.array.slice(this.config.instanceLabels, -1)[0],
     groups+: [
       {
         name: this.config.uid + '-kafka-alerts',
@@ -59,8 +61,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'Kafka ISR expansion rate is expanding.',
                 description: 'Kafka broker {{ $labels.%s }} in cluster {{ $labels.%s }} In-Sync Replica (ISR) is expanding by {{ $value }} per second. If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR expansion rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.'
                              % [
-                               xtd.array.slice(this.config.instanceLabels, -1),
-                               xtd.array.slice(this.config.groupLabels, -1),
+                               instanceLabel,
+                               groupLabel,
                              ],
               },
             },
@@ -78,8 +80,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'Kafka ISR expansion rate is shrinking.',
                 description: 'Kafka broker {{ $labels.%s }} in cluster {{ $labels.%s }} In-Sync Replica (ISR) is shrinking by {{ $value }} per second. If a broker goes down, ISR for some of the partitions shrink. When that broker is up again, ISRs are expanded once the replicas are fully caught up. Other than that, the expected value for ISR shrink rate is 0. If ISR is expanding and shrinking frequently, adjust Allowed replica lag.'
                              % [
-                               xtd.array.slice(this.config.instanceLabels, -1),
-                               xtd.array.slice(this.config.groupLabels, -1),
+                               instanceLabel,
+                               groupLabel,
                              ],
               },
             },
@@ -97,7 +99,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'Kafka has offline partitons.',
                 description: 'Kafka cluster {{ $labels.%s }} has {{ $value }} offline partitions. After successful leader election, if the leader for partition dies, then the partition moves to the OfflinePartition state. Offline partitions are not available for reading and writing. Restart the brokers, if needed, and check the logs for errors.'
-                             % xtd.array.slice(this.config.groupLabels, -1),
+                             % groupLabel,
               },
             },
             {
@@ -115,8 +117,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 summary: 'Kafka has under replicated partitons.',
                 description: 'Kafka broker {{ $labels.%s }} in cluster {{ $labels.%s }} has {{ $value }} under replicated partitons'
                              % [
-                               xtd.array.slice(this.config.instanceLabels, -1),
-                               xtd.array.slice(this.config.groupLabels, -1),
+                               instanceLabel,
+                               groupLabel,
                              ],
               },
             },
@@ -130,7 +132,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'Kafka has no active controller.',
                 description: 'Kafka cluster {{ $labels.%s }} has {{ $value }} broker(s) reporting as the active controller in the last 5 minute interval. During steady state there should be only one active controller per cluster.'
-                             % xtd.array.slice(this.config.groupLabels, -1),
+                             % groupLabel,
               },
             },
             {
@@ -143,7 +145,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'Kafka has unclean leader elections.',
                 description: 'Kafka cluster {{ $labels.%s }} has {{ $value }} unclean partition leader elections reported in the last 5 minute interval. When unclean leader election is held among out-of-sync replicas, there is a possibility of data loss if any messages were not synced prior to the loss of the former leader. So if the number of unclean elections is greater than 0, investigate broker logs to determine why leaders were re-elected, and look for WARN or ERROR messages. Consider setting the broker configuration parameter unclean.leader.election.enable to false so that a replica outside of the set of in-sync replicas is never elected leader.'
-                             % xtd.array.slice(this.config.groupLabels, -1),
+                             % groupLabel,
               },
             },
             {
@@ -155,7 +157,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               },
               annotations: {
                 summary: 'Kafka has no brokers online.',
-                description: 'Kafka cluster {{ $labels.%s }} broker count is 0.' % xtd.array.slice(this.config.groupLabels, -1),
+                description: 'Kafka cluster {{ $labels.%s }} broker count is 0.' % groupLabel,
               },
             },
             {
@@ -170,8 +172,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 description:
                   'Kafka broker {{ $labels.%s }} in cluster {{ $labels.%s }} has disconected from Zookeeper.'
                   % [
-                    xtd.array.slice(this.config.instanceLabels, -1),
-                    xtd.array.slice(this.config.groupLabels, -1),
+                    instanceLabel
+                    groupLabel,
                   ],
               },
             },
