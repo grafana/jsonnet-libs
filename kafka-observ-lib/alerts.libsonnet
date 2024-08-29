@@ -172,7 +172,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 description:
                   'Kafka broker {{ $labels.%s }} in cluster {{ $labels.%s }} has disconected from Zookeeper.'
                   % [
-                    instanceLabel
+                    instanceLabel,
                     groupLabel,
                   ],
               },
