@@ -7,7 +7,7 @@ function(this)
     instanceLabels: this.instanceLabels,
     aggLevel: 'instance',
     discoveryMetric: {
-      stackdriver: 'stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count'
+      stackdriver: 'stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count',
     },
     signals: {
       requestsByStatus: {
@@ -15,10 +15,10 @@ function(this)
         description: 'The number of requests per second by status code.',
         type: 'raw',
         sources: {
-            stackdriver: {
-                expr: 'label_replace(sum by (response_code_class) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s}[$__rate_interval])),"response_code_class","${1}xx","response_code_class","([0-9])00")',
-                legendCustomTemplate: '{{response_code_class}}',
-            },
+          stackdriver: {
+            expr: 'label_replace(sum by (response_code_class) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s}[$__rate_interval])),"response_code_class","${1}xx","response_code_class","([0-9])00")',
+            legendCustomTemplate: '{{response_code_class}}',
+          },
         },
       },
 
@@ -28,8 +28,8 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-              expr: 'sum by (backend_target_name, client_country) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s}[$__rate_interval]))',
-              legendCustomTemplate: '{{client_country}}',
+            expr: 'sum by (backend_target_name, client_country) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s}[$__rate_interval]))',
+            legendCustomTemplate: '{{client_country}}',
           },
         },
       },
