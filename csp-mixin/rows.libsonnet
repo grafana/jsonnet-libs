@@ -116,5 +116,24 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
       ],
+
+      glb_requests: [
+        g.panel.row.new('Load Balancer Requests'),
+        this.grafana.panels.glb_reqsec
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_reqcountry
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_reqcache
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_reqprotocol
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
     },
 }

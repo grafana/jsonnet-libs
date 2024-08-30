@@ -27,6 +27,28 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ),
     }
     +
+    {
+      [csplib.config.uid + '-loadbalancer.json']:
+        local variables = csplib.signals.loadbalancer.getVariablesMultiChoice();
+        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Load Balancing')
+        + g.dashboard.withUid(csplib.config.uid + '-loadbalancer')
+        + g.dashboard.withTags(csplib.config.dashboardTags)
+        + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+        + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+        + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+        + g.dashboard.withVariables([
+          if std.asciiLower(v.label) == std.asciiLower(csplib.config.blobStorage.bucketLabel)  //v.label == 'Bucket_name'
+          then v { label: 'Bucket Name' }
+          else v
+          for v in variables
+        ])
+        + g.dashboard.withPanels(
+          g.util.grid.wrapPanels(
+            csplib.grafana.rows.glb_requests
+          )
+        ),
+    }
+    +
     if csplib.config.uid == 'azure' then
       {
         [csplib.config.uid + '-elasticpool.json']:
