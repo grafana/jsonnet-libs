@@ -27,6 +27,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         ),
     }
     +
+    if csplib.config.uid == 'gcp' then
     {
       [csplib.config.uid + '-loadbalancer.json']:
         local variables = csplib.signals.loadbalancer.getVariablesMultiChoice();
@@ -47,7 +48,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             csplib.grafana.rows.glb_requests
           )
         ),
-    }
+    } else {}
     +
     if csplib.config.uid == 'azure' then
       {
