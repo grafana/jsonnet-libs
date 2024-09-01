@@ -3,8 +3,8 @@ function(this)
   {
     local s = self,
     filteringSelector: this.filteringSelector,
-    groupLabels: this.groupLabels,
-    instanceLabels: this.instanceLabels,
+    groupLabels: ['job', 'project_id', 'client_country'],
+    instanceLabels: ['backend_target_name'],
     aggLevel: 'instance',
     discoveryMetric: {
       stackdriver: 'stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count',

@@ -386,18 +386,26 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     glb_reqsec:
       this.signals.loadbalancer.requestsByStatus.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
 
     glb_reqcountry:
       this.signals.loadbalancer.requestsByCountry.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
 
     glb_reqcache:
       this.signals.loadbalancer.requestsByCache.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
 
     glb_reqprotocol:
       this.signals.loadbalancer.requestsByProtocol.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
   },
 }
