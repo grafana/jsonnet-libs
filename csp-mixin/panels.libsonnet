@@ -592,5 +592,93 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
         },
       ]),
+
+    glb_req_bytes_count:
+      this.signals.loadbalancer.totalReqSent.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisLabel('out(-) | in(+)')
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.totalReqReceived.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Sent',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'blue',
+              },
+            },
+            {
+              id: 'custom.transform',
+              value: 'negative-Y',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Received',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'green',
+              },
+            },
+          ],
+        },
+      ]),
+
+    glb_backend_req_bytes_count:
+      this.signals.loadbalancer.backendTotalReqSent.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisLabel('out(-) | in(+)')
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.backendTotalReqReceived.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Sent',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'blue',
+              },
+            },
+            {
+              id: 'custom.transform',
+              value: 'negative-Y',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Received',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'green',
+              },
+            },
+          ],
+        },
+      ]),
   },
 }

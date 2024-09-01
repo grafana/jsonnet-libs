@@ -177,5 +177,53 @@ function(this)
           },
         },
       },
+
+      totalReqSent: {
+        name: 'Total Requests sent/received',
+        description: 'Number of bytes sent from/received by the load balancer.',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
+            legendCustomTemplate: 'Sent',
+          },
+        },
+      },
+
+      totalReqReceived: {
+        name: 'Total Requests received',
+        description: 'Number of bytes sent from/received by the load balancer.',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_response_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
+            legendCustomTemplate: 'Received',
+          },
+        },
+      },
+
+      backendTotalReqSent: {
+        name: 'Backend Total Requests sent/received',
+        description: 'The number of bytes per second in requests sent from the load balancer to backends and in responses received from the load balancer to the backends.',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
+            legendCustomTemplate: 'Sent',
+          },
+        },
+      },
+
+      backendTotalReqReceived: {
+        name: 'Backend Total Requests received',
+        description: 'The number of bytes per second in requests sent from the load balancer to backends and in responses received from the load balancer to the backends.',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_response_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
+            legendCustomTemplate: 'Received',
+          },
+        },
+      },
     },
   }

@@ -150,5 +150,16 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
       ],
+
+      glb_traffic_metrics: [
+        g.panel.row.new('Traffic Metrics'),
+        this.grafana.panels.glb_req_bytes_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_backend_req_bytes_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
     },
 }
