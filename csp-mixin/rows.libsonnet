@@ -135,5 +135,20 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
       ],
+
+      glb_latency: [
+        g.panel.row.new('Latency'),
+        this.grafana.panels.glb_reslatency
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(9),
+
+        this.grafana.panels.glb_frontendlatency
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_backendlatency
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
     },
 }

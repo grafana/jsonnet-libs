@@ -407,5 +407,190 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
       + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+
+    glb_reslatency:
+      this.signals.loadbalancer.totalResponseLatency50.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.totalResponseLatency90.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.totalResponseLatency99.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.totalResponseLatencyAverage.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p50',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'green',
+              },
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p90',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'orange',
+              },
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p99',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'red',
+              },
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Average',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'blue',
+              },
+            },
+          ],
+        },
+      ]),
+
+    glb_frontendlatency:
+      this.signals.loadbalancer.frontendLatency50.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.frontendLatency90.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.frontendLatency99.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p50',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'green',
+              },
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p90',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'orange',
+              },
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p99',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'red',
+              },
+            },
+          ],
+        },
+      ]),
+
+    glb_backendlatency:
+      this.signals.loadbalancer.backendLatency50.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.backendLatency90.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + this.signals.loadbalancer.backendLatency99.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p50',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'green',
+              },
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p90',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'orange',
+              },
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'p99',
+          },
+          properties: [
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'red',
+              },
+            },
+          ],
+        },
+      ]),
   },
 }

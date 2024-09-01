@@ -48,6 +48,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           + g.dashboard.withPanels(
             g.util.grid.wrapPanels(
               csplib.grafana.rows.glb_requests
+              + csplib.grafana.rows.glb_latency
             )
           ),
       } else {}
