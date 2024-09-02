@@ -19,7 +19,7 @@ local g = import './g.libsonnet';
         g.dashboard.new(prefix + 'Golang runtime')
         + g.dashboard.withPanels(
           g.util.grid.wrapPanels(
-            std.flattenArrays(
+            g.util.panel.resolveCollapsedFlagOnRows(
               std.objectValues(this.grafana.rows)
             )
           )
