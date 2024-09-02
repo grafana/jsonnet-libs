@@ -16,6 +16,7 @@
   jvmMetricsSource: ['prometheus_old', 'prometheus', 'jmx_exporter'],
 
   topicsFilteringSelector: 'topic!="__consumer_offsets"',
+  consumerGroupFilteringSelector: 'consumergroup!=""',
   zookeeperEnabled: true,
   totalTimeMsQuantile: '0.95',  // quantile to use for totalTimeMs metrics: 0.50, 0.75, 0.95, 0.98, 0.99, 0.999...
   zookeeperClientQuantile: '0.95',  // quantile to use for zookeeperClient metrics: 0.50, 0.75, 0.95, 0.98, 0.99, 0.999...

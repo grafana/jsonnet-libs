@@ -2,7 +2,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 function(this)
   {
-    filteringSelector: std.join(',', [this.filteringSelector, this.topicsFilteringSelector]),
+    filteringSelector: std.join(',', [this.filteringSelector, this.topicsFilteringSelector, this.consumerGroupFilteringSelector]),
     groupLabels: this.groupLabels,
     instanceLabels: ['topic', 'consumergroup'],  // this.instanceLabels is ommitted, as it would point to kafka_exporter instance.
     aggLevel: 'group',
