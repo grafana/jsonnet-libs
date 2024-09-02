@@ -51,7 +51,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               alert: 'KafkaISRExpandRate',
               expr: |||
                 sum without() (%s) != 0
-              ||| % this.signals.replicaManager.isrExpands.asRuleExpression(),
+              ||| % this.signals.brokerReplicaManager.isrExpands.asRuleExpression(),
               'for': '5m',
               keep_firing_for: '15m',
               labels: {
@@ -70,7 +70,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               alert: 'KafkaISRShrinkRate',
               expr: |||
                 sum without() (%s) != 0
-              ||| % this.signals.replicaManager.isrShrinks.asRuleExpression(),
+              ||| % this.signals.brokerReplicaManager.isrShrinks.asRuleExpression(),
               'for': '5m',
               keep_firing_for: '15m',
               labels: {
@@ -91,7 +91,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 sum by (%s) (%s) > 0
               ||| % [
                 std.join(',', this.config.groupLabels),
-                this.signals.replicaManager.offlinePartitions.asRuleExpression(),
+                this.signals.brokerReplicaManager.offlinePartitions.asRuleExpression(),
               ],
               labels: {
                 severity: 'critical',
@@ -107,7 +107,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: |||
                 (%s) > 0
               ||| % [
-                this.signals.replicaManager.underReplicatedPartitions.asRuleExpression(),
+                this.signals.brokerReplicaManager.underReplicatedPartitions.asRuleExpression(),
               ],
               'for': '5m',
               labels: {
@@ -137,7 +137,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'KafkaUncleanLeaderElection',
-              expr: '(%s) != 0' % this.signals.replicaManager.uncleanLeaderElection.asRuleExpression(),
+              expr: '(%s) != 0' % this.signals.brokerReplicaManager.uncleanLeaderElection.asRuleExpression(),
               'for': '5m',
               labels: {
                 severity: 'critical',

@@ -5,7 +5,7 @@ function(this)
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
-    aggLevel: 'group',
+    aggLevel: 'instance',
     aggFunction: 'sum',
     discoveryMetric: {
       prometheus: 'kafka_server_replicamanager_isrshrinks_total',
