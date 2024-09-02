@@ -134,6 +134,10 @@ local g = import './g.libsonnet';
         this.grafana.panels.glb_reqprotocol
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_errorrate
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(9),
       ],
 
       glb_latency: [

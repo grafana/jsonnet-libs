@@ -408,6 +408,27 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
       + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
 
+    glb_errorrate:
+      this.signals.loadbalancer.errorRate.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Error Rate visualization',
+          },
+          properties: [
+            {
+              id: 'noValue',
+              value: '0',
+            },
+          ],
+        },
+      ]),
+
     glb_reslatency:
       this.signals.loadbalancer.totalResponseLatency50.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()

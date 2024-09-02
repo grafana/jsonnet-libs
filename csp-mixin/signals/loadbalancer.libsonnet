@@ -58,6 +58,18 @@ function(this)
         },
       },
 
+      errorRate: {
+        name: 'Error rate visualization',
+        description: 'Error rate visualization',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job="integrations/gcp",job=~"$job",project_id=~"$project_id",client_country=~"$client_country",backend_target_name=~"$backend_target_name", response_code_class!="200", response_code_class!="0"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s})',
+            legendCustomTemplate: 'Error Rate visualization',
+          },
+        },
+      },
+
       totalResponseLatency50: {
         name: 'Total Response Latency',
         description: 'The total latency of responses',
@@ -208,7 +220,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{job="integrations/gcp",job=~"$job",project_id=~"$project_id",backend_target_name=~"$backend_target_name"}[$__rate_interval]))',
             legendCustomTemplate: 'Sent',
           },
         },
@@ -220,7 +232,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_response_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_response_bytes_count{job="integrations/gcp",job=~"$job",project_id=~"$project_id",backend_target_name=~"$backend_target_name"}[$__rate_interval]))',
             legendCustomTemplate: 'Received',
           },
         },
