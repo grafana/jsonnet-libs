@@ -50,7 +50,7 @@ Examples:
  - [jvm-observ-lib](jvm-observ-lib/)
  - [process-observ-lib](process-observ-lib/)
  - [golang-observ-lib](golang-observ-lib/)
- - [csp-mixin][(csp-mixin/)
+ - [csp-mixin](csp-mixin/)
 
 
 
