@@ -15,8 +15,8 @@
   // 'prometheus' if you use jmx_exporter in javaagent mode and version 1.0.1 or newer
   jvmMetricsSource: ['prometheus_old', 'prometheus', 'jmx_exporter'],
 
-  //Can be regex:
-  topicsIgnoreSelector: '__consumer_offsets',
+  topicsFilteringSelector: 'topic!="__consumer_offsets"',
+  consumerGroupFilteringSelector: 'consumergroup!=""',
   zookeeperEnabled: true,
   totalTimeMsQuantile: '0.95',  // quantile to use for totalTimeMs metrics: 0.50, 0.75, 0.95, 0.98, 0.99, 0.999...
   zookeeperClientQuantile: '0.95',  // quantile to use for zookeeperClient metrics: 0.50, 0.75, 0.95, 0.98, 0.99, 0.999...
@@ -28,7 +28,8 @@
       consumerGroup: (import './signals/consumerGroup.libsonnet')(this),
       zookeeperClient: (import './signals/zookeeperClient.libsonnet')(this),
       totalTime: (import './signals/totalTime.libsonnet')(this),
-      replicaManager: (import './signals/replicaManager.libsonnet')(this),
+      brokerReplicaManager: (import './signals/brokerReplicaManager.libsonnet')(this),
+      clusterReplicaManager: (import './signals/clusterReplicaManager.libsonnet')(this),
       conversion: (import './signals/conversion.libsonnet')(this),
     },
 }

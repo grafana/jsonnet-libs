@@ -3,43 +3,43 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(signals):: {
     isrShrinks:
-      signals.replicaManager.isrShrinks.asTimeSeries()
+      signals.brokerReplicaManager.isrShrinks.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
     isrExpands:
-      signals.replicaManager.isrExpands.asTimeSeries()
+      signals.brokerReplicaManager.isrExpands.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
     onlinePartitions:
-      signals.replicaManager.onlinePartitions.asTimeSeries()
+      signals.brokerReplicaManager.onlinePartitions.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize(),
     offlinePartitions:
-      signals.replicaManager.offlinePartitions.asTimeSeries()
+      signals.brokerReplicaManager.offlinePartitions.asTimeSeries()
       + commonlib.panels.requests.timeSeries.errors.stylize(),
     underReplicatedPartitions:
-      signals.replicaManager.underReplicatedPartitions.asTimeSeries()
+      signals.brokerReplicaManager.underReplicatedPartitions.asTimeSeries()
       + commonlib.panels.requests.timeSeries.errors.stylize(),
     underMinISRPartitions:
-      signals.replicaManager.underMinISRPartitions.asTimeSeries()
+      signals.brokerReplicaManager.underMinISRPartitions.asTimeSeries()
       + commonlib.panels.requests.timeSeries.errors.stylize(),
 
-    //for overview:
+    //for overview (use cluster wide signals):
     uncleanLeaderElectionStat:
-      signals.replicaManager.uncleanLeaderElection.asStat()
+      signals.clusterReplicaManager.uncleanLeaderElection.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
     preferredReplicaInbalanceStat:
-      signals.replicaManager.preferredReplicaInbalance.asStat()
+      signals.clusterReplicaManager.preferredReplicaInbalance.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
 
     onlinePartitionsStat:
-      signals.replicaManager.onlinePartitions.asStat()
+      signals.clusterReplicaManager.onlinePartitions.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
     offlinePartitionsStat:
-      signals.replicaManager.offlinePartitions.asStat()
+      signals.clusterReplicaManager.offlinePartitions.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
     underReplicatedPartitionsStat:
-      signals.replicaManager.underReplicatedPartitions.asStat()
+      signals.clusterReplicaManager.underReplicatedPartitions.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
     underMinISRPartitionsStat:
-      signals.replicaManager.underMinISRPartitions.asStat()
+      signals.clusterReplicaManager.underMinISRPartitions.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
 
   },
