@@ -36,21 +36,21 @@ You can find more in directories with `-mixin` suffix.
 
 Observability library is a flexible format to describe dashboards and alerts in a modular way so libraries can be imported into one another or into monitoring-mixins. Observability libraries can be found in folders with `-observ-lib` suffix. [Common library](https://github.com/grafana/jsonnet-libs/tree/master/common-lib) is also used to apply consistent style options.
 
-See [helloworld-observ-lib](../helloworld-observ-lib) for starter template and format description.
+See [helloworld-observ-lib](helloworld-observ-lib/) for starter template and format description.
 
 More examples:
- - [windows-observ-lib](../windows-observ-lib)
+ - [windows-observ-lib](windows-observ-lib/)
 
  ### Observability libraries signal extention
 
  [Signal](https://github.com/grafana/jsonnet-libs/tree/master/common-lib/common/signal#signal) is the experimental extenstion to observability libraries format to declatively define metrics (signals) and then render them as different grafana panel types (timeseries, stat, table, etc), or alert rules.
 
 Examples:
- - [kafka-observ-lib](../kafka-observ-lib)
- - [jvm-observ-lib](../jvm-observ-lib)
- - [process-observ-lib](../process-observ-lib)
- - [golang-observ-lib](../golang-observ-lib)
- - [csp-mixin][(./csp-mixin)
+ - [kafka-observ-lib](kafka-observ-lib/)
+ - [jvm-observ-lib](jvm-observ-lib/)
+ - [process-observ-lib](process-observ-lib/)
+ - [golang-observ-lib](golang-observ-lib/)
+ - [csp-mixin][(csp-mixin/)
 
 
 
