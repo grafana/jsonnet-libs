@@ -43,7 +43,7 @@ More examples:
 
  ### Observability libraries signal extention
 
- [Signal](https://github.com/grafana/jsonnet-libs/tree/master/common-lib/common/signal#signal) is the experimental extenstion to observability libraries format to declatively define metrics (signals) and then render them as different grafana panel types (timeseries, stat, table, etc), or alert rules.
+ [Signal](https://github.com/grafana/jsonnet-libs/tree/master/common-lib/common/signal#signal) is the experimental extension to observability libraries format to declare metrics (signals) and then render them as different grafana panel types (timeseries, stat, table, etc), or alert rules.
 
 Examples:
  - [kafka-observ-lib](kafka-observ-lib/)
