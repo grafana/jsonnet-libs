@@ -3,6 +3,8 @@
 
 # Wildcard permissions should be loaded first
 /*-mixin/ @grafana/cloud-integrations
+/*-observ-lib/ @grafana/cloud-integrations
+/*-mixin/ @grafana/cloud-integrations
 /consul*/ @grafana/mimir-maintainers @grafana/loki-team
 /memcached*/ @grafana/mimir-maintainers @grafana/loki-team
 
@@ -15,4 +17,3 @@
 /grafana-cloud-integration-utils/ @grafana/cloud-integrations
 /logs-lib/ @grafana/cloud-integrations
 /status-panels-lib/ @grafana/cloud-integrations
-/windows-observe-lib/ @grafana/cloud-integrations
