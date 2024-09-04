@@ -1,1 +1,5 @@
-(import 'dashboard.libsonnet')
+{
+  grafanaDashboards+:: {
+    'jenkins.json': (import './dashboard.json'),
+  },
+}
