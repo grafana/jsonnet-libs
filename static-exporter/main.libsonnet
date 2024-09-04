@@ -47,7 +47,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     }),
 
   metric:: {
-    new(name, description, metricType="counter")::
+    new(name, description, metricType='counter')::
       self.withName(name)
       + self.withDescription(description)
       + self.withMetricType(metricType),
