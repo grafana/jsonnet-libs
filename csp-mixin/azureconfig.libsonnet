@@ -1,7 +1,7 @@
 {
   _config+:: {
     local this = self,
-    dashboardTags: ['azure'],
+    dashboardTags: ['azure-cloud-provider'],
     dashboardNamePrefix: 'Azure ',
     blobStorage+: {
       enableAvailability: true,
