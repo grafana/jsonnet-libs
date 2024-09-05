@@ -9,7 +9,8 @@
         blobstore: (import './signals/blobstore.libsonnet')(this),
         azureelasticpool: (import './signals/azureelasticpool.libsonnet')(this),
         azuresqldb: (import './signals/azuresqldb.libsonnet')(this),
-        loadbalancer: (import './signals/loadbalancer.libsonnet')(this),
+        gcploadbalancer: (import './signals/gcploadbalancer.libsonnet')(this),
+        azureloadbalancer: (import './signals/azureloadbalancer.libsonnet')(this),
       },
     blobStorage: {
       enableAvailability: false,

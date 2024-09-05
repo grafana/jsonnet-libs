@@ -7,7 +7,7 @@
     blobStorage+: {
       bucketLabel: 'bucket_name',
     },
-    loadBalancer+: {
+    gcploadBalancer+: {
       backendLabel: 'backend_target_name',
       countryLabel: 'client_country',
     },

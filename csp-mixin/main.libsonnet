@@ -9,7 +9,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         blobstore: commonlib.signals.unmarshallJsonMulti(this.config.signals.blobstore, type=this.config.metricsSource),
         azureelasticpool: commonlib.signals.unmarshallJsonMulti(this.config.signals.azureelasticpool, type=this.config.metricsSource),
         azuresqldb: commonlib.signals.unmarshallJsonMulti(this.config.signals.azuresqldb, type=this.config.metricsSource),
-        loadbalancer: commonlib.signals.unmarshallJsonMulti(this.config.signals.loadbalancer, type=this.config.metricsSource),
+        gcploadbalancer: commonlib.signals.unmarshallJsonMulti(this.config.signals.gcploadbalancer, type=this.config.metricsSource),
+        azureloadbalancer: commonlib.signals.unmarshallJsonMulti(this.config.signals.azureloadbalancer, type=this.config.metricsSource),
       },
     grafana: {
       panels: (import './panels.libsonnet').new(this),
