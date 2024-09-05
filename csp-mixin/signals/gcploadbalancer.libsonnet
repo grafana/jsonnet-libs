@@ -48,7 +48,7 @@ function(this)
 
       requestsByProtocol: {
         name: 'Requests by protocol',
-        description: 'Requests per second by protocol.',
+        description: 'The number of requests per second by protocol.',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -60,11 +60,11 @@ function(this)
 
       errorRate: {
         name: 'Error rate visualization',
-        description: 'Error rate visualization',
+        description: 'Percentage of requests failing',
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job="integrations/gcp",job=~"$job",project_id=~"$project_id",client_country=~"$client_country",backend_target_name=~"$backend_target_name", response_code_class!="200", response_code_class!="0"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s})',
+            expr: '100 * sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job="integrations/gcp",job=~"$job",project_id=~"$project_id",client_country=~"$client_country",backend_target_name=~"$backend_target_name", response_code_class!="200", response_code_class!="0"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s})',
             legendCustomTemplate: 'Error Rate visualization',
           },
         },
@@ -76,7 +76,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.50, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{%(queriesSelector)s}))',
+            expr: 'histogram_quantile(0.50, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{%(queriesSelector)s}) > 0)',
             legendCustomTemplate: 'p50',
           },
         },
@@ -88,7 +88,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.90, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{%(queriesSelector)s}))',
+            expr: 'histogram_quantile(0.90, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{%(queriesSelector)s}) > 0)',
             legendCustomTemplate: 'p90',
           },
         },
@@ -100,7 +100,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.99, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{%(queriesSelector)s}))',
+            expr: 'histogram_quantile(0.99, sum by(le) (stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_total_latencies_bucket{%(queriesSelector)s}) > 0)',
             legendCustomTemplate: 'p99',
           },
         },
@@ -124,7 +124,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.50,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{%(queriesSelector)s}[$__rate_interval])))',
+            expr: 'histogram_quantile(0.50,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{%(queriesSelector)s}[$__rate_interval])) > 0)',
             legendCustomTemplate: 'p50',
           },
         },
@@ -136,7 +136,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.90,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{%(queriesSelector)s}[$__rate_interval])))',
+            expr: 'histogram_quantile(0.90,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{%(queriesSelector)s}[$__rate_interval])) > 0)',
             legendCustomTemplate: 'p90',
           },
         },
@@ -148,7 +148,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.99,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{%(queriesSelector)s}[$__rate_interval])))',
+            expr: 'histogram_quantile(0.99,sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_frontend_tcp_rtt_bucket{%(queriesSelector)s}[$__rate_interval])) > 0)',
             legendCustomTemplate: 'p99',
           },
         },
@@ -160,7 +160,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.50, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(queriesSelector)s}[$__rate_interval])))',
+            expr: 'histogram_quantile(0.50, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(queriesSelector)s}[$__rate_interval])) > 0)',
             legendCustomTemplate: 'p50',
           },
         },
@@ -172,7 +172,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.90, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(queriesSelector)s}[$__rate_interval])))',
+            expr: 'histogram_quantile(0.90, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(queriesSelector)s}[$__rate_interval])) > 0)',
             legendCustomTemplate: 'p90',
           },
         },
@@ -184,7 +184,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'histogram_quantile(0.99, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(queriesSelector)s}[$__rate_interval])))',
+            expr: 'histogram_quantile(0.99, sum by (le) (rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_latencies_bucket{%(queriesSelector)s}[$__rate_interval])) > 0)',
             legendCustomTemplate: 'p99',
           },
         },

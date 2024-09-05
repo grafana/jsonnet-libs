@@ -389,32 +389,45 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       this.signals.gcploadbalancer.requestsByStatus.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('reqps')
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     glb_reqcountry:
       this.signals.gcploadbalancer.requestsByCountry.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     glb_reqcache:
       this.signals.gcploadbalancer.requestsByCache.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     glb_reqprotocol:
       this.signals.gcploadbalancer.requestsByProtocol.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     glb_errorrate:
       this.signals.gcploadbalancer.errorRate.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
       + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
-      + g.panel.timeSeries.standardOptions.withUnit('percentunit')
+      + g.panel.timeSeries.options.legend.withShowLegend(false)
+      + g.panel.timeSeries.standardOptions.withUnit('percent')
       + g.panel.timeSeries.standardOptions.withOverrides([
         {
           matcher: {
@@ -426,6 +439,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               id: 'noValue',
               value: '0',
             },
+            {
+              id: 'color',
+              value: {
+                mode: 'fixed',
+                fixedColor: 'red',
+              },
+            },
           ],
         },
       ]),
@@ -434,12 +454,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       this.signals.gcploadbalancer.totalResponseLatency50.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.totalResponseLatency90.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.totalResponseLatency99.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.totalResponseLatencyAverage.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withUnit('ms')
+      + g.panel.timeSeries.standardOptions.withNoValue('0')
       + g.panel.timeSeries.standardOptions.withOverrides([
         {
           matcher: {
@@ -507,10 +530,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       this.signals.gcploadbalancer.frontendLatency50.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.frontendLatency90.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.frontendLatency99.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withUnit('ms')
+      + g.panel.timeSeries.standardOptions.withNoValue('0')
       + g.panel.timeSeries.standardOptions.withOverrides([
         {
           matcher: {
@@ -562,11 +588,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     glb_backendlatency:
       this.signals.gcploadbalancer.backendLatency50.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.backendLatency90.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.backendLatency99.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withUnit('ms')
+      + g.panel.timeSeries.standardOptions.withNoValue('0')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
       + g.panel.timeSeries.standardOptions.withOverrides([
         {
           matcher: {
@@ -618,10 +647,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     glb_req_bytes_count:
       this.signals.gcploadbalancer.totalReqSent.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisLabel('out(-) | in(+)')
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.totalReqReceived.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisLabel('out(-) | in(+)')
       + g.panel.timeSeries.standardOptions.withOverrides([
         {
           matcher: {
@@ -662,10 +693,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     glb_backend_req_bytes_count:
       this.signals.gcploadbalancer.backendTotalReqSent.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisLabel('out(-) | in(+)')
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.gcploadbalancer.backendTotalReqReceived.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisLabel('out(-) | in(+)')
       + g.panel.timeSeries.standardOptions.withOverrides([
         {
           matcher: {
@@ -710,14 +743,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.stat.base.stylize()
       + g.panel.stat.options.withColorMode('background_solid')
       + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.standardOptions.withUnit('short'),
+      + g.panel.stat.standardOptions.withUnit('short')
+      + g.panel.stat.standardOptions.withNoValue('0'),
 
     alb_total_packets:
       this.signals.azureloadbalancer.summaryTotalPackets.asStat()
       + commonlib.panels.generic.stat.base.stylize()
       + g.panel.stat.options.withColorMode('background_solid')
       + g.panel.stat.standardOptions.color.withMode('thresholds')
-      + g.panel.stat.standardOptions.withUnit('short'),
+      + g.panel.stat.standardOptions.withUnit('short')
+      + g.panel.stat.standardOptions.withNoValue('0'),
 
     alb_total_bytes:
       this.signals.azureloadbalancer.summaryTotalBytes.asStat()
@@ -725,6 +760,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.options.withColorMode('background_solid')
       + g.panel.stat.standardOptions.color.withMode('thresholds')
       + g.panel.stat.standardOptions.withUnit('decbytes')
+      + g.panel.stat.standardOptions.withNoValue('0')
       + g.panel.stat.standardOptions.withOverrides([]),
 
     alb_snat_connections:
@@ -732,43 +768,57 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.stat.base.stylize()
       + g.panel.stat.options.withColorMode('background_solid')
       + g.panel.stat.standardOptions.color.withMode('thresholds')
+      + g.panel.stat.standardOptions.withNoValue('0')
       + g.panel.stat.standardOptions.withUnit('short'),
 
     alb_details_sync_packets:
       this.signals.azureloadbalancer.detailsSyncPackets.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     alb_details_total_packets:
       this.signals.azureloadbalancer.detailsTotalPackets.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     alb_details_total_bytes:
       this.signals.azureloadbalancer.detailsTotalBytes.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     alb_details_snat_connections:
       this.signals.azureloadbalancer.detailsSnatConn.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none'),
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     alb_snatports:
       this.signals.azureloadbalancer.snatPorts.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
       + this.signals.azureloadbalancer.allocatedSnatPorts.asPanelMixin()
-      + g.panel.timeSeries.options.tooltip.withMode('multi'),
+      + g.panel.timeSeries.options.tooltip.withMode('multi')
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     alb_used_snatports:
       this.signals.azureloadbalancer.usedSnatPorts.asGauge()
       + this.signals.azureloadbalancer.allocatedSnatPorts.asPanelMixin()
       + g.panel.gauge.standardOptions.color.withMode('thresholds')
       + g.panel.gauge.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + g.panel.timeSeries.standardOptions.withNoValue('0')
       + g.panel.gauge.queryOptions.withTransformations([
         {
           id: 'configFromData',
