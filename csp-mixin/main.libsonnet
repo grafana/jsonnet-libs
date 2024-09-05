@@ -6,11 +6,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     config: config,
     signals:
       {
-        blobstore: commonlib.signals.unmarshallJsonMulti(this.config.signals.blobstore, type=this.config.metricsSource),
-        azureelasticpool: commonlib.signals.unmarshallJsonMulti(this.config.signals.azureelasticpool, type=this.config.metricsSource),
-        azuresqldb: commonlib.signals.unmarshallJsonMulti(this.config.signals.azuresqldb, type=this.config.metricsSource),
-        gcploadbalancer: commonlib.signals.unmarshallJsonMulti(this.config.signals.gcploadbalancer, type=this.config.metricsSource),
-        azureloadbalancer: commonlib.signals.unmarshallJsonMulti(this.config.signals.azureloadbalancer, type=this.config.metricsSource),
+        [sig]: commonlib.signals.unmarshallJsonMulti(this.config.signals[sig], type=this.config.metricsSource)
+        for sig in std.objectFields(this.config.signals)
       },
     grafana: {
       panels: (import './panels.libsonnet').new(this),
