@@ -691,10 +691,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     glb_backend_req_bytes_count:
-      this.signals.gcploadbalancer.backendTotalReqSent.asTimeSeries()
+      this.signals.gcpoadbalancerBackend.backendTotalReqSent.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withOverrides([])
-      + this.signals.gcploadbalancer.backendTotalReqReceived.asPanelMixin()
+      + this.signals.gcpoadbalancerBackend.backendTotalReqReceived.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withUnit('short')
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(10)
       + g.panel.timeSeries.fieldConfig.defaults.custom.withGradientMode('none')

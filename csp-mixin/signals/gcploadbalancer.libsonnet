@@ -64,7 +64,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: '100 * sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{job="integrations/gcp",job=~"$job",project_id=~"$project_id",client_country=~"$client_country",backend_target_name=~"$backend_target_name", response_code_class!="200", response_code_class!="0"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s})',
+            expr: '100 * sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s, response_code_class!="200", response_code_class!="0"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s})',
             legendCustomTemplate: 'Error Rate visualization',
           },
         },
@@ -209,30 +209,6 @@ function(this)
         sources: {
           stackdriver: {
             expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_response_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
-            legendCustomTemplate: 'Received',
-          },
-        },
-      },
-
-      backendTotalReqSent: {
-        name: 'Backend Total Requests sent/received',
-        description: 'The number of bytes per second in requests sent from the load balancer to backends and in responses received from the load balancer to the backends.',
-        type: 'raw',
-        sources: {
-          stackdriver: {
-            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_request_bytes_count{job="integrations/gcp",job=~"$job",project_id=~"$project_id",backend_target_name=~"$backend_target_name"}[$__rate_interval]))',
-            legendCustomTemplate: 'Sent',
-          },
-        },
-      },
-
-      backendTotalReqReceived: {
-        name: 'Backend Total Requests received',
-        description: 'The number of bytes per second in requests sent from the load balancer to backends and in responses received from the load balancer to the backends.',
-        type: 'raw',
-        sources: {
-          stackdriver: {
-            expr: 'sum(rate(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_backend_response_bytes_count{job="integrations/gcp",job=~"$job",project_id=~"$project_id",backend_target_name=~"$backend_target_name"}[$__rate_interval]))',
             legendCustomTemplate: 'Received',
           },
         },

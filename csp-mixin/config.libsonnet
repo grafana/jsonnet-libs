@@ -10,6 +10,7 @@
         azureelasticpool: (import './signals/azureelasticpool.libsonnet')(this),
         azuresqldb: (import './signals/azuresqldb.libsonnet')(this),
         gcploadbalancer: (import './signals/gcploadbalancer.libsonnet')(this),
+        gcpoadbalancerBackend: (import './signals/gcpoadbalancerBackend.libsonnet')(this),
         azureloadbalancer: (import './signals/azureloadbalancer.libsonnet')(this),
       },
     blobStorage: {
