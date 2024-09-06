@@ -35,7 +35,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
             function(acc, metric)
               acc + [
                 '# HELP %(name)s %(description)s' % metric,
-                '# TYPE %(name)s %(metricType)s' % metric,
+                '# TYPE %(name)s %(type)s' % metric,
               ] + [
                 metric.name + value
                 for value in metric.values
@@ -47,16 +47,16 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     }),
 
   metric:: {
-    new(name, description, metricType='counter')::
+    new(name, description, type='counter')::
       self.withName(name)
       + self.withDescription(description)
-      + self.withMetricType(metricType),
+      + self.withMetricType(type),
 
     withName(name): { name: name },
 
     withDescription(description): { description: description },
 
-    withMetricType(metricType): { type: metricType },
+    withMetricType(type): { type: type },
 
     local generateValues(labelMap, value=1) =
       local labels = [
