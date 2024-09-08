@@ -11,8 +11,8 @@ function(this)
     },
     signals: {
       requestsByStatus: {
-        name: 'Requests / sec',
-        description: 'The number of requests per second by status code.',
+        name: 'Requests by status code',
+        description: 'Amount of requests sent by status code for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -23,8 +23,8 @@ function(this)
       },
 
       requestsByCountry: {
-        name: 'Requests by Country',
-        description: 'The number of requests per second by client country.',
+        name: 'Requests by country',
+        description: 'Amount of requests sent by country for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -35,8 +35,8 @@ function(this)
       },
 
       requestsByCache: {
-        name: 'Requests by Cache Results',
-        description: 'The cache results per second of requests.',
+        name: 'Requests by cache results',
+        description: 'Amount of cache results for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -48,7 +48,7 @@ function(this)
 
       requestsByProtocol: {
         name: 'Requests by protocol',
-        description: 'The number of requests per second by protocol.',
+        description: 'Amount of requests by protocol for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -59,20 +59,20 @@ function(this)
       },
 
       errorRate: {
-        name: 'Error rate visualization',
-        description: 'Percentage of requests failing',
+        name: 'Error rate percentage',
+        description: 'Percentage of requests failing for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: '100 * sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s, response_code_class!="200", response_code_class!="0"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s})',
+            expr: '100 * (sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s, response_code_class!="200", response_code_class!="0"}) / sum(stackdriver_https_lb_rule_loadbalancing_googleapis_com_https_request_count{%(queriesSelector)s}))',
             legendCustomTemplate: 'Error Rate visualization',
           },
         },
       },
 
       totalResponseLatency50: {
-        name: 'Total Response Latency',
-        description: 'The total latency of responses',
+        name: 'Total Response',
+        description: 'Latency of all responses for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -108,7 +108,7 @@ function(this)
 
       totalResponseLatencyAverage: {
         name: 'Latency Average',
-        description: 'The total latency of responses',
+        description: 'Latency of return trip time for the frontend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -119,8 +119,8 @@ function(this)
       },
 
       frontendLatency50: {
-        name: 'Frontend RTT Latency',
-        description: 'The latency of frontend RTT.',
+        name: 'Frontend RTT',
+        description: 'Latency of return trip time for the frontend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -132,7 +132,7 @@ function(this)
 
       frontendLatency90: {
         name: 'Frontend RTT Latency 90',
-        description: 'The latency of frontend RTT.',
+        description: 'Latency of return trip time for the frontend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -144,7 +144,7 @@ function(this)
 
       frontendLatency99: {
         name: 'Frontend RTT Latency 99',
-        description: 'The latency of frontend RTT.',
+        description: 'Latency of return trip time for the frontend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -155,8 +155,8 @@ function(this)
       },
 
       backendLatency50: {
-        name: 'Backend Response Latency',
-        description: 'The backend latency of responses.',
+        name: 'Backend Response',
+        description: 'Latency of responses for the backend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -168,7 +168,7 @@ function(this)
 
       backendLatency90: {
         name: 'Backend Response Latency 90',
-        description: 'The backend latency of responses.',
+        description: 'Latency of responses for the backend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -180,7 +180,7 @@ function(this)
 
       backendLatency99: {
         name: 'Backend Response Latency 99',
-        description: 'The backend latency of responses.',
+        description: 'Latency of responses for the backend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -191,8 +191,8 @@ function(this)
       },
 
       totalReqSent: {
-        name: 'Total Requests sent/received',
-        description: 'Number of bytes sent from/received by the load balancer.',
+        name: 'Total requests sent/received',
+        description: 'Total bytes sent/received by load balancer for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -204,7 +204,7 @@ function(this)
 
       totalReqReceived: {
         name: 'Total Requests received',
-        description: 'Number of bytes sent from/received by the load balancer.',
+        description: 'Total bytes received by load balancer for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {

@@ -119,7 +119,7 @@ local g = import './g.libsonnet';
 
       // GCP Load Balancer
       glb_requests: [
-        g.panel.row.new('Load Balancer Requests'),
+        g.panel.row.new('Load balancer requests'),
         this.grafana.panels.glb_reqsec
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
@@ -157,7 +157,7 @@ local g = import './g.libsonnet';
       ],
 
       glb_traffic_metrics: [
-        g.panel.row.new('Traffic Metrics'),
+        g.panel.row.new('Traffic'),
         this.grafana.panels.glb_req_bytes_count
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
@@ -207,7 +207,7 @@ local g = import './g.libsonnet';
       ],
 
       alb_loadbalancers: [
-        g.panel.row.new('Load Balancers'),
+        g.panel.row.new('SNAT Ports'),
         this.grafana.panels.alb_snatports
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),

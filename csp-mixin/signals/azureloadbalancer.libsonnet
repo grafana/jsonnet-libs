@@ -11,7 +11,7 @@ function(this)
     },
     signals: {
       summarySyncPackets: {
-        name: 'Total Sync Packets',
+        name: 'Sync Packets',
         description: 'Total number of SYN Packets transmitted',
         type: 'raw',
         unit: 'short',
@@ -24,7 +24,7 @@ function(this)
       },
 
       summaryTotalPackets: {
-        name: 'Total Packets',
+        name: 'Packets',
         description: 'Total number of Packets transmitted',
         type: 'raw',
         unit: 'short',
@@ -36,7 +36,7 @@ function(this)
         },
       },
       summaryTotalBytes: {
-        name: 'Total Bytes',
+        name: 'Bytes',
         description: 'Total number of Bytes transmitted',
         type: 'raw',
         unit: 'short',
@@ -48,7 +48,7 @@ function(this)
         },
       },
       summarySnatConn: {
-        name: 'Total SNAT Connections',
+        name: 'SNAT connetions',
         description: 'Total number of new SNAT connections created',
         type: 'raw',
         unit: 'short',
@@ -61,8 +61,8 @@ function(this)
       },
 
       detailsSyncPackets: {
-        name: 'Total Sync Packets by Resource Group',
-        description: 'Total number of SYN Packets transmitted by resource group',
+        name: 'Sync Packets',
+        description: 'Total number of SYN Packets transmitted within time period',
         type: 'raw',
         sources: {
           azuremonitor: {
@@ -73,8 +73,8 @@ function(this)
       },
 
       detailsTotalPackets: {
-        name: 'Packet Count by Resource Group',
-        description: 'Total number of Packets transmitted by resource group',
+        name: 'Packets',
+        description: 'Total number of Packets transmitted within time period',
         type: 'raw',
         sources: {
           azuremonitor: {
@@ -84,8 +84,8 @@ function(this)
         },
       },
       detailsTotalBytes: {
-        name: 'Total Bytes by Resource Group',
-        description: 'Total number of Bytes transmitted by resource group',
+        name: 'Bytes',
+        description: 'Total number of Bytes transmitted within time period',
         type: 'raw',
         sources: {
           azuremonitor: {
@@ -95,8 +95,8 @@ function(this)
         },
       },
       detailsSnatConn: {
-        name: 'SNAT Connections by Resource Group',
-        description: 'Total number of new SNAT connections created by resource group',
+        name: 'SNAT connections',
+        description: 'Total number of new SNAT connections created within time period',
         type: 'raw',
         sources: {
           azuremonitor: {
@@ -108,7 +108,7 @@ function(this)
 
       snatPorts: {
         name: 'SNAT Ports',
-        description: 'Total number of SNAT ports used and allocated',
+        description: 'Total SNAT ports used and allocated within time period',
         type: 'raw',
         sources: {
           azuremonitor: {
@@ -119,8 +119,8 @@ function(this)
       },
 
       usedSnatPorts: {
-        name: 'Used SNAT Ports',
-        description: 'Total number of SNAT ports used',
+        name: 'Currently used SNAT ports',
+        description: 'Total SNAT ports used at the current time',
         type: 'raw',
         sources: {
           azuremonitor: {

@@ -11,8 +11,8 @@ function(this)
     },
     signals: {
       backendTotalReqSent: {
-        name: 'Backend Total Requests sent/received',
-        description: 'The number of bytes per second in requests sent from the load balancer to backends and in responses received from the load balancer to the backends.',
+        name: 'Backend requests sent/received',
+        description: 'Total bytes sent/received by backend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
@@ -24,7 +24,7 @@ function(this)
 
       backendTotalReqReceived: {
         name: 'Backend Total Requests received',
-        description: 'The number of bytes per second in requests sent from the load balancer to backends and in responses received from the load balancer to the backends.',
+        description: 'Total bytes sent/received by backend for the filters selected',
         type: 'raw',
         sources: {
           stackdriver: {
