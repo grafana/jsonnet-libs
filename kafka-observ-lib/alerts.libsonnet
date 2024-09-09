@@ -11,15 +11,18 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
           [
             {
               alert: 'KafkaLagKeepsIncreasing',
-              expr: 'sum without (partition) (%s) > 0' %
-                    // split back combined string to wrap in delta, then join back:
-                    std.join(
-                      '\nor\n',
-                      std.map(
-                        function(x) 'delta(%s[5m])' % x,
-                        std.split(this.signals.consumerGroup.consumerGroupLag.asRuleExpression(), '\nor\n')
-                      )
-                    ),
+              expr: 'sum by (%s, topic, consumergroup) (%s) > 0' %
+                    [
+                      std.join(',', this.config.groupLabels),
+                      // split back combined string to wrap in delta, then join back:
+                      std.join(
+                        '\nor\n',
+                        std.map(
+                          function(x) 'delta(%s[5m])' % x,
+                          std.split(this.signals.consumerGroup.consumerGroupLag.asRuleExpression(), '\nor\n')
+                        )
+                      ),
+                    ],
               'for': '15m',
               keep_firing_for: '10m',
               labels: {
@@ -32,8 +35,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             },
             {
               alert: 'KafkaLagIsTooHigh',
-              expr: 'sum without (partition) (%s) > %s' %
+              expr: 'sum by (%s, topic, consumergroup) (%s) > %s' %
                     [
+                      std.join(',', this.config.groupLabels),
                       this.signals.consumerGroup.consumerGroupLag.asRuleExpression(),
                       this.config.alertKafkaLagTooHighThreshold,
                     ],
@@ -50,8 +54,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             {
               alert: 'KafkaISRExpandRate',
               expr: |||
-                sum without() (%s) != 0
-              ||| % this.signals.brokerReplicaManager.isrExpands.asRuleExpression(),
+                sum by (%s) (%s) != 0
+              ||| % [
+                std.join(',', this.config.groupLabels + this.config.instanceLabels),
+                this.signals.brokerReplicaManager.isrExpands.asRuleExpression(),
+              ],
               'for': '5m',
               keep_firing_for: '15m',
               labels: {
@@ -69,8 +76,11 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             {
               alert: 'KafkaISRShrinkRate',
               expr: |||
-                sum without() (%s) != 0
-              ||| % this.signals.brokerReplicaManager.isrShrinks.asRuleExpression(),
+                sum by (%s) (%s) != 0
+              ||| % [
+                std.join(',', this.config.groupLabels + this.config.instanceLabels),
+                this.signals.brokerReplicaManager.isrShrinks.asRuleExpression(),
+              ],
               'for': '5m',
               keep_firing_for: '15m',
               labels: {
@@ -105,8 +115,9 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             {
               alert: 'KafkaUnderReplicatedPartitionCount',
               expr: |||
-                (%s) > 0
+                sum by (%s) (%s) > 0
               ||| % [
+                std.join(',', this.config.groupLabels + this.config.instanceLabels),
                 this.signals.brokerReplicaManager.underReplicatedPartitions.asRuleExpression(),
               ],
               'for': '5m',
