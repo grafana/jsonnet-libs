@@ -116,5 +116,105 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
       ],
+
+      // GCP Load Balancer
+      glb_requests: [
+        g.panel.row.new('Load balancer requests'),
+        this.grafana.panels.glb_reqsec
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_reqcountry
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_reqcache
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_reqprotocol
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_errorrate
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(9),
+      ],
+
+      glb_latency: [
+        g.panel.row.new('Latency'),
+        this.grafana.panels.glb_reslatency
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(9),
+
+        this.grafana.panels.glb_frontendlatency
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_backendlatency
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      glb_traffic_metrics: [
+        g.panel.row.new('Traffic'),
+        this.grafana.panels.glb_req_bytes_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.glb_backend_req_bytes_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      // Azure Load balancer
+
+      alb_summary: [
+        g.panel.row.new('Summary'),
+        this.grafana.panels.alb_sync_packets
+        + g.panel.timeSeries.gridPos.withW(6)
+        + g.panel.timeSeries.gridPos.withH(2),
+
+        this.grafana.panels.alb_total_packets
+        + g.panel.timeSeries.gridPos.withW(6)
+        + g.panel.timeSeries.gridPos.withH(2),
+
+        this.grafana.panels.alb_total_bytes
+        + g.panel.timeSeries.gridPos.withW(6)
+        + g.panel.timeSeries.gridPos.withH(2),
+
+        this.grafana.panels.alb_snat_connections
+        + g.panel.timeSeries.gridPos.withW(6)
+        + g.panel.timeSeries.gridPos.withH(2),
+      ],
+      alb_details: [
+        g.panel.row.new('Details'),
+        this.grafana.panels.alb_details_sync_packets
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.alb_details_total_packets
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.alb_details_total_bytes
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.alb_details_snat_connections
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      alb_loadbalancers: [
+        g.panel.row.new('SNAT Ports'),
+        this.grafana.panels.alb_snatports
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.alb_used_snatports
+        + g.panel.gauge.gridPos.withW(12)
+        + g.panel.gauge.gridPos.withH(8),
+      ],
     },
 }
