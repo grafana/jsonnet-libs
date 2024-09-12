@@ -103,6 +103,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 std.join(',', this.config.groupLabels),
                 this.signals.brokerReplicaManager.offlinePartitions.asRuleExpression(),
               ],
+              'for': '5m',
               labels: {
                 severity: 'critical',
               },
