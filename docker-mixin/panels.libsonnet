@@ -72,6 +72,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     diskUsageBytes:
       commonlib.panels.disk.timeSeries.usage.new('Disk usage', targets=[])
+      + g.panel.timeSeries.standardOptions.withMin(0)
       + this.signals.container.diskUsageBytes.asPanelMixin(),
 
     diskIO:
