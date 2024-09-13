@@ -44,7 +44,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       this.signals.container.cpuUsage.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisSoftMax(1)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisSoftMax(100)
       + g.panel.timeSeries.standardOptions.withMin(0),
 
     memory:
@@ -72,14 +72,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     diskUsageBytes:
       commonlib.panels.disk.timeSeries.usage.new('Disk usage', targets=[])
+      + g.panel.timeSeries.standardOptions.withMin(0)
       + this.signals.container.diskUsageBytes.asPanelMixin(),
 
     diskIO:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.disk.timeSeries.iops.new(
         'Disk I/O',
         targets=[],
         description='The number of I/O requests per second for the device/volume.'
       )
-      + this.signals.container.diskIO.asPanelMixin(),
+      + this.signals.container.diskReads.asPanelMixin()
+      + this.signals.container.diskWrites.asPanelMixin(),
   },
 }
