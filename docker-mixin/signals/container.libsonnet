@@ -144,12 +144,12 @@ function(this)
         name: 'Disk reads',
         description: 'The number of read requests per second for the device/volume.',
         type: 'counter',
-        unit: 'ops',
+        unit: 'reqps',
         sources: {
           cadvisor: {
             expr: 'container_fs_reads_total{%(queriesSelector)s}',
             aggKeepLabels: ['device'],
-            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
+            legendCustomTemplate: '%s read' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
           },
         },
       },
@@ -157,12 +157,12 @@ function(this)
         name: 'Disk writes',
         description: 'The number of write requests per second for the device/volume.',
         type: 'counter',
-        unit: 'ops',
+        unit: 'reqps',
         sources: {
           cadvisor: {
             expr: 'container_fs_writes_total{%(queriesSelector)s}',
             aggKeepLabels: ['device'],
-            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
+            legendCustomTemplate: '%s write' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
           },
         },
       },
