@@ -19,7 +19,8 @@
   dashboardRefresh: '1m',
 
   // otel: https://pkg.go.dev/go.opentelemetry.io/contrib/instrumentation/runtime
+  // otel_with_suffixes: when add_metric_suffixes=true in otelcollector
   // or prometheus
-  metricsSource: ['prometheus'],
+  metricsSource: ['prometheus', 'otel', 'otel_with_suffixes'],
   signals: (import './signals/golang.libsonnet')(this),
 }
