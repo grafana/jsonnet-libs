@@ -129,22 +129,34 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_fs_usage_bytes{%(queriesSelector)s}',
-            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['device'],
+            legendCustomTemplate: '%s(%s)' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'device'],
           },
         },
       },
-      diskIO: {
-        name: 'Disk I/O',
-        description: 'The number of I/O requests per second for the device/volume.',
+      diskReads: {
+        name: 'Disk reads',
+        description: 'The number of read requests per second for the device/volume.',
         type: 'counter',
-        unit: 'percent',
+        unit: 'ops',
         sources: {
           cadvisor: {
-            expr: 'container_fs_io_time_seconds_total{%(queriesSelector)s}',
-            exprWrappers: [
-              ['100 *', ''],
-            ],
-            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            expr: 'container_fs_reads_total{%(queriesSelector)s}',
+            aggKeepLabels: ['device'],
+            legendCustomTemplate: '%s(%s)' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'device'],
+          },
+        },
+      },
+      diskWrites: {
+        name: 'Disk writes',
+        description: 'The number of write requests per second for the device/volume.',
+        type: 'counter',
+        unit: 'ops',
+        sources: {
+          cadvisor: {
+            expr: 'container_fs_writes_total{%(queriesSelector)s}',
+            aggKeepLabels: ['device'],
+            legendCustomTemplate: '%s(%s)' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'device'],
           },
         },
       },

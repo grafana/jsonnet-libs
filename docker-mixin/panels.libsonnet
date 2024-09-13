@@ -75,11 +75,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + this.signals.container.diskUsageBytes.asPanelMixin(),
 
     diskIO:
-      commonlib.panels.generic.timeSeries.base.new(
+      commonlib.panels.disk.timeSeries.iops.new(
         'Disk I/O',
         targets=[],
         description='The number of I/O requests per second for the device/volume.'
       )
-      + this.signals.container.diskIO.asPanelMixin(),
+      + this.signals.container.diskReads.asPanelMixin()
+      + this.signals.container.diskWrites.asPanelMixin(),
   },
 }
