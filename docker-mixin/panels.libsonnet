@@ -44,7 +44,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       this.signals.container.cpuUsage.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
-      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisSoftMax(1)
+      + g.panel.timeSeries.fieldConfig.defaults.custom.withAxisSoftMax(100)
       + g.panel.timeSeries.standardOptions.withMin(0),
 
     memory:
