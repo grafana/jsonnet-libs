@@ -10,6 +10,7 @@ function(this)
     discoveryMetric: {
       java_micrometer: 'hikaricp_connections',  // https://github.com/brettwooldridge/HikariCP/blob/dev/src/main/java/com/zaxxer/hikari/metrics/micrometer/MicrometerMetricsTracker.java
       otel: 'hikaricp_connections',
+      otel_with_suffixes: self.otel,
     },
     signals: {
       connections: {
@@ -27,6 +28,7 @@ function(this)
             expr: 'hikaricp_connections{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
+          otel_with_suffixes: self.otel,
         },
       },
       timeouts: {
@@ -57,6 +59,7 @@ function(this)
             expr: 'hikaricp_connections_active{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
+          otel_with_suffixes: self.otel,
         },
       },
       connectionsIdle: {
@@ -74,6 +77,7 @@ function(this)
             expr: 'hikaricp_connections_idle{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
+          otel_with_suffixes: self.otel,
         },
       },
       connectionsPending: {
@@ -90,7 +94,9 @@ function(this)
           otel: {
             expr: 'hikaricp_connections_pending{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
+
           },
+          otel_with_suffixes: self.otel,
         },
       },
       connectionsCreationDurationAvg: {
@@ -152,6 +158,10 @@ function(this)
             expr: 'hikaricp_connections_creation_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
+          otel_with_suffixes: {
+            expr: 'hikaricp_connections_creation_seconds_bucket{%(queriesSelector)s}',
+            aggKeepLabels: ['pool'],
+          },
         },
       },
       connectionsUsageDurationP95: {
@@ -165,6 +175,10 @@ function(this)
             expr: 'hikaricp_connections_usage_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
+          otel_with_suffixes: {
+            expr: 'hikaricp_connections_usage_seconds_bucket{%(queriesSelector)s}',
+            aggKeepLabels: ['pool'],
+          },
         },
       },
       connectionsAcquireDurationP95: {
@@ -176,6 +190,10 @@ function(this)
         sources: {
           otel: {
             expr: 'hikaricp_connections_acquire_bucket{%(queriesSelector)s}',
+            aggKeepLabels: ['pool'],
+          },
+          otel_with_suffixes: {
+            expr: 'hikaricp_connections_acquire_seconds_bucket{%(queriesSelector)s}',
             aggKeepLabels: ['pool'],
           },
         },

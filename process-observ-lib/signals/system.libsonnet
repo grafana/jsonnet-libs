@@ -52,6 +52,9 @@ function(this)
           java_otel: {
             expr: 'process_runtime_jvm_system_cpu_utilization{%(queriesSelector)s}',
           },
+          java_otel_with_suffixes: {
+            expr: 'process_runtime_jvm_system_cpu_utilization_ratio{%(queriesSelector)s}',
+          },
           jmx_exporter: {
             expr: 'java_lang_operatingsystem_cpuload{%(queriesSelector)s}',
             exprWrappers: [
