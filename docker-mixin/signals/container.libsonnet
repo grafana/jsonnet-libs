@@ -52,7 +52,7 @@ function(this)
               ['8 *', ''],
             ],
             aggKeepLabels: ['interface'],
-            legendCustomTemplate: '%s(%s) receive' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
+            legendCustomTemplate: '%s receive' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -68,7 +68,7 @@ function(this)
               ['8 *', ''],
             ],
             aggKeepLabels: ['interface'],
-            legendCustomTemplate: '%s(%s) transmit' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
+            legendCustomTemplate: '%s transmit' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -82,7 +82,7 @@ function(this)
           cadvisor: {
             expr: 'container_network_receive_packets_dropped_total{%(queriesSelector)s}',
             aggKeepLabels: ['interface'],
-            legendCustomTemplate: '%s(%s) rx drops' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
+            legendCustomTemplate: '%s rx drops' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -95,7 +95,7 @@ function(this)
           cadvisor: {
             expr: 'container_network_transmit_packets_dropped_total{%(queriesSelector)s}',
             aggKeepLabels: ['interface'],
-            legendCustomTemplate: '%s(%s) tx drops' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
+            legendCustomTemplate: '%s tx drops' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -108,7 +108,7 @@ function(this)
           cadvisor: {
             expr: 'container_network_receive_errors_total{%(queriesSelector)s}',
             aggKeepLabels: ['interface'],
-            legendCustomTemplate: '%s(%s) rx errors ' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
+            legendCustomTemplate: '%s rx errors' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -121,7 +121,7 @@ function(this)
           cadvisor: {
             expr: 'container_network_transmit_errors_total{%(queriesSelector)s}',
             aggKeepLabels: ['interface'],
-            legendCustomTemplate: '%s(%s) tx errors ' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
+            legendCustomTemplate: '%s tx errors' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['interface']),
           },
         },
       },
@@ -136,7 +136,7 @@ function(this)
           cadvisor: {
             expr: 'container_fs_usage_bytes{%(queriesSelector)s}',
             aggKeepLabels: ['device'],
-            legendCustomTemplate: '%s(%s)' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'device'],
+            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
           },
         },
       },
@@ -149,7 +149,7 @@ function(this)
           cadvisor: {
             expr: 'container_fs_reads_total{%(queriesSelector)s}',
             aggKeepLabels: ['device'],
-            legendCustomTemplate: '%s(%s)' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'device'],
+            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
           },
         },
       },
@@ -162,7 +162,7 @@ function(this)
           cadvisor: {
             expr: 'container_fs_writes_total{%(queriesSelector)s}',
             aggKeepLabels: ['device'],
-            legendCustomTemplate: '%s(%s)' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'device'],
+            legendCustomTemplate: '%s' % commonlib.utils.labelsToPanelLegend(s.legendLabels + ['device']),
           },
         },
       },
