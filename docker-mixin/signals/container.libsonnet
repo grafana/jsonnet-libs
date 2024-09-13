@@ -51,7 +51,8 @@ function(this)
             exprWrappers: [
               ['8 *', ''],
             ],
-            legendCustomTemplate: '%s receive' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s(%s) receive' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
           },
         },
       },
@@ -66,7 +67,8 @@ function(this)
             exprWrappers: [
               ['8 *', ''],
             ],
-            legendCustomTemplate: '%s transmit' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s(%s) transmit' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
           },
         },
       },
@@ -79,7 +81,8 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_network_receive_packets_dropped_total{%(queriesSelector)s}',
-            legendCustomTemplate: '%s rx drops' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s(%s) rx drops' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
           },
         },
       },
@@ -91,7 +94,8 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_network_transmit_packets_dropped_total{%(queriesSelector)s}',
-            legendCustomTemplate: '%s tx drops' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s(%s) tx drops' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
           },
         },
       },
@@ -103,7 +107,8 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_network_receive_errors_total{%(queriesSelector)s}',
-            legendCustomTemplate: '%s rx errors ' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s(%s) rx errors ' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
           },
         },
       },
@@ -115,7 +120,8 @@ function(this)
         sources: {
           cadvisor: {
             expr: 'container_network_transmit_errors_total{%(queriesSelector)s}',
-            legendCustomTemplate: '%s tx errors ' % commonlib.utils.labelsToPanelLegend(s.legendLabels),
+            aggKeepLabels: ['interface'],
+            legendCustomTemplate: '%s(%s) tx errors ' % [commonlib.utils.labelsToPanelLegend(s.legendLabels), 'interface'],
           },
         },
       },
