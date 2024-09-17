@@ -57,7 +57,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_tcpbytesdroppedddos_bytespersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Dropped',
+          legendCustomTemplate: 'TCP Dropped',
         },
       },
     },
@@ -70,7 +70,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_tcpbytesforwardedddos_bytespersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Forwarded',
+          legendCustomTemplate: 'TCP Forwarded',
         },
       },
     },
@@ -83,7 +83,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_tcpbytesinddos_bytespersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Total',
+          legendCustomTemplate: 'TCP Total',
         },
       },
     },
@@ -96,7 +96,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_udpbytesdroppedddos_bytespersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Dropped',
+          legendCustomTemplate: 'UDP Dropped',
         },
       },
     },
@@ -109,7 +109,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_udpbytesforwardedddos_bytespersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Forwarded',
+          legendCustomTemplate: 'UDP Forwarded',
         },
       },
     },
@@ -122,7 +122,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_udpbytesinddos_bytespersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Total',
+          legendCustomTemplate: 'UDP Total',
         },
       },
     },
@@ -170,7 +170,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_tcppacketsdroppedddos_countpersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Dropped',
+          legendCustomTemplate: 'TCP Dropped',
         },
       },
     },
@@ -182,7 +182,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_tcppacketsforwardedddos_countpersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Forwarded',
+          legendCustomTemplate: 'TCP Forwarded',
         },
       },
     },
@@ -194,7 +194,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_tcppacketsinddos_countpersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Total',
+          legendCustomTemplate: 'TCP Total',
         },
       },
     },
@@ -206,7 +206,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_udppacketsdroppedddos_countpersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Dropped',
+          legendCustomTemplate: 'UDP Dropped',
         },
       },
     },
@@ -218,7 +218,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_udppacketsforwardedddos_countpersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Forwarded',
+          legendCustomTemplate: 'UDP Forwarded',
         },
       },
     },
@@ -230,7 +230,7 @@ function(this)
       sources: {
         azuremonitor: {
           expr: 'azure_microsoft_network_virtualnetworks_udppacketsinddos_countpersecond_maximum{%(queriesSelector)s}',
-          legendCustomTemplate: 'Total',
+          legendCustomTemplate: 'UDP Total',
         },
       },
     },
