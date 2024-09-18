@@ -845,23 +845,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     // Azure Virtual Network
     vn_under_ddos:
-      this.signals.azurevirtualnetwork.underDdos.asStat()
-      + g.panel.timeSeries.standardOptions.withMappings(
-        {
-          type: 'value',
-          options: {
-            '0': {
-              text: 'OK',
-              index: 0,
-            },
-            '1': {
-              text: 'Under Attack',
-              color: 'dark-red',
-              index: 1,
-            },
-          },
-        }
-      ),
+      this.signals.azurevirtualnetwork.underDdos.asStat(),
 
     vn_pingmesh_avg:
       this.signals.azurevirtualnetwork.pingMeshAvgRoundrip.asTimeSeries(),

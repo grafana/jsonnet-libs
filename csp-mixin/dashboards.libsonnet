@@ -107,7 +107,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
                  [csplib.config.uid + '-virtualnetwork.json']:
                    local variables = csplib.signals.azureloadbalancer.getVariablesMultiChoice();
-                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual Network')
+                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual network')
                    + g.dashboard.withUid(csplib.config.uid + '-virtualnetwork')
                    + g.dashboard.withTags(csplib.config.dashboardTags)
                    + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
