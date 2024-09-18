@@ -843,16 +843,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
+    // Azure Virtual Machines
+
     avm_instance_count:
-      this.signals.virtualMachines.instanceCount.asStat()
+      this.signals.virtualMachinesOverview.instanceCount.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
 
     avm_availability:
-      this.signals.virtualMachines.vmAvailability.common
+      this.signals.virtualMachinesOverview.vmAvailability.common
       + commonlib.panels.generic.stat.base.new(
         'VM Availability',
         [
-          this.signals.virtualMachines.vmAvailability.asTarget()
+          this.signals.virtualMachinesOverview.vmAvailability.asTarget()
           + g.query.prometheus.withFormat('time_series')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
@@ -922,33 +924,33 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + self._avm_timeSeriesCommon(),
 
     avm_disk_total_bytes:
-      this.signals.virtualMachines.diskReadBytes.asTimeSeries()
+      this.signals.virtualMachinesOverview.diskReadBytes.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.virtualMachines.diskWriteBytes.asPanelMixin()
+      + this.signals.virtualMachinesOverview.diskWriteBytes.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_disk_operations:
-      this.signals.virtualMachines.diskReadOperations.asTimeSeries()
+      this.signals.virtualMachinesOverview.diskReadOperations.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.virtualMachines.diskWriteOperations.asPanelMixin()
+      + this.signals.virtualMachinesOverview.diskWriteOperations.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + g.panel.timeSeries.standardOptions.withUnit('cps')
       + self._avm_timeSeriesCommon(),
 
     avm_network_total:
-      this.signals.virtualMachines.networkInTotal.asTimeSeries()
+      this.signals.virtualMachinesOverview.networkInTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.virtualMachines.networkOutTotal.asPanelMixin()
+      + this.signals.virtualMachinesOverview.networkOutTotal.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
-      + g.panel.timeSeries.standardOptions.withUnit('cps')
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_connections:
-      this.signals.virtualMachines.inboundFlows.asTimeSeries()
+      this.signals.virtualMachinesOverview.inboundFlows.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.virtualMachines.outboundFlows.asPanelMixin()
+      + this.signals.virtualMachinesOverview.outboundFlows.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + g.panel.timeSeries.standardOptions.withUnit('cps')
       + self._avm_timeSeriesCommon(),
@@ -990,11 +992,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + self._avm_timeSeriesCommon(),
 
     avm_top5_cpu_utilization:
-      this.signals.virtualMachines.top5CpuUtilization.common
+      this.signals.virtualMachinesOverview.top5CpuUtilization.common
       + commonlib.panels.generic.table.base.new(
         'Top 5 Instances - CPU utilitization',
         [
-          this.signals.virtualMachines.top5CpuUtilization.asTarget()
+          this.signals.virtualMachinesOverview.top5CpuUtilization.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
@@ -1005,24 +1007,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Time',
-          },
-          properties: [
-            {
-              id: 'custom.hidden',
-              value: true,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
             options: 'Value',
           },
           properties: [
             {
               id: 'custom.width',
-              value: 97,
+              value: 100,
             },
             {
               id: 'unit',
@@ -1031,13 +1021,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             {
               id: 'custom.cellOptions',
               value: {
+                mode: 'gradient',
                 type: 'gauge',
+                valueDisplayMode: 'text',
               },
             },
             {
               id: 'thresholds',
               value: {
-                mode: 'percentage',
+                mode: 'absolute',
                 steps: [
                   {
                     color: 'green',
@@ -1061,8 +1053,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           id: 'organize',
           options: {
-            excludeByName: {},
-            includeByName: {},
+            excludeByName: {
+              Time: true,
+              job: true,
+              subscriptionName: true,
+            },
             indexByName: {
               Time: 1,
               Value: 4,
@@ -1071,7 +1066,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               resourceName: 0,
             },
             renameByName: {
-              job: 'Job',
+              job: '',
               resourceGroup: 'Group',
               resourceName: 'Instance',
             },
@@ -1079,35 +1074,41 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
-    avm_top5_disk_read:
-      this.signals.virtualMachines.top5DiskRead.common
+    avm_top5_disk_read_write:
+      this.signals.virtualMachinesOverview.top5DiskRead.common
       + commonlib.panels.generic.table.base.new(
-        'Top 5 Instances - Disk read bytes',
+        'Top 5 Instances - Disk read/write bytes',
         [
-          this.signals.virtualMachines.top5DiskRead.asTarget()
+          this.signals.virtualMachinesOverview.top5DiskRead.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withRange(false),
+
+          this.signals.virtualMachinesOverview.top5DiskWrite.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
         ],
-        'List of top 5 Instances by disk read bytes'
+        'List of top 5 Instances by disk read/write bytes'
       )
+      + g.panel.table.standardOptions.withUnit('decbytes')
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
             id: 'byName',
-            options: 'Time',
+            options: 'Read',
           },
           properties: [
             {
-              id: 'custom.hidden',
-              value: true,
+              id: 'custom.width',
+              value: 100,
             },
           ],
         },
         {
           matcher: {
             id: 'byName',
-            options: 'Value',
+            options: 'Write',
           },
           properties: [
             {
@@ -1119,19 +1120,29 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ])
       + g.panel.table.queryOptions.withTransformations([
         {
+          id: 'merge',
+          options: {},
+        },
+        {
           id: 'organize',
           options: {
-            excludeByName: {},
-            includeByName: {},
+            excludeByName: {
+              subscriptionName: true,
+              Time: true,
+              job: true,
+            },
             indexByName: {
               Time: 1,
-              Value: 4,
+              'Value #Top 5 Instances - Disk read bytes': 4,
+              'Value #Top 5 Instances - Disk write bytes': 5,
               job: 2,
               resourceGroup: 3,
               resourceName: 0,
             },
             renameByName: {
-              job: 'Job',
+              'Value #Top 5 Instances - Disk read bytes': 'Read',
+              'Value #Top 5 Instances - Disk write bytes': 'Write',
+              job: '',
               resourceGroup: 'Group',
               resourceName: 'Instance',
             },
