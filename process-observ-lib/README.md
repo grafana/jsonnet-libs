@@ -7,6 +7,7 @@ Supports the following sources:
 - prometheus
 - otel
 - java_otel
+- java_otel_with_suffixes (add_metric_suffixes=true in otelcollector)
 - java_micrometer (springboot)
 - jmx_exporter
 

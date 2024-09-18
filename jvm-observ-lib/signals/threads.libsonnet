@@ -11,6 +11,7 @@ function(this)
       java_micrometer: 'jvm_threads_live_threads',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmThreadMetrics.java
       prometheus: 'jvm_threads_current',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       otel: 'process_runtime_jvm_threads_count',
+      otel_with_suffixes: self.otel,
       prometheus_old: 'jvm_threads_current',
       jmx_exporter: 'java_lang_threading_threadcount',
     },
@@ -30,6 +31,7 @@ function(this)
           otel: {
             expr: 'sum without (daemon) (process_runtime_jvm_threads_count{%(queriesSelector)s})',
           },
+          otel_with_suffixes: self.otel,
           prometheus_old: self.prometheus,
           jmx_exporter: {
             expr: 'java_lang_threading_threadcount{%(queriesSelector)s}',
@@ -51,6 +53,7 @@ function(this)
           otel: {
             expr: 'process_runtime_jvm_threads_count{daemon="true", %(queriesSelector)s}',
           },
+          otel_with_suffixes: self.otel,
           prometheus_old: self.prometheus,
           jmx_exporter: {
             expr: 'java_lang_threading_daemonthreadcount{%(queriesSelector)s}',

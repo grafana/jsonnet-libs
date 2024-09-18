@@ -2,18 +2,16 @@ function(this)
   {
     discoveryMetric: {
       // https://opentelemetry.io/docs/specs/semconv/system/process-metrics/
-
       otel: 'runtime_uptime',
+      otel_with_suffixes: 'runtime_uptime_milliseconds_total',
       java_otel: self.otel,  // some system metrics are calculated differently for java. (see system.libsonnet)
       java_micrometer: 'process_uptime_seconds',  // https://docs.spring.io/spring-boot/docs/1.3.3.RELEASE/reference/html/production-ready-metrics.html
-
+      java_otel_with_suffixes: self.otel_with_suffixes,  // some system metrics are calculated differently for java. (see system.libsonnet),
       // https://prometheus.github.io/client_java/instrumentation/jvm/#process-metrics
       // https://github.com/prometheus/client_golang
       prometheus: 'process_start_time_seconds',
-
       // acceptable if container has single process running
       cadvisor: 'container_cpu_usage_seconds_total',
-
       //https://github.com/prometheus/jmx_exporter/blob/main/collector/src/test/java/io/prometheus/jmx/JmxCollectorTest.java#L195
       jmx_exporter: 'java_lang_operatingsystem_processcputime',
     },
@@ -37,7 +35,11 @@ function(this)
           otel: {
             expr: 'process_uptime{%(queriesSelector)s}',
           },
+          otel_with_suffixes: {
+            expr: 'runtime_uptime_milliseconds_total{%(queriesSelector)s}',
+          },
           java_otel: self.otel,
+          java_otel_with_suffixes: self.otel_with_suffixes,
           java_micrometer: {
             expr: 'process_uptime_seconds{%(queriesSelector)s}',
           },
@@ -66,7 +68,11 @@ function(this)
           otel: {
             expr: 'process_start_time{%(queriesSelector)s} * 1000',
           },
+          otel_with_suffixes: {
+            expr: 'process_start_time_seconds{%(queriesSelector)s} * 1000',
+          },
           java_otel: self.otel,
+          java_otel_with_suffixes: self.otel_with_suffixes,
           cadvisor: {
             cadvisor: 'container_start_time_seconds{%(queriesSelector)s}',
           },
@@ -88,6 +94,9 @@ function(this)
           },
           java_otel: {
             expr: 'process_runtime_jvm_cpu_utilization{%(queriesSelector)s} * 100',
+          },
+          java_otel_with_suffixes: {
+            expr: 'process_runtime_jvm_cpu_utilization_ratio{%(queriesSelector)s} * 100',
           },
           prometheus: {
             // convert to gauge from counter to match others here.
@@ -149,6 +158,8 @@ function(this)
           otel: {
             expr: 'process_files_open{%(queriesSelector)s}',
           },
+          otel_with_suffixes: self.otel,
+          java_otel_with_suffixes: self.otel,
           java_otel: self.otel,
           java_micrometer: {
             expr: 'process_files_open_files{%(queriesSelector)s}',
@@ -168,6 +179,8 @@ function(this)
             expr: 'process_files_max{%(queriesSelector)s}',
           },
           java_otel: self.otel,
+          otel_with_suffixes: self.otel,
+          java_otel_with_suffixes: self.otel,
           java_micrometer: {
             expr: 'process_files_max_files{%(queriesSelector)s}',
           },

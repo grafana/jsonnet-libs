@@ -10,6 +10,7 @@ function(this)
       prometheus: 'jvm_memory_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       prometheus_old: 'jvm_memory_bytes_used',
       otel: 'process_runtime_jvm_memory_usage',  //https://opentelemetry.io/docs/specs/semconv/runtime/jvm-metrics/
+      otel_with_suffixes: 'process_runtime_jvm_memory_usage_bytes',
     },
     signals: {
 
@@ -47,6 +48,9 @@ function(this)
             exprWrappers: [
               actionLabelPrettify,
             ],
+          },
+          otel_with_suffixes: self.otel {
+            expr: 'process_runtime_jvm_gc_duration_seconds_count{%(queriesSelector)s}',
           },
         },
       },
@@ -117,6 +121,11 @@ function(this)
               actionLabelPrettify,
             ],
           },
+          otel_with_suffixes: self.otel {
+            expr: |||
+              histogram_quantile(0.95, sum(rate(process_runtime_jvm_gc_duration_seconds_bucket{%(queriesSelector)s}[$__rate_interval])) by (le,%(agg)s,action,gc))
+            |||,
+          },
         },
       },
 
@@ -166,6 +175,7 @@ function(this)
             |||,
             legendCustomTemplate: '{{ %(agg)s }}: Allocated ({{ thread_name }}, {{ arena }})',
           },
+          otel_with_suffixes: self.otel,
         },
       },
 
@@ -190,6 +200,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_jvm_memory_usage{type="heap", pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'process_runtime_jvm_memory_usage_bytes{type="heap", pool=~"(G1 |PS )?Eden Space", %(queriesSelector)s}',
           },
         },
       },
@@ -227,6 +240,9 @@ function(this)
               ['', ' != -1'],
             ],
           },
+          otel_with_suffixes: self.otel {
+            expr: 'process_runtime_jvm_memory_limit_bytes{pool=~"(G1 |PS )?Eden Space", type="heap", %(queriesSelector)s}',
+          },
         },
       },
       memoryCommittedEden: {
@@ -249,6 +265,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_jvm_memory_committed{pool=~"(G1 |PS )?Eden Space", type="heap", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'process_runtime_jvm_memory_committed_bytes{pool=~"(G1 |PS )?Eden Space", type="heap", %(queriesSelector)s}',
           },
         },
       },
@@ -274,6 +293,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_jvm_memory_usage{type="heap", pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'process_runtime_jvm_memory_usage_bytes{type="heap", pool=~"(G1 |PS )?Survivor Space", %(queriesSelector)s}',
           },
         },
       },
@@ -305,6 +327,9 @@ function(this)
           otel: {
             expr: 'process_runtime_jvm_memory_limit{pool=~"(G1 |PS )?Survivor Space", type="heap", %(queriesSelector)s} != -1',
           },
+          otel_with_suffixes: {
+            expr: 'process_runtime_jvm_memory_limit_bytes{pool=~"(G1 |PS )?Survivor Space", type="heap", %(queriesSelector)s} != -1',
+          },
         },
       },
       memoryCommittedSurvival: {
@@ -327,6 +352,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_jvm_memory_committed{pool=~"(G1 |PS )?Survivor Space", type="heap", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'process_runtime_jvm_memory_committed_bytes{pool=~"(G1 |PS )?Survivor Space", type="heap", %(queriesSelector)s}',
           },
         },
       },
@@ -352,6 +380,9 @@ function(this)
           otel: {
             expr: 'process_runtime_jvm_memory_usage{type="heap", pool=~"G1 Old Gen|Tenured Gen", %(queriesSelector)s}',
           },
+          otel_with_suffixes: {
+            expr: 'process_runtime_jvm_memory_usage_bytes{type="heap", pool=~"G1 Old Gen|Tenured Gen", %(queriesSelector)s}',
+          },
         },
       },
       memoryMaxTenured: {
@@ -371,19 +402,31 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
-            expr: 'jvm_memory_max_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s} != -1',
-          },
-          prometheus: {
-            expr: 'jvm_memory_pool_used_bytes{pool="PS Old Gen", %(queriesSelector)s} != -1',
-          },
-          prometheus_old: {
-            expr: 'jvm_memory_pool_bytes_max{pool="G1 Old Gen", %(queriesSelector)s} != -1',
-          },
-          otel: {
-            expr: 'process_runtime_jvm_memory_limit{pool=~"G1 Old Gen|Tenured Gen", type="heap", %(queriesSelector)s} != -1',
+            expr: 'jvm_memory_max_bytes{id="Tenured Gen", area="heap", %(queriesSelector)s}',
             exprWrappers: [
               ['', ' != -1'],
             ],
+          },
+          prometheus: {
+            expr: 'jvm_memory_pool_used_bytes{pool="PS Old Gen", %(queriesSelector)s}',
+            exprWrappers: [
+              ['', ' != -1'],
+            ],
+          },
+          prometheus_old: {
+            expr: 'jvm_memory_pool_bytes_max{pool="G1 Old Gen", %(queriesSelector)s}',
+            exprWrappers: [
+              ['', ' != -1'],
+            ],
+          },
+          otel: {
+            expr: 'process_runtime_jvm_memory_limit{pool=~"G1 Old Gen|Tenured Gen", type="heap", %(queriesSelector)s}',
+            exprWrappers: [
+              ['', ' != -1'],
+            ],
+          },
+          otel_with_suffixes: self.otel {
+            expr: 'process_runtime_jvm_memory_limit_bytes{pool=~"G1 Old Gen|Tenured Gen", type="heap", %(queriesSelector)s}',
           },
         },
       },
@@ -407,6 +450,9 @@ function(this)
           },
           otel: {
             expr: 'process_runtime_jvm_memory_committed{pool=~"G1 Old Gen|Tenured Gen", type="heap", %(queriesSelector)s}',
+          },
+          otel_with_suffixes: {
+            expr: 'process_runtime_jvm_memory_committed_bytes{pool=~"G1 Old Gen|Tenured Gen", type="heap", %(queriesSelector)s}',
           },
         },
       },
