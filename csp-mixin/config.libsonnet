@@ -12,6 +12,7 @@
         gcploadbalancer: (import './signals/gcploadbalancer.libsonnet')(this),
         gcpoadbalancerBackend: (import './signals/gcpoadbalancerBackend.libsonnet')(this),
         azureloadbalancer: (import './signals/azureloadbalancer.libsonnet')(this),
+        virtualMachines: (import './signals/virtualMachines.libsonnet')(this),
       },
     blobStorage: {
       enableAvailability: false,

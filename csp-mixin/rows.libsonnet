@@ -216,5 +216,90 @@ local g = import './g.libsonnet';
         + g.panel.gauge.gridPos.withW(12)
         + g.panel.gauge.gridPos.withH(8),
       ],
+
+      // Azure Virtual Machines
+      avm_overview: [
+        g.panel.row.new('Overview'),
+
+        this.grafana.panels.avm_instance_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(5),
+
+        this.grafana.panels.avm_availability
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(5),
+
+        this.grafana.panels.avm_top5_cpu_utilization
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.avm_top5_disk_read
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.avm_disk_total_bytes
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.avm_disk_operations
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.avm_network_total
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.avm_connections
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      avm_instance: [
+        g.panel.row.new('Instance')
+        + g.panel.row.withCollapsed(true)
+        + g.panel.row.withPanels(
+          [
+            this.grafana.panels.avm_cpu_utilization
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_available_memory
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_cpu_credits_consumed
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_cpu_credits_remaining
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_network_in_by_instance
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_network_out_by_instance
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_disk_read_by_instance
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_disk_write_by_instance
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_disk_read_operations_by_instance
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.avm_disk_write_operations_by_instance
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+          ]
+        ),
+      ],
     },
 }

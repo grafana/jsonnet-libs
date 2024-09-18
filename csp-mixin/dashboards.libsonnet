@@ -104,5 +104,20 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                        csplib.grafana.rows.alb_loadbalancers
                      )
                    ),
+                 [csplib.config.uid + '-virtualMachines.json']:
+                   local variables = csplib.signals.virtualMachines.getVariablesMultiChoice();
+                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual Machines')
+                   + g.dashboard.withUid(csplib.config.uid + '-virtualMachines')
+                   + g.dashboard.withTags(csplib.config.dashboardTags)
+                   + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+                   + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+                   + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+                   + g.dashboard.withVariables(variables)
+                   + g.dashboard.withPanels(
+                     g.util.grid.wrapPanels(
+                       csplib.grafana.rows.avm_overview +
+                       csplib.grafana.rows.avm_instance
+                     )
+                   ),
                } else {},
 }

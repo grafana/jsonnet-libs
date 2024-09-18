@@ -842,5 +842,301 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           },
         },
       ]),
+
+    avm_instance_count:
+      this.signals.virtualMachines.instanceCount.asStat()
+      + commonlib.panels.generic.stat.base.stylize(),
+
+    avm_availability:
+      this.signals.virtualMachines.vmAvailability.common
+      + commonlib.panels.generic.stat.base.new(
+        'VM Availability',
+        [
+          this.signals.virtualMachines.vmAvailability.asTarget()
+          + g.query.prometheus.withFormat('time_series')
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withRange(false),
+        ],
+        'Measure of Availability of Virtual machines'
+      )
+      + g.panel.stat.options.withColorMode('background')
+      + g.panel.stat.standardOptions.withUnit('short')
+      + g.panel.stat.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byType',
+            options: 'number',
+          },
+          properties: [
+            {
+              id: 'mappings',
+              value: [
+                {
+                  options: {
+                    '0': {
+                      color: 'red',
+                      index: 1,
+                      text: 'Not Available',
+                    },
+                    '1': {
+                      color: 'green',
+                      index: 0,
+                      text: 'Available',
+                    },
+                  },
+                  type: 'value',
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+
+    _avm_timeSeriesCommon()::
+      g.panel.timeSeries.standardOptions.color.withMode('palette-classic')
+      + g.panel.timeSeries.standardOptions.withNoValue('0')
+      + g.panel.timeSeries.standardOptions.withOverrides([]),
+
+    avm_cpu_utilization:
+      this.signals.virtualMachines.cpuUtilization.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('percent')
+      + self._avm_timeSeriesCommon(),
+
+    avm_available_memory:
+      this.signals.virtualMachines.availableMemory.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + self._avm_timeSeriesCommon(),
+
+    avm_cpu_credits_consumed:
+      this.signals.virtualMachines.cpuCreditsConsumed.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + self._avm_timeSeriesCommon(),
+
+    avm_cpu_credits_remaining:
+      this.signals.virtualMachines.cpuCreditsRemaining.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('short')
+      + self._avm_timeSeriesCommon(),
+
+    avm_disk_total_bytes:
+      this.signals.virtualMachines.diskReadBytes.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + this.signals.virtualMachines.diskWriteBytes.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + self._avm_timeSeriesCommon(),
+
+    avm_disk_operations:
+      this.signals.virtualMachines.diskReadOperations.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + this.signals.virtualMachines.diskWriteOperations.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withUnit('cps')
+      + self._avm_timeSeriesCommon(),
+
+    avm_network_total:
+      this.signals.virtualMachines.networkInTotal.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + this.signals.virtualMachines.networkOutTotal.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withUnit('cps')
+      + self._avm_timeSeriesCommon(),
+
+    avm_connections:
+      this.signals.virtualMachines.inboundFlows.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + this.signals.virtualMachines.outboundFlows.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withOverrides([])
+      + g.panel.timeSeries.standardOptions.withUnit('cps')
+      + self._avm_timeSeriesCommon(),
+
+    avm_network_in_by_instance:
+      this.signals.virtualMachines.networkInByVM.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + self._avm_timeSeriesCommon(),
+
+    avm_network_out_by_instance:
+      this.signals.virtualMachines.networkOutByVM.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + self._avm_timeSeriesCommon(),
+
+    avm_disk_read_by_instance:
+      this.signals.virtualMachines.diskReadByVM.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + self._avm_timeSeriesCommon(),
+
+    avm_disk_write_by_instance:
+      this.signals.virtualMachines.diskWriteByVM.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + self._avm_timeSeriesCommon(),
+
+    avm_disk_read_operations_by_instance:
+      this.signals.virtualMachines.diskReadOperationsByVM.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + self._avm_timeSeriesCommon(),
+
+    avm_disk_write_operations_by_instance:
+      this.signals.virtualMachines.diskWriteOperationsByVM.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
+      + self._avm_timeSeriesCommon(),
+
+    avm_top5_cpu_utilization:
+      this.signals.virtualMachines.top5CpuUtilization.common
+      + commonlib.panels.generic.table.base.new(
+        'Top 5 Instances - CPU utilitization',
+        [
+          this.signals.virtualMachines.top5CpuUtilization.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withRange(false),
+        ],
+        'Fractional utilization of allocated CPU on an instance'
+      )
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Time',
+          },
+          properties: [
+            {
+              id: 'custom.hidden',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 97,
+            },
+            {
+              id: 'unit',
+              value: 'percent',
+            },
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'gauge',
+              },
+            },
+            {
+              id: 'thresholds',
+              value: {
+                mode: 'percentage',
+                steps: [
+                  {
+                    color: 'green',
+                    value: null,
+                  },
+                  {
+                    color: 'orange',
+                    value: 70,
+                  },
+                  {
+                    color: 'red',
+                    value: 90,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {},
+            includeByName: {},
+            indexByName: {
+              Time: 1,
+              Value: 4,
+              job: 2,
+              resourceGroup: 3,
+              resourceName: 0,
+            },
+            renameByName: {
+              job: 'Job',
+              resourceGroup: 'Group',
+              resourceName: 'Instance',
+            },
+          },
+        },
+      ]),
+
+    avm_top5_disk_read:
+      this.signals.virtualMachines.top5DiskRead.common
+      + commonlib.panels.generic.table.base.new(
+        'Top 5 Instances - Disk read bytes',
+        [
+          this.signals.virtualMachines.top5DiskRead.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withRange(false),
+        ],
+        'List of top 5 Instances by disk read bytes'
+      )
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Time',
+          },
+          properties: [
+            {
+              id: 'custom.hidden',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 100,
+            },
+          ],
+        },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {},
+            includeByName: {},
+            indexByName: {
+              Time: 1,
+              Value: 4,
+              job: 2,
+              resourceGroup: 3,
+              resourceName: 0,
+            },
+            renameByName: {
+              job: 'Job',
+              resourceGroup: 'Group',
+              resourceName: 'Instance',
+            },
+          },
+        },
+      ]),
   },
 }
