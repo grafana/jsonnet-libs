@@ -116,9 +116,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                    + g.dashboard.withVariables(variables)
                    + g.dashboard.withPanels(
                      g.util.grid.wrapPanels(
-                      csplib.grafana.rows.vn_overview +
-                      csplib.grafana.rows.vn_bytes +
-                      csplib.grafana.rows.vn_packets
+                       csplib.grafana.rows.vn_overview +
+                       csplib.grafana.rows.vn_bytes +
+                       csplib.grafana.rows.vn_packets
                      )
                    ),
                } else {},
