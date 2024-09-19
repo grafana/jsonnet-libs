@@ -18,7 +18,7 @@
   dashboardTimezone: 'default',
   dashboardRefresh: '1m',
 
-  metricsSource: ['prometheus'],  // or any combination of: prometheus, otel, java_otel, java_micrometer.
+  metricsSource: ['prometheus'],  // or any combination of: prometheus, otel, otel_with_suffixes, java_otel, java_otel_with_suffixes, java_micrometer.
   signals+:
     {
       system: (import './signals/system.libsonnet')(this),
