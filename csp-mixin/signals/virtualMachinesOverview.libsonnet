@@ -74,6 +74,58 @@ function(this)
         },
       },
 
+      top5DiskReadOperations: {
+        name: 'Top 5 Instances - Disk read operations/sec',
+        description: 'List of top 5 Instances with higher disk read IOPS',
+        type: 'raw',
+        unit: 'cps',
+        sources: {
+          azuremonitor: {
+            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(rate(azure_microsoft_compute_virtualmachines_disk_read_operations_sec_average_countpersecond{%(queriesSelector)s}[$__rate_interval])))',
+            legendCustomTemplate: '',
+          },
+        },
+      },
+
+      top5DiskWriteOperations: {
+        name: 'Top 5 Instances - Disk write operations/sec',
+        description: 'List of top 5 Instances with higher disk write IOPS',
+        type: 'raw',
+        unit: 'cps',
+        sources: {
+          azuremonitor: {
+            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(rate(azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}[$__rate_interval])))',
+            legendCustomTemplate: '',
+          },
+        },
+      },
+
+      top5NetworkIn: {
+        name: 'Top 5 Instances - Network throughput received',
+        description: 'List of top 5 Instances with higher number of bytes received over the network.',
+        type: 'raw',
+        unit: 'decbytes',
+        sources: {
+          azuremonitor: {
+            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(rate(azure_microsoft_compute_virtualmachines_network_in_total_total_bytes{%(queriesSelector)s}[$__rate_interval])))',
+            legendCustomTemplate: '',
+          },
+        },
+      },
+
+      top5NetworkOut: {
+        name: 'Top 5 Instances - Network throughput sent',
+        description: 'List of top 5 Instances with higher number of bytes sent over the network.',
+        type: 'raw',
+        unit: 'decbytes',
+        sources: {
+          azuremonitor: {
+            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(rate(azure_microsoft_compute_virtualmachines_network_out_total_total_bytes{%(queriesSelector)s}[$__rate_interval])))',
+            legendCustomTemplate: '',
+          },
+        },
+      },
+
       diskReadBytes: {
         name: 'Disk bytes (total)',
         description: 'Bytes read/written from/to disk during monitoring period',
