@@ -216,5 +216,51 @@ local g = import './g.libsonnet';
         + g.panel.gauge.gridPos.withW(12)
         + g.panel.gauge.gridPos.withH(8),
       ],
+
+      // Azure Virtual Network
+      vn_overview: [
+        g.panel.row.new('Overview'),
+        this.grafana.panels.vn_under_ddos
+        + g.panel.timeSeries.gridPos.withW(6)
+        + g.panel.timeSeries.gridPos.withH(6),
+
+        this.grafana.panels.vn_pingmesh_avg
+        + g.panel.timeSeries.gridPos.withW(6)
+        + g.panel.timeSeries.gridPos.withH(6),
+
+        this.grafana.panels.vn_packet_trigger
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(6),
+      ],
+
+      vn_bytes: [
+        g.panel.row.new('Bytes'),
+        this.grafana.panels.vn_bytes_by_action
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.vn_bytes_dropped_by_protocol
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.vn_bytes_forwarded_by_protocol
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      vn_packets: [
+        g.panel.row.new('Packets'),
+        this.grafana.panels.vn_packets_by_action
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.vn_packets_dropped_by_protocol
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.vn_packets_forwarded_by_protocol
+        + g.panel.timeSeries.gridPos.withW(8)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
     },
 }
