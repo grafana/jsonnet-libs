@@ -25,7 +25,7 @@ local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libso
               // g.panel.row.new("Overview"),
               panels.fleetOverviewTable { gridPos+: { w: 24, h: 16 } },
               panels.cpuUsageTopk { gridPos+: { w: 24 } },
-              panels.memotyUsageTopKPercent { gridPos+: { w: 24 } },
+              panels.memoryUsageTopKPercent { gridPos+: { w: 24 } },
               panels.diskIOutilPercentTopK { gridPos+: { w: 12 } },
               panels.diskUsagePercentTopK { gridPos+: { w: 12 } },
               panels.networkErrorsAndDroppedPerSecTopK { gridPos+: { w: 24 } },
