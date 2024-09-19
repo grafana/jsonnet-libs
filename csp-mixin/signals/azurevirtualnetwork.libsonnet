@@ -131,6 +131,7 @@ function(this)
         name: 'Packets dropped DDoS',
         description: 'Inbound packets per second dropped by DDoS protection',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_packetsdroppedddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -143,6 +144,7 @@ function(this)
         name: 'Packets forwarded DDoS',
         description: 'Inbound packets per second forwarded by DDoS protection',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_packetsforwardedddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -155,6 +157,7 @@ function(this)
         name: 'Packets in DDoS',
         description: 'Total packets per second inbound in DDoS protection.',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_packetsinddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -167,6 +170,7 @@ function(this)
         name: 'TCP packets dropped DDoS',
         description: 'Inbound TCP packets per second dropped by DDoS protection',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_tcppacketsdroppedddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -179,6 +183,7 @@ function(this)
         name: 'TCP packets forwarded DDoS',
         description: 'Inbound TCP packets per second forwarded by DDoS protection',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_tcppacketsforwardedddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -191,6 +196,7 @@ function(this)
         name: 'TCP packets in DDoS',
         description: 'Total TCP packets per second inbound in DDoS protection.',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_tcppacketsinddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -203,6 +209,7 @@ function(this)
         name: 'UDP Packets dropped DDoS',
         description: 'Inbound UDP packets per second dropped by DDoS protection',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_udppacketsdroppedddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -215,6 +222,7 @@ function(this)
         name: 'UDP packets forwarded DDoS',
         description: 'Inbound UDP packets per second forwarded by DDoS protection',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_udppacketsforwardedddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -227,6 +235,7 @@ function(this)
         name: 'UDP packets in DDoS',
         description: 'Total UDP packets per second inbound in DDoS protection.',
         type: 'gauge',
+        unit: 'pps',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_network_virtualnetworks_udppacketsinddos_countpersecond_maximum{%(queriesSelector)s}',
@@ -237,6 +246,7 @@ function(this)
 
       pingMeshAvgRoundrip: {
         name: 'Round trip time for pings to a VM',
+        description: 'Round trip time for Pings sent to a destination VM',
         type: 'gauge',
         unit: 'ms',
         sources: {
@@ -248,6 +258,7 @@ function(this)
 
       pingMeshProbesFailed: {
         name: 'Failed pings to a VM %',
+        description: 'Percent of number of failed Pings to total sent Pings of a destination VM',
         type: 'gauge',
         unit: 'percent',
         sources: {
