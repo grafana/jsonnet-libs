@@ -5,7 +5,7 @@ A collection of dashboards and their component parts for cloud service provider 
 # New Dashboard definition
 1. Create a new `.libsonnet` file on the `csp-mixin/signals` folder that will contain the general settings of your dashboard and its panels like title, description, panel queries, legend template, discovery metric, variable definitions, aggregation level...
 2. Override default configuration loaded from `azureconfig.libsonnet` or `gcpconfig.libsonnet` for the specific dashboard if needed. Ex. You can initialize groupLabels like: `groupLabels: this.groupLabels` or override global values like this: `groupLabels: ['job', 'resourceName']`.
-3. Add the new signal definition to the `config.libsonnet` file. Ex. `virtualMachines: (import './signals/virtualMachines.libsonnet')(this),`.
+3. Add the new signal definition to the `config.libsonnet` file. Ex. `azurevm: (import './signals/azurevm.libsonnet')(this),`.
 4. Add your panel definitions to the file `panels.libsonnet` like:
    ```
    [panel_id]:
@@ -15,7 +15,7 @@ A collection of dashboards and their component parts for cloud service provider 
    # Example: 
    
    avm_availability:
-      this.signals.virtualMachines.vmAvailability.asStat()
+      this.signals.azurevm.vmAvailability.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
    
    alb_snatports:
@@ -51,10 +51,10 @@ A collection of dashboards and their component parts for cloud service provider 
    +
    if csplib.config.uid == 'azure' then
    {
-      [csplib.config.uid + '-virtualMachines.json']:
-        local variables = csplib.signals.virtualMachines.getVariablesMultiChoice();
+      [csplib.config.uid + '-virtualmachines.json']:
+        local variables = csplib.signals.azurevm.getVariablesMultiChoice();
         g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual Machines')
-        + g.dashboard.withUid(csplib.config.uid + '-virtualMachines')
+        + g.dashboard.withUid(csplib.config.uid + '-virtualmachines')
         + g.dashboard.withTags(csplib.config.dashboardTags)
         + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
         + g.dashboard.withRefresh(csplib.config.dashboardRefresh)

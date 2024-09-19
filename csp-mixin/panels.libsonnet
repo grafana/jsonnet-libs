@@ -846,15 +846,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Azure Virtual Machines
 
     avm_instance_count:
-      this.signals.virtualMachinesOverview.instanceCount.asStat()
+      this.signals.azurevmOverview.instanceCount.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
 
     avm_availability:
-      this.signals.virtualMachinesOverview.vmAvailability.common
+      this.signals.azurevmOverview.vmAvailability.common
       + commonlib.panels.generic.stat.base.new(
         'VM Availability',
         [
-          this.signals.virtualMachinesOverview.vmAvailability.asTarget()
+          this.signals.azurevmOverview.vmAvailability.asTarget()
           + g.query.prometheus.withFormat('time_series')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
@@ -900,103 +900,103 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withOverrides([]),
 
     avm_cpu_utilization:
-      this.signals.virtualMachines.cpuUtilization.asTimeSeries()
+      this.signals.azurevm.cpuUtilization.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('percent')
       + self._avm_timeSeriesCommon(),
 
     avm_available_memory:
-      this.signals.virtualMachines.availableMemory.asTimeSeries()
+      this.signals.azurevm.availableMemory.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_cpu_credits_consumed:
-      this.signals.virtualMachines.cpuCreditsConsumed.asTimeSeries()
+      this.signals.azurevm.cpuCreditsConsumed.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('short')
       + self._avm_timeSeriesCommon(),
 
     avm_cpu_credits_remaining:
-      this.signals.virtualMachines.cpuCreditsRemaining.asTimeSeries()
+      this.signals.azurevm.cpuCreditsRemaining.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('short')
       + self._avm_timeSeriesCommon(),
 
     avm_disk_total_bytes:
-      this.signals.virtualMachinesOverview.diskReadBytes.asTimeSeries()
+      this.signals.azurevmOverview.diskReadBytes.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.virtualMachinesOverview.diskWriteBytes.asPanelMixin()
+      + this.signals.azurevmOverview.diskWriteBytes.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_disk_operations:
-      this.signals.virtualMachinesOverview.diskReadOperations.asTimeSeries()
+      this.signals.azurevmOverview.diskReadOperations.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.virtualMachinesOverview.diskWriteOperations.asPanelMixin()
+      + this.signals.azurevmOverview.diskWriteOperations.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + g.panel.timeSeries.standardOptions.withUnit('cps')
       + self._avm_timeSeriesCommon(),
 
     avm_network_total:
-      this.signals.virtualMachinesOverview.networkInTotal.asTimeSeries()
+      this.signals.azurevmOverview.networkInTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.virtualMachinesOverview.networkOutTotal.asPanelMixin()
+      + this.signals.azurevmOverview.networkOutTotal.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_connections:
-      this.signals.virtualMachinesOverview.inboundFlows.asTimeSeries()
+      this.signals.azurevmOverview.inboundFlows.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.virtualMachinesOverview.outboundFlows.asPanelMixin()
+      + this.signals.azurevmOverview.outboundFlows.asPanelMixin()
       + g.panel.timeSeries.standardOptions.withOverrides([])
       + g.panel.timeSeries.standardOptions.withUnit('cps')
       + self._avm_timeSeriesCommon(),
 
     avm_network_in_by_instance:
-      this.signals.virtualMachines.networkInByVM.asTimeSeries()
+      this.signals.azurevm.networkInByVM.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_network_out_by_instance:
-      this.signals.virtualMachines.networkOutByVM.asTimeSeries()
+      this.signals.azurevm.networkOutByVM.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_disk_read_by_instance:
-      this.signals.virtualMachines.diskReadByVM.asTimeSeries()
+      this.signals.azurevm.diskReadByVM.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_disk_write_by_instance:
-      this.signals.virtualMachines.diskWriteByVM.asTimeSeries()
+      this.signals.azurevm.diskWriteByVM.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_disk_read_operations_by_instance:
-      this.signals.virtualMachines.diskReadOperationsByVM.asTimeSeries()
+      this.signals.azurevm.diskReadOperationsByVM.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_disk_write_operations_by_instance:
-      this.signals.virtualMachines.diskWriteOperationsByVM.asTimeSeries()
+      this.signals.azurevm.diskWriteOperationsByVM.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withUnit('decbytes')
       + self._avm_timeSeriesCommon(),
 
     avm_top5_cpu_utilization:
-      this.signals.virtualMachinesOverview.top5CpuUtilization.common
+      this.signals.azurevmOverview.top5CpuUtilization.common
       + commonlib.panels.generic.table.base.new(
         'Top 5 Instances - CPU utilitization',
         [
-          this.signals.virtualMachinesOverview.top5CpuUtilization.asTarget()
+          this.signals.azurevmOverview.top5CpuUtilization.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
@@ -1075,16 +1075,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     avm_top5_disk_read_write:
-      this.signals.virtualMachinesOverview.top5DiskRead.common
+      this.signals.azurevmOverview.top5DiskRead.common
       + commonlib.panels.generic.table.base.new(
         'Top 5 Instances - Disk read/write bytes',
         [
-          this.signals.virtualMachinesOverview.top5DiskRead.asTarget()
+          this.signals.azurevmOverview.top5DiskRead.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
 
-          this.signals.virtualMachinesOverview.top5DiskWrite.asTarget()
+          this.signals.azurevmOverview.top5DiskWrite.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
@@ -1151,16 +1151,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     avm_top5_disk_operations:
-      this.signals.virtualMachinesOverview.top5DiskReadOperations.common
+      this.signals.azurevmOverview.top5DiskReadOperations.common
       + commonlib.panels.generic.table.base.new(
         'Top 5 Instances - Disk read/write operations/sec',
         [
-          this.signals.virtualMachinesOverview.top5DiskReadOperations.asTarget()
+          this.signals.azurevmOverview.top5DiskReadOperations.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
 
-          this.signals.virtualMachinesOverview.top5DiskWriteOperations.asTarget()
+          this.signals.azurevmOverview.top5DiskWriteOperations.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
@@ -1227,16 +1227,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     avm_top5_network_total:
-      this.signals.virtualMachinesOverview.top5NetworkIn.common
+      this.signals.azurevmOverview.top5NetworkIn.common
       + commonlib.panels.generic.table.base.new(
         'Top 5 Instances - Network throughput received/sent',
         [
-          this.signals.virtualMachinesOverview.top5NetworkIn.asTarget()
+          this.signals.azurevmOverview.top5NetworkIn.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),
 
-          this.signals.virtualMachinesOverview.top5NetworkOut.asTarget()
+          this.signals.azurevmOverview.top5NetworkOut.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withRange(false),

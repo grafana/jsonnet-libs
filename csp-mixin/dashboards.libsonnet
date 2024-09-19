@@ -104,10 +104,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                        csplib.grafana.rows.alb_loadbalancers
                      )
                    ),
-                 [csplib.config.uid + '-virtualMachines.json']:
-                   local variables = csplib.signals.virtualMachines.getVariablesMultiChoice();
+                 [csplib.config.uid + '-virtualmachines.json']:
+                   local variables = csplib.signals.azurevm.getVariablesMultiChoice();
                    g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual Machines')
-                   + g.dashboard.withUid(csplib.config.uid + '-virtualMachines')
+                   + g.dashboard.withUid(csplib.config.uid + '-virtualmachines')
                    + g.dashboard.withTags(csplib.config.dashboardTags)
                    + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
                    + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
