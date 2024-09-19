@@ -1149,5 +1149,157 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           },
         },
       ]),
+
+    avm_top5_disk_operations:
+      this.signals.virtualMachinesOverview.top5DiskReadOperations.common
+      + commonlib.panels.generic.table.base.new(
+        'Top 5 Instances - Disk read/write operations/sec',
+        [
+          this.signals.virtualMachinesOverview.top5DiskReadOperations.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withRange(false),
+
+          this.signals.virtualMachinesOverview.top5DiskWriteOperations.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withRange(false),
+        ],
+        'List of top 5 Instances with higher disk read/write IOPS'
+      )
+      + g.panel.table.standardOptions.withUnit('cps')
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Read',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 100,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Write',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 100,
+            },
+          ],
+        },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
+        {
+          id: 'merge',
+          options: {},
+        },
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {
+              subscriptionName: true,
+              Time: true,
+              job: true,
+            },
+            indexByName: {
+              Time: 1,
+              'Value #Top 5 Instances - Disk read operations/sec': 4,
+              'Value #Top 5 Instances - Disk write operations/sec': 5,
+              job: 2,
+              resourceGroup: 3,
+              resourceName: 0,
+            },
+            renameByName: {
+              'Value #Top 5 Instances - Disk read operations/sec': 'Read',
+              'Value #Top 5 Instances - Disk write operations/sec': 'Write',
+              job: '',
+              resourceGroup: 'Group',
+              resourceName: 'Instance',
+            },
+          },
+        },
+      ]),
+
+    avm_top5_network_total:
+      this.signals.virtualMachinesOverview.top5NetworkIn.common
+      + commonlib.panels.generic.table.base.new(
+        'Top 5 Instances - Network throughput received/sent',
+        [
+          this.signals.virtualMachinesOverview.top5NetworkIn.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withRange(false),
+
+          this.signals.virtualMachinesOverview.top5NetworkOut.asTarget()
+          + g.query.prometheus.withFormat('table')
+          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withRange(false),
+        ],
+        'List of top 5 Instances with higher number of bytes received/sent over the network.'
+      )
+      + g.panel.table.standardOptions.withUnit('cps')
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Received',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 100,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Sent',
+          },
+          properties: [
+            {
+              id: 'custom.width',
+              value: 100,
+            },
+          ],
+        },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
+        {
+          id: 'merge',
+          options: {},
+        },
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {
+              subscriptionName: true,
+              Time: true,
+              job: true,
+            },
+            indexByName: {
+              Time: 1,
+              'Value #Top 5 Instances - Network throughput received': 4,
+              'Value #Top 5 Instances - Network throughput sent': 5,
+              job: 2,
+              resourceGroup: 3,
+              resourceName: 0,
+            },
+            renameByName: {
+              'Value #Top 5 Instances - Network throughput received': 'Received',
+              'Value #Top 5 Instances - Network throughput sent': 'Sent',
+              job: '',
+              resourceGroup: 'Group',
+              resourceName: 'Instance',
+            },
+          },
+        },
+      ]),
   },
 }
