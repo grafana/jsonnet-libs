@@ -68,15 +68,14 @@ A collection of dashboards and their component parts for cloud service provider 
    } else {},
    ```
 
-7. Run the following command to generate the .json object containing the dashboard definition and then import it as a new dashboard on any instance:
+7. Run the following command from the `csp-mixin` folder to generate all the dashboards in `json` format and then import the one you are building on any instance. Check the folder `csp-mixin/dashout` that will contain all the generated dashboards:
    ```
    mixtool generate dashboards -J vendor -d dashout mixin.libsonnet
    ```
-8. Lint and fix the files modified with the following command:
+8. Lint and fix the files modified executing the following command from the root folder:
    ```
    make fmt
    ```
-   
 
 # Notes
 
