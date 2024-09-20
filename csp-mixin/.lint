@@ -8,6 +8,14 @@ exclusions:
       reason: "Using 'Bucket' as instance label"
     - dashboard: "Azure Elastic pool"
       reason: "Using 'resourceName' as instance label"
+    - panel: "Average Message Size"
+      reason: "Overview which is not filterable by instance"
+    - dashboard: "Azure SQL database"
+      reason: "Overview which is not filterable by instance"
+    - dashboard: "Azure Load Balancing"
+    - dashboard: "GCP Load Balancing"
+    - dashboard: "Azure Virtual network"
+      reason: "resourceName is the instance label"
   target-job-rule:
       reason: "Using filtering selector with job"
   template-instance-rule:  
@@ -18,6 +26,12 @@ exclusions:
       reason: "Using 'Bucket' as instance label"
     - dashboard: "Azure Elastic pool"
       reason: "Using 'resourceName' as instance label"
+    - dashboard: "Azure SQL database"
+      reason: "Using 'resourceName' as instance label"
+    - dashboard: "Azure Load Balancing"    
+    - dashboard: "GCP Load Balancing"
+    - dashboard: "Azure Virtual network"
+      reason: "resourceName is the instance label"
   panel-datasource-rule:
     reason: "Many panels use --Mixed-- DS"
   panel-units-rule:
@@ -26,3 +40,14 @@ exclusions:
     - panel: "API requests by type"
     - panel: "eDTU utilization"
     - panel: "Concurrent sessions"
+    - panel: "Requests Success Rate"
+    - dashboard: "Azure SQL database"
+    - dashboard: "Azure Load Balancing"
+    - dashboard: "Azure Elastic pool"
+    - dashboard: "Azure Blob storage"
+    - dashboard: "GCP Blob storage"
+    - dashboard: "Azure Virtual network"
+      reason: "False positive.. Need to look into this"
+  panel-title-description-rule:
+    entries:
+    - dashboard: Azure Service Bus

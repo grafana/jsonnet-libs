@@ -266,7 +266,7 @@ local utils = commonlib.utils;
           |||
         ),
       memoryUsageStatPercent: commonlib.panels.memory.stat.usage.new(targets=[t.memoryUsagePercent]),
-      memotyUsageTopKPercent: commonlib.panels.generic.timeSeries.topkPercentage.new(
+      memoryUsageTopKPercent: commonlib.panels.generic.timeSeries.topkPercentage.new(
         title='Memory usage',
         target=t.memoryUsagePercent,
         topk=25,
