@@ -233,15 +233,15 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 
-        this.grafana.panels.avm_top5_disk_read_write
+        this.grafana.panels.avm_bottom5_memory_available
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 
-        this.grafana.panels.avm_top5_disk_operations
+        this.grafana.panels.avm_top5_disk_read
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 
-        this.grafana.panels.avm_top5_network_total
+        this.grafana.panels.avm_top5_disk_write
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 

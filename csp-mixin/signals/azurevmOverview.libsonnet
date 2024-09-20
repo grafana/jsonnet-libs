@@ -30,20 +30,38 @@ function(this)
         unit: 'short',
         sources: {
           azuremonitor: {
-            expr: 'avg by (resourceName, job, resourceGroup, subscriptionName) (azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{%(queriesSelector)s})',
-            legendCustomTemplate: '{{resourceName}}',
+            expr: 'avg by(resourceName) (azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{%(queriesSelector)s})',
+            legendCustomTemplate: '',
+          },
+        },
+      },
+      top5CpuUtilization: {
+        name: 'Top 5 Instances - CPU utilitization',
+        description: 'Fractional utilization of allocated CPU on an instance',
+        type: 'gauge',
+        aggFunction: 'sum',
+        sources: {
+          azuremonitor: {
+            expr: 'azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{%(queriesSelector)s}',
+            legendCustomTemplate: '',
+            aggKeepLabels: ['resourceName'],
+            exprWrappers: [['topk(5,', ')']],
           },
         },
       },
 
-      top5CpuUtilization: {
-        name: 'Top 5 Instances - CPU utilitization',
-        description: 'Fractional utilization of allocated CPU on an instance',
-        type: 'raw',
+      bottom5MemoryAvailable: {
+        name: 'Top 5 Instances - Less available memory',
+        description: 'List of top 5 Instances with less amount of physical memory immediately available for allocation.',
+        type: 'gauge',
+        unit: 'decbytes',
+        aggFunction: 'avg',
         sources: {
           azuremonitor: {
-            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(azure_microsoft_compute_virtualmachines_percentage_cpu_average_percent{%(queriesSelector)s}))',
+            expr: 'azure_microsoft_compute_virtualmachines_available_memory_bytes_average_bytes{%(queriesSelector)s}',
             legendCustomTemplate: '',
+            aggKeepLabels: ['resourceName'],
+            exprWrappers: [['bottomk(5,', ')']],
           },
         },
       },
@@ -51,12 +69,15 @@ function(this)
       top5DiskRead: {
         name: 'Top 5 Instances - Disk read bytes',
         description: 'List of top 5 Instances by disk read bytes',
-        type: 'raw',
+        type: 'gauge',
         unit: 'decbytes',
+        aggFunction: 'sum',
         sources: {
           azuremonitor: {
-            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(azure_microsoft_compute_virtualmachines_disk_read_bytes_total_bytes{%(queriesSelector)s}))',
+            expr: 'azure_microsoft_compute_virtualmachines_disk_read_bytes_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: '',
+            aggKeepLabels: ['resourceName'],
+            exprWrappers: [['topk(5,', ')']],
           },
         },
       },
@@ -64,64 +85,15 @@ function(this)
       top5DiskWrite: {
         name: 'Top 5 Instances - Disk write bytes',
         description: 'List of top 5 Instances by disk write bytes',
-        type: 'raw',
+        type: 'gauge',
         unit: 'decbytes',
+        aggFunction: 'sum',
         sources: {
           azuremonitor: {
-            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(azure_microsoft_compute_virtualmachines_disk_write_bytes_total_bytes{%(queriesSelector)s}))',
+            expr: 'azure_microsoft_compute_virtualmachines_disk_write_bytes_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: '',
-          },
-        },
-      },
-
-      top5DiskReadOperations: {
-        name: 'Top 5 Instances - Disk read operations/sec',
-        description: 'List of top 5 Instances with higher disk read IOPS',
-        type: 'raw',
-        unit: 'cps',
-        sources: {
-          azuremonitor: {
-            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(rate(azure_microsoft_compute_virtualmachines_disk_read_operations_sec_average_countpersecond{%(queriesSelector)s}[$__rate_interval])))',
-            legendCustomTemplate: '',
-          },
-        },
-      },
-
-      top5DiskWriteOperations: {
-        name: 'Top 5 Instances - Disk write operations/sec',
-        description: 'List of top 5 Instances with higher disk write IOPS',
-        type: 'raw',
-        unit: 'cps',
-        sources: {
-          azuremonitor: {
-            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(rate(azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}[$__rate_interval])))',
-            legendCustomTemplate: '',
-          },
-        },
-      },
-
-      top5NetworkIn: {
-        name: 'Top 5 Instances - Network throughput received',
-        description: 'List of top 5 Instances with higher number of bytes received over the network.',
-        type: 'raw',
-        unit: 'decbytes',
-        sources: {
-          azuremonitor: {
-            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(rate(azure_microsoft_compute_virtualmachines_network_in_total_total_bytes{%(queriesSelector)s}[$__rate_interval])))',
-            legendCustomTemplate: '',
-          },
-        },
-      },
-
-      top5NetworkOut: {
-        name: 'Top 5 Instances - Network throughput sent',
-        description: 'List of top 5 Instances with higher number of bytes sent over the network.',
-        type: 'raw',
-        unit: 'decbytes',
-        sources: {
-          azuremonitor: {
-            expr: 'topk(5, sum by (resourceName, job, resourceGroup, subscriptionName)(rate(azure_microsoft_compute_virtualmachines_network_out_total_total_bytes{%(queriesSelector)s}[$__rate_interval])))',
-            legendCustomTemplate: '',
+            aggKeepLabels: ['resourceName'],
+            exprWrappers: [['topk(5,', ')']],
           },
         },
       },
@@ -129,12 +101,13 @@ function(this)
       diskReadBytes: {
         name: 'Disk bytes (total)',
         description: 'Bytes read/written from/to disk during monitoring period',
-        type: 'raw',
+        type: 'counter',
         unit: 'decbytes',
         sources: {
           azuremonitor: {
-            expr: 'sum(rate(azure_microsoft_compute_virtualmachines_disk_read_bytes_total_bytes{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'azure_microsoft_compute_virtualmachines_disk_read_bytes_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Read',
+            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -142,12 +115,13 @@ function(this)
       diskWriteBytes: {
         name: 'Disk write bytes',
         description: 'Bytes written to disk during monitoring period',
-        type: 'raw',
+        type: 'counter',
         unit: 'decbytes',
         sources: {
           azuremonitor: {
-            expr: 'sum(rate(azure_microsoft_compute_virtualmachines_disk_write_bytes_total_bytes{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'azure_microsoft_compute_virtualmachines_disk_write_bytes_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Write',
+            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -155,12 +129,13 @@ function(this)
       diskReadOperations: {
         name: 'Disk Operations/Sec (average)',
         description: 'Disk Read/Write IOPS',
-        type: 'raw',
+        type: 'counter',
         unit: 'cps',
         sources: {
           azuremonitor: {
-            expr: 'sum(rate(azure_microsoft_compute_virtualmachines_disk_read_operations_sec_average_countpersecond{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'azure_microsoft_compute_virtualmachines_disk_read_operations_sec_average_countpersecond{%(queriesSelector)s}',
             legendCustomTemplate: 'Read',
+            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -168,12 +143,13 @@ function(this)
       diskWriteOperations: {
         name: 'Disk Write Operations',
         description: 'Disk Write IOPS',
-        type: 'raw',
+        type: 'counter',
         unit: 'cps',
         sources: {
           azuremonitor: {
-            expr: 'sum(rate(azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}',
             legendCustomTemplate: 'Write',
+            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -181,12 +157,13 @@ function(this)
       networkInTotal: {
         name: 'Network throughput send/received',
         description: 'The number of bytes sent/received over the network.',
-        type: 'raw',
+        type: 'counter',
         unit: 'decbytes',
         sources: {
           azuremonitor: {
-            expr: 'sum(rate(azure_microsoft_compute_virtualmachines_network_in_total_total_bytes{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'azure_microsoft_compute_virtualmachines_network_in_total_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Received',
+            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -194,12 +171,13 @@ function(this)
       networkOutTotal: {
         name: 'Network throughput sent',
         description: 'The number of bytes sent over the network.',
-        type: 'raw',
+        type: 'counter',
         unit: 'decbytes',
         sources: {
           azuremonitor: {
-            expr: 'sum(rate(azure_microsoft_compute_virtualmachines_network_out_total_total_bytes{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'azure_microsoft_compute_virtualmachines_network_out_total_total_bytes{%(queriesSelector)s}',
             legendCustomTemplate: 'Sent',
+            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -207,12 +185,13 @@ function(this)
       inboundFlows: {
         name: 'Connections',
         description: 'Number of current flows in the inbound/outbound direction',
-        type: 'raw',
+        type: 'counter',
         unit: 'cps',
         sources: {
           azuremonitor: {
-            expr: 'sum(rate(azure_microsoft_compute_virtualmachines_inbound_flows_average_count{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'azure_microsoft_compute_virtualmachines_inbound_flows_average_count{%(queriesSelector)s}',
             legendCustomTemplate: 'In',
+            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -220,12 +199,13 @@ function(this)
       outboundFlows: {
         name: 'Outbound connections',
         description: 'Number of current flows in the outbound direction',
-        type: 'raw',
+        type: 'counter',
         unit: 'cps',
         sources: {
           azuremonitor: {
-            expr: 'sum(rate(azure_microsoft_compute_virtualmachines_outbound_flows_average_count{%(queriesSelector)s}[$__rate_interval]))',
+            expr: 'azure_microsoft_compute_virtualmachines_outbound_flows_average_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Out',
+            exprWrappers: [['avg(', ')']],
           },
         },
       },

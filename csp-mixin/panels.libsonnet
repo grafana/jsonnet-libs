@@ -850,26 +850,19 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.stat.base.stylize(),
 
     avm_availability:
-      this.signals.azurevmOverview.vmAvailability.common
-      + commonlib.panels.generic.stat.base.new(
-        'VM Availability',
-        [
-          this.signals.azurevmOverview.vmAvailability.asTarget()
-          + g.query.prometheus.withFormat('time_series')
-          + g.query.prometheus.withInstant(true)
-          + g.query.prometheus.withRange(false),
-        ],
-        'Measure of Availability of Virtual machines'
-      )
-      + g.panel.stat.options.withColorMode('background')
-      + g.panel.stat.standardOptions.withUnit('short')
-      + g.panel.stat.standardOptions.withOverrides([
+      this.signals.azurevmOverview.vmAvailability.asTable(format='table')
+      + commonlib.panels.generic.table.base.stylize()
+      + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
-            id: 'byType',
-            options: 'number',
+            id: 'byName',
+            options: 'Value',
           },
           properties: [
+            {
+              id: 'displayName',
+              value: 'Status',
+            },
             {
               id: 'mappings',
               value: [
@@ -889,6 +882,44 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                   type: 'value',
                 },
               ],
+            },
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'color-background',
+              },
+            },
+            {
+              id: 'custom.width',
+              value: 150,
+            },
+            {
+              id: 'custom.align',
+              value: 'center',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Time',
+          },
+          properties: [
+            {
+              id: 'custom.hidden',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'resourceName',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Instance',
             },
           ],
         },
@@ -957,52 +988,31 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     avm_network_in_by_instance:
       this.signals.azurevm.networkInByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_network_out_by_instance:
       this.signals.azurevm.networkOutByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_disk_read_by_instance:
       this.signals.azurevm.diskReadByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_disk_write_by_instance:
       this.signals.azurevm.diskWriteByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_disk_read_operations_by_instance:
       this.signals.azurevm.diskReadOperationsByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_disk_write_operations_by_instance:
       this.signals.azurevm.diskWriteOperationsByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_top5_cpu_utilization:
-      this.signals.azurevmOverview.top5CpuUtilization.common
-      + commonlib.panels.generic.table.base.new(
-        'Top 5 Instances - CPU utilitization',
-        [
-          this.signals.azurevmOverview.top5CpuUtilization.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
-          + g.query.prometheus.withRange(false),
-        ],
-        'Fractional utilization of allocated CPU on an instance'
-      )
+      this.signals.azurevmOverview.top5CpuUtilization.asTable(format='table')
+      + commonlib.panels.generic.table.base.stylize()
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
@@ -1074,41 +1084,47 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
-    avm_top5_disk_read_write:
-      this.signals.azurevmOverview.top5DiskRead.common
-      + commonlib.panels.generic.table.base.new(
-        'Top 5 Instances - Disk read/write bytes',
-        [
-          this.signals.azurevmOverview.top5DiskRead.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
-          + g.query.prometheus.withRange(false),
+    avm_bottom5_memory_available:
+      this.signals.azurevmOverview.bottom5MemoryAvailable.asTable(format='table')
+      + commonlib.panels.generic.table.base.stylize()
+      + g.panel.table.standardOptions.withUnit('decbytes')
+      + g.panel.table.queryOptions.withTransformations([
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {
+              Time: true,
+              subscriptionName: true,
+              resourceGroup: false,
+            },
+            indexByName: {
+              resourceName: 0,
+              Time: 1,
+              job: 2,
+              resourceGroup: 3,
+              subscriptionName: 4,
+              Value: 5,
+            },
+            renameByName: {
+              Value: '',
+              resourceGroup: 'Group',
+              job: 'Job',
+              resourceName: 'Instance',
+            },
+            includeByName: {},
+          },
+        },
+      ]),
 
-          this.signals.azurevmOverview.top5DiskWrite.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
-          + g.query.prometheus.withRange(false),
-        ],
-        'List of top 5 Instances by disk read/write bytes'
-      )
+    avm_top5_disk_read:
+      this.signals.azurevmOverview.top5DiskRead.asTable(format='table')
+      + commonlib.panels.generic.table.base.stylize()
       + g.panel.table.standardOptions.withUnit('decbytes')
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
             id: 'byName',
-            options: 'Read',
-          },
-          properties: [
-            {
-              id: 'custom.width',
-              value: 100,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Write',
+            options: 'Value',
           },
           properties: [
             {
@@ -1120,10 +1136,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ])
       + g.panel.table.queryOptions.withTransformations([
         {
-          id: 'merge',
-          options: {},
-        },
-        {
           id: 'organize',
           options: {
             excludeByName: {
@@ -1133,15 +1145,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             indexByName: {
               Time: 1,
-              'Value #Top 5 Instances - Disk read bytes': 4,
-              'Value #Top 5 Instances - Disk write bytes': 5,
+              Value: 4,
               job: 2,
               resourceGroup: 3,
               resourceName: 0,
             },
             renameByName: {
-              'Value #Top 5 Instances - Disk read bytes': 'Read',
-              'Value #Top 5 Instances - Disk write bytes': 'Write',
               job: '',
               resourceGroup: 'Group',
               resourceName: 'Instance',
@@ -1150,41 +1159,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
-    avm_top5_disk_operations:
-      this.signals.azurevmOverview.top5DiskReadOperations.common
-      + commonlib.panels.generic.table.base.new(
-        'Top 5 Instances - Disk read/write operations/sec',
-        [
-          this.signals.azurevmOverview.top5DiskReadOperations.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
-          + g.query.prometheus.withRange(false),
-
-          this.signals.azurevmOverview.top5DiskWriteOperations.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
-          + g.query.prometheus.withRange(false),
-        ],
-        'List of top 5 Instances with higher disk read/write IOPS'
-      )
-      + g.panel.table.standardOptions.withUnit('cps')
+    avm_top5_disk_write:
+      this.signals.azurevmOverview.top5DiskWrite.asTable(format='table')
+      + commonlib.panels.generic.table.base.stylize()
+      + g.panel.table.standardOptions.withUnit('decbytes')
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
             id: 'byName',
-            options: 'Read',
-          },
-          properties: [
-            {
-              id: 'custom.width',
-              value: 100,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Write',
+            options: 'Value',
           },
           properties: [
             {
@@ -1196,10 +1179,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ])
       + g.panel.table.queryOptions.withTransformations([
         {
-          id: 'merge',
-          options: {},
-        },
-        {
           id: 'organize',
           options: {
             excludeByName: {
@@ -1209,91 +1188,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             indexByName: {
               Time: 1,
-              'Value #Top 5 Instances - Disk read operations/sec': 4,
-              'Value #Top 5 Instances - Disk write operations/sec': 5,
+              Value: 4,
               job: 2,
               resourceGroup: 3,
               resourceName: 0,
             },
             renameByName: {
-              'Value #Top 5 Instances - Disk read operations/sec': 'Read',
-              'Value #Top 5 Instances - Disk write operations/sec': 'Write',
-              job: '',
-              resourceGroup: 'Group',
-              resourceName: 'Instance',
-            },
-          },
-        },
-      ]),
-
-    avm_top5_network_total:
-      this.signals.azurevmOverview.top5NetworkIn.common
-      + commonlib.panels.generic.table.base.new(
-        'Top 5 Instances - Network throughput received/sent',
-        [
-          this.signals.azurevmOverview.top5NetworkIn.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
-          + g.query.prometheus.withRange(false),
-
-          this.signals.azurevmOverview.top5NetworkOut.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
-          + g.query.prometheus.withRange(false),
-        ],
-        'List of top 5 Instances with higher number of bytes received/sent over the network.'
-      )
-      + g.panel.table.standardOptions.withUnit('cps')
-      + g.panel.table.standardOptions.withOverrides([
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Received',
-          },
-          properties: [
-            {
-              id: 'custom.width',
-              value: 100,
-            },
-          ],
-        },
-        {
-          matcher: {
-            id: 'byName',
-            options: 'Sent',
-          },
-          properties: [
-            {
-              id: 'custom.width',
-              value: 100,
-            },
-          ],
-        },
-      ])
-      + g.panel.table.queryOptions.withTransformations([
-        {
-          id: 'merge',
-          options: {},
-        },
-        {
-          id: 'organize',
-          options: {
-            excludeByName: {
-              subscriptionName: true,
-              Time: true,
-              job: true,
-            },
-            indexByName: {
-              Time: 1,
-              'Value #Top 5 Instances - Network throughput received': 4,
-              'Value #Top 5 Instances - Network throughput sent': 5,
-              job: 2,
-              resourceGroup: 3,
-              resourceName: 0,
-            },
-            renameByName: {
-              'Value #Top 5 Instances - Network throughput received': 'Received',
-              'Value #Top 5 Instances - Network throughput sent': 'Sent',
               job: '',
               resourceGroup: 'Group',
               resourceName: 'Instance',
