@@ -25,7 +25,7 @@ function(this)
 
       vmAvailability: {
         name: 'VM Availability',
-        description: 'Measure of Availability of Virtual machines',
+        description: 'Measure of availability of virtual machines',
         type: 'raw',
         unit: 'short',
         sources: {
@@ -36,7 +36,7 @@ function(this)
         },
       },
       top5CpuUtilization: {
-        name: 'Top 5 Instances - CPU utilitization',
+        name: 'Top 5 Instances - CPU Utilitization',
         description: 'Fractional utilization of allocated CPU on an instance',
         type: 'gauge',
         aggFunction: 'sum',
@@ -52,7 +52,7 @@ function(this)
 
       bottom5MemoryAvailable: {
         name: 'Top 5 Instances - Less available memory',
-        description: 'List of top 5 Instances with less amount of physical memory immediately available for allocation.',
+        description: 'List of top 5 instances with less amount of physical memory immediately available for allocation.',
         type: 'gauge',
         unit: 'decbytes',
         aggFunction: 'avg',
@@ -68,7 +68,7 @@ function(this)
 
       top5DiskRead: {
         name: 'Top 5 Instances - Disk read bytes',
-        description: 'List of top 5 Instances by disk read bytes',
+        description: 'List of top 5 instances by disk read bytes',
         type: 'gauge',
         unit: 'decbytes',
         aggFunction: 'sum',
@@ -84,7 +84,7 @@ function(this)
 
       top5DiskWrite: {
         name: 'Top 5 Instances - Disk write bytes',
-        description: 'List of top 5 Instances by disk write bytes',
+        description: 'List of top 5 instances by disk write bytes',
         type: 'gauge',
         unit: 'decbytes',
         aggFunction: 'sum',
@@ -127,8 +127,8 @@ function(this)
       },
 
       diskReadOperations: {
-        name: 'Disk Operations/Sec (average)',
-        description: 'Disk Read/Write IOPS',
+        name: 'Disk operations/sec (average)',
+        description: 'Disk read/write IOPS',
         type: 'counter',
         unit: 'cps',
         sources: {
@@ -141,8 +141,8 @@ function(this)
       },
 
       diskWriteOperations: {
-        name: 'Disk Write Operations',
-        description: 'Disk Write IOPS',
+        name: 'Disk write operations',
+        description: 'Disk write IOPS',
         type: 'counter',
         unit: 'cps',
         sources: {

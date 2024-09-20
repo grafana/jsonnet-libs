@@ -925,66 +925,41 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
-    _avm_timeSeriesCommon()::
-      g.panel.timeSeries.standardOptions.color.withMode('palette-classic')
-      + g.panel.timeSeries.standardOptions.withNoValue('0')
-      + g.panel.timeSeries.standardOptions.withOverrides([]),
-
     avm_cpu_utilization:
       this.signals.azurevm.cpuUtilization.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('percent')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_available_memory:
       this.signals.azurevm.availableMemory.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_cpu_credits_consumed:
       this.signals.azurevm.cpuCreditsConsumed.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('short')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_cpu_credits_remaining:
       this.signals.azurevm.cpuCreditsRemaining.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('short')
-      + self._avm_timeSeriesCommon(),
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_disk_total_bytes:
       this.signals.azurevmOverview.diskReadBytes.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.azurevmOverview.diskWriteBytes.asPanelMixin()
-      + g.panel.timeSeries.standardOptions.withOverrides([])
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + this.signals.azurevmOverview.diskWriteBytes.asPanelMixin(),
 
     avm_disk_operations:
       this.signals.azurevmOverview.diskReadOperations.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.azurevmOverview.diskWriteOperations.asPanelMixin()
-      + g.panel.timeSeries.standardOptions.withOverrides([])
-      + g.panel.timeSeries.standardOptions.withUnit('cps')
-      + self._avm_timeSeriesCommon(),
+      + this.signals.azurevmOverview.diskWriteOperations.asPanelMixin(),
 
     avm_network_total:
       this.signals.azurevmOverview.networkInTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.azurevmOverview.networkOutTotal.asPanelMixin()
-      + g.panel.timeSeries.standardOptions.withOverrides([])
-      + g.panel.timeSeries.standardOptions.withUnit('decbytes')
-      + self._avm_timeSeriesCommon(),
+      + this.signals.azurevmOverview.networkOutTotal.asPanelMixin(),
 
     avm_connections:
       this.signals.azurevmOverview.inboundFlows.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.azurevmOverview.outboundFlows.asPanelMixin()
-      + g.panel.timeSeries.standardOptions.withOverrides([])
-      + g.panel.timeSeries.standardOptions.withUnit('cps')
-      + self._avm_timeSeriesCommon(),
+      + this.signals.azurevmOverview.outboundFlows.asPanelMixin(),
 
     avm_network_in_by_instance:
       this.signals.azurevm.networkInByVM.asTimeSeries()

@@ -38,7 +38,7 @@ function(this)
         },
       },
       cpuCreditsConsumed: {
-        name: 'CPU Credits Consumed',
+        name: 'CPU Credits consumed',
         description: 'Total number of credits consumed by the Virtual Machine.',
         type: 'gauge',
         unit: 'short',
@@ -51,7 +51,7 @@ function(this)
         },
       },
       cpuCreditsRemaining: {
-        name: 'CPU Credits Remaining',
+        name: 'CPU Credits remaining',
         description: 'Total number of credits available to burst.',
         type: 'gauge',
         unit: 'short',
@@ -93,7 +93,7 @@ function(this)
       },
 
       diskReadByVM: {
-        name: 'Disk Read bytes (total)',
+        name: 'Disk read bytes (total)',
         description: 'Bytes read from disk during monitoring period',
         type: 'gauge',
         unit: 'decbytes',
@@ -121,8 +121,8 @@ function(this)
       },
 
       diskReadOperationsByVM: {
-        name: 'Disk Read Operations/Sec (average)',
-        description: 'Disk Read IOPS',
+        name: 'Disk read operations/sec (average)',
+        description: 'Disk read IOPS',
         type: 'gauge',
         unit: 'cps',
         aggFunction: 'sum',
@@ -135,8 +135,8 @@ function(this)
       },
 
       diskWriteOperationsByVM: {
-        name: 'Disk Write Operations/Sec (average)',
-        description: 'Disk Write IOPS',
+        name: 'Disk write operations/sec (average)',
+        description: 'Disk write IOPS',
         type: 'gauge',
         unit: 'cps',
         aggFunction: 'sum',
