@@ -52,15 +52,11 @@ function(this)
       top5SystemProblem: {
         name: 'Top 5 Instances by System problem',
         description: 'List of top 5 instances with system problems.',
-        type: 'gauge',
-        unit: 'decbytes',
-        aggFunction: 'avg',
+        type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'stackdriver_gce_instance_compute_googleapis_com_guest_system_problem_count{%(queriesSelector)s}',
+            expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_guest_system_problem_count{%(queriesSelector)s}[$__range])))',
             legendCustomTemplate: '',
-            aggKeepLabels: ['instance_name', 'job', 'project_id'],
-            exprWrappers: [['topk(5,', ')']],
           },
         },
       },
@@ -68,15 +64,11 @@ function(this)
       top5DiskWrite: {
         name: 'Top 5 Instances by Disk write bytes',
         description: 'List of top 5 instances by disk write bytes',
-        type: 'gauge',
-        unit: 'decbytes',
-        aggFunction: 'sum',
+        type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}',
+            expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[$__range]))\n)',
             legendCustomTemplate: '',
-            aggKeepLabels: ['instance_name', 'job', 'project_id'],
-            exprWrappers: [['topk(5,', ')']],
           },
         },
       },
@@ -84,15 +76,11 @@ function(this)
       top5DiskRead: {
         name: 'Top 5 Instances by Disk read bytes',
         description: 'List of top 5 instances by disk read bytes',
-        type: 'gauge',
-        unit: 'decbytes',
-        aggFunction: 'sum',
+        type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}',
+            expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[$__range]))\n)',
             legendCustomTemplate: '',
-            aggKeepLabels: ['instance_name', 'job', 'project_id'],
-            exprWrappers: [['topk(5,', ')']],
           },
         },
       },
