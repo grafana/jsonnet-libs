@@ -292,6 +292,10 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 
+        this.grafana.panels.avm_instances_table
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(8),
+
         this.grafana.panels.avm_disk_total_bytes
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),

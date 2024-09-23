@@ -15,7 +15,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       dashboards: (import './dashboards.libsonnet').new(this),
     },
     prometheus: {
-      alerts: {},
+      alerts: (import './alerts.libsonnet').new(this),
       recordingRules: {},
     },
     asMonitoringMixin(): {

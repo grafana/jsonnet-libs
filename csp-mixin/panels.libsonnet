@@ -1088,6 +1088,18 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                 ],
               },
             },
+            {
+              id: 'decimals',
+              value: 2,
+            },
+            {
+              id: 'min',
+              value: 0,
+            },
+            {
+              id: 'max',
+              value: 100,
+            },
           ],
         },
       ])
@@ -1229,6 +1241,206 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               job: '',
               resourceGroup: 'Group',
               resourceName: 'Instance',
+            },
+          },
+        },
+      ]),
+
+    avm_instances_table:
+      this.signals.azurevm.cpuUtilization.asTable(name='Instances', format='table')
+      + this.signals.azurevm.availableMemory.asTableColumn(format='table')
+      + this.signals.azurevm.diskReadByVM.asTableColumn(format='table')
+      + this.signals.azurevm.diskWriteByVM.asTableColumn(format='table')
+      + this.signals.azurevm.networkInByVM.asTableColumn(format='table')
+      + this.signals.azurevm.networkOutByVM.asTableColumn(format='table')
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #CPU Utilization average',
+          },
+          properties: [
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'auto',
+              },
+            },
+            {
+              id: 'unit',
+              value: 'percent',
+            },
+            {
+              id: 'min',
+              value: 0,
+            },
+            {
+              id: 'max',
+              value: 100,
+            },
+            {
+              id: 'thresholds',
+              value: {
+                mode: 'absolute',
+                steps: [
+                  {
+                    color: 'green',
+                    value: null,
+                  },
+                  {
+                    color: 'orange',
+                    value: 70,
+                  },
+                  {
+                    color: 'red',
+                    value: 90,
+                  },
+                ],
+              },
+            },
+            {
+              id: 'decimals',
+              value: 2,
+            },
+            {
+              id: 'displayName',
+              value: 'Cpu utilization',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #Available memory',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Available Memory',
+            },
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #Disk read bytes (total)',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Disk read bytes',
+            },
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #Disk write bytes (total)',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Disk write bytes',
+            },
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Time',
+          },
+          properties: [
+            {
+              id: 'custom.hidden',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'resourceName',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Instance',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #Network throughput received',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Network in',
+            },
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #Network throughput sent',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Network out',
+            },
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+          ],
+        },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
+        {
+          id: 'merge',
+          options: {},
+        },
+        {
+          id: 'organize',
+          options: {
+            excludeByName: {},
+            includeByName: {},
+            indexByName: {
+              Time: 0,
+              'Value #CPU Utilization average': 5,
+              'Value #Available memory': 6,
+              'Value #Disk read bytes (total)': 7,
+              'Value #Disk write bytes (total)': 8,
+              'Value #Network throughput received': 9,
+              'Value #Network throughput sent': 10,
+              job: 2,
+              resourceGroup: 3,
+              resourceName: 1,
+              subscriptionName: 4,
+            },
+            renameByName: {
+              job: 'Job',
+              resourceGroup: 'Group',
+              resourceName: 'Instance',
+              subscriptionName: 'Subscription',
             },
           },
         },
