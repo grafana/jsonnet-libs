@@ -1068,6 +1068,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     gce_total_packets_sent_received:
       this.signals.gcpceOverview.packetsSent.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('short')
       + this.signals.gcpceOverview.packetsReceived.asPanelMixin(),
     gce_network_send_received:
       this.signals.gcpceOverview.networkSent.asTimeSeries()

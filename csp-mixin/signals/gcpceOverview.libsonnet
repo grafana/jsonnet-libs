@@ -94,7 +94,7 @@ function(this)
         unit: 'bytes',
         sources: {
           stackdriver: {
-            expr: 'sum(stackdriver_gce_instance_compute_googleapis_com_instance_memory_balloon_ram_size{instance_name=~"$instance"} or on() vector(0)) + sum(stackdriver_gce_instance_compute_googleapis_com_guest_memory_bytes_used{instance_name=~"$instance"} OR on() vector(0))',
+            expr: 'sum(stackdriver_gce_instance_compute_googleapis_com_instance_memory_balloon_ram_size{instance_name=~"$instance_name"} or on() vector(0)) + sum(stackdriver_gce_instance_compute_googleapis_com_guest_memory_bytes_used{instance_name=~"$instance_name"} OR on() vector(0))',
             legendCustomTemplate: 'Total Memory Capacity',
           },
         },
@@ -107,7 +107,7 @@ function(this)
         unit: 'bytes',
         sources: {
           stackdriver: {
-            expr: 'sum(stackdriver_gce_instance_compute_googleapis_com_instance_memory_balloon_ram_used{instance_name=~"$instance"} OR on() vector(0)) + sum(stackdriver_gce_instance_compute_googleapis_com_guest_memory_bytes_used{instance_name=~"$instance", state!="free"} OR on() vector(0))',
+            expr: 'sum(stackdriver_gce_instance_compute_googleapis_com_instance_memory_balloon_ram_used{instance_name=~"$instance_name"} OR on() vector(0)) + sum(stackdriver_gce_instance_compute_googleapis_com_guest_memory_bytes_used{instance_name=~"$instance_name", state!="free"} OR on() vector(0))',
             legendCustomTemplate: 'Total Memory Used',
           },
         },
@@ -123,7 +123,6 @@ function(this)
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_packets_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Sent',
-            // exprWrappers: [['sum(', ')']],
           },
         },
       },
@@ -138,7 +137,6 @@ function(this)
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_received_packets_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Received',
-            // exprWrappers: [['sum(', ')']],
           },
         },
       },
@@ -146,13 +144,12 @@ function(this)
       networkSent: {
         name: 'Network throughput Sent/Received',
         description: 'Count of bytes sent/received over the network. Sampled every 60 seconds',
-        type: 'gauge',
+        type: 'counter',
         unit: 'bytes',
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Sent',
-            exprWrappers: [['sum(', ')']],
           },
         },
       },
@@ -160,13 +157,12 @@ function(this)
       networkReceived: {
         name: 'Network throughput Received',
         description: 'Count of bytes sent/received over the network. Sampled every 60 seconds',
-        type: 'gauge',
+        type: 'counter',
         unit: 'bytes',
         sources: {
           stackdriver: {
             expr: 'azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}',
             legendCustomTemplate: 'Received',
-            exprWrappers: [['sum(', ')']],
           },
         },
       },
@@ -174,13 +170,12 @@ function(this)
       diskBytesRead: {
         name: 'Total Bytes count read/write',
         description: 'Total count of bytes read/write from disk. Sampled every 60 seconds',
-        type: 'gauge',
+        type: 'counter',
         unit: 'bytes',
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Sent',
-            exprWrappers: [['sum(', ')']],
           },
         },
       },
@@ -188,13 +183,12 @@ function(this)
       diskBytesWrite: {
         name: 'Total Bytes count write',
         description: 'Total count of bytes read/write from disk. Sampled every 60 seconds',
-        type: 'gauge',
+        type: 'counter',
         unit: 'bytes',
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}',
             legendCustomTemplate: 'In',
-            exprWrappers: [['sum(', ')']],
           },
         },
       },
