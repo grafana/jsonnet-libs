@@ -904,14 +904,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     gce_instance_count:
       this.signals.gcpceOverview.instanceCount.asStat()
-        + commonlib.panels.generic.stat.base.stylize(),
+      + commonlib.panels.generic.stat.base.stylize(),
     gce_system_problem_count:
       this.signals.gcpceOverview.systemProblemCount.asStat()
-        + commonlib.panels.generic.stat.base.stylize(),
+      + commonlib.panels.generic.stat.base.stylize(),
     gce_top5_cpu_utilization:
       this.signals.gcpceOverview.top5CpuUtilization.asTable(format='table')
-        + commonlib.panels.generic.table.base.stylize()
-        + g.panel.table.standardOptions.withOverrides([
+      + commonlib.panels.generic.table.base.stylize()
+      + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
             id: 'byName',
@@ -939,40 +939,40 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               value: 'percent',
             },
             {
-              "id": "custom.cellOptions",
-              "value": {
-                "mode": "basic",
-                "type": "gauge",
-                "valueDisplayMode": "text"
-              }
+              id: 'custom.cellOptions',
+              value: {
+                mode: 'basic',
+                type: 'gauge',
+                valueDisplayMode: 'text',
+              },
             },
             {
-              "id": "thresholds",
-              "value": {
-                "mode": "absolute",
-                "steps": [
+              id: 'thresholds',
+              value: {
+                mode: 'absolute',
+                steps: [
                   {
-                    "color": "yellow",
-                    "value": null
+                    color: 'yellow',
+                    value: null,
                   },
                   {
-                    "color": "green",
-                    "value": 30
+                    color: 'green',
+                    value: 30,
                   },
                   {
-                    "color": "red",
-                    "value": 85
-                  }
-                ]
-              }
+                    color: 'red',
+                    value: 85,
+                  },
+                ],
+              },
             },
           ],
         },
       ]),
     gce_top5_system_problem:
       this.signals.gcpceOverview.top5SystemProblem.asTable(format='table')
-        + commonlib.panels.generic.table.base.stylize()
-        + g.panel.table.standardOptions.withOverrides([
+      + commonlib.panels.generic.table.base.stylize()
+      + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
             id: 'byName',
@@ -1000,9 +1000,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
     gce_top5_disk_write_bytes:
       this.signals.gcpceOverview.top5DiskWrite.asTable(format='table')
-        + commonlib.panels.generic.table.base.stylize()
-        + g.panel.table.standardOptions.withUnit('bytes')
-        + g.panel.table.standardOptions.withOverrides([
+      + commonlib.panels.generic.table.base.stylize()
+      + g.panel.table.standardOptions.withUnit('bytes')
+      + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
             id: 'byName',
@@ -1030,9 +1030,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
     gce_top5_disk_read_bytes:
       this.signals.gcpceOverview.top5DiskRead.asTable(format='table')
-        + commonlib.panels.generic.table.base.stylize()
-        + g.panel.table.standardOptions.withUnit('bytes')
-        + g.panel.table.standardOptions.withOverrides([
+      + commonlib.panels.generic.table.base.stylize()
+      + g.panel.table.standardOptions.withUnit('bytes')
+      + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
             id: 'byName',
@@ -1059,55 +1059,55 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
-      // To do: add table
+    // To do: add table
 
-      gce_memory_utilization:
-        this.signals.gcpceOverview.memoryUtilization.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize()
-        + this.signals.gcpceOverview.memoryUsed.asPanelMixin(),
-      gce_total_packets_sent_received:
-        this.signals.gcpceOverview.packetsSent.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize()
-        + this.signals.gcpceOverview.packetsReceived.asPanelMixin(),
-      gce_network_send_received:
-        this.signals.gcpceOverview.networkSent.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize()
-        + this.signals.gcpceOverview.networkReceived.asPanelMixin(),
-      gce_bytes_read_write:
-        this.signals.gcpceOverview.diskBytesRead.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize()
-        + this.signals.gcpceOverview.diskBytesWrite.asPanelMixin(),
+    gce_memory_utilization:
+      this.signals.gcpceOverview.memoryUtilization.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + this.signals.gcpceOverview.memoryUsed.asPanelMixin(),
+    gce_total_packets_sent_received:
+      this.signals.gcpceOverview.packetsSent.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + this.signals.gcpceOverview.packetsReceived.asPanelMixin(),
+    gce_network_send_received:
+      this.signals.gcpceOverview.networkSent.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + this.signals.gcpceOverview.networkReceived.asPanelMixin(),
+    gce_bytes_read_write:
+      this.signals.gcpceOverview.diskBytesRead.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + this.signals.gcpceOverview.diskBytesWrite.asPanelMixin(),
 
-      gce_text_instances:
-        this.signals.gcpce.instancesText.as()
-        + commonlib.panels.generic.text.base.stylize(),
-      gce_cpu_utilization:
-        this.signals.gcpce.cpuUtilization.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize()
-        + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
-      gce_network_received:
-        this.signals.gcpce.networkReceived.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-      gce_cpu_usage_time:
-        this.signals.gcpce.cpuUsageTime.asTimeSeries()
-        + g.panel.timeSeries.standardOptions.withUnit('seconds')
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-      gce_network_sent:
-        this.signals.gcpce.networkSent.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-      gce_count_disk_read_bytes:
-        this.signals.gcpce.diskReadBytes.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-      gce_count_disk_read_operations:
-        this.signals.gcpce.diskReadOperations.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-      gce_count_disk_write_bytes:
-        this.signals.gcpce.diskWriteBytes.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-      gce_count_disk_write_operations:
-        this.signals.gcpce.diskWriteOperations.asTimeSeries()
-        + commonlib.panels.generic.timeSeries.base.stylize(),
-       
+    gce_text_instances:
+      this.signals.gcpce.instancesText.as()
+      + commonlib.panels.generic.text.base.stylize(),
+    gce_cpu_utilization:
+      this.signals.gcpce.cpuUtilization.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
+    gce_network_received:
+      this.signals.gcpce.networkReceived.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
+    gce_cpu_usage_time:
+      this.signals.gcpce.cpuUsageTime.asTimeSeries()
+      + g.panel.timeSeries.standardOptions.withUnit('seconds')
+      + commonlib.panels.generic.timeSeries.base.stylize(),
+    gce_network_sent:
+      this.signals.gcpce.networkSent.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
+    gce_count_disk_read_bytes:
+      this.signals.gcpce.diskReadBytes.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
+    gce_count_disk_read_operations:
+      this.signals.gcpce.diskReadOperations.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
+    gce_count_disk_write_bytes:
+      this.signals.gcpce.diskWriteBytes.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
+    gce_count_disk_write_operations:
+      this.signals.gcpce.diskWriteOperations.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
+
 
   },
 }

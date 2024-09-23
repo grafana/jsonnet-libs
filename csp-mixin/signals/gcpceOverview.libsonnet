@@ -97,9 +97,9 @@ function(this)
         },
       },
 
-    //   To do: add Instances table
+      //   To do: add Instances table
 
-    memoryUtilization: {
+      memoryUtilization: {
         name: 'Memory Utilization',
         description: 'Memory Utilization',
         type: 'raw',
@@ -168,7 +168,7 @@ function(this)
       },
 
       networkReceived: {
-       name: 'Network throughput Sent/Received',
+        name: 'Network throughput Sent/Received',
         description: 'Count of bytes sent/received over the network. Sampled every 60 seconds',
         type: 'gauge',
         unit: 'bytes',
