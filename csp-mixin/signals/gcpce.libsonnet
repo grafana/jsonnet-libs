@@ -3,8 +3,8 @@ function(this)
   {
     local s = self,
     filteringSelector: 'job!=""',
-    groupLabels: ['instance_name'],
-    instanceLabels: [],
+    groupLabels: ['job', 'project_id'],
+    instanceLabels: ['instance_name'],
     aggLevel: 'instance',
     discoveryMetric: {
       stackdriver: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization',

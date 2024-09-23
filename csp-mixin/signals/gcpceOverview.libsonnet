@@ -3,7 +3,7 @@ function(this)
   {
     local s = self,
     filteringSelector: 'job!=""',
-    groupLabels: this.groupLabels,
+    groupLabels: ['job', 'project_id'],
     instanceLabels: [],
     aggLevel: 'instance',
     discoveryMetric: {
@@ -113,8 +113,8 @@ function(this)
       },
 
       memoryUsed: {
-        name: 'Memory Utilization',
-        description: 'Memory Utilization',
+        name: 'Memory Utilization2',
+        description: 'Memory used',
         type: 'raw',
         unit: 'bytes',
         sources: {
@@ -128,27 +128,29 @@ function(this)
       packetsSent: {
         name: 'Total packets count sent/received',
         description: 'Count of packets sent/received over the network. Sampled every 60 seconds',
-        type: 'gauge',
+        type: 'counter',
         unit: 'short',
+        aggFunction: 'sum',
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_packets_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Sent',
-            exprWrappers: [['sum(', ')']],
+            // exprWrappers: [['sum(', ')']],
           },
         },
       },
 
       packetsReceived: {
-        name: 'Total packets count sent/received',
+        name: 'Total packets count received',
         description: 'Count of packets sent/received over the network. Sampled every 60 seconds',
-        type: 'gauge',
+        type: 'counter',
         unit: 'short',
+        aggFunction: 'sum',
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_received_packets_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Received',
-            exprWrappers: [['sum(', ')']],
+            // exprWrappers: [['sum(', ')']],
           },
         },
       },
@@ -168,7 +170,7 @@ function(this)
       },
 
       networkReceived: {
-        name: 'Network throughput Sent/Received',
+        name: 'Network throughput Received',
         description: 'Count of bytes sent/received over the network. Sampled every 60 seconds',
         type: 'gauge',
         unit: 'bytes',
@@ -196,7 +198,7 @@ function(this)
       },
 
       diskBytesWrite: {
-        name: 'Total Bytes count read/write',
+        name: 'Total Bytes count write',
         description: 'Total count of bytes read/write from disk. Sampled every 60 seconds',
         type: 'gauge',
         unit: 'bytes',
