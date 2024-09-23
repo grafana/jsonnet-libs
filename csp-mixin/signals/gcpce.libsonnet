@@ -20,7 +20,7 @@ function(this)
         name: 'CPU Utilization',
         description: 'Fractional utilization of allocated CPU on this instance.',
         type: 'raw',
-        unit: 'percent',
+        unit: 'percentunit',
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s}',
