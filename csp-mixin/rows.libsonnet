@@ -291,9 +291,9 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 
-        // this.grafana.panels.gce_instances
-        // + g.panel.timeSeries.gridPos.withW(24)
-        // + g.panel.timeSeries.gridPos.withH(12),
+        this.grafana.panels.gce_instances
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(12),
 
         this.grafana.panels.gce_memory_utilization
         + g.panel.timeSeries.gridPos.withW(12)

@@ -85,7 +85,95 @@ function(this)
         },
       },
 
-      //   To do: add Instances table
+      // Table
+      tableCpuUtilization: {
+        name: 'tableCpuUtilization',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: '100 * sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{job!="",job=~".+",project_id=~".+"})',
+            legendCustomTemplate: '',
+            step: '1m',
+          },
+        },
+      },
+      tableUptime: {
+        name: 'tableUptime',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_uptime_total{job=~"$job", project_id=~"$project_id"})',
+            legendCustomTemplate: '',
+          },
+        },
+      },
+      tableSentPackets: {
+        name: 'tableSentPackets',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_packets_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            legendCustomTemplate: '',
+            step: '1m',
+          },
+        },
+      },
+      tableReceivedPackets: {
+        name: 'tableReceivedPackets',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_packets_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            legendCustomTemplate: '',
+            step: '1m',
+          },
+        },
+      },
+      tableSentBytes: {
+        name: 'tableSentBytes',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            legendCustomTemplate: '',
+            step: '1m',
+          },
+        },
+      },
+      tableReceivedBytes: {
+        name: 'tableReceivedBytes',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            legendCustomTemplate: '',
+            step: '1m',
+          },
+        },
+      },
+      tableReadBytes: {
+        name: 'tableReadBytes',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            legendCustomTemplate: '',
+            step: '1m',
+          },
+        },
+      },
+      tableWriteBytes: {
+        name: 'tableWriteBytes',
+        type: 'raw',
+        sources: {
+          stackdriver: {
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            legendCustomTemplate: '',
+            step: '1m',
+          },
+        },
+      },
+      // end table
 
       memoryUtilization: {
         name: 'Memory Utilization',

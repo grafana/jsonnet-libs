@@ -1059,7 +1059,278 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
 
-    // To do: add table
+    gce_instances:
+      this.signals.gcpceOverview.tableCpuUtilization.asTable(name='Instances', format='table')
+      + this.signals.gcpceOverview.tableUptime.asTableColumn(format='table')
+      + this.signals.gcpceOverview.tableSentPackets.asTableColumn(format='table')
+      + this.signals.gcpceOverview.tableReceivedPackets.asTableColumn(format='table')
+      + this.signals.gcpceOverview.tableSentBytes.asTableColumn(format='table')
+      + this.signals.gcpceOverview.tableReceivedBytes.asTableColumn(format='table')
+      + this.signals.gcpceOverview.tableReadBytes.asTableColumn(format='table')
+      + this.signals.gcpceOverview.tableWriteBytes.asTableColumn(format='table')
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Time',
+          },
+          properties: [
+            {
+              id: 'custom.hidden',
+              value: true,
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #tableCpuUtilization',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Cpu utilization',
+            },
+            {
+              id: 'unit',
+              value: 'percent',
+            },
+            {
+              id: 'custom.width',
+              value: 100,
+            },
+            {
+              id: 'custom.cellOptions',
+              value: {
+                mode: 'basic',
+                type: 'gauge',
+                valueDisplayMode: 'text',
+              },
+            },
+            {
+              id: 'thresholds',
+              value: {
+                mode: 'absolute',
+                steps: [
+                  {
+                    color: 'yellow',
+                    value: null,
+                  },
+                  {
+                    color: 'green',
+                    value: 30,
+                  },
+                  {
+                    color: 'red',
+                    value: 85,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #tableUptime',
+          },
+          properties: [
+            {
+              id: 'unit',
+              value: 's',
+            },
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'color-text',
+              },
+            },
+            {
+              id: 'color',
+              value: {
+                fixedColor: 'blue',
+                mode: 'fixed',
+              },
+            },
+            {
+              id: 'displayName',
+              value: 'Uptime',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #tableSentPackets',
+          },
+          properties: [
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'color-text',
+              },
+            },
+            {
+              id: 'color',
+              value: {
+                fixedColor: 'blue',
+                mode: 'fixed',
+              },
+            },
+            {
+              id: 'displayName',
+              value: 'Sent packets',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #tableReceivedPackets',
+          },
+          properties: [
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'color-text',
+              },
+            },
+            {
+              id: 'color',
+              value: {
+                fixedColor: 'blue',
+                mode: 'fixed',
+              },
+            },
+            {
+              id: 'displayName',
+              value: 'Received packets',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #tableSentBytes',
+          },
+          properties: [
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'color-text',
+              },
+            },
+            {
+              id: 'color',
+              value: {
+                fixedColor: 'blue',
+                mode: 'fixed',
+              },
+            },
+            {
+              id: 'displayName',
+              value: 'Network throughput Send',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #tableReceivedBytes',
+          },
+          properties: [
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'color-text',
+              },
+            },
+            {
+              id: 'color',
+              value: {
+                fixedColor: 'blue',
+                mode: 'fixed',
+              },
+            },
+            {
+              id: 'displayName',
+              value: 'Network throughput Received',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #tableReadBytes',
+          },
+          properties: [
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'color-text',
+              },
+            },
+            {
+              id: 'color',
+              value: {
+                fixedColor: 'blue',
+                mode: 'fixed',
+              },
+            },
+            {
+              id: 'displayName',
+              value: 'Total Bytes count read',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'Value #tableWriteBytes',
+          },
+          properties: [
+            {
+              id: 'unit',
+              value: 'decbytes',
+            },
+            {
+              id: 'custom.cellOptions',
+              value: {
+                type: 'color-text',
+              },
+            },
+            {
+              id: 'color',
+              value: {
+                fixedColor: 'blue',
+                mode: 'fixed',
+              },
+            },
+            {
+              id: 'displayName',
+              value: 'Total Bytes count write',
+            },
+          ],
+        },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
+        {
+          id: 'merge',
+          options: {},
+        },
+      ]),
 
     gce_memory_utilization:
       this.signals.gcpceOverview.memoryUtilization.asTimeSeries()
