@@ -57,7 +57,7 @@ function(this)
         description: 'List of top 5 instances with less amount of physical memory immediately available for allocation.',
         type: 'gauge',
         unit: 'decbytes',
-        aggFunction: 'avg',
+        aggFunction: 'sum',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_compute_virtualmachines_available_memory_bytes_average_bytes{%(queriesSelector)s}',
@@ -140,7 +140,6 @@ function(this)
           azuremonitor: {
             expr: 'azure_microsoft_compute_virtualmachines_disk_read_operations_sec_average_countpersecond{%(queriesSelector)s}',
             legendCustomTemplate: 'Read',
-            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -155,7 +154,6 @@ function(this)
           azuremonitor: {
             expr: 'azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}',
             legendCustomTemplate: 'Write',
-            exprWrappers: [['avg(', ')']],
           },
         },
       },
@@ -193,7 +191,7 @@ function(this)
       inboundFlows: {
         name: 'Flows',
         description: 'Number of current flows in the inbound/outbound direction',
-        type: 'counter',
+        type: 'gauge',
         unit: 'cps',
         aggFunction: 'sum',
         sources: {
@@ -208,7 +206,7 @@ function(this)
       outboundFlows: {
         name: 'Outbound flows',
         description: 'Number of current flows in the outbound direction',
-        type: 'counter',
+        type: 'gauge',
         unit: 'cps',
         aggFunction: 'sum',
         sources: {
