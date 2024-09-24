@@ -10,12 +10,6 @@ function(this)
       stackdriver: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization',
     },
     signals: {
-      // instancesText: {
-      //   name: "Instances",
-      //   type: 'text',
-      //   content: 'Use this section to look at one instance at a time by picking a value in the *Instance* picker at the top of the dashboard.'
-      //   // To Do: check if this works???
-      // },
       cpuUtilization: {
         name: 'CPU Utilization',
         description: 'Fractional utilization of allocated CPU on this instance.',

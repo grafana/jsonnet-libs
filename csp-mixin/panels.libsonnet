@@ -1350,9 +1350,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + commonlib.panels.generic.timeSeries.base.stylize()
       + this.signals.gcpceOverview.diskBytesWrite.asPanelMixin(),
 
-    gce_text_instances:
-      this.signals.gcpce.instancesText.as()
-      + commonlib.panels.generic.text.base.stylize(),
     gce_cpu_utilization:
       this.signals.gcpce.cpuUtilization.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
