@@ -1316,7 +1316,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           properties: [
             {
               id: 'displayName',
-              value: 'Available Memory',
+              value: 'Available memory',
             },
             {
               id: 'unit',

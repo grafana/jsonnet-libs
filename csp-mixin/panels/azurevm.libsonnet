@@ -86,29 +86,35 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     avm_cpu_utilization:
       this.signals.azurevm.cpuUtilization.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_available_memory:
       this.signals.azurevm.availableMemory.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_cpu_credits_consumed:
       this.signals.azurevm.cpuCreditsConsumed.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_cpu_credits_remaining:
       this.signals.azurevm.cpuCreditsRemaining.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_disk_total_bytes:
       this.signals.azurevmOverview.diskReadBytes.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.azurevmOverview.diskWriteBytes.asPanelMixin(),
+      + this.signals.azurevmOverview.diskWriteBytes.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_disk_operations:
       this.signals.azurevmOverview.diskReadOperations.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.azurevmOverview.diskWriteOperations.asPanelMixin(),
+      + this.signals.azurevmOverview.diskWriteOperations.asPanelMixin()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_network_total:
       this.signals.azurevmOverview.networkInTotal.asTimeSeries()
@@ -130,19 +136,23 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     avm_disk_read_by_instance:
       this.signals.azurevm.diskReadByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_disk_write_by_instance:
       this.signals.azurevm.diskWriteByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_disk_read_operations_by_instance:
       this.signals.azurevm.diskReadOperationsByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_disk_write_operations_by_instance:
       this.signals.azurevm.diskWriteOperationsByVM.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      + commonlib.panels.generic.timeSeries.base.stylize()
+      + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_top5_cpu_utilization:
       this.signals.azurevmOverview.top5CpuUtilization.asTable(format='table')
@@ -211,7 +221,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           options: {
             excludeByName: {
               Time: true,
-              job: true,
+              job: false,
               subscriptionName: true,
             },
             indexByName: {
@@ -222,7 +232,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               resourceName: 0,
             },
             renameByName: {
-              job: '',
+              job: 'Job',
               resourceGroup: 'Group',
               resourceName: 'Instance',
             },
@@ -285,9 +295,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           id: 'organize',
           options: {
             excludeByName: {
-              subscriptionName: true,
               Time: true,
-              job: true,
+              job: false,
+              subscriptionName: true,
             },
             indexByName: {
               Time: 1,
@@ -297,7 +307,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               resourceName: 0,
             },
             renameByName: {
-              job: '',
+              job: 'Job',
               resourceGroup: 'Group',
               resourceName: 'Instance',
             },
@@ -328,9 +338,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           id: 'organize',
           options: {
             excludeByName: {
-              subscriptionName: true,
               Time: true,
-              job: true,
+              job: false,
+              subscriptionName: true,
             },
             indexByName: {
               Time: 1,
@@ -340,7 +350,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               resourceName: 0,
             },
             renameByName: {
-              job: '',
+              job: 'Job',
               resourceGroup: 'Group',
               resourceName: 'Instance',
             },
@@ -418,7 +428,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           properties: [
             {
               id: 'displayName',
-              value: 'Available Memory',
+              value: 'Available memory',
             },
             {
               id: 'unit',
@@ -490,7 +500,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           properties: [
             {
               id: 'displayName',
-              value: 'Network in',
+              value: 'Network received',
             },
             {
               id: 'unit',
@@ -506,7 +516,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           properties: [
             {
               id: 'displayName',
-              value: 'Network out',
+              value: 'Network sent',
             },
             {
               id: 'unit',
