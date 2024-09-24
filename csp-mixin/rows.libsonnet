@@ -322,11 +322,11 @@ local g = import './g.libsonnet';
             + g.panel.timeSeries.gridPos.withW(12)
             + g.panel.timeSeries.gridPos.withH(8),
 
-            this.grafana.panels.gce_network_received
+            this.grafana.panels.gce_cpu_usage_time
             + g.panel.timeSeries.gridPos.withW(12)
             + g.panel.timeSeries.gridPos.withH(8),
 
-            this.grafana.panels.gce_cpu_usage_time
+            this.grafana.panels.gce_network_received
             + g.panel.timeSeries.gridPos.withW(12)
             + g.panel.timeSeries.gridPos.withH(8),
 
@@ -338,11 +338,11 @@ local g = import './g.libsonnet';
             + g.panel.timeSeries.gridPos.withW(12)
             + g.panel.timeSeries.gridPos.withH(8),
 
-            this.grafana.panels.gce_count_disk_read_operations
+            this.grafana.panels.gce_count_disk_write_bytes
             + g.panel.timeSeries.gridPos.withW(12)
             + g.panel.timeSeries.gridPos.withH(8),
 
-            this.grafana.panels.gce_count_disk_write_bytes
+            this.grafana.panels.gce_count_disk_read_operations
             + g.panel.timeSeries.gridPos.withW(12)
             + g.panel.timeSeries.gridPos.withH(8),
 

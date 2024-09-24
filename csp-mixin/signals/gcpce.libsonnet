@@ -22,20 +22,6 @@ function(this)
           },
         },
       },
-
-      networkReceived: {
-        name: 'Network received',
-        description: 'Count of bytes received from the network. Sampled every 60 seconds.',
-        type: 'counter',
-        unit: 'bytes',
-        aggFunction: 'avg',
-        sources: {
-          stackdriver: {
-            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{instance_name}}',
-          },
-        },
-      },
       cpuUsageTime: {
         name: 'Cpu usage time',
         description: 'CPU usage, in seconds. For Container-Optimized OS, or Ubuntu running GKE.',
@@ -45,6 +31,19 @@ function(this)
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_usage_time{%(queriesSelector)s}',
+            legendCustomTemplate: '{{instance_name}}',
+          },
+        },
+      },
+      networkReceived: {
+        name: 'Network received',
+        description: 'Count of bytes received from the network. Sampled every 60 seconds.',
+        type: 'counter',
+        unit: 'bytes',
+        aggFunction: 'avg',
+        sources: {
+          stackdriver: {
+            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{%(queriesSelector)s}',
             legendCustomTemplate: '{{instance_name}}',
           },
         },
@@ -77,21 +76,6 @@ function(this)
           },
         },
       },
-
-      diskReadOperations: {
-        name: 'Count of disk read operations',
-        description: 'Count of disk read IO operations. Sampled every 60 seconds.',
-        type: 'counter',
-        unit: 'short',
-        aggFunction: 'avg',
-        sources: {
-          stackdriver: {
-            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_ops_count{%(queriesSelector)s}',
-            legendCustomTemplate: '{{instance_name}}',
-          },
-        },
-      },
-
       diskWriteBytes: {
         name: 'Count of disk write bytes',
         description: 'Count of bytes written to disk. Sampled every 60 seconds.',
@@ -105,7 +89,19 @@ function(this)
           },
         },
       },
-
+      diskReadOperations: {
+        name: 'Count of disk read operations',
+        description: 'Count of disk read IO operations. Sampled every 60 seconds.',
+        type: 'counter',
+        unit: 'short',
+        aggFunction: 'avg',
+        sources: {
+          stackdriver: {
+            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_ops_count{%(queriesSelector)s}',
+            legendCustomTemplate: '{{instance_name}}',
+          },
+        },
+      },
       diskWriteOperations: {
         name: 'Count of disk write operations',
         description: 'Count of disk write IO operations. Sampled every 60 seconds.',
