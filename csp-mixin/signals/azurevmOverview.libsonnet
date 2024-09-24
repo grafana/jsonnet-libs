@@ -67,7 +67,7 @@ function(this)
       },
 
       top5DiskRead: {
-        name: 'Top 5 Instances - Disk read bytes',
+        name: 'Top 5 Instances by Disk read bytes',
         description: 'List of top 5 instances by disk read bytes',
         type: 'gauge',
         unit: 'decbytes',
