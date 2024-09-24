@@ -24,13 +24,13 @@ function(this)
       },
       systemProblemCount: {
         name: 'System problem count',
-        description: 'Number of times a machine problem has happened.',
+        description: 'Number of error fired on all instances.',
         type: 'raw',
         unit: 'short',
         sources: {
           stackdriver: {
-            expr: 'count(sum by(instance_id)(stackdriver_gce_instance_compute_googleapis_com_guest_system_problem_count{%(queriesSelector)s}))',
-            legendCustomTemplate: '',
+            expr: 'sum(increase(stackdriver_gce_instance_compute_googleapis_com_guest_system_problem_count{%(queriesSelector)s}[$__range]))',
+            legendCustomTemplate: 'Total errors',
           },
         },
       },
