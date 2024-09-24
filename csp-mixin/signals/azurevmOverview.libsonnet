@@ -51,7 +51,7 @@ function(this)
       },
 
       bottom5MemoryAvailable: {
-        name: 'Top 5 Instances - Less available memory',
+        name: 'Top 5 Instances by Less available memory',
         description: 'List of top 5 instances with less amount of physical memory immediately available for allocation.',
         type: 'gauge',
         unit: 'decbytes',
