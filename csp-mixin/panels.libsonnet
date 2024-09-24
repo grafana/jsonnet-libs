@@ -1528,46 +1528,33 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     gce_memory_utilization:
       this.signals.gcpceOverview.memoryUtilization.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
       + this.signals.gcpceOverview.memoryUsed.asPanelMixin(),
     gce_total_packets_sent_received:
       this.signals.gcpceOverview.packetsSent.asTimeSeries()
       + this.signals.gcpceOverview.packetsReceived.asPanelMixin(),
     gce_network_send_received:
       this.signals.gcpceOverview.networkSent.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
       + this.signals.gcpceOverview.networkReceived.asPanelMixin(),
     gce_bytes_read_write:
       this.signals.gcpceOverview.diskBytesRead.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
       + this.signals.gcpceOverview.diskBytesWrite.asPanelMixin(),
 
     gce_cpu_utilization:
-      this.signals.gcpce.cpuUtilization.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('percentunit'),
+      this.signals.gcpce.cpuUtilization.asTimeSeries(),
     gce_network_received:
-      this.signals.gcpce.networkReceived.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      this.signals.gcpce.networkReceived.asTimeSeries(),
     gce_cpu_usage_time:
-      this.signals.gcpce.cpuUsageTime.asTimeSeries()
-      + g.panel.timeSeries.standardOptions.withUnit('seconds')
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      this.signals.gcpce.cpuUsageTime.asTimeSeries(),
     gce_network_sent:
-      this.signals.gcpce.networkSent.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      this.signals.gcpce.networkSent.asTimeSeries(),
     gce_count_disk_read_bytes:
-      this.signals.gcpce.diskReadBytes.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      this.signals.gcpce.diskReadBytes.asTimeSeries(),
     gce_count_disk_read_operations:
-      this.signals.gcpce.diskReadOperations.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      this.signals.gcpce.diskReadOperations.asTimeSeries(),
     gce_count_disk_write_bytes:
-      this.signals.gcpce.diskWriteBytes.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      this.signals.gcpce.diskWriteBytes.asTimeSeries(),
     gce_count_disk_write_operations:
-      this.signals.gcpce.diskWriteOperations.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+      this.signals.gcpce.diskWriteOperations.asTimeSeries(),
 
 
   },
