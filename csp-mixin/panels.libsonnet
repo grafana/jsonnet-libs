@@ -1539,6 +1539,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       this.signals.gcpceOverview.diskBytesRead.asTimeSeries()
       + this.signals.gcpceOverview.diskBytesWrite.asPanelMixin(),
 
+    gce_text_instances:
+      g.panel.text.new('Instances')
+      + g.panel.text.options.withContent('Use this section to look at one instance at a time by picking a value in the *Instance* picker at the top of the dashboard.'),
     gce_cpu_utilization:
       this.signals.gcpce.cpuUtilization.asTimeSeries(),
     gce_cpu_usage_time:

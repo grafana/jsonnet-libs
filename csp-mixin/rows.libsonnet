@@ -317,6 +317,9 @@ local g = import './g.libsonnet';
         + g.panel.row.withCollapsed(true)
         + g.panel.row.withPanels(
           [
+            this.grafana.panels.gce_text_instances
+            + g.panel.timeSeries.gridPos.withW(24)
+            + g.panel.timeSeries.gridPos.withH(2),
 
             this.grafana.panels.gce_cpu_utilization
             + g.panel.timeSeries.gridPos.withW(12)
