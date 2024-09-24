@@ -1202,27 +1202,28 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.table.queryOptions.withTargets(
         [
           this.signals.gcpceOverview.tableCpuUtilization.asTarget()
-          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
           this.signals.gcpceOverview.tableUptime.asTarget()
+          + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
           this.signals.gcpceOverview.tableSentPackets.asTarget()
-          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
           this.signals.gcpceOverview.tableReceivedPackets.asTarget()
-          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
           this.signals.gcpceOverview.tableSentBytes.asTarget()
-          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
           this.signals.gcpceOverview.tableReceivedBytes.asTarget()
-          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
           this.signals.gcpceOverview.tableReadBytes.asTarget()
-          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
           this.signals.gcpceOverview.tableWriteBytes.asTarget()
-          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
         ]
       )
@@ -1373,7 +1374,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Sent packets',
+              value: 'Sent packets [5m]',
             },
           ],
         },
@@ -1398,7 +1399,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Received packets',
+              value: 'Received packets [5m]',
             },
           ],
         },
@@ -1427,7 +1428,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Network throughput Send',
+              value: 'Network throughput Send [5m]',
             },
           ],
         },
@@ -1456,7 +1457,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Network throughput Received',
+              value: 'Network throughput Received [5m]',
             },
           ],
         },
@@ -1485,7 +1486,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Total Bytes count read',
+              value: 'Total Bytes count read [5m]',
             },
           ],
         },
@@ -1514,7 +1515,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Total Bytes count write',
+              value: 'Total Bytes count write [5m]',
             },
           ],
         },
