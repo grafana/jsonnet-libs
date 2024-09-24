@@ -903,14 +903,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Gcp Compute Engine
 
     gce_instance_count:
-      this.signals.gcpceOverview.instanceCount.asStat()
-      + commonlib.panels.generic.stat.base.stylize(),
+      this.signals.gcpceOverview.instanceCount.asStat(),
     gce_system_problem_count:
-      this.signals.gcpceOverview.systemProblemCount.asStat()
-      + commonlib.panels.generic.stat.base.stylize(),
+      this.signals.gcpceOverview.systemProblemCount.asStat(),
     gce_top5_cpu_utilization:
       this.signals.gcpceOverview.top5CpuUtilization.asTable(format='table')
-      + commonlib.panels.generic.table.base.stylize()
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
@@ -971,7 +968,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
     gce_top5_system_problem:
       this.signals.gcpceOverview.top5SystemProblem.asTable(format='table')
-      + commonlib.panels.generic.table.base.stylize()
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
@@ -1000,7 +996,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
     gce_top5_disk_write_bytes:
       this.signals.gcpceOverview.top5DiskWrite.asTable(format='table')
-      + commonlib.panels.generic.table.base.stylize()
       + g.panel.table.standardOptions.withUnit('bytes')
       + g.panel.table.standardOptions.withOverrides([
         {
@@ -1030,7 +1025,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
     gce_top5_disk_read_bytes:
       this.signals.gcpceOverview.top5DiskRead.asTable(format='table')
-      + commonlib.panels.generic.table.base.stylize()
       + g.panel.table.standardOptions.withUnit('bytes')
       + g.panel.table.standardOptions.withOverrides([
         {
@@ -1338,8 +1332,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + this.signals.gcpceOverview.memoryUsed.asPanelMixin(),
     gce_total_packets_sent_received:
       this.signals.gcpceOverview.packetsSent.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
-      + g.panel.timeSeries.standardOptions.withUnit('short')
       + this.signals.gcpceOverview.packetsReceived.asPanelMixin(),
     gce_network_send_received:
       this.signals.gcpceOverview.networkSent.asTimeSeries()

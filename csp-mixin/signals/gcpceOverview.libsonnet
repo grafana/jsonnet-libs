@@ -23,8 +23,8 @@ function(this)
         },
       },
       systemProblemCount: {
-        name: 'VM Availability',
-        description: 'Measure of availability of virtual machines',
+        name: 'System problem count',
+        description: 'Number of times a machine problem has happened.',
         type: 'raw',
         unit: 'short',
         sources: {
@@ -67,7 +67,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[$__range]))\n)',
+            expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[$__range])))',
             legendCustomTemplate: '',
           },
         },
@@ -79,7 +79,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[$__range]))\n)',
+            expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[$__range])))',
             legendCustomTemplate: '',
           },
         },
@@ -249,7 +249,7 @@ function(this)
         unit: 'bytes',
         sources: {
           stackdriver: {
-            expr: 'azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}',
+            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{%(queriesSelector)s}',
             legendCustomTemplate: 'Received',
           },
         },
@@ -263,7 +263,7 @@ function(this)
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}',
-            legendCustomTemplate: 'Sent',
+            legendCustomTemplate: 'Read',
           },
         },
       },
@@ -276,7 +276,7 @@ function(this)
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}',
-            legendCustomTemplate: 'In',
+            legendCustomTemplate: 'Write',
           },
         },
       },
