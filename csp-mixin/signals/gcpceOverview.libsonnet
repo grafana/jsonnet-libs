@@ -200,7 +200,7 @@ function(this)
         name: 'Total packets count sent/received',
         description: 'Count of packets sent/received over the network. Sampled every 60 seconds',
         type: 'counter',
-        unit: 'short',
+        unit: 'sishort',
         aggFunction: 'sum',
         sources: {
           stackdriver: {
@@ -214,7 +214,7 @@ function(this)
         name: 'Total packets count received',
         description: 'Count of packets sent/received over the network. Sampled every 60 seconds',
         type: 'counter',
-        unit: 'short',
+        unit: 'sishort',
         aggFunction: 'sum',
         sources: {
           stackdriver: {
