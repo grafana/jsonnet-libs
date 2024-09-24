@@ -36,7 +36,7 @@ function(this)
         },
       },
       top5CpuUtilization: {
-        name: 'Top 5 Instances - CPU Utilitization',
+        name: 'Top 5 Instances by CPU Utilitization',
         description: 'Fractional utilization of allocated CPU on an instance',
         type: 'gauge',
         aggFunction: 'sum',
