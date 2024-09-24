@@ -1078,6 +1078,42 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
+            options: 'instance_name',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Instance',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'job',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Job',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
+            options: 'project_id',
+          },
+          properties: [
+            {
+              id: 'displayName',
+              value: 'Project ID',
+            },
+          ],
+        },
+        {
+          matcher: {
+            id: 'byName',
             options: 'Value #tableCpuUtilization',
           },
           properties: [
