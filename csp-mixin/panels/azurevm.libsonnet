@@ -557,5 +557,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           },
         },
       ]),
+
+    avm_text_instances:
+      g.panel.text.new('Instances')
+      + g.panel.text.options.withContent('Use this section to look at one instance at a time by picking a value in the *ResourceName* picker at the top of the dashboard.'),
   },
 }

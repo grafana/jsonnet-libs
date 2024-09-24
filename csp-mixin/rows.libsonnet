@@ -318,6 +318,10 @@ local g = import './g.libsonnet';
         + g.panel.row.withCollapsed(true)
         + g.panel.row.withPanels(
           [
+            this.grafana.panels.azurevm.avm_text_instances
+            + g.panel.timeSeries.gridPos.withW(24)
+            + g.panel.timeSeries.gridPos.withH(2),
+
             this.grafana.panels.azurevm.avm_cpu_utilization
             + g.panel.timeSeries.gridPos.withW(12)
             + g.panel.timeSeries.gridPos.withH(8),
