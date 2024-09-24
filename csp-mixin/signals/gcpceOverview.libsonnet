@@ -95,7 +95,6 @@ function(this)
           stackdriver: {
             expr: '100 * sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s})',
             legendCustomTemplate: '',
-            step: '1m',
           },
         },
       },
@@ -116,7 +115,6 @@ function(this)
           stackdriver: {
             expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_packets_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
-            step: '1m',
           },
         },
       },
@@ -127,7 +125,6 @@ function(this)
           stackdriver: {
             expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_packets_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
-            step: '1m',
           },
         },
       },
@@ -138,7 +135,6 @@ function(this)
           stackdriver: {
             expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
-            step: '1m',
           },
         },
       },
@@ -149,7 +145,6 @@ function(this)
           stackdriver: {
             expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
-            step: '1m',
           },
         },
       },
@@ -160,7 +155,6 @@ function(this)
           stackdriver: {
             expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
-            step: '1m',
           },
         },
       },
@@ -171,7 +165,6 @@ function(this)
           stackdriver: {
             expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
-            step: '1m',
           },
         },
       },

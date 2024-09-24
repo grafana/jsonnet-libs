@@ -1054,14 +1054,34 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     gce_instances:
-      this.signals.gcpceOverview.tableCpuUtilization.asTable(name='Instances', format='table')
-      + this.signals.gcpceOverview.tableUptime.asTableColumn(format='table')
-      + this.signals.gcpceOverview.tableSentPackets.asTableColumn(format='table')
-      + this.signals.gcpceOverview.tableReceivedPackets.asTableColumn(format='table')
-      + this.signals.gcpceOverview.tableSentBytes.asTableColumn(format='table')
-      + this.signals.gcpceOverview.tableReceivedBytes.asTableColumn(format='table')
-      + this.signals.gcpceOverview.tableReadBytes.asTableColumn(format='table')
-      + this.signals.gcpceOverview.tableWriteBytes.asTableColumn(format='table')
+      g.panel.table.new('Instances')
+      + g.panel.table.queryOptions.withTargets(
+        [
+          this.signals.gcpceOverview.tableCpuUtilization.asTarget()
+          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withFormat('table'),
+          this.signals.gcpceOverview.tableUptime.asTarget()
+          + g.query.prometheus.withFormat('table'),
+          this.signals.gcpceOverview.tableSentPackets.asTarget()
+          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withFormat('table'),
+          this.signals.gcpceOverview.tableReceivedPackets.asTarget()
+          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withFormat('table'),
+          this.signals.gcpceOverview.tableSentBytes.asTarget()
+          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withFormat('table'),
+          this.signals.gcpceOverview.tableReceivedBytes.asTarget()
+          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withFormat('table'),
+          this.signals.gcpceOverview.tableReadBytes.asTarget()
+          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withFormat('table'),
+          this.signals.gcpceOverview.tableWriteBytes.asTarget()
+          + g.query.prometheus.withInterval('1m')
+          + g.query.prometheus.withFormat('table'),
+        ]
+      )
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
