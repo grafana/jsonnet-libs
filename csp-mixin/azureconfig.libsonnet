@@ -14,7 +14,8 @@
     groupLabels: ['job', 'resourceGroup', 'subscriptionName'],
     instanceLabels: ['resourceName'],
     metricsSource: 'azuremonitor',
-    alertAzureVMAvailableMemoryLowThreshold: '367001600',
-    alertAzureVMAvailableMemoryLowSeverity: 'critical',
+    alertAzureVMHighCpuUtilizationThreshold: '80',
+    alertAzureVMHighCpuUtilizationSeverity: 'critical',
+    alertAzureVMUnavailableSeverity: 'critical',
   },
 }

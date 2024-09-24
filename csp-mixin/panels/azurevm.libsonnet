@@ -70,17 +70,23 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
           ],
         },
+      ])
+      + g.panel.table.queryOptions.withTransformations([
         {
-          matcher: {
-            id: 'byName',
-            options: 'resourceName',
-          },
-          properties: [
-            {
-              id: 'displayName',
-              value: 'Instance',
+          id: 'organize',
+          options: {
+            excludeByName: {
+              Time: true,
+              job: true,
+              resourceGroup: true,
+              subscriptionName: true,
             },
-          ],
+            includeByName: {},
+            indexByName: {},
+            renameByName: {
+              resourceName: 'Instance',
+            },
+          },
         },
       ]),
 

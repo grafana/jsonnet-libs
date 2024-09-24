@@ -26,12 +26,14 @@ function(this)
       vmAvailability: {
         name: 'VM Availability',
         description: 'Measure of availability of virtual machines',
-        type: 'raw',
+        type: 'gauge',
+        aggFunction: 'avg',
         unit: 'short',
         sources: {
           azuremonitor: {
-            expr: 'avg by(resourceName) (azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{%(queriesSelector)s})',
+            expr: 'azure_microsoft_compute_virtualmachines_vmavailabilitymetric_average_count{%(queriesSelector)s}',
             legendCustomTemplate: '',
+            aggKeepLabels: ['resourceName'],
           },
         },
       },
