@@ -83,7 +83,7 @@ function(this)
       },
 
       top5DiskWrite: {
-        name: 'Top 5 Instances - Disk write bytes',
+        name: 'Top 5 Instances by Disk write bytes',
         description: 'List of top 5 instances by disk write bytes',
         type: 'gauge',
         unit: 'decbytes',
