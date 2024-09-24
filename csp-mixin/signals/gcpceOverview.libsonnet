@@ -17,8 +17,10 @@ function(this)
         unit: 'short',
         sources: {
           stackdriver: {
-            expr: 'count(sum by (instance_name) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s}))',
+            expr: 'sum by (instance_name) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s})',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
+            exprWrappers: [['count(', ')']],
           },
         },
       },
@@ -109,71 +111,78 @@ function(this)
       },
       tableUptime: {
         name: 'tableUptime',
-        type: 'raw',
+        type: 'gauge',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_uptime_total{%(queriesSelector)s})',
+            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_uptime_total{%(queriesSelector)s}',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
           },
         },
       },
       tableSentPackets: {
         name: 'tableSentPackets',
-        type: 'raw',
+        type: 'gauge',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_packets_count{%(queriesSelector)s}[5m]))',
+            expr: 'rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_packets_count{%(queriesSelector)s}[5m])',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
           },
         },
       },
       tableReceivedPackets: {
         name: 'tableReceivedPackets',
-        type: 'raw',
+        type: 'gauge',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_packets_count{%(queriesSelector)s}[5m]))',
+            expr: 'rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_packets_count{%(queriesSelector)s}[5m])',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
           },
         },
       },
       tableSentBytes: {
         name: 'tableSentBytes',
-        type: 'raw',
+        type: 'gauge',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{%(queriesSelector)s}[5m]))',
+            expr: 'rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{%(queriesSelector)s}[5m])',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
           },
         },
       },
       tableReceivedBytes: {
         name: 'tableReceivedBytes',
-        type: 'raw',
+        type: 'gauge',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{%(queriesSelector)s}[5m]))',
+            expr: 'rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{%(queriesSelector)s}[5m])',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
           },
         },
       },
       tableReadBytes: {
         name: 'tableReadBytes',
-        type: 'raw',
+        type: 'gauge',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[5m]))',
+            expr: 'rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[5m])',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
           },
         },
       },
       tableWriteBytes: {
         name: 'tableWriteBytes',
-        type: 'raw',
+        type: 'gauge',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[5m]))',
+            expr: 'rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[5m])',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
           },
         },
       },
