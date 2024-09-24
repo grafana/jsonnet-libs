@@ -29,19 +29,20 @@ function(this)
         description: 'Amount of physical memory, in bytes, immediately available for allocation to a process or for system use in the Virtual Machine',
         type: 'gauge',
         unit: 'decbytes',
-        aggFunction: 'sum',
+        aggFunction: 'avg',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_compute_virtualmachines_available_memory_bytes_average_bytes{%(queriesSelector)s}',
             legendCustomTemplate: '{{resourceName}}',
+
           },
         },
       },
       cpuCreditsConsumed: {
         name: 'CPU Credits consumed',
         description: 'Total number of credits consumed by the Virtual Machine.',
-        type: 'gauge',
-        unit: 'short',
+        type: 'counter',
+        unit: 'cps',
         aggFunction: 'sum',
         sources: {
           azuremonitor: {
@@ -53,8 +54,8 @@ function(this)
       cpuCreditsRemaining: {
         name: 'CPU Credits remaining',
         description: 'Total number of credits available to burst.',
-        type: 'gauge',
-        unit: 'short',
+        type: 'counter',
+        unit: 'cps',
         aggFunction: 'sum',
         sources: {
           azuremonitor: {
@@ -125,7 +126,7 @@ function(this)
         description: 'Disk read IOPS',
         type: 'gauge',
         unit: 'cps',
-        aggFunction: 'sum',
+        aggFunction: 'avg',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_compute_virtualmachines_disk_read_operations_sec_average_countpersecond{%(queriesSelector)s}',
@@ -139,7 +140,7 @@ function(this)
         description: 'Disk write IOPS',
         type: 'gauge',
         unit: 'cps',
-        aggFunction: 'sum',
+        aggFunction: 'avg',
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}',
