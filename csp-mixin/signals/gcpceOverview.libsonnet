@@ -43,7 +43,7 @@ function(this)
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s}',
             legendCustomTemplate: '',
-            aggKeepLabels: ['instance_name', 'job', 'project_id'],
+            aggKeepLabels: ['instance_name'],
             exprWrappers: [['topk(5, 100*', ')']],
           },
         },
@@ -65,6 +65,7 @@ function(this)
         name: 'Top 5 Instances by Disk write bytes',
         description: 'List of top 5 instances by disk write bytes',
         type: 'raw',
+        unit: 'bytes',
         sources: {
           stackdriver: {
             expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[$__range])))',
@@ -77,6 +78,7 @@ function(this)
         name: 'Top 5 Instances by Disk read bytes',
         description: 'List of top 5 instances by disk read bytes',
         type: 'raw',
+        unit: 'bytes',
         sources: {
           stackdriver: {
             expr: 'topk(5, sum by (instance_name, job, project_id) (increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[$__range])))',
@@ -91,7 +93,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: '100 * sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{job!="",job=~".+",project_id=~".+"})',
+            expr: '100 * sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s})',
             legendCustomTemplate: '',
             step: '1m',
           },
@@ -102,7 +104,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_uptime_total{job=~"$job", project_id=~"$project_id"})',
+            expr: 'sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_uptime_total{%(queriesSelector)s})',
             legendCustomTemplate: '',
           },
         },
@@ -112,7 +114,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_packets_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_packets_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
             step: '1m',
           },
@@ -123,7 +125,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_packets_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_packets_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
             step: '1m',
           },
@@ -134,7 +136,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
             step: '1m',
           },
@@ -145,7 +147,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_received_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
             step: '1m',
           },
@@ -156,7 +158,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
             step: '1m',
           },
@@ -167,7 +169,7 @@ function(this)
         type: 'raw',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{job!="",job=~".+",project_id=~".+"}[$__rate_interval]))',
+            expr: 'sum by (instance_name, job, project_id)(rate(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[$__rate_interval]))',
             legendCustomTemplate: '',
             step: '1m',
           },

@@ -44,7 +44,7 @@ function(this)
         aggFunction: 'avg',
         sources: {
           stackdriver: {
-            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_usage_time{instance_name=~"$instance"}',
+            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_usage_time{%(queriesSelector)s}',
             legendCustomTemplate: '{{instance_name}}',
           },
         },
@@ -52,12 +52,12 @@ function(this)
       networkSent: {
         name: 'Network sent',
         description: 'Count of bytes sent from the network. Sampled every 60 seconds.',
-        type: 'raw',
+        type: 'counter',
         unit: 'bytes',
         aggFunction: 'avg',
         sources: {
           stackdriver: {
-            expr: 'rate(stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{instance_name=~"$instance"}[$__rate_interval])',
+            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_network_sent_bytes_count{%(queriesSelector)s}',
             legendCustomTemplate: '{{instance_name}}',
           },
         },
