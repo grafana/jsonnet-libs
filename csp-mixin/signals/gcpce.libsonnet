@@ -13,7 +13,7 @@ function(this)
       cpuUtilization: {
         name: 'CPU Utilization',
         description: 'Fractional utilization of allocated CPU on this instance.',
-        type: 'raw',
+        type: 'gauge',
         unit: 'percentunit',
         sources: {
           stackdriver: {
