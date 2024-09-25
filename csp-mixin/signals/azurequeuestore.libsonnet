@@ -132,8 +132,8 @@ function(this)
         sources: {
           azuremonitor: {
             expr: |||
-              topk(5, sum by (job, resourceName) (azure_microsoft_storage_storageaccounts_queueservices_ingress_total_bytes{%(queriesSelector)s})
-              + sum by (job, resourceName) (azure_microsoft_storage_storageaccounts_queueservices_egress_total_bytes{%(queriesSelector)s}))
+              topk(5, sum by (job, resourceName) (sum_over_time(azure_microsoft_storage_storageaccounts_queueservices_ingress_total_bytes{%(queriesSelector)s}[$__range]))
+              + sum by (job, resourceName) (sum_over_time(azure_microsoft_storage_storageaccounts_queueservices_egress_total_bytes{%(queriesSelector)s}[$__range])))
             |||,
           },
         },

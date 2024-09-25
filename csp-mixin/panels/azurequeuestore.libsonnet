@@ -64,11 +64,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     availabilityStat:
       this.signals.azurequeuestore.availability.asStat(),
     queueCount:
-      this.signals.azurequeuestore.queueCount.asStat(),
+      this.signals.azurequeuestore.queueCount.asStat()
+      + g.panel.stat.standardOptions.color.withMode('fixed')
+      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
     messageCountTotal:
-      this.signals.azurequeuestore.messageCountTotal.asStat(),
+      this.signals.azurequeuestore.messageCountTotal.asStat()
+      + g.panel.stat.standardOptions.color.withMode('fixed')
+      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
     messageCountByQueue:
       this.signals.azurequeuestore.messageCountTopK.common
+      + g.panel.table.standardOptions.withUnit('locale')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Queues - Message Count',
         [
@@ -82,9 +87,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     messageCountTs:
       this.signals.azurequeuestore.messageCount.asTimeSeries(),
     totalBytesTotal:
-      this.signals.azurequeuestore.totalBytesTotal.asStat(),
+      this.signals.azurequeuestore.totalBytesTotal.asStat()
+      + g.panel.stat.standardOptions.color.withMode('fixed')
+      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
     totalBytesByBucket:
       this.signals.azurequeuestore.totalBytesTopK.common
+      + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Queues - Total Bytes',
         [
@@ -96,6 +104,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ) + self._tableCommon('Total Bytes'),
     totalNetworkThroughput:
       this.signals.azurequeuestore.networkThroughputTopK.common
+      + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Queues - Network Throughput',
         [
