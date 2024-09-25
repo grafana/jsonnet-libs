@@ -26,7 +26,7 @@ function(this)
       },
       systemProblemCount: {
         name: 'System problem count',
-        description: 'Number of error fired on all instances.',
+        description: 'Number of errors fired on all instances.',
         type: 'raw',
         unit: 'short',
         sources: {
