@@ -7,16 +7,15 @@
           [
             {
               alert: 'AzureVMHighCpuUtilization',
-              expr: |||
-                avg by (%s) (%s) > this.config.alertAzureVMHighCpuUtilizationThreshold
-              ||| % [
-                std.join(',', this.config.groupLabels + this.config.instanceLabels),
-                this.signals.azurevm.cpuUtilization.asRuleExpression(),
-              ],
+              expr: 'avg by (%s) (%s) > 80' %
+                    [
+                      std.join(',', this.config.groupLabels + this.config.instanceLabels),
+                      this.signals.azurevm.cpuUtilization.asRuleExpression(),
+                    ],
               'for': '5m',
               keep_firing_for: '10m',
               labels: {
-                severity: this.config.alertAzureVMHighCpuUtilizationSeverity,
+                severity: 'critical',
               },
               annotations: {
                 summary: 'CPU utilization is too high',
@@ -25,16 +24,15 @@
             },
             {
               alert: 'AzureVMUnavailable',
-              expr: |||
-                avg by (%s) (%s) != 1
-              ||| % [
-                std.join(',', this.config.groupLabels + this.config.instanceLabels),
-                this.signals.azurevmOverview.vmAvailability.asRuleExpression(),
-              ],
+              expr: 'avg by (%s) (%s) != 1' %
+                    [
+                      std.join(',', this.config.groupLabels + this.config.instanceLabels),
+                      this.signals.azurevmOverview.vmAvailability.asRuleExpression(),
+                    ],
               'for': '5m',
-              keep_firing_for: '5m',
+              keep_firing_for: '10m',
               labels: {
-                severity: this.config.alertAzureVMUnavailableSeverity,
+                severity: 'critical',
               },
               annotations: {
                 summary: 'VM unavailable',
