@@ -15,6 +15,7 @@
         azurevirtualnetwork: (import './signals/azurevirtualnetwork.libsonnet')(this),
         azurevm: (import './signals/azurevm.libsonnet')(this),
         azurevmOverview: (import './signals/azurevmOverview.libsonnet')(this),
+        azurequeuestore: (import './signals/azurequeuestore.libsonnet')(this),
       },
     blobStorage: {
       enableAvailability: false,
