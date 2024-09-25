@@ -51,7 +51,7 @@ function(this)
             expr: 'stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{%(queriesSelector)s}',
           },
           azuremonitor: {
-            expr: 'azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count{%(queriesSelector)s}',
+            expr: 'sum(azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count{%(queriesSelector)s})',
           },
         },
       },
@@ -63,11 +63,11 @@ function(this)
         unit: 'locale',
         sources: {
           stackdriver: {
-            expr: 'stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{%(queriesSelector)s}',
+            expr: 'max_over_time(stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{%(queriesSelector)s}[$__range])',
             exprWrappers: [['topk(5,', ')']],
           },
           azuremonitor: {
-            expr: 'azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count{%(queriesSelector)s}',
+            expr: 'max_over_time(azure_microsoft_storage_storageaccounts_blobservices_blobcount_average_count{%(queriesSelector)s}[$__range])',
             exprWrappers: [['topk(5,', ')']],
           },
         },
@@ -83,7 +83,7 @@ function(this)
             expr: 'count(sum by (bucket_name) (stackdriver_gcs_bucket_storage_googleapis_com_storage_object_count{%(queriesSelector)s}))',
           },
           azuremonitor: {
-            expr: 'sum by (resourceName) (azure_microsoft_storage_storageaccounts_blobservices_containercount_average_count{%(queriesSelector)s})',
+            expr: 'count(sum by (resourceName) (azure_microsoft_storage_storageaccounts_blobservices_containercount_average_count{%(queriesSelector)s}))',
           },
         },
       },
@@ -169,8 +169,8 @@ function(this)
           },
           azuremonitor: {
             expr: |||
-              topk(5, sum by (job, resourceName) (increase(azure_microsoft_storage_storageaccounts_blobservices_ingress_total_bytes{%(queriesSelector)s}[$__range]))
-              + sum by (job, resourceName) (increase(azure_microsoft_storage_storageaccounts_blobservices_egress_total_bytes{%(queriesSelector)s}[$__range])))
+              topk(5, sum by (job, resourceName) (sum_over_time(azure_microsoft_storage_storageaccounts_blobservices_ingress_total_bytes{%(queriesSelector)s}[$__range]))
+              + sum by (job, resourceName) (sum_over_time(azure_microsoft_storage_storageaccounts_blobservices_egress_total_bytes{%(queriesSelector)s}[$__range])))
             |||,
           },
         },
@@ -186,7 +186,7 @@ function(this)
             expr: 'sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_received_bytes_count{%(queriesSelector)s}[$__range])) and ' + s.signals.networkThroughputTopK.sources.stackdriver.expr,
           },
           azuremonitor: {
-            expr: 'sum by (job, resourceName) (increase(azure_microsoft_storage_storageaccounts_blobservices_ingress_total_bytes{%(queriesSelector)s}[$__range])) and ' + s.signals.networkThroughputTopK.sources.azuremonitor.expr,
+            expr: 'sum by (job, resourceName) (sum_over_time(azure_microsoft_storage_storageaccounts_blobservices_ingress_total_bytes{%(queriesSelector)s}[$__range])) and ' + s.signals.networkThroughputTopK.sources.azuremonitor.expr,
           },
         },
       },
@@ -201,7 +201,7 @@ function(this)
             expr: 'sum by (job, bucket_name) (increase(stackdriver_gcs_bucket_storage_googleapis_com_network_sent_bytes_count{%(queriesSelector)s}[$__range])) and ' + s.signals.networkThroughputTopK.sources.stackdriver.expr,
           },
           azuremonitor: {
-            expr: 'increase(azure_microsoft_storage_storageaccounts_blobservices_egress_total_bytes{%(queriesSelector)s}[$__range]) and ' + s.signals.networkThroughputTopK.sources.azuremonitor.expr,
+            expr: 'sum by (job, resourceName) (sum_over_time(azure_microsoft_storage_storageaccounts_blobservices_egress_total_bytes{%(queriesSelector)s}[$__range])) and ' + s.signals.networkThroughputTopK.sources.azuremonitor.expr,
           },
         },
       },
@@ -221,8 +221,8 @@ function(this)
           // See also: https://learn.microsoft.com/en-us/azure/azure-monitor/reference/supported-metrics/microsoft-storage-storageaccounts-blobservices-metrics
           azuremonitor: {
             expr: |||
-              sum(azure_microsoft_storage_storageaccounts_blobservices_blobcapacity_average_bytes{%(queriesSelector)s}) +
-              sum(azure_microsoft_storage_storageaccounts_blobservices_indexcapacity_average_bytes{%(queriesSelector)s})
+              sum(max_over_time(azure_microsoft_storage_storageaccounts_blobservices_blobcapacity_average_bytes{%(queriesSelector)s}[$__range])) +
+              sum(max_over_time(azure_microsoft_storage_storageaccounts_blobservices_indexcapacity_average_bytes{%(queriesSelector)s}[$__range]))
             |||,
           },
         },
@@ -251,11 +251,11 @@ function(this)
         unit: 'bytes',
         sources: {
           stackdriver: {
-            expr: 'stackdriver_gcs_bucket_storage_googleapis_com_storage_total_bytes{%(queriesSelector)s}',
+            expr: 'max_over_time(stackdriver_gcs_bucket_storage_googleapis_com_storage_total_bytes{%(queriesSelector)s}[$__range])',
             exprWrappers: [['topk(5,', ')']],
           },
           azuremonitor: {
-            expr: 'azure_microsoft_storage_storageaccounts_blobservices_blobcapacity_average_bytes{%(queriesSelector)s}',
+            expr: 'max_over_time(azure_microsoft_storage_storageaccounts_blobservices_blobcapacity_average_bytes{%(queriesSelector)s}[$__range])',
             exprWrappers: [['topk(5,', ')']],
           },
         },

@@ -59,20 +59,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     availabilityTs:
       this.signals.blobstore.availability.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
     availabilityStat:
-      this.signals.blobstore.availability.asStat()
-      + commonlib.panels.generic.stat.base.stylize(),
+      this.signals.blobstore.availability.asStat(),
     bucketCount:
       this.signals.blobstore.bucketCount.asStat()
-      + commonlib.panels.generic.stat.base.stylize(),
+      + g.panel.stat.standardOptions.color.withMode('fixed')
+      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
     objectCountTotal:
       this.signals.blobstore.objectCountTotal.asStat()
-      + commonlib.panels.generic.stat.base.stylize(),
+      + g.panel.stat.standardOptions.color.withMode('fixed')
+      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
     objectCountByBucket:
       this.signals.blobstore.objectCountTopK.common
+      + g.panel.table.standardOptions.withUnit('locale')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Buckets - Object Count',
         [
@@ -85,9 +86,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + self._tableCommon('Object Count'),
     totalBytesTotal:
       this.signals.blobstore.totalBytesTotal.asStat()
-      + commonlib.panels.generic.stat.base.stylize(),
+      + g.panel.stat.standardOptions.color.withMode('fixed')
+      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
     totalBytesByBucket:
       this.signals.blobstore.totalBytesTopK.common
+      + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Buckets - Total Bytes',
         [
@@ -99,6 +102,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ) + self._tableCommon('Total Bytes'),
     totalNetworkThroughput:
       this.signals.blobstore.networkThroughputTopK.common
+      + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Buckets - Network Throughput',
         [
