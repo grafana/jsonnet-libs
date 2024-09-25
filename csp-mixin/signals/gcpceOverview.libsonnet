@@ -101,11 +101,14 @@ function(this)
       // Table
       tableCpuUtilization: {
         name: 'tableCpuUtilization',
-        type: 'raw',
+        type: 'gauge',
+        aggFunction: 'sum',
         sources: {
           stackdriver: {
-            expr: '100 * sum by (instance_name, job, project_id)(stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s})',
+            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s}',
             legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
+            exprWrappers: [['100 *', '']],
           },
         },
       },
