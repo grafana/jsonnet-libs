@@ -146,5 +146,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                        csplib.grafana.rows.avm_instance
                      )
                    ),
+
+                 [csplib.config.uid + '-queuestorage.json']:
+                   local variables = csplib.signals.azurequeuestore.getVariablesMultiChoice();
+                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Queue storage')
+                   + g.dashboard.withUid(csplib.config.uid + '-queuestoreage')
+                   + g.dashboard.withTags(csplib.config.dashboardTags)
+                   + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+                   + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+                   + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+                   + g.dashboard.withVariables(variables)
+                   + g.dashboard.withPanels(
+                     g.util.grid.wrapPanels(
+                       csplib.grafana.rows.azqueuestore_overview
+                       + csplib.grafana.rows.azqueuestore_api
+                       + csplib.grafana.rows.azqueuestore_network,
+                     )
+                   ),
                } else {},
 }

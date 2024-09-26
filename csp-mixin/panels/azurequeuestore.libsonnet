@@ -2,18 +2,18 @@ local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(this): {
-    // Blob Storage
+    // Azure Queue Storage
     _tableCommon(valueName)::
       g.panel.table.queryOptions.withTransformations([
         g.panel.table.queryOptions.transformation.withId('filterFieldsByName')
         + g.panel.table.queryOptions.transformation.withOptions({
           include: {
-            pattern: '%s.*|Value.*' % this.config.blobStorage.bucketLabel,
+            pattern: 'resourceName.*|Value.*',
           },
         }),
         g.panel.table.queryOptions.transformation.withId('joinByField')
         + g.panel.table.queryOptions.transformation.withOptions({
-          byField: this.config.blobStorage.bucketLabel,
+          byField: 'resourceName',
           mode: 'outer',
         }),
       ])
@@ -21,12 +21,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: this.config.blobStorage.bucketLabel,
+            options: 'resourceName',
           },
           properties: [
             {
               id: 'displayName',
-              value: 'Bucket',
+              value: 'Storage account',
             },
             // TODO: The link "works" but does not refresh the dashboard upon following the link. Surely this is solvable?
             // {
@@ -58,61 +58,63 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     availabilityTs:
-      this.signals.blobstore.availability.asTimeSeries()
+      this.signals.azurequeuestore.availability.asTimeSeries()
       + g.panel.timeSeries.options.legend.withDisplayMode('table')
       + g.panel.timeSeries.options.legend.withPlacement('bottom'),
     availabilityStat:
-      this.signals.blobstore.availability.asStat(),
-    bucketCount:
-      this.signals.blobstore.bucketCount.asStat()
+      this.signals.azurequeuestore.availability.asStat(),
+    queueCount:
+      this.signals.azurequeuestore.queueCount.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
       + g.panel.stat.standardOptions.color.withFixedColor('text'),
-    objectCountTotal:
-      this.signals.blobstore.objectCountTotal.asStat()
+    messageCountTotal:
+      this.signals.azurequeuestore.messageCountTotal.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
       + g.panel.stat.standardOptions.color.withFixedColor('text'),
-    objectCountByBucket:
-      this.signals.blobstore.objectCountTopK.common
+    messageCountByQueue:
+      this.signals.azurequeuestore.messageCountTopK.common
       + g.panel.table.standardOptions.withUnit('locale')
       + commonlib.panels.generic.table.base.new(
-        'Top 5 Buckets - Object Count',
+        'Top 5 Queues - Message Count',
         [
-          this.signals.blobstore.objectCountTopK.asTarget()
+          this.signals.azurequeuestore.messageCountTopK.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true),
         ],
-        'Number of objects stored.'
+        'Number of messages stored.'
       )
-      + self._tableCommon('Object Count'),
+      + self._tableCommon('Message Count'),
+    messageCountTs:
+      this.signals.azurequeuestore.messageCount.asTimeSeries(),
     totalBytesTotal:
-      this.signals.blobstore.totalBytesTotal.asStat()
+      this.signals.azurequeuestore.totalBytesTotal.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
       + g.panel.stat.standardOptions.color.withFixedColor('text'),
     totalBytesByBucket:
-      this.signals.blobstore.totalBytesTopK.common
+      this.signals.azurequeuestore.totalBytesTopK.common
       + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
-        'Top 5 Buckets - Total Bytes',
+        'Top 5 Queues - Total Bytes',
         [
-          this.signals.blobstore.totalBytesTopK.asTarget()
+          this.signals.azurequeuestore.totalBytesTopK.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true),
         ],
         'Total bytes stored'
       ) + self._tableCommon('Total Bytes'),
     totalNetworkThroughput:
-      this.signals.blobstore.networkThroughputTopK.common
+      this.signals.azurequeuestore.networkThroughputTopK.common
       + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
-        'Top 5 Buckets - Network Throughput',
+        'Top 5 Queues - Network Throughput',
         [
-          this.signals.blobstore.networkThroughputTopK.asTarget()
+          this.signals.azurequeuestore.networkThroughputTopK.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true),
-          this.signals.blobstore.networkRxTopK.asTarget()
+          this.signals.azurequeuestore.networkRxTopK.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true),
-          this.signals.blobstore.networkTxTopK.asTarget()
+          this.signals.azurequeuestore.networkTxTopK.asTarget()
           + g.query.prometheus.withFormat('table')
           + g.query.prometheus.withInstant(true),
         ],
@@ -158,15 +160,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         },
       ]),
     apiRequestCount:
-      this.signals.blobstore.apiRequestByTypeCount.asTimeSeries()
+      this.signals.azurequeuestore.apiRequestByTypeCount.asTimeSeries()
       + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal'),
     apiErrorRate:
-      this.signals.blobstore.apiRequestErrorRate.asTimeSeries(),
+      this.signals.azurequeuestore.apiRequestErrorRate.asTimeSeries(),
     network:
       commonlib.panels.network.timeSeries.traffic.new('Network traffic', targets=[])
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
       + g.panel.timeSeries.fieldConfig.defaults.custom.stacking.withMode('normal')
-      + this.signals.blobstore.networkRx.asPanelMixin()
-      + this.signals.blobstore.networkTx.asPanelMixin(),
+      + this.signals.azurequeuestore.networkRx.asPanelMixin()
+      + this.signals.azurequeuestore.networkTx.asPanelMixin(),
   },
 }
