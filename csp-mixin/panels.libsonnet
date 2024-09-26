@@ -1273,16 +1273,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           this.signals.gcpceOverview.tableReceivedPackets.asTarget()
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
-          this.signals.gcpceOverview.tableSentBytes.asTarget()
+          this.signals.gcpceOverview.tableNetworkSentBytes.asTarget()
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
-          this.signals.gcpceOverview.tableReceivedBytes.asTarget()
+          this.signals.gcpceOverview.tableNetworkReceivedBytes.asTarget()
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
-          this.signals.gcpceOverview.tableReadBytes.asTarget()
+          this.signals.gcpceOverview.tableDiskReadBytes.asTarget()
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
-          this.signals.gcpceOverview.tableWriteBytes.asTarget()
+          this.signals.gcpceOverview.tableDiskWriteBytes.asTarget()
           + g.query.prometheus.withInstant(true)
           + g.query.prometheus.withFormat('table'),
         ]
@@ -1466,7 +1466,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Value #tableSentBytes',
+            options: 'Value #tableNetworkSentBytes',
           },
           properties: [
             {
@@ -1495,7 +1495,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Value #tableReceivedBytes',
+            options: 'Value #tableNetworkReceivedBytes',
           },
           properties: [
             {
@@ -1524,7 +1524,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Value #tableReadBytes',
+            options: 'Value #tableDiskReadBytes',
           },
           properties: [
             {
@@ -1553,7 +1553,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Value #tableWriteBytes',
+            options: 'Value #tableDiskWriteBytes',
           },
           properties: [
             {

@@ -13,11 +13,12 @@ function(this)
       instanceCount: {
         name: 'Instance count',
         description: 'Number of VM instances',
-        type: 'raw',
+        type: 'gauge',
+        aggFunction: 'sum',
         unit: 'short',
         sources: {
           stackdriver: {
-            expr: 'sum by (instance_name) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s})',
+            expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s}',
             legendCustomTemplate: '',
             aggKeepLabels: ['instance_name'],
             exprWrappers: [['count(', ')']],
@@ -145,8 +146,8 @@ function(this)
           },
         },
       },
-      tableSentBytes: {
-        name: 'tableSentBytes',
+      tableNetworkSentBytes: {
+        name: 'tableNetworkSentBytes',
         type: 'gauge',
         sources: {
           stackdriver: {
@@ -156,8 +157,8 @@ function(this)
           },
         },
       },
-      tableReceivedBytes: {
-        name: 'tableReceivedBytes',
+      tableNetworkReceivedBytes: {
+        name: 'tableNetworkReceivedBytes',
         type: 'gauge',
         sources: {
           stackdriver: {
@@ -167,8 +168,8 @@ function(this)
           },
         },
       },
-      tableReadBytes: {
-        name: 'tableReadBytes',
+      tableDiskReadBytes: {
+        name: 'tableDiskReadBytes',
         type: 'gauge',
         sources: {
           stackdriver: {
@@ -178,8 +179,8 @@ function(this)
           },
         },
       },
-      tableWriteBytes: {
-        name: 'tableWriteBytes',
+      tableDiskWriteBytes: {
+        name: 'tableDiskWriteBytes',
         type: 'gauge',
         sources: {
           stackdriver: {
@@ -198,7 +199,7 @@ function(this)
         unit: 'bytes',
         sources: {
           stackdriver: {
-            expr: 'sum(stackdriver_gce_instance_compute_googleapis_com_instance_memory_balloon_ram_size{instance_name=~"$instance_name"} or on() vector(0)) + sum(stackdriver_gce_instance_compute_googleapis_com_guest_memory_bytes_used{instance_name=~"$instance_name"} OR on() vector(0))',
+            expr: 'sum(stackdriver_gce_instance_compute_googleapis_com_instance_memory_balloon_ram_size{%(queriesSelector)s}) + sum(stackdriver_gce_instance_compute_googleapis_com_guest_memory_bytes_used{%(queriesSelector)s})',
             legendCustomTemplate: 'Total Memory Capacity',
           },
         },
@@ -211,7 +212,7 @@ function(this)
         unit: 'bytes',
         sources: {
           stackdriver: {
-            expr: 'sum(stackdriver_gce_instance_compute_googleapis_com_instance_memory_balloon_ram_used{instance_name=~"$instance_name"} OR on() vector(0)) + sum(stackdriver_gce_instance_compute_googleapis_com_guest_memory_bytes_used{instance_name=~"$instance_name", state!="free"} OR on() vector(0))',
+            expr: 'sum(stackdriver_gce_instance_compute_googleapis_com_instance_memory_balloon_ram_used{%(queriesSelector)s}) + sum(stackdriver_gce_instance_compute_googleapis_com_guest_memory_bytes_used{%(queriesSelector)s, state!="free"})',
             legendCustomTemplate: 'Total Memory Used',
           },
         },
