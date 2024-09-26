@@ -121,5 +121,30 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                        csplib.grafana.rows.vn_packets
                      )
                    ),
+
+                 [csplib.config.uid + '-virtualmachines.json']:
+                   local variables = csplib.signals.azurevm.getVariablesMultiChoice();
+                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual Machines')
+                   + g.dashboard.withUid(csplib.config.uid + '-virtualmachines')
+                   + g.dashboard.withTags(csplib.config.dashboardTags)
+                   + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+                   + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+                   + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+                   + g.dashboard.withVariables([
+                     if std.asciiLower(v.label) == std.asciiLower(csplib.config.azurevm.groupLabel)
+                     then v { label: 'Group' }
+                     else if std.asciiLower(v.label) == std.asciiLower(csplib.config.azurevm.subscriptionLabel)
+                     then v { label: 'Subscription' }
+                     else if std.asciiLower(v.label) == std.asciiLower(csplib.config.azurevm.instanceLabel)
+                     then v { label: 'Instance' }
+                     else v
+                     for v in variables
+                   ])
+                   + g.dashboard.withPanels(
+                     g.util.grid.wrapPanels(
+                       csplib.grafana.rows.avm_overview +
+                       csplib.grafana.rows.avm_instance
+                     )
+                   ),
                } else {},
 }

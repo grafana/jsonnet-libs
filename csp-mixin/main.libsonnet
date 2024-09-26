@@ -10,16 +10,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         for sig in std.objectFields(this.config.signals)
       },
     grafana: {
-      panels: (import './panels.libsonnet').new(this),
+      panels: (import './panels/main.libsonnet').new(this),
       rows: (import './rows.libsonnet').new(this),
       dashboards: (import './dashboards.libsonnet').new(this),
     },
     prometheus: {
-      alerts: {},
+      alerts: (import './alerts.libsonnet').new(this),
       recordingRules: {},
     },
     asMonitoringMixin(): {
       grafanaDashboards+:: this.grafana.dashboards,
+      prometheusAlerts+:: this.prometheus.alerts,
     },
   },
 

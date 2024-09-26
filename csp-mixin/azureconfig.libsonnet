@@ -7,6 +7,11 @@
       enableAvailability: true,
       bucketLabel: 'resourceName',
     },
+    azurevm+: {
+      groupLabel: 'resourceGroup',
+      subscriptionLabel: 'subscriptionName',
+      instanceLabel: 'resourceName',
+    },
     // UID Prefix for each dashboard
     uid: 'azure',
     filteringSelector: 'job="integrations/azure"',
