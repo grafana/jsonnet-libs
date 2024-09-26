@@ -19,8 +19,5 @@
     groupLabels: ['job', 'resourceGroup', 'subscriptionName'],
     instanceLabels: ['resourceName'],
     metricsSource: 'azuremonitor',
-    alertAzureVMHighCpuUtilizationThreshold: '80',
-    alertAzureVMHighCpuUtilizationSeverity: 'critical',
-    alertAzureVMUnavailableSeverity: 'critical',
   },
 }
