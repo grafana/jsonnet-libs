@@ -66,11 +66,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     queueCount:
       this.signals.azurequeuestore.queueCount.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
-      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
+      + g.panel.stat.standardOptions.color.withFixedColor('text'),
     messageCountTotal:
       this.signals.azurequeuestore.messageCountTotal.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
-      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
+      + g.panel.stat.standardOptions.color.withFixedColor('text'),
     messageCountByQueue:
       this.signals.azurequeuestore.messageCountTopK.common
       + g.panel.table.standardOptions.withUnit('locale')
@@ -89,7 +89,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     totalBytesTotal:
       this.signals.azurequeuestore.totalBytesTotal.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
-      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
+      + g.panel.stat.standardOptions.color.withFixedColor('text'),
     totalBytesByBucket:
       this.signals.azurequeuestore.totalBytesTopK.common
       + g.panel.table.standardOptions.withUnit('bytes')

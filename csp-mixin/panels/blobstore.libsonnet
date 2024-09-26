@@ -66,11 +66,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     bucketCount:
       this.signals.blobstore.bucketCount.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
-      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
+      + g.panel.stat.standardOptions.color.withFixedColor('text'),
     objectCountTotal:
       this.signals.blobstore.objectCountTotal.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
-      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
+      + g.panel.stat.standardOptions.color.withFixedColor('text'),
     objectCountByBucket:
       this.signals.blobstore.objectCountTopK.common
       + g.panel.table.standardOptions.withUnit('locale')
@@ -87,7 +87,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     totalBytesTotal:
       this.signals.blobstore.totalBytesTotal.asStat()
       + g.panel.stat.standardOptions.color.withMode('fixed')
-      + g.panel.stat.standardOptions.color.withFixedColor('purple'),
+      + g.panel.stat.standardOptions.color.withFixedColor('text'),
     totalBytesByBucket:
       this.signals.blobstore.totalBytesTopK.common
       + g.panel.table.standardOptions.withUnit('bytes')
