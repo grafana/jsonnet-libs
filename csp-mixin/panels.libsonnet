@@ -903,9 +903,69 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     // Gcp Compute Engine
 
     gce_instance_count:
-      this.signals.gcpceOverview.instanceCount.asStat(),
+      this.signals.gcpceOverview.instanceCount.asStat()
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byFrameRefID',
+            options: 'Instance count',
+          },
+          properties: [
+            {
+              id: 'mappings',
+              value: [],
+            },
+            {
+              id: 'unit',
+              value: 'short',
+            },
+            {
+              id: 'thresholds',
+              value: {
+                mode: 'absolute',
+                steps: [
+                  {
+                    color: 'text',
+                    value: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ]),
     gce_system_problem_count:
-      this.signals.gcpceOverview.systemProblemCount.asStat(),
+      this.signals.gcpceOverview.systemProblemCount.asStat()
+      + g.panel.table.standardOptions.withOverrides([
+        {
+          matcher: {
+            id: 'byFrameRefID',
+            options: 'System problem count',
+          },
+          properties: [
+            {
+              id: 'mappings',
+              value: [],
+            },
+            {
+              id: 'unit',
+              value: 'short',
+            },
+            {
+              id: 'thresholds',
+              value: {
+                mode: 'absolute',
+                steps: [
+                  {
+                    color: 'text',
+                    value: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      ]),
     gce_top5_cpu_utilization:
       this.signals.gcpceOverview.top5CpuUtilization.asTable(format='table')
       + g.panel.table.standardOptions.withOverrides([
@@ -1428,7 +1488,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Network throughput Send [5m]',
+              value: 'Network sent [5m]',
             },
           ],
         },
@@ -1457,7 +1517,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Network throughput Received [5m]',
+              value: 'Network received [5m]',
             },
           ],
         },
@@ -1486,7 +1546,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Total Bytes count read [5m]',
+              value: 'Disk Read Bytes [5m]',
             },
           ],
         },
@@ -1515,7 +1575,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Total Bytes count write [5m]',
+              value: 'Disk Write Bytes [5m]',
             },
           ],
         },
