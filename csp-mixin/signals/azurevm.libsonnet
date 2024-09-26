@@ -66,7 +66,7 @@ function(this)
       },
 
       networkInByVM: {
-        name: 'Network throughput received',
+        name: 'Network received',
         description: 'The number of bytes received on all network interfaces by the Virtual Machine(s)',
         type: 'gauge',
         unit: 'decbytes',
@@ -80,7 +80,7 @@ function(this)
       },
 
       networkOutByVM: {
-        name: 'Network throughput sent',
+        name: 'Network sent',
         description: 'The number of bytes sent to all network interfaces by the Virtual Machine(s)',
         type: 'gauge',
         unit: 'decbytes',
@@ -94,7 +94,7 @@ function(this)
       },
 
       diskReadByVM: {
-        name: 'Disk read bytes (total)',
+        name: 'Disk read bytes',
         description: 'Bytes read from disk during monitoring period',
         type: 'gauge',
         unit: 'decbytes',
@@ -108,7 +108,7 @@ function(this)
       },
 
       diskWriteByVM: {
-        name: 'Disk write bytes (total)',
+        name: 'Disk write bytes',
         description: 'Bytes written to disk during monitoring period',
         type: 'gauge',
         unit: 'decbytes',
@@ -122,7 +122,7 @@ function(this)
       },
 
       diskReadOperationsByVM: {
-        name: 'Disk read operations/sec (average)',
+        name: 'Disk read operations',
         description: 'Disk read IOPS',
         type: 'gauge',
         unit: 'cps',
@@ -136,7 +136,7 @@ function(this)
       },
 
       diskWriteOperationsByVM: {
-        name: 'Disk write operations/sec (average)',
+        name: 'Disk write operations',
         description: 'Disk write IOPS',
         type: 'gauge',
         unit: 'cps',
@@ -144,6 +144,33 @@ function(this)
         sources: {
           azuremonitor: {
             expr: 'azure_microsoft_compute_virtualmachines_disk_write_operations_sec_average_countpersecond{%(queriesSelector)s}',
+            legendCustomTemplate: '{{resourceName}}',
+          },
+        },
+      },
+
+      inboundFlowsByVM: {
+        name: 'Inbound flows',
+        description: 'The number of current flows in the inbound direction (traffic going into the VM).',
+        type: 'counter',
+        unit: 'cps',
+        aggFunction: 'sum',
+        sources: {
+          azuremonitor: {
+            expr: 'azure_microsoft_compute_virtualmachines_inbound_flows_average_count{%(queriesSelector)s}',
+            legendCustomTemplate: '{{resourceName}}',
+          },
+        },
+      },
+      outboundFlowsByVM: {
+        name: 'Outbound flows',
+        description: 'Number of current flows in the outbound direction',
+        type: 'counter',
+        unit: 'cps',
+        aggFunction: 'sum',
+        sources: {
+          azuremonitor: {
+            expr: 'azure_microsoft_compute_virtualmachines_outbound_flows_average_count{%(queriesSelector)s}',
             legendCustomTemplate: '{{resourceName}}',
           },
         },

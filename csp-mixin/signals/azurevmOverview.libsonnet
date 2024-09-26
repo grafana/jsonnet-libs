@@ -38,7 +38,7 @@ function(this)
         },
       },
       top5CpuUtilization: {
-        name: 'Top 5 Instances by CPU Utilitization',
+        name: 'Top 5 Instances by CPU utilitization',
         description: 'Fractional utilization of allocated CPU on an instance',
         type: 'gauge',
         aggFunction: 'avg',
@@ -101,7 +101,7 @@ function(this)
       },
 
       diskReadBytes: {
-        name: 'Disk bytes (total)',
+        name: 'Disk read/write bytes',
         description: 'Bytes read/written from/to disk during monitoring period',
         type: 'gauge',
         unit: 'decbytes',
@@ -131,7 +131,7 @@ function(this)
       },
 
       diskReadOperations: {
-        name: 'Disk operations/sec (average)',
+        name: 'Disk read/write operations',
         description: 'Disk read/write IOPS',
         type: 'gauge',
         unit: 'cps',
@@ -161,8 +161,8 @@ function(this)
       },
 
       networkInTotal: {
-        name: 'Network throughput send/received',
-        description: 'The number of bytes sent/received over the network.',
+        name: 'Network throughput received',
+        description: 'The number of bytes received over the network.',
         type: 'gauge',
         unit: 'decbytes',
         aggFunction: 'sum',
@@ -176,8 +176,8 @@ function(this)
       },
 
       networkOutTotal: {
-        name: 'Network throughput sent',
-        description: 'The number of bytes sent over the network.',
+        name: 'Network throughput sent/received',
+        description: 'The number of bytes sent/received over the network.',
         type: 'gauge',
         unit: 'decbytes',
         aggFunction: 'sum',
@@ -191,7 +191,7 @@ function(this)
       },
 
       inboundFlows: {
-        name: 'Connections',
+        name: 'Flows',
         description: 'Number of current flows in the inbound/outbound direction',
         type: 'counter',
         unit: 'cps',
@@ -206,7 +206,7 @@ function(this)
       },
 
       outboundFlows: {
-        name: 'Outbound connections',
+        name: 'Outbound flows',
         description: 'Number of current flows in the outbound direction',
         type: 'counter',
         unit: 'cps',

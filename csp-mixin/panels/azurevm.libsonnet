@@ -123,9 +123,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.standardOptions.withNoValue('0'),
 
     avm_network_total:
-      this.signals.azurevmOverview.networkInTotal.asTimeSeries()
+      this.signals.azurevmOverview.networkOutTotal.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
-      + this.signals.azurevmOverview.networkOutTotal.asPanelMixin(),
+      + this.signals.azurevmOverview.networkInTotal.asPanelMixin(),
 
     avm_connections:
       this.signals.azurevmOverview.inboundFlows.asTimeSeries()
@@ -159,6 +159,14 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       this.signals.azurevm.diskWriteOperationsByVM.asTimeSeries()
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.standardOptions.withNoValue('0'),
+
+    avm_inbound_flows_by_instance:
+      this.signals.azurevm.inboundFlowsByVM.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
+
+    avm_outbound_flows_by_instance:
+      this.signals.azurevm.outboundFlowsByVM.asTimeSeries()
+      + commonlib.panels.generic.timeSeries.base.stylize(),
 
     avm_top5_cpu_utilization:
       this.signals.azurevmOverview.top5CpuUtilization.asTable(format='table')
@@ -367,10 +375,10 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     avm_instances_table:
       this.signals.azurevm.cpuUtilization.asTable(name='Instances', format='table')
       + this.signals.azurevm.availableMemory.asTableColumn(format='table')
-      + this.signals.azurevm.diskReadByVM.asTableColumn(format='table')
-      + this.signals.azurevm.diskWriteByVM.asTableColumn(format='table')
       + this.signals.azurevm.networkInByVM.asTableColumn(format='table')
       + this.signals.azurevm.networkOutByVM.asTableColumn(format='table')
+      + this.signals.azurevm.diskReadByVM.asTableColumn(format='table')
+      + this.signals.azurevm.diskWriteByVM.asTableColumn(format='table')
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
@@ -445,7 +453,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Value #Disk read bytes (total)',
+            options: 'Value #Disk read bytes',
           },
           properties: [
             {
@@ -461,7 +469,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Value #Disk write bytes (total)',
+            options: 'Value #Disk write bytes',
           },
           properties: [
             {
@@ -501,7 +509,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Value #Network throughput received',
+            options: 'Value #Network received',
           },
           properties: [
             {
@@ -517,7 +525,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         {
           matcher: {
             id: 'byName',
-            options: 'Value #Network throughput sent',
+            options: 'Value #Network sent',
           },
           properties: [
             {

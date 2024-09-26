@@ -361,6 +361,14 @@ local g = import './g.libsonnet';
             this.grafana.panels.azurevm.avm_disk_write_operations_by_instance
             + g.panel.timeSeries.gridPos.withW(12)
             + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.azurevm.avm_inbound_flows_by_instance
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.azurevm.avm_outbound_flows_by_instance
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
           ]
         ),
       ],
