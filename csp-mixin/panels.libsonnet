@@ -904,6 +904,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     gce_instance_count:
       this.signals.gcpceOverview.instanceCount.asStat()
+      + g.panel.stat.standardOptions.color.withMode('fixed')
+      + g.panel.stat.standardOptions.color.withFixedColor('text')
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
@@ -919,23 +921,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               id: 'unit',
               value: 'short',
             },
-            {
-              id: 'thresholds',
-              value: {
-                mode: 'absolute',
-                steps: [
-                  {
-                    color: 'text',
-                    value: null,
-                  },
-                ],
-              },
-            },
           ],
         },
       ]),
     gce_system_problem_count:
       this.signals.gcpceOverview.systemProblemCount.asStat()
+      + g.panel.stat.standardOptions.color.withMode('fixed')
+      + g.panel.stat.standardOptions.color.withFixedColor('text')
       + g.panel.table.standardOptions.withOverrides([
         {
           matcher: {
@@ -950,18 +942,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             {
               id: 'unit',
               value: 'short',
-            },
-            {
-              id: 'thresholds',
-              value: {
-                mode: 'absolute',
-                steps: [
-                  {
-                    color: 'text',
-                    value: null,
-                  },
-                ],
-              },
             },
           ],
         },
