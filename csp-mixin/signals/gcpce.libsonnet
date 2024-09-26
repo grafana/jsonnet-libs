@@ -37,7 +37,7 @@ function(this)
       },
       networkReceived: {
         name: 'Network received',
-        description: 'Count of bytes received from the network. Sampled every 60 seconds.',
+        description: 'Bytes received from the network. Sampled every 60 seconds.',
         type: 'counter',
         unit: 'bytes',
         aggFunction: 'avg',
@@ -50,7 +50,7 @@ function(this)
       },
       networkSent: {
         name: 'Network sent',
-        description: 'Count of bytes sent from the network. Sampled every 60 seconds.',
+        description: 'Bytes sent from the network. Sampled every 60 seconds.',
         type: 'counter',
         unit: 'bytes',
         aggFunction: 'avg',
@@ -63,8 +63,8 @@ function(this)
       },
 
       diskReadBytes: {
-        name: 'Count of disk read bytes',
-        description: 'Count of bytes read from disk. Sampled every 60 seconds.',
+        name: 'Disk read bytes',
+        description: 'Bytes read from disk. Sampled every 60 seconds.',
         type: 'counter',
         unit: 'bytes',
         aggFunction: 'avg',
@@ -77,8 +77,8 @@ function(this)
         },
       },
       diskWriteBytes: {
-        name: 'Count of disk write bytes',
-        description: 'Count of bytes written to disk. Sampled every 60 seconds.',
+        name: 'Disk write bytes',
+        description: 'Bytes written to disk. Sampled every 60 seconds.',
         type: 'counter',
         unit: 'bytes',
         aggFunction: 'avg',
@@ -90,8 +90,8 @@ function(this)
         },
       },
       diskReadOperations: {
-        name: 'Count of disk read operations',
-        description: 'Count of disk read IO operations. Sampled every 60 seconds.',
+        name: 'Disk read operations',
+        description: 'Disk read IO operations. Sampled every 60 seconds.',
         type: 'counter',
         unit: 'short',
         aggFunction: 'avg',
@@ -103,8 +103,8 @@ function(this)
         },
       },
       diskWriteOperations: {
-        name: 'Count of disk write operations',
-        description: 'Count of disk write IO operations. Sampled every 60 seconds.',
+        name: 'Disk write operations',
+        description: 'Disk write IO operations. Sampled every 60 seconds.',
         type: 'counter',
         unit: 'short',
         aggFunction: 'avg',
