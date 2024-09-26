@@ -29,9 +29,9 @@ A collection of dashboards and their component parts for cloud service provider 
      + this.signals.azurevmOverview.diskWriteOperations.asPanelMixin()
    ```
    
-   _Note: You can prefix the definition with the first letter of the provider and the first letter of the dashboard name You want to build. Ex. `avm_` for **A**zure **V**irtual **M**achine._
+   _Note: You can prefix the definition with the first letter of the provider and the first letter of the dashboard name you want to build. Ex. `avm_` for **A**zure **V**irtual **M**achine._
 
-5. Add all your row definitions in the `rows.libsonnet` file. You need to define:
+5. Add all your row definitions into the `rows.libsonnet` file. You need to define:
    - The title of the row if you have one.
    - The panel(s) that you want to show.
    - The width and height of each panel
