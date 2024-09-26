@@ -1126,8 +1126,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
         },
       ]),
-    gce_top5_disk_write_bytes:
-      this.signals.gcpceOverview.top5DiskWrite.asTable(format='table')
+    gce_top5_disk_read_bytes:
+      this.signals.gcpceOverview.top5DiskRead.asTable(format='table')
       + g.panel.table.standardOptions.withUnit('bytes')
       + g.panel.table.standardOptions.withOverrides([
         {
@@ -1191,8 +1191,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           ],
         },
       ]),
-    gce_top5_disk_read_bytes:
-      this.signals.gcpceOverview.top5DiskRead.asTable(format='table')
+    gce_top5_disk_write_bytes:
+      this.signals.gcpceOverview.top5DiskWrite.asTable(format='table')
       + g.panel.table.standardOptions.withUnit('bytes')
       + g.panel.table.standardOptions.withOverrides([
         {

@@ -283,11 +283,11 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 
-        this.grafana.panels.gce_top5_disk_write_bytes
+        this.grafana.panels.gce_top5_disk_read_bytes
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 
-        this.grafana.panels.gce_top5_disk_read_bytes
+        this.grafana.panels.gce_top5_disk_write_bytes
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
 

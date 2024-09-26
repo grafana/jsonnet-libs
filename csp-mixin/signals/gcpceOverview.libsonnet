@@ -67,22 +67,6 @@ function(this)
         },
       },
 
-      top5DiskWrite: {
-        name: 'Top 5 Instances by Disk write bytes',
-        description: 'List of top 5 instances by disk write bytes',
-        type: 'gauge',
-        aggFunction: 'sum',
-        unit: 'bytes',
-        sources: {
-          stackdriver: {
-            expr: 'increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[$__range])',
-            legendCustomTemplate: '',
-            aggKeepLabels: ['instance_name'],
-            exprWrappers: [['topk(5,', ')']],
-          },
-        },
-      },
-
       top5DiskRead: {
         name: 'Top 5 Instances by Disk read bytes',
         description: 'List of top 5 instances by disk read bytes',
@@ -94,6 +78,22 @@ function(this)
             expr: 'increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_read_bytes_count{%(queriesSelector)s}[$__range])',
             aggKeepLabels: ['instance_name'],
             legendCustomTemplate: '',
+            exprWrappers: [['topk(5,', ')']],
+          },
+        },
+      },
+
+      top5DiskWrite: {
+        name: 'Top 5 Instances by Disk write bytes',
+        description: 'List of top 5 instances by disk write bytes',
+        type: 'gauge',
+        aggFunction: 'sum',
+        unit: 'bytes',
+        sources: {
+          stackdriver: {
+            expr: 'increase(stackdriver_gce_instance_compute_googleapis_com_instance_disk_write_bytes_count{%(queriesSelector)s}[$__range])',
+            legendCustomTemplate: '',
+            aggKeepLabels: ['instance_name'],
             exprWrappers: [['topk(5,', ')']],
           },
         },
