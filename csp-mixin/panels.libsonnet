@@ -1468,7 +1468,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Disk Read Bytes [5m]',
+              value: 'Disk read bytes [5m]',
             },
           ],
         },
@@ -1484,7 +1484,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
             {
               id: 'displayName',
-              value: 'Disk Write Bytes [5m]',
+              value: 'Disk write bytes [5m]',
             },
           ],
         },
