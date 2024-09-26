@@ -1395,19 +1395,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               value: 's',
             },
             {
-              id: 'custom.cellOptions',
-              value: {
-                type: 'color-text',
-              },
-            },
-            {
-              id: 'color',
-              value: {
-                fixedColor: 'blue',
-                mode: 'fixed',
-              },
-            },
-            {
               id: 'displayName',
               value: 'Uptime',
             },
@@ -1420,19 +1407,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           },
           properties: [
             {
-              id: 'custom.cellOptions',
-              value: {
-                type: 'color-text',
-              },
-            },
-            {
-              id: 'color',
-              value: {
-                fixedColor: 'blue',
-                mode: 'fixed',
-              },
-            },
-            {
               id: 'displayName',
               value: 'Sent packets [5m]',
             },
@@ -1444,19 +1418,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             options: 'Value #tableReceivedPackets',
           },
           properties: [
-            {
-              id: 'custom.cellOptions',
-              value: {
-                type: 'color-text',
-              },
-            },
-            {
-              id: 'color',
-              value: {
-                fixedColor: 'blue',
-                mode: 'fixed',
-              },
-            },
             {
               id: 'displayName',
               value: 'Received packets [5m]',
@@ -1472,19 +1433,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             {
               id: 'unit',
               value: 'decbytes',
-            },
-            {
-              id: 'custom.cellOptions',
-              value: {
-                type: 'color-text',
-              },
-            },
-            {
-              id: 'color',
-              value: {
-                fixedColor: 'blue',
-                mode: 'fixed',
-              },
             },
             {
               id: 'displayName',
@@ -1503,19 +1451,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               value: 'decbytes',
             },
             {
-              id: 'custom.cellOptions',
-              value: {
-                type: 'color-text',
-              },
-            },
-            {
-              id: 'color',
-              value: {
-                fixedColor: 'blue',
-                mode: 'fixed',
-              },
-            },
-            {
               id: 'displayName',
               value: 'Network received [5m]',
             },
@@ -1532,19 +1467,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               value: 'decbytes',
             },
             {
-              id: 'custom.cellOptions',
-              value: {
-                type: 'color-text',
-              },
-            },
-            {
-              id: 'color',
-              value: {
-                fixedColor: 'blue',
-                mode: 'fixed',
-              },
-            },
-            {
               id: 'displayName',
               value: 'Disk Read Bytes [5m]',
             },
@@ -1559,19 +1481,6 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             {
               id: 'unit',
               value: 'decbytes',
-            },
-            {
-              id: 'custom.cellOptions',
-              value: {
-                type: 'color-text',
-              },
-            },
-            {
-              id: 'color',
-              value: {
-                fixedColor: 'blue',
-                mode: 'fixed',
-              },
             },
             {
               id: 'displayName',
