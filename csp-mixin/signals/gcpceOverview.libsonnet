@@ -193,8 +193,8 @@ function(this)
       // end table
 
       memoryUtilization: {
-        name: 'Memory Utilization',
-        description: 'Memory Utilization',
+        name: 'Memory utilization',
+        description: 'Memory utilization',
         type: 'raw',
         unit: 'bytes',
         sources: {
@@ -206,7 +206,7 @@ function(this)
       },
 
       memoryUsed: {
-        name: 'Memory Utilization2',
+        name: 'Memory utilization2',
         description: 'Memory used',
         type: 'raw',
         unit: 'bytes',
@@ -219,8 +219,8 @@ function(this)
       },
 
       packetsSent: {
-        name: 'Total packets count sent/received',
-        description: 'Count of packets sent/received over the network. Sampled every 60 seconds',
+        name: 'Sent/received packets',
+        description: 'Packets sent/received over the network. Sampled every 60 seconds',
         type: 'counter',
         unit: 'sishort',
         aggFunction: 'sum',
@@ -233,8 +233,8 @@ function(this)
       },
 
       packetsReceived: {
-        name: 'Total packets count received',
-        description: 'Count of packets sent/received over the network. Sampled every 60 seconds',
+        name: 'Received packets',
+        description: 'Packets received over the network. Sampled every 60 seconds',
         type: 'counter',
         unit: 'sishort',
         aggFunction: 'sum',
@@ -247,7 +247,7 @@ function(this)
       },
 
       networkSent: {
-        name: 'Network throughput Sent/Received',
+        name: 'Network throughput sent/received',
         description: 'Count of bytes sent/received over the network. Sampled every 60 seconds',
         type: 'counter',
         unit: 'bytes',
@@ -260,7 +260,7 @@ function(this)
       },
 
       networkReceived: {
-        name: 'Network throughput Received',
+        name: 'Network throughput received',
         description: 'Count of bytes sent/received over the network. Sampled every 60 seconds',
         type: 'counter',
         unit: 'bytes',
@@ -273,7 +273,7 @@ function(this)
       },
 
       diskBytesRead: {
-        name: 'Total Bytes count read/write',
+        name: 'Disk read/write bytes',
         description: 'Total count of bytes read/write from disk. Sampled every 60 seconds',
         type: 'counter',
         unit: 'bytes',
@@ -286,7 +286,7 @@ function(this)
       },
 
       diskBytesWrite: {
-        name: 'Total Bytes count write',
+        name: 'Disk write bytes',
         description: 'Total count of bytes read/write from disk. Sampled every 60 seconds',
         type: 'counter',
         unit: 'bytes',

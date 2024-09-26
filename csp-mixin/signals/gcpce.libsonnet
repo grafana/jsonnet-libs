@@ -11,7 +11,7 @@ function(this)
     },
     signals: {
       cpuUtilization: {
-        name: 'CPU Utilization',
+        name: 'CPU utilization',
         description: 'Fractional utilization of allocated CPU on this instance.',
         type: 'gauge',
         unit: 'percentunit',
