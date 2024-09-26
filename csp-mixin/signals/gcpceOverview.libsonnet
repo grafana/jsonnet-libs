@@ -19,7 +19,7 @@ function(this)
         sources: {
           stackdriver: {
             expr: 'stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{%(queriesSelector)s}',
-            legendCustomTemplate: '',
+            legendCustomTemplate: 'Number of instances',
             aggKeepLabels: ['instance_name'],
             exprWrappers: [['count(', ')']],
           },
