@@ -375,8 +375,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     avm_instances_table:
       this.signals.azurevm.cpuUtilization.asTable(name='Instances', format='table')
       + this.signals.azurevm.availableMemory.asTableColumn(format='table')
-      + this.signals.azurevm.networkInByVM.asTableColumn(format='table')
       + this.signals.azurevm.networkOutByVM.asTableColumn(format='table')
+      + this.signals.azurevm.networkInByVM.asTableColumn(format='table')
       + this.signals.azurevm.diskReadByVM.asTableColumn(format='table')
       + this.signals.azurevm.diskWriteByVM.asTableColumn(format='table')
       + g.panel.table.standardOptions.withOverrides([

@@ -4,25 +4,32 @@ A collection of dashboards and their component parts for cloud service provider 
 
 # New Dashboard definition
 1. Create a new `.libsonnet` file on the `csp-mixin/signals` folder that will contain the general settings of your dashboard and its panels like title, description, panel queries, legend template, discovery metric, variable definitions, aggregation level...
-2. Override default configuration loaded from `azureconfig.libsonnet` or `gcpconfig.libsonnet` for the specific dashboard if needed. Ex. You can initialize groupLabels like: `groupLabels: this.groupLabels` or override global values like this: `groupLabels: ['job', 'resourceName']`.
+2. Define variables definition by setting `groupLabels` and `instanceLabels` in your signal. You can use the global values defined on `azureconfig.libsonnet` or `gcpconfig.libsonnet` or override them as needed. Ex. You can initialize groupLabels like: `groupLabels: this.groupLabels` or override it like: `groupLabels: ['job', 'resourceName']`.
 3. Add the new signal definition to the `config.libsonnet` file. Ex. `azurevm: (import './signals/azurevm.libsonnet')(this),`.
-4. Add your panel definitions to the file `panels.libsonnet` like:
+4. Create a new `.libsonnet` file on the `csp-mixin/panels` folder containing the configuration for each panel. Example:
    ```
-   [panel_id]:
-     this.signals.[signal_id].[signal_definition_id].as[PanelType]()
-     + commonlib.panels.generic.[panelType].base.stylize(),
+   [panel_name]:
+     this.signals.[panel_id].[signal_id].as[visualization_type]()
+     + commonlib.panels.generic.[visualization_type].base.stylize(),
    
    # Example: 
    
-   avm_availability:
-      this.signals.azurevm.vmAvailability.asStat()
+   avm_instance_count:
+      this.signals.azurevmOverview.instanceCount.asStat()
       + commonlib.panels.generic.stat.base.stylize(),
-   
-   alb_snatports:
-      this.signals.azureloadbalancer.snatPorts.asTimeSeries()
-      + commonlib.panels.generic.timeSeries.base.stylize(),
+
+   avm_cpu_utilization:
+     this.signals.azurevm.cpuUtilization.asTimeSeries()
+     + commonlib.panels.generic.timeSeries.base.stylize(),
    ```
-   _Note: You can prefix the definition with the first letter of the provider and the first letter of the dashboard name You want to build. Ex. `avm_` for **A**zure **V**irtual **M**achine because this file contains all panels for all dashboards._
+   Use **asPanelMixin** when you want to show multiple queries on the same panel. Example:
+   ```
+   this.signals.azurevmOverview.diskReadOperations.asTimeSeries()
+     + commonlib.panels.generic.timeSeries.base.stylize()
+     + this.signals.azurevmOverview.diskWriteOperations.asPanelMixin()
+   ```
+   
+   _Note: You can prefix the definition with the first letter of the provider and the first letter of the dashboard name You want to build. Ex. `avm_` for **A**zure **V**irtual **M**achine._
 
 5. Add all your row definitions in the `rows.libsonnet` file. You need to define:
    - The title of the row if you have one.
@@ -32,21 +39,22 @@ A collection of dashboards and their component parts for cloud service provider 
    See example below:
    
    ```
-   alb_loadbalancers: [
-      g.panel.row.new('SNAT Ports'),
-      this.grafana.panels.alb_snatports
-      + g.panel.timeSeries.gridPos.withW(12)
-      + g.panel.timeSeries.gridPos.withH(8),
-   ],
-   
-   # or without any row (just the panels)
    avm_overview: [
-      this.grafana.panels.avm_availability
-      + g.panel.timeSeries.gridPos.withW(24)
-      + g.panel.timeSeries.gridPos.withH(2),
-   ],
+     # the row definition is optional. You can show all panels together without to group them by row.
+     g.panel.row.new('Overview'),
+
+     this.grafana.panels.azurevm.avm_instance_count
+      + g.panel.timeSeries.gridPos.withW(12)
+      + g.panel.timeSeries.gridPos.withH(5),
+
+     this.grafana.panels.azurevm.avm_availability
+      + g.panel.timeSeries.gridPos.withW(12)
+      + g.panel.timeSeries.gridPos.withH(5),
+      ...
+   ]
    ```
-6. Add your dashboard definition to the `dashboards.libsonnet` file. You can define a unique signal for gcp and azure dashboard or specify a dashboard just for one of the provider (azure or gcp). See example below:
+6. Add your dashboard definition to the `dashboards.libsonnet` file. 
+   You can define a unique signal for **gcp** and **azure** dashboard or specify a dashboard just for one of the providers (azure or gcp). See example below:
    ```
    +
    if csplib.config.uid == 'azure' then
