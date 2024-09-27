@@ -7,7 +7,7 @@
           [
             {
               alert: 'AzureVMHighCpuUtilization',
-              expr: 'avg by (%s) (%s) > 80' %
+              expr: 'avg by (%s) (%s) > 85' %
                     [
                       std.join(',', this.config.groupLabels + this.config.instanceLabels),
                       this.signals.azurevm.cpuUtilization.asRuleExpression(),

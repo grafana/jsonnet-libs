@@ -200,16 +200,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                 mode: 'absolute',
                 steps: [
                   {
-                    color: 'green',
+                    color: 'yellow',
                     value: null,
                   },
                   {
-                    color: 'orange',
-                    value: 70,
+                    color: 'green',
+                    value: 30,
                   },
                   {
                     color: 'red',
-                    value: 90,
+                    value: 85,
                   },
                 ],
               },
@@ -410,16 +410,16 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                 mode: 'absolute',
                 steps: [
                   {
-                    color: 'green',
+                    color: 'yellow',
                     value: null,
                   },
                   {
-                    color: 'orange',
-                    value: 70,
+                    color: 'green',
+                    value: 30,
                   },
                   {
                     color: 'red',
-                    value: 90,
+                    value: 85,
                   },
                 ],
               },
