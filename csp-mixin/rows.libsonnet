@@ -416,5 +416,98 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(24)
         + g.panel.timeSeries.gridPos.withH(12),
       ],
+
+      // Gcp Compute Engine
+      gce_overview: [
+        g.panel.row.new('Overview'),
+
+        this.grafana.panels.gcpce.gce_instance_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(5),
+
+        this.grafana.panels.gcpce.gce_system_problem_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(5),
+
+        this.grafana.panels.gcpce.gce_top5_cpu_utilization
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpce.gce_top5_system_problem
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpce.gce_top5_disk_read_bytes
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpce.gce_top5_disk_write_bytes
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpce.gce_instances
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(12),
+
+        this.grafana.panels.gcpce.gce_memory_utilization
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpce.gce_total_packets_sent_received
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpce.gce_network_send_received
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpce.gce_bytes_read_write
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      gce_instance: [
+        g.panel.row.new('Instance')
+        + g.panel.row.withCollapsed(true)
+        + g.panel.row.withPanels(
+          [
+            this.grafana.panels.gcpce.gce_text_instances
+            + g.panel.timeSeries.gridPos.withW(24)
+            + g.panel.timeSeries.gridPos.withH(2),
+
+            this.grafana.panels.gcpce.gce_cpu_utilization
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.gcpce.gce_cpu_usage_time
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.gcpce.gce_network_received
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.gcpce.gce_network_sent
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.gcpce.gce_count_disk_read_bytes
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.gcpce.gce_count_disk_write_bytes
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.gcpce.gce_count_disk_read_operations
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.gcpce.gce_count_disk_write_operations
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+          ]
+        ),
+      ],
     },
 }

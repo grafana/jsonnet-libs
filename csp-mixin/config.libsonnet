@@ -16,6 +16,8 @@
         azurevm: (import './signals/azurevm.libsonnet')(this),
         azurevmOverview: (import './signals/azurevmOverview.libsonnet')(this),
         azurequeuestore: (import './signals/azurequeuestore.libsonnet')(this),
+        gcpce: (import './signals/gcpce.libsonnet')(this),
+        gcpceOverview: (import './signals/gcpceOverview.libsonnet')(this),
       },
     blobStorage: {
       enableAvailability: false,

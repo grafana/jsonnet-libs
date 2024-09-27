@@ -8,5 +8,6 @@
     azurevm: (import './azurevm.libsonnet').new(this),
     blobstore: (import './blobstore.libsonnet').new(this),
     gcploadbalancer: (import './gcploadbalancer.libsonnet').new(this),
+    gcpce: (import './gcpce.libsonnet').new(this),
   },
 }

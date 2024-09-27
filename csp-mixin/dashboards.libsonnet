@@ -52,6 +52,21 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               + csplib.grafana.rows.glb_traffic_metrics
             )
           ),
+        [csplib.config.uid + '-computeengine.json']:
+          local variables = csplib.signals.gcpce.getVariablesMultiChoice();
+          g.dashboard.new(csplib.config.dashboardNamePrefix + 'Compute Engine')
+          + g.dashboard.withUid(csplib.config.uid + '-computeengine')
+          + g.dashboard.withTags(csplib.config.dashboardTags)
+          + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+          + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+          + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+          + g.dashboard.withVariables(variables)
+          + g.dashboard.withPanels(
+            g.util.grid.wrapPanels(
+              csplib.grafana.rows.gce_overview +
+              csplib.grafana.rows.gce_instance
+            )
+          ),
       } else {}
              +
              if csplib.config.uid == 'azure' then
