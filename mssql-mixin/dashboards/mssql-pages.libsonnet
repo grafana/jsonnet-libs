@@ -256,7 +256,6 @@ local pageFaultsPanel(matcher) = {
       'increase(mssql_page_fault_count_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
-      step=75,
     ),
   ],
   type: 'timeseries',
