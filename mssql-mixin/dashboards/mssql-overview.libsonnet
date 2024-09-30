@@ -105,6 +105,7 @@ local batchRequestsPanel(matcher) = {
       'rate(mssql_batch_requests_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      step=75,
     ),
   ],
   type: 'timeseries',
@@ -182,9 +183,10 @@ local severeErrorsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_kill_connection_errors_total{' + matcher + '}[$__rate_interval])',
+      'increase(mssql_kill_connection_errors_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      step=75,
     ),
   ],
   type: 'timeseries',
@@ -265,6 +267,7 @@ local deadlocksPanel(matcher) = {
       'rate(mssql_deadlocks_total{' + matcher + '}[$__rate_interval])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
+      step=75,
     ),
   ],
   type: 'timeseries',
@@ -587,9 +590,10 @@ local databaseWriteStallDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_io_stall_seconds_total{' + matcher + ', db=~"$database", operation="write"}[$__rate_interval])',
+      'increase(mssql_io_stall_seconds_total{' + matcher + ', db=~"$database", operation="write"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
+      step=75,
     ),
   ],
   type: 'timeseries',
@@ -663,9 +667,10 @@ local databaseReadStallDurationPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_io_stall_seconds_total{' + matcher + ', db=~"$database", operation="read"}[$__rate_interval])',
+      'increase(mssql_io_stall_seconds_total{' + matcher + ', db=~"$database", operation="read"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
+      step=75,
     ),
   ],
   type: 'timeseries',
@@ -739,9 +744,10 @@ local transactionLogExpansionsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_log_growths_total{' + matcher + ', db=~"$database"}[$__rate_interval])',
+      'increase(mssql_log_growths_total{' + matcher + ', db=~"$database"}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}} - {{db}}',
+      step=75,
     ),
   ],
   type: 'timeseries',
