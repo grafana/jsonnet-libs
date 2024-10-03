@@ -253,7 +253,7 @@ local pageFaultsPanel(matcher) = {
   datasource: promDatasource,
   targets: [
     prometheus.target(
-      'increase(mssql_page_fault_count_total{' + matcher + '}[$__rate_interval])',
+      'increase(mssql_page_fault_count_total{' + matcher + '}[$__rate_interval:])',
       datasource=promDatasource,
       legendFormat='{{instance}}',
     ),
