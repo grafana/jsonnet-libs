@@ -66,7 +66,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         [
           this.signals.gcpvpc.gcpvpc_service_topk_throughput_bytes.asTarget()
           + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withInstant(true),
         ],
         'Average throughput',
       ) + self._serviceTableCommon('Average throughput'),
@@ -79,7 +79,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         [
           this.signals.gcpvpc.gcpvpc_service_topk_error_percent.asTarget()
           + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true)
+          + g.query.prometheus.withInstant(true),
         ],
         'Average error rate',
       ) + self._serviceTableCommon('Average error rate'),

@@ -204,7 +204,7 @@ function(this)
             legendCustomTemplate: '{{service_name}}: transmitted',
           },
         },
-      },      
+      },
 
       //
       // VPN Tunnel Metrics
