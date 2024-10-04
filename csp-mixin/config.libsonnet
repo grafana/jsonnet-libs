@@ -18,6 +18,7 @@
         azurequeuestore: (import './signals/azurequeuestore.libsonnet')(this),
         gcpce: (import './signals/gcpce.libsonnet')(this),
         gcpceOverview: (import './signals/gcpceOverview.libsonnet')(this),
+        gcpvpc: (import './signals/gcpvpc.libsonnet')(this),
       },
     blobStorage: {
       enableAvailability: false,

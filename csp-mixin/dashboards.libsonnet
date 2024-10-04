@@ -67,6 +67,28 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               csplib.grafana.rows.gce_instance
             )
           ),
+
+        [csplib.config.uid + '-vpc.json']:
+          local variables = csplib.signals.gcpvpc.getVariablesMultiChoice();
+          g.dashboard.new(csplib.config.dashboardNamePrefix + 'Virtual private cloud')
+          + g.dashboard.withUid(csplib.config.uid + '-vpc')
+          + g.dashboard.withTags(csplib.config.dashboardTags)
+          + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+          + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+          + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+          + g.dashboard.withVariables([
+            if std.asciiLower(v.label) == std.asciiLower('project_id')
+            then v { label: 'Project' }
+            else v
+            for v in variables
+          ])
+          + g.dashboard.withPanels(
+            g.util.grid.wrapPanels(
+              csplib.grafana.rows.gcpvpc_overview +
+              csplib.grafana.rows.gcpvpc_service +
+              csplib.grafana.rows.gcpvpc_tunnel,
+            ),
+          ),
       } else {}
              +
              if csplib.config.uid == 'azure' then
