@@ -37,7 +37,7 @@ function(this)
         unit: 'short',
         sources: {
           stackdriver: {
-            expr: 'count(count by (service_name) (stackdriver_google_service_gce_client_networking_googleapis_com_google_service_response_bytes_count{%(queriesSelector)s} OR stackdriver_google_service_gce_client_networking_googleapis_com_google_service_request_bytes_count{%(queriesSelector)s}))',
+            expr: 'count(count by (service_name) (stackdriver_google_service_gce_client_networking_googleapis_com_google_service_response_bytes_count{%(queriesSelector)s} OR stackdriver_google_service_gce_client_networking_googleapis_com_google_service_response_bytes_count{%(queriesSelector)s}))',
           },
         },
       },
@@ -91,7 +91,6 @@ function(this)
         name: 'Top 5 services by network throughput.',
         description: '',
         type: 'gauge',
-        unit: 'bps',
         aggFunction: 'avg',
         sources: {
           stackdriver: {
@@ -107,7 +106,6 @@ function(this)
         name: 'Top 5 services by network error response code',
         description: '',
         type: 'gauge',
-        unit: 'percent',
         aggFunction: 'avg',
         sources: {
           stackdriver: {
