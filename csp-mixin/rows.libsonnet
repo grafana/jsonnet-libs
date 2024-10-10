@@ -509,5 +509,62 @@ local g = import './g.libsonnet';
           ]
         ),
       ],
+
+      gcpvpc_overview: [
+        g.panel.row.new('Overview'),
+        this.grafana.panels.gcpvpc.gcpvpc_services_in_use_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(4),
+
+        this.grafana.panels.gcpvpc.gcpvpc_subnets_in_use_count
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(4),
+
+        this.grafana.panels.gcpvpc.gcpvpc_fixed_usage_tier_network_egress
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      gcpvpc_service: [
+        g.panel.row.new('Services'),
+        this.grafana.panels.gcpvpc.gcpvpc_service_topk_throughput
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpvpc.gcpvpc_service_topk_error
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpvpc.gcpvpc_service_throughput
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpvpc.gcpvpc_service_by_service_error_throughput
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpvpc.gcpvpc_service_by_service_throughput
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpvpc.gcpvpc_service_by_responsecode_throughput
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      gcpvpc_tunnel: [
+        g.panel.row.new('VPN tunnels'),
+        this.grafana.panels.gcpvpc.gcpvpc_tunnel_throughput
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpvpc.gcpvpc_tunnel_by_protocol_throughput
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.gcpvpc.gcpvpc_tunnel_by_resource_type_throughput
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
     },
 }
