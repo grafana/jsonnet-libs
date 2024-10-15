@@ -1,6 +1,6 @@
 # Nginx Mixin
 
-This mixin is a thin veneer over the dashboard designed and published by [Ward Bekker](https://grafana.com/orgs/wardbekker1) in the [Grafana dashboards library](https://grafana.com/grafana/dashboards/12559).
+This mixin is a thin veneer over the dashboard designed and published by [Ward Bekker](https://grafana.com/orgs/wardbekker1) in the [Grafana dashboards library](https://grafana.com/grafana/dashboards/12559) and the metrics dashboard is collected from the [official NGINX exporter repository](https://github.com/nginxinc/nginx-prometheus-exporter/blob/main/grafana/dashboard.png).
 
 Specifically this mixin adds a configurable `cluster` variable to the dashboard in order to support it's use in one or many kubernetes clusters.
 
