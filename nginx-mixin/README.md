@@ -6,13 +6,11 @@ Specifically this mixin adds a configurable `cluster` variable to the dashboard 
 
 The mixin uses revision 14 of the dashboard currently. Change `DASHBOARD_REV` in the Makefile to fetch a different revision of the dashboard.
 
-The Nginx mixin contains the following dashboard:
+The Nginx mixin contains the following dashboards:
 
-- Nginx...
+- **Nginx Overview**: This dashboard provides a comprehensive view of various NGINX metrics, allowing you to monitor performance and health across multiple dimensions.
 
-# Nginx overview
-
-...
+- **Nginx Logs**: This dashboard showcases panels powered by Logs, providing insights into log data to help diagnose issues and track the operational status of your NGINX deployments.
 
 ## Install tools
 
