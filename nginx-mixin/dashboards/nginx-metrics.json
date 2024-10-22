@@ -40,7 +40,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "This panel indicates the current status of the NGINX server for the selected instance ($__rate_interval), showing whether it's up or down.",
+      "description": "This panel indicates the current status of the NGINX server for the selected instance, showing whether it's up or down.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -119,7 +119,7 @@
           "refId": "A"
         }
       ],
-      "title": "NGINX Status for $__rate_interval",
+      "title": "NGINX Status for $instance",
       "type": "stat"
     },
     {
@@ -141,7 +141,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "This panel tracks the number of processed connections for the selected instance ($__rate_interval), displaying both active and handled connections to monitor server activity.",
+      "description": "This panel tracks the number of processed connections for the selected instance, displaying both active and handled connections to monitor server activity.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -253,7 +253,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "This panel shows NGINX active connections for the selected instance ($__rate_interval), categorized as writing, waiting, reading, and total active.",
+      "description": "This panel shows NGINX active connections for the selected instance, categorized as writing, waiting, reading, and total active.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -394,7 +394,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "This panel displays the total number of requests processed by the NGINX server for the selected instance ($__rate_interval), providing insight into traffic volume.",
+      "description": "This panel displays the total number of requests processed by the NGINX server for the selected instance, providing insight into traffic volume.",
       "fieldConfig": {
         "defaults": {
           "color": {
