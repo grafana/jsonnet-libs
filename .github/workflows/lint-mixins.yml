@@ -79,5 +79,3 @@ jobs:
       - name: Lint Mixin
         working-directory: ./${{ matrix.mixin }}
         run: mixtool lint mixin.libsonnet
-
-    
