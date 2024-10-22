@@ -39,6 +39,7 @@ jobs:
           dir_names_max_depth: 1
           files: | 
             **-mixin/
+            **-observ-lib/
           matrix: true
           
       - name: List all changed mixins
