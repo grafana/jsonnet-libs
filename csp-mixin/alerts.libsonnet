@@ -45,6 +45,26 @@
                 dashboard_uid: '58f33c50e66c911b0ad8a25aa438a96e',
               },
             },
+            {
+              alert: 'GcpCEHighCpuUtilization',
+              expr: 'avg by (%s) (%s) > 85' %
+                    [
+                      std.join(',', this.config.groupLabels + this.config.instanceLabels),
+                      this.signals.gcpceOverview.tableCpuUtilization.asRuleExpression(),
+                    ],
+              'for': '5m',
+              keep_firing_for: '10m',
+              labels: {
+                severity: 'critical',
+                service: 'Compute Engine',
+                namespace: 'cloud-provider-' + this.config.uid,
+              },
+              annotations: {
+                summary: 'CPU utilization is too high',
+                description: 'The VM {{$labels.instance_name}} is under heavy load and may become unresponsive.',
+                dashboard_uid: 'f115fe73641347c43415535d77e2dc0f',
+              },
+            },
           ],
       },
     ],
