@@ -6,7 +6,8 @@ function(this)
     aggLevel: 'group',
     aggFunction: 'avg',
     discoveryMetric: {
-      java_micrometer: 'jvm_memory_used_bytes',
+      java_micrometer: 'jvm_memory_used',
+      java_micrometer_with_suffixes: 'jvm_memory_used_bytes',
       prometheus: 'jvm_memory_used_bytes',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics
       otel: 'process_runtime_jvm_memory_usage',
       otel_with_suffixes: 'process_runtime_jvm_memory_usage_bytes',
@@ -23,6 +24,9 @@ function(this)
         sources: {
           //spring
           java_micrometer: {
+            expr: 'sum without (id) (jvm_memory_used{area="heap", %(queriesSelector)s})',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_used_bytes{area="heap", %(queriesSelector)s})',
           },
           prometheus: {
@@ -58,6 +62,9 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
+            expr: 'sum without (id) (jvm_memory_max{area="heap", %(queriesSelector)s} != -1)',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_max_bytes{area="heap", %(queriesSelector)s} != -1)',
           },
           prometheus: self.java_micrometer,
@@ -83,6 +90,9 @@ function(this)
         sources: {
           //spring
           java_micrometer: {
+            expr: 'sum without (id) (jvm_memory_used{area="nonheap", %(queriesSelector)s})',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_used_bytes{area="nonheap", %(queriesSelector)s})',
           },
           prometheus: self.java_micrometer,
@@ -107,6 +117,9 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
+            expr: 'sum without (id) (jvm_memory_max{area="nonheap", %(queriesSelector)s} != -1)',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_max_bytes{area="nonheap", %(queriesSelector)s} != -1)',
           },
           prometheus: self.java_micrometer,
@@ -133,6 +146,9 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
+            expr: 'sum without (id) (jvm_memory_committed{area="heap", %(queriesSelector)s})',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_committed_bytes{area="heap", %(queriesSelector)s})',
           },
           prometheus: self.java_micrometer,

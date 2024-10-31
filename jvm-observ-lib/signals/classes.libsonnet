@@ -8,7 +8,8 @@ function(this)
     aggLevel: 'group',
     aggFunction: 'avg',
     discoveryMetric: {
-      java_micrometer: 'jvm_classes_loaded_classes',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/ClassLoaderMetrics.java
+      java_micrometer: 'jvm_classes_loaded',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/ClassLoaderMetrics.java
+      java_micrometer_with_suffixes: 'jvm_classes_loaded_classes',
       prometheus: 'jvm_classes_loaded',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-class-loading-metrics
       otel: 'process_runtime_jvm_classes_loaded',
       otel_with_suffixes: 'process_runtime_jvm_classes_loaded_total',
@@ -23,6 +24,9 @@ function(this)
         unit: 'short',
         sources: {
           java_micrometer: {
+            expr: 'jvm_classes_loaded{%(queriesSelector)s}',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'jvm_classes_loaded_classes{%(queriesSelector)s}',
           },
           prometheus: {

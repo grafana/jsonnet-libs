@@ -21,6 +21,14 @@ function(this)
         sources: {
           java_micrometer: {
             expr: |||
+              logback_events{%(queriesSelector)s}
+            |||,
+            exprWrappers: [
+              ['topk(10,', ')'],
+            ],
+          },
+          java_micrometer_with_suffixes: {
+            expr: |||
               logback_events_total{%(queriesSelector)s}
             |||,
             exprWrappers: [
@@ -37,6 +45,12 @@ function(this)
         optional: true,
         sources: {
           java_micrometer: {
+            expr: 'logback_events{level="error", %(queriesSelector)s}',
+            exprWrappers: [
+              ['topk(10,', ')'],
+            ],
+          },
+          java_micrometer_with_suffixes: {
             expr: 'logback_events_total{level="error", %(queriesSelector)s}',
             exprWrappers: [
               ['topk(10,', ')'],
