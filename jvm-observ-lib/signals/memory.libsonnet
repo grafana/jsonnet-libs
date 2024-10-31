@@ -175,6 +175,9 @@ function(this)
         unit: 'bytes',
         sources: {
           java_micrometer: {
+            expr: 'sum without (id) (jvm_memory_committed{area="nonheap", %(queriesSelector)s})',
+          },
+          java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_committed_bytes{area="nonheap", %(queriesSelector)s})',
           },
           prometheus: self.java_micrometer,
