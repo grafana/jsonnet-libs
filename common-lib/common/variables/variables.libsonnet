@@ -59,14 +59,21 @@ local utils = import '../utils.libsonnet';
          [root.datasources.prometheus]
          + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
        queriesSelectorAdvancedSyntax:
-         '%s' % [
-           utils.labelsToPromQLSelectorAdvanced(groupLabels + instanceLabels),
-         ],
+         std.join(
+           ',',
+           std.filter(function(x) std.length(x) > 0, [
+             filteringSelector,
+             utils.labelsToPromQLSelectorAdvanced(groupLabels + instanceLabels),
+           ])
+         ),
        queriesSelector:
-         '%s,%s' % [
-           filteringSelector,
-           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
-         ],
+         std.join(
+           ',',
+           std.filter(function(x) std.length(x) > 0, [
+             filteringSelector,
+             utils.labelsToPromQLSelector(groupLabels + instanceLabels),
+           ])
+         ),
 
      }
      + if enableLokiLogs then self.withLokiLogs() else {},
