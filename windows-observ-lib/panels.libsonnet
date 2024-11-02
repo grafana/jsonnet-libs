@@ -363,7 +363,7 @@ local utils = commonlib.utils;
           targets=[t.osInfo],
           description="System's hostname."
         )
-        { options+: { reduceOptions+: { fields: '/^hostname$/' } } },
+        { options+: { reduceOptions+: { fields: '/^instance$/' } } },
       networkErrorsAndDroppedPerSec:
         commonlib.panels.network.timeSeries.errors.new(
           'Network errors and dropped packets',
