@@ -187,7 +187,8 @@ local utils = commonlib.utils;
 
             A high number of context switches or interrupts can indicate that the system is overloaded or that there are problems with specific devices or processes.
           |||
-        ),
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
       systemExceptions:
         commonlib.panels.generic.timeSeries.base.new(
           'System calls and exceptions',
@@ -195,14 +196,16 @@ local utils = commonlib.utils;
             t.windowsSystemExceptions,
             t.windowsSystemCalls,
           ],
-        ),
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
       systemThreads:
         commonlib.panels.generic.timeSeries.base.new(
           'System threads',
           targets=[
             t.windowsSystemThreads,
           ],
-        ),
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
       timeNtpStatus:
         commonlib.panels.system.statusHistory.ntp.new(
           'NTP status',
@@ -242,17 +245,19 @@ local utils = commonlib.utils;
           CPU usage by different modes.
         |||
       ),
-      cpuQueue: commonlib.panels.generic.timeSeries.base.new(
-        'CPU average queue size',
-        targets=[t.cpuQueue],
-        description=|||
-          The CPU average queue size in Windows, often referred to as the "Processor Queue Length" or "CPU Queue Length," is a metric that measures the number of threads or tasks waiting to be processed by the central processing unit (CPU) at a given moment.
-          It is an essential performance indicator that reflects the workload and responsiveness of the CPU.
-          When the CPU queue length is high, it indicates that there are more tasks in line for processing than the CPU can handle immediately.
+      cpuQueue:
+        commonlib.panels.generic.timeSeries.base.new(
+          'CPU average queue size',
+          targets=[t.cpuQueue],
+          description=|||
+            The CPU average queue size in Windows, often referred to as the "Processor Queue Length" or "CPU Queue Length," is a metric that measures the number of threads or tasks waiting to be processed by the central processing unit (CPU) at a given moment.
+            It is an essential performance indicator that reflects the workload and responsiveness of the CPU.
+            When the CPU queue length is high, it indicates that there are more tasks in line for processing than the CPU can handle immediately.
 
-          This can lead to system slowdowns, decreased responsiveness, and potential performance issues. High CPU queue lengths are often associated with CPU saturation, where the CPU is struggling to keep up with the demands placed on it.
-        |||
-      ),
+            This can lead to system slowdowns, decreased responsiveness, and potential performance issues. High CPU queue lengths are often associated with CPU saturation, where the CPU is struggling to keep up with the demands placed on it.
+          |||
+        )
+        + g.panel.timeSeries.standardOptions.withUnit('short'),
       memoryTotalBytes: commonlib.panels.memory.stat.total.new(targets=[t.memoryTotalBytes]),
       memoryPageTotalBytes:
         commonlib.panels.memory.stat.total.new(
