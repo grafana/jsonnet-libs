@@ -224,7 +224,7 @@ local utils = commonlib.utils;
             Time offset: Absolute time offset between the system clock and the chosen time source, in seconds.
           |||
         )
-        + g.panel.timeSeries.standardOptions.withUnit('seconds')
+        + g.panel.timeSeries.standardOptions.withUnit('s')
         + g.panel.timeSeries.standardOptions.withNoValue('No data. Please check that "time" collector is enabled.'),
       cpuCount: commonlib.panels.cpu.stat.count.new(targets=[t.cpuCount]),
       cpuUsageTs: commonlib.panels.cpu.timeSeries.utilization.new(targets=[t.cpuUsage]),
