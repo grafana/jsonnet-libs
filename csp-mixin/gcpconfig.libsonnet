@@ -19,5 +19,12 @@
     groupLabels: ['job'],
     instanceLabels: ['bucket_name'],
     metricsSource: 'stackdriver',
+    local importRules(rules) = {
+      groups+: std.parseYaml(rules).groups,
+    },
+
+    prometheus: {
+      alerts: importRules(importstr 'alerts/gcp-alerts.yml'),
+    },
   },
 }
