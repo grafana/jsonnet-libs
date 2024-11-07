@@ -19,5 +19,14 @@
     groupLabels: ['job', 'resourceGroup', 'subscriptionName'],
     instanceLabels: ['resourceName'],
     metricsSource: 'azuremonitor',
+
+    local importRules(rules) = {
+      groups+: std.parseYaml(rules).groups,
+    },
+
+    prometheus: {
+      alerts: importRules(importstr 'alerts/azure-alerts.yml'),
+      recordingRules: {},
+    },
   },
 }
