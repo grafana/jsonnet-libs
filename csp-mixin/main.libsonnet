@@ -14,9 +14,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       rows: (import './rows.libsonnet').new(this),
       dashboards: (import './dashboards.libsonnet').new(this),
     },
+    local importRules(rules) = {
+      groups+: std.parseYaml(rules).groups,
+    },
     asMonitoringMixin(): {
       grafanaDashboards+:: this.grafana.dashboards,
-      prometheusAlerts+:: this.prometheus.alerts,
+      prometheusAlerts+:
+        importRules(importstr 'alerts/azure-alerts.yml') + importRules(importstr 'alerts/gcp-alerts.yml'),
     },
   },
 
