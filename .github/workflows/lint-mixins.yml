@@ -1,0 +1,82 @@
+---
+name: Mixin
+
+permissions:
+  contents: read
+
+on:
+  # To conserve resources we only run tests against main in PRs
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  check-for-changed-mixins:
+    name: Check for changes
+    runs-on: ubuntu-latest
+    outputs:
+      changed-mixins: ${{ steps.changed-mixins.outputs.all_changed_files }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.18
+      
+      - name: Install CI dependencies
+        run: make install-ci-deps
+      
+      - name: Get changed mixins
+        id: changed-mixins
+        uses: tj-actions/changed-files@v44
+        with:
+          dir_names: true
+          dir_names_exclude_current_dir: true
+          dir_names_max_depth: 1
+          files: | 
+            **-mixin/
+            **-observ-lib/
+          matrix: true
+          
+      - name: List all changed mixins
+        run: echo '${{ steps.changed-mixins.outputs.all_changed_files }}'
+
+  lint-mixin:
+    name: Run Mixtool
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: write
+      pull-requests: write
+      repository-projects: write
+    timeout-minutes: 15
+    needs: [check-for-changed-mixins]
+    strategy:
+      matrix:
+        mixin: ${{ fromJSON(needs.check-for-changed-mixins.outputs.changed-mixins) }}
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.18
+      
+      - name: Install CI dependencies
+        run: make install-ci-deps
+
+      - name: Install Mixin dependencies
+        working-directory: ./${{ matrix.mixin }}
+        run: jb install
+
+      - name: Lint Mixin
+        working-directory: ./${{ matrix.mixin }}
+        run: mixtool lint mixin.libsonnet
