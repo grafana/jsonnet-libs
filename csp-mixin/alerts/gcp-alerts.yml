@@ -11,6 +11,6 @@ groups:
           service: 'Compute Engine'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'CPU utilization is too high'
+          summary: 'CPU utilization is too high.'
           description: 'The VM {{ $labels.instance_name }} is under heavy load and may become unresponsive.'
           dashboard_uid: 'f115fe73641347c43415535d77e2dc0f'
