@@ -14,9 +14,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       rows: (import './rows.libsonnet').new(this),
       dashboards: (import './dashboards.libsonnet').new(this),
     },
+    prometheus: {
+      alerts: this.config.prometheus.alerts,
+      recordingRules: {},
+    },
     asMonitoringMixin(): {
       grafanaDashboards+:: this.grafana.dashboards,
-      prometheusAlerts+:: this.config.prometheus.alerts,
+      prometheusAlerts+:: this.prometheus.alerts,
     },
   },
 
