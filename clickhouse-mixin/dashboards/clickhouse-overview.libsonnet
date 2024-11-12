@@ -760,6 +760,7 @@ local networkTransmittedPanel(matcher) =
               datasource='$prometheus_datasource',
               query='label_values(ClickHouseProfileEvents_Query{job=~"$job"}, instance)',
               current='all',
+              allValues='.+',
               refresh=2,
               includeAll=true,
               sort=1
@@ -773,7 +774,7 @@ local networkTransmittedPanel(matcher) =
               refresh=2,
               includeAll=true,
               multi=true,
-              allValues='',
+              allValues='.*',
               hide=if $._config.enableMultiCluster then '' else 'variable',
               sort=0
             ),

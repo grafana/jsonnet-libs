@@ -471,6 +471,7 @@ local zooKeeperWaitTimePanel(matcher) =
             datasource=promDatasource,
             query='label_values(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{job=~"$job"}, instance)',
             current='all',
+            allValues='.+',
             refresh=2,
             includeAll=true,
             sort=1
@@ -484,7 +485,7 @@ local zooKeeperWaitTimePanel(matcher) =
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),

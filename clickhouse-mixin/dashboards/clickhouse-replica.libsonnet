@@ -652,6 +652,7 @@ local zooKeeperRequestsPanel(matcher) =
             datasource=promDatasource,
             query='label_values(ClickHouseMetrics_InterserverConnection{job=~"$job"}, instance)',
             current='all',
+            allValues='.+',
             refresh=2,
             includeAll=true,
             sort=1
@@ -665,7 +666,7 @@ local zooKeeperRequestsPanel(matcher) =
             refresh=2,
             includeAll=true,
             multi=true,
-            allValues='',
+            allValues='.*',
             hide=if $._config.enableMultiCluster then '' else 'variable',
             sort=0
           ),
