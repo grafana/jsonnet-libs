@@ -6,7 +6,7 @@ function(this)
     filteringSelector: this.filteringSelector + ', quantile="%s"' % this.totalTimeMsQuantile,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
-    aggLevel: 'instance',
+    aggLevel: if this.totalTimeMetricsRepeat then 'instance' else 'group',
     aggFunction: 'avg',
     discoveryMetric: {
       prometheus: 'kafka_network_requestmetrics_requestqueuetimems',
