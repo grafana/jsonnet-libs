@@ -11,7 +11,7 @@ groups:
           service: 'Azure Virtual Machines'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'CPU utilization is too high.'
+          summary: 'VM CPU utilization is too high.'
           description: 'The VM {{ $labels.resourceName }} is under heavy load and may become unresponsive.'
           dashboard_uid: '58f33c50e66c911b0ad8a25aa438a96e'
 
@@ -29,7 +29,7 @@ groups:
           description: 'The VM {{ $labels.resourceName }} is not functioning or crashed, which may require immediate action.'
           dashboard_uid: '58f33c50e66c911b0ad8a25aa438a96e'
 
-      - alert: AzureHighDtuConsumption
+      - alert: AzureDatabaseHighDtuConsumption
         expr: |
           avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_dtu_consumption_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
         for: 10m
@@ -39,11 +39,11 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'High DTU consumption.'
+          summary: 'High database DTU consumption.'
           description: 'Check active queries and optimize indexes or consider scaling up DTUs to handle load in {{ $labels.resourceName }} database.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
-      - alert: AzureHighStorageUsage
+      - alert: AzureDatabaseHighStorageUsage
         expr: |
           avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_storage_percent_maximum_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 85
         for: 10m
@@ -53,11 +53,11 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'High Storage usage.'
+          summary: 'High database Storage usage.'
           description: 'Archive or delete old data, or scale up storage capacity in {{ $labels.resourceName }} database.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
-      - alert: AzureHighDeadlockCount
+      - alert: AzureDatabaseHighDeadlockCount
         expr: |
           sum by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_deadlock_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 5
         for: 10m
@@ -67,11 +67,11 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'High Deadlock count.'
+          summary: 'High database Deadlock count.'
           description: 'Check {{ $labels.resourceName }} database logs for deadlock details and optimize affected queries.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
-      - alert: AzureHighUserCpuUsage
+      - alert: AzureDatabaseHighUserCpuUsage
         expr: |
           avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_cpu_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 80
         for: 10m
@@ -81,11 +81,11 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'High User CPU usage.'
+          summary: 'High database User CPU usage.'
           description: 'Identify high CPU queries on {{ $labels.resourceName }} database and optimize them.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
-      - alert: AzureHighSystemFailedConnections
+      - alert: AzureDatabaseHighSystemFailedConnections
         expr: |
           sum by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_connection_failed_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 10
         for: 5m
@@ -95,11 +95,11 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'High number of System Failed connections.'
+          summary: 'High number of database System Failed connections.'
           description: 'Check network problems, firewall restrictions or high resource consumption affecting application access to the database {{ $labels.resourceName }}.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
-      - alert: AzureHighUserFailedConnections
+      - alert: AzureDatabaseHighUserFailedConnections
         expr: |
           sum by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_connection_failed_user_error_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 10
         for: 5m
@@ -109,11 +109,11 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'High number of User Failed connections.'
+          summary: 'High number of database User Failed connections.'
           description: 'Check for authentication problems, network configuration errors, firewall issues, or resource constraints, affecting database accessibility for users on database {{ $labels.resourceName }}.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
-      - alert: AzureHighWorkerUsage
+      - alert: AzureDatabaseHighWorkerUsage
         expr: |
           avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_workers_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
         for: 5m
@@ -123,11 +123,11 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'High worker usage.'
+          summary: 'High database worker usage.'
           description: 'Look for long execution queries, review the number of concurrent queries and requests being sent to the database or check if there are any blocking sessions or deadlocks into the {{ $labels.resourceName }} database.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
-      - alert: AzureHighDataIoUsage
+      - alert: AzureDatabaseHighDataIoUsage
         expr: |
           avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_physical_data_read_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
         for: 15m
@@ -137,11 +137,11 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'High data IO usage.'
+          summary: 'High database data IO usage.'
           description: 'Review queries with high read or write activity, check if there are missing indexes or inefficient indexes that result in full table scans and assess the volume of transactions into the {{ $labels.resourceName }} database.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
-      - alert: AzureLowTempdbLogSpace
+      - alert: AzureDatabaseLowTempdbLogSpace
         expr: |
           avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_tempdb_log_used_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 60
         for: 5m
@@ -151,6 +151,6 @@ groups:
           service: 'Azure SQL database'
           namespace: cloud-provider-azure
         annotations:
-          summary: 'Low tempdb log space.'
+          summary: 'Low database tempdb log space.'
           description: 'Look for active sessions that might be using TempDB intensively, identify stored procedures or queries that create temporary tables or objects, and also look for long-running or memory-intensive queries that rely heavily on TempDB into the {{ $labels.resourceName }} database.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
