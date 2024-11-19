@@ -59,7 +59,7 @@ groups:
 
       - alert: AzureDatabaseHighDeadlockCount
         expr: |
-          sum by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_deadlock_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 5
+          sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_deadlock_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[$__rate_interval])) > 5
         for: 10m
         keep_firing_for: 10m
         labels:
