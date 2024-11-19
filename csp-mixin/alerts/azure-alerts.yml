@@ -45,8 +45,8 @@ groups:
 
       - alert: AzureDatabaseHighStorageUsage
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_storage_percent_maximum_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 85
-        for: 10m
+          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_storage_percent_maximum_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 95
+        for: 15m
         keep_firing_for: 10m
         labels:
           severity: critical
@@ -73,7 +73,7 @@ groups:
 
       - alert: AzureDatabaseHighUserCpuUsage
         expr: |
-          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_cpu_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 80
+          avg by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_cpu_percent_average_percent{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 90
         for: 10m
         keep_firing_for: 10m
         labels:
@@ -102,7 +102,7 @@ groups:
       - alert: AzureDatabaseHighUserFailedConnections
         expr: |
           sum by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_connection_failed_user_error_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 10
-        for: 5m
+        for: 15m
         keep_firing_for: 10m
         labels:
           severity: warning
