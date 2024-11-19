@@ -96,7 +96,7 @@ groups:
           namespace: cloud-provider-azure
         annotations:
           summary: 'High number of database System Failed connections.'
-          description: 'Check network problems, firewall restrictions or high resource consumption affecting application access to the database {{ $labels.resourceName }}.'
+          description: 'Check network problems, firewall restrictions or high resource consumption affecting application access to the {{ $labels.resourceName }} database.'
           dashboard_uid: '82c5b6cf30db5b601c5cc3f5d8d4284d'
 
       - alert: AzureDatabaseHighUserFailedConnections
