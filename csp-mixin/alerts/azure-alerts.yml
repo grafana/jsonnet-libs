@@ -87,7 +87,7 @@ groups:
 
       - alert: AzureDatabaseHighSystemFailedConnections
         expr: |
-          sum by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_connection_failed_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 10
+          sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_connection_failed_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
         for: 5m
         keep_firing_for: 10m
         labels:
@@ -101,7 +101,7 @@ groups:
 
       - alert: AzureDatabaseHighUserFailedConnections
         expr: |
-          sum by (job,resourceGroup,subscriptionName,resourceName) (azure_microsoft_sql_servers_databases_connection_failed_user_error_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}) > 10
+          sum by (job,resourceGroup,subscriptionName,resourceName) (rate(azure_microsoft_sql_servers_databases_connection_failed_user_error_total_count{job=~".+",resourceGroup=~".+",subscriptionName=~".+",resourceName=~".+"}[5m])) > 10
         for: 15m
         keep_firing_for: 10m
         labels:
