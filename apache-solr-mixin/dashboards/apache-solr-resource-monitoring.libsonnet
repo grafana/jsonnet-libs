@@ -1059,7 +1059,7 @@ local dispatchesPanel(matcher) = {
   },
 };
 
-local getMatcher(cfg) = '%(solrSelector)s, solr_cluster="$solr_cluster", base_url=~"$base_url"' % cfg;
+local getMatcher(cfg) = '%(solrSelector)s, solr_cluster=~"$solr_cluster", base_url=~"$base_url"' % cfg;
 
 {
   grafanaDashboards+:: {
