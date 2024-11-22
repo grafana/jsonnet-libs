@@ -48,13 +48,13 @@ local k = import 'ksonnet-util/kausal.libsonnet';
         ),
     }),
 
-  withHttpConfig():: {
+  withHttpConfig(config=(importstr 'httpd.conf')):: {
     local configMap = k.core.v1.configMap,
     local volumeMount = k.core.v1.volumeMount,
     httpdConfig:
       configMap.new(self.name, 'httpd-config')
       + configMap.withData({
-        'httpd.conf': importstr 'httpd.conf',
+        'httpd.conf': config,
       }),
     deployment+:
       k.util.configMapVolumeMount(self.httpdConfig, '/usr/local/apache2/conf/httpd.conf', volumeMount.withSubPath('httpd.conf')),
