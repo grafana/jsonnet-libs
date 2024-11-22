@@ -2,6 +2,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
   new(name, image='httpd:2.4-alpine'):: {
+    name:: name,
     data:: { metrics: '' },
 
     local configMap = k.core.v1.configMap,
@@ -51,7 +52,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     local configMap = k.core.v1.configMap,
     local volumeMount = k.core.v1.volumeMount,
     httpdConfig:
-      configMap.new('httpd-config')
+      configMap.new(self.name, 'httpd-config')
       + configMap.withData({
         'httpd.conf': importstr 'httpd.conf',
       }),
