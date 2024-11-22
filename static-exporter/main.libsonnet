@@ -7,6 +7,11 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     local configMap = k.core.v1.configMap,
     configmap:
       configMap.new(name, self.data),
+    httpdConfig:
+      configMap.new(name + '-httpd-config')
+      + configMap.withData({
+        'httpd.conf': importstr 'httpd.conf',
+      }),
 
     local container = k.core.v1.container,
     container::
