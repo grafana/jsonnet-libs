@@ -23,10 +23,12 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     ,
 
     local deployment = k.apps.v1.deployment,
+    local volumeMount = k.core.v1.volumeMount,
     deployment:
       deployment.new(name, replicas=1, containers=[self.container])
       + k.util.configMapVolumeMount(self.configmap, '/usr/local/apache2/htdocs')
-      + k.util.configMapVolumeMount(self.httpdConfig, '/usr/local/apache2/conf'),
+      + k.util.configMapVolumeMount(self.httpdConfig, '/usr/local/apache2/conf/httpd.conf', volumeMount.withSubPath('httpd.conf')),
+
   },
 
   withData(data):: { data: data },
