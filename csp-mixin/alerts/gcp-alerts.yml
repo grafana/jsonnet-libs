@@ -31,7 +31,7 @@ groups:
 
       - alert: GcpCloudSQLHighCpu
         expr: |
-          100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 80
+          100 * avg by (job,project_id,instance,database_id) (stackdriver_cloudsql_database_cloudsql_googleapis_com_database_cpu_utilization{job=~".+",project_id=~".+",instance=~".+", database_id=~".+"}) > 90
         for: 5m
         keep_firing_for: 10m
         labels:
