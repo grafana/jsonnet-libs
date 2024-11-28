@@ -11,7 +11,7 @@ groups:
           service: 'Compute Engine'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'CPU utilization is too high.'
+          summary: 'VM CPU utilization is too high.'
           description: 'The VM {{ $labels.instance_name }} is under heavy load and may become unresponsive.'
           dashboard_uid: 'f115fe73641347c43415535d77e2dc0f'
 
@@ -25,7 +25,7 @@ groups:
           service: 'Compute Engine'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'IO latency is too high.'
+          summary: 'VM IO latency is too high.'
           description: 'Check {{ $labels.instance_id }} VM for I/O bottlenecks and upgrade to SSD if necessary.'
           dashboard_uid: 'f115fe73641347c43415535d77e2dc0f'
 
@@ -67,7 +67,7 @@ groups:
           service: 'Cloud SQL'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'Disk utilization is too high.'
+          summary: 'Database disk utilization is too high.'
           description: 'Delete or archive unused data, or increase disk size to the {{ $labels.database_id }} database.'
           dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
 
@@ -109,7 +109,7 @@ groups:
           service: 'Cloud SQL'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'More than 5 seconds lag between read replica and primary.'
+          summary: 'More than 5 seconds lag between database read replica and primary.'
           description: 'Check {{ $labels.database_id }} database for network latency between primary and replica; adjust configurations to optimize replication.'
           dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
 
