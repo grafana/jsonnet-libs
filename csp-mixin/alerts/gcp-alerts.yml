@@ -39,7 +39,7 @@ groups:
           service: 'Cloud SQL'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'CPU utilization is too high.'
+          summary: 'Database CPU utilization is too high.'
           description: 'Check {{ $labels.database_id }} database for high CPU queries and optimize them, or scale up the instance if sustained high usage.'
           dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
 
@@ -53,7 +53,7 @@ groups:
           service: 'Cloud SQL'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'Memory utilization is too high.'
+          summary: 'Database memory utilization is too high.'
           description: 'Review high-memory queries or add more memory to the {{ $labels.database_id }} instance.'
           dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
 
@@ -81,7 +81,7 @@ groups:
           service: 'Cloud SQL'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'Too many active connections.'
+          summary: 'Too many database active connections.'
           description: 'Investigate connection pooling settings and connection management in your {{ $labels.database_id }} application database.'
           dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
 
@@ -95,7 +95,7 @@ groups:
           service: 'Cloud SQL'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'More than 5 failed connections in 5 minutes.'
+          summary: 'More than 5 MySQL failed connections in 5 minutes.'
           description: 'Verify credentials and network settings; check for firewall rules blocking connections for the {{ $labels.database_id }} database.'
           dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
 
@@ -123,7 +123,7 @@ groups:
           service: 'Pub/Sub'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'More than 1000 messages.'
+          summary: 'More than 1000 unacknowledged messages for a PubSub subscription.'
           description: 'Scale up subscribers or adjust message processing capacity for the {{ $labels.instance }} instance.'
           dashboard_uid: '2abad1eb5e4873b95e9176e7ef10a30c'
 
@@ -137,6 +137,6 @@ groups:
           service: 'Pub/Sub'
           namespace: cloud-provider-gcp
         annotations:
-          summary: 'Unacknowledged messages for more than 60 seconds.'
+          summary: 'Unacknowledged messages for more than 60 seconds for a PubSub subscription.'
           description: 'Investigate {{ $labels.instance }} instance and speed up message processing; ensure consumers can handle the load.'
           dashboard_uid: '2abad1eb5e4873b95e9176e7ef10a30c'
