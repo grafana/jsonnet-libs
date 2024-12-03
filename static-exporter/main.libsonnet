@@ -2,6 +2,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
   new(name, image='httpd:2.4-alpine'):: {
+    name:: name,
     data:: { metrics: '' },
 
     local configMap = k.core.v1.configMap,
@@ -18,6 +19,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
     ,
 
     local deployment = k.apps.v1.deployment,
+    local volumeMount = k.core.v1.volumeMount,
     deployment:
       deployment.new(name, replicas=1, containers=[self.container])
       + k.util.configMapVolumeMount(self.configmap, '/usr/local/apache2/htdocs'),
@@ -45,6 +47,18 @@ local k = import 'ksonnet-util/kausal.libsonnet';
           )
         ),
     }),
+
+  withHttpConfig(config=(importstr 'httpd.conf')):: {
+    local configMap = k.core.v1.configMap,
+    local volumeMount = k.core.v1.volumeMount,
+    httpdConfig:
+      configMap.new(self.name + '-httpd-config')
+      + configMap.withData({
+        'httpd.conf': config,
+      }),
+    deployment+:
+      k.util.configMapVolumeMount(self.httpdConfig, '/usr/local/apache2/conf/httpd.conf', volumeMount.withSubPath('httpd.conf')),
+  },
 
   metric:: {
     new(name, description)::
