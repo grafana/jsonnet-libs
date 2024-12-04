@@ -180,10 +180,10 @@ local g = import 'grafana-builder/grafana.libsonnet';
 
   // showClassicHistogramQuery wraps a query defined as map {classic: q, native: q}, and compares the classic query
   // to dashboard variable which should take -1 or +1 as values in order to hide or show the classic query.
-  showClassicHistogramQuery(query, dashboard_variable='latency_metrics'):: '%s < ($%s * +Inf)' % [query.classic, dashboard_variable],
+  showClassicHistogramQuery(query, dashboard_variable='latency_metrics'):: '(%s) and on() (vector($%s) == 1)' % [query.classic, dashboard_variable],
   // showNativeHistogramQuery wraps a query defined as map {classic: q, native: q}, and compares the native query
   // to dashboard variable which should take -1 or +1 as values in order to show or hide the native query.
-  showNativeHistogramQuery(query, dashboard_variable='latency_metrics'):: '%s < ($%s * -Inf)' % [query.native, dashboard_variable],
+  showNativeHistogramQuery(query, dashboard_variable='latency_metrics'):: '(%s) and on() (vector($%s) == -1)' % [query.native, dashboard_variable],
 
   histogramRules(metric, labels, interval='1m', record_native=false)::
     local vars = {

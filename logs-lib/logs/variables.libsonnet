@@ -21,7 +21,7 @@ function(
         )
         + var.query.selectionOptions.withIncludeAll(
           value=true,
-          customAllValue='.*'
+          customAllValue='.+'
         )
         + var.query.selectionOptions.withMulti()
         + var.query.refresh.onTime()
