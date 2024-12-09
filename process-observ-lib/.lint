@@ -1,0 +1,4 @@
+exclusions:
+  panel-units-rule:
+    entries:
+      - panel: Process files open
