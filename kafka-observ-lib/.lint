@@ -1,0 +1,70 @@
+exclusions:
+  panel-units-rule:
+    entries:
+      - panel: Process files open
+
+  target-instance-rule:
+    reason: Instance selector is intentionally dropped in these panels as they represent whole cluster.
+    entries:
+      - dashboard: ZooKeeper overview
+        panel: Current zookeeper role
+      - dashboard: Kafka overview
+        panel: Current role
+      - dashboard: Kafka overview
+        panel: Active kafka controllers
+      - dashboard: Kafka overview
+        panel: Brokers count
+      - dashboard: Kafka overview
+        panel: Brokers count
+      - dashboard: Kafka overview
+        panel: Cluster network throughput
+      - dashboard: Kafka overview
+        panel: Cluster messages throughput
+      - dashboard: Kafka topic overview
+  panel-datasource-rule:
+    entries:
+      - panel: GC duration
+      - panel: Allocated/promoted
+      - panel: Cluster network throughput
+      - panel: Cluster messages throughpu
+      - panel: Broker network throughput
+      - panel: Broker messages throughput
+      - panel: Producer ($instance)
+      - panel: Fetch-follower ($instance)
+      - panel: Fetch-consumer ($instance)
+      - panel: Cluster network throughput
+        dashboard: Kafka overview
+      - panel: Cluster messages throughput
+        dashboard: Kafka overview
+      - panel: Broker network throughput
+        dashboard: Kafka overview
+      - panel: Broker messages throughput
+        dashboard: Kafka overview
+      - panel: Consumer group overview
+        dashboard: Kafka topic overview
+      - panel: Topic overview
+        dashboard: Kafka topic overview
+      
+  panel-title-description-rule:
+    entries:
+      - panel: Cluster network throughput
+        dashboard: Kafka overview
+      - panel: Cluster messages throughput
+        dashboard: Kafka overview
+      - panel: Broker network throughput
+        dashboard: Kafka overview
+      - panel: Broker messages throughput
+        dashboard: Kafka overview
+      - panel: Consumer group overview
+        dashboard: Kafka topic overview
+  template-instance-rule:
+    reason: kafka_cluster is used intead
+    entries:
+      - dashboard: Kafka topic overview
+      
+  target-job-rule:
+    reason: kafka_cluster is used intead
+  template-job-rule:
+    reason: kafka_cluster is used intead
+
+        

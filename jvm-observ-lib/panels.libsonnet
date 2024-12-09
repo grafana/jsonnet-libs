@@ -71,6 +71,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     gcDuration:
       g.panel.timeSeries.new('GC duration')
+      + g.panel.timeSeries.panelOptions.withDescription('Major and minor garbage collections')
       + commonlib.panels.generic.timeSeries.base.stylize()
       + g.panel.timeSeries.fieldConfig.defaults.custom.withFillOpacity(0)
       + signals.gc.collectionsTimeAvg.asPanelMixin()
@@ -79,6 +80,12 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
     promotedAllocated:
       g.panel.timeSeries.new('Allocated/promoted')
+      + g.panel.timeSeries.panelOptions.withDescription(
+        |||
+          'Allocated' is the size increase of the young generation memory pool after one GC and before the next. It reflects minor GC.
+          'Promoted' is the size increase of the old generation memory pool after GC. It reflects full GC.
+        |||
+      )
       + commonlib.panels.memory.timeSeries.usageBytes.stylize()
       + signals.gc.memAllocatedBytes.asPanelMixin()
       + signals.gc.memAllocated.asPanelMixin()

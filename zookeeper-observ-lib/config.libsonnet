@@ -1,7 +1,7 @@
 {
   local this = self,
   filteringSelector: 'job!=""',
-  groupLabels: ['cluster'],
+  groupLabels: ['job'],
   instanceLabels: ['instance'],
   uid: 'zookeeper',
   dashboardNamePrefix: '',

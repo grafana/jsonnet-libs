@@ -1,0 +1,13 @@
+exclusions:
+  panel-units-rule:
+    entries:
+      - panel: Process files open
+  panel-datasource-rule:
+    entries:
+      - panel: GC duration
+      - panel: Allocated/promoted
+  target-instance-rule:
+    reason: Instance selector is intentionally dropped in these panels as they represent whole cluster.
+    entries:
+      - dashboard: ZooKeeper overview
+        panel: Current zookeeper role

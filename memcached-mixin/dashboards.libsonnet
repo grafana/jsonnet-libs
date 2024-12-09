@@ -118,6 +118,7 @@ local g = (import 'grafana-builder/grafana.libsonnet');
             'Value #B': { alias: 'Uptime', type: 'number', unit: 'dtdurations' },
           })
         )
-      ),
+      )
+      { editable: false },
   },
 }

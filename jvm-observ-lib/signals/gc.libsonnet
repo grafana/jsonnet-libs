@@ -22,7 +22,7 @@ function(this)
       //gc
       collections: {
         name: 'Garbage collections',
-        description: 'Major and minor garbage collection',
+        description: 'Major and minor garbage collections',
         type: 'counter',
         unit: 'ops',
         optional: true,
