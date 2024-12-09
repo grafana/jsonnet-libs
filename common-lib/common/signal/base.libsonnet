@@ -119,13 +119,19 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             g.panel.timeSeries.fieldOverride.byQuery.new(name)
             + g.panel.timeSeries.fieldOverride.byQuery.withPropertiesFromOptions(
               g.panel.timeSeries.standardOptions.withUnit(self.unit)
-              + g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
+              +
+              (if std.length(this.getValueMappings(sourceMaps)) > 0 then
+                 g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
+               else {})
             )
           else if override == 'byName' then
             g.panel.timeSeries.fieldOverride.byName.new(name)
             + g.panel.timeSeries.fieldOverride.byName.withPropertiesFromOptions(
               g.panel.timeSeries.standardOptions.withUnit(self.unit)
-              + g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
+              +
+              (if std.length(this.getValueMappings(sourceMaps)) > 0 then
+                 g.panel.timeSeries.standardOptions.withMappings(this.getValueMappings(sourceMaps))
+               else {})
             )
           else error 'Unknown override type, only "byName", "byQuery" are supported.',
         ],
