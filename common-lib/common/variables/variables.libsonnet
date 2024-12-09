@@ -11,7 +11,7 @@ local utils = import '../utils.libsonnet';
     enableLokiLogs=false,
     customAllValue='.+',
     prometheusDatasourceName=if enableLokiLogs then 'prometheus_datasource' else 'datasource',
-    prometheusDatasourceLabel=if enableLokiLogs then 'Prometheus datasource' else 'Data source',
+    prometheusDatasourceLabel=if enableLokiLogs then 'Prometheus data source' else 'Data source',
   ): {
        local varMetricTemplate(varMetric, chainSelector) =
          // check if chainSelector is not empty string (case when filtering selector is empty):
