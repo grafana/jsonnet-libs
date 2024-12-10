@@ -91,31 +91,31 @@ local utils = commonlib.utils;
             },
           ]),
           fieldOverride.byName.new('Cores')
-          + fieldOverride.byName.withProperty('custom.width', '120'),
+          + fieldOverride.byName.withProperty('custom.width', 120),
           fieldOverride.byName.new('CPU usage')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + fieldOverride.byName.withPropertiesFromOptions(
             commonlib.panels.cpu.timeSeries.utilization.stylize()
           ),
           fieldOverride.byName.new('Memory total')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('bytes')
           ),
           fieldOverride.byName.new('Memory usage')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + fieldOverride.byName.withPropertiesFromOptions(
             commonlib.panels.cpu.timeSeries.utilization.stylize()
           ),
           fieldOverride.byName.new('Disk C: total')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('bytes')
           ),
           fieldOverride.byName.new('Disk C: used')
-          + fieldOverride.byName.withProperty('custom.width', '120')
+          + fieldOverride.byName.withProperty('custom.width', 120)
           + fieldOverride.byName.withProperty('custom.displayMode', 'basic')
           + fieldOverride.byName.withPropertiesFromOptions(
             table.standardOptions.withUnit('percent')
