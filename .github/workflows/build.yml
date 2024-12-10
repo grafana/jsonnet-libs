@@ -18,7 +18,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
         with:
-          go-version: 1.18
+          go-version: 1.23
       - name: Install CI dependencies
         run: make install-ci-deps
       - name: Lint and Format
@@ -33,7 +33,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
         with:
-          go-version: 1.18
+          go-version: 1.23
       - name: Install CI dependencies
         run: make install-ci-deps
       - name: Run Tests
