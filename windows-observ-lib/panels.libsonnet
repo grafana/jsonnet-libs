@@ -72,7 +72,7 @@ local utils = commonlib.utils;
         + table.standardOptions.withOverridesMixin([
           fieldOverride.byRegexp.new('Product|^Hostname$')
           + fieldOverride.byRegexp.withProperty('custom.filterable', true),
-          fieldOverride.byName.new('Instance')
+          fieldOverride.byName.new(utils.toSentenceCase(instanceLabel))
           + fieldOverride.byName.withProperty('custom.filterable', true)
           + fieldOverride.byName.withProperty('links', [
             {
