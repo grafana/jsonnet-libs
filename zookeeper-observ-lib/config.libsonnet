@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job!=""',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   uid: 'zookeeper',
