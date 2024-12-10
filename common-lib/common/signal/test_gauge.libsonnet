@@ -15,6 +15,21 @@ local gauge1 = signal.init(
       rangeFunction: null,
       aggKeepLabels: [],
       legendCustomTemplate: null,
+      valueMappings: [{
+        type: 'value',
+        options: {
+          '1': {
+            text: 'Up',
+            color: 'light-green',
+            index: 1,
+          },
+          '0': {
+            text: 'Down',
+            color: 'light-red',
+            index: 0,
+          },
+        },
+      }],
     },
   ]
 );
@@ -45,6 +60,10 @@ local gauge1 = signal.init(
         testUnit: {
           actual: gauge1.asTimeSeries().fieldConfig.overrides[0].properties[1].value,
           expect: 'short',
+        },
+        testValueMapping: {
+          actual: gauge1.asTimeSeries().fieldConfig.overrides[0].properties[0].value,
+          expect: [{ options: { '0': { color: 'light-red', index: 0, text: 'Down' }, '1': { color: 'light-green', index: 1, text: 'Up' } }, type: 'value' }],
         },
         testTStype: {
           actual: gauge1.asTimeSeries().type,
