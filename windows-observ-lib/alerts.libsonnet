@@ -80,7 +80,7 @@
           {
             alert: 'WindowsCPUHighUsage',
             expr: |||
-              100 - (avg without (mode, core) (rate(windows_cpu_time_total{%(filteringSelector)s, mode="idle"}[2m])) * 100) > %(alertsCPUThresholdWarning)s
+              100 - (avg without (mode, core) (rate(windows_cpu_time_total{mode="idle", %(filteringSelector)s}[2m])) * 100) > %(alertsCPUThresholdWarning)s
             ||| % this.config,
             'for': '15m',
             keep_firing_for: '5m',
@@ -133,7 +133,7 @@
           {
             alert: 'WindowsServiceNotHealthy',
             expr: |||
-              windows_service_status{%(filteringSelector)s, status!~"starting|stopping|ok"} > 0
+              windows_service_status{status!~"starting|stopping|ok", %(filteringSelector)s} > 0
             ||| % this.config,
             'for': '5m',
             labels: {
@@ -150,7 +150,7 @@
           {
             alert: 'WindowsDiskDriveNotHealthy',
             expr: |||
-              windows_disk_drive_status{%(filteringSelector)s, status="OK"} != 1
+              windows_disk_drive_status{status="OK", %(filteringSelector)s} != 1
             ||| % this.config,
             'for': '5m',
             labels: {
