@@ -1,0 +1,16 @@
+groups:
+  - name: gcp
+    rules:
+      - alert: GcpCEHighCpuUtilization
+        expr: |
+          100 * avg by (job,project_id,instance_name) (stackdriver_gce_instance_compute_googleapis_com_instance_cpu_utilization{job=~".+",project_id=~".+",instance_name=~".+"}) > 85
+        for: 5m
+        keep_firing_for: 10m
+        labels:
+          severity: critical
+          service: 'Compute Engine'
+          namespace: cloud-provider-gcp
+        annotations:
+          summary: 'CPU utilization is too high.'
+          description: 'The VM {{ $labels.instance_name }} is under heavy load and may become unresponsive.'
+          dashboard_uid: 'f115fe73641347c43415535d77e2dc0f'

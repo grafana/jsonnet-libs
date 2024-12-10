@@ -30,7 +30,7 @@ function(
         sum by (%s) (count_over_time({%s}
         |~ "$regex_search"
         %s
-        [$__interval]))
+        [$__auto]))
       ||| % [
         logsVolumeGroupBy,
         variables.queriesSelector,

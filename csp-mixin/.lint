@@ -71,3 +71,9 @@ exclusions:
   panel-title-description-rule:
     entries:
     - dashboard: Azure Service Bus
+    - dashboard: GCP Compute Engine
+    - dashboard: Azure Virtual Machines
+  target-rate-interval-rule:
+    entries:
+    - dashboard: GCP Compute Engine
+

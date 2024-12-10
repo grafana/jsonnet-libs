@@ -10,15 +10,19 @@ local utils = import '../utils.libsonnet';
     varMetric='up',
     enableLokiLogs=false,
     customAllValue='.+',
-    prometheusDatasourceName='datasource',
-    prometheusDatasourceLabel='Data source',
+    prometheusDatasourceName=if enableLokiLogs then 'prometheus_datasource' else 'datasource',
+    prometheusDatasourceLabel=if enableLokiLogs then 'Prometheus data source' else 'Data source',
   ): {
-       local varMetricTemplate =
-         if std.type(varMetric) == 'array'
-         then '{__name__=~"%s",%%s}' % std.join('|', std.uniq(varMetric))
+       local varMetricTemplate(varMetric, chainSelector) =
+         // check if chainSelector is not empty string (case when filtering selector is empty):
+         if std.type(varMetric) == 'array' && chainSelector != ''
+         then '{__name__=~"%s",%s}' % [std.join('|', std.uniq(varMetric)), chainSelector]
+         else if std.type(varMetric) == 'array' && chainSelector == ''
+         then '{__name__=~"%s"}' % std.join('|', std.uniq(varMetric))
          else if std.type(varMetric) == 'string'
-         then '%s{%%s}' % varMetric
+         then '%s{%s}' % [varMetric, chainSelector]
          else error ('varMetric must be array or string'),
+
        local root = self,
        local variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=true) =
          local chainVarProto(index, chainVar) =
@@ -26,7 +30,7 @@ local utils = import '../utils.libsonnet';
            + var.query.withDatasourceFromVariable(root.datasources.prometheus)
            + var.query.queryTypes.withLabelValues(
              chainVar.label,
-             varMetricTemplate % [chainVar.chainSelector],
+             varMetricTemplate(varMetric, chainVar.chainSelector),
            )
            + var.query.generalOptions.withLabel(utils.toSentenceCase(chainVar.label))
            + var.query.selectionOptions.withIncludeAll(
@@ -43,7 +47,7 @@ local utils = import '../utils.libsonnet';
              asc=true,
              caseInsensitive=false
            );
-         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, [filteringSelector])),
+         std.mapWithIndex(chainVarProto, utils.chainLabels(groupLabels + instanceLabels, if std.length(filteringSelector) > 0 then [filteringSelector] else [])),
        datasources: {
          prometheus:
            var.datasource.new(prometheusDatasourceName, 'prometheus')
@@ -59,14 +63,21 @@ local utils = import '../utils.libsonnet';
          [root.datasources.prometheus]
          + variablesFromLabels(groupLabels, instanceLabels, filteringSelector, multiInstance=false),
        queriesSelectorAdvancedSyntax:
-         '%s' % [
-           utils.labelsToPromQLSelectorAdvanced(groupLabels + instanceLabels),
-         ],
+         std.join(
+           ',',
+           std.filter(function(x) std.length(x) > 0, [
+             filteringSelector,
+             utils.labelsToPromQLSelectorAdvanced(groupLabels + instanceLabels),
+           ])
+         ),
        queriesSelector:
-         '%s,%s' % [
-           filteringSelector,
-           utils.labelsToPromQLSelector(groupLabels + instanceLabels),
-         ],
+         std.join(
+           ',',
+           std.filter(function(x) std.length(x) > 0, [
+             filteringSelector,
+             utils.labelsToPromQLSelector(groupLabels + instanceLabels),
+           ])
+         ),
 
      }
      + if enableLokiLogs then self.withLokiLogs() else {},

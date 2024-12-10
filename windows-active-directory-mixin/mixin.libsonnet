@@ -3,16 +3,13 @@ local alerts = import './alerts/alerts.libsonnet';
 local g = import './g.libsonnet';
 local var = g.dashboard.variable;
 local activedirectorymixin =
-  windowsobservlib.new(
-    filteringSelector='job=~"integrations/windows_exporter"',
-    uid='active-directory',
-    groupLabels=['job'],
-    instanceLabels=['instance'],
-  )
+  windowsobservlib.new()
 
   {
     config+: {
       enableADDashboard: true,
+      groupLabels: ['job'],
+      uid: 'active-directory',
     },
   }
 
