@@ -9,6 +9,9 @@ function(
   labels,
 )
   {
+    // strip trailing or starting comma if present that are not accepted in LoqQL
+    // starting comma can be present in case of concatenation of empty filteringSelector with some extra selectors.
+    local _filteringSelector = std.stripChars(std.stripChars(filterSelector, ' '), ','),
     local this = self,
     local variablesFromLabels(labels, filterSelector) =
       local chainVarProto(chainVar) =
@@ -34,7 +37,7 @@ function(
       ;
       [
         chainVarProto(chainVar)
-        for chainVar in utils.chainLabels(labels, [filterSelector])
+        for chainVar in utils.chainLabels(labels, [_filteringSelector])
       ],
 
     datasource:
@@ -48,14 +51,14 @@ function(
 
     toArray:
       [self.datasource]
-      + variablesFromLabels(labels, filterSelector)
+      + variablesFromLabels(labels, _filteringSelector)
       + [self.regex_search],
 
     queriesSelector:
       std.join(
         ',',
         std.filter(function(x) std.length(x) > 0, [
-          filterSelector,
+          _filteringSelector,
           utils.labelsToPromQLSelector(labels),
         ])
       ),
