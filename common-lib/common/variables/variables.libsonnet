@@ -14,7 +14,7 @@ local utils = import '../utils.libsonnet';
     prometheusDatasourceLabel=if enableLokiLogs then 'Prometheus data source' else 'Data source',
   ): {
        // strip trailing or starting comma if present:
-       // while trailing comman is accepted in PromQL expressions, starting comma is not.
+       // while trailing comma is accepted in PromQL expressions, starting comma is not.
        // starting comma can be present in case of concatenation of empty filteringSelector with some extra selectors.
        local _filteringSelector = std.stripChars(std.stripChars(filteringSelector, ' '), ','),
 
