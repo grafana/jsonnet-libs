@@ -52,8 +52,11 @@ function(
       + [self.regex_search],
 
     queriesSelector:
-      '%s,%s' % [
-        filterSelector,
-        utils.labelsToPromQLSelector(labels),
-      ],
+      std.join(
+        ',',
+        std.filter(function(x) std.length(x) > 0, [
+          filterSelector,
+          utils.labelsToPromQLSelector(labels),
+        ])
+      ),
   }
