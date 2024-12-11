@@ -6,7 +6,7 @@
   // 'instanceLabels' - one or more labels that can be used to identify single entity of instances. In simple cases, can be 'instance' or 'pod'.
   // 'uid' - UID to prefix all dashboards original uids
   local this = self,
-  filteringSelector: 'job!=""',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="bar"
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   dashboardTags: [self.uid],

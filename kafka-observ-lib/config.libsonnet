@@ -1,6 +1,6 @@
 {
   local this = self,
-  filteringSelector: 'job!=""',
+  filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="integrations/kafka"
   zookeeperfilteringSelector: this.filteringSelector,
   groupLabels: ['kafka_cluster'],  // label(s) that defines kafka cluster
   instanceLabels: ['instance'],  // label(s) that defines single broker

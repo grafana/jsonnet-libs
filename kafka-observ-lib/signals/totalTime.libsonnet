@@ -3,7 +3,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 // TotalTimeMs metric
 function(this)
   {
-    filteringSelector: this.filteringSelector + ', quantile="%s"' % this.totalTimeMsQuantile,
+    filteringSelector: ('quantile="%s"' % this.totalTimeMsQuantile) + ',' + this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     aggLevel: if this.totalTimeMetricsRepeat then 'instance' else 'group',
