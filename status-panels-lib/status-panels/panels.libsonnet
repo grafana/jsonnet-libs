@@ -2,6 +2,7 @@ local g = import '../common/g.libsonnet';
 local utils = import '../utils.libsonnet';
 local stat = g.panel.stat;
 local row = g.panel.row;
+local text = g.panel.text;
 function(
   title,
   type,
@@ -74,15 +75,13 @@ function(
       + row.gridPos.withY(rowPositionY),
 
     integrationVersionInit(targets)::
-      stat.new('Integration version')
-      + stat.panelOptions.withDescription('Shows the installed version of this integration.')
-      + stat.standardOptions.withUnit('string')
-      + stat.standardOptions.withNoValue(integrationVersion)
-      + stat.standardOptions.color.withMode('fixed')
-      + stat.standardOptions.color.withFixedColor('text')
-      + stat.gridPos.withH(panelsHeight)
-      + stat.gridPos.withW(panelsWidth)
-      + stat.gridPos.withX(0 + 2 * panelsWidth)
+      text.new('Integration version')
+      + text.panelOptions.withDescription('Shows the installed version of this integration.')
+      + text.options.withContent(value='<p style="text-align: center">'+ integrationVersion + '</p>')
+      + text.options.withMode(value='html')
+      + text.gridPos.withH(panelsHeight)
+      + text.gridPos.withW(panelsWidth)
+      + text.gridPos.withX(0 + 2 * panelsWidth)
       + row.gridPos.withY(rowPositionY),
 
     rowInit(title)::
