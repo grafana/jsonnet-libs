@@ -77,7 +77,7 @@ function(
     integrationVersionInit(targets)::
       text.new('Integration version')
       + text.panelOptions.withDescription('Shows the installed version of this integration.')
-      + text.options.withContent(value='<p style="text-align: center">'+ integrationVersion + '</p>')
+      + text.options.withContent(value='<p style="text-align: center">' + integrationVersion + '</p>')
       + text.options.withMode(value='html')
       + text.gridPos.withH(panelsHeight)
       + text.gridPos.withW(panelsWidth)
