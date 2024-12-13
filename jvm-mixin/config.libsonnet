@@ -1,5 +1,5 @@
 {
-  filteringSelector: 'job!=""',
+  filteringSelector: '',
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   uid: 'jvm',

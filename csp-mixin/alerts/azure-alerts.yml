@@ -13,7 +13,7 @@ groups:
         annotations:
           summary: 'VM CPU utilization is too high.'
           description: 'The VM {{ $labels.resourceName }} is under heavy load and may become unresponsive.'
-          dashboard_uid: '58f33c50e66c911b0ad8a25aa438a96e'
+          dashboard_url: '/a/grafana-csp-app/azure/dashboards/vm'
 
       - alert: AzureVMUnavailable
         expr: |
@@ -27,7 +27,7 @@ groups:
         annotations:
           summary: 'VM unavailable.'
           description: 'The VM {{ $labels.resourceName }} is not functioning or crashed, which may require immediate action.'
-          dashboard_uid: '58f33c50e66c911b0ad8a25aa438a96e'
+          dashboard_url: '/a/grafana-csp-app/azure/dashboards/vm'
 
       - alert: AzureDatabaseHighDtuConsumption
         expr: |
