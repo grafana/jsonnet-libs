@@ -566,5 +566,86 @@ local g = import './g.libsonnet';
         + g.panel.timeSeries.gridPos.withW(12)
         + g.panel.timeSeries.gridPos.withH(8),
       ],
+
+      // Azure Front Door
+      afd_overview: [
+        g.panel.row.new('Overview'),
+
+        this.grafana.panels.azurefrontdoor.afd_endpoint_count
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(5),
+
+        this.grafana.panels.azurefrontdoor.afd_top5_errors
+        + g.panel.timeSeries.gridPos.withW(24)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.azurefrontdoor.afd_total_requests
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.azurefrontdoor.afd_requests_by_country
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.azurefrontdoor.afd_requests_by_status
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.azurefrontdoor.afd_requests_by_errors
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.azurefrontdoor.afd_requests_responses_size
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.azurefrontdoor.afd_total_latency
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.azurefrontdoor.afd_origin_health
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+
+        this.grafana.panels.azurefrontdoor.afd_origin_latency
+        + g.panel.timeSeries.gridPos.withW(12)
+        + g.panel.timeSeries.gridPos.withH(8),
+      ],
+
+      afd_endpoints: [
+        g.panel.row.new('Endpoints')
+        + g.panel.row.withCollapsed(true)
+        + g.panel.row.withPanels(
+          [
+            this.grafana.panels.azurefrontdoor.afd_requests_by_endpoint
+            + g.panel.timeSeries.gridPos.withW(24)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.azurefrontdoor.afd_requests_size_by_endpoint
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.azurefrontdoor.afd_responses_size_by_endpoint
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.azurefrontdoor.afd_total_latency_by_endpoint
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.azurefrontdoor.afd_errors_by_endpoint
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.azurefrontdoor.afd_origin_requests_by_endpoint
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+
+            this.grafana.panels.azurefrontdoor.afd_origin_latency_by_endpoint
+            + g.panel.timeSeries.gridPos.withW(12)
+            + g.panel.timeSeries.gridPos.withH(8),
+          ]
+        ),
+      ],
     },
 }

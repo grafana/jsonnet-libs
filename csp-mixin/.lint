@@ -23,6 +23,7 @@ exclusions:
     - dashboard: "GCP Compute Engine"
       reason: "Using instance_name as instance label"
     - dashboard: "Azure Virtual Machines"
+    - dashboard: "Azure Front Door"
       reason: "Aggregation is at the group level, and resourceName is used for instance label"
   target-job-rule:
       reason: "Using filtering selector with job"
@@ -47,6 +48,7 @@ exclusions:
     - dashboard: "GCP Compute Engine"
       reason: "Using instance_name as instance label"
     - dashboard: "Azure Virtual Machines"
+    - dashboard: "Azure Front Door"
       reason: "Aggregation is at the group level, and resourceName is used for instance label"
   panel-datasource-rule:
     reason: "Many panels use --Mixed-- DS"
@@ -73,6 +75,7 @@ exclusions:
     - dashboard: Azure Service Bus
     - dashboard: GCP Compute Engine
     - dashboard: Azure Virtual Machines
+    - dashboard: Azure Front Door
   target-rate-interval-rule:
     entries:
     - dashboard: GCP Compute Engine
