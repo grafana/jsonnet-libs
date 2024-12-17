@@ -67,7 +67,7 @@ function(this)
           java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_max_bytes{area="heap", %(queriesSelector)s} != -1)',
           },
-          prometheus: self.java_micrometer,
+          prometheus: self.java_micrometer_with_suffixes,
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_limit{type="heap", %(queriesSelector)s} != -1)',
           },
@@ -95,7 +95,7 @@ function(this)
           java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_used_bytes{area="nonheap", %(queriesSelector)s})',
           },
-          prometheus: self.java_micrometer,
+          prometheus: self.java_micrometer_with_suffixes,
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_usage{type="non_heap", %(queriesSelector)s})',
           },
@@ -122,7 +122,7 @@ function(this)
           java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_max_bytes{area="nonheap", %(queriesSelector)s} != -1)',
           },
-          prometheus: self.java_micrometer,
+          prometheus: self.java_micrometer_with_suffixes,
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_limit{type="non_heap", %(queriesSelector)s} != -1)',
           },
@@ -151,7 +151,7 @@ function(this)
           java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_committed_bytes{area="heap", %(queriesSelector)s})',
           },
-          prometheus: self.java_micrometer,
+          prometheus: self.java_micrometer_with_suffixes,
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_committed{type="heap", %(queriesSelector)s})',
           },
@@ -180,7 +180,7 @@ function(this)
           java_micrometer_with_suffixes: {
             expr: 'sum without (id) (jvm_memory_committed_bytes{area="nonheap", %(queriesSelector)s})',
           },
-          prometheus: self.java_micrometer,
+          prometheus: self.java_micrometer_with_suffixes,
           otel: {
             expr: 'sum without (pool) (process_runtime_jvm_memory_committed{type="non_heap", %(queriesSelector)s})',
           },

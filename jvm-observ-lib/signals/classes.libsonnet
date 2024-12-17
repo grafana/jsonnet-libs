@@ -10,7 +10,7 @@ function(this)
     discoveryMetric: {
       java_micrometer: 'jvm_classes_loaded',  // https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/ClassLoaderMetrics.java
       java_micrometer_with_suffixes: 'jvm_classes_loaded_classes',
-      prometheus: 'jvm_classes_loaded',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-class-loading-metrics
+      prometheus: 'jvm_classes_loaded_total',  // https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-class-loading-metrics
       otel: 'process_runtime_jvm_classes_loaded',
       otel_with_suffixes: 'process_runtime_jvm_classes_loaded_total',
       prometheus_old: 'jvm_classes_loaded',
@@ -30,7 +30,7 @@ function(this)
             expr: 'jvm_classes_loaded_classes{%(queriesSelector)s}',
           },
           prometheus: {
-            expr: 'jvm_classes_loaded{%(queriesSelector)s}',
+            expr: 'jvm_classes_loaded_total{%(queriesSelector)s}',
           },
           otel: {
             expr: 'process_runtime_jvm_classes_loaded{%(queriesSelector)s}',
