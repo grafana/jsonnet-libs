@@ -168,11 +168,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                    + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
                    + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
                    + g.dashboard.withVariables([
-                     if std.asciiLower(v.label) == std.asciiLower(csplib.config.azurevm.groupLabel)
+                     if std.asciiLower(v.label) == std.asciiLower(csplib.config.commomVars.groupLabel)
                      then v { label: 'Group' }
-                     else if std.asciiLower(v.label) == std.asciiLower(csplib.config.azurevm.subscriptionLabel)
+                     else if std.asciiLower(v.label) == std.asciiLower(csplib.config.commomVars.subscriptionLabel)
                      then v { label: 'Subscription' }
-                     else if std.asciiLower(v.label) == std.asciiLower(csplib.config.azurevm.instanceLabel)
+                     else if std.asciiLower(v.label) == std.asciiLower(csplib.config.commomVars.instanceLabel)
                      then v { label: 'Instance' }
                      else v
                      for v in variables
@@ -181,6 +181,31 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                      g.util.grid.wrapPanels(
                        csplib.grafana.rows.avm_overview +
                        csplib.grafana.rows.avm_instance
+                     )
+                   ),
+
+                 [csplib.config.uid + '-frontdoor.json']:
+                   local variables = csplib.signals.azurefrontdoor.getVariablesMultiChoice();
+                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Front Door')
+                   + g.dashboard.withUid(csplib.config.uid + '-frontdoor')
+                   + g.dashboard.withTags(csplib.config.dashboardTags)
+                   + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
+                   + g.dashboard.withRefresh(csplib.config.dashboardRefresh)
+                   + g.dashboard.timepicker.withTimeOptions(csplib.config.dashboardPeriod)
+                   + g.dashboard.withVariables([
+                     if std.asciiLower(v.label) == std.asciiLower(csplib.config.commomVars.groupLabel)
+                     then v { label: 'Group' }
+                     else if std.asciiLower(v.label) == std.asciiLower(csplib.config.commomVars.subscriptionLabel)
+                     then v { label: 'Subscription' }
+                     else if std.asciiLower(v.label) == std.asciiLower(csplib.config.commomVars.dimensionEndpoint)
+                     then v { label: 'Endpoint' }
+                     else v
+                     for v in variables
+                   ])
+                   + g.dashboard.withPanels(
+                     g.util.grid.wrapPanels(
+                       csplib.grafana.rows.afd_overview
+                       + csplib.grafana.rows.afd_endpoints,
                      )
                    ),
 

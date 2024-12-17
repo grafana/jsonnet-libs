@@ -19,6 +19,8 @@
         gcpce: (import './signals/gcpce.libsonnet')(this),
         gcpceOverview: (import './signals/gcpceOverview.libsonnet')(this),
         gcpvpc: (import './signals/gcpvpc.libsonnet')(this),
+        azurefrontdoorOverview: (import './signals/azurefrontdoorOverview.libsonnet')(this),
+        azurefrontdoor: (import './signals/azurefrontdoor.libsonnet')(this),
       },
     blobStorage: {
       enableAvailability: false,
