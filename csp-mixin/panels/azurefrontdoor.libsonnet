@@ -40,19 +40,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
               {
                 id: 'thresholds',
                 value: {
-                  mode: 'absolute',
+                  mode: 'percentage',
                   steps: [
                     {
-                      color: 'yellow',
-                      value: null,
-                    },
-                    {
-                      color: 'green',
-                      value: 30,
+                      color: 'text',
+                      value: 0,
                     },
                     {
                       color: 'red',
-                      value: 85,
+                      value: 1,
                     },
                   ],
                 },
@@ -216,16 +212,20 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                   mode: 'percentage',
                   steps: [
                     {
-                      color: 'yellow',
-                      value: null,
+                      color: 'text',
+                      value: 0,
                     },
                     {
-                      value: 30,
-                      color: 'green',
-                    },
-                    {
+                      value: 1,
                       color: 'red',
+                    },
+                    {
                       value: 85,
+                      color: 'yellow',
+                    },
+                    {
+                      color: 'green',
+                      value: 90,
                     },
                   ],
                 },

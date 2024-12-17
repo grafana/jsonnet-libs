@@ -30,6 +30,7 @@ function(this)
         name: 'Top 5 Endpoints by Errors',
         description: 'Top 5 Endpoints with higher percentage of client requests for which the response status code is 4XX or 5XX',
         type: 'raw',
+        unit: 'percent',
         sources: {
           azuremonitor: {
             expr: 'avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion) (azure_microsoft_cdn_profiles_percentage4xx_average_percent{%(queriesSelector)s}) + avg by (job, resourceGroup, subscriptionName, resourceName, dimensionClientCountry, dimensionClientRegion) (azure_microsoft_cdn_profiles_percentage5xx_average_percent{%(queriesSelector)s})',
