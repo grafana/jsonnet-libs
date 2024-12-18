@@ -13,7 +13,7 @@ groups:
         annotations:
           summary: 'VM CPU utilization is too high.'
           description: 'The VM {{ $labels.instance_name }} is under heavy load and may become unresponsive.'
-          dashboard_uid: 'f115fe73641347c43415535d77e2dc0f'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/compute-engine'
 
       - alert: GcpCEHighIOLatency
         expr: |
@@ -27,7 +27,7 @@ groups:
         annotations:
           summary: 'VM IO latency is too high.'
           description: 'Check {{ $labels.instance_id }} VM for I/O bottlenecks and upgrade to SSD if necessary.'
-          dashboard_uid: 'f115fe73641347c43415535d77e2dc0f'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/compute-engine'
 
       - alert: GcpCloudSQLHighCpu
         expr: |
@@ -41,7 +41,7 @@ groups:
         annotations:
           summary: 'Database CPU utilization is too high.'
           description: 'Check {{ $labels.database_id }} database for high CPU queries and optimize them, or scale up the instance if sustained high usage.'
-          dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
 
       - alert: GcpCloudSQLMemoryUsage
         expr: |
@@ -55,7 +55,7 @@ groups:
         annotations:
           summary: 'Database memory utilization is too high.'
           description: 'Review high-memory queries or add more memory to the {{ $labels.database_id }} instance.'
-          dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
 
       - alert: GcpCloudSQLDiskUsage
         expr: |
@@ -69,7 +69,7 @@ groups:
         annotations:
           summary: 'Database disk utilization is too high.'
           description: 'Delete or archive unused data, or increase disk size to the {{ $labels.database_id }} database.'
-          dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
 
       - alert: GcpCloudSQLActiveConnections
         expr: |
@@ -83,7 +83,7 @@ groups:
         annotations:
           summary: 'Too many database active connections.'
           description: 'Investigate connection pooling settings and connection management in your {{ $labels.database_id }} application database.'
-          dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
 
       - alert: GcpCloudSQLAbortedConnections
         expr: |
@@ -97,7 +97,7 @@ groups:
         annotations:
           summary: 'More than 5 MySQL failed connections in 5 minutes.'
           description: 'Verify credentials and network settings; check for firewall rules blocking connections for the {{ $labels.database_id }} database.'
-          dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
 
       - alert: GcpCloudSQLLagSecondsBehindMaster
         expr: |
@@ -111,7 +111,7 @@ groups:
         annotations:
           summary: 'More than 5 seconds lag between database read replica and primary.'
           description: 'Check {{ $labels.database_id }} database for network latency between primary and replica; adjust configurations to optimize replication.'
-          dashboard_uid: 'cc710d49022fdd69bed0e992891863e9'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/cloud-sql'
 
       - alert: GcpPubSubNumUndeliveredMessages
         expr: |
@@ -125,7 +125,7 @@ groups:
         annotations:
           summary: 'More than 1000 unacknowledged messages for a PubSub subscription.'
           description: 'Scale up subscribers or adjust message processing capacity for the {{ $labels.instance }} instance.'
-          dashboard_uid: '2abad1eb5e4873b95e9176e7ef10a30c'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/pub-sub'
 
       - alert: GcpPubSubUnackedMessageAge
         expr: |
@@ -139,4 +139,4 @@ groups:
         annotations:
           summary: 'Unacknowledged messages for more than 60 seconds for a PubSub subscription.'
           description: 'Investigate {{ $labels.instance }} instance and speed up message processing; ensure consumers can handle the load.'
-          dashboard_uid: '2abad1eb5e4873b95e9176e7ef10a30c'
+          dashboard_url: '/a/grafana-csp-app/gcp/dashboards/pub-sub'
