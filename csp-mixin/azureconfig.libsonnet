@@ -7,10 +7,11 @@
       enableAvailability: true,
       bucketLabel: 'resourceName',
     },
-    azurevm+: {
+    commomVars+: {
       groupLabel: 'resourceGroup',
       subscriptionLabel: 'subscriptionName',
       instanceLabel: 'resourceName',
+      dimensionEndpoint: 'dimensionEndpoint',
     },
     // UID Prefix for each dashboard
     uid: 'azure',
