@@ -17,6 +17,8 @@ local variables = import './variables.libsonnet';
     logsVolumeGroupBy='level',
     extraFilters='',
     customAllValue='.*',
+    adHocEnabled=false,
+    adHocLabels=[],
   ): {
 
     local this = self,
@@ -27,6 +29,8 @@ local variables = import './variables.libsonnet';
       filterSelector,
       labels,
       customAllValue,
+      adHocEnabled,
+      adHocLabels,
     ),
 
     targets: targets(

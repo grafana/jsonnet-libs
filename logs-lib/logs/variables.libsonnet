@@ -9,6 +9,8 @@ function(
   filterSelector,
   labels,
   customAllValue,
+  adHocEnabled,
+  adHocLabels,
 )
   {
     // strip trailing or starting comma if present that are not accepted in LoqQL
@@ -47,14 +49,28 @@ function(
       + var.datasource.withRegex(datasourceRegex)
       + var.query.generalOptions.withLabel(datasourceLabel),
 
-    regex_search:
+    regexSearch:
       var.textbox.new('regex_search', default='')
       + var.query.generalOptions.withLabel('Regex search'),
 
+    adHoc:
+      var.adhoc.new('adhoc', 'loki', '${' + self.datasource.name + '}')
+      + var.adhoc.generalOptions.withLabel('Adhoc filters')
+      + var.adhoc.generalOptions.withDescription('Add additional filters')
+      + (if std.length(adHocLabels) > 0 then {
+           defaultKeys: [
+             {
+               text: l,
+               value: l,
+             }
+             for l in adHocLabels
+           ],
+         } else {}),
     toArray:
       [self.datasource]
       + variablesFromLabels(labels, _filteringSelector)
-      + [self.regex_search],
+      + [self.regexSearch]
+      + (if adHocEnabled then [self.adHoc] else []),
 
     queriesSelector:
       std.join(
