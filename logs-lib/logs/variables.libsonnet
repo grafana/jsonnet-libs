@@ -1,12 +1,14 @@
-local utils = import '../utils.libsonnet';
-local g = import './g.libsonnet';
+local g = import '../g.libsonnet';
 local var = g.dashboard.variable;
+local utils = import '../utils.libsonnet';
+
 function(
   datasourceName,
   datasourceLabel,
   datasourceRegex,
   filterSelector,
   labels,
+  customAllValue,
 )
   {
     // strip trailing or starting comma if present that are not accepted in LoqQL
@@ -24,7 +26,7 @@ function(
         )
         + var.query.selectionOptions.withIncludeAll(
           value=true,
-          customAllValue='.+'
+          customAllValue=customAllValue,
         )
         + var.query.selectionOptions.withMulti()
         + var.query.refresh.onTime()
