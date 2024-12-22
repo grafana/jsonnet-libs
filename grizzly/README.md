@@ -7,7 +7,7 @@ installations.
 ## Kubernetes Style Observability Objects
 It provides functions to render Kubernetes style objects from Monitoring Mixins.
 
-If deploying dashboards structured to be consumed by [prometheus-ksonnet](https://github.com/grafana/jsonnet-libs/prometheus-ksonnet)
+If deploying dashboards structured to be consumed by [prometheus-ksonnet](../prometheus-ksonnet)
 or associated libraries, where other resources are using Tanka, place a file
 named `grr.jsonnet` next to your `main.jsonnet`, and give it this content:
 
