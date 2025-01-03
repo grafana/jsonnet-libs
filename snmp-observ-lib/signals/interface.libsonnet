@@ -4,9 +4,10 @@ function(this)
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
-    instanceLabels: this.groupLabels,
-    aggLevel: 'group',
+    instanceLabels: this.instanceLabels,
+    aggLevel: 'none',
     aggFunction: 'sum',
+    rangeFunction: 'irate',
     discoveryMetric: {
       prometheus: 'ifOperStatus',
     },
@@ -32,6 +33,7 @@ function(this)
         |||,
         type: 'counter',
         unit: 'bytes',
+
         sources: {
           prometheus:
             {
@@ -159,7 +161,7 @@ function(this)
         },
       },
 
-      networkOuMulticasttPacketsPerSec: {
+      networkOutMulticastPacketsPerSec: {
         name: 'Network interface multicast packets out',
         description: |||
           Network interface multicast packets out.
