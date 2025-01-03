@@ -6,8 +6,8 @@ local g = import './g.libsonnet';
         g.dashboard.new(this.config.dashboardNamePrefix + 'SNMP fleet overview')
         + g.dashboard.withVariables(
           std.setUnion(
-            this.signals.topic.getVariablesMultiChoice(),
-            this.signals.consumerGroup.getVariablesMultiChoice(),
+            this.signals.interface.getVariablesMultiChoice(),
+            this.signals.system.getVariablesMultiChoice(),
             keyF=function(x) x.name
           )
         )
@@ -18,15 +18,15 @@ local g = import './g.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
               [
-                this.grafana.rows.topic,
-                this.grafana.rows.consumerGroup,
+                this.grafana.rows.system,
+                this.grafana.rows.interface,
               ]
             )
           ), setPanelIDs=false
         ),
       'snmp-overview.json':
         g.dashboard.new(this.config.dashboardNamePrefix + ' SNMP overview')
-        + g.dashboard.withVariables(this.signals.broker.getVariablesMultiChoice())
+        + g.dashboard.withVariables(this.signals.interface.getVariablesMultiChoice())
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withUid(this.config.uid + '-snmp-overview')
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
@@ -34,11 +34,8 @@ local g = import './g.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
               [
-                this.grafana.rows.overview,
-                this.grafana.rows.throughput,
-                this.grafana.rows.replication,
-                this.grafana.rows.totalTimePerformance,
-                this.grafana.rows.messageConversion,
+                this.grafana.rows.system,
+                this.grafana.rows.interface,
               ]
             )
           ), setPanelIDs=false
