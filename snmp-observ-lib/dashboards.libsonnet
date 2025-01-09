@@ -26,7 +26,7 @@ local g = import './g.libsonnet';
         ),
       'snmp-overview.json':
         g.dashboard.new(this.config.dashboardNamePrefix + ' SNMP overview')
-        + g.dashboard.withVariables(this.signals.interface.getVariablesMultiChoice())
+        + g.dashboard.withVariables(this.signals.interface.getVariablesSingleChoice())
         + g.dashboard.withTags(this.config.dashboardTags)
         + g.dashboard.withUid(this.config.uid + '-snmp-overview')
         + g.dashboard.withLinks(this.grafana.links.otherDashboards)
