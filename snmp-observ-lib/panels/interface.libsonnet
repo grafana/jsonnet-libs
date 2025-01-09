@@ -2,6 +2,14 @@ local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(signals):: {
+    interfacesTable:
+      signals.interface.ifOperStatus.asTable(name='Interfaces', format='table', filterable=true)
+      + g.panel.table.panelOptions.withDescription('Network interfaces overview.')
+      + signals.interface.ifAdminStatus.asTableColumn(format='table')
+      + signals.interface.networkOutBitPerSec.asTableColumn(format='table')
+      + signals.interface.networkInBitPerSec.asTableColumn(format='table')
+      + signals.interface.networkInErrorsPerSec.asTableColumn(format='table')
+      + signals.interface.networkOutErrorsPerSec.asTableColumn(format='table'),
 
     traffic:
       commonlib.panels.network.timeSeries.traffic.new(targets=[])
