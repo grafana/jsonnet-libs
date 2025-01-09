@@ -5,9 +5,13 @@ function(this)
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
-    aggLevel: 'none',
+    aggLevel: 'instance',
     aggFunction: 'sum',
     rangeFunction: 'irate',
+    aggKeepLabels: ["ifName"],
+    local topkWrapper = ['topk(25,',')',],
+    local bitsWrapper = ['(',')*8',],
+    local clampQuery = ['','\n# Only show TB/s spikes if can be confirmed by ifSpeed. ifSpeed == 0 then clamp to 100Mbit.\n<\non (%(agg)s) clamp_min(ifHighSpeed{%(queriesSelector)s}*1000000 or ifSpeed{%(queriesSelector)s},100000000)'],
     discoveryMetric: {
       prometheus: 'ifOperStatus',
     },
@@ -23,6 +27,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCInOctets{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper,bitsWrapper,clampQuery],
             },
         },
       },
@@ -38,6 +43,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCOutOctets{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper,bitsWrapper,clampQuery],
             },
         },
       },
@@ -52,6 +58,7 @@ function(this)
           prometheus:
             {
               expr: 'ifOutErrors{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -66,6 +73,7 @@ function(this)
           prometheus:
             {
               expr: 'ifInErrors{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -81,6 +89,7 @@ function(this)
           prometheus:
             {
               expr: 'ifInDiscards{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -95,6 +104,7 @@ function(this)
           prometheus:
             {
               expr: 'ifOutDiscards{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -110,6 +120,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCInUcastPkts{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -126,6 +137,7 @@ function(this)
           prometheus:
             {
               expr: 'ifInUnknownProtos{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -142,6 +154,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCOutUcastPkts{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -157,6 +170,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCInMulticastPkts{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -187,6 +201,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCInBroadcastPkts{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
@@ -202,6 +217,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCOutBroadcastPkts{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper],
             },
         },
       },
