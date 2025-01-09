@@ -7,7 +7,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       commonlib.panels.network.timeSeries.traffic.new(targets=[])
       + signals.interface.networkOutBitPerSec.asPanelMixin()
       + signals.interface.networkInBitPerSec.asPanelMixin()
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
+      //set legend table
+      + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max', 'lastNotNull'])
+      + g.panel.timeSeries.options.legend.withDisplayMode('table')
+      + g.panel.timeSeries.options.legend.withPlacement('right')
+      + g.panel.timeSeries.options.legend.withSortBy('Mean')
+      + g.panel.timeSeries.options.legend.withSortDesc(true),
+      
+      
 
     errors:
       commonlib.panels.network.timeSeries.errors.new('Network errors', targets=[])
