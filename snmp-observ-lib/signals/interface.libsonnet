@@ -19,6 +19,7 @@ function(this)
     signals: {
       networkInBitPerSec: {
         name: 'Network interface traffic in',
+        nameShort: 'in',
         description: |||
           Network interface traffic in.
         |||,
@@ -34,6 +35,7 @@ function(this)
       },
       networkOutBitPerSec: {
         name: 'Network interface traffic out',
+        nameShort: 'out',
         description: |||
           Network interface traffic out.
         |||,
@@ -50,6 +52,7 @@ function(this)
       },
       networkOutErrorsPerSec: {
         name: 'Network interface errors out',
+        nameShort: 'errors out',
         description: |||
           Network interface errors out.
         |||,
@@ -65,6 +68,7 @@ function(this)
       },
       networkInErrorsPerSec: {
         name: 'Network interface errors in',
+        nameShort: 'errors in',
         description: |||
           Network interface errors in.
         |||,
@@ -81,6 +85,7 @@ function(this)
 
       networkInDroppedPerSec: {
         name: 'Network interface discards in',
+        nameShort: 'dropped in',
         description: |||
           Network interface discards in.
         |||,
@@ -96,6 +101,7 @@ function(this)
       },
       networkOutDroppedPerSec: {
         name: 'Network interface discards out',
+        nameShort: 'dropped out',
         description: |||
           Network interface discards out.
         |||,
@@ -112,6 +118,7 @@ function(this)
 
       networkInUnicastPacketsPerSec: {
         name: 'Network interface unicast packets in',
+        nameShort: 'unicast in',
         description: |||
           Network interface unicast packets in.
         |||,
@@ -127,6 +134,7 @@ function(this)
       },
       ifInUnknownProtos: {
         name: 'Network interface unknown protocol in packets dropped',
+        nameShort: 'unknown dropped in',
         description: |||
           The number of packets received via the interface
           which were discarded because of an unknown or
@@ -146,6 +154,7 @@ function(this)
 
       networkOutUnicastPacketsPerSec: {
         name: 'Network interface unicast packets out',
+        nameShort: 'unicast out',
         description: |||
           Network interface unicast packets out.
         |||,
@@ -162,6 +171,7 @@ function(this)
 
       networkInMulticastPacketsPerSec: {
         name: 'Network interface multicast packets in',
+        nameShort: 'multicast in',
         description: |||
           Network interface multicast packets in.
         |||,
@@ -178,6 +188,7 @@ function(this)
 
       networkOutMulticastPacketsPerSec: {
         name: 'Network interface multicast packets out',
+        nameShort: 'multicast out',
         description: |||
           Network interface multicast packets out.
         |||,
@@ -193,6 +204,7 @@ function(this)
 
       networkInBroadcastPacketsPerSec: {
         name: 'Network interface broadcast packets in',
+        nameShort: 'broadcast in',
         description: |||
           Network interface broadcast packets in.
         |||,
@@ -209,6 +221,7 @@ function(this)
 
       networkOutBroadcastPacketsPerSec: {
         name: 'Network interface broadcast packets out',
+        nameShort: 'broadcast out',
         description: |||
           'Network interface broadcast packets out.',
         |||,
@@ -224,6 +237,7 @@ function(this)
       },
       ifOperStatus: {
         name: 'Interface operational status',
+        nameShort: 'status',
         description: |||
           Interface operational status(ifOperStatus).
         |||,
@@ -280,6 +294,7 @@ function(this)
       },
       ifAdminStatus: {
         name: 'Interface admin status',
+        nameShort: 'admin status',
         description: |||
           The desired state of the interface.  The
           testing(3) state indicates that no operational
