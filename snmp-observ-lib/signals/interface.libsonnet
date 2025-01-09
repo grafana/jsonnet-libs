@@ -8,7 +8,7 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'sum',
     rangeFunction: 'irate',
-    aggKeepLabels: ["ifName"],
+    aggKeepLabels: ["ifAlias", "ifDescr", "ifName"],
     local topkWrapper = ['topk(25,',')',],
     local bitsWrapper = ['(',')*8',],
     local nonZeroWrapper = ['(',')>0',],
