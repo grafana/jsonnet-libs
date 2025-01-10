@@ -29,19 +29,10 @@ groups:
       description: "A queue has unroutable messages on {{ $labels.instance }}."
   
   - alert: RabbitMQNodeNotDistributed
-    expr: erlang_vm_dist_node_state < 3
-    for: 2m
+    expr: erlang_vm_dist_node_state{rabbitmq_cluster!=""} < 3
+    for: 5m
     labels:
       severity: critical
     annotations:
       summary: 'RabbitMQ node not distributed, link state is down.'
-      description: "Distribution link state is not 'up' on {{ $labels.instance }}."
-  
-  - alert: RabbitMQNodeDown
-    expr: sum by (rabbitmq_cluster) (rabbitmq_identity_info) < 3
-    for: 0m
-    labels:
-      severity: critical
-    annotations:
-      summary: 'RabbitMQ node is down.'
-      description: "Less than 3 nodes running in RabbitMQ cluster\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      description: Distribution link state is not 'up' on {{ $labels.instance }}, current value is {{ $value }}. Note: The state is represented as a numerical value where pending=1', up_pending=2' and `up=3'.
