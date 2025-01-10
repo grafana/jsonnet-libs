@@ -8,14 +8,16 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'sum',
     rangeFunction: 'irate',
-    aggKeepLabels: ["ifAlias", "ifDescr", "ifName"],
-    local topkWrapper = ['topk(25,',')',],
-    local bitsWrapper = ['(',')*8',],
-    local nonZeroWrapper = ['(',')>0',],
-    local clampQuery = ['','\n# Only show TB/s spikes if can be confirmed by ifSpeed. ifSpeed == 0 then clamp to 100Mbit.\n<\non (%(agg)s) clamp_min(ifHighSpeed{%(queriesSelector)s}*1000000 or ifSpeed{%(queriesSelector)s},100000000)'],
+    aggKeepLabels: ['ifAlias', 'ifDescr', 'ifName'],
+    local topkWrapper = ['topk(25,', ')'],
+    local bitsWrapper = ['(', ')*8'],
+    local nonZeroWrapper = ['(', ')>0'],
+    local clampQuery = ['', '\n# Only show TB/s spikes if can be confirmed by ifSpeed. ifSpeed == 0 then clamp to 100Mbit.\n<\non (%(agg)s) clamp_min(ifHighSpeed{%(queriesSelector)s}*1000000 or ifSpeed{%(queriesSelector)s},100000000)'],
     discoveryMetric: {
       prometheus: 'ifOperStatus',
     },
+    varAdHocEnabled: true,
+    varAdHocLabels: self.aggKeepLabels,
     signals: {
       networkInBitPerSec: {
         name: 'Network interface traffic in',
@@ -29,7 +31,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCInOctets{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper,bitsWrapper,clampQuery],
+              exprWrappers: [topkWrapper, bitsWrapper, clampQuery],
             },
         },
       },
@@ -46,7 +48,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCOutOctets{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper,bitsWrapper,clampQuery],
+              exprWrappers: [topkWrapper, bitsWrapper, clampQuery],
             },
         },
       },
@@ -62,7 +64,7 @@ function(this)
           prometheus:
             {
               expr: 'ifOutErrors{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper,nonZeroWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -78,7 +80,7 @@ function(this)
           prometheus:
             {
               expr: 'ifInErrors{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper,nonZeroWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -95,7 +97,7 @@ function(this)
           prometheus:
             {
               expr: 'ifInDiscards{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper,nonZeroWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -111,7 +113,7 @@ function(this)
           prometheus:
             {
               expr: 'ifOutDiscards{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper,nonZeroWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -128,7 +130,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCInUcastPkts{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper,nonZeroWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -146,7 +148,7 @@ function(this)
           prometheus:
             {
               expr: 'ifInUnknownProtos{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper,nonZeroWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -164,7 +166,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCOutUcastPkts{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -181,7 +183,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCInMulticastPkts{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -198,6 +200,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCOutMulticastPkts{%(queriesSelector)s}',
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -214,7 +217,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCInBroadcastPkts{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -231,7 +234,7 @@ function(this)
           prometheus:
             {
               expr: 'ifHCOutBroadcastPkts{%(queriesSelector)s}',
-              exprWrappers: [topkWrapper],
+              exprWrappers: [topkWrapper, nonZeroWrapper],
             },
         },
       },
@@ -333,6 +336,7 @@ function(this)
       },
       ifConnectorPresent: {
         name: 'Interface connector present',
+        nameShort: 'connector',
         description: |||
           This object has the value 'true(1)' if the interface sublayer has a physical connector and the value 'false(2)' otherwise.
         |||,
@@ -364,6 +368,7 @@ function(this)
       },
       ifPromiscuousMode: {
         name: 'Interface promiscuous mode',
+        nameShort: 'promiscuous mode',
         description: |||
           This object has a value of false(2) if this interface only accepts packets/frames that are addressed to this station. 
           This object has a value of true(1) when the station accepts all packets/frames transmitted on the media.
@@ -400,6 +405,7 @@ function(this)
 
       ifHighSpeed: {
         name: 'Interface estimated bandwidth',
+        nameShort: 'Speed',
         description: |||
           An estimate of the interface's current bandwidth in units of 1,000,000 bits per second.
           If this object reports a value of `n' then the speed of the interface is somewhere in the range of `n-500,000' to `n+499,999'.
@@ -412,7 +418,9 @@ function(this)
           prometheus:
             {
               expr: 'ifHighSpeed{%(queriesSelector)s}',
+              exprWrappers: [['(', ')*1_000_000']],
             },
+          //TODO ifSpeed
         },
       },
       local ifTypeFile = import './IANAifType.txt',
@@ -422,6 +430,7 @@ function(this)
       // },
       ifType: {
         name: 'Interface type',
+        nameShort: 'Type',
         description: |||
           The type of interface, distinguished according to the physical/link protocol(s) immediately `below' the network layer in the protocol stack.
         |||,
@@ -435,5 +444,41 @@ function(this)
             },
         },
       },
+
+      ifLastChange: {
+        name: 'Interface last change',
+        nameShort: 'Last change',
+        description: |||
+          Interface last change.
+        |||,
+        type: 'raw',
+        unit: 'dtdurations',
+        sources: {
+          prometheus:
+            {
+              expr: |||
+                sum by (%%(agg)s) (
+                  (sysUpTime{%%(queriesSelector)s} - on(%s) group_right ifLastChange{%%(queriesSelector)s})
+                )/100
+              ||| % std.join(',', this.instanceLabels),
+            },
+        },
+      },
+      ifMtu: {
+        name: 'Interface MTU',
+        nameShort: 'MTU',
+        description: |||
+          Maximum transmission unit (MTU).
+        |||,
+        type: 'gauge',
+        unit: 'none',
+        sources: {
+          prometheus:
+            {
+              expr: 'ifMtu{%(queriesSelector)s}',
+            },
+        },
+      },
+
     },
   }

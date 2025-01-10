@@ -6,10 +6,22 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.interface.ifOperStatus.asTable(name='Interfaces', format='table', filterable=true)
       + g.panel.table.panelOptions.withDescription('Network interfaces overview.')
       + signals.interface.ifAdminStatus.asTableColumn(format='table')
-      + signals.interface.networkOutBitPerSec.asTableColumn(format='table')
-      + signals.interface.networkInBitPerSec.asTableColumn(format='table')
-      + signals.interface.networkInErrorsPerSec.asTableColumn(format='table')
-      + signals.interface.networkOutErrorsPerSec.asTableColumn(format='table'),
+      + signals.interface.ifHighSpeed.asTableColumn(format='table')
+      + signals.interface.ifType.asTableColumn(format='table')
+      + signals.interface.ifPromiscuousMode.asTableColumn(format='table')
+      + signals.interface.ifConnectorPresent.asTableColumn(format='table')
+      + signals.interface.ifMtu.asTableColumn(format='table')
+      + signals.interface.ifLastChange.asTableColumn(format='table')
+      + {
+        options+: {
+          sortBy: [
+            {
+              displayName: 'IfName',
+              desc: false,
+            },
+          ],
+        },
+      },
 
     traffic:
       commonlib.panels.network.timeSeries.traffic.new(targets=[])
@@ -22,8 +34,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withPlacement('right')
       + g.panel.timeSeries.options.legend.withSortBy('Mean')
       + g.panel.timeSeries.options.legend.withSortDesc(true),
-      
-      
+
 
     errors:
       commonlib.panels.network.timeSeries.errors.new('Network errors', targets=[])
