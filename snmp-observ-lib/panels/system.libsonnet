@@ -5,5 +5,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     uptime:
       signals.system.uptime.asStat()
       + commonlib.panels.system.stat.uptime.stylize(),
+    sysName:
+      signals.system.sysName.asStat(),
   },
 }

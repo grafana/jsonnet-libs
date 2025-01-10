@@ -5,7 +5,7 @@ function(this)
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
-    aggLevel: 'group',
+    aggLevel: 'instance',
     aggFunction: 'sum',
     discoveryMetric: {
       prometheus: 'sysUpTime',
@@ -24,6 +24,20 @@ function(this)
               expr: 'sysUpTime{%(queriesSelector)s}',
               //ticks to seconds
               exprWrappers: [['(', ')/100']],
+            },
+        },
+      },
+      sysName: {
+        name: 'System name',
+        description: |||
+          System name.
+        |||,
+        type: 'info',
+        sources: {
+          prometheus:
+            {
+              expr: 'sysName{%(queriesSelector)s}',
+              infoLabel: 'sysName',
             },
         },
       },
