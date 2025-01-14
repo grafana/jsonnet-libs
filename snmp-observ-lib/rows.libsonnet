@@ -21,8 +21,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.row.withCollapsed(false)
       + g.panel.row.withPanels(
         [
-          panels.system.sysName { gridPos+: { w: 4, h: 3 } },
-          panels.system.uptime { gridPos+: { w: 4, h: 3 } },
+          panels.system.sysName { gridPos+: { w: 3, h: 5 } },
+          panels.system.version { gridPos+: { w: 3, h: 5 } },
+          panels.system.uptime { gridPos+: { w: 3, h: 5 } },
+          panels.cpu.cpuUsage { gridPos+: { w: 7, h: 5 } },
+          panels.memory.memoryUsage { gridPos+: { w: 8, h: 5 } },
         ]
       ),
   },
