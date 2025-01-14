@@ -7,11 +7,11 @@
   uid: 'snmp',
   dashboardNamePrefix: '',
   dashboardTags: ['snmp'],
-  metricsSource: ['prometheus'],
+  metricsSource: ['generic', 'dlink_des', 'juniper', 'cisco'],
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),
-      memory: (import './signals/memorynetwork.libsonnet')(this),
+      memory: (import './signals/memory.libsonnet')(this),
       interface: (import './signals/interface.libsonnet')(this),
       system: (import './signals/system.libsonnet')(this),
     },
