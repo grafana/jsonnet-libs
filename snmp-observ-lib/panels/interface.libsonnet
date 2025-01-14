@@ -7,11 +7,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.table.panelOptions.withDescription('Network interfaces overview.')
       + signals.interface.ifAdminStatus.asTableColumn(format='table')
       + signals.interface.ifHighSpeed.asTableColumn(format='table')
-      + signals.interface.ifType.asTableColumn(format='table')
+      // + signals.interface.ifType.asTableColumn(format='table')
+      + signals.interface.ifType_info.asTableColumn(format='table')
       + signals.interface.ifPromiscuousMode.asTableColumn(format='table')
       + signals.interface.ifConnectorPresent.asTableColumn(format='table')
       + signals.interface.ifMtu.asTableColumn(format='table')
       + signals.interface.ifLastChange.asTableColumn(format='table')
+      + signals.interface.ifPhysAddress.asTableColumn(format='table')
       + {
         options+: {
           sortBy: [
@@ -24,9 +26,9 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
 
     traffic:
-      commonlib.panels.network.timeSeries.traffic.new(targets=[])
-      + signals.interface.networkOutBitPerSec.asPanelMixin()
+      signals.interface.networkOutBitPerSec.asTimeSeries('Traffic')
       + signals.interface.networkInBitPerSec.asPanelMixin()
+      + commonlib.panels.network.timeSeries.traffic.stylize()
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
       //set legend table
       + g.panel.timeSeries.options.legend.withCalcs(['min', 'mean', 'max', 'lastNotNull'])
@@ -35,32 +37,36 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withSortBy('Mean')
       + g.panel.timeSeries.options.legend.withSortDesc(true),
 
-
     errors:
-      commonlib.panels.network.timeSeries.errors.new('Network errors', targets=[])
-      + commonlib.panels.network.timeSeries.errors.withNegateOutPackets()
-      + signals.interface.networkInErrorsPerSec.asPanelMixin()
-      + signals.interface.networkOutErrorsPerSec.asPanelMixin(),
+      signals.interface.networkInErrorsPerSec.asTimeSeries('Network errors')
+      + signals.interface.networkOutErrorsPerSec.asPanelMixin()
+      + commonlib.panels.network.timeSeries.errors.stylize()
+      + commonlib.panels.network.timeSeries.errors.withNegateOutPackets(),
 
-    dropped: commonlib.panels.network.timeSeries.dropped.new(targets=[])
-             + commonlib.panels.network.timeSeries.errors.withNegateOutPackets()
-             + signals.interface.networkInDroppedPerSec.asPanelMixin()
-             + signals.interface.networkOutDroppedPerSec.asPanelMixin()
-             + signals.interface.ifInUnknownProtos.asPanelMixin(),
+    dropped:
+      signals.interface.networkInDroppedPerSec.asTimeSeries('Packets dropped')
+      + signals.interface.networkOutDroppedPerSec.asPanelMixin()
+      + signals.interface.ifInUnknownProtos.asPanelMixin()
+      + commonlib.panels.network.timeSeries.dropped.stylize()
+      + commonlib.panels.network.timeSeries.errors.withNegateOutPackets(),
+
     packetsUnicast:
-      commonlib.panels.network.timeSeries.unicast.new('Unicast', targets=[])
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
-      + signals.interface.networkInUnicastPacketsPerSec.asPanelMixin()
-      + signals.interface.networkOutUnicastPacketsPerSec.asPanelMixin(),
+      signals.interface.networkInUnicastPacketsPerSec.asTimeSeries('Unicast')
+      + signals.interface.networkOutUnicastPacketsPerSec.asPanelMixin()
+      + commonlib.panels.network.timeSeries.unicast.stylize()
+      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+
     packetsBroadcast:
-      commonlib.panels.network.timeSeries.broadcast.new('Broadcast', targets=[])
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
-      + signals.interface.networkInBroadcastPacketsPerSec.asPanelMixin()
-      + signals.interface.networkOutBroadcastPacketsPerSec.asPanelMixin(),
+      signals.interface.networkInBroadcastPacketsPerSec.asTimeSeries('Broadcast')
+      + signals.interface.networkOutBroadcastPacketsPerSec.asPanelMixin()
+      + commonlib.panels.network.timeSeries.broadcast.stylize()
+      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+
     packetsMulticast:
-      commonlib.panels.network.timeSeries.multicast.new('Multicast', targets=[])
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
-      + signals.interface.networkInMulticastPacketsPerSec.asPanelMixin()
-      + signals.interface.networkOutMulticastPacketsPerSec.asPanelMixin(),
+      signals.interface.networkInMulticastPacketsPerSec.asTimeSeries('Multicast')
+      + signals.interface.networkOutMulticastPacketsPerSec.asPanelMixin()
+      + commonlib.panels.network.timeSeries.multicast.stylize()
+      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+
   },
 }
