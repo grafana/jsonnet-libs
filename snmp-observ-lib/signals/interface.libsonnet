@@ -4,17 +4,36 @@ function(this)
   {
     filteringSelector: this.filteringSelector,
     groupLabels: this.groupLabels,
-    instanceLabels: this.instanceLabels,
+    instanceLabels: this.instanceLabels + ['ifName'],
     aggLevel: 'instance',
     aggFunction: 'sum',
     rangeFunction: 'irate',
-    aggKeepLabels: ['ifAlias', 'ifDescr', 'ifName'],
+    aggKeepLabels: ['ifAlias', 'ifDescr'],
     local topkWrapper = ['topk(25,', ')'],
     local bitsWrapper = ['(', ')*8'],
     local nonZeroWrapper = ['(', ')>0'],
     local clampQuery = ['', '\n# Only show TB/s spikes if can be confirmed by ifSpeed. ifSpeed == 0 then clamp to 100Mbit.\n<\non (%(agg)s) clamp_min(ifHighSpeed{%(queriesSelector)s}*1000000 or ifSpeed{%(queriesSelector)s},100000000)'],
     discoveryMetric: {
-      prometheus: 'ifOperStatus',
+      generic: 'ifOperStatus',
+      arista: self.generic,
+      brocade_fc: self.generic,
+      brocade_foundry: self.generic,
+      cisco: self.generic,
+      dell_force: self.generic,
+      dlink_des: self.generic,
+      extreme: self.generic,
+      eltex: self.generic,
+      eltex_mes: self.generic,
+      f5_bigip: self.generic,
+      fortigate: self.generic,
+      hpe: self.generic,
+      huawei: self.generic,
+      juniper: self.generic,
+      mikrotik: self.generic,
+      netgear: self.generic,
+      qtech: self.generic,
+      tplink: self.generic,
+      ubiquiti_airos: self.generic,
     },
     varAdHocEnabled: true,
     varAdHocLabels: self.aggKeepLabels,
@@ -28,11 +47,30 @@ function(this)
         type: 'counter',
         unit: 'bytes',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHCInOctets{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, bitsWrapper, clampQuery],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       networkOutBitPerSec: {
@@ -45,11 +83,30 @@ function(this)
         unit: 'bytes',
 
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHCOutOctets{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, bitsWrapper, clampQuery],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       networkOutErrorsPerSec: {
@@ -61,11 +118,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifOutErrors{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       networkInErrorsPerSec: {
@@ -77,11 +153,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifInErrors{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -94,11 +189,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifInDiscards{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       networkOutDroppedPerSec: {
@@ -110,11 +224,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifOutDiscards{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -127,11 +260,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHCInUcastPkts{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       ifInUnknownProtos: {
@@ -145,11 +297,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifInUnknownProtos{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -163,11 +334,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHCOutUcastPkts{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -180,11 +370,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHCInMulticastPkts{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -197,11 +406,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHCOutMulticastPkts{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -214,11 +442,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHCInBroadcastPkts{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -231,11 +478,30 @@ function(this)
         type: 'counter',
         unit: 'pps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHCOutBroadcastPkts{%(queriesSelector)s}',
               exprWrappers: [topkWrapper, nonZeroWrapper],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       ifOperStatus: {
@@ -247,7 +513,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifOperStatus{%(queriesSelector)s}',
               valueMappings: [
@@ -293,20 +559,39 @@ function(this)
                 },
               ],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       ifAdminStatus: {
         name: 'Interface admin status',
         nameShort: 'admin status',
         description: |||
-          The desired state of the interface.  The
-          testing(3) state indicates that no operational
+          The desired state of the interface. 
+          The testing(3) state indicates that no operational
           packets can be passed.
         |||,
         type: 'gauge',
         unit: 'short',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifAdminStatus{%(queriesSelector)s}',
               valueMappings: [
@@ -332,6 +617,25 @@ function(this)
                 },
               ],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       ifConnectorPresent: {
@@ -343,7 +647,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifConnectorPresent{%(queriesSelector)s}',
               valueMappings: [
@@ -364,6 +668,25 @@ function(this)
                 },
               ],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       ifPromiscuousMode: {
@@ -379,7 +702,7 @@ function(this)
         type: 'gauge',
         unit: 'short',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifPromiscuousMode{%(queriesSelector)s}',
               valueMappings: [
@@ -400,6 +723,25 @@ function(this)
                 },
               ],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -415,33 +757,67 @@ function(this)
         type: 'gauge',
         unit: 'bps',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifHighSpeed{%(queriesSelector)s}',
-              exprWrappers: [['(', ')*1_000_000']],
+              exprWrappers: [['(', ')*1000000']],
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
           //TODO ifSpeed
         },
       },
-      local ifTypeFile = import './IANAifType.txt',
-      //TODO: Split by ) then by (
-      // local ifTypeMapping = {
-      //   for line in std.split(ifTypeFile, "\n"),
-      // },
-      ifType: {
+
+
+      ifType_info: {
         name: 'Interface type',
         nameShort: 'Type',
         description: |||
           The type of interface, distinguished according to the physical/link protocol(s) immediately `below' the network layer in the protocol stack.
         |||,
-        type: 'gauge',
-        unit: 'short',
+        type: 'info',
         sources: {
-          prometheus:
+          generic:
             {
-              expr: 'ifType{%(queriesSelector)s}',
-              //TODO: add valueMapping
+              expr: 'ifType_info{%(queriesSelector)s}',
+              infoLabel: 'ifType',
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
@@ -454,14 +830,33 @@ function(this)
         type: 'raw',
         unit: 'dtdurations',
         sources: {
-          prometheus:
+          generic:
             {
               expr: |||
                 sum by (%%(agg)s) (
-                  (sysUpTime{%%(queriesSelector)s} - on(%s) group_right ifLastChange{%%(queriesSelector)s})
+                  (sysUpTime{} - on(%s) group_right ifLastChange{%%(queriesSelector)s})
                 )/100
-              ||| % std.join(',', this.instanceLabels),
+              ||| % std.join(',', this.groupLabels + this.instanceLabels),
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
       ifMtu: {
@@ -473,10 +868,64 @@ function(this)
         type: 'gauge',
         unit: 'none',
         sources: {
-          prometheus:
+          generic:
             {
               expr: 'ifMtu{%(queriesSelector)s}',
             },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
+        },
+      },
+      ifPhysAddress: {
+        name: 'Interface physical address',
+        nameShort: 'MAC',
+        description: |||
+          MAC.
+        |||,
+        type: 'info',
+
+        sources: {
+          generic:
+            {
+              expr: 'ifPhysAddress{%(queriesSelector)s}',
+              infoLabel: 'ifPhysAddress',
+            },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
         },
       },
 
