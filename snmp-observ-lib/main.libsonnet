@@ -10,16 +10,20 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         for sig in std.objectFields(this.config.signals)
       },
     grafana: {
-      panels: (import './panels/main.libsonnet').new(this.signals, this.config),
+      panels: (import './panels/main.libsonnet').new(this.signals, this),
       rows: (import './rows.libsonnet').new(this.grafana.panels, type=this.config.metricsSource),
+      annotations: {},
       // common links here
       links: {
         local link = g.dashboard.link,
+        backToFleet:
+          link.link.new('Back to network fleet', '/d/' + this.grafana.dashboards['snmp-fleet.json'].uid)
+          + link.link.options.withKeepTime(true),
         otherDashboards:
-          link.dashboards.new('All SNMP dashboards', this.config.dashboardTags)
+          link.dashboards.new('All network dashboards', this.config.dashboardTags)
           + link.dashboards.options.withIncludeVars(true)
           + link.dashboards.options.withKeepTime(true)
-          + link.dashboards.options.withAsDropdown(false),
+          + link.dashboards.options.withAsDropdown(true),
       },
       dashboards: (import './dashboards.libsonnet').new(this),
     },

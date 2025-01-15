@@ -7,7 +7,9 @@
   uid: 'snmp',
   dashboardNamePrefix: '',
   dashboardTags: ['snmp'],
-  metricsSource: ['generic', 'dlink_des', 'juniper', 'cisco'],
+  dashboardPeriod: 'now-6h',
+  dashboardRefresh: '5m',
+  dashboardTimezone: '',
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),
