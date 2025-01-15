@@ -10,6 +10,10 @@
   dashboardPeriod: 'now-6h',
   dashboardRefresh: '5m',
   dashboardTimezone: '',
+
+  //increase min interval to match max SNMP polling interval used:
+  minInterval: '30s',
+
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),
