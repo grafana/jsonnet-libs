@@ -10,11 +10,10 @@ function(this, level='interface')
     aggFunction: 'sum',
     rangeFunction: 'irate',
     aggKeepLabels: if level == 'interface' then ['ifAlias', 'ifDescr'] else [],
-    local topkWrapper = ['topk(25,', ')'],
     local bitsWrapper = ['(', ')*8'],
     local nonZeroWrapper = ['(', ')>0'],
     //applicable to workaround for Cisco Nexus TB/PBsec spikes
-    local clampQuery = '\n# Only show TB/s spikes if can be confirmed by ifSpeed. ifSpeed == 0 then clamp to 100Mbit.\n<\non (%(agg)s, ifIndex) clamp_min(ifHighSpeed{%(queriesSelector)s}*1000000 or ifSpeed{%(queriesSelector)s},100000000)',
+    local clampQuery = ['', '\n# Only show TB/s spikes if can be confirmed by ifSpeed. ifSpeed == 0 then clamp to 100Mbit.\n<\non (%(agg)s) clamp_min(ifHighSpeed{%(queriesSelector)s}*1000000 or ifSpeed{%(queriesSelector)s},100000000)'],
     discoveryMetric: {
       generic: 'ifOperStatus',
       arista: self.generic,
@@ -52,8 +51,8 @@ function(this, level='interface')
           sources: {
             generic:
               {
-                expr: 'ifHCInOctets{%(queriesSelector)s}' + clampQuery,
-                exprWrappers: [topkWrapper, bitsWrapper],
+                expr: 'ifHCInOctets{%(queriesSelector)s}',
+                exprWrappers: [bitsWrapper, clampQuery],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -87,8 +86,8 @@ function(this, level='interface')
           sources: {
             generic:
               {
-                expr: 'ifHCOutOctets{%(queriesSelector)s} ' + clampQuery,
-                exprWrappers: [topkWrapper, bitsWrapper],
+                expr: 'ifHCOutOctets{%(queriesSelector)s} ',
+                exprWrappers: [bitsWrapper, clampQuery],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -123,7 +122,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifOutErrors{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -158,7 +157,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifInErrors{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -194,7 +193,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifInDiscards{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -229,7 +228,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifOutDiscards{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -265,7 +264,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifHCInUcastPkts{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -302,7 +301,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifInUnknownProtos{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -339,7 +338,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifHCOutUcastPkts{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -375,7 +374,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifHCInMulticastPkts{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -411,7 +410,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifHCOutMulticastPkts{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -447,7 +446,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifHCInBroadcastPkts{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,
@@ -483,7 +482,7 @@ function(this, level='interface')
             generic:
               {
                 expr: 'ifHCOutBroadcastPkts{%(queriesSelector)s}',
-                exprWrappers: [topkWrapper, nonZeroWrapper],
+                exprWrappers: [nonZeroWrapper],
               },
             arista: self.generic,
             brocade_fc: self.generic,

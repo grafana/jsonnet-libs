@@ -26,8 +26,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       },
 
     traffic:
-      signals.interface.networkOutBitPerSec.asTimeSeries('Traffic')
-      + signals.interface.networkInBitPerSec.asPanelMixin()
+      signals.interface.networkOutBitPerSec.withTopK().asTimeSeries('Network traffic')
+      + signals.interface.networkInBitPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.traffic.stylize()
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
       //set legend table
@@ -38,33 +38,33 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withSortDesc(true),
 
     errors:
-      signals.interface.networkInErrorsPerSec.asTimeSeries('Network errors')
-      + signals.interface.networkOutErrorsPerSec.asPanelMixin()
+      signals.interface.networkInErrorsPerSec.withTopK().asTimeSeries('Network errors')
+      + signals.interface.networkOutErrorsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.errors.stylize()
       + commonlib.panels.network.timeSeries.errors.withNegateOutPackets(),
 
     dropped:
-      signals.interface.networkInDroppedPerSec.asTimeSeries('Packets dropped')
-      + signals.interface.networkOutDroppedPerSec.asPanelMixin()
-      + signals.interface.ifInUnknownProtos.asPanelMixin()
+      signals.interface.networkInDroppedPerSec.withTopK().asTimeSeries('Dropped packets')
+      + signals.interface.networkOutDroppedPerSec.withTopK().asPanelMixin()
+      + signals.interface.ifInUnknownProtos.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.dropped.stylize()
       + commonlib.panels.network.timeSeries.errors.withNegateOutPackets(),
 
     packetsUnicast:
-      signals.interface.networkInUnicastPacketsPerSec.asTimeSeries('Unicast')
-      + signals.interface.networkOutUnicastPacketsPerSec.asPanelMixin()
+      signals.interface.networkInUnicastPacketsPerSec.withTopK().asTimeSeries('Unicast')
+      + signals.interface.networkOutUnicastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.unicast.stylize()
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
 
     packetsBroadcast:
-      signals.interface.networkInBroadcastPacketsPerSec.asTimeSeries('Broadcast')
-      + signals.interface.networkOutBroadcastPacketsPerSec.asPanelMixin()
+      signals.interface.networkInBroadcastPacketsPerSec.withTopK().asTimeSeries('Broadcast')
+      + signals.interface.networkOutBroadcastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.broadcast.stylize()
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
 
     packetsMulticast:
-      signals.interface.networkInMulticastPacketsPerSec.asTimeSeries('Multicast')
-      + signals.interface.networkOutMulticastPacketsPerSec.asPanelMixin()
+      signals.interface.networkInMulticastPacketsPerSec.withTopK().asTimeSeries('Multicast')
+      + signals.interface.networkOutMulticastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.multicast.stylize()
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
 

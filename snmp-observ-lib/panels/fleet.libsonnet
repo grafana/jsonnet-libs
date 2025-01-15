@@ -35,8 +35,8 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
 
     traffic:
-      signals.fleetInterface.networkOutBitPerSec.asTimeSeries('Traffic')
-      + signals.fleetInterface.networkInBitPerSec.asPanelMixin()
+      signals.fleetInterface.networkOutBitPerSec.withTopK().asTimeSeries('Traffic')
+      + signals.fleetInterface.networkInBitPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.traffic.stylize()
       + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
       //set legend table
@@ -47,35 +47,35 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.timeSeries.options.legend.withSortDesc(true),
 
     errors:
-      signals.fleetInterface.networkInErrorsPerSec.asTimeSeries('Network errors')
-      + signals.fleetInterface.networkOutErrorsPerSec.asPanelMixin()
+      signals.fleetInterface.networkInErrorsPerSec.withTopK().asTimeSeries('Network errors')
+      + signals.fleetInterface.networkOutErrorsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.errors.stylize()
       + commonlib.panels.network.timeSeries.errors.withNegateOutPackets(),
 
     dropped:
-      signals.fleetInterface.networkInDroppedPerSec.asTimeSeries('Packets dropped')
-      + signals.fleetInterface.networkOutDroppedPerSec.asPanelMixin()
-      + signals.fleetInterface.ifInUnknownProtos.asPanelMixin()
+      signals.fleetInterface.networkInDroppedPerSec.withTopK().asTimeSeries('Packets dropped')
+      + signals.fleetInterface.networkOutDroppedPerSec.withTopK().asPanelMixin()
+      + signals.fleetInterface.ifInUnknownProtos.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.dropped.stylize()
       + commonlib.panels.network.timeSeries.errors.withNegateOutPackets(),
 
-    // packetsUnicast:
-    //   signals.fleetInterface.networkInUnicastPacketsPerSec.asTimeSeries('Unicast')
-    //   + signals.fleetInterface.networkOutUnicastPacketsPerSec.asPanelMixin()
-    //   + commonlib.panels.network.timeSeries.unicast.stylize()
-    //   + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+    packetsUnicast:
+      signals.fleetInterface.networkInUnicastPacketsPerSec.withTopK().asTimeSeries('Unicast')
+      + signals.fleetInterface.networkOutUnicastPacketsPerSec.withTopK().asPanelMixin()
+      + commonlib.panels.network.timeSeries.unicast.stylize()
+      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
 
-    // packetsBroadcast:
-    //   signals.fleetInterface.networkInBroadcastPacketsPerSec.asTimeSeries('Broadcast')
-    //   + signals.fleetInterface.networkOutBroadcastPacketsPerSec.asPanelMixin()
-    //   + commonlib.panels.network.timeSeries.broadcast.stylize()
-    //   + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+    packetsBroadcast:
+      signals.fleetInterface.networkInBroadcastPacketsPerSec.withTopK().asTimeSeries('Broadcast')
+      + signals.fleetInterface.networkOutBroadcastPacketsPerSec.withTopK().asPanelMixin()
+      + commonlib.panels.network.timeSeries.broadcast.stylize()
+      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
 
-    // packetsMulticast:
-    //   signals.fleetInterface.networkInMulticastPacketsPerSec.asTimeSeries('Multicast')
-    //   + signals.fleetInterface.networkOutMulticastPacketsPerSec.asPanelMixin()
-    //   + commonlib.panels.network.timeSeries.multicast.stylize()
-    //   + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
+    packetsMulticast:
+      signals.fleetInterface.networkInMulticastPacketsPerSec.withTopK().asTimeSeries('Multicast')
+      + signals.fleetInterface.networkOutMulticastPacketsPerSec.withTopK().asPanelMixin()
+      + commonlib.panels.network.timeSeries.multicast.stylize()
+      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets(),
 
   },
 }
