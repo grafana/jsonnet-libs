@@ -12,6 +12,8 @@ local utils = import '../utils.libsonnet';
     customAllValue='.+',
     prometheusDatasourceName=if enableLokiLogs then 'prometheus_datasource' else 'datasource',
     prometheusDatasourceLabel=if enableLokiLogs then 'Prometheus data source' else 'Data source',
+    adHocEnabled=false,
+    adHocLabels=[],
   ): {
        // strip trailing or starting comma if present:
        // while trailing comma is accepted in PromQL expressions, starting comma is not.
@@ -59,14 +61,30 @@ local utils = import '../utils.libsonnet';
            + var.datasource.generalOptions.withLabel(prometheusDatasourceLabel)
            + var.datasource.withRegex(''),
        },
+       adHoc:
+         var.adhoc.new('adhoc', 'prometheus', '${' + root.datasources.prometheus.name + '}')
+         + var.adhoc.generalOptions.withLabel('Adhoc filters')
+         + var.adhoc.generalOptions.withDescription('Add additional filters')
+         + (if std.length(adHocLabels) > 0 then {
+              defaultKeys: [
+                {
+                  text: l,
+                  value: l,
+                }
+                for l in adHocLabels
+              ],
+            } else {}),
+
        // Use on dashboards where multiple entities can be selected, like fleet dashboards
        multiInstance:
          [root.datasources.prometheus]
-         + variablesFromLabels(groupLabels, instanceLabels, _filteringSelector),
+         + variablesFromLabels(groupLabels, instanceLabels, _filteringSelector)
+         + (if adHocEnabled then [self.adHoc] else []),
        // Use on dashboards where only single entity can be selected
        singleInstance:
          [root.datasources.prometheus]
-         + variablesFromLabels(groupLabels, instanceLabels, _filteringSelector, multiInstance=false),
+         + variablesFromLabels(groupLabels, instanceLabels, _filteringSelector, multiInstance=false)
+         + (if adHocEnabled then [self.adHoc] else []),
        queriesSelectorAdvancedSyntax:
          std.join(
            ',',
