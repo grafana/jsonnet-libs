@@ -2,6 +2,20 @@ local g = import './g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
   new(panels, type):: {
+    fleet:
+      g.panel.row.new('Fleet overview')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels(
+        [
+          panels.fleet.deviceTable { gridPos+: { w: 24, h: 12 } },
+          panels.fleet.traffic { gridPos+: { w: 24, h: 8 } },
+          panels.fleet.errors { gridPos+: { w: 12, h: 6 } },
+          panels.fleet.dropped { gridPos+: { w: 12, h: 6 } },
+          // panels.fleetInterface.packetsUnicast { gridPos+: { w: 8, h: 8 } },
+          // panels.fleetInterface.packetsBroadcast { gridPos+: { w: 8, h: 8 } },
+          // panels.fleetInterface.packetsMulticast { gridPos+: { w: 8, h: 8 } },
+        ]
+      ),
     interface:
       g.panel.row.new('Network interfaces')
       + g.panel.row.withCollapsed(false)
