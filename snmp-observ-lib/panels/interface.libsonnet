@@ -13,6 +13,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.ifMtu.asTableColumn(format='table')
       + signals.interface.ifLastChange.asTableColumn(format='table')
       + signals.interface.ifPhysAddress.asTableColumn(format='table')
+      + commonlib.panels.system.table.uptime.stylizeByName('Last change')
       + {
         options+: {
           sortBy: [
