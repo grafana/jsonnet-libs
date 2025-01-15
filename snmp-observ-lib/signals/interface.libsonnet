@@ -12,8 +12,8 @@ function(this, level='interface')
     aggKeepLabels: if level == 'interface' then ['ifAlias', 'ifDescr'] else [],
     local bitsWrapper = ['(', ')*8'],
     local nonZeroWrapper = ['(', ')>0'],
-    //applicable to workaround for Cisco Nexus TB/PBsec spikes
-    local clampQuery = ['', '\n# Only show TB/s spikes if can be confirmed by ifSpeed. ifSpeed == 0 then clamp to 100Mbit.\n<\non (%(agg)s) clamp_min(ifHighSpeed{%(queriesSelector)s}*1000000 or ifSpeed{%(queriesSelector)s},100000000)'],
+    //set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.
+    local clampQuery = ['', '\n# set max limit to workaround for TB-PB/sec spikes when counters are overloaded too quickly on very busy interfaces.\n<100*10^9'],
     discoveryMetric: {
       generic: 'ifOperStatus',
       arista: self.generic,
