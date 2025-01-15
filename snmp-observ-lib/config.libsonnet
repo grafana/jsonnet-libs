@@ -11,8 +11,9 @@
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),
+      fleetInterface: (import './signals/interface.libsonnet')(this, level='fleet'),
       memory: (import './signals/memory.libsonnet')(this),
-      interface: (import './signals/interface.libsonnet')(this),
+      interface: (import './signals/interface.libsonnet')(this, level='interface'),
       system: (import './signals/system.libsonnet')(this),
     },
 }
