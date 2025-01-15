@@ -1,13 +1,12 @@
 local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
-  new(signals):: {
+  new(signals, this):: {
     interfacesTable:
       signals.interface.ifOperStatus.asTable(name='Interfaces', format='table', filterable=true)
       + g.panel.table.panelOptions.withDescription('Network interfaces overview.')
       + signals.interface.ifAdminStatus.asTableColumn(format='table')
       + signals.interface.ifHighSpeed.asTableColumn(format='table')
-      // + signals.interface.ifType.asTableColumn(format='table')
       + signals.interface.ifType_info.asTableColumn(format='table')
       + signals.interface.ifPromiscuousMode.asTableColumn(format='table')
       + signals.interface.ifConnectorPresent.asTableColumn(format='table')

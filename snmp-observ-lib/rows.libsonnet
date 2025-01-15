@@ -9,11 +9,11 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         [
           panels.fleet.deviceTable { gridPos+: { w: 24, h: 12 } },
           panels.fleet.traffic { gridPos+: { w: 24, h: 8 } },
-          panels.fleet.errors { gridPos+: { w: 12, h: 6 } },
-          panels.fleet.dropped { gridPos+: { w: 12, h: 6 } },
-          // panels.fleetInterface.packetsUnicast { gridPos+: { w: 8, h: 8 } },
-          // panels.fleetInterface.packetsBroadcast { gridPos+: { w: 8, h: 8 } },
-          // panels.fleetInterface.packetsMulticast { gridPos+: { w: 8, h: 8 } },
+          panels.fleet.errors { gridPos+: { w: 12, h: 8 } },
+          panels.fleet.dropped { gridPos+: { w: 12, h: 8 } },
+          panels.fleet.packetsUnicast { gridPos+: { w: 8, h: 8 } },
+          panels.fleet.packetsBroadcast { gridPos+: { w: 8, h: 8 } },
+          panels.fleet.packetsMulticast { gridPos+: { w: 8, h: 8 } },
         ]
       ),
     interface:
