@@ -854,9 +854,11 @@ function(this, level='interface')
               sources: {
                 generic:
                   {
+
                     expr: |||
+                      # ignore when ifLastCHange == 0 as invalid
                       sum by (%%(agg)s) (
-                        (sysUpTime{} - on(%s) group_right ifLastChange{%%(queriesSelector)s})
+                        (sysUpTime{} - on(%s) group_right () (ifLastChange{%%(queriesSelector)s})!=0)
                       )/100
                     ||| % std.join(',', this.groupLabels + this.instanceLabels),
                   },
