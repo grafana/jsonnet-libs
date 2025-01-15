@@ -1,7 +1,7 @@
 local g = import '../g.libsonnet';
 local commonlib = import 'common-lib/common/main.libsonnet';
 {
-  new(signals):: {
+  new(signals, this):: {
     uptime:
       signals.system.uptime.asStat()
       + commonlib.panels.system.stat.uptime.stylize(),
