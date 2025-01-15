@@ -6,8 +6,8 @@ local g = import './g.libsonnet';
         g.dashboard.new(this.config.dashboardNamePrefix + 'SNMP fleet overview')
         + g.dashboard.withVariables(
           std.setUnion(
-            this.signals.interface.getVariablesMultiChoice(),
-            this.signals.system.getVariablesMultiChoice(),
+            this.signals.fleetInterface.getVariablesMultiChoice(),
+            this.signals.system.getVariablesSingleChoice(),
             keyF=function(x) x.name
           )
         )
@@ -18,8 +18,7 @@ local g = import './g.libsonnet';
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
               [
-                this.grafana.rows.system,
-                this.grafana.rows.interface,
+                this.grafana.rows.fleet,
               ]
             )
           ), setPanelIDs=false
