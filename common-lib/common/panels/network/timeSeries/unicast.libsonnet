@@ -7,13 +7,14 @@ local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 base {
   new(
-    title='Network packets',
+    title='Unicast packets',
     targets,
-    description='Network packet count tracks the number of data packets transmitted and received over a network connection, providing insight into network activity and performance.',
+    description='Packets sent from one source to a single destination.',
   ):
     super.new(title, targets, description)
     + self.stylize(),
 
   stylize(allLayers=true):
-    (if allLayers == true then super.stylize() else {}),
+    (if allLayers == true then super.stylize() else {})
+    + timeSeries.standardOptions.withNoValue('No unicast packets'),
 }

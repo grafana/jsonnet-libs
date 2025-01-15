@@ -6,10 +6,12 @@ local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
 base {
+  title: 'Network traffic',
+  description: 'Network traffic (bits per sec) measures data transmitted and received.',
   new(
-    title='Network traffic',
+    title=self.title,
     targets,
-    description='Network traffic (bits per sec) measures data transmitted and received.',
+    description=self.description,
   ):
     super.new(title, targets, description)
     + self.stylize(),
@@ -17,5 +19,6 @@ base {
   stylize(allLayers=true):
 
     (if allLayers == true then super.stylize() else {})
-    + timeSeries.standardOptions.withUnit('bps'),
+    + timeSeries.standardOptions.withUnit('bps')
+    + timeSeries.standardOptions.withNoValue('No traffic'),
 }

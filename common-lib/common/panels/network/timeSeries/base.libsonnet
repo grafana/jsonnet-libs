@@ -12,7 +12,8 @@ base {
     (if allLayers == true then super.stylize() else {})
 
     + timeSeries.standardOptions.withDecimals(1)
-    + timeSeries.standardOptions.withUnit('pps'),
+    + timeSeries.standardOptions.withUnit('pps')
+    + timeSeries.standardOptions.withNoValue('No packets'),
 
   withNegateOutPackets(regexp='/transmit|tx|out/'):
     defaults.custom.withAxisLabel('out(-) | in(+)')
