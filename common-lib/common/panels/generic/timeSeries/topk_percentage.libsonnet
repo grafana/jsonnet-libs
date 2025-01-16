@@ -27,13 +27,7 @@ base {
                        + g.query.prometheus.withLegendFormat('Mean');
     super.new(title, targets=[topTarget, meanTarget], description=description)
     + self.withDataLink(instanceLabels, drillDownDashboardUid),
-  withDataLink(instanceLabels, drillDownDashboardUid):
-    standardOptions.withLinks(
-      {
-        url: 'd/' + drillDownDashboardUid + '?' + std.join('&', std.map(function(l) 'var-%s=${__field.labels.%s}' % [l, l], instanceLabels)) + '&${__url_time_range}',
-        title: 'Drill down to this instance',
-      }
-    ),
+
   stylize(allLayers=true):
     (if allLayers then super.stylize() else {})
     + generic.percentage.stylize(allLayers=false)

@@ -5,6 +5,7 @@ local fieldOverride = g.panel.timeSeries.fieldOverride;
 local custom = timeSeries.fieldConfig.defaults.custom;
 local defaults = timeSeries.fieldConfig.defaults;
 local options = timeSeries.options;
+local standardOptions = g.panel.timeSeries.standardOptions;
 local base = import '../base.libsonnet';
 base {
   new(title, targets, description=''):
@@ -29,5 +30,13 @@ base {
     // Style choice: Use simple legend without any values (cleaner look)
     + options.legend.withDisplayMode('list')
     + options.legend.withCalcs([]),
+
+  withDataLink(instanceLabels, drillDownDashboardUid):
+    standardOptions.withLinks(
+      {
+        url: '/d/' + drillDownDashboardUid + '?' + std.join('&', std.map(function(l) 'var-%s=${__field.labels.%s}' % [l, l], instanceLabels)) + '&${__url_time_range}&${datasource:queryparam}',
+        title: 'Drill down to this instance',
+      }
+    ),
 
 }
