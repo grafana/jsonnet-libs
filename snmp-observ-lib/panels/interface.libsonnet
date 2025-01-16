@@ -50,28 +50,28 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + signals.interface.networkOutDroppedPerSec.withTopK().asPanelMixin()
       + signals.interface.ifInUnknownProtos.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.dropped.stylize()
-      + commonlib.panels.network.timeSeries.errors.withNegateOutPackets()
+      + commonlib.panels.network.timeSeries.dropped.withNegateOutPackets()
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsUnicast:
       signals.interface.networkInUnicastPacketsPerSec.withTopK().asTimeSeries('Unicast')
       + signals.interface.networkOutUnicastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.unicast.stylize()
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
+      + commonlib.panels.network.timeSeries.unicast.withNegateOutPackets()
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsBroadcast:
       signals.interface.networkInBroadcastPacketsPerSec.withTopK().asTimeSeries('Broadcast')
       + signals.interface.networkOutBroadcastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.broadcast.stylize()
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
+      + commonlib.panels.network.timeSeries.broadcast.withNegateOutPackets()
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsMulticast:
       signals.interface.networkInMulticastPacketsPerSec.withTopK().asTimeSeries('Multicast')
       + signals.interface.networkOutMulticastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.multicast.stylize()
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
+      + commonlib.panels.network.timeSeries.multicast.withNegateOutPackets()
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
   },
