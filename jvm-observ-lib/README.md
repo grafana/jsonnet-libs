@@ -7,7 +7,8 @@ Supports the following sources:
 - `prometheus` (https://prometheus.github.io/client_java/instrumentation/jvm/#jvm-memory-metrics). This also works for jmx_exporter (javaagent mode) starting from 1.0.1 release.
 - `otel` (https://github.com/open-telemetry/opentelemetry-java-contrib/blob/main/jmx-metrics/docs/target-systems/jvm.md)
 - `otel_with_suffixes` same as otel with add_metric_suffixes=true in otelcollector
-- `java_micrometer` (springboot) (https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java)
+- `java_micrometer` (springboot) (https://github.com/micrometer-metrics/micrometer/blob/main/micrometer-core/src/main/java/io/micrometer/core/instrument/binder/jvm/JvmMemoryMetrics.java). Can be seen when Micrometer to OTEL bridge is used.
+- `java_micrometer_with_suffixes` (springboot) same, but with prometheus suffixes
 - `prometheus_old` client_java instrumentation prior to 1.0.0 release: (https://github.com/prometheus/client_java/releases/tag/v1.0.0-alpha-4). This also works for jmx_exporter (javaagent mode) prior to 1.0.1 release.
 - `jmx_exporter`. Works with jmx_exporter (both http and javaagent modes) and the folllowing snippet:
 
@@ -45,7 +46,7 @@ local jvm =
         uid: 'jvm-sample',
         dashboardNamePrefix: 'JVM',
         dashboardTags: ['java', 'jvm'],
-        metricsSource: 'java_micrometer', // or java_otel, prometheus,
+        metricsSource: 'java_micrometer_with_suffixes', // or java_otel, prometheus,
     }
   );
 jvm.asMonitoringMixin()
