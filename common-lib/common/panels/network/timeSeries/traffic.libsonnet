@@ -17,5 +17,6 @@ base {
   stylize(allLayers=true):
 
     (if allLayers == true then super.stylize() else {})
-    + timeSeries.standardOptions.withUnit('bps'),
+    + timeSeries.standardOptions.withUnit('bps')
+    + timeSeries.standardOptions.withNoValue('No traffic'),
 }
