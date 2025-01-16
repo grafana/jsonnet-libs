@@ -92,7 +92,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + signals.fleetInterface.ifInUnknownProtos.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.dropped.stylize()
       + commonlib.panels.network.timeSeries.dropped.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
-      + commonlib.panels.network.timeSeries.errors.withNegateOutPackets()
+      + commonlib.panels.network.timeSeries.dropped.withNegateOutPackets()
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsUnicast:
@@ -100,7 +100,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + signals.fleetInterface.networkOutUnicastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.unicast.stylize()
       + commonlib.panels.network.timeSeries.unicast.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
+      + commonlib.panels.network.timeSeries.unicast.withNegateOutPackets()
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsBroadcast:
@@ -108,7 +108,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + signals.fleetInterface.networkOutBroadcastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.broadcast.stylize()
       + commonlib.panels.network.timeSeries.broadcast.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
+      + commonlib.panels.network.timeSeries.broadcast.withNegateOutPackets()
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
     packetsMulticast:
@@ -116,7 +116,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + signals.fleetInterface.networkOutMulticastPacketsPerSec.withTopK().asPanelMixin()
       + commonlib.panels.network.timeSeries.multicast.stylize()
       + commonlib.panels.network.timeSeries.multicast.withDataLink(this.config.instanceLabels, this.grafana.dashboards['snmp-overview.json'].uid)
-      + commonlib.panels.network.timeSeries.traffic.withNegateOutPackets()
+      + commonlib.panels.network.timeSeries.multicast.withNegateOutPackets()
       + g.panel.timeSeries.queryOptions.withInterval(this.config.minInterval),
 
   },
