@@ -77,6 +77,8 @@ Init level:
 |varMetric| A Metric used for variables discovery. |*|`up`|`node_uname_info`|
 |legendCustomTemplate| A custom legend template could be defined with this to override automatic legend's generation|*|`null`|`{{instance}}`|
 |rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
+|varAdHocEnabled| Attach ad hoc labels to variables generated. |`true`,`false`|`false`|`false`|
+|varAdHocLabels| Limit ad hoc to the specific labels |*|`["environment"]`|`[]`|
 
 Signal's level:
 
