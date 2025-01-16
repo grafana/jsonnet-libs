@@ -1,0 +1,135 @@
+local commonlib = import 'common-lib/common/main.libsonnet';
+local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
+function(this)
+  {
+    filteringSelector: this.filteringSelector,
+    groupLabels: this.groupLabels,
+    instanceLabels: this.instanceLabels,
+    aggLevel: 'instance',
+    aggFunction: 'sum',
+    discoveryMetric: {
+      generic: 'sysUpTime',
+      arista: self.generic,
+      brocade_fc: self.generic,
+      brocade_foundry: self.generic,
+      cisco: self.generic,
+      dell_force: self.generic,
+      dlink_des: self.generic,
+      extreme: self.generic,
+      eltex: self.generic,
+      eltex_mes: self.generic,
+      f5_bigip: self.generic,
+      fortigate: self.generic,
+      hpe: self.generic,
+      huawei: self.generic,
+      juniper: self.generic,
+      mikrotik: self.generic,
+      netgear: self.generic,
+      qtech: self.generic,
+      tplink: self.generic,
+      ubiquiti_airos: self.generic,
+    },
+    signals: {
+      uptime: {
+        name: 'Uptime',
+        description: |||
+          The time since the network management portion of the system was last re-initialized.
+        |||,
+        type: 'gauge',
+        unit: 'dtdurations',
+        sources: {
+          generic:
+            {
+              expr: 'sysUpTime{%(queriesSelector)s}',
+              //ticks to seconds
+              exprWrappers: [['(', ')/100']],
+            },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
+        },
+      },
+      sysName: {
+        name: 'System name',
+        description: |||
+          System name.
+        |||,
+        type: 'info',
+        sources: {
+          generic:
+            {
+              expr: 'sysName{%(queriesSelector)s}',
+              infoLabel: 'sysName',
+            },
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco: self.generic,
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
+        },
+      },
+      version: {
+        name: 'Version',
+        description: |||
+          System version.
+        |||,
+        type: 'info',
+        sources: {
+          generic: self.cisco,
+          arista: self.generic,
+          brocade_fc: self.generic,
+          brocade_foundry: self.generic,
+          cisco:
+            {
+              expr: 'label_replace(sysDescr{%(queriesSelector)s}, "sysDescr", "$1", "sysDescr", ".*Version(.+?),.*")',
+              infoLabel: 'sysDescr',
+            },
+          dell_force: self.generic,
+          dlink_des: self.generic,
+          extreme: self.generic,
+          eltex: self.generic,
+          eltex_mes: self.generic,
+          f5_bigip: self.generic,
+          fortigate: self.generic,
+          hpe: self.generic,
+          huawei: self.generic,
+          juniper: self.generic,
+          mikrotik: self.generic,
+          netgear: self.generic,
+          qtech: self.generic,
+          tplink: self.generic,
+          ubiquiti_airos: self.generic,
+        },
+      },
+    },
+  }
