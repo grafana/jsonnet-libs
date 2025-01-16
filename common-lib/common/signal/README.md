@@ -9,12 +9,39 @@ This shifts focus of dashboard building from panels to actual signals we want to
 Workflow to generate dashboards would be as follows:
 
 - Define key indicators(signals) your want to observe.
-- Use built-in functions to render each signal as a panel (i.e. `signal.asTimeSeries()`, `signal.asStat()`, `signal.asGauge()`, `signal.asStatusHistory()`, `signal.asTable(format='table|time_series'))`, `signal.asTableColumn()`)
-- If you want to combine multiple signals inside a single panel, render signal not as [Grafana panel](https://grafana.github.io/grafonnet/API/panel/index.html), but as a [Target](https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-queryoptionswithtargets), which is attachable to existing panel. (`signal.asTarget()`)
-- If you need to put multiple signals inside single panel use `signal.asPanelMixin()` function. It would add `Target` And overrides relevant to it (units, value mappings...)
+- Use built-in functions to render each signal as a panel (i.e. `signal.asTimeSeries()`, `signal.asStat()`, `signal.asGauge()`, `signal.asStatusHistory()`, `signal.asTable(format='table|time_series'))`, `signal.asTableColumn()`).
+- If you need to put multiple signals inside a single panel use `signal.asPanelMixin()` function. It would add [Target](https://grafana.github.io/grafonnet/API/panel/timeSeries/index.html#fn-queryoptionswithtargets) and overrides relevant to it (units, value mappings...)
 - If you need to put multiple columns inside single table use `signal.asTableColumn(format='table|time_series')` function. It would add `Target` And overrides relevant to it (units, value mappings...).
-- Variables required for signals are also generated and can be attached to any dashboard
+- Variables required for signals are also generated and can be attached to any dashboard.
 - Bonus: use stylize() functions from commonlib/panels to apply common styles to signals.
+
+## Functions
+
+### Modify functions
+
+These functions modify one of the signal's property and then  return signal back. Can be used as part of the builder pattern.
+
+- withTopK(limit=25) - wrap signal expression into topk()
+
+### Render functions
+
+These functions return signals view as one of the Grafana panels, its part, or as alerts.
+
+- Panel functions
+  - asTimeSeries() - renders TimeSeries panel with signals expression as the the first target and panel override.
+  - asStat() - renders Stat panel with signals expression as the the first target and panel override.
+  - asGauge() - renders Gauge panel with signals expression as the the first target and panel override.
+  - asStatusHistory() - renders StatusHistory panel with signals expression as the the first target and panel override.
+  - asTable(format=table|time_series) - renders Table panel with signals expression as the the first target and panel override.
+- Parts of panels
+  - asPanelMixin() - add signals expression as the the target and panel override to the existing panel of any type, except a table.
+  - asTableColumn(format=table|time_series) - add signals expression as the the target and panel override to the existing panel created with .asTable() function.
+  - asTarget() - add signals expression as the the target to the existing panel.
+  - asTableTarget() - add signals expression as the the target to the existing panel, with format=table.
+  - asOverride() - add panel override to the existing panel.
+  - asPanelExpression() - add signals expression to the panels target.
+- Prometheus rules (alerts)
+  - asRuleExpression() - add signals expression without any Grafana dynamic variables inside. Can be used for Prometheus alerts and rules.
 
 ## Autotransformations
 
@@ -55,7 +82,8 @@ Signal's level:
 
 |Name|Description|Possible values|Example value|Default value|
 |-----|---|---|---|---|
-|name|Signal's name. Used to populate panel's legends and titles. |*|CPU usage|-|
+|name|Signal's name. Used to populate panel's titles. |*|CPU utilization|-|
+|nameShort|Signal's short name. Used to populate panel's legends and column names. |*|CPU|-|
 |type|Signal's type. Depending on the type, some opinionated autotransformations would happen with queries, units. |gauge,counter,histogram,info,raw|gauge|-|
 |unit| Signal's units. |*|bytes|``|
 |description| Signal's description. Used to populate panel's description. |*|CPU usage time in percent.|``|
@@ -103,7 +131,8 @@ local jsonSignals =
     },
     signals: {
       abc: {
-        name: 'ABC',
+        name: 'ABC metric',
+        nameShort: 'ABC',
         type: 'gauge',
         description: 'ABC',
         unit: 's',
@@ -216,6 +245,7 @@ local g = import 'g.libsonnet';
 
     bytesIn: s.addSignal(
         name='Bytes in',
+        nameShort='In',
         type='counter',
         unit='bytes',
         description='Bytes in through interface',
@@ -225,11 +255,13 @@ local g = import 'g.libsonnet';
             rangeFunction: null,
             aggKeepLabels: [],
             legendCustomTemplate: null,
+            infoLabel: null,
           },
         ],
     ),
     bytesOut: s.addSignal(
         name='Bytes out',
+        nameShort='Out',
         type='counter',
         unit='bytes',
         description='Bytes out through interface',
@@ -239,6 +271,7 @@ local g = import 'g.libsonnet';
             rangeFunction: null,
             aggKeepLabels: [],
             legendCustomTemplate: null,
+            infoLabel: null,
           },
         ],
         
