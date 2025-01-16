@@ -38,7 +38,7 @@ local signals = signal.unmarshallJson(jsonSignals);
             defaultKeys:
               [{ text: 'env', value: 'env' }, { text: 'zone', value: 'zone' }],
             description: 'Add additional filters',
-            label: 'Adhoc filters',
+            label: 'Ad hoc filters',
             name: 'adhoc',
             type: 'adhoc',
           },
