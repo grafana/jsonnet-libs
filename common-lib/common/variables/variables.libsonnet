@@ -63,7 +63,7 @@ local utils = import '../utils.libsonnet';
        },
        adHoc:
          var.adhoc.new('adhoc', 'prometheus', '${' + root.datasources.prometheus.name + '}')
-         + var.adhoc.generalOptions.withLabel('Adhoc filters')
+         + var.adhoc.generalOptions.withLabel('Ad hoc filters')
          + var.adhoc.generalOptions.withDescription('Add additional filters')
          + (if std.length(adHocLabels) > 0 then {
               defaultKeys: [
