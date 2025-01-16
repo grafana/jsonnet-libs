@@ -260,15 +260,12 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       ),
 
     //Return as timeSeriesPanel
-    asTimeSeries(name=signalName, prototype=g.panel.timeSeries.new(name)):
-
-      // local _prototype = std.split(prototype, '.');
-      // panels[_prototype[0]][_prototype[1]][_prototype[2]].new(title='', targets=[])
-      prototype
+    asTimeSeries(name=signalName):
+      g.panel.timeSeries.new(name)
       + self.common(type='timeSeries'),
 
     //Return as statPanel
-    asStat(name=signalName, prototype=g.panel.stat.new(name)):
+    asStat(name=signalName):
       g.panel.stat.new(name)
       + self.common(type='stat'),
     // Return as table
