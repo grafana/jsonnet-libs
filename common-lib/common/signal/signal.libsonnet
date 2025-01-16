@@ -44,6 +44,8 @@ local stub = import './stub.libsonnet';
       aggKeepLabels=std.get(signalsJson, 'aggKeepLabels', []),
       legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
       rangeFunction=std.get(signalsJson, 'rangeFunction', 'rate'),  // rate, irate , delta, increase, idelta...
+      varAdHocEnabled=std.get(signalsJson, 'varAdHocEnabled', false),
+      varAdHocLabels=std.get(signalsJson, 'varAdHocLabels', []),
     )
     +
     {
@@ -51,6 +53,7 @@ local stub = import './stub.libsonnet';
         name=std.get(signalsJson.signals[s], 'name', error 'Must provide name'),
         type=std.get(signalsJson.signals[s], 'type', error 'Must provide type for signal %s' % signalsJson.signals[s].name),
         unit=std.get(signalsJson.signals[s], 'unit', ''),
+        nameShort=std.get(signalsJson.signals[s], 'nameShort', signalsJson.signals[s].name),
         description=std.get(signalsJson.signals[s], 'description', ''),
         aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
         aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
@@ -95,6 +98,8 @@ local stub = import './stub.libsonnet';
       aggKeepLabels=std.get(signalsJson, 'aggKeepLabels', []),
       legendCustomTemplate=std.get(signalsJson, 'legendCustomTemplate', null),
       rangeFunction=std.get(signalsJson, 'rangeFunction', std.get(signalsJson, 'rangeFunction', 'rate')),  // rate, irate , delta, increase, idelta...
+      varAdHocEnabled=std.get(signalsJson, 'varAdHocEnabled', false),
+      varAdHocLabels=std.get(signalsJson, 'varAdHocLabels', []),
     )
     +
     {
@@ -135,6 +140,7 @@ local stub = import './stub.libsonnet';
                name=name,
                type=metricType,
                unit=std.get(signalsJson.signals[s], 'unit', ''),
+               nameShort=std.get(signalsJson.signals[s], 'nameShort', name),
                description=std.get(signalsJson.signals[s], 'description', ''),
                aggLevel=std.get(signalsJson.signals[s], 'aggLevel', signalsJson.aggLevel),
                aggFunction=std.get(signalsJson.signals[s], 'aggFunction', std.get(signalsJson, 'aggFunction', 'avg')),
@@ -168,7 +174,9 @@ local stub = import './stub.libsonnet';
     //metric used in variables discovery by default
     varMetric='up',
     legendCustomTemplate=null,
-    rangeFunction='rate'
+    rangeFunction='rate',
+    varAdHocEnabled=false,
+    varAdHocLabels=[],
   ): self {
 
     local this = self,
@@ -185,6 +193,8 @@ local stub = import './stub.libsonnet';
       varMetric=varMetric,
       prometheusDatasourceName=datasource,
       prometheusDatasourceLabel=datasourceLabel,
+      adHocEnabled=varAdHocEnabled,
+      adHocLabels=varAdHocLabels,
     ),
     // vars are used in templating(legend+expressions)
     templatingVariables: {
@@ -214,6 +224,7 @@ local stub = import './stub.libsonnet';
       name,
       type,
       unit='short',
+      nameShort,
       description,
       aggLevel=self.aggLevel,
       aggFunction=self.aggFunction,
@@ -245,6 +256,7 @@ local stub = import './stub.libsonnet';
           name=name,
           type=type,
           unit=unit,
+          nameShort=nameShort,
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
@@ -257,6 +269,7 @@ local stub = import './stub.libsonnet';
           name=name,
           type=type,
           unit=unit,
+          nameShort=nameShort,
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
@@ -269,6 +282,7 @@ local stub = import './stub.libsonnet';
           name=name,
           type=type,
           unit=unit,
+          nameShort=nameShort,
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
@@ -281,6 +295,7 @@ local stub = import './stub.libsonnet';
           name=name,
           type=type,
           unit=unit,
+          nameShort=nameShort,
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,
@@ -292,6 +307,7 @@ local stub = import './stub.libsonnet';
         info.new(
           name=name,
           type=type,
+          nameShort=nameShort,
           description=description,
           aggLevel=aggLevel,
           aggFunction=aggFunction,

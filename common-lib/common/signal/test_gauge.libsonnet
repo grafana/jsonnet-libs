@@ -6,6 +6,7 @@ local gauge1 = signal.init(
   filteringSelector=['job="integrations/agent"'],
 ).addSignal(
   name='Up metric',
+  nameShort='Up',
   type='gauge',
   unit='short',
   description='abc',
@@ -15,6 +16,7 @@ local gauge1 = signal.init(
       rangeFunction: null,
       aggKeepLabels: [],
       legendCustomTemplate: null,
+      infoLabel: null,
       valueMappings: [{
         type: 'value',
         options: {
@@ -41,7 +43,7 @@ local gauge1 = signal.init(
     testResult: test.suite({
       testLegend: {
         actual: gauge1.asTarget().legendFormat,
-        expect: '{{job}}: Up metric',
+        expect: '{{job}}: Up',
       },
       testExpression: {
         actual: gauge1.asTarget().expr,

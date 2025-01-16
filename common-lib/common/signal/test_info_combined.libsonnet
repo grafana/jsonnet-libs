@@ -5,6 +5,7 @@ local m1 = signal.init(
   filteringSelector=['job="abc"'],
 ).addSignal(
   name='Go version',
+  nameShort='Version',
   type='info',
   description='Go version.',
   sourceMaps=[
