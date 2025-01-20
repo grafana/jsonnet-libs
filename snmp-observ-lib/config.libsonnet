@@ -1,9 +1,8 @@
 {
   local this = self,
   filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="integrations/snmp"
-  zookeeperfilteringSelector: this.filteringSelector,
-  groupLabels: ['job'],
-  instanceLabels: ['instance'],
+  groupLabels: ['job_snmp'],
+  instanceLabels: ['snmp_target', 'instance'],
   uid: 'snmp',
   dashboardNamePrefix: '',
   dashboardTags: ['snmp'],
@@ -13,6 +12,7 @@
 
   //increase min interval to match max SNMP polling interval used:
   minInterval: '30s',
+  metricsSource: ['generic', 'cisco'],
 
   //only fire alerts 'interface is down' for the following selector:
   alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN).*"',
