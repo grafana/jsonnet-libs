@@ -135,6 +135,26 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               'for': '15m',
               keep_firing_for: '3m',
             },
+            {
+              alert: 'SNMPInterfaceIsFlapping',
+              expr: |||
+                      changes(%s[5m]) > 5
+                    |||
+                    % [
+                      this.signals.interface.ifOperStatus.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Network interface is flapping.',
+                description: |||
+                  Network interface {{ $labels.ifName }} ({{$labels.ifAlias}}) is flapping on {{ $labels.%s }}. It has changed its status more than 5 times in the last 5 minutes.
+                ||| % [instanceLabel],
+              },
+              'for': '0',
+              keep_firing_for: '3m',
+            },
           ] +
           (
             if this.config.filteringSelector != '' then
