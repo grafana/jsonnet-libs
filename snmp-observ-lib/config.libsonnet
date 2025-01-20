@@ -14,6 +14,10 @@
   //increase min interval to match max SNMP polling interval used:
   minInterval: '30s',
 
+  //only fire alerts 'interface is down' for the following selector:
+  alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN).*"',
+  alertMemoryUsageThresholdCritical: 90,
+  alertsCPUThresholdWarning: 90,
   signals+:
     {
       cpu: (import './signals/cpu.libsonnet')(this),
