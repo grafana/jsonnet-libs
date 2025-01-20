@@ -21,9 +21,9 @@ Workflow to generate dashboards would be as follows:
 
 These functions modify one of the signal's property and then  return signal back. Can be used as part of the builder pattern.
 
-- withTopK(limit=25) - wrap signal expression into topk().
-- withOffset(offset) - add offset modifier to the expression.
-- withFilteringSelectorMixin(mixin) - add additional selector to filteringSelector used.
+- withTopK(limit=25) - wraps signal expression into topk().
+- withOffset(offset) - adds offset modifier to the expression.
+- withFilteringSelectorMixin(mixin) - adds additional selector to filteringSelector used.
 
 ### Render functions
 

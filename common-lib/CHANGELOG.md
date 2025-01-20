@@ -1,3 +1,8 @@
+# 0.2.0
+
+- [Signal] `withOffset(offset)` - add offset modifier to the expression.
+- [Signal] `withFilteringSelectorMixin(mixin)` - add additional selector to filteringSelector used.
+
 # 0.1.0
 
 - [Variables] Add support for optional ad hoc variabels
