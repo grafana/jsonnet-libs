@@ -155,24 +155,60 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               'for': '0',
               keep_firing_for: '3m',
             },
-          ] +
-          (
+          ],
+      },
+      {
+        name: this.config.uid + '-snmp-exporter-alerts',
+        rules:
+          [
+            {
+              alert: 'SNMPExporterEmptyResponse',
+              expr: 'snmp_scrape_pdus_returned{%s} <= 1' % this.config.filteringSelector,
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'SNMP exporter returns an empty response.',
+                description: |||
+                  SNMP exporter returns an empty response for node {{ $labels.%s }}. Please check authentication and other SNMP settings.
+                ||| % instanceLabel,
+              },
+              'for': '10m',
+              keep_firing_for: '3m',
+            },
+            {
+              alert: 'SNMPExporterSlowScrape',
+              expr: 'min_over_time(snmp_scrape_duration_seconds{%s}[5m]) > 50' % this.config.filteringSelector,
+              labels: {
+                severity: 'info',
+              },
+              annotations: {
+                summary: 'SNMP exporter scrape is slow.',
+                description: |||
+                  SNMP exporter scrape of {{ $labels.%s }} is taking more than 50 seconds. Please check SNMP modules polled and that snmp_exporter is located on the same network as the SNMP target.
+                ||| % instanceLabel,
+              },
+              'for': '10m',
+              keep_firing_for: '3m',
+            },
+          ]
+          + (
             if this.config.filteringSelector != '' then
               [
                 {
-                  alert: 'SNMPNodeDown',
+                  alert: 'SNMPExporterNoResponse',
                   expr: 'up{%s} == 0' % this.config.filteringSelector,
                   labels: {
-                    severity: 'critical',
+                    severity: 'warning',
                   },
                   annotations: {
-                    summary: 'SNMP target is down.',
+                    summary: 'SNMP node is down.',
                     description: |||
-                      Failed to scrape metrics from SNMP node {{$labels.%s}}.
-                      If device is available, please check network connectivity and SNMP authentication settings.
+                      SNMP exporter scrape of node {{ $labels.%s }} is not responding to SNMP walk.
+                      Please check network connectivity and SNMP authentication settings.
                     ||| % instanceLabel,
                   },
-                  'for': '5m',
+                  'for': '10m',
                 },
               ]
             else []
