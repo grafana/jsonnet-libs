@@ -6,7 +6,7 @@ function(this)
     groupLabels: this.groupLabels,
     instanceLabels: this.instanceLabels,
     aggLevel: 'instance',
-    aggFunction: 'sum',
+    aggFunction: 'avg',
     discoveryMetric: {
       generic: 'hrProcessorLoad',
       arista: self.generic,
