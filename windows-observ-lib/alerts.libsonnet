@@ -197,6 +197,21 @@
               ||| % this.config,
             },
           },
+          {
+            alert: 'WindowsNodeHasRebooted',
+            expr: |||
+              (time() - windows_system_system_up_time{%(filteringSelector)s}) < 600
+              and
+              (time() - (windows_system_system_up_time{%(filteringSelector)s} offset 10m)) > 600
+            ||| % this.config,
+            labels: {
+              severity: 'info',
+            },
+            annotations: {
+              summary: 'Node has rebooted.',
+              description: 'Node {{ $labels.instance }} has rebooted {{ $value | humanize }} seconds ago.',
+            },
+          },
         ] + if this.config.enableADDashboard then ADAlerts else [],
       },
     ],
