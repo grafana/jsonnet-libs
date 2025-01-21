@@ -23,7 +23,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     local hasValueMaps = std.length(this.getValueMappings(this.sourceMaps)) > 0,
     local legendCustomTemplate = sourceMaps[0].legendCustomTemplate,
 
-
     sourceMaps:: sourceMaps,
     combineUniqueExpressions(expressions)::
       std.join(
@@ -96,6 +95,37 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
 
     unit:: signalUtils.generateUnits(type, unit, this.sourceMaps[0].rangeFunction),
 
+    withOffset(offset):
+      this
+      {
+        sourceMaps:
+          [
+            source
+            {
+              expr: '(%s offset %s)' % [source.expr, offset],
+            }
+            for source in this.sourceMaps
+          ],
+      },
+
+    withFilteringSelectorMixin(mixin):
+      this
+      {
+        vars+::
+          {
+            filteringSelector:
+              [
+                std.join(
+                  ',',
+                  std.filter(function(x) std.length(x) > 0, [
+                    this.vars.filteringSelector[0],
+                    mixin,
+                  ])
+                ),
+              ],
+            queriesSelector+: ',' + mixin,
+          },
+      },
 
     withTopK(limit=25):
       this
