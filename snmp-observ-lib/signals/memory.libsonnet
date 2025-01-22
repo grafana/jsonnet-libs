@@ -124,6 +124,12 @@ function(this)
           },
           ubiquiti_airos: {
             // FROGFOOT-RESOURCES-MIB
+            // # HELP memFree Available physical memory (in KB) - 1.3.6.1.4.1.10002.1.1.1.1.2
+            // # TYPE memFree gauge
+            // memFree 42576
+            // # HELP memTotal Total usable physical memory (in KB) - 1.3.6.1.4.1.10002.1.1.1.1.1
+            // # TYPE memTotal gauge
+            // memTotal 62268
             expr: |||
               (memTotal{%(queriesSelector)s}-memFree{%(queriesSelector)s})
               /
