@@ -16,7 +16,7 @@ The library supports multiple metrics sources (`metricsSource`).
 |dell_force | Dell Force S-Series | IF-MIB,SNMPv2-MIB,F10-S-SERIES-CHASSIS-MIB | Dell Force S-Series ||
 |dlink_des | D-Link DES series | IF-MIB,SNMPv2-MIB,DLINK-AGENT-MIB | DGS-3420-26SC Gigabit Ethernet ||
 |eltex | Eltex  | IF-MIB, SNMPv2-MIB | - ||
-|eltex_mes | Eltex MES | IF-MIB, SNMPv2-MIB | - ||
+|eltex_mes | Eltex MES | IF-MIB, SNMPv2-MIB,ELTEX-MES-ISS-CPU-UTIL-MIB,ARICENT-ISS-MIB | MES 2448P ||
 |extreme | Extreme EXOS | IF-MIB, SNMPv2-MIB,EXTREME-SYSTEM-MIB, EXTREME-SOFTWARE-MONITOR-MIB | - ||
 |f5_bigip | F5 BigIP | IF-MIB,SNMPv2-MIB,F5-BIGIP-SYSTEM-MIB | - |https://my.f5.com/manage/s/article/K13322|
 |fortigate | Fortinet Fortigate | IF-MIB,SNMPv2-MIB,FORTINET-FORTIGATE-MIB, ENTITY-MIB | v7.2.5 ||
