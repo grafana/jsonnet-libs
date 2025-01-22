@@ -38,7 +38,7 @@ function(this)
         unit: 'percent',
         sources: {
           generic: {
-            expr: 'hrProcessorLoad{%(queriesSelector)s}',
+            expr: 'hrProcessorLoad{%(cpuSelector)s,%%(queriesSelector)s}' % { cpuSelector: this.cpuSelector },
           },
           arista_sw: self.generic,
           brocade_fc: {
