@@ -102,7 +102,11 @@ function(this)
           juniper: {
             expr: 'jnxOperatingBuffer{%(queriesSelector)s}',
           },
-          mikrotik: self.generic,
+          mikrotik: {
+            expr: |||
+              hrStorageUsed{%(memorySelector)s, %%(queriesSelector)s}/hrStorageSize{%(memorySelector)s, %%(queriesSelector)s}*100
+            ||| % { memorySelector: this.mikrotikMemorySelector },
+          },
           netgear: {
             expr: |||
               # netgear
