@@ -9,7 +9,7 @@ function(this)
     aggFunction: 'sum',
     discoveryMetric: {
       generic: 'sysUpTime',
-      arista: self.generic,
+      arista_sw: self.generic,
       brocade_fc: self.generic,
       brocade_foundry: self.generic,
       cisco: self.generic,
@@ -44,7 +44,7 @@ function(this)
               //ticks to seconds
               exprWrappers: [['(', ')/100']],
             },
-          arista: self.generic,
+          arista_sw: self.generic,
           brocade_fc: self.generic,
           brocade_foundry: self.generic,
           cisco: self.generic,
@@ -77,7 +77,7 @@ function(this)
               expr: 'sysName{%(queriesSelector)s}',
               infoLabel: 'sysName',
             },
-          arista: self.generic,
+          arista_sw: self.generic,
           brocade_fc: self.generic,
           brocade_foundry: self.generic,
           cisco: self.generic,
@@ -106,7 +106,7 @@ function(this)
         type: 'info',
         sources: {
           generic: self.cisco,
-          arista: self.generic,
+          arista_sw: self.generic,
           brocade_fc: self.generic,
           brocade_foundry: self.generic,
           cisco:

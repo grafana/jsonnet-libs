@@ -9,7 +9,7 @@ function(this)
     aggFunction: 'avg',
     discoveryMetric: {
       generic: 'hrProcessorLoad',
-      arista: self.generic,
+      arista_sw: self.generic,
       brocade_fc: 'swCpuUsage',
       brocade_foundry: 'snAgGblCpuUtil1MinAvg',
       cisco: 'cpmCPUTotal1minRev',
@@ -40,7 +40,7 @@ function(this)
           generic: {
             expr: 'hrProcessorLoad{%(queriesSelector)s}',
           },
-          arista: self.generic,
+          arista_sw: self.generic,
           brocade_fc: {
             expr: 'swCpuUsage{%(queriesSelector)s}',
           },
