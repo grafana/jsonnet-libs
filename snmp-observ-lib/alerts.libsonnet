@@ -170,7 +170,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'SNMP exporter returns an empty response.',
                 description: |||
-                  SNMP exporter returns an empty response for node {{ $labels.%s }}. Please check authentication and other SNMP settings.
+                  SNMP exporter returns an empty response for node {{ $labels.%s }} and module {{ $labels.module}}. Please check that target support {{ $labels.module }} module as well as authentication and other SNMP settings.
                 ||| % instanceLabel,
               },
               'for': '10m',
