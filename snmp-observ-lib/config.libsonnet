@@ -1,8 +1,8 @@
 {
   local this = self,
   filteringSelector: '',  // set to apply static filters to all queries and alerts, i.e. job="integrations/snmp"
-  groupLabels: ['job_snmp'],
-  instanceLabels: ['snmp_target', 'instance'],
+  groupLabels: ['job'],
+  instanceLabels: ['instance'],
   uid: 'snmp',
   dashboardNamePrefix: '',
   dashboardTags: ['snmp'],
