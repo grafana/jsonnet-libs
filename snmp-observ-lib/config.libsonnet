@@ -16,6 +16,11 @@
 
   //only fire alerts 'interface is down' for the following selector:
   alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN).*"',
+  // cpuSelector for metricsSources with HOST-RESOURCE-MIB:
+  cpuSelector: 'hrDeviceType="1.3.6.1.2.1.25.3.1.3"',
+  // memorySelector for metricsSources with HOST-RESOURCE-MIB:
+  // ignore buffers for now:
+  memorySelector: 'hrStorageDescr!~".*(?i(cache|buffer).*", hrStorageType="1.3.6.1.2.1.25.2.1.2"',
   alertMemoryUsageThresholdCritical: 90,
   alertsCPUThresholdWarning: 90,
   signals+:

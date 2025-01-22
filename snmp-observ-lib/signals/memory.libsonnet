@@ -37,10 +37,9 @@ function(this)
         unit: 'percent',
         sources: {
           generic: {
-            //TODO: add memory filter: type!=buffer,cache, adjust type="hrStorageRam"
             expr: |||
-              hrStorageUsed{%(queriesSelector)s, type="hrStorageRam"}/hrStorageSize{%(queriesSelector)s, type="hrStorageRam"}*100
-            |||,
+              hrStorageUsed{%(memorySelector)s, %%(queriesSelector)s}/hrStorageSize{%(memorySelector)s, %%(queriesSelector)s}*100
+            ||| % { memorySelector: this.memorySelector },
           },
           arista_sw: self.generic,
           brocade_fc: {
