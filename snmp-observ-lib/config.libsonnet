@@ -21,6 +21,8 @@
   // memorySelector for metricsSources with HOST-RESOURCE-MIB:
   // ignore buffers for now:
   memorySelector: 'hrStorageDescr!~".*(?i(cache|buffer).*", hrStorageType="1.3.6.1.2.1.25.2.1.2"',
+  mikrotikMemorySelector: 'hrStorageDescr="main memory",hrStorageIndex="65536"',
+
   alertMemoryUsageThresholdCritical: 90,
   alertsCPUThresholdWarning: 90,
   signals+:
