@@ -9,7 +9,7 @@ function(this)
     aggFunction: 'avg',
     discoveryMetric: {
       generic: 'hrStorageUsed',
-      arista: self.generic,
+      arista_sw: self.generic,
       brocade_fc: 'swMemUsage',
       brocade_foundry: 'snAgGblDynMemUtil',
       cisco: 'cpmCPUMemoryUsed',
@@ -42,7 +42,7 @@ function(this)
               hrStorageUsed{%(queriesSelector)s, type="hrStorageRam"}/hrStorageSize{%(queriesSelector)s, type="hrStorageRam"}*100
             |||,
           },
-          arista: self.generic,
+          arista_sw: self.generic,
           brocade_fc: {
             expr: 'swMemUsage{%(queriesSelector)s}',
           },

@@ -10,7 +10,7 @@ The library supports multiple metrics sources (`metricsSource`).
 |-|-|-|-|-|
 |generic           |Generic SNMP device|IF-MIB,SNMPv2-MIB    |default choice||
 |cisco             | Cisco IoS devices |IF-MIB,SNMPv2-MIB, Cisco private mibs|-||
-|arista            | Arista devices    |IF-MIB,SNMPv2-MIB,HOST-RESOURCES-MIB|-||
+|arista_sw            | Arista devices    |IF-MIB,SNMPv2-MIB,HOST-RESOURCES-MIB|-||
 |brocade_fcs       | Brocade           |IF-MIB,SNMPv2-MIB,SW-MIB|Brocade 6520 v7.4.1c, Brocade 300 v7.0.0c,Brocade BL 5480 v6.3.1c|
 |brocade_foundry | Brocade Foundry | FOUNDRY-SN-AGENT-MIB | Brocade MLXe (System Mode: MLX), IronWare Version V5.4.0eT163, Foundry FLS648 Foundry Networks, Inc. FLS648, IronWare Version 04.1.00bT7e1, Foundry FWSX424 Foundry Networks, Inc. FWSX424, IronWare Version 02.0.00aT1e0||
 |dell_force | Dell Force S-Series | IF-MIB,SNMPv2-MIB,F10-S-SERIES-CHASSIS-MIB | Dell Force S-Series ||
