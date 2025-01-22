@@ -93,7 +93,12 @@ function(this)
           },
           ubiquiti_airos: {
             // FROGFOOT-RESOURCES-MIB
-            expr: 'loadValue{%(queriesSelector)s}',
+            // # HELP loadValue The 1,5 and 10 minute load averages - 1.3.6.1.4.1.10002.1.1.1.4.2.1.3
+            // # TYPE loadValue gauge
+            // loadValue{loadIndex="1"} 12
+            // loadValue{loadIndex="2"} 83
+            // loadValue{loadIndex="3"} 2
+            expr: 'loadValue{loadIndex="1", %(queriesSelector)s}',
           },
         },
       },
