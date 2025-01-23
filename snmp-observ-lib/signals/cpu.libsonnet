@@ -79,7 +79,8 @@ function(this)
             expr: 'hwEntityCpuUsage{%(queriesSelector)s}',
           },
           juniper: {
-            expr: 'jnxOperatingCPU{%(queriesSelector)s}',
+            expr: 'jnxOperatingCPU{jnxOperatingContentsIndex="9", %(queriesSelector)s}',
+            aggKeepLabels: ['jnxOperatingDescr'],
           },
           mikrotik: self.generic,
           netgear: {
