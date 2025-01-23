@@ -100,7 +100,8 @@ function(this)
             expr: 'hwEntityMemUsage{%(queriesSelector)s}',
           },
           juniper: {
-            expr: 'jnxOperatingBuffer{%(queriesSelector)s}',
+            expr: 'jnxOperatingBuffer{jnxOperatingContentsIndex="9", %(queriesSelector)s}',
+            aggKeepLabels: ['jnxOperatingDescr'],
           },
           mikrotik: {
             expr: |||

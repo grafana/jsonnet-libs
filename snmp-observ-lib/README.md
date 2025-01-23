@@ -22,7 +22,7 @@ The library supports multiple metrics sources (`metricsSource`).
 |fortigate | Fortinet Fortigate | IF-MIB,SNMPv2-MIB,FORTINET-FORTIGATE-MIB,ENTITY-MIB | v7.2.5 ||system,if_mib,hrDevice,hrStorage|
 |hpe | HP Enterprise Switches | IF-MIB,SNMPv2-MIB,STATISTICS-MIB,NETSWITCH-MIB | HP ProCurve J4900B, HP J9728A 2920-48G | https://support.hpe.com/hpesc/public/docDisplay?sp4ts.oid=51079&docId=emr_na-c02597344|system,if_mib|
 |huawei | Huawei VRP | IF-MIB,SNMPv2-MIB,HUAWEI-ENTITY-EXTENT-MIB | - | |system,if_mib|
-|juniper | Juniper MX | IF-MIB,SNMPv2-MIB,JUNIPER-MIB | Juniper MX204 Edge Router, JUNOS 24.2R1-S1.10 | |system,if_mib|
+|juniper | Juniper MX, Juniper SRX | IF-MIB,SNMPv2-MIB,JUNIPER-MIB | Juniper MX204 Edge Router, JUNOS 24.2R1-S1.10, Juniper SRX, Juniper EX4200-24| https://www.juniper.net/documentation/us/en/software/nce/nce-srx-cluster-management-best/topics/concept/chassis-cluster-performance-monitoring.html |system,if_mib|
 |mikrotik | Mikrotik OS | HOST-RESOURCES-MIB,SNMPv2-MIB,MIKROTIK-MIB,IF-MIB | Router OS 7.3 |912UAG-5HPnD,941-2nD,1100ahx2,CCR1016-12G,CCR1036-12G-4S,rb2011ua,mikrotik450g,mikrotikrb1100ah|system,if_mib,mikrotik,hrStorage,hrDevice|
 |netgear | Netgear FastPath switches | HOST-RESOURCES-MIB,SNMPv2-MIB,FASTPATH-SWITCHING-MIB,FASTPATH-BOXSERVICES-PRIVATE-MIB,IF-MIB | Netgear M5300-28G | https://kb.netgear.com/24352/MIBs-for-Smart-switches |system,if_mib|
 |qtech | QTech | QTECH-MIB,EtherLike-MIB,HOST-RESOURCES-MIB,SNMPv2-MIB,ENTITY-MIB,IF-MIB | | |system,if_mib|
