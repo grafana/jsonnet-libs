@@ -22,7 +22,8 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               },
               annotations: {
                 summary: 'SNMP node has rebooted.',
-                description: 'SNMP node {{ %s }} has rebooted {{ $value | humanize }} seconds ago.' % instanceLabel,
+                description: 'SNMP node {{ $labels.%(instanceLabel)s }} has rebooted {{ $value | humanize }} seconds ago.'
+                             % this.config { instanceLabel: instanceLabel },
               },
             },
             {

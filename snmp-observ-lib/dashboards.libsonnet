@@ -38,7 +38,7 @@ local g = import './g.libsonnet';
           period
         ),
       'snmp-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + ' SNMP overview')
+        g.dashboard.new(this.config.dashboardNamePrefix + 'SNMP overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(

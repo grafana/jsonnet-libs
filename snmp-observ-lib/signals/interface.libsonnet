@@ -855,12 +855,18 @@ function(this, level='interface')
                 generic:
                   {
 
-                    expr: |||
-                      # ignore when ifLastCHange == 0 as invalid
-                      sum by (%%(agg)s) (
-                        (sysUpTime{} - on(%s) group_right () (ifLastChange{%%(queriesSelector)s})!=0)
-                      )/100
-                    ||| % std.join(',', this.groupLabels + this.instanceLabels),
+                    expr:
+                      |||
+                        # ignore when ifLastCHange == 0 as invalid
+                        sum by (%%(agg)s) (
+                          (sysUpTime{%s} - on(%s) group_right () (ifLastChange{%%(queriesSelector)s})!=0)
+                        )/100
+                      |||
+                      %
+                      [
+                        commonlib.utils.labelsToPromQLSelector(this.groupLabels + this.instanceLabels),
+                        std.join(',', this.groupLabels + this.instanceLabels),
+                      ],
                   },
                 arista_sw: self.generic,
                 brocade_fc: self.generic,
