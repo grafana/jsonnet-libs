@@ -1,0 +1,5 @@
+exclusions:
+  template-instance-rule:
+    reason: "These dashboards are designed to be single instance"
+    entries:
+      - dashboard: SNMP overview

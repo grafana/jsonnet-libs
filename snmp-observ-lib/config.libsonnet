@@ -11,11 +11,11 @@
   dashboardTimezone: '',
 
   //increase min interval to match max SNMP polling interval used:
-  minInterval: '30s',
-  metricsSource: ['generic', 'cisco'],
+  minInterval: '2m',
+  metricsSource: ['generic', 'cisco', 'eltex', 'eltex_mes', 'mikrotik'],
 
   //only fire alerts 'interface is down' for the following selector:
-  alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN).*"',
+  alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN)).*"',
   // cpuSelector for metricsSources with HOST-RESOURCE-MIB:
   cpuSelector: 'hrDeviceType="1.3.6.1.2.1.25.3.1.3"',
   // memorySelector for metricsSources with HOST-RESOURCE-MIB:
