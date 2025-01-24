@@ -13,7 +13,7 @@ function(this)
       brocade_fc: 'swCpuUsage',
       brocade_foundry: 'snAgGblCpuUtil1MinAvg',
       cisco: 'cpmCPUTotal1minRev',
-      dell_force: 'chStackUnitMemUsageUtil',
+      dell_network: 'dellNetCpuUtil1Min',
       dlink_des: 'agentCPUutilizationIn1min',
       extreme: 'extremeCpuMonitorTotalUtilization',
       eltex: 'eltexProcessCPUMonitorValue',
@@ -50,7 +50,7 @@ function(this)
           cisco: {
             expr: 'cpmCPUTotal1minRev{%(queriesSelector)s}',
           },
-          dell_force: {
+          dell_network: {
             expr: 'chStackUnitMemUsageUtil{%(queriesSelector)s}',
           },
           dlink_des: {
