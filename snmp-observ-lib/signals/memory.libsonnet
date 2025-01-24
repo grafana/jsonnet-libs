@@ -13,7 +13,7 @@ function(this)
       brocade_fc: 'swMemUsage',
       brocade_foundry: 'snAgGblDynMemUtil',
       cisco: 'cpmCPUMemoryUsed',
-      dell_force: 'chStackUnitMemUsageUtil',
+      dell_network: 'dellNetCpuUtilMemUsage',
       dlink_des: 'agentDRAMutilization',
       extreme: 'extremeMemoryMonitorSystemTotal',
       eltex: 'eltexProcessMemoryTotal',
@@ -56,7 +56,7 @@ function(this)
               (cpmCPUMemoryUsed{%(queriesSelector)s} + cpmCPUMemoryFree{%(queriesSelector)s}) * 100
             |||,
           },
-          dell_force: {
+          dell_network: {
             expr: 'chStackUnitMemUsageUtil{%(queriesSelector)s}',
           },
           dlink_des: {

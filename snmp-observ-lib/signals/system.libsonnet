@@ -13,7 +13,7 @@ function(this)
       brocade_fc: self.generic,
       brocade_foundry: self.generic,
       cisco: self.generic,
-      dell_force: self.generic,
+      dell_network: self.generic,
       dlink_des: self.generic,
       extreme: self.generic,
       eltex: self.generic,
@@ -48,7 +48,7 @@ function(this)
           brocade_fc: self.generic,
           brocade_foundry: self.generic,
           cisco: self.generic,
-          dell_force: self.generic,
+          dell_network: self.generic,
           dlink_des: self.generic,
           extreme: self.generic,
           eltex: self.generic,
@@ -81,7 +81,7 @@ function(this)
           brocade_fc: self.generic,
           brocade_foundry: self.generic,
           cisco: self.generic,
-          dell_force: self.generic,
+          dell_network: self.generic,
           dlink_des: self.generic,
           extreme: self.generic,
           eltex: self.generic,
@@ -114,7 +114,7 @@ function(this)
               expr: 'label_replace(sysDescr{%(queriesSelector)s}, "sysDescr", "$1", "sysDescr", ".*Version(.+?),.*")',
               infoLabel: 'sysDescr',
             },
-          dell_force: self.generic,
+          dell_network: self.generic,
           dlink_des: self.generic,
           extreme: self.generic,
           eltex: self.generic,
@@ -133,3 +133,31 @@ function(this)
       },
     },
   }
+
+
+// - uuid: 64128e7f2adf44988b0ca3edd76cba61
+//   name: 'JUNIPER-ALARM-MIB::jnxOperatingState'
+//   mappings:
+//     - value: '1'
+//       newvalue: unknown
+//     - value: '2'
+//       newvalue: running
+//     - value: '3'
+//       newvalue: ready
+//     - value: '4'
+//       newvalue: reset
+//     - value: '5'
+//       newvalue: runningAtFullSpeed
+//     - value: '6'
+//       newvalue: 'down or off'
+//     - value: '7'
+//       newvalue: standby
+// - uuid: 3aaa451c55cd4e72ab84b65dd8310564
+//   name: 'JUNIPER-ALARM-MIB::jnxRedAlarmState'
+//   mappings:
+//     - value: '1'
+//       newvalue: other
+//     - value: '2'
+//       newvalue: 'off'
+//     - value: '3'
+//       newvalue: 'on - RedAlarm'
