@@ -83,7 +83,7 @@ local diskReadLatencyPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
+        expr: 'increase(ClickHouseProfileEvents_DiskReadElapsedMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
         legendFormat: '{{ instance }} - disk read elapsed',
         range: true,
         refId: 'A',
@@ -166,7 +166,7 @@ local diskWriteLatencyPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
+        expr: 'increase(ClickHouseProfileEvents_DiskWriteElapsedMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
         legendFormat: '{{ instance }} - disk write elapsed',
         range: true,
         refId: 'A',
@@ -249,7 +249,7 @@ local networkTransmitLatencyInboundPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
+        expr: 'increase(ClickHouseProfileEvents_NetworkReceiveElapsedMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
         legendFormat: '{{ instance }} - network receive elapsed',
         range: true,
         refId: 'A',
@@ -332,7 +332,7 @@ local networkTransmitLatencyOutboundPanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{' + matcher + '}[$__rate_interval])',
+        expr: 'increase(ClickHouseProfileEvents_NetworkSendElapsedMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
         legendFormat: '{{ instance }} - network send elapsed',
         range: true,
         refId: 'A',
@@ -415,7 +415,7 @@ local zooKeeperWaitTimePanel(matcher) =
       {
         datasource: promDatasource,
         editorMode: 'builder',
-        expr: 'increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{' + matcher + '}[$__rate_interval])',
+        expr: 'increase(ClickHouseProfileEvents_ZooKeeperWaitMicroseconds{' + matcher + '}[$__interval] offset -$__interval)',
         legendFormat: '{{ instance }} - ZooKeeper wait',
         range: true,
         refId: 'A',
