@@ -1,20 +1,122 @@
 <html>
-  <head>
-    <style>
-      .help {
-        color: grey;
-        font-size: 50%%; 
-        text-decoration-line: underline;
-        text-decoration-style: dashed;
-        vertical-align: super;
+
+<head>
+  <style>
+    *,
+    *:before,
+    *:after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 24px;
+      color: #424242;
+      line-height: 1.7;
+      background: #fff;
+    }
+
+    h1 {
+      border-bottom: 1px solid #e4e4e4;
+    }
+
+    .help {
+      color: #666;
+      text-decoration-line: underline;
+      text-decoration-style: dashed;
+      vertical-align: super;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      margin: 0;
+      padding: 0;
+    }
+
+    a {
+      display: inline-block;
+      padding: 8px;
+      color: #424242;
+      text-decoration: none;
+    }
+
+    a:hover {
+      background: #f1f5f9;
+      color: #3865AB;
+    }
+
+    table {
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #e4e4e4;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #f8f9fa;
+      font-weight: 500;
+    }
+
+    button,
+    input[type="button"] {
+      padding: 4px 12px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: #1a1c1e;
+        color: #e1e3e5;
       }
-    </style>
-    <title>%(title)s</title>
-  </head>
-  <body>
-    <h1>%(title)s</h1>
-    <ul>
-      %(links)s
-    </ul>
-  </body>
+
+      .help {
+        color: #e1e3e5;
+      }
+
+      h1 {
+        border-bottom-color: #333;
+      }
+
+      a {
+        color: #e1e3e5;
+      }
+
+      a:hover {
+        background: #2c2c2c;
+        color: #6E9FFF;
+      }
+
+      .help {
+        color: #999;
+      }
+
+      th,
+      td {
+        border-color: #333;
+      }
+
+      th {
+        background: #2c2c2c;
+      }
+    }
+  </style>
+  <title>%(title)s</title>
+</head>
+
+<body>
+  <h1>%(title)s</h1>
+  <ul>
+    %(links)s
+  </ul>
+</body>
+
 </html>
