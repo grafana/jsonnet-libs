@@ -6,6 +6,152 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     local groupLabel = xtd.array.slice(this.config.groupLabels, -1)[0],
     groups+: [
       {
+        name: this.config.uid + '-fc-snmp-alerts',
+        rules:
+          [
+            {
+              alert: 'SNMPInterfaceFCerrors',
+              expr: |||
+                      (%s) > 0
+                    |||
+                    % [
+                      this.signals.fiber.fcIfTxWaitCount.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Too many packets with errors (fcIfTxWaitCount) on the FC network interface.',
+                description: |||
+                  Too many packets with errors (fcIfTxWaitCount) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                ||| % [instanceLabel],
+              },
+              'for': '15m',
+              keep_firing_for: '3m',
+            },
+            {
+              alert: 'SNMPInterfaceFCerrors',
+              expr: |||
+                      (%s) > 0
+                    |||
+                    % [
+                      this.signals.fiber.fcIfFramesDiscard.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Too many packets with errors (fcIfFramesDiscard) on the FC network interface.',
+                description: |||
+                  Too many packets with errors (fcIfFramesDiscard) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                ||| % [instanceLabel],
+              },
+              'for': '15m',
+              keep_firing_for: '3m',
+            },
+            {
+              alert: 'SNMPInterfaceFCerrors',
+              expr: |||
+                      (%s) > 0
+                    |||
+                    % [
+                      this.signals.fiber.fcIfTxWtAvgBBCreditTransitionToZero.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Too many packets with errors (fcIfTxWtAvgBBCreditTransitionToZero) on the FC network interface.',
+                description: |||
+                  Too many packets with errors (fcIfTxWtAvgBBCreditTransitionToZero) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                ||| % [instanceLabel],
+              },
+              'for': '15m',
+              keep_firing_for: '3m',
+            },
+            {
+              alert: 'SNMPInterfaceFCerrors',
+              expr: |||
+                      (%s) > 0
+                    |||
+                    % [
+                      this.signals.fiber.fcHCIfBBCreditTransistionFromZero.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Too many packets with errors (fcHCIfBBCreditTransistionFromZero) on the FC network interface.',
+                description: |||
+                  Too many packets with errors (fcHCIfBBCreditTransistionFromZero) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                ||| % [instanceLabel],
+              },
+              'for': '15m',
+              keep_firing_for: '3m',
+            },
+            {
+              alert: 'SNMPInterfaceFCerrors',
+              expr: |||
+                      (%s) > 0
+                    |||
+                    % [
+                      this.signals.fiber.fcHCIfBBCreditTransistionToZero.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Too many packets with errors (fcHCIfBBCreditTransistionToZero) on the FC network interface.',
+                description: |||
+                  Too many packets with errors (fcHCIfBBCreditTransistionToZero) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                ||| % [instanceLabel],
+              },
+              'for': '15m',
+              keep_firing_for: '3m',
+            },
+            {
+              alert: 'SNMPInterfaceFCerrors',
+              expr: |||
+                      (%s) > 0
+                    |||
+                    % [
+                      this.signals.fiber.fcIfInvalidCrcs.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Too many packets with errors (fcIfInvalidCrcs) on the FC network interface.',
+                description: |||
+                  Too many packets with errors (fcIfInvalidCrcs) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                ||| % [instanceLabel],
+              },
+              'for': '15m',
+              keep_firing_for: '3m',
+            },
+            {
+              alert: 'SNMPInterfaceFCerrors',
+              expr: |||
+                      (%s) > 0
+                    |||
+                    % [
+                      this.signals.fiber.fcIfInvalidTxWords.asRuleExpression(),
+                    ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'Too many packets with errors (fcIfInvalidTxWords) on the FC network interface.',
+                description: |||
+                  Too many packets with errors (fcIfInvalidTxWords) on {{ $labels.%s }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+                ||| % [instanceLabel],
+              },
+              'for': '15m',
+              keep_firing_for: '3m',
+            },
+          ],
+      },
+      {
         name: this.config.uid + '-snmp-alerts',
         rules:
           [
@@ -23,6 +169,22 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               annotations: {
                 summary: 'SNMP node has rebooted.',
                 description: 'SNMP node {{ $labels.%(instanceLabel)s }} has rebooted {{ $value | humanize }} seconds ago.'
+                             % this.config { instanceLabel: instanceLabel },
+              },
+            },
+            {
+              alert: 'SNMPFRUComponentProblem',
+              expr: |||
+                (%s) == 1
+              ||| % [
+                this.signals.system.fruOperStatus.withFilteringSelectorMixin('cefcFRUPowerOperStatus!="on"').asRuleExpression(),
+              ],
+              labels: {
+                severity: 'warning',
+              },
+              annotations: {
+                summary: 'SNMP FRU component is not on.',
+                description: 'SNMP field replaceable unit is in {{ $labels.cefcFRUPowerOperStatus }} status on {{ $labels.%(instanceLabel)s }}.'
                              % this.config { instanceLabel: instanceLabel },
               },
             },
@@ -215,6 +377,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             else []
           ),
       },
+
     ],
   },
 }
