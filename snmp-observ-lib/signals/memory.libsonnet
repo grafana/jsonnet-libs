@@ -12,11 +12,10 @@ function(this)
       arista_sw: self.generic,
       brocade_fc: 'swMemUsage',
       brocade_foundry: 'snAgGblDynMemUtil',
-      cisco: 'cpmCPUMemoryUsed',
+      cisco: 'ciscoMemoryPoolUsed',
       dell_network: 'dellNetCpuUtilMemUsage',
       dlink_des: 'agentDRAMutilization',
       extreme: 'extremeMemoryMonitorSystemTotal',
-      eltex: 'eltexProcessMemoryTotal',
       eltex_mes: 'issSwitchCurrentRAMUsage',
       f5_bigip: 'sysGlobalTmmStatMemoryUsed',
       fortigate: self.generic,
@@ -51,13 +50,15 @@ function(this)
           cisco: {
             expr: |||
               # cisco
-              cpmCPUMemoryUsed{%(queriesSelector)s}
+              # ciscoMemoryPoolType="1" - Processor
+              ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s}
               /
-              (cpmCPUMemoryUsed{%(queriesSelector)s} + cpmCPUMemoryFree{%(queriesSelector)s}) * 100
+              (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s} + ciscoMemoryPoolFree{ciscoMemoryPoolType="1", %(queriesSelector)s}) * 100
             |||,
+            // aggKeepLabels: ['ciscoMemoryPoolName'],
           },
           dell_network: {
-            expr: 'chStackUnitMemUsageUtil{%(queriesSelector)s}',
+            expr: 'dellNetCpuUtilMemUsage{%(queriesSelector)s}',
           },
           dlink_des: {
             expr: 'agentDRAMutilization{%(queriesSelector)s}',
@@ -65,12 +66,6 @@ function(this)
           extreme: {
             expr: |||
               (extremeMemoryMonitorSystemTotal{%(queriesSelector)s}-extremeMemoryMonitorSystemFree{%(queriesSelector)s})/extremeMemoryMonitorSystemTotal{%(queriesSelector)s}*100
-            |||,
-          },
-          eltex: {
-            expr: |||
-              # eltex
-              (eltexProcessMemoryTotal{%(queriesSelector)s}-eltexProcessMemoryFree{%(queriesSelector)s})/eltexProcessMemoryTotal{%(queriesSelector)s}*100
             |||,
           },
           eltex_mes: {
@@ -101,7 +96,7 @@ function(this)
           },
           juniper: {
             expr: 'jnxOperatingBuffer{jnxOperatingContentsIndex="9", %(queriesSelector)s}',
-            aggKeepLabels: ['jnxOperatingDescr'],
+            // aggKeepLabels: ['jnxOperatingDescr'],
           },
           mikrotik: {
             expr: |||

@@ -9,5 +9,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       signals.system.sysName.asStat(),
     version:
       signals.system.version.asStat(),
+    fruOperStatus:
+      signals.system.fruOperStatus.asTable(format='table')
+      + {
+        options+: {
+          sortBy: [
+            {
+              displayName: 'EntPhysicalName',
+              desc: true,
+            },
+          ],
+        },
+      },
   },
 }

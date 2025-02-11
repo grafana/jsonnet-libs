@@ -16,7 +16,6 @@ function(this)
       dell_network: self.generic,
       dlink_des: self.generic,
       extreme: self.generic,
-      eltex: self.generic,
       eltex_mes: self.generic,
       f5_bigip: self.generic,
       fortigate: self.generic,
@@ -51,7 +50,6 @@ function(this)
           dell_network: self.generic,
           dlink_des: self.generic,
           extreme: self.generic,
-          eltex: self.generic,
           eltex_mes: self.generic,
           f5_bigip: self.generic,
           fortigate: self.generic,
@@ -84,7 +82,6 @@ function(this)
           dell_network: self.generic,
           dlink_des: self.generic,
           extreme: self.generic,
-          eltex: self.generic,
           eltex_mes: self.generic,
           f5_bigip: self.generic,
           fortigate: self.generic,
@@ -117,7 +114,6 @@ function(this)
           dell_network: self.generic,
           dlink_des: self.generic,
           extreme: self.generic,
-          eltex: self.generic,
           eltex_mes: self.generic,
           f5_bigip: self.generic,
           fortigate: self.generic,
@@ -130,6 +126,125 @@ function(this)
           tplink: self.generic,
           ubiquiti_airos: self.generic,
         },
+      },
+      fruOperStatus: {
+        name: 'FRU status',
+        nameShort: 'FRU status',
+        description: 'Field replaceable unit status',
+        type: 'info',
+        optional: true,
+        sources: {
+          cisco: {
+            expr: 'cefcFRUPowerOperStatus{%(queriesSelector)s}',
+            aggKeepLabels: ['entPhysicalName'],
+            infoLabel: 'cefcFRUPowerOperStatus',
+            exprWrappers: [
+              ['(', ')!=0'],
+            ],
+            // valueMappings: [
+            //   {
+            //     options: {
+            //       '1': {
+            //         color: 'orange',
+            //         index: 1,
+            //         text: 'offEnvOther',
+            //       },
+            //       '2': {
+            //         color: 'green',
+            //         index: 0,
+            //         text: 'on',
+            //       },
+            //       '3': {
+            //         color: 'orange',
+            //         index: 2,
+            //         text: 'offAdmin',
+            //       },
+            //       '4': {
+            //         color: 'orange',
+            //         index: 4,
+            //         text: 'offEnvPower',
+            //       },
+            //       '5': {
+            //         color: 'orange',
+            //         index: 5,
+            //         text: 'offEnvFan',
+            //       },
+            //       '6': {
+            //         color: 'red',
+            //         index: 6,
+            //         text: 'offEnvTemp',
+            //       },
+            //       '7': {
+            //         color: 'red',
+            //         index: 7,
+            //         text: 'offEnvFan',
+            //       },
+            //       '8': {
+            //         color: 'red',
+            //         index: 8,
+            //         text: 'failed',
+            //       },
+            //       '9': {
+            //         color: 'red',
+            //         index: 9,
+            //         text: 'onButFanFail',
+            //       },
+            //       '10': {
+            //         color: 'red',
+            //         index: 10,
+            //         text: 'offCooling',
+            //       },
+            //       '11': {
+            //         color: 'red',
+            //         index: 11,
+            //         text: 'offConnectorRating',
+            //       },
+            //       '12': {
+            //         color: 'yellow',
+            //         index: 12,
+            //         text: 'onButInlinePowerFail',
+            //       },
+            //     },
+            //     type: 'value',
+            //   },
+            // ],
+            // offEnvOther(1)   FRU is powered off because of a problem not
+            //                          listed below.
+
+            //         on(2):           FRU is powered on.
+
+            //         offAdmin(3):     Administratively off.
+
+            //         offDenied(4):    FRU is powered off because available
+            //                          system power is insufficient.
+
+            //         offEnvPower(5):  FRU is powered off because of power problem in
+            //                          the FRU.  for example, the FRU's power
+            //                          translation (DC-DC converter) or distribution
+            //                          failed.
+
+            //         offEnvTemp(6):   FRU is powered off because of temperature
+            //                          problem.
+
+            //         offEnvFan(7):    FRU is powered off because of fan problems.
+
+            //         failed(8):       FRU is in failed state.
+
+            //         onButFanFail(9): FRU is on, but fan has failed.
+
+            //         offCooling(10):  FRU is powered off because of the system's
+            //                          insufficient cooling capacity.
+
+            //         offConnectorRating(11): FRU is powered off because of the
+            //                                 system's connector rating exceeded.
+
+            //         onButInlinePowerFail(12): The FRU on, but no inline power
+            //                                   is being delivered as the
+            //                                   data/inline power component of the
+            //                                   FRU has failed."
+          },
+        },
+
       },
     },
   }

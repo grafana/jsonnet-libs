@@ -23,7 +23,6 @@ function(this, level='interface')
       dell_network: self.generic,
       dlink_des: self.generic,
       extreme: self.generic,
-      eltex: self.generic,
       eltex_mes: self.generic,
       f5_bigip: self.generic,
       fortigate: self.generic,
@@ -61,7 +60,6 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -96,7 +94,6 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -131,7 +128,6 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -166,7 +162,6 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -202,7 +197,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -237,7 +232,6 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -273,7 +267,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -310,7 +304,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -347,7 +341,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -383,7 +377,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -419,7 +413,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -455,7 +449,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -491,7 +485,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -581,7 +575,7 @@ function(this, level='interface')
             dell_network: self.generic,
             dlink_des: self.generic,
             extreme: self.generic,
-            eltex: self.generic,
+
             eltex_mes: self.generic,
             f5_bigip: self.generic,
             fortigate: self.generic,
@@ -646,7 +640,7 @@ function(this, level='interface')
                 dell_network: self.generic,
                 dlink_des: self.generic,
                 extreme: self.generic,
-                eltex: self.generic,
+
                 eltex_mes: self.generic,
                 f5_bigip: self.generic,
                 fortigate: self.generic,
@@ -697,7 +691,7 @@ function(this, level='interface')
                 dell_network: self.generic,
                 dlink_des: self.generic,
                 extreme: self.generic,
-                eltex: self.generic,
+
                 eltex_mes: self.generic,
                 f5_bigip: self.generic,
                 fortigate: self.generic,
@@ -731,7 +725,7 @@ function(this, level='interface')
                       {
                         options: {
                           '1': {
-                            color: 'true',
+                            color: 'green',
                             index: 1,
                             text: 'present',
                           },
@@ -752,7 +746,6 @@ function(this, level='interface')
                 dell_network: self.generic,
                 dlink_des: self.generic,
                 extreme: self.generic,
-                eltex: self.generic,
                 eltex_mes: self.generic,
                 f5_bigip: self.generic,
                 fortigate: self.generic,
@@ -791,7 +784,6 @@ function(this, level='interface')
                 dell_network: self.generic,
                 dlink_des: self.generic,
                 extreme: self.generic,
-                eltex: self.generic,
                 eltex_mes: self.generic,
                 f5_bigip: self.generic,
                 fortigate: self.generic,
@@ -828,7 +820,7 @@ function(this, level='interface')
                 dell_network: self.generic,
                 dlink_des: self.generic,
                 extreme: self.generic,
-                eltex: self.generic,
+
                 eltex_mes: self.generic,
                 f5_bigip: self.generic,
                 fortigate: self.generic,
@@ -875,7 +867,6 @@ function(this, level='interface')
                 dell_network: self.generic,
                 dlink_des: self.generic,
                 extreme: self.generic,
-                eltex: self.generic,
                 eltex_mes: self.generic,
                 f5_bigip: self.generic,
                 fortigate: self.generic,
@@ -909,7 +900,7 @@ function(this, level='interface')
                 dell_network: self.generic,
                 dlink_des: self.generic,
                 extreme: self.generic,
-                eltex: self.generic,
+
                 eltex_mes: self.generic,
                 f5_bigip: self.generic,
                 fortigate: self.generic,
@@ -944,7 +935,7 @@ function(this, level='interface')
                 dell_network: self.generic,
                 dlink_des: self.generic,
                 extreme: self.generic,
-                eltex: self.generic,
+
                 eltex_mes: self.generic,
                 f5_bigip: self.generic,
                 fortigate: self.generic,
