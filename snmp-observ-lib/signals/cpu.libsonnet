@@ -16,7 +16,6 @@ function(this)
       dell_network: 'dellNetCpuUtil1Min',
       dlink_des: 'agentCPUutilizationIn1min',
       extreme: 'extremeCpuMonitorTotalUtilization',
-      eltex: 'eltexProcessCPUMonitorValue',
       eltex_mes: 'eltMesIssCpuUtilLastMinute',
       f5_bigip: 'sysGlobalHostCpuUsageRatio',
       fortigate: 'fgSysCpuUsage',
@@ -28,7 +27,6 @@ function(this)
       qtech: 'switchCpuUsage',
       tplink: 'tpSysMonitorCpu1Minute',
       ubiquiti_airos: 'loadValue',
-
     },
     signals: {
       cpuUsage: {
@@ -51,17 +49,13 @@ function(this)
             expr: 'cpmCPUTotal1minRev{%(queriesSelector)s}',
           },
           dell_network: {
-            expr: 'chStackUnitMemUsageUtil{%(queriesSelector)s}',
+            expr: 'dellNetCpuUtil1Min{%(queriesSelector)s}',
           },
           dlink_des: {
             expr: 'agentCPUutilizationIn1min{%(queriesSelector)s}',
           },
-
           extreme: {
             expr: 'extremeCpuMonitorTotalUtilization(%(queriesSelector)s)',
-          },
-          eltex: {
-            expr: 'eltexProcessCPUMonitorValue{eltexProcessCPUMonitorInterval="60", %(queriesSelector)s}',
           },
           eltex_mes: {
             expr: 'eltMesIssCpuUtilLastMinute{%(queriesSelector)s}',
@@ -80,7 +74,7 @@ function(this)
           },
           juniper: {
             expr: 'jnxOperatingCPU{jnxOperatingContentsIndex="9", %(queriesSelector)s}',
-            aggKeepLabels: ['jnxOperatingDescr'],
+            // aggKeepLabels: ['jnxOperatingDescr'],
           },
           mikrotik: self.generic,
           netgear: {

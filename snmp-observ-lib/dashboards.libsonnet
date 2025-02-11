@@ -45,6 +45,9 @@ local g = import './g.libsonnet';
               [
                 this.grafana.rows.system,
                 this.grafana.rows.interface,
+                this.grafana.rows.fru,
+                this.grafana.rows.fiber,
+                this.grafana.rows.sensors,
               ]
             )
           ), setPanelIDs=false

@@ -12,7 +12,7 @@
 
   //increase min interval to match max SNMP polling interval used:
   minInterval: '2m',
-  metricsSource: ['generic', 'cisco', 'eltex', 'eltex_mes', 'mikrotik'],
+  metricsSource: ['generic', 'cisco', 'eltex_mes', 'mikrotik', 'juniper', 'dell_network'],
 
   //only fire alerts 'interface is down' for the following selector:
   alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN)).*"',
@@ -22,7 +22,8 @@
   // ignore buffers for now:
   memorySelector: 'hrStorageDescr!~".*(?i:(cache|buffer)).*", hrStorageType="1.3.6.1.2.1.25.2.1.2"',
   mikrotikMemorySelector: 'hrStorageDescr="main memory",hrStorageIndex="65536"',
-
+  // ignore interface sensors
+  ciscoTemperatureSelector: 'entSensorType="8", entPhysicalName!~".+(\\\\d+/\\\\d+(/\\\\d+)?).*"',
   alertMemoryUsageThresholdCritical: 90,
   alertsCPUThresholdWarning: 90,
   signals+:
@@ -32,5 +33,10 @@
       memory: (import './signals/memory.libsonnet')(this),
       interface: (import './signals/interface.libsonnet')(this, level='interface'),
       system: (import './signals/system.libsonnet')(this),
+      temperature: (import './signals/temperature.libsonnet')(this),
+      power: (import './signals/power.libsonnet')(this),
+      fans: (import './signals/fans.libsonnet')(this),
+      fiber: (import './signals/fiber.libsonnet')(this),
+
     },
 }

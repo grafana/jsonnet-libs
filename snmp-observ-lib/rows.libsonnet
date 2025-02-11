@@ -42,5 +42,34 @@ local commonlib = import 'common-lib/common/main.libsonnet';
           panels.memory.memoryUsage { gridPos+: { w: 8, h: 5 } },
         ]
       ),
+    sensors:
+      g.panel.row.new('Sensors')
+      + g.panel.row.withCollapsed(false)
+      + g.panel.row.withPanels(
+        [
+          panels.temperature.temperature { gridPos+: { w: 12, h: 8 } },
+          panels.power.dcVoltage { gridPos+: { w: 12, h: 8 } },
+          panels.power.power { gridPos+: { w: 12, h: 8 } },
+          panels.power.rxtxPower { gridPos+: { w: 12, h: 8 } },
+          panels.fans.fanSpeed { gridPos+: { w: 12, h: 8 } },
+        ]
+      ),
+    fru:
+      g.panel.row.new('FRU (Components)')
+      + g.panel.row.withCollapsed(true)
+      + g.panel.row.withPanels(
+        [
+          panels.system.fruOperStatus { gridPos+: { w: 24, h: 12 } },
+        ]
+      ),
+    fiber:
+      g.panel.row.new('Fibre channel')
+      + g.panel.row.withCollapsed(true)
+      + g.panel.row.withPanels(
+        [
+          panels.fiber.credit { gridPos+: { w: 12, h: 8 } },
+          panels.fiber.errors { gridPos+: { w: 12, h: 8 } },
+        ]
+      ),
   },
 }
