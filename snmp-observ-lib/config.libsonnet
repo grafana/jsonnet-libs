@@ -37,6 +37,18 @@
       power: (import './signals/power.libsonnet')(this),
       fans: (import './signals/fans.libsonnet')(this),
       fiber: (import './signals/fiber.libsonnet')(this),
-
+      alerts: (import './signals/alerts.libsonnet')(this),
+      logs: (import './signals/logs.libsonnet')(this),
     },
+
+  // logs lib related
+  enableLokiLogs: true,
+  logsFilteringSelector: 'job="syslog"',
+  logsGroupLabels: [],
+  logsInstanceLabels: this.instanceLabels,
+  logsExtraFilters: '',
+  extraLogLabels: ['sysname', 'syslog_app_name', 'level'],
+  logsVolumeGroupBy: 'level',
+  showLogsVolume: true,
+
 }

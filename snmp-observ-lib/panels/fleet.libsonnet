@@ -25,6 +25,12 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + signals.fleetInterface.networkInDroppedPerSec.asTableColumn(format='table')
       + signals.fleetInterface.networkOutDroppedPerSec.asTableColumn(format='table')
       + signals.fleetInterface.ifInUnknownProtos.asTableColumn(format='table')
+      + signals.alerts.alertsWarning
+        .withExprWrappersMixin(['count by (%s)(' % std.join(',', this.config.instanceLabels + this.config.groupLabels), ')'])
+        .asTableColumn(format='table')
+      + signals.alerts.alertsCritical
+        .withExprWrappersMixin(['count by (%s)(' % std.join(',', this.config.instanceLabels + this.config.groupLabels), ')'])
+        .asTableColumn(format='table')
       + {
         options+: {
           sortBy: [

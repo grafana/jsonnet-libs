@@ -8,6 +8,7 @@ function(this)
     aggLevel: 'instance',
     aggFunction: 'avg',
     legendCustomTemplate: '{{entPhysicalName}}',
+    enableLokiLogs: this.enableLokiLogs,
     discoveryMetric: {
       cisco: 'entSensorValue',
     },

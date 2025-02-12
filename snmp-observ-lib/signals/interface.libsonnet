@@ -9,6 +9,7 @@ function(this, level='interface')
     aggLevel: 'instance',
     aggFunction: 'sum',
     rangeFunction: 'irate',
+    enableLokiLogs: this.enableLokiLogs,
     aggKeepLabels: if level == 'interface' then ['ifAlias', 'ifDescr'] else [],
     local bitsWrapper = ['(', ')*8'],
     local nonZeroWrapper = ['(', ')>0'],
