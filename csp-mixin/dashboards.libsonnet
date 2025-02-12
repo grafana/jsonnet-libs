@@ -6,7 +6,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     {
       [csplib.config.uid + '-blobstorage.json']:
         local variables = csplib.signals.blobstore.getVariablesMultiChoice();
-        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Blob storage')
+        g.dashboard.new(csplib.config.dashboardNamePrefix + 'Storage')
         + g.dashboard.withUid(csplib.config.uid + '-blobstorage')
         + g.dashboard.withTags(csplib.config.dashboardTags)
         + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
@@ -95,7 +95,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
                {
                  [csplib.config.uid + '-elasticpool.json']:
                    local variables = csplib.signals.azureelasticpool.getVariablesMultiChoice();
-                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Elastic pool')
+                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Elastic pools')
                    + g.dashboard.withUid(csplib.config.uid + '-elasticpool')
                    + g.dashboard.withTags(csplib.config.dashboardTags)
                    + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
@@ -127,7 +127,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
 
                  [csplib.config.uid + '-loadbalancer.json']:
                    local variables = csplib.signals.azureloadbalancer.getVariablesMultiChoice();
-                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Load Balancing')
+                   g.dashboard.new(csplib.config.dashboardNamePrefix + 'Load Balancer')
                    + g.dashboard.withUid(csplib.config.uid + '-loadbalancer')
                    + g.dashboard.withTags(csplib.config.dashboardTags)
                    + g.dashboard.withTimezone(csplib.config.dashboardTimezone)
