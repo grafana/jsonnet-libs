@@ -2,7 +2,7 @@
 exclusions:
   target-instance-rule:
     entries:
-    - dashboard: "Azure Blob storage"
+    - dashboard: "Azure Storage"
       reason: "Using 'Bucket' as instance label"
     - dashboard: "GCP Storage"
       reason: "Using 'Bucket' as instance label"
@@ -29,7 +29,7 @@ exclusions:
       reason: "Using filtering selector with job"
   template-instance-rule:  
     entries:
-    - dashboard: "Azure Blob storage"
+    - dashboard: "Azure Storage"
       reason: "Using 'Bucket' as instance label"
     - dashboard: "GCP Storage"
       reason: "Using 'Bucket' as instance label"
