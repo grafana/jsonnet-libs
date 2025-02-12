@@ -11,7 +11,7 @@ local container = k.core.v1.container;
     user,
     host,
     port=3306,
-    image='prom/mysqld-exporter:v0.13.0',
+    image='prom/mysqld-exporter:v0.16.0',
     tlsMode='preferred',
     configMapName='%s-cfg' % [name],
   ):: {
