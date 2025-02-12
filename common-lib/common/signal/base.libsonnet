@@ -144,6 +144,19 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
             for source in this.sourceMaps
           ],
       },
+
+    withExprWrappersMixin(wrappers=[]):
+      this
+      {
+        sourceMaps:
+          [
+            source
+            {
+              exprWrappers+: [wrappers],
+            }
+            for source in this.sourceMaps
+          ],
+      },
     //Return as grafana panel target(query+legend)
     asTarget(name=signalName):
       prometheusQuery.new(
@@ -344,6 +357,12 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                     std.mapWithIndex(function(i, e) { index: i, el: e }, this.vars.aggLabels)
                 },
                 renameByName:
+                  // If 'Value' is still present, then rename value to signal name.
+                  // this is the case if only single query is used in the table.
+                  {
+                    Value: name,
+                  }
+                  +
                   {
                     [label]: utils.toSentenceCase(label)
                     for label in this.vars.aggLabels
