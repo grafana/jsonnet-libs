@@ -34,8 +34,8 @@ local container = k.core.v1.container;
       + container.withArgsMixin([
         '--collect.info_schema.innodb_metrics',
       ] + if needsConfigFile then [
-            '--config.my-cnf=/conf/config.cnf',
-          ] else [])
+        '--config.my-cnf=/conf/config.cnf',
+      ] else [])
       + container.withEnvMap(this.envMap)
     ,
 
@@ -57,19 +57,19 @@ local container = k.core.v1.container;
       k.util.serviceFor(this.deployment),
 
     configMap: if needsConfigFile then configMap.new(configMapName)
-        + configMap.withData({
-          'config.cnf': std.manifestIni({
-            sections: {
-              client: {
-                host: '${MYSQL_HOST}',
-                port: '${MYSQL_PORT}',
-                user: '${MYSQL_USER}',
-                password: '${MYSQL_PASSWORD}',
-                tls: '${MYSQL_TLS_MODE}',
-              },
-            },
-          }),
-        }) else {},
+                                       + configMap.withData({
+                                         'config.cnf': std.manifestIni({
+                                           sections: {
+                                             client: {
+                                               host: '${MYSQL_HOST}',
+                                               port: '${MYSQL_PORT}',
+                                               user: '${MYSQL_USER}',
+                                               password: '${MYSQL_PASSWORD}',
+                                               tls: '${MYSQL_TLS_MODE}',
+                                             },
+                                           },
+                                         }),
+                                       }) else {},
   },
 
   withPassword(password):: {
