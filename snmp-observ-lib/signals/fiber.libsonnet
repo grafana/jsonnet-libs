@@ -9,6 +9,7 @@ function(this, level='interface')
     aggFunction: 'sum',
     rangeFunction: 'irate',
     aggKeepLabels: ['ifAlias', 'ifDescr'],
+    enableLokiLogs: this.enableLokiLogs,
     discoveryMetric: {
       cisco: 'fcIfTxWaitCount',
     },

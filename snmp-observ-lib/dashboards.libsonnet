@@ -1,4 +1,5 @@
 local g = import './g.libsonnet';
+local logslib = import 'github.com/grafana/jsonnet-libs/logs-lib/logs/main.libsonnet';
 {
   local root = self,
   new(this):
@@ -6,7 +7,6 @@ local g = import './g.libsonnet';
     local links = this.grafana.links;
     local tags = this.config.dashboardTags;
     local uid = g.util.string.slugify(this.config.uid);
-    local vars = this.grafana.variables;
     local annotations = this.grafana.annotations;
     local refresh = this.config.dashboardRefresh;
     local period = this.config.dashboardPeriod;
@@ -66,7 +66,44 @@ local g = import './g.libsonnet';
           refresh,
           period
         ),
-    },
+
+    }
+    + (if this.config.enableLokiLogs then
+         {
+           'snmp-logs.json':
+             logslib.new(
+               prefix + 'SNMP logs',
+               datasourceName='loki_datasource',
+               datasourceRegex='',
+               filterSelector=this.config.logsFilteringSelector,
+               labels=this.config.logsGroupLabels + this.config.logsInstanceLabels + this.config.extraLogLabels,
+               formatParser=null,
+               showLogsVolume=this.config.showLogsVolume,
+               logsVolumeGroupBy=this.config.logsVolumeGroupBy,
+               extraFilters=this.config.logsExtraFilters,
+               adHocEnabled=true,
+               adHocLabels=[],
+             )
+             {
+
+               dashboards+:
+                 {
+                   logs+:
+                     // reference to self, already generated variables, to keep them, but apply other common data in applyCommon. Skip annotations
+                     root.applyCommon(super.logs.templating.list, uid=uid + '-logs', tags=tags, links=links, annotations={}, timezone=timezone, refresh=refresh, period=period),
+                 },
+               panels+:
+                 {
+                   // modify log panel
+                   logs+:
+                     g.panel.logs.options.withEnableLogDetails(true)
+                     + g.panel.logs.options.withShowTime(true)
+                     + g.panel.logs.options.withWrapLogMessage(false),
+                 },
+             }.dashboards.logs,
+         } else {}),
+
+
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(uid)

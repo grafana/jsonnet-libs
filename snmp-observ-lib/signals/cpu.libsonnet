@@ -7,6 +7,7 @@ function(this)
     instanceLabels: this.instanceLabels,
     aggLevel: 'instance',
     aggFunction: 'avg',
+    enableLokiLogs: this.enableLokiLogs,
     discoveryMetric: {
       generic: 'hrProcessorLoad',
       arista_sw: self.generic,

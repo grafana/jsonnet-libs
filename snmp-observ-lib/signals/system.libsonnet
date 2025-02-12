@@ -7,6 +7,7 @@ function(this)
     instanceLabels: this.instanceLabels,
     aggLevel: 'instance',
     aggFunction: 'sum',
+    enableLokiLogs: this.enableLokiLogs,
     discoveryMetric: {
       generic: 'sysUpTime',
       arista_sw: self.generic,

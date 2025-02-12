@@ -12,8 +12,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
     grafana: {
       panels: (import './panels/main.libsonnet').new(this.signals, this),
       rows: (import './rows.libsonnet').new(this.grafana.panels, type=this.config.metricsSource),
-      annotations: {},
-      // common links here
+      annotations: (import './annotations.libsonnet').new(this),
       links: {
         local link = g.dashboard.link,
         backToFleet:
