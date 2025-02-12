@@ -27,7 +27,7 @@ local m1 = signal.init(
 {
 
   asTarget: {
-    local raw = m1.withExprWrappersMixin(["sum(",")"]).asTarget(),
+    local raw = m1.withExprWrappersMixin(['sum(', ')']).asTarget(),
     testResult: test.suite({
       testLegend: {
         actual: raw.legendFormat,
