@@ -1,3 +1,9 @@
+# 0.3.0
+
+- [Signal] add new signal `log`. add enableLokiLogs=true|false to signals init
+- [Signal] `withExprWrappersMixin(offset)` - wrap signal expression into additional function on top of existing wrappers.
+
+
 # 0.2.0
 
 - [Signal] `withOffset(offset)` - add offset modifier to the expression.
