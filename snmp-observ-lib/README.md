@@ -34,3 +34,7 @@ The library supports multiple metrics sources (`metricsSource`).
 jb init
 jb install https://github.com/grafana/jsonnet-libs/snmp-observ-lib
 ```
+
+## Usage
+
+For detailed usage examples see [helloworld-observ-lib README](../helloworld-observ-lib/README.md).
