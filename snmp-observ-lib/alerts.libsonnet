@@ -27,7 +27,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '15m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceFCerrors',
@@ -47,7 +47,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '15m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceFCerrors',
@@ -67,7 +67,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '15m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceFCerrors',
@@ -87,7 +87,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '15m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceFCerrors',
@@ -107,7 +107,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '15m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceFCerrors',
@@ -127,7 +127,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '15m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceFCerrors',
@@ -147,7 +147,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '15m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
           ],
       },
@@ -250,7 +250,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel, this.config.alertInterfaceDownSelector],
               },
               'for': '5m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceDrops',
@@ -273,7 +273,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '30m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceErrors',
@@ -296,7 +296,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '15m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPInterfaceIsFlapping',
@@ -316,7 +316,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % [instanceLabel],
               },
               'for': '0',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
           ],
       },
@@ -337,7 +337,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % instanceLabel,
               },
               'for': '10m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
             {
               alert: 'SNMPExporterSlowScrape',
@@ -352,7 +352,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                 ||| % instanceLabel,
               },
               'for': '10m',
-              keep_firing_for: '3m',
+              keep_firing_for: '5m',
             },
           ]
           + (
