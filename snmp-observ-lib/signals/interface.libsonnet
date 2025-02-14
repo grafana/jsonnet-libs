@@ -108,6 +108,43 @@ function(this, level='interface')
             ubiquiti_airos: self.generic,
           },
         },
+        networkAllErrorsPerSec: {
+          name: 'Network interface errors and drops',
+          nameShort: 'errors and drops',
+          type: 'raw',
+          unit: 'pps',
+          sources: {
+            generic:
+              {
+                expr: |||
+                  %(aggFunction)s by (%(agg)s) (irate(ifOutErrors{%(queriesSelector)s}[%(interval)s])) +
+                  %(aggFunction)s by (%(agg)s) (irate(ifInErrors{%(queriesSelector)s}[%(interval)s])) +
+                  %(aggFunction)s by (%(agg)s) (irate(ifInDiscards{%(queriesSelector)s}[%(interval)s])) +
+                  %(aggFunction)s by (%(agg)s) (irate(ifOutDiscards{%(queriesSelector)s}[%(interval)s]))+ 
+                  %(aggFunction)s by (%(agg)s) (irate(ifInUnknownProtos{%(queriesSelector)s}[%(interval)s]))
+                |||,
+              },
+            arista_sw: self.generic,
+            brocade_fc: self.generic,
+            brocade_foundry: self.generic,
+            cisco: self.generic,
+            dell_network: self.generic,
+            dlink_des: self.generic,
+            extreme: self.generic,
+            eltex_mes: self.generic,
+            f5_bigip: self.generic,
+            fortigate: self.generic,
+            hpe: self.generic,
+            huawei: self.generic,
+            juniper: self.generic,
+            mikrotik: self.generic,
+            netgear: self.generic,
+            qtech: self.generic,
+            tplink: self.generic,
+            ubiquiti_airos: self.generic,
+          },
+
+        },
         networkOutErrorsPerSec: {
           name: 'Network interface errors out',
           nameShort: 'errors out',
