@@ -250,7 +250,6 @@ function(this)
     },
   }
 
-
 // - uuid: 64128e7f2adf44988b0ca3edd76cba61
 //   name: 'JUNIPER-ALARM-MIB::jnxOperatingState'
 //   mappings:
