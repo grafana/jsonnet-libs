@@ -28,13 +28,202 @@ The library supports multiple metrics sources (`metricsSource`).
 |tplink | TP-LINK | TPLINK-SYSINFO-MIB,HOST-RESOURCES-MIB,SNMPv2-MIB,TPLINK-SYSMONITOR-MIB,IF-MIB | T2600G-28TS | https://www.tp-link.com/en/support/download/t2600g-28ts/#MIBs_Files https://www.tp-link.com/ru/support/faq/1330/ |system,if_mib|
 |ubiquiti_airos | Ubiquiti AirOS | FROGFOOT-RESOURCES-MIB,HOST-RESOURCES-MIB,SNMPv2-MIB,IEEE802dot11-MIB,IF-MIB | NanoStation M5, UAP-LR |  |system,if_mib,ubiquiti_airos|
 
-## Import
+
+## Usage
+
+For detailed usage examples see [helloworld-observ-lib README](../helloworld-observ-lib/README.md).
+
+### Import as a library
+
+Import into another library or mixin:
 
 ```sh
 jb init
 jb install https://github.com/grafana/jsonnet-libs/snmp-observ-lib
 ```
 
-## Usage
+Add jsonnet file:
+```
+local snmplib = import 'snmp-observ-lib/main.libsonnet';
+local snmp =
+  snmplib.new()
+  + snmplib.withConfigMixin(
+    {
+        //override default configs:
+        filteringSelector: 'job!=""',
+        groupLabels: ['zone'],
+        instanceLabels: ['target'],
+        uid: 'snmp-sample',
+        dashboardNamePrefix: 'Network',
+        dashboardTags: ['networking'],
+        metricsSource: ['juniper','mikrotik'],
+        enableLokiLogs: false,
+    }
+  );
+snmp.asMonitoringMixin()
+```
 
-For detailed usage examples see [helloworld-observ-lib README](../helloworld-observ-lib/README.md).
+
+### As monitoring-mixin
+
+You can quickly generate dashboards and alerts by using monitoring-mixin mixin.libsonnet:
+
+- Adjust config.libsonnet to your needs.
+- Run
+```
+make dashboards_out
+make prometheus_alerts.yaml
+```
+
+
+### Logs support
+
+Note: Logs support is enabled by default. To opt-out, set `enableLokiLogs: false` in the config before generating dashboards from this library.
+
+This SNMP observability library can show syslog messages collected by alloy/rsyslog agents and stored in Grafana Loki.
+
+In order to get syslog messages you need to do the following (example for cisco syslog):
+
+1. Setup rsyslog agent with the following rsyslog.conf:
+
+```
+module(load="imudp")
+#https://www.rsyslog.com/doc/master/configuration/modules/pmciscoios.html
+module(load="pmciscoios")
+# Pick your port to taste
+input(type="imudp" port="30514" ruleset="withOrigin")
+timezone(id="<yourtimezone>" offset="00:00")
+# instead of -x
+global(net.enableDNS="off")
+
+$template raw,"%msg:2:2048%\n"
+
+ruleset(name="common") {
+       # Forward everything
+       if ($fromhost-ip != "127.0.0.1" ) then action(type="omfwd"
+              protocol=tcp target=localhost port=30514
+              Template="RSYSLOG_SyslogProtocol23Format"
+              TCP_Framing="octet-counted" KeepAlive="on"
+              action.resumeRetryCount="-1"
+              queue.type="linkedlist" queue.size="50000")
+       *.*    /dev/stdout; raw
+}
+
+ruleset(name="withoutOrigin" parser="rsyslog.ciscoios") {
+    /* this ruleset uses the default parser which was
+     * created during module load
+     */
+    call common
+}
+
+parser(name="custom.ciscoios.withOrigin" type="pmciscoios"
+       present.origin="on")
+ruleset(name="withOrigin" parser="custom.ciscoios.withOrigin") {
+    /* this ruleset uses the parser defined immediately above */
+    call common
+}
+```
+
+2. Setup alloy agent with the following snippet (adjust to your setup):
+
+```
+// LOGS
+loki.write "default" {
+    endpoint {
+        url = "loki:3100"
+    }
+}
+
+loki.source.api "default" {
+    http {
+        listen_address = "0.0.0.0"
+        listen_port = 3500
+    }
+    forward_to = [
+        loki.process.limit.receiver,
+    ]
+}
+loki.process "limit" {
+    stage.limit {
+        rate  = 10000
+        burst = 20000
+        drop  = drop
+        by_label_name = "hostname"
+    }
+    forward_to    = [
+        loki.write.default.receiver,
+    ]
+}
+
+
+// SYSLOG specific:
+loki.source.syslog "default" {
+  listener {
+    address  = "0.0.0.0:30514"
+    protocol = "tcp"
+    use_incoming_timestamp = true
+    labels   = { job = "syslog" }
+  }
+
+  forward_to = [loki.process.syslog.receiver]
+  relabel_rules = loki.relabel.syslog.rules
+}
+
+loki.relabel "syslog" {
+  forward_to = []
+
+  rule {
+    source_labels = ["__syslog_message_hostname"]
+    target_label         = "sysname"
+  }
+  rule {
+    source_labels = ["__syslog_message_hostname"]
+    target_label         = "instance"
+  }
+  rule {
+    source_labels = ["__syslog_message_app_name"]
+    target_label         = "syslog_app_name"
+  }
+  rule {
+    source_labels = ["__syslog_message_severity"]
+    target_label         = "level"
+  }
+  rule {
+    source_labels = ["__syslog_message_facility"]
+    target_label         = "facility"
+  }
+  rule {
+    source_labels = ["__syslog_message_msg_id"]
+    target_label         = "syslog_msg_id"
+  }
+}
+//cisco_rfc3164_logs
+loki.process "syslog" {
+    stage.match {
+        // match only cisco unparsed logs like https://regex101.com/r/v0MyiB/6
+        // from ASA or NX-OS
+        selector = `{instance!=""} |~ "<\\d+>.+%.+"`
+        stage.regex {
+          expression = `<\d+?>((?P<sysname>[a-zA-Z0-9\-\.]+):)?(?P<date_and_other>.+): (?P<appname>%.+?): (?P<msg>.+)`
+        }
+        stage.labels {
+          values = {
+              sysname = "",
+              syslog_app_name = "appname",
+          }
+        }
+        stage.output {
+          source   = "msg"
+        }
+    }
+
+    forward_to    = [loki.process.limit.receiver]
+}
+
+```
+
+3. Setup syslog at the device side according to vendor docs
+
+For cisco devices, set origin option: `logging origin-id hostname`.
+
+4. Get syslog messages on the separate dashboard and as dashboard annotations for critical events collected.

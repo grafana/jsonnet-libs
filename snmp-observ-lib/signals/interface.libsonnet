@@ -357,7 +357,6 @@ function(this, level='interface')
           },
         },
 
-
         networkOutUnicastPacketsPerSec: {
           name: 'Network interface unicast packets out',
           nameShort: 'unicast out',
@@ -832,7 +831,6 @@ function(this, level='interface')
                 ubiquiti_airos: self.generic,
               },
             },
-
 
             ifType_info: {
               name: 'Interface type',

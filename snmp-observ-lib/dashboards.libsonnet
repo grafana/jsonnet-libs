@@ -103,7 +103,6 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
              }.dashboards.logs,
          } else {}),
 
-
   applyCommon(vars, uid, tags, links, annotations, timezone, refresh, period):
     g.dashboard.withTags(tags)
     + g.dashboard.withUid(uid)
