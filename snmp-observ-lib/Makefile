@@ -22,7 +22,7 @@ lint: build
 		done
 	mixtool lint mixin.libsonnet
 
-dashboards_out: mixin.libsonnet config.libsonnet $(wildcard panels/*) $(wildcard signals/*) dashboards.libsonnet annotations.libsonnet
+dashboards_out: mixin.libsonnet main.libsonnet config.libsonnet $(wildcard panels/*) $(wildcard signals/*) dashboards.libsonnet annotations.libsonnet
 	@mkdir -p dashboards_out
 	mixtool generate dashboards mixin.libsonnet -d dashboards_out
 
