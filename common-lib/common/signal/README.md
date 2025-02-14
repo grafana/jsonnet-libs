@@ -82,6 +82,7 @@ Init level:
 |rangeFunction| Rate function to use for counter metrics.|rate,irate,delta,idelta,increase|`rate`|`increase`|
 |varAdHocEnabled| Attach ad hoc labels to variables generated. |`true`,`false`|`false`|`false`|
 |varAdHocLabels| Limit ad hoc to the specific labels |*|`["environment"]`|`[]`|
+|enableLokiLogs| Add additional loki datasource to variables generation |`true`,`false`|`true`|`false`|
 
 Signal's level:
 
