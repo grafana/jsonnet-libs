@@ -4,7 +4,7 @@
   groupLabels: ['job'],
   instanceLabels: ['instance'],
   uid: 'snmp',
-  dashboardNamePrefix: '',
+  dashboardNamePrefix: 'SNMP',
   dashboardTags: ['snmp'],
   dashboardPeriod: 'now-6h',
   dashboardRefresh: '5m',
