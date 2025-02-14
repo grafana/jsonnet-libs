@@ -32,7 +32,7 @@ base {
       common(type)::
         // override panel-wide --mixed-- datasource
         lokiQuery.withDatasource('${%s}' % datasource)
-        + g.panel.timeSeries.panelOptions.withDescription(description),
+        + g.panel.logs.panelOptions.withDescription(description),
 
 
       //Return as grafana panel target(query+legend)
