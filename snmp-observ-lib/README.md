@@ -34,9 +34,3 @@ The library supports multiple metrics sources (`metricsSource`).
 jb init
 jb install https://github.com/grafana/jsonnet-libs/snmp-observ-lib
 ```
-
-## Example
-
-
-## Links
-https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.2.2.1.3
