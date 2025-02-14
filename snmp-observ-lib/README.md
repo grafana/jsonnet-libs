@@ -2,7 +2,7 @@
 
 This lib can be used to generate dashboards, rows, panels for SNMP devices.
 
-The library supports multiple metrics sources (`metricsSource`).
+The library supports multiple metrics sources that corresponds to different network vendors.
 
 ### Supported sources
 
@@ -56,6 +56,7 @@ local snmp =
         uid: 'snmp-sample',
         dashboardNamePrefix: 'Network',
         dashboardTags: ['networking'],
+        // pick vendors you have:
         metricsSource: ['juniper','mikrotik'],
         enableLokiLogs: false,
     }
@@ -68,7 +69,7 @@ snmp.asMonitoringMixin()
 
 You can quickly generate dashboards and alerts by using monitoring-mixin mixin.libsonnet:
 
-- Adjust config.libsonnet to your needs.
+- Adjust config.libsonnet to your needs. For example, pick metricSources that correspond to network vendors you use on your network.
 - Run
 ```
 make dashboards_out
@@ -227,3 +228,13 @@ loki.process "syslog" {
 For cisco devices, set origin option: `logging origin-id hostname`.
 
 4. Get syslog messages on the separate dashboard and as dashboard annotations for critical events collected.
+
+## Examples
+SNMP fleet:
+![fleet](snmp_fleetpng)
+
+SNMP overview:
+![overview](snmp_overview.png)
+
+SNMP logs:
+![logs](snmp_logs.png)
