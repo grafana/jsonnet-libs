@@ -18,7 +18,6 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
   ): {
 
     local prometheusQuery = g.query.prometheus,
-    local lokiQuery = g.query.loki,
     local this = self,
     local hasValueMaps = std.length(this.getValueMappings(this.sourceMaps)) > 0,
     local legendCustomTemplate = sourceMaps[0].legendCustomTemplate,
