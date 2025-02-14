@@ -12,7 +12,8 @@
 
   //increase min interval to match max SNMP polling interval used:
   minInterval: '2m',
-  metricsSource: ['generic', 'cisco', 'eltex_mes', 'mikrotik', 'juniper', 'dell_network'],
+  // pick vendors you have. See README for full list.
+  metricsSource: ['generic', 'cisco', 'mikrotik', 'juniper'],
 
   //only fire alerts 'interface is down' for the following selector:
   alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN)).*"',
