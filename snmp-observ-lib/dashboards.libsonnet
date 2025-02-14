@@ -15,7 +15,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
     local stat = g.panel.stat;
     {
       'snmp-fleet.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + 'SNMP fleet overview')
+        g.dashboard.new(prefix + ' fleet overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
@@ -38,7 +38,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
           period
         ),
       'snmp-overview.json':
-        g.dashboard.new(this.config.dashboardNamePrefix + 'SNMP overview')
+        g.dashboard.new(prefix + ' overview')
         + g.dashboard.withPanels(
           g.util.panel.resolveCollapsedFlagOnRows(
             g.util.grid.wrapPanels(
@@ -72,7 +72,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
          {
            'snmp-logs.json':
              logslib.new(
-               prefix + 'SNMP logs',
+               prefix + ' logs',
                datasourceName='loki_datasource',
                datasourceRegex='',
                filterSelector=this.config.logsFilteringSelector,
