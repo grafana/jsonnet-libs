@@ -44,7 +44,7 @@ function(this)
         sources: {
           generic: {
             expr: |||
-              count by (%(agg)s,alertname) (max_over_time(ALERTS{alertstate="firing", severity="critical", %(queriesSelector)s}[1m]))
+              count by (%(agg)s,alertname) (max_over_time(ALERTS{alertstate="firing", severity="critical", %(queriesSelector)s}[%(interval)s]))
                 * on(%(agg)s) group_left group by (%(agg)s) (sysUpTime{%(queriesSelector)s})
             |||,
           },
@@ -77,7 +77,7 @@ function(this)
         sources: {
           generic: {
             expr: |||
-              count by (%(agg)s,alertname) (max_over_time(ALERTS{alertstate="firing", severity="warning", %(queriesSelector)s}[1m]))
+              count by (%(agg)s,alertname) (max_over_time(ALERTS{alertstate="firing", severity="warning", %(queriesSelector)s}[%(interval)s]))
                 * on(%(agg)s) group_left group by (%(agg)s) (sysUpTime{%(queriesSelector)s})
             |||,
           },
