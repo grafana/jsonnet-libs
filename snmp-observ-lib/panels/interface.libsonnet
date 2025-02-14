@@ -23,7 +23,17 @@ local commonlib = import 'common-lib/common/main.libsonnet';
             },
           ],
         },
-      },
+      }
+      //drop labels useless in single device context:
+      + g.panel.table.queryOptions.withTransformationsMixin(
+        g.panel.table.queryOptions.transformation.withId('organize')
+        + g.panel.table.queryOptions.transformation.withOptions({
+          excludeByName: {
+            [commonlib.utils.toSentenceCase(label)]: true
+            for label in this.config.groupLabels + this.config.instanceLabels
+          },
+        },)
+      ),
 
     traffic:
       signals.interface.networkOutBitPerSec.withTopK().asTimeSeries('Network traffic')
