@@ -56,6 +56,7 @@ function(this)
               /
               (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s} + ciscoMemoryPoolFree{ciscoMemoryPoolType="1", %(queriesSelector)s}) * 100
             |||,
+            // keeping this label for now for future improvements
             // aggKeepLabels: ['ciscoMemoryPoolName'],
           },
           dell_network: {
@@ -97,6 +98,7 @@ function(this)
           },
           juniper: {
             expr: 'jnxOperatingBuffer{jnxOperatingContentsIndex="9", %(queriesSelector)s}',
+            // keeping this label for now for future improvements
             // aggKeepLabels: ['jnxOperatingDescr'],
           },
           mikrotik: {

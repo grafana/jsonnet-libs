@@ -75,7 +75,8 @@ function(this)
           },
           juniper: {
             expr: 'jnxOperatingCPU{jnxOperatingContentsIndex="9", %(queriesSelector)s}',
-            // aggKeepLabels: ['jnxOperatingDescr'],
+            // keeping this label for now for future improvements
+            //aggKeepLabels: ['jnxOperatingDescr'],
           },
           mikrotik: self.generic,
           netgear: {
