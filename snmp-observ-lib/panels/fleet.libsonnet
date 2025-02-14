@@ -20,11 +20,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
       + commonlib.panels.generic.table.coldHotGauge.stylizeByName('Transmitted')
       + signals.fleetInterface.networkInBitPerSec.asTableColumn(format='table')
       + commonlib.panels.generic.table.coldHotGauge.stylizeByName('Received')
-      + signals.fleetInterface.networkInErrorsPerSec.asTableColumn(format='table')
-      + signals.fleetInterface.networkOutErrorsPerSec.asTableColumn(format='table')
-      + signals.fleetInterface.networkInDroppedPerSec.asTableColumn(format='table')
-      + signals.fleetInterface.networkOutDroppedPerSec.asTableColumn(format='table')
-      + signals.fleetInterface.ifInUnknownProtos.asTableColumn(format='table')
+      + signals.fleetInterface.networkAllErrorsPerSec.asTableColumn(format='table')
       + signals.alerts.alertsWarning
         .withExprWrappersMixin(['count by (%s)(' % std.join(',', this.config.instanceLabels + this.config.groupLabels), ')'])
         .asTableColumn(format='table')
