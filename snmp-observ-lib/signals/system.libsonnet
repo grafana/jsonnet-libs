@@ -107,11 +107,10 @@ function(this)
           arista_sw: self.generic,
           brocade_fc: self.generic,
           brocade_foundry: self.generic,
-          cisco:
-            {
-              expr: 'label_replace(sysDescr{%(queriesSelector)s}, "sysDescr", "$1", "sysDescr", ".*Version(.+?),.*")',
-              infoLabel: 'sysDescr',
-            },
+          cisco: {
+            expr: 'label_replace(sysDescr{%(queriesSelector)s}, "sysDescr", "$1", "sysDescr", ".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*")',
+            infoLabel: 'sysDescr',
+          },
           dell_network: self.generic,
           dlink_des: self.generic,
           extreme: self.generic,
