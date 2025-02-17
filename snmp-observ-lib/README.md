@@ -9,7 +9,7 @@ The library supports multiple metrics sources that corresponds to different netw
 |metricsSource|Description|MIBs|Known devices|Links|snmp_exporter modules|
 |-|-|-|-|-|-|
 |generic           |Generic SNMP device|IF-MIB,SNMPv2-MIB    |default choice||system,if_mib,hrDevice,hrStorage|
-|cisco             | Cisco IoS devices |IF-MIB,SNMPv2-MIB, Cisco private mibs|Cisco C2900, Cisco C7600, Cisco MDS|-|system,if_mib,cisco_device,cisco_fc_fe|
+|cisco             | Cisco ASA, IOS, NX-OS, and IOS-XR devices |IF-MIB,SNMPv2-MIB, Cisco private mibs|Cisco C2900, Cisco C7600, Cisco Nexus 93180, Cisco MDS|https://www.cisco.com/c/en/us/td/docs/security/asa/asa918/configuration/general/asa-918-general-config/monitor-snmp.html|system,if_mib,cisco_device,cisco_fc_fe|
 |arista_sw            | Arista devices    |IF-MIB,SNMPv2-MIB,HOST-RESOURCES-MIB|-||system,if_mib,hrDevice,hrStorage,arista_sw|
 |brocade_fcs       | Brocade           |IF-MIB,SNMPv2-MIB,SW-MIB|Brocade 6520 v7.4.1c, Brocade 300 v7.0.0c,Brocade BL 5480 v6.3.1c|https://techdocs.broadcom.com/us/en/fibre-channel-networking/fabric-os/fabric-os-mib/9-1-x/understanding-brocade-snmp/loading-brocade-mibs/brocade-mib-files.html|system,if_mib|
 |brocade_foundry | Brocade Foundry | FOUNDRY-SN-AGENT-MIB | Brocade MLXe (System Mode: MLX), IronWare Version V5.4.0eT163, Foundry FLS648 Foundry Networks, Inc. FLS648, IronWare Version 04.1.00bT7e1, Foundry FWSX424 Foundry Networks, Inc. FWSX424, IronWare Version 02.0.00aT1e0||system,if_mib|
