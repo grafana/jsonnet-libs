@@ -1,13 +1,18 @@
 local g = import '../g.libsonnet';
 local utils = import '../utils.libsonnet';
 local signalUtils = import './utils.libsonnet';
-
 {
   new(
     signalName,
     type,
   ): {
+    local this = self,
 
+    withTopK(limit): this,
+    withOffset(offset): this,
+    withFilteringSelectorMixin(mixin): this,
+    withExprWrappersMixin(wrappers=[]): this,
+    asOverride(name=signalName, override='byQuery', format='time_series'): {},
     asTarget():: {},
     asTableTarget():: {},
 
@@ -31,9 +36,13 @@ local signalUtils = import './utils.libsonnet';
     asTable(name=signalName, format)::
       self.asTimeSeries(),
 
+    asStatusHistory(name=signalName)::
+      self.asTimeSeries(),
+
     //Return as timeSeriesPanel
     asGauge(name=signalName)::
       self.asTimeSeries(),
+
     asTableColumn(override, format):: {},
   },
 

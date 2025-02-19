@@ -91,6 +91,7 @@ Signal's level:
 |name|Signal's name. Used to populate panel's titles. |*|CPU utilization|-|
 |nameShort|Signal's short name. Used to populate panel's legends and column names. |*|CPU|-|
 |type|Signal's type. Depending on the type, some opinionated autotransformations would happen with queries, units. |gauge,counter,histogram,info,raw|gauge|-|
+|optional| Set this signal optional.| true,false | false | false|
 |unit| Signal's units. |*|bytes|``|
 |description| Signal's description. Used to populate panel's description. |*|CPU usage time in percent.|``|
 |sourceMaps[].expr| Signal's BASE expression in simplest form. Simplified jsonnet templating is supported (see below). Depending on signal's type(not `raw`) could autotransform to different form. |*|network_bytes_received_total{%(queriesSelector)s}|-|
@@ -117,6 +118,9 @@ The following is supported in expressions and legends:
 - `%(interval)s` - expands to `interval` value
 - `%(alertsInterval)s` - expands to `interval` value
 
+## Making signals optional
+
+When defining signals from multiple sources, you can make some of the signals optional. In this case, rendering will not throw a validation error that signal is missing for the specific source, while internal 'stub' type will be used and empty panel will be rendered instead.
 
 ## Example 1: From JSON
 

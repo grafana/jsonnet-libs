@@ -1,7 +1,11 @@
+# 0.3.1
+- [Signal] Fix optional signals (type=stub).
+- [Signal] Add optional signals documentation.
+
 # 0.3.0
 
-- [Signal] add new signal `log`.
-- [Signal] add enableLokiLogs=true|false to signals init.
+- [Signal] Add new signal `log`.
+- [Signal] Add enableLokiLogs=true|false to signals init.
 - [Signal] `withExprWrappersMixin(offset)` - wrap signal expression into additional function on top of existing wrappers.
 
 
