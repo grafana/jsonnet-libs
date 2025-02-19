@@ -13,7 +13,7 @@ function(this)
       arista_sw: self.generic,
       brocade_fc: 'swMemUsage',
       brocade_foundry: 'snAgGblDynMemUtil',
-      cisco: 'ciscoMemoryPoolUsed',
+      cisco: 'cempMemPoolUsed',
       dell_network: 'dellNetCpuUtilMemUsage',
       dlink_des: 'agentDRAMutilization',
       extreme: 'extremeMemoryMonitorSystemTotal',
@@ -50,14 +50,28 @@ function(this)
           },
           cisco: {
             expr: |||
-              # cisco
+              # cisco CISCO-ENHANCED-MEMPOOL-MIB
+              # cempMemPoolType="2" - processorMemory, cempMemPoolType="10" - virtual memory, i.e in ASA(v).
+              (
+                
+                (
+                  cempMemPoolUsed{%(queriesSelector)s}
+                  /
+                  (cempMemPoolUsed{%(queriesSelector)s} + cempMemPoolFree{%(queriesSelector)s}) * 100
+                ) * on (instance, cempMemPoolIndex) group_left () 
+                      (
+                        cempMemPoolType{%(queriesSelector)s} == 2)/2 
+                        or (cempMemPoolType{%(queriesSelector)s} == 10)/10 
+              )
+              or
+              # cisco firmwares that supports only CISCO-MEMORY-POOL-MIB
               # ciscoMemoryPoolType="1" - Processor
-              ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s}
+              (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s}
               /
-              (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s} + ciscoMemoryPoolFree{ciscoMemoryPoolType="1", %(queriesSelector)s}) * 100
+              (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s} + ciscoMemoryPoolFree{ciscoMemoryPoolType="1", %(queriesSelector)s}) * 100)
             |||,
             // keeping this label for now for future improvements
-            // aggKeepLabels: ['ciscoMemoryPoolName'],
+            // aggKeepLabels: ['ciscoMemoryPoolName', cempMemPoolName'],
           },
           dell_network: {
             expr: 'dellNetCpuUtilMemUsage{%(queriesSelector)s}',
