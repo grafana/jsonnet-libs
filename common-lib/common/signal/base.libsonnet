@@ -25,7 +25,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
     sourceMaps:: sourceMaps,
     combineUniqueExpressions(expressions)::
       std.join(
-        '\nor\n',
+        if type == 'info' then '\nor ignoring(%s)\n' % std.join(',', this.combineUniqueInfoLabels(sourceMaps)) else '\nor\n',
         std.uniq(  // keep unique only
           std.sort(expressions)
         )
