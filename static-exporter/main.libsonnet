@@ -63,6 +63,39 @@ local k = import 'ksonnet-util/kausal.libsonnet';
       k.util.configMapVolumeMount(self.httpdConfig, '/usr/local/apache2/conf/httpd.conf', volumeMount.withSubPath('httpd.conf')),
   },
 
+  withoutHttpConfig():: {
+    assert std.trace('DEPRECATION WARNING: running static-exporter without HttpConfig will make it unable for Prometheus 3.x to scrape it.', true),
+    local name = self.name + '-httpd-config',
+    httpdConfig:: {},
+    deployment+: {
+      spec+: {
+        template+: {
+          spec+: {
+            containers:
+              std.map(
+                function(container)
+                  container + {
+                    volumeMounts:
+                      std.filter(
+                        function(volumeMount)
+                          volumeMount.name != name,
+                        container.volumeMounts
+                      ),
+                  },
+                super.containers
+              ),
+            volumes:
+              std.filter(
+                function(volume)
+                  volume.name != name,
+                super.volumes
+              ),
+          },
+        },
+      },
+    },
+  },
+
   metric:: {
     new(name, description)::
       self.withName(name)
