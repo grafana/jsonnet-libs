@@ -1,29 +1,32 @@
 local k = import 'ksonnet-util/kausal.libsonnet';
 
 {
-  new(name, image='httpd:2.4-alpine'):: {
-    name:: name,
-    data:: { metrics: '' },
+  new(name, image='httpd:2.4-alpine')::
+    {
+      name:: name,
+      data:: { metrics: '' },
 
-    local configMap = k.core.v1.configMap,
-    configmap:
-      configMap.new(name, self.data),
+      local configMap = k.core.v1.configMap,
+      configmap:
+        configMap.new(name, self.data),
 
-    local container = k.core.v1.container,
-    container::
-      container.new('static-exporter', image)
-      + container.withPorts([
-        k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=80),
-      ])
-      + k.util.resourcesRequests('10m', '10Mi')
-    ,
+      local container = k.core.v1.container,
+      container::
+        container.new('static-exporter', image)
+        + container.withPorts([
+          k.core.v1.containerPort.newNamed(name='http-metrics', containerPort=80),
+        ])
+        + k.util.resourcesRequests('10m', '10Mi')
+      ,
 
-    local deployment = k.apps.v1.deployment,
-    local volumeMount = k.core.v1.volumeMount,
-    deployment:
-      deployment.new(name, replicas=1, containers=[self.container])
-      + k.util.configMapVolumeMount(self.configmap, '/usr/local/apache2/htdocs'),
-  },
+      local deployment = k.apps.v1.deployment,
+      local volumeMount = k.core.v1.volumeMount,
+      deployment:
+        deployment.new(name, replicas=1, containers=[self.container])
+        + k.util.configMapVolumeMount(self.configmap, '/usr/local/apache2/htdocs'),
+    }
+    + self.withHttpConfig()
+  ,
 
   withData(data):: { data: data },
 
