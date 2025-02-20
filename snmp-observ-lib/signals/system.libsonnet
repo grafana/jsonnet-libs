@@ -103,13 +103,20 @@ function(this)
         |||,
         type: 'info',
         sources: {
-          generic: self.cisco,
+          generic: {
+            expr: 'label_replace(sysDescr{%(queriesSelector)s}, "version", "$1", "sysDescr", ".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*")',
+            infoLabel: 'version',
+          },
           arista_sw: self.generic,
           brocade_fc: self.generic,
           brocade_foundry: self.generic,
           cisco: {
-            expr: 'label_replace(sysDescr{%(queriesSelector)s}, "sysDescr", "$1", "sysDescr", ".*Version ([0-9a-zA-Z\\\\.\\\\(\\\\)]+).*")',
-            infoLabel: 'sysDescr',
+            expr: |||
+              label_replace(
+                ciscoImageString{ciscoImageString=~"CW_VERSION.+", %(queriesSelector)s}, "version", "$1", "ciscoImageString", "CW_VERSION\\$(.+)\\$"
+              )
+            |||,
+            infoLabel: 'version',
           },
           dell_network: self.generic,
           dlink_des: self.generic,

@@ -71,7 +71,7 @@ function(this)
               (ciscoMemoryPoolUsed{ciscoMemoryPoolType="1", %(queriesSelector)s} + ciscoMemoryPoolFree{ciscoMemoryPoolType="1", %(queriesSelector)s}) * 100)
             |||,
             // keeping this label for now for future improvements
-            // aggKeepLabels: ['ciscoMemoryPoolName', cempMemPoolName'],
+            // aggKeepLabels: ['ciscoMemoryPoolName', 'cempMemPoolName'],
           },
           dell_network: {
             expr: 'dellNetCpuUtilMemUsage{%(queriesSelector)s}',
