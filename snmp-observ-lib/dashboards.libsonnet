@@ -29,7 +29,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             this.signals.system.getVariablesSingleChoice(),
             keyF=function(x) x.name
           ),
-          uid + '-snmp-fleet',
+          uid + '-fleet',
           tags,
           links { backToFleet+:: {} },
           annotations,
@@ -58,7 +58,7 @@ local logslib = import 'logs-lib/logs/main.libsonnet';
             this.signals.interface.getVariablesMultiChoice(),
             keyF=function(x) x.name
           ),
-          uid + '-snmp-overview',
+          uid + '-overview',
           tags,
           links,
           annotations,
