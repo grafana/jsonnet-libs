@@ -1,0 +1,407 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "enable": true,
+               "expr": "{job=~\"$job\",instance=~\"$instance\", channel=\"System\", level=\"Critical\"} | json",
+               "hide": true,
+               "iconColor": "light-purple",
+               "name": "Critical system event",
+               "tagKeys": "job,instance,level",
+               "textFormat": "{{message}}",
+               "titleFormat": "Critical system event"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "enable": true,
+               "expr": "windows_system_system_up_time{job=~\"$job\",instance=~\"$instance\"}*1000 > $__from < $__to",
+               "hide": true,
+               "iconColor": "light-yellow",
+               "name": "Reboot",
+               "tagKeys": "job,instance",
+               "titleFormat": "Reboot",
+               "useValueForTime": "on"
+            },
+            {
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "enable": true,
+               "expr": "{job=~\"$job\",instance=~\"$instance\", source=\"Service Control Manager\", level=\"Error\"} |= \"terminated\" | json",
+               "hide": true,
+               "iconColor": "light-orange",
+               "name": "Service failed",
+               "tagKeys": "job,instance,level",
+               "textFormat": "{{message}}",
+               "titleFormat": "Service failed"
+            }
+         ]
+      },
+      "links": [
+         {
+            "keepTime": true,
+            "title": "Back to Windows fleet",
+            "type": "link",
+            "url": "/d/windows-fleet"
+         },
+         {
+            "keepTime": true,
+            "title": "Back to Windows overview",
+            "type": "link",
+            "url": "/d/windows-overview"
+         },
+         {
+            "asDropdown": true,
+            "includeVars": true,
+            "keepTime": true,
+            "tags": [
+               "windows"
+            ],
+            "title": "All Windows dashboards",
+            "type": "dashboards"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "loki",
+               "uid": "${loki_datasource}"
+            },
+            "description": "Logs volume grouped by \"level\" label.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "drawStyle": "bars",
+                     "fillOpacity": 50,
+                     "stacking": {
+                        "mode": "normal"
+                     }
+                  },
+                  "unit": "none"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(E|e)merg|(F|f)atal|(A|a)lert|(C|c)rit.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "purple",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(E|e)(rr.*|RR.*)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "red",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(W|w)(arn.*|ARN.*|rn|RN)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "orange",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(N|n)(otice|ote)|(I|i)(nf.*|NF.*)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "green",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "dbg.*|DBG.*|(D|d)(EBUG|ebug)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "(T|t)(race|RACE)"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-blue",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "logs"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "text",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "maxDataPoints": 100,
+            "options": {
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "${loki_datasource}"
+                  },
+                  "expr": "sum by (level) (count_over_time({job=~\"$job\",instance=~\"$instance\",channel=~\"$channel\",source=~\"$source\",keywords=~\"$keywords\",level=~\"$level\"}\n|~ \"$regex_search\"\n| json | __error__=``\n[$__auto]))\n",
+                  "legendFormat": "{{ level }}"
+               }
+            ],
+            "title": "Logs volume",
+            "transformations": [
+               {
+                  "id": "renameByRegex",
+                  "options": {
+                     "regex": "Value",
+                     "renamePattern": "logs"
+                  }
+               }
+            ],
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "gridPos": {
+               "h": 18,
+               "w": 24,
+               "x": 0,
+               "y": 18
+            },
+            "id": 2,
+            "options": {
+               "dedupStrategy": "exact",
+               "enableLogDetails": true,
+               "prettifyLogMessage": true,
+               "showTime": false,
+               "wrapLogMessage": false
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "loki",
+                     "uid": "${loki_datasource}"
+                  },
+                  "expr": "{job=~\"$job\",instance=~\"$instance\",channel=~\"$channel\",source=~\"$source\",keywords=~\"$keywords\",level=~\"$level\"} \n|~ \"$regex_search\"\n| json | __error__=``\n| label_format timestamp=\"{{__timestamp__}}\"\n| drop channel_extracted,source_extracted,computer_extracted,level_extracted,keywords_extracted\n| line_format `{{ if eq \"[[instance]]\" \".*\" }}{{ alignLeft 25 .instance}}|{{end}}{{alignLeft 12 .channel }}| {{ alignLeft 25 .source}}| {{ .message }}`\n\n"
+               }
+            ],
+            "title": "Logs",
+            "type": "logs"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 39,
+      "tags": [
+         "windows"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Loki data source",
+               "name": "loki_datasource",
+               "query": "loki",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({,job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Channel",
+               "multi": true,
+               "name": "channel",
+               "query": "label_values({,job=~\"$job\",instance=~\"$instance\"}, channel)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Source",
+               "multi": true,
+               "name": "source",
+               "query": "label_values({,job=~\"$job\",instance=~\"$instance\",channel=~\"$channel\"}, source)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Keywords",
+               "multi": true,
+               "name": "keywords",
+               "query": "label_values({,job=~\"$job\",instance=~\"$instance\",channel=~\"$channel\",source=~\"$source\"}, keywords)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "loki",
+                  "uid": "${loki_datasource}"
+               },
+               "includeAll": true,
+               "label": "Level",
+               "multi": true,
+               "name": "level",
+               "query": "label_values({,job=~\"$job\",instance=~\"$instance\",channel=~\"$channel\",source=~\"$source\",keywords=~\"$keywords\"}, level)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "",
+                  "value": ""
+               },
+               "label": "Regex search",
+               "name": "regex_search",
+               "options": [
+                  {
+                     "selected": true,
+                     "text": "",
+                     "value": ""
+                  }
+               ],
+               "query": "",
+               "type": "textbox"
+            },
+            {
+               "hide": 2,
+               "label": "Prometheus data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-1h",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "Windows logs",
+      "uid": "windows-logs"
+   }
