@@ -1,2 +1,2 @@
-**/prometheus_rules_out/**/*.yaml linguist-generated=true
+**/prometheus_rules_out/*.yaml linguist-generated=true
 **/dashboards_out/*.json linguist-generated=true
