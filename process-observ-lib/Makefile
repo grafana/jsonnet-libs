@@ -22,12 +22,33 @@ lint: build
 		done
 	mixtool lint mixin.libsonnet
 
-dashboards_out: mixin.libsonnet config.libsonnet $(wildcard dashboards/*)
+dashboards_out: mixin.libsonnet main.libsonnet config.libsonnet $(wildcard panels/*) $(wildcard signals/*) dashboards.libsonnet
 	@mkdir -p dashboards_out
-	jsonnet -J vendor -m dashboards_out lib/dashboards.jsonnet
+	mixtool generate dashboards mixin.libsonnet -d dashboards_out
 
-prometheus_alerts.yaml: mixin.libsonnet lib/alerts.jsonnet alerts/*.libsonnet
-	jsonnet -J vendor -S lib/alerts.jsonnet > $@
+prometheus_alerts.yaml: mixin.libsonnet $(wildcard alerts.libsonnet) $(wildcard signals/*)
+	@if [ -f alerts.libsonnet ]; then \
+		mixtool generate alerts mixin.libsonnet -a prometheus_alerts.yaml; \
+	else \
+		touch prometheus_alerts.yaml; \
+	fi
+
+.PHONY: deploy deploy_rules deploy_dashboards
+deploy: deploy_rules deploy_dashboards
+
+deploy_dashboards:
+ifdef GRAFANA_URL
+	grr apply mixin.libsonnet --target "Dashboard.*" --target "DashboardFolder.*"
+else
+	$(warning GRAFANA_URL is not set, skipping grafana dashboards deployment)
+endif
+
+deploy_rules:
+ifdef CORTEX_ADDRESS
+	grr apply mixin.libsonnet --target "PrometheusRuleGroup.*"
+else
+	$(warning CORTEX_ADDRESS is not set, skipping prometheus alerts deployment)
+endif
 
 .PHONY: clean
 clean:
