@@ -15,3 +15,11 @@ exclusions:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   alert-description-templating:
     reason: "Allow untemplated descriptions for now. TODO: Improve descriptions"
+  panel-units-rule:
+    reason: "Time units are correctly defined for table timestamps. TODO: Review if this exclusion can be removed"
+    dashboards:
+      - "Ceph - Cluster"
+    panels:
+      - "Alerts from CephThanos"
+      - "Top Sluggish OSD's" 
+      - "Down OSD's"
