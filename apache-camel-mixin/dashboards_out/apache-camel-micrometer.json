@@ -1,0 +1,2455 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "builtIn": 1,
+               "datasource": {
+                  "type": "datasource",
+                  "uid": "grafana"
+               },
+               "enable": true,
+               "hide": true,
+               "iconColor": "rgba(0, 211, 255, 1)",
+               "name": "Annotations & Alerts",
+               "target": {
+                  "limit": 100,
+                  "matchAny": false,
+                  "tags": [ ],
+                  "type": "dashboard"
+               },
+               "type": "dashboard"
+            }
+         ]
+      },
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": 58,
+      "links": [ ],
+      "liveNow": false,
+      "panels": [
+         {
+            "collapsed": false,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 22,
+            "panels": [ ],
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "refId": "A"
+               }
+            ],
+            "title": "Global Stats Camel Context : $context",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "red",
+                           "value": null
+                        },
+                        {
+                           "color": "blue",
+                           "value": 100
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "RunningRoutesPercentage"
+                     },
+                     "properties": [
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "RoutesCount"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "transparent",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Instances"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "transparent",
+                              "mode": "fixed"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 0,
+               "y": 1
+            },
+            "id": 4,
+            "links": [ ],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "none",
+               "justifyMode": "center",
+               "orientation": "vertical",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.0.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "exemplar": false,
+                  "expr": "count (\n    camel_routes_running_routes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        camelContext=\"$context\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\", \n        app_kubernetes_io_version=\"$version\"\n    }\n)",
+                  "format": "time_series",
+                  "hide": false,
+                  "instant": true,
+                  "legendFormat": "Instances",
+                  "range": false,
+                  "refId": "Instances"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "exemplar": false,
+                  "expr": "sum(\n    camel_routes_running_routes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        camelContext=\"$context\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\"\n    }\n) \n/ \nsum(\n    camel_routes_added_routes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        camelContext=\"$context\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\"\n    }\n)\n*\n100",
+                  "format": "time_series",
+                  "hide": false,
+                  "instant": true,
+                  "legendFormat": "Running",
+                  "range": false,
+                  "refId": "RunningRoutesPercentage"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "exemplar": false,
+                  "expr": "max(\n    camel_routes_added_routes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        camelContext=\"$context\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\"\n    }\n)",
+                  "format": "time_series",
+                  "hide": false,
+                  "instant": true,
+                  "legendFormat": "Routes",
+                  "range": false,
+                  "refId": "RoutesCount"
+               }
+            ],
+            "title": "Routes Status",
+            "transformations": [ ],
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Shows completed exchanges of the camel context in the time range",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "rgb(31, 120, 193)",
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "blue",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 3,
+               "w": 2,
+               "x": 4,
+               "y": 1
+            },
+            "id": 212,
+            "links": [ ],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "none",
+               "graphMode": "area",
+               "justifyMode": "center",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.0.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum(\n    increase(\n        camel_exchanges_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\",\n            app_kubernetes_io_version=\"$version\"\n        }[$__range]\n    )\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Completed",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "red",
+                     "mode": "fixed"
+                  },
+                  "decimals": 0,
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "blue",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Failure Percentage"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Failure %"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Failure Count"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Failure Count"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 3,
+               "x": 6,
+               "y": 1
+            },
+            "id": 334,
+            "links": [ ],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "none",
+               "graphMode": "area",
+               "justifyMode": "center",
+               "orientation": "vertical",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.0.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by (camelContext) (\n    increase(\n        camel_exchanges_failed_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\",\n            app_kubernetes_io_version=\"$version\"\n        }[$__range]\n    )\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "",
+                  "intervalFactor": 1,
+                  "legendFormat": "__auto",
+                  "range": true,
+                  "refId": "Failure Count"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by (camelContext) (\n    increase(\n        camel_exchanges_failed_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\",\n            app_kubernetes_io_version=\"$version\"\n        }[$__range])\n    ) \n/ \nsum by (camelContext) (\n    increase(\n        camel_exchanges_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\",\n            app_kubernetes_io_version=\"$version\"\n        }[$__range]\n    )\n)*100",
+                  "hide": false,
+                  "legendFormat": "__auto",
+                  "range": true,
+                  "refId": "Failure Percentage"
+               }
+            ],
+            "title": "Failures",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineStyle": {
+                        "fill": "solid"
+                     },
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "dashed"
+                     }
+                  },
+                  "mappings": [ ],
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "#EAB839",
+                           "value": 0.59999999999999998
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.90000000000000002
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 9,
+               "y": 1
+            },
+            "id": 466,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "pluginVersion": "9.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by(node) (\n    process_cpu_usage{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\"\n    }\n)",
+                  "interval": "",
+                  "legendFormat": "{{label_name}}",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Saturation : CPU Usage by node",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "lineInterpolation": "smooth",
+                     "lineStyle": {
+                        "fill": "solid"
+                     },
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "dashed"
+                     }
+                  },
+                  "mappings": [ ],
+                  "max": 1,
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "#EAB839",
+                           "value": 0.59999999999999998
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.90000000000000002
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 5,
+               "x": 13,
+               "y": 1
+            },
+            "id": 497,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "single",
+                  "sort": "none"
+               }
+            },
+            "pluginVersion": "9.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by (pod) (\n    jvm_memory_used_bytes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\",\n        area=\"heap\"\n    }\n) \n/ \nsum by (pod) (\n    jvm_memory_max_bytes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\",\n        area=\"heap\"\n    }\n)",
+                  "format": "time_series",
+                  "legendFormat": "{{pod}} heap",
+                  "range": true,
+                  "refId": "A"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by (pod) (\n    jvm_memory_used_bytes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\",\n        area=\"nonheap\"\n    }\n) \n/ \nsum by (pod) (\n    jvm_memory_max_bytes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\",\n        area=\"nonheap\"\n    }\n)",
+                  "format": "time_series",
+                  "hide": false,
+                  "legendFormat": "{{pod}} nonheap",
+                  "range": true,
+                  "refId": "B"
+               }
+            ],
+            "title": "Saturation : Memory usage by pod",
+            "transformations": [ ],
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "align": "auto",
+                     "cellOptions": {
+                        "type": "auto"
+                     },
+                     "inspect": false
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.hidden",
+                           "value": true
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "node"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Node Name"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Pod Count"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "NB of Pods"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value #Process CPU Usage"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Sum of CPU usage"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percentunit"
+                        },
+                        {
+                           "id": "color"
+                        },
+                        {
+                           "id": "custom.cellOptions",
+                           "value": {
+                              "mode": "lcd",
+                              "type": "gauge",
+                              "valueDisplayMode": "color"
+                           }
+                        },
+                        {
+                           "id": "thresholds",
+                           "value": {
+                              "mode": "absolute",
+                              "steps": [
+                                 {
+                                    "color": "green",
+                                    "value": null
+                                 },
+                                 {
+                                    "color": "yellow",
+                                    "value": 0.59999999999999998
+                                 },
+                                 {
+                                    "color": "red",
+                                    "value": 0.90000000000000002
+                                 }
+                              ]
+                           }
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 1
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 6,
+               "x": 18,
+               "y": 1
+            },
+            "id": 498,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "10.0.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "exemplar": false,
+                  "expr": "count by (node) (\n    camel_routes_running_routes{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        camelContext=\"$context\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\", \n        app_kubernetes_io_version=\"$version\"\n    }\n)\n",
+                  "format": "table",
+                  "instant": true,
+                  "legendFormat": "__auto",
+                  "range": false,
+                  "refId": "Pod Count"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "exemplar": false,
+                  "expr": "sum by (node) (\n    process_cpu_usage{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\", \n        app_kubernetes_io_version=\"$version\"\n    }\n)",
+                  "format": "table",
+                  "hide": false,
+                  "instant": true,
+                  "legendFormat": "__auto",
+                  "range": false,
+                  "refId": "Process CPU Usage"
+               }
+            ],
+            "title": "Pods per Nodes and CPU Usage",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "node",
+                     "mode": "outer"
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "blue",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 3,
+               "w": 2,
+               "x": 4,
+               "y": 4
+            },
+            "id": 11,
+            "links": [ ],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "none",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.0.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum(\n    camel_exchanges_inflight{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        camelContext=\"$context\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\",\n        app_kubernetes_io_version=\"$version\"\n    }\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "intervalFactor": 1,
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Inflight",
+            "type": "stat"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 7
+            },
+            "id": 382,
+            "panels": [ ],
+            "title": "Camel Context Overview - RED Method",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "decimals": 0,
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "blue",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "short"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 13,
+               "w": 7,
+               "x": 0,
+               "y": 8
+            },
+            "id": 368,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "center",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.0.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "expr": "sum by (routeId) (\n    irate(\n        camel_exchanges_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__rate_interval]\n    )\n)",
+                  "legendFormat": "{{routeId}}",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Rate : Executions / sec",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "blue",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "s"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 13,
+               "w": 9,
+               "x": 7,
+               "y": 8
+            },
+            "id": 434,
+            "links": [ ],
+            "maxDataPoints": 100,
+            "options": {
+               "colorMode": "background",
+               "graphMode": "area",
+               "justifyMode": "center",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "text": { },
+               "textMode": "auto"
+            },
+            "pluginVersion": "10.0.1",
+            "repeatDirection": "v",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "exemplar": false,
+                  "expr": "sum by (routeId) (\n    increase (\n        camel_route_policy_seconds_sum{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n) \n \n/ \n \nsum by (routeId) (\n    increase (\n        camel_route_policy_seconds_count{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n)",
+                  "format": "time_series",
+                  "hide": false,
+                  "instant": false,
+                  "intervalFactor": 1,
+                  "legendFormat": "__auto",
+                  "range": true,
+                  "refId": "A"
+               }
+            ],
+            "title": "Duration : Avg Execution time",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "mappings": [ ],
+                  "max": 1,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "blue",
+                           "value": null
+                        },
+                        {
+                           "color": "#EAB839",
+                           "value": 0.050000000000000003
+                        },
+                        {
+                           "color": "red",
+                           "value": 0.80000000000000004
+                        }
+                     ]
+                  },
+                  "unit": "percentunit"
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 13,
+               "w": 8,
+               "x": 16,
+               "y": 8
+            },
+            "id": 337,
+            "options": {
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "showThresholdLabels": false,
+               "showThresholdMarkers": true
+            },
+            "pluginVersion": "10.0.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "editorMode": "code",
+                  "exemplar": false,
+                  "expr": "sum by (routeId) (\n    increase(\n        camel_exchanges_failed_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n) \n/ \nsum by (routeId) (\n    increase(\n        camel_exchanges_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    ) > 0\n)",
+                  "instant": true,
+                  "legendFormat": "{{routeId}}",
+                  "range": false,
+                  "refId": "A"
+               }
+            ],
+            "title": "Errors : Failure Rates",
+            "transformations": [ ],
+            "type": "gauge"
+         },
+         {
+            "collapsed": true,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 21
+            },
+            "id": 10,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Show the numbers of exchanges per second for camel route $route",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "thresholds"
+                        },
+                        "decimals": 2,
+                        "mappings": [ ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 80
+                              }
+                           ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 2,
+                     "x": 0,
+                     "y": 22
+                  },
+                  "id": 12,
+                  "links": [ ],
+                  "maxDataPoints": 100,
+                  "options": {
+                     "colorMode": "none",
+                     "graphMode": "none",
+                     "justifyMode": "auto",
+                     "orientation": "horizontal",
+                     "reduceOptions": {
+                        "calcs": [
+                           "mean"
+                        ],
+                        "fields": "/^Value$/",
+                        "values": false
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "10.0.1",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "expr": "sum(\n    irate(\n        camel_exchanges_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__rate_interval]\n    )\n)",
+                        "format": "table",
+                        "instant": true,
+                        "intervalFactor": 1,
+                        "legendFormat": "",
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Ex/sec",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "blue",
+                           "mode": "fixed"
+                        },
+                        "custom": {
+                           "axisCenteredZero": false,
+                           "axisColorMode": "text",
+                           "axisLabel": "",
+                           "axisPlacement": "auto",
+                           "barAlignment": 0,
+                           "drawStyle": "line",
+                           "fillOpacity": 10,
+                           "gradientMode": "none",
+                           "hideFrom": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           },
+                           "lineInterpolation": "linear",
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "scaleDistribution": {
+                              "type": "linear"
+                           },
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           },
+                           "thresholdsStyle": {
+                              "mode": "off"
+                           }
+                        },
+                        "mappings": [ ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              }
+                           ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 5,
+                     "x": 2,
+                     "y": 22
+                  },
+                  "id": 16,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": false
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "none"
+                     }
+                  },
+                  "pluginVersion": "9.0.5",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "expr": "sum by (camelContext) (\n    irate(\n        camel_exchanges_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__rate_interval]\n    )\n)",
+                        "format": "time_series",
+                        "intervalFactor": 1,
+                        "legendFormat": "__auto",
+                        "range": true,
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "$route Exchanges/sec - all instances",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "palette-classic"
+                        },
+                        "custom": {
+                           "axisCenteredZero": false,
+                           "axisColorMode": "text",
+                           "axisLabel": "",
+                           "axisPlacement": "auto",
+                           "barAlignment": 0,
+                           "drawStyle": "line",
+                           "fillOpacity": 10,
+                           "gradientMode": "none",
+                           "hideFrom": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           },
+                           "lineInterpolation": "linear",
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "scaleDistribution": {
+                              "type": "linear"
+                           },
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           },
+                           "thresholdsStyle": {
+                              "mode": "off"
+                           }
+                        },
+                        "mappings": [ ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 80
+                              }
+                           ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 5,
+                     "x": 7,
+                     "y": 22
+                  },
+                  "id": 27,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": false
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "none"
+                     }
+                  },
+                  "pluginVersion": "9.0.5",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "expr": "sum by (pod) (\n    irate(\n        camel_exchanges_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__rate_interval]\n    )\n)",
+                        "format": "time_series",
+                        "intervalFactor": 1,
+                        "legendFormat": "__auto",
+                        "range": true,
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "$route  Exchanges/sec - per instances",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "red",
+                           "mode": "fixed"
+                        },
+                        "custom": {
+                           "axisCenteredZero": false,
+                           "axisColorMode": "text",
+                           "axisLabel": "",
+                           "axisPlacement": "auto",
+                           "barAlignment": 0,
+                           "drawStyle": "line",
+                           "fillOpacity": 10,
+                           "gradientMode": "none",
+                           "hideFrom": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           },
+                           "lineInterpolation": "linear",
+                           "lineStyle": {
+                              "fill": "solid"
+                           },
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "scaleDistribution": {
+                              "type": "linear"
+                           },
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           },
+                           "thresholdsStyle": {
+                              "mode": "off"
+                           }
+                        },
+                        "mappings": [ ],
+                        "max": 1,
+                        "min": 0,
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              }
+                           ]
+                        },
+                        "unit": "percentunit"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 5,
+                     "x": 12,
+                     "y": 22
+                  },
+                  "id": 335,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": false
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "none"
+                     }
+                  },
+                  "pluginVersion": "9.0.5",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "expr": "sum by (routeId) (\n    increase(\n        camel_exchanges_failed_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n) \n/ \nsum by (routeId) (\n    increase(\n        camel_exchanges_total{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n)",
+                        "format": "time_series",
+                        "intervalFactor": 1,
+                        "legendFormat": "__auto",
+                        "range": true,
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "$route Failure % - all instances",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Current number of inflight exchanges",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "thresholds"
+                        },
+                        "mappings": [
+                           {
+                              "options": {
+                                 "match": "null",
+                                 "result": {
+                                    "index": 0,
+                                    "text": "0"
+                                 }
+                              },
+                              "type": "special"
+                           }
+                        ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 80
+                              }
+                           ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 2,
+                     "x": 17,
+                     "y": 22
+                  },
+                  "id": 35,
+                  "links": [ ],
+                  "maxDataPoints": 100,
+                  "options": {
+                     "colorMode": "none",
+                     "graphMode": "none",
+                     "justifyMode": "center",
+                     "orientation": "horizontal",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ],
+                        "fields": "",
+                        "values": false
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "10.0.1",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "sum by (camelContext) (\n    camel_exchanges_inflight{\n        job=~\"$job\",\n        cluster=\"$cluster\",\n        namespace=\"$namespace\",\n        camelContext=\"$context\",\n        app_kubernetes_io_part_of=\"$part_of\",\n        app_kubernetes_io_name=\"$app_name\",\n        app_kubernetes_io_component=\"$component\",\n        app_kubernetes_io_instance=\"$instance\", \n        app_kubernetes_io_version=\"$version\",\n        routeId=~\"$route\"\n    }\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 1,
+                        "legendFormat": "__auto",
+                        "range": true,
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Inflight $route",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "palette-classic"
+                        },
+                        "custom": {
+                           "axisCenteredZero": false,
+                           "axisColorMode": "text",
+                           "axisLabel": "",
+                           "axisPlacement": "auto",
+                           "barAlignment": 0,
+                           "drawStyle": "line",
+                           "fillOpacity": 10,
+                           "gradientMode": "none",
+                           "hideFrom": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           },
+                           "lineInterpolation": "linear",
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "scaleDistribution": {
+                              "type": "linear"
+                           },
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           },
+                           "thresholdsStyle": {
+                              "mode": "off"
+                           }
+                        },
+                        "mappings": [ ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 80
+                              }
+                           ]
+                        },
+                        "unit": "short"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 5,
+                     "x": 19,
+                     "y": 22
+                  },
+                  "id": 55,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": false
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "none"
+                     }
+                  },
+                  "pluginVersion": "9.1.0",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "expr": "sum by (kubernetes_pod_name) (camel_exchanges_inflight{job=~\"$job\",namespace=\"$namespace\",camelContext=\"$context\",routeId=~\"$route\"})",
+                        "format": "time_series",
+                        "intervalFactor": 1,
+                        "legendFormat": "{{kubernetes_pod_name}}",
+                        "range": true,
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "$route Inflight  - per instances",
+                  "type": "timeseries"
+               }
+            ],
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "refId": "A"
+               }
+            ],
+            "title": "Traffic Per Route",
+            "type": "row"
+         },
+         {
+            "collapsed": true,
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 22
+            },
+            "id": 69,
+            "panels": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "description": "Average execution time for a route",
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "thresholds"
+                        },
+                        "mappings": [ ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 80
+                              }
+                           ]
+                        },
+                        "unit": "s"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 2,
+                     "x": 0,
+                     "y": 23
+                  },
+                  "id": 96,
+                  "links": [ ],
+                  "maxDataPoints": 100,
+                  "options": {
+                     "colorMode": "none",
+                     "graphMode": "none",
+                     "justifyMode": "auto",
+                     "orientation": "horizontal",
+                     "reduceOptions": {
+                        "calcs": [
+                           "lastNotNull"
+                        ],
+                        "fields": "",
+                        "values": false
+                     },
+                     "textMode": "auto"
+                  },
+                  "pluginVersion": "10.0.1",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "exemplar": false,
+                        "expr": "sum by (camelContext) (\n    increase (\n        camel_route_policy_seconds_sum{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n) \n\n/ \n\nsum by (camelContext) (\n    increase (\n        camel_route_policy_seconds_count{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n)",
+                        "format": "time_series",
+                        "hide": false,
+                        "instant": false,
+                        "intervalFactor": 1,
+                        "legendFormat": "__auto",
+                        "range": true,
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Avg Exec time $route",
+                  "type": "stat"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "blue",
+                           "mode": "fixed"
+                        },
+                        "custom": {
+                           "axisCenteredZero": false,
+                           "axisColorMode": "text",
+                           "axisLabel": "",
+                           "axisPlacement": "auto",
+                           "barAlignment": 0,
+                           "drawStyle": "line",
+                           "fillOpacity": 10,
+                           "gradientMode": "none",
+                           "hideFrom": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           },
+                           "lineInterpolation": "linear",
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "scaleDistribution": {
+                              "type": "linear"
+                           },
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           },
+                           "thresholdsStyle": {
+                              "mode": "off"
+                           }
+                        },
+                        "decimals": 0,
+                        "mappings": [ ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 80
+                              }
+                           ]
+                        },
+                        "unit": "s"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 5,
+                     "x": 2,
+                     "y": 23
+                  },
+                  "id": 112,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": false
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "none"
+                     }
+                  },
+                  "pluginVersion": "9.1.0",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "expr": "sum by (camelContext) (\n    increase (\n        camel_route_policy_seconds_sum{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n) \n \n/ \n \nsum by (camelContext) (\n    increase (\n        camel_route_policy_seconds_count{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n)",
+                        "format": "time_series",
+                        "intervalFactor": 1,
+                        "legendFormat": "__auto",
+                        "range": true,
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Avg Exec time $route - all instances",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "fixedColor": "blue",
+                           "mode": "palette-classic"
+                        },
+                        "custom": {
+                           "axisCenteredZero": false,
+                           "axisColorMode": "text",
+                           "axisLabel": "",
+                           "axisPlacement": "auto",
+                           "barAlignment": 0,
+                           "drawStyle": "line",
+                           "fillOpacity": 10,
+                           "gradientMode": "none",
+                           "hideFrom": {
+                              "legend": false,
+                              "tooltip": false,
+                              "viz": false
+                           },
+                           "lineInterpolation": "linear",
+                           "lineWidth": 1,
+                           "pointSize": 5,
+                           "scaleDistribution": {
+                              "type": "linear"
+                           },
+                           "showPoints": "never",
+                           "spanNulls": false,
+                           "stacking": {
+                              "group": "A",
+                              "mode": "none"
+                           },
+                           "thresholdsStyle": {
+                              "mode": "off"
+                           }
+                        },
+                        "decimals": 0,
+                        "mappings": [ ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 80
+                              }
+                           ]
+                        },
+                        "unit": "s"
+                     },
+                     "overrides": [ ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 5,
+                     "x": 7,
+                     "y": 23
+                  },
+                  "id": 181,
+                  "links": [ ],
+                  "options": {
+                     "legend": {
+                        "calcs": [ ],
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": false
+                     },
+                     "tooltip": {
+                        "mode": "multi",
+                        "sort": "none"
+                     }
+                  },
+                  "pluginVersion": "9.1.0",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "expr": "sum by (pod) (\n    increase (\n        camel_route_policy_seconds_sum{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n) \n \n/ \n \nsum by (pod) (\n    increase (\n        camel_route_policy_seconds_count{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\"\n        }[$__range]\n    )\n)",
+                        "format": "time_series",
+                        "instant": false,
+                        "intervalFactor": 1,
+                        "legendFormat": "{{kubernetes_pod_name}}",
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Avg Exec time $route - per instances",
+                  "type": "timeseries"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "fieldConfig": {
+                     "defaults": {
+                        "color": {
+                           "mode": "thresholds"
+                        },
+                        "custom": {
+                           "align": "auto",
+                           "cellOptions": {
+                              "type": "auto"
+                           },
+                           "inspect": false
+                        },
+                        "mappings": [ ],
+                        "thresholds": {
+                           "mode": "absolute",
+                           "steps": [
+                              {
+                                 "color": "green",
+                                 "value": null
+                              },
+                              {
+                                 "color": "red",
+                                 "value": 80
+                              }
+                           ]
+                        }
+                     },
+                     "overrides": [
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "Value"
+                           },
+                           "properties": [
+                              {
+                                 "id": "displayName",
+                                 "value": "Avg Execution TIme"
+                              },
+                              {
+                                 "id": "unit",
+                                 "value": "s"
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "Time"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.hidden",
+                                 "value": true
+                              }
+                           ]
+                        },
+                        {
+                           "matcher": {
+                              "id": "byName",
+                              "options": "routeId"
+                           },
+                           "properties": [
+                              {
+                                 "id": "custom.hidden",
+                                 "value": true
+                              }
+                           ]
+                        }
+                     ]
+                  },
+                  "gridPos": {
+                     "h": 5,
+                     "w": 12,
+                     "x": 12,
+                     "y": 23
+                  },
+                  "id": 189,
+                  "interval": "",
+                  "links": [ ],
+                  "options": {
+                     "cellHeight": "sm",
+                     "footer": {
+                        "countRows": false,
+                        "fields": "",
+                        "reducer": [
+                           "sum"
+                        ],
+                        "show": false
+                     },
+                     "showHeader": true
+                  },
+                  "pluginVersion": "10.0.1",
+                  "repeat": "route",
+                  "repeatDirection": "v",
+                  "targets": [
+                     {
+                        "datasource": {
+                           "type": "prometheus",
+                           "uid": "${datasource}"
+                        },
+                        "editorMode": "code",
+                        "expr": "sum by (routeId,nodeId) (\n    increase (\n        camel_message_history_seconds_sum{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\",\n            nodeId=~\"$processor\"\n        }[$__range]\n    )\n) \n/ \nsum by (routeId,nodeId) (\n    increase (\n        camel_message_history_seconds_count{\n            job=~\"$job\",\n            cluster=\"$cluster\",\n            namespace=\"$namespace\",\n            camelContext=\"$context\",\n            app_kubernetes_io_part_of=\"$part_of\",\n            app_kubernetes_io_name=\"$app_name\",\n            app_kubernetes_io_component=\"$component\",\n            app_kubernetes_io_instance=\"$instance\", \n            app_kubernetes_io_version=\"$version\",\n            routeId=~\"$route\",\n            nodeId=~\"$processor\"\n        }[$__range]\n    )\n)\n",
+                        "format": "table",
+                        "hide": false,
+                        "instant": true,
+                        "intervalFactor": 1,
+                        "refId": "A"
+                     }
+                  ],
+                  "title": "Processor Execution Times - $route",
+                  "transformations": [ ],
+                  "type": "table"
+               }
+            ],
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "refId": "A"
+               }
+            ],
+            "title": "Execution Times Per Route",
+            "type": "row"
+         }
+      ],
+      "refresh": "5s",
+      "schemaVersion": 38,
+      "style": "dark",
+      "tags": [ ],
+      "templating": {
+         "list": [
+            {
+               "current": {
+                  "selected": true,
+                  "text": "default",
+                  "value": "default"
+               },
+               "hide": 0,
+               "includeAll": false,
+               "label": "Data Source",
+               "multi": false,
+               "name": "datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "queryValue": "",
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "type": "datasource"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "All",
+                  "value": "$__all"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{eventType=\"RouteEvent\"},job)",
+               "description": "",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{eventType=\"RouteEvent\"},job)",
+                  "refId": "StandardVariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "local",
+                  "value": "local"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{eventType=\"RouteEvent\"},cluster)",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Cluster",
+               "multi": false,
+               "name": "cluster",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{eventType=\"RouteEvent\"},cluster)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "camel",
+                  "value": "camel"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{eventType=\"RouteEvent\",job=~\"${job}\",cluster=\"${cluster}\"},namespace)",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Namespace",
+               "multi": false,
+               "name": "namespace",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{eventType=\"RouteEvent\",job=~\"${job}\",cluster=\"${cluster}\"},namespace)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "smoke-test-app",
+                  "value": "smoke-test-app"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{eventType=\"RouteEvent\",job=~\"${job}\",cluster=\"${cluster}\",namespace=\"$namespace\"},camelContext)",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Camel Context",
+               "multi": false,
+               "name": "context",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{eventType=\"RouteEvent\",job=~\"${job}\",cluster=\"${cluster}\",namespace=\"$namespace\"},camelContext)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "All",
+                  "value": "$__all"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_exchanges_succeeded_total{job=~\"${job}\",cluster=\"${cluster}\",namespace=\"$namespace\",camelContext=\"$context\"},routeId)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Camel Route",
+               "multi": true,
+               "name": "route",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_exchanges_succeeded_total{job=~\"${job}\",cluster=\"${cluster}\",namespace=\"$namespace\",camelContext=\"$context\"},routeId)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "current": {
+                  "selected": false,
+                  "text": "All",
+                  "value": "$__all"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_message_history_seconds_count{job=~\"${job}\",cluster=\"${cluster}\",namespace=\"$namespace\",camelContext=\"$context\",routeId=~\"$route\"},nodeId)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Camel Processor",
+               "multi": true,
+               "name": "processor",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_message_history_seconds_count{job=~\"${job}\",cluster=\"${cluster}\",namespace=\"$namespace\",camelContext=\"$context\",routeId=~\"$route\"},nodeId)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "tagValuesQuery": "",
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": "",
+               "current": {
+                  "selected": false,
+                  "text": "dev",
+                  "value": "dev"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_part_of)",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Part of",
+               "multi": false,
+               "name": "part_of",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_part_of)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            },
+            {
+               "allValue": "",
+               "current": {
+                  "selected": false,
+                  "text": "dev",
+                  "value": "dev"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_name)",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Name",
+               "multi": false,
+               "name": "app_name",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_name)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            },
+            {
+               "allValue": "",
+               "current": {
+                  "selected": false,
+                  "text": "dev",
+                  "value": "dev"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_component)",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Component",
+               "multi": false,
+               "name": "component",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_component)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            },
+            {
+               "allValue": "",
+               "current": {
+                  "selected": true,
+                  "text": "dev-master",
+                  "value": "dev-master"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_instance)",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Instance",
+               "multi": false,
+               "name": "instance",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_instance)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            },
+            {
+               "allValue": "",
+               "current": {
+                  "selected": false,
+                  "text": "dev-snapshot",
+                  "value": "dev-snapshot"
+               },
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "grafanacloud-prom"
+               },
+               "definition": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_version)",
+               "hide": 0,
+               "includeAll": false,
+               "label": "Version",
+               "multi": false,
+               "name": "version",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(camel_routes_running_routes{job=~\"$job\",cluster=\"${cluster}\",eventType=\"RouteEvent\",camelContext=\"$context\"},app_kubernetes_io_version)",
+                  "refId": "PrometheusVariableQueryEditor-VariableQuery"
+               },
+               "refresh": 1,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-15m",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "5s",
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ],
+         "time_options": [
+            "5m",
+            "15m",
+            "1h",
+            "6h",
+            "12h",
+            "24h",
+            "2d",
+            "7d",
+            "30d"
+         ]
+      },
+      "timezone": "",
+      "title": "Apache Camel - Context view",
+      "uid": "apache-camel-micrometer",
+      "version": 11,
+      "weekStart": ""
+   }

@@ -1,0 +1,48 @@
+groups:
+    - name: apache-mesos
+      rules:
+        - alert: ApacheMesosHighMemoryUsage
+          annotations:
+            description: '{{ printf "%.0f" $value }} percent memory usage on {{$labels.mesos_cluster}}, which is above the threshold of 90.'
+            summary: There is a high memory usage for the cluster.
+          expr: |
+            min without(instance, job, type) (mesos_master_mem{type="percent"}) > 90
+          for: 5m
+          labels:
+            severity: warning
+        - alert: ApacheMesosHighDiskUsage
+          annotations:
+            description: '{{ printf "%.0f" $value }} percent disk usage on {{$labels.mesos_cluster}}, which is above the threshold of 90.'
+            summary: There is a high disk usage for the cluster.
+          expr: |
+            min without(instance, job, type) (mesos_master_disk{type="percent"}) > 90
+          for: 5m
+          labels:
+            severity: critical
+        - alert: ApacheMesosUnreachableTasks
+          annotations:
+            description: '{{ printf "%.0f" $value }} unreachable tasks on {{$labels.mesos_cluster}}, which is above the threshold of 3.'
+            summary: There are an unusually high number of unreachable tasks.
+          expr: |
+            max without(instance, job, state) (mesos_master_task_states_current{state="unreachable"}) > 3
+          for: 5m
+          labels:
+            severity: warning
+        - alert: ApacheMesosNoLeaderElected
+          annotations:
+            description: There is no cluster coordinator on {{$labels.mesos_cluster}}.
+            summary: There is currently no cluster coordinator.
+          expr: |
+            max without(instance, job) (mesos_master_elected) == 0
+          for: 1m
+          labels:
+            severity: critical
+        - alert: ApacheMesosInactiveAgents
+          annotations:
+            description: '{{ printf "%.0f" $value }} inactive agent clients over the last 5m which is above the threshold of 1.'
+            summary: There are currently inactive agent clients.
+          expr: |
+            max without(instance, job, state) (mesos_master_slaves_state{state=~"connected_inactive|disconnected_inactive"}) > 1
+          for: 5m
+          labels:
+            severity: warning
