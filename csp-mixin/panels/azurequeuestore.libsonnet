@@ -72,7 +72,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.color.withMode('fixed')
       + g.panel.stat.standardOptions.color.withFixedColor('text'),
     messageCountByQueue:
-      this.signals.azurequeuestore.messageCountTopK.common
+      this.signals.azurequeuestore.messageCountTopK.common(type='table')
       + g.panel.table.standardOptions.withUnit('locale')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Queues - Message Count',
@@ -91,7 +91,7 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       + g.panel.stat.standardOptions.color.withMode('fixed')
       + g.panel.stat.standardOptions.color.withFixedColor('text'),
     totalBytesByBucket:
-      this.signals.azurequeuestore.totalBytesTopK.common
+      this.signals.azurequeuestore.totalBytesTopK.common(type='table')
       + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Queues - Total Bytes',
@@ -103,20 +103,15 @@ local commonlib = import 'common-lib/common/main.libsonnet';
         'Total bytes stored'
       ) + self._tableCommon('Total Bytes'),
     totalNetworkThroughput:
-      this.signals.azurequeuestore.networkThroughputTopK.common
+      this.signals.azurequeuestore.networkThroughputTopK.common(type='table')
       + g.panel.table.standardOptions.withUnit('bytes')
       + commonlib.panels.generic.table.base.new(
         'Top 5 Queues - Network Throughput',
         [
-          this.signals.azurequeuestore.networkThroughputTopK.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true),
-          this.signals.azurequeuestore.networkRxTopK.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true),
-          this.signals.azurequeuestore.networkTxTopK.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true),
+          this.signals.azurequeuestore.networkThroughputTopK.asTableTarget(),
+
+          this.signals.azurequeuestore.networkRxTopK.asTableTarget(),
+          this.signals.azurequeuestore.networkTxTopK.asTableTarget(),
         ],
         'Total network throughput in bits for the selected timerange'
       ) + self._tableCommon('Total Throughput')

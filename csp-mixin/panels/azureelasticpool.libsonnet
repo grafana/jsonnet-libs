@@ -69,21 +69,13 @@ local commonlib = import 'common-lib/common/main.libsonnet';
       ]),
 
     aep_storage:
-      this.signals.azureelasticpool.storageAllocTbl.common
+      this.signals.azureelasticpool.storageAllocTbl.common(type='table')
       + commonlib.panels.generic.table.base.new(
         'Elastic pool storage',
         [
-          this.signals.azureelasticpool.storageAllocTbl.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true),
-
-          this.signals.azureelasticpool.storageUsedTbl.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true),
-
-          this.signals.azureelasticpool.storageLimitTbl.asTarget()
-          + g.query.prometheus.withFormat('table')
-          + g.query.prometheus.withInstant(true),
+          this.signals.azureelasticpool.storageAllocTbl.asTableTarget(),
+          this.signals.azureelasticpool.storageUsedTbl.asTableTarget(),
+          this.signals.azureelasticpool.storageLimitTbl.asTableTarget(),
         ],
         'Storage overview per elasticpool.'
       ) + self._aep_tableCommon(),
