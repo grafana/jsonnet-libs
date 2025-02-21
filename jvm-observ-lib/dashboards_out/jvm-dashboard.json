@@ -1,0 +1,2507 @@
+{
+      "panels": [
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 0
+            },
+            "panels": [ ],
+            "title": "JVM overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "RAM (random-access memory) currently in use by the operating system and running applications, in percent.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 0,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "((avg by (job) (\n  java_lang_memory_heapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_used{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n))/(avg by (job) (\n  java_lang_memory_heapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_max{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n))) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: JVM memory used(heap)",
+                  "refId": "JVM memory used(heap)"
+               }
+            ],
+            "title": "Memory used(heap)",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "RAM (random-access memory) currently in use by the operating system and running applications, in percent.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 4,
+               "y": 1
+            },
+            "options": {
+               "colorMode": "value",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "((avg by (job) (\n  java_lang_memory_nonheapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_used{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n))/(avg by (job) (\n  java_lang_memory_nonheapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_max{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n))) * 100",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: JVM memory used(nonheap)",
+                  "refId": "JVM memory used(nonheap)"
+               }
+            ],
+            "title": "Memory used(nonheap)",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The current number of live threads including both daemon and non-daemon threads.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Threads"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 8,
+               "y": 1
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_threading_threadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_current{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_live_threads{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (daemon) (process_runtime_jvm_threads_count{job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Threads",
+                  "refId": "Threads"
+               }
+            ],
+            "title": "Threads",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The number of classes that are currently loaded in the JVM.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Classes loaded"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 4,
+               "w": 4,
+               "x": 12,
+               "y": 1
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_classloading_loadedclasscount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_classes_loaded_classes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_classes_loaded{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_classes_loaded_total{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_classes_loaded{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Classes loaded",
+                  "refId": "Classes loaded"
+               }
+            ],
+            "title": "Classes loaded",
+            "type": "stat"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 5
+            },
+            "panels": [ ],
+            "title": "Process overview",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process uptime.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "thresholds"
+                  },
+                  "decimals": 1,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "orange",
+                           "value": null
+                        },
+                        {
+                           "color": "text",
+                           "value": 600
+                        }
+                     ]
+                  },
+                  "unit": "dtdurations"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Uptime"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "dtdurations"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 6
+            },
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none"
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  java_lang_runtime_uptime{job=~\"$job\",instance=~\"$instance\"}\n/1000\nor\nprocess_uptime_seconds{job=~\"$job\",instance=~\"$instance\"}\nor\nprocess_uptime{job=~\"$job\",instance=~\"$instance\"}\nor\nruntime_uptime_milliseconds_total{job=~\"$job\",instance=~\"$instance\"}\nor\ntime()-process_start_time_seconds{job=~\"$job\",instance=~\"$instance\"}",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Uptime",
+                  "refId": "Uptime"
+               }
+            ],
+            "title": "Uptime",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process start time.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "fixedColor": "text",
+                     "mode": "fixed"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process start time"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "dateTimeAsIso"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 6
+            },
+            "options": {
+               "colorMode": "fixed",
+               "graphMode": "none",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ]
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  java_lang_runtime_starttime{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_start_time_seconds{job=~\"$job\",instance=~\"$instance\"} * 1000\n)\nor\navg by (job,instance) (\n  process_start_time{job=~\"$job\",instance=~\"$instance\"} * 1000\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process start time",
+                  "refId": "Process start time"
+               }
+            ],
+            "title": "Process start time",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "System's load average.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "short"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Load average"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CPU count"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*CPU count.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 6
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  java_lang_operatingsystem_systemloadaverage{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_runtime_jvm_system_cpu_load_1m{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  system_load_average_1m{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Load average",
+                  "refId": "Load average"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  system_cpu_count{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: CPU count",
+                  "refId": "CPU count"
+               }
+            ],
+            "title": "Load average",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process CPU usage.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CPU usage (process)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "CPU usage (system)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "percent"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 0,
+               "y": 12
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  avg by (job,instance) (\n  rate(java_lang_operatingsystem_processcputime{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n/1000000000 * 100\nor\navg by (job,instance) (\n  process_cpu_usage{job=~\"$job\",instance=~\"$instance\"} * 100\n)\nor\navg by (job,instance) (\n  process_runtime_jvm_cpu_utilization_ratio{job=~\"$job\",instance=~\"$instance\"} * 100\n)\nor\navg by (job,instance) (\n  process_runtime_jvm_cpu_utilization{job=~\"$job\",instance=~\"$instance\"} * 100\n)\nor\navg by (job,instance) (\n  rate(process_cpu_seconds_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]) * 100\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: CPU usage (process)",
+                  "refId": "CPU usage (process)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  avg by (job,instance) (\n  java_lang_operatingsystem_cpuload{job=~\"$job\",instance=~\"$instance\"}\n)\n* 100\nor\navg by (job,instance) (\n  process_runtime_jvm_system_cpu_utilization_ratio{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_runtime_jvm_system_cpu_utilization{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  system_cpu_usage{job=~\"$job\",instance=~\"$instance\"} * 100\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: CPU usage (system)",
+                  "refId": "CPU usage (system)"
+               }
+            ],
+            "title": "CPU usage (process)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process resident memory size in bytes.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process memory used (rss)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 8,
+               "y": 12
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  java_lang_memory_heapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"} + java_lang_memory_nonheapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_resident_memory_bytes{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process memory used (rss)",
+                  "refId": "Process memory used (rss)"
+               }
+            ],
+            "title": "Process memory used (rss)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Process files opened.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process files open"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Process files max"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": ""
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 8,
+               "x": 16,
+               "y": 12
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  process_files_open_files{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_files_open{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_open_fds{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process files open",
+                  "refId": "Process files open"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,instance) (\n  process_files_max_files{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_files_max{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job,instance) (\n  process_max_fds{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{instance}}: Process files max",
+                  "refId": "Process files max"
+               }
+            ],
+            "title": "Process files open",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 18
+            },
+            "panels": [ ],
+            "title": "JVM memory",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The used space is the amount of memory that is currently occupied by Java objects.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "JVM memory used(heap)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*max.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "JVM memory max(heap)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "JVM memory committed(heap)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 19
+            },
+            "h": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_used{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: JVM memory used(heap)",
+                  "refId": "JVM memory used(heap)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_max{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit{type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: JVM memory max(heap)",
+                  "refId": "JVM memory max(heap)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_memory_heapmemoryusage_committed{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_committed{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_committed_bytes{area=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed_bytes{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed{type=\"heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: JVM memory committed(heap)",
+                  "refId": "JVM memory committed(heap)"
+               }
+            ],
+            "title": "JVM memory used(heap)",
+            "type": "timeseries",
+            "w": 12
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The amount of memory that is currently in non-heap.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "JVM memory used(nonheap)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*max.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "JVM memory max(nonheap)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "JVM memory committed(nonheap)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 19
+            },
+            "h": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_used{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_used{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_used_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_usage{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: JVM memory used(nonheap)",
+                  "refId": "JVM memory used(nonheap)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_max{job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_max{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_max_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_limit{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"} != -1)\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: JVM memory max(nonheap)",
+                  "refId": "JVM memory max(nonheap)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_memory_nonheapmemoryusage_committed{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_bytes_committed{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (id) (jvm_memory_committed_bytes{area=\"nonheap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed_bytes{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)\nor\navg by (job) (\n  sum without (pool) (process_runtime_jvm_memory_committed{type=\"non_heap\", job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: JVM memory committed(nonheap)",
+                  "refId": "JVM memory committed(nonheap)"
+               }
+            ],
+            "title": "JVM memory used(nonheap)",
+            "type": "timeseries",
+            "w": 12
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 27
+            },
+            "panels": [ ],
+            "title": "JVM garbage collection",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Memory used for G1 Eden Space Collection.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Eden Space (used)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*max.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Eden Space (max)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Eden Space (committed)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 28
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_memory_pool_bytes_used{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_used_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{id=~\"(G1 |PS )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage{type=\"heap\", pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Eden Space (used)",
+                  "refId": "Eden Space (used)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  avg by (job) (\n  jvm_memory_max_bytes{id=~\"(G1 )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\navg by (job) (\n  jvm_memory_pool_bytes_max{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_max_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Eden Space (max)",
+                  "refId": "Eden Space (max)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{id=~\"(G1 |PS )?Eden Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_bytes_committed{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=~\"(G1 |PS )?Eden Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed{pool=~\"(G1 |PS )?Eden Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Eden Space (committed)",
+                  "refId": "Eden Space (committed)"
+               }
+            ],
+            "title": "Eden Space (used)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Memory used for Survival collection.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Survival space (used)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*max.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Survival space (max)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Survival space (committed)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 28
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_memory_pool_bytes_used{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_used_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage{type=\"heap\", pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Survival space (used)",
+                  "refId": "Survival space (used)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_memory_max_bytes{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  jvm_memory_pool_bytes_max{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  jvm_memory_pool_max_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_limit{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"} != -1\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Survival space (max)",
+                  "refId": "Survival space (max)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{id=~\"(G1 |PS )?Survivor Space\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_bytes_committed{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=~\"(G1 |PS )?Survivor Space\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed{pool=~\"(G1 |PS )?Survivor Space\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Survival space (committed)",
+                  "refId": "Survival space (committed)"
+               }
+            ],
+            "title": "Survival space (used)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Memory used for Tenured(Old Gen) collection.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Tenured space (used)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": "/.*max.*/"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Tenured space (max)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Tenured space (committed)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 28
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_memory_pool_bytes_used{pool=\"G1 Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_used_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_used_bytes{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage_bytes{type=\"heap\", pool=~\"G1 Old Gen|Tenured Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_usage{type=\"heap\", pool=~\"G1 Old Gen|Tenured Gen\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Tenured space (used)",
+                  "refId": "Tenured space (used)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "\n  avg by (job) (\n  jvm_memory_max_bytes{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  jvm_memory_pool_bytes_max{pool=\"G1 Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  jvm_memory_pool_used_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit_bytes{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1\nor\n\n  avg by (job) (\n  process_runtime_jvm_memory_limit{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\n != -1",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Tenured space (max)",
+                  "refId": "Tenured space (max)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_memory_committed_bytes{id=\"Tenured Gen\", area=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_bytes_committed{pool=\"G1 Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_memory_pool_committed_bytes{pool=\"PS Old Gen\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed_bytes{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_memory_committed{pool=~\"G1 Old Gen|Tenured Gen\", type=\"heap\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Tenured space (committed)",
+                  "refId": "Tenured space (committed)"
+               }
+            ],
+            "title": "Tenured space (used)",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Major and minor garbage collections",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Garbage collections"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "ops"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 36
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job,gc) (\n  rate(jvm_gc_collection_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\nlabel_replace(\n  avg by (job,action,cause) (\n  rate(jvm_gc_pause_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n, \"action\", \"$1\", \"action\", \"end of (.+)\")\nor\nlabel_replace(\n  avg by (job,gc,action) (\n  rate(process_runtime_jvm_gc_duration_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n, \"action\", \"$1\", \"action\", \"end of (.+)\")\nor\nlabel_replace(\n  avg by (job,gc,action) (\n  rate(process_runtime_jvm_gc_duration_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{gc}}",
+                  "refId": "Garbage collections"
+               }
+            ],
+            "title": "Garbage collections",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "Major and minor garbage collections",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 0,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "GC time (avg)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "GC time (max)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "s"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "GC time (p95)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 36
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job, gc) (\n  rate(jvm_gc_collection_seconds_sum{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n  /\n  rate(jvm_gc_collection_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n\nor\nlabel_replace(\n  avg by (job, action, cause) (\n  rate(jvm_gc_pause_seconds_sum{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n  /\n  rate(jvm_gc_pause_seconds_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\n\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ job }}: {{ action }} ({{ cause }}) (avg)",
+                  "refId": "GC time (avg)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "label_replace(\n  avg by (action,cause, job) (rate(jvm_gc_pause_seconds_max{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ job }}: {{ action }} ({{ cause }}) (max)",
+                  "refId": "GC time (max)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "label_replace(\n  histogram_quantile(0.95, sum(rate(process_runtime_jvm_gc_duration_bucket{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by (le,job,action,gc))\n\n, \"action\", \"$1\", \"action\", \"end of (.+)\")\nor\nlabel_replace(\n  histogram_quantile(0.95, sum(rate(process_runtime_jvm_gc_duration_seconds_bucket{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])) by (le,job,action,gc))\n\n, \"action\", \"$1\", \"action\", \"end of (.+)\")",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ job }}: {{ action }} ({{ gc }}) (p95)",
+                  "refId": "GC time (p95)"
+               }
+            ],
+            "title": "GC duration",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "datasource",
+               "uid": "-- Mixed --"
+            },
+            "description": "'Allocated' is the size increase of the young generation memory pool after one GC and before the next. It reflects minor GC.\n'Promoted' is the size increase of the old generation memory pool after GC. It reflects full GC.\n",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*(T|t)otal.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Allocated (bytes)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Allocated"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "allocs"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Promoted"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 36
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  rate(jvm_gc_memory_allocated_bytes_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)\nor\navg by (job) (\n  rate(jvm_memory_pool_allocated_bytes_total{pool=~\"(G1 |PS )?Eden Space\",job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Allocated (bytes)",
+                  "refId": "Allocated (bytes)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "topk(10,\n  avg by (job, arena, thread_name) (rate(process_runtime_jvm_memory_allocation_count{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval]))\n)\n",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ job }}: Allocated ({{ thread_name }}, {{ arena }})",
+                  "refId": "Allocated"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  rate(jvm_gc_memory_promoted_bytes_total{job=~\"$job\",instance=~\"$instance\"}[$__rate_interval])\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Promoted",
+                  "refId": "Promoted"
+               }
+            ],
+            "title": "Allocated/promoted",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 44
+            },
+            "panels": [ ],
+            "title": "JVM threads",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The current number of live threads including both daemon and non-daemon threads.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Threads"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Threads (daemon)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Threads (peak)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*peak.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Threads (deadlocked)"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 45
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_threading_threadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_current{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_live_threads{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  sum without (daemon) (process_runtime_jvm_threads_count{job=~\"$job\",instance=~\"$instance\"})\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Threads",
+                  "refId": "Threads"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_threading_daemonthreadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_daemon_threads{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_daemon{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_threads_count{daemon=\"true\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Threads (daemon)",
+                  "refId": "Threads (daemon)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  java_lang_threading_peakthreadcount{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_peak_threads{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_threads_peak{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Threads (peak)",
+                  "refId": "Threads (peak)"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_threads_deadlocked{job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Threads (deadlocked)",
+                  "refId": "Threads (deadlocked)"
+               }
+            ],
+            "title": "Threads",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Threads by current state.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  }
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Threads states"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 45
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "sum by (state, job) (jvm_threads_states_threads{job=~\"$job\",instance=~\"$instance\"})\nor\nsum by (state, job) (jvm_threads_state{job=~\"$job\",instance=~\"$instance\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{ state }}",
+                  "refId": "Threads states"
+               }
+            ],
+            "title": "Threads states",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 0,
+               "y": 53
+            },
+            "panels": [ ],
+            "title": "JVM buffers",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "Direct buffer is allocated outside the Java heap and represents the OS native memory used by the JVM process. It is generally used for I/O operations. Note that direct buffers aren't freed up by GC.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Direct buffer used bytes"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Direct buffer capacity"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*capacity.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 54
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_buffer_memory_used_bytes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_pool_used_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Direct buffer used bytes",
+                  "refId": "Direct buffer used bytes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_buffer_pool_capacity_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_total_capacity_bytes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit_bytes{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit{pool=\"direct\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Direct buffer capacity",
+                  "refId": "Direct buffer capacity"
+               }
+            ],
+            "title": "Direct buffer used bytes",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${datasource}"
+            },
+            "description": "The mapped buffer pool is used for its FileChannel instances.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "min": 0,
+                  "unit": "bytes"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Mapped buffer used"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byFrameRefID",
+                        "options": "Mapped buffer capacity"
+                     },
+                     "properties": [
+                        {
+                           "id": "mappings",
+                           "value": [ ]
+                        },
+                        {
+                           "id": "unit",
+                           "value": "bytes"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byRegexp",
+                        "options": ".*capacity.*"
+                     },
+                     "properties": [
+                        {
+                           "id": "color",
+                           "value": {
+                              "fixedColor": "light-orange",
+                              "mode": "fixed"
+                           }
+                        },
+                        {
+                           "id": "custom.fillOpacity",
+                           "value": 0
+                        },
+                        {
+                           "id": "custom.lineStyle",
+                           "value": {
+                              "dash": [
+                                 10,
+                                 10
+                              ],
+                              "fill": "dash"
+                           }
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 54
+            },
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_buffer_memory_used_bytes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_pool_used_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_usage{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Mapped buffer used",
+                  "refId": "Mapped buffer used"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${datasource}"
+                  },
+                  "expr": "avg by (job) (\n  jvm_buffer_pool_capacity_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  jvm_buffer_total_capacity_bytes{job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit_bytes{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)\nor\navg by (job) (\n  process_runtime_jvm_buffer_limit{pool=\"mapped\", job=~\"$job\",instance=~\"$instance\"}\n)",
+                  "format": "time_series",
+                  "instant": false,
+                  "legendFormat": "{{job}}: Mapped buffer capacity",
+                  "refId": "Mapped buffer capacity"
+               }
+            ],
+            "title": "Mapped buffer used",
+            "type": "timeseries"
+         }
+      ],
+      "schemaVersion": 39,
+      "tags": [
+         "java",
+         "jvm"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values({__name__=~\"jvm_memory_used_bytes|jvm_memory_bytes_max|process_runtime_jvm_memory_usage|process_runtime_jvm_memory_usage_bytes|java_lang_memory_heapmemoryusage_used\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${datasource}"
+               },
+               "includeAll": true,
+               "label": "Instance",
+               "multi": true,
+               "name": "instance",
+               "query": "label_values({__name__=~\"jvm_memory_used_bytes|jvm_memory_bytes_max|process_runtime_jvm_memory_usage|process_runtime_jvm_memory_usage_bytes|java_lang_memory_heapmemoryusage_used\",job=~\"$job\"}, instance)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-6h",
+         "to": "now"
+      },
+      "timezone": "utc",
+      "title": "JVM overview",
+      "uid": "jvm-jvm-dashboard"
+   }
