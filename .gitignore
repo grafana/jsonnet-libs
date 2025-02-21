@@ -1,6 +1,4 @@
 .DS_Store
 vendor
 jsonnetfile.lock.json
-!*-observ-lib/prometheus_alerts.yaml
-!*-observ-lib/dashboards_out
 *.zip
