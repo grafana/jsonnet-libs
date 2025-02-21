@@ -1,0 +1,206 @@
+groups:
+    - name: snmp-fc-snmp-alerts
+      rules:
+        - alert: SNMPInterfaceFCerrors
+          annotations:
+            description: |
+                Too many packets with errors (fcIfTxWaitCount) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+            summary: Too many packets with errors (fcIfTxWaitCount) on the FC network interface.
+          expr: |
+            (irate(fcIfTxWaitCount{}[5m])) > 0
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceFCerrors
+          annotations:
+            description: |
+                Too many packets with errors (fcIfFramesDiscard) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+            summary: Too many packets with errors (fcIfFramesDiscard) on the FC network interface.
+          expr: |
+            (irate(fcIfFramesDiscard{}[5m])) > 0
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceFCerrors
+          annotations:
+            description: |
+                Too many packets with errors (fcIfTxWtAvgBBCreditTransitionToZero) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+            summary: Too many packets with errors (fcIfTxWtAvgBBCreditTransitionToZero) on the FC network interface.
+          expr: |
+            (irate(fcIfTxWtAvgBBCreditTransitionToZero{}[5m])) > 0
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceFCerrors
+          annotations:
+            description: |
+                Too many packets with errors (fcHCIfBBCreditTransistionFromZero) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+            summary: Too many packets with errors (fcHCIfBBCreditTransistionFromZero) on the FC network interface.
+          expr: |
+            (irate(fcHCIfBBCreditTransistionFromZero{}[5m])) > 0
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceFCerrors
+          annotations:
+            description: |
+                Too many packets with errors (fcHCIfBBCreditTransistionToZero) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+            summary: Too many packets with errors (fcHCIfBBCreditTransistionToZero) on the FC network interface.
+          expr: |
+            (irate(fcHCIfBBCreditTransistionToZero{}[5m])) > 0
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceFCerrors
+          annotations:
+            description: |
+                Too many packets with errors (fcIfInvalidCrcs) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+            summary: Too many packets with errors (fcIfInvalidCrcs) on the FC network interface.
+          expr: |
+            (irate(fcIfInvalidCrcs{}[5m])) > 0
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceFCerrors
+          annotations:
+            description: |
+                Too many packets with errors (fcIfInvalidTxWords) on {{ $labels.instance }}, FC interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+            summary: Too many packets with errors (fcIfInvalidTxWords) on the FC network interface.
+          expr: |
+            (irate(fcIfInvalidTxWords{}[5m])) > 0
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+    - name: snmp-snmp-alerts
+      rules:
+        - alert: SNMPNodeHasRebooted
+          annotations:
+            description: SNMP node {{ $labels.instance }} has rebooted {{ $value | humanize }} seconds ago.
+            summary: SNMP node has rebooted.
+          expr: |
+            ((
+              sysUpTime{}
+            )/100) < 600 and ((
+              (sysUpTime{} offset 10m)
+            )/100) > 600
+          labels:
+            severity: info
+        - alert: SNMPFRUComponentProblem
+          annotations:
+            description: SNMP field replaceable unit is in {{ $labels.cefcFRUPowerOperStatus }} status on {{ $labels.instance }}.
+            summary: SNMP FRU component is not on.
+          expr: |
+            ((
+              cefcFRUPowerOperStatus{cefcFRUPowerOperStatus!="on"}
+            )!=0) == 1
+          labels:
+            severity: warning
+        - alert: SNMPNodeCPUHighUsage
+          annotations:
+            description: |
+                CPU usage on SNMP node {{ $labels.instance }} is above 90%. The current value is {{ $value | printf "%.2f" }}%.
+            summary: High CPU usage on SNMP node.
+          expr: |
+            avg by (job,instance) (cpmCPUTotal1minRev{}
+            or
+            hrProcessorLoad{hrDeviceType="1.3.6.1.2.1.25.3.1.3",}
+            or
+            jnxOperatingCPU{jnxOperatingContentsIndex="9", }) > 90
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPNodeMemoryUtilization
+          annotations:
+            description: |
+                Memory usage on SNMP node {{ $labels.instance }} is above 90%. The current value is {{ $value | printf "%.2f" }}%.
+            summary: High memory usage on SNMP node.
+          expr: "avg by (job,instance) (# cisco CISCO-ENHANCED-MEMPOOL-MIB\n# cempMemPoolType=\"2\" - processorMemory, cempMemPoolType=\"10\" - virtual memory, i.e in ASA(v).\n(\n  \n  (\n    cempMemPoolUsed{}\n    /\n    (cempMemPoolUsed{} + cempMemPoolFree{}) * 100\n  ) * on (instance, cempMemPoolIndex) group_left () \n        (\n          cempMemPoolType{} == 2)/2 \n          or (cempMemPoolType{} == 10)/10 \n)\nor\n# cisco firmwares that supports only CISCO-MEMORY-POOL-MIB\n# ciscoMemoryPoolType=\"1\" - Processor\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", }\n/\n(ciscoMemoryPoolUsed{ciscoMemoryPoolType=\"1\", } + ciscoMemoryPoolFree{ciscoMemoryPoolType=\"1\", }) * 100)\n\nor\nhrStorageUsed{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", }/hrStorageSize{hrStorageDescr!~\".*(?i:(cache|buffer)).*\", hrStorageType=\"1.3.6.1.2.1.25.2.1.2\", }*100\n\nor\nhrStorageUsed{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", }/hrStorageSize{hrStorageDescr=\"main memory\",hrStorageIndex=\"65536\", }*100\n\nor\njnxOperatingBuffer{jnxOperatingContentsIndex=\"9\", }) > 90\n"
+          labels:
+            severity: info
+        - alert: SNMPInterfaceDown
+          annotations:
+            description: "Network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.instance}} is down. \nOnly interfaces with ifAdminStatus = `up` and matching `ifAlias=~\".*(?i:(uplink|internet|WAN)).*\"` are being checked.'\n"
+            summary: Network interface is down on SNMP device.
+          expr: |
+            (ifOperStatus{ifAlias=~".*(?i:(uplink|internet|WAN)).*"}) == 2
+            # only alert if interface is adminatratively up:
+            and (ifAdminStatus{}) != 1
+          for: 5m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceDrops
+          annotations:
+            description: |
+                Too many packets discarded on {{ $labels.instance }}, interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (30m).
+            summary: Too many packets discarded on the network interface.
+          expr: |
+            ((
+              irate(ifInDiscards{}[5m])
+            )>0) > 0
+            or
+            ((
+              irate(ifOutDiscards{}[5m])
+            )>0) > 0
+          for: 30m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceErrors
+          annotations:
+            description: |
+                Too many packets with errors on {{ $labels.instance }}, interface {{ $labels.ifName }} ({{$labels.ifAlias}}) for extended period of time (15m).
+            summary: Too many packets with errors on the network interface.
+          expr: |
+            ((
+              irate(ifInErrors{}[5m])
+            )>0) > 0
+            or
+            ((
+              irate(ifOutErrors{}[5m])
+            )>0) > 0
+          for: 15m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPInterfaceIsFlapping
+          annotations:
+            description: |
+                Network interface {{ $labels.ifName }} ({{$labels.ifAlias}}) is flapping on {{ $labels.instance }}. It has changed its status more than 5 times in the last 5 minutes.
+            summary: Network interface is flapping.
+          expr: |
+            changes(ifOperStatus{}[5m]) > 5
+          for: "0"
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+    - name: snmp-snmp-exporter-alerts
+      rules:
+        - alert: SNMPExporterEmptyResponse
+          annotations:
+            description: |
+                SNMP exporter returns an empty response for node {{ $labels.instance }} and module {{ $labels.module}}. Please check that target support {{ $labels.module }} module as well as authentication and other SNMP settings.
+            summary: SNMP exporter returns an empty response.
+          expr: snmp_scrape_pdus_returned{} <= 1
+          for: 10m
+          keep_firing_for: 5m
+          labels:
+            severity: warning
+        - alert: SNMPExporterSlowScrape
+          annotations:
+            description: |
+                SNMP exporter scrape of {{ $labels.instance }} is taking more than 50 seconds. Please check SNMP modules polled and that snmp_exporter is located on the same network as the SNMP target.
+            summary: SNMP exporter scrape is slow.
+          expr: min_over_time(snmp_scrape_duration_seconds{}[5m]) > 50
+          for: 10m
+          keep_firing_for: 5m
+          labels:
+            severity: info
