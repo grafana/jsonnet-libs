@@ -69,7 +69,7 @@
                      "type": "prometheus",
                      "uid": "${datasource}"
                   },
-                  "expr": "go_info{job!=\"\",job=~\"$job\",instance=~\"$instance\"}",
+                  "expr": "avg by (job,instance,version) (\n  go_info{job!=\"\",job=~\"$job\",instance=~\"$instance\"}\n)",
                   "format": "table",
                   "instant": false,
                   "legendFormat": "{{instance}}: Golang version",
