@@ -19,19 +19,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 2,
-  "links": [
-    {
-      "asDropdown": false,
-      "icon": "external link",
-      "includeVars": true,
-      "keepTime": true,
-      "tags": ["snmp"],
-      "targetBlank": false,
-      "title": "Docker Dashboards",
-      "type": "dashboards",
-      "url": ""
-    }
-  ],
+  "links": [],
   "liveNow": false,
   "panels": [
     {
