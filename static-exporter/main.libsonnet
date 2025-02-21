@@ -66,7 +66,7 @@ local k = import 'ksonnet-util/kausal.libsonnet';
   withoutHttpConfig():: {
     assert std.trace('DEPRECATION WARNING: running static-exporter without HttpConfig will make it unable for Prometheus 3.x to scrape it.', true),
     local name = self.name + '-httpd-config',
-    httpdConfig:: {},
+    httpdConfig:: super.httpdConfig,
     deployment+: {
       spec+: {
         template+: {
