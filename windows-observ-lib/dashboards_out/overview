@@ -1066,6 +1066,7 @@
                      "showPoints": "never"
                   },
                   "decimals": 1,
+                  "noValue": "No traffic",
                   "unit": "bps"
                },
                "overrides": [

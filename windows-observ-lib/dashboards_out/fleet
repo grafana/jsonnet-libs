@@ -580,7 +580,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "d/windows-overview?var-instance=${__field.labels.instance}&${__url_time_range}"
+                        "url": "/d/windows-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "max": 100,
@@ -685,7 +685,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "d/windows-overview?var-instance=${__field.labels.instance}&${__url_time_range}"
+                        "url": "/d/windows-overview?var-instance=${__field.labels.instance}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "max": 100,
@@ -790,7 +790,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "d/windows-overview?var-instance=${__field.labels.instance}&var-volume=${__field.labels.volume}&${__url_time_range}"
+                        "url": "/d/windows-overview?var-instance=${__field.labels.instance}&var-volume=${__field.labels.volume}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "max": 100,
@@ -895,7 +895,7 @@
                   "links": [
                      {
                         "title": "Drill down to this instance",
-                        "url": "d/windows-overview?var-instance=${__field.labels.instance}&var-volume=${__field.labels.volume}&${__url_time_range}"
+                        "url": "/d/windows-overview?var-instance=${__field.labels.instance}&var-volume=${__field.labels.volume}&${__url_time_range}&${datasource:queryparam}"
                      }
                   ],
                   "max": 100,
