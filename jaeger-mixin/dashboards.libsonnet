@@ -108,7 +108,8 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
           g.queryPanel('histogram_quantile(0.95, sum by (job, le) (rate(jaeger_collector_save_latency_bucket[1m])))', '{{job}}') +
           { yaxes: g.yaxes({ format: 's' }) },
         )
-      ),
+      )
+      { editable: false },
 
     'jaeger-read.json':
       (g.dashboard('Jaeger / Read') + { uid: '1311ff9971f44f5ade3e1592d579f3f4' })
@@ -137,6 +138,7 @@ local g = (import 'grafana-builder/grafana.libsonnet') + {
           g.queryPanel('histogram_quantile(0.99, sum(rate(jaeger_cassandra_read_latency_ok_bucket[1m])) by (le, instance))', '{{instance}}') +
           g.stack,
         )
-      ),
+      )
+      { editable: false },
   },
 }
