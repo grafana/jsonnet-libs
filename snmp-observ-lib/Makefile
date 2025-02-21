@@ -26,9 +26,12 @@ dashboards_out: mixin.libsonnet main.libsonnet config.libsonnet $(wildcard panel
 	@mkdir -p dashboards_out
 	mixtool generate dashboards mixin.libsonnet -d dashboards_out
 
-prometheus_alerts.yaml: mixin.libsonnet alerts.libsonnet $(wildcard signals/*)
-	mixtool generate alerts mixin.libsonnet -a prometheus_alerts.yaml
-
+prometheus_alerts.yaml: mixin.libsonnet $(wildcard alerts.libsonnet) $(wildcard signals/*)
+	@if [ -f alerts.libsonnet ]; then \
+		mixtool generate alerts mixin.libsonnet -a prometheus_alerts.yaml; \
+	else \
+		touch prometheus_alerts.yaml; \
+	fi
 
 .PHONY: deploy deploy_rules deploy_dashboards
 deploy: deploy_rules deploy_dashboards
