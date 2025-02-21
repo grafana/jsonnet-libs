@@ -1,3 +1,6 @@
+# 0.3.2
+- [Signal] Fix combining info metrics.
+
 # 0.3.1
 - [Signal] Fix optional signals (type=stub).
 - [Signal] Add optional signals documentation.
