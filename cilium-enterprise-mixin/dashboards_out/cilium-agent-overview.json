@@ -21,7 +21,7 @@
          ]
       },
       "description": "Dashboard for Cilium v1.12 (https://cilium.io/) Agent metrics",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "gnetId": 16611,
       "graphTooltip": 1,

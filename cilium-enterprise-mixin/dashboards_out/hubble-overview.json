@@ -22,7 +22,7 @@
          ]
       },
       "description": "Dashboard for the Cilium v1.12 (https://cilium.io/) Hubble metrics",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "gnetId": 16612,
       "graphTooltip": 0,

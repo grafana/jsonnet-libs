@@ -1,5 +1,5 @@
 {
-  grafanaDashboards: {
-    'apache-camel-micrometer.json': (import 'camel-dashboards/apache-camel-micrometer.json'),
+  grafanaDashboards+:: {
+    'apache-camel-micrometer.json': (import 'camel-dashboards/apache-camel-micrometer.json') {editable: false},
   },
 }

@@ -15,7 +15,7 @@
             }
          ]
       },
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
       "id": 2,
@@ -29,7 +29,7 @@
                "snmp"
             ],
             "targetBlank": false,
-            "title": "Docker Dashboards",
+            "title": "SNMP dashboards",
             "type": "dashboards",
             "url": ""
          }

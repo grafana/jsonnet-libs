@@ -15,11 +15,25 @@
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 2,
-  "links": [],
+  "links": [
+      {
+         "asDropdown": false,
+         "icon": "external link",
+         "includeVars": true,
+         "keepTime": true,
+         "tags": [
+            "snmp"
+         ],
+         "targetBlank": false,
+         "title": "SNMP dashboards",
+         "type": "dashboards",
+         "url": ""
+      }
+  ],
   "liveNow": false,
   "panels": [
     {

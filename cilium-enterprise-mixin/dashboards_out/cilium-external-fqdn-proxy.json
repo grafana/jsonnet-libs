@@ -22,7 +22,7 @@
          ]
       },
       "description": "Dashboard for Cilium Enterprise v1.12 (https://cilium.io/) HA FQDN Proxy metrics",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "gnetId": 16611,
       "graphTooltip": 1,

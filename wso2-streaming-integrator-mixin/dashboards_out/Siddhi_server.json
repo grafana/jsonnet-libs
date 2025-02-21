@@ -19,7 +19,7 @@
          ]
       },
       "description": "",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 2,
       "id": 87,

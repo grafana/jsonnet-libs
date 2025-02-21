@@ -16,7 +16,7 @@
          ]
       },
       "description": "ElasticSearch cluster stats",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "gnetId": 2322,
       "graphTooltip": 1,

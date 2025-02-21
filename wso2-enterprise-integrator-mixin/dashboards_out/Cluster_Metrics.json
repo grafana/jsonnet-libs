@@ -22,7 +22,7 @@
          ]
       },
       "description": "This Dashboard provides an overview of WSO2 integration cluster deployment",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "gnetId": 12783,
       "graphTooltip": 0,

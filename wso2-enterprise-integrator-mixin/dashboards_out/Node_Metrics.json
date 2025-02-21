@@ -22,7 +22,7 @@
          ]
       },
       "description": "This Dashboard provides an overview of a single WSO2 integration nodes",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "gnetId": 12887,
       "graphTooltip": 0,

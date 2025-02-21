@@ -23,7 +23,7 @@
          ]
       },
       "description": "NGINX Access Logs",
-      "editable": true,
+      "editable": false,
       "fiscalYearStartMonth": 0,
       "gnetId": 12559,
       "graphTooltip": 0,

@@ -41,7 +41,7 @@
          ]
       },
       "description": "Shows Jira server and usage metrics",
-      "editable": true,
+      "editable": false,
       "gnetId": 5249,
       "graphTooltip": 0,
       "id": null,
