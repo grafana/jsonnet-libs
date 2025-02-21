@@ -48,10 +48,6 @@
                      },
                      "properties": [
                         {
-                           "id": "mappings",
-                           "value": [ ]
-                        },
-                        {
                            "id": "unit",
                            "value": "dtdurations"
                         }
@@ -106,10 +102,6 @@
                         "options": "Process start time"
                      },
                      "properties": [
-                        {
-                           "id": "mappings",
-                           "value": [ ]
-                        },
                         {
                            "id": "unit",
                            "value": "dateTimeAsIso"
@@ -175,10 +167,6 @@
                         "options": "Load average"
                      },
                      "properties": [
-                        {
-                           "id": "mappings",
-                           "value": [ ]
-                        },
                         {
                            "id": "unit",
                            "value": "short"
@@ -280,10 +268,6 @@
                      },
                      "properties": [
                         {
-                           "id": "mappings",
-                           "value": [ ]
-                        },
-                        {
                            "id": "unit",
                            "value": "percent"
                         }
@@ -295,10 +279,6 @@
                         "options": "CPU usage (system)"
                      },
                      "properties": [
-                        {
-                           "id": "mappings",
-                           "value": [ ]
-                        },
                         {
                            "id": "unit",
                            "value": "percent"
@@ -447,10 +427,6 @@
                      },
                      "properties": [
                         {
-                           "id": "mappings",
-                           "value": [ ]
-                        },
-                        {
                            "id": "unit",
                            "value": ""
                         }
@@ -462,10 +438,6 @@
                         "options": "Process files max"
                      },
                      "properties": [
-                        {
-                           "id": "mappings",
-                           "value": [ ]
-                        },
                         {
                            "id": "unit",
                            "value": ""
