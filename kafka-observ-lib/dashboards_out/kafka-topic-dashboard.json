@@ -26,11 +26,16 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
             "description": "Kafka active topics overview. ",
             "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
@@ -249,6 +254,7 @@
                      "showPoints": "never"
                   },
                   "decimals": 1,
+                  "noValue": "No traffic",
                   "unit": "bps"
                },
                "overrides": [
@@ -315,6 +321,7 @@
                      "showPoints": "never"
                   },
                   "decimals": 1,
+                  "noValue": "No traffic",
                   "unit": "bps"
                },
                "overrides": [
@@ -379,10 +386,16 @@
          },
          {
             "datasource": {
-               "type": "datasource",
-               "uid": "-- Mixed --"
+               "type": "prometheus",
+               "uid": "${datasource}"
             },
+            "description": "Consumer group consume rate.",
             "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "filterable": false
+                  }
+               },
                "overrides": [
                   {
                      "matcher": {
