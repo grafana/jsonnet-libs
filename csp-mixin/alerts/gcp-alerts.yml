@@ -144,7 +144,7 @@ groups:
         labels:
           severity: warning
           service: 'Pub/Sub'
-          service: 'pubsub'
+          serviceId: 'pubsub'
           namespace: cloud-provider-gcp
         annotations:
           summary: 'Unacknowledged messages for more than 60 seconds for a PubSub subscription.'
