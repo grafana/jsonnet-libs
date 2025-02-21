@@ -16,7 +16,9 @@
   metricsSource: ['generic', 'cisco', 'mikrotik', 'juniper'],
 
   //only fire alerts 'interface is down' for the following selector:
-  alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN)).*"',
+  alertInterfaceDownSelector: 'ifAlias=~".*(?i:(uplink|internet|WAN)|ISP).*"',
+  alertInterfaceDownSeverity: 'warning',
+
   // cpuSelector for metricsSources with HOST-RESOURCE-MIB:
   cpuSelector: 'hrDeviceType="1.3.6.1.2.1.25.3.1.3"',
   // memorySelector for metricsSources with HOST-RESOURCE-MIB:

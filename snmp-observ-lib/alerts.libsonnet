@@ -240,7 +240,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
                       this.signals.interface.ifAdminStatus.asRuleExpression(),
                     ],
               labels: {
-                severity: 'warning',
+                severity: this.config.alertInterfaceDownSeverity,
               },
               annotations: {
                 summary: 'Network interface is down on SNMP device.',
