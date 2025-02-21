@@ -233,7 +233,7 @@ local xtd = import 'github.com/jsonnet-libs/xtd/main.libsonnet';
               expr: |||
                       (%s) == 2
                       # only alert if interface is adminatratively up:
-                      and (%s) != 1
+                      and (%s) != 2
                     |||
                     % [
                       this.signals.interface.ifOperStatus.withFilteringSelectorMixin(this.config.alertInterfaceDownSelector).asRuleExpression(),
