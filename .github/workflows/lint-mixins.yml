@@ -46,7 +46,7 @@ jobs:
         run: echo '${{ steps.changed-mixins.outputs.all_changed_files }}'
 
   lint-mixin:
-    name: Run Mixtool
+    name: Lint Mixin
     runs-on: ubuntu-latest
     permissions:
       issues: write
