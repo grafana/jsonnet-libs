@@ -14,11 +14,11 @@ exclusions:
     reason: "mixtool upgrade made this rule stricter. TODO: Fix errors and remove the warning exclusion"
   target-logql-auto-rule:
     reason: "LogQL queries use fixed duration instead of $__auto"
-    dashboards:
-      - "Asterisk - Logs"
-    panels:
-      - "Total Log Lines"
-      - "Warnings" 
-      - "Errors"
-      - "Error Percentage"
-      - "Bytes Used"
+    entries:
+      - dashboard: "Asterisk - Logs"
+        panels:
+          - "Total Log Lines"
+          - "Warnings" 
+          - "Errors"
+          - "Error Percentage"
+          - "Bytes Used"

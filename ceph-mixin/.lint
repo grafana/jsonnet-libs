@@ -17,9 +17,9 @@ exclusions:
     reason: "Allow untemplated descriptions for now. TODO: Improve descriptions"
   panel-units-rule:
     reason: "Time units are correctly defined for table timestamps. TODO: Review if this exclusion can be removed"
-    dashboards:
-      - "Ceph - Cluster"
-    panels:
-      - "Alerts from CephThanos"
-      - "Top Sluggish OSD's" 
-      - "Down OSD's"
+    entries:
+      - dashboard: "Ceph - Cluster"
+        panels:
+          - "Alerts from CephThanos"
+          - "Top Sluggish OSD's" 
+          - "Down OSD's"
