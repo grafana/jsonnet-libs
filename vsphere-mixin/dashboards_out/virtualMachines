@@ -1,0 +1,846 @@
+{
+      "links": [
+         {
+            "keepTime": true,
+            "title": "vSphere logs",
+            "type": "link",
+            "url": "/d/vsphere-logs"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "vSphere clusters",
+            "type": "link",
+            "url": "/d/vsphere-clusters"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "vSphere hosts",
+            "type": "link",
+            "url": "/d/vsphere-hosts"
+         },
+         {
+            "includeVars": true,
+            "keepTime": true,
+            "title": "vSphere overview",
+            "type": "link",
+            "url": "/d/vsphere-overview"
+         }
+      ],
+      "panels": [
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The amount of CPU used by the VMs.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "rotmhz"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 0
+            },
+            "id": 1,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_cpu_usage_MHz{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}"
+               }
+            ],
+            "title": "CPU usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The CPU utilization percentage of VMs.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 0
+            },
+            "id": 2,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_cpu_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}"
+               }
+            ],
+            "title": "CPU utilization",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The amount of memory used by the VMs.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "mbytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 6
+            },
+            "id": 3,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}"
+               }
+            ],
+            "title": "Memory usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The memory utilization percentage of the VMs.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 6
+            },
+            "id": 4,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_memory_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}"
+               }
+            ],
+            "title": "Memory utilization",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The amount of memory that has been swapped or ballooned on the VMs.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "mbytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 12
+            },
+            "id": 5,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "right"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_memory_ballooned_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"} != 0",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}} - ballooned"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_memory_swapped_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"} != 0",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}} - swapped"
+               }
+            ],
+            "title": "Modified memory",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The 20s average rate of data transmitted or received over the network of the VMs.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "KiBs"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 18
+            },
+            "id": 6,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_network_throughput_bytes_per_sec{direction=\"received\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}} - received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_network_throughput_bytes_per_sec{direction=\"transmitted\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}} - transmitted"
+               }
+            ],
+            "title": "Avg network throughput rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The 20s average of received or transmitted packets dropped over the VMs network compared to the overall packets received or transmitted.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 18
+            },
+            "id": 7,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_network_packet_drop_rate{direction=\"received\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"} / clamp_min(vcenter_vm_network_packet_rate{direction=\"received\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}, 1) != 0",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}} - received"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_network_packet_drop_rate{direction=\"transmitted\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"} / clamp_min(vcenter_vm_network_packet_rate{direction=\"transmitted\", object=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}, 1) != 0",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}} - transmitted"
+               }
+            ],
+            "title": "Avg packet drops",
+            "type": "timeseries"
+         },
+         {
+            "collapsed": false,
+            "gridPos": {
+               "h": 1,
+               "w": 0,
+               "x": 24,
+               "y": 24
+            },
+            "id": 8,
+            "title": "Disks",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The amount of disk space used by the VMs.",
+            "fieldConfig": {
+               "defaults": {
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "opacity",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "unit": "bytes"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 0,
+               "y": 25
+            },
+            "id": 9,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_disk_usage_bytes{disk_state=\"used\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}"
+               }
+            ],
+            "title": "Disk usage",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "The disk utilization percentage of VMs.",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "continuous-BlYlRd"
+                  },
+                  "custom": {
+                     "fillOpacity": 30,
+                     "gradientMode": "scheme",
+                     "lineInterpolation": "smooth",
+                     "lineWidth": 2,
+                     "showPoints": "never"
+                  },
+                  "decimals": 1,
+                  "max": 100,
+                  "min": 0,
+                  "unit": "percent"
+               }
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 12,
+               "x": 12,
+               "y": 25
+            },
+            "id": 10,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list"
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "vcenter_vm_disk_utilization_percent{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path|\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path|\",vcenter_vm_name=~\"$vcenter_vm_name\"}",
+                  "legendFormat": "{{vcenter_resource_pool_inventory_path}}{{vcenter_virtual_app_inventory_path}}/{{vcenter_vm_name}}"
+               }
+            ],
+            "title": "Disk utilization",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "type": "prometheus",
+               "uid": "${prometheus_datasource}"
+            },
+            "description": "Information about the disks associated with the virtual machines.",
+            "fieldConfig": {
+               "defaults": {
+                  "noValue": "NA"
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Throughput (R)"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 157
+                        },
+                        {
+                           "id": "unit",
+                           "value": "KiBs"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Delay (R)"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 157
+                        },
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Throughput (W)"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 157
+                        },
+                        {
+                           "id": "unit",
+                           "value": "KiBs"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Delay (W)"
+                     },
+                     "properties": [
+                        {
+                           "id": "custom.align",
+                           "value": "left"
+                        },
+                        {
+                           "id": "custom.width",
+                           "value": 157
+                        },
+                        {
+                           "id": "unit",
+                           "value": "ms"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 24,
+               "x": 0,
+               "y": 31
+            },
+            "id": 11,
+            "pluginVersion": "v11.0.0",
+            "targets": [
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "label_join(vcenter_vm_disk_throughput{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path\",vcenter_virtual_app_inventory_path=\"\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\",\"object\") or label_join(vcenter_vm_disk_throughput{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\",\"object\") or label_join(vcenter_vm_disk_throughput{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_vm_name\",\"object\")",
+                  "format": "table",
+                  "range": true,
+                  "refId": "disk_reads"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "label_join(vcenter_vm_disk_latency_avg_milliseconds{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path\",vcenter_virtual_app_inventory_path=\"\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\",\"object\") or label_join(vcenter_vm_disk_latency_avg_milliseconds{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\",\"object\") or label_join(vcenter_vm_disk_latency_avg_milliseconds{direction=\"read\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_vm_name\",\"object\")",
+                  "format": "table",
+                  "range": true,
+                  "refId": "disk_read_latency"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "label_join(vcenter_vm_disk_throughput{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path\",vcenter_virtual_app_inventory_path=\"\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\",\"object\") or label_join(vcenter_vm_disk_throughput{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\",\"object\") or label_join(vcenter_vm_disk_throughput{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_vm_name\",\"object\")",
+                  "format": "table",
+                  "range": true,
+                  "refId": "disk_writes"
+               },
+               {
+                  "datasource": {
+                     "type": "prometheus",
+                     "uid": "${prometheus_datasource}"
+                  },
+                  "expr": "label_join(vcenter_vm_disk_latency_avg_milliseconds{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path\",vcenter_virtual_app_inventory_path=\"\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\",\"object\") or label_join(vcenter_vm_disk_latency_avg_milliseconds{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\",\"object\") or label_join(vcenter_vm_disk_latency_avg_milliseconds{direction=\"write\", object!=\"\", job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\",vcenter_vm_name=~\"$vcenter_vm_name\"}, \"disk_path\", \"/\", \"vcenter_vm_name\",\"object\")",
+                  "format": "table",
+                  "range": true,
+                  "refId": "disk_write_latency"
+               }
+            ],
+            "title": "Disks table",
+            "transformations": [
+               {
+                  "id": "joinByField",
+                  "options": {
+                     "byField": "disk_path",
+                     "mode": "outer"
+                  }
+               },
+               {
+                  "id": "filterFieldsByName",
+                  "options": {
+                     "include": {
+                        "names": [
+                           "disk_path",
+                           "Value #disk_reads",
+                           "Value #disk_read_latency",
+                           "Value #disk_writes",
+                           "Value #disk_write_latency"
+                        ]
+                     }
+                  }
+               },
+               {
+                  "id": "organize",
+                  "options": {
+                     "excludeByName": { },
+                     "includeByName": { },
+                     "indexByName": {
+                        "Value #disk_read_latency": 2,
+                        "Value #disk_reads": 1,
+                        "Value #disk_write_latency": 4,
+                        "Value #disk_writes": 3,
+                        "disk_path": 0
+                     },
+                     "renameByName": {
+                        "Value #disk_read_latency": "Delay (R)",
+                        "Value #disk_reads": "Throughput (R)",
+                        "Value #disk_write_latency": "Delay (W)",
+                        "Value #disk_writes": "Throughput (W)",
+                        "disk_path": "Disk"
+                     }
+                  }
+               }
+            ],
+            "type": "table"
+         }
+      ],
+      "refresh": "1m",
+      "schemaVersion": 36,
+      "tags": [
+         "vsphere"
+      ],
+      "templating": {
+         "list": [
+            {
+               "label": "Data source",
+               "name": "prometheus_datasource",
+               "query": "prometheus",
+               "regex": "",
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\"}, job)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "allValue": ".+",
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Datacenter",
+               "multi": true,
+               "name": "vcenter_datacenter_name",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\"}, vcenter_datacenter_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "vSphere cluster",
+               "multi": true,
+               "name": "vcenter_cluster_name",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\"}, vcenter_cluster_name)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "ESXi host",
+               "multi": true,
+               "name": "vcenter_host_name",
+               "query": "query_result(sum(vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\"}) by (vcenter_host_name))",
+               "refresh": 2,
+               "regex": "/vcenter_host_name=\"([^\"]*)/",
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Resource pool",
+               "multi": true,
+               "name": "vcenter_resource_pool_inventory_path",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}, vcenter_resource_pool_inventory_path)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Virtual app",
+               "multi": true,
+               "name": "vcenter_virtual_app_inventory_path",
+               "query": "label_values(vcenter_vm_memory_usage_mebibytes{job=~\"integrations/vsphere\",job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\"}, vcenter_virtual_app_inventory_path)",
+               "refresh": 2,
+               "sort": 1,
+               "type": "query"
+            },
+            {
+               "datasource": {
+                  "type": "prometheus",
+                  "uid": "${prometheus_datasource}"
+               },
+               "includeAll": true,
+               "label": "Virtual machine",
+               "multi": true,
+               "name": "vcenter_vm_name",
+               "query": "query_result((sum(label_join(sgn(sum by(vcenter_resource_pool_inventory_path,vcenter_vm_name) (vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=~\"$vcenter_resource_pool_inventory_path\",vcenter_resource_pool_inventory_path!=\"\"})),\"vm_path\",\"/\",\"vcenter_resource_pool_inventory_path\",\"vcenter_vm_name\")) by (vm_path,vcenter_vm_name)) or (sum(label_join(sgn(sum by(vcenter_virtual_app_inventory_path,vcenter_vm_name) (vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_virtual_app_inventory_path=~\"$vcenter_virtual_app_inventory_path\",vcenter_virtual_app_inventory_path!=\"\"})),\"vm_path\",\"/\",\"vcenter_virtual_app_inventory_path\",\"vcenter_vm_name\")) by (vm_path,vcenter_vm_name)) or (sum(label_replace(sgn(sum by(vcenter_resource_pool_inventory_path,vcenter_virtual_app_inventory_path,vcenter_vm_name) (vcenter_vm_memory_usage_mebibytes{job=~\"$job\",vcenter_datacenter_name=~\"$vcenter_datacenter_name\",vcenter_cluster_name=~\"$vcenter_cluster_name|\",vcenter_host_name=~\"$vcenter_host_name\",vcenter_resource_pool_inventory_path=\"\",vcenter_virtual_app_inventory_path=\"\"})),\"vm_path\",\"$1\",\"vcenter_vm_name\",\"(.*)\")) by (vm_path,vcenter_vm_name)))",
+               "refresh": 2,
+               "regex": "/vcenter_vm_name=\"(?<value>[^\"]*)\",vm_path=\"(?<text>[^\"]*)\"/",
+               "sort": 1,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timezone": "default",
+      "title": "vSphere virtual machines",
+      "uid": "vsphere-virtual-machines"
+   }

@@ -1,0 +1,1121 @@
+{
+      "annotations": {
+         "list": [
+            {
+               "builtIn": 1,
+               "datasource": {
+                  "type": "datasource",
+                  "uid": "grafana"
+               },
+               "enable": true,
+               "hide": true,
+               "iconColor": "rgba(0, 211, 255, 1)",
+               "name": "Annotations & Alerts",
+               "target": {
+                  "limit": 100,
+                  "matchAny": false,
+                  "tags": [ ],
+                  "type": "dashboard"
+               },
+               "type": "dashboard"
+            }
+         ]
+      },
+      "description": "This Dashboard provides an overview of WSO2 integration cluster deployment",
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "gnetId": 12783,
+      "graphTooltip": 0,
+      "id": 21,
+      "links": [ ],
+      "liveNow": false,
+      "panels": [
+         {
+            "collapsed": false,
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "gridPos": {
+               "h": 1,
+               "w": 24,
+               "x": 0,
+               "y": 0
+            },
+            "id": 4,
+            "panels": [ ],
+            "repeat": "node",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "refId": "A"
+               }
+            ],
+            "title": "WSO2 Integration Cluster",
+            "type": "row"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays the number of nodes connected to this cluster",
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "#B877D9",
+                           "value": null
+                        },
+                        {
+                           "color": "#56A64B",
+                           "value": 0
+                        },
+                        {
+                           "color": "#56A64B",
+                           "value": 0
+                        }
+                     ]
+                  },
+                  "unit": "short",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 0,
+               "y": 1
+            },
+            "id": 35,
+            "links": [ ],
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "justifyMode": "auto",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "showPercentChange": false,
+               "text": { },
+               "textMode": "auto",
+               "wideLayout": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "count(wso2_integration_server_up{wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"})",
+                  "format": "time_series",
+                  "instant": false,
+                  "interval": "30s",
+                  "legendFormat": "",
+                  "refId": "A"
+               }
+            ],
+            "title": "Node Count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays the number of services deployed in the cluster.",
+            "fieldConfig": {
+               "defaults": {
+                  "links": [ ],
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "semi-dark-green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 4,
+               "y": 1
+            },
+            "id": 36,
+            "options": {
+               "colorMode": "value",
+               "graphMode": "area",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "last"
+                  ],
+                  "fields": "",
+                  "values": true
+               },
+               "showPercentChange": false,
+               "text": { },
+               "textMode": "auto",
+               "wideLayout": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "count(count by(service_name,service_type)(wso2_integration_service_up{wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}))",
+                  "instant": true,
+                  "interval": "30s",
+                  "legendFormat": "Current",
+                  "refId": "A"
+               }
+            ],
+            "title": "Service Count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays nodes that are deployed in this cluster",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "align": "auto",
+                     "cellOptions": {
+                        "type": "auto"
+                     },
+                     "inspect": false
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unitScale": true
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Time"
+                        },
+                        {
+                           "id": "custom.align"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Start Time"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "Time"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 2
+                        },
+                        {
+                           "id": "unit",
+                           "value": "time: YYYY-MM-DD HH:mm:ss"
+                        },
+                        {
+                           "id": "custom.align"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "instance"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Node Name"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 2
+                        },
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "targetBlank": true,
+                                 "title": "Visit node metrics for ${__cell}",
+                                 "url": "d/wso2-mi-node-metrics/wso2-integration-node-metrics?var-node=${__cell}&from=${__from}&to=${__to}&refresh=30s"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "custom.align"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 12,
+               "w": 8,
+               "x": 8,
+               "y": 1
+            },
+            "id": 37,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "sum by(instance) (wso2_integration_server_up{wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}>0)*1000",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+               }
+            ],
+            "title": "Node List",
+            "transformations": [
+               {
+                  "id": "merge",
+                  "options": {
+                     "reducers": [ ]
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays services that are deployed in this cluster",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "thresholds"
+                  },
+                  "custom": {
+                     "align": "auto",
+                     "cellOptions": {
+                        "type": "auto"
+                     },
+                     "inspect": false
+                  },
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unitScale": true
+               },
+               "overrides": [
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Time"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Time"
+                        },
+                        {
+                           "id": "custom.align"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "Value"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Deployed Time"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 2
+                        },
+                        {
+                           "id": "unit",
+                           "value": "time: YYYY-MM-DD HH:mm:ss"
+                        },
+                        {
+                           "id": "custom.align"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "service_type"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Service Type"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 2
+                        },
+                        {
+                           "id": "custom.align"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "start_time"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Deploy Time"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "dateTimeFromNow"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 2
+                        },
+                        {
+                           "id": "unit",
+                           "value": "time: YYYY-MM-DD HH:mm:ss"
+                        },
+                        {
+                           "id": "custom.align"
+                        }
+                     ]
+                  },
+                  {
+                     "matcher": {
+                        "id": "byName",
+                        "options": "service_name"
+                     },
+                     "properties": [
+                        {
+                           "id": "displayName",
+                           "value": "Service Name"
+                        },
+                        {
+                           "id": "unit",
+                           "value": "short"
+                        },
+                        {
+                           "id": "decimals",
+                           "value": 2
+                        },
+                        {
+                           "id": "links",
+                           "value": [
+                              {
+                                 "targetBlank": true,
+                                 "title": "Visit service metrics for ${__cell} ${__cell_2}",
+                                 "url": "d/wso2-observerbility-${__cell_2}/wso2-${__cell_2}-metrics?var-service=${__cell}&from=${__from}&to=${__to}&refresh=30s"
+                              }
+                           ]
+                        },
+                        {
+                           "id": "custom.align"
+                        }
+                     ]
+                  }
+               ]
+            },
+            "gridPos": {
+               "h": 12,
+               "w": 8,
+               "x": 16,
+               "y": 1
+            },
+            "id": 22,
+            "options": {
+               "cellHeight": "sm",
+               "footer": {
+                  "countRows": false,
+                  "fields": "",
+                  "reducer": [
+                     "sum"
+                  ],
+                  "show": false
+               },
+               "showHeader": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "max by(service_name,service_type) (wso2_integration_service_up{wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}>0)*1000",
+                  "format": "table",
+                  "instant": true,
+                  "interval": "",
+                  "legendFormat": "{{service_name}}",
+                  "refId": "A"
+               }
+            ],
+            "title": "Service List",
+            "transformations": [
+               {
+                  "id": "merge",
+                  "options": {
+                     "reducers": [ ]
+                  }
+               }
+            ],
+            "type": "table"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays the total request count served by the cluster for the selected time period. Request which resulted in errors will be counted here too.",
+            "fieldConfig": {
+               "defaults": {
+                  "displayName": "",
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "semi-dark-green",
+                              "text": "0"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "semi-dark-green",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 0,
+               "y": 7
+            },
+            "id": 2,
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "justifyMode": "center",
+               "orientation": "horizontal",
+               "reduceOptions": {
+                  "calcs": [
+                     "lastNotNull"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "showPercentChange": false,
+               "text": { },
+               "textMode": "auto",
+               "wideLayout": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "sum((max_over_time({__name__ =~\"wso2_integration_.*_request_count_total\",wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__range]))- (min_over_time({__name__ =~\"wso2_integration_.*_request_count_total\",wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__range])))",
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+               }
+            ],
+            "title": "Request Count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays the total error count occurred in this cluster for the selected time period",
+            "fieldConfig": {
+               "defaults": {
+                  "mappings": [
+                     {
+                        "options": {
+                           "match": "null",
+                           "result": {
+                              "color": "dark-red",
+                              "text": "0"
+                           }
+                        },
+                        "type": "special"
+                     }
+                  ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "dark-red",
+                           "value": null
+                        }
+                     ]
+                  },
+                  "unit": "none",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 6,
+               "w": 4,
+               "x": 4,
+               "y": 7
+            },
+            "id": 20,
+            "options": {
+               "colorMode": "value",
+               "graphMode": "none",
+               "justifyMode": "auto",
+               "orientation": "auto",
+               "reduceOptions": {
+                  "calcs": [
+                     "last"
+                  ],
+                  "fields": "",
+                  "values": false
+               },
+               "showPercentChange": false,
+               "text": { },
+               "textMode": "auto",
+               "wideLayout": true
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "sum((max_over_time({__name__ =~\"wso2_integration_.*_request_count_error_total\",wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__range]))- (min_over_time({__name__ =~\"wso2_integration_.*_request_count_error_total\",wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__range])))",
+                  "interval": "",
+                  "legendFormat": "",
+                  "refId": "A"
+               }
+            ],
+            "title": "Error Count",
+            "type": "stat"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays the request rate received by cluster during the selected time period. This will also include error requests. ",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "TPS",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "decimals": 0,
+                  "links": [ ],
+                  "mappings": [ ],
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "reqps",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 0,
+               "y": 13
+            },
+            "id": 9,
+            "interval": "",
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_total\",wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__rate_interval]))",
+                  "interval": "70s",
+                  "intervalFactor": 1,
+                  "legendFormat": "{{instance}}",
+                  "refId": "A"
+               }
+            ],
+            "title": "Request Rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays the error rate occurred at this cluster during the selected time period. ",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "TPS",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 10,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "type": "linear"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "links": [ ],
+                  "mappings": [ ],
+                  "min": 0,
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "reqps",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 8,
+               "y": 13
+            },
+            "id": 12,
+            "interval": "",
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": false
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "none"
+               }
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "sum(rate({__name__ =~\"wso2_integration_.*_request_count_error_total\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__rate_interval]))",
+                  "interval": "1m",
+                  "legendFormat": "{{kubernetes_pod_name}}",
+                  "refId": "A"
+               }
+            ],
+            "title": "Error Rate",
+            "type": "timeseries"
+         },
+         {
+            "datasource": {
+               "uid": "${datasource}"
+            },
+            "description": "Displays 95th and 50th percentile of response times served by all nodes of this cluster",
+            "fieldConfig": {
+               "defaults": {
+                  "color": {
+                     "mode": "palette-classic"
+                  },
+                  "custom": {
+                     "axisBorderShow": false,
+                     "axisCenteredZero": false,
+                     "axisColorMode": "text",
+                     "axisLabel": "",
+                     "axisPlacement": "auto",
+                     "barAlignment": 0,
+                     "drawStyle": "line",
+                     "fillOpacity": 0,
+                     "gradientMode": "none",
+                     "hideFrom": {
+                        "legend": false,
+                        "tooltip": false,
+                        "viz": false
+                     },
+                     "insertNulls": false,
+                     "lineInterpolation": "linear",
+                     "lineWidth": 1,
+                     "pointSize": 5,
+                     "scaleDistribution": {
+                        "log": 10,
+                        "type": "log"
+                     },
+                     "showPoints": "never",
+                     "spanNulls": false,
+                     "stacking": {
+                        "group": "A",
+                        "mode": "none"
+                     },
+                     "thresholdsStyle": {
+                        "mode": "off"
+                     }
+                  },
+                  "links": [ ],
+                  "mappings": [ ],
+                  "thresholds": {
+                     "mode": "absolute",
+                     "steps": [
+                        {
+                           "color": "green",
+                           "value": null
+                        },
+                        {
+                           "color": "red",
+                           "value": 80
+                        }
+                     ]
+                  },
+                  "unit": "s",
+                  "unitScale": true
+               },
+               "overrides": [ ]
+            },
+            "gridPos": {
+               "h": 8,
+               "w": 8,
+               "x": 16,
+               "y": 13
+            },
+            "id": 13,
+            "options": {
+               "legend": {
+                  "calcs": [ ],
+                  "displayMode": "list",
+                  "placement": "bottom",
+                  "showLegend": true
+               },
+               "tooltip": {
+                  "mode": "multi",
+                  "sort": "desc"
+               }
+            },
+            "pluginVersion": "10.3.1",
+            "targets": [
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "histogram_quantile(0.5, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", le=~\".+\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__rate_interval])) by (le))",
+                  "format": "time_series",
+                  "hide": false,
+                  "interval": "1m",
+                  "legendFormat": "50th Percentile",
+                  "refId": "A"
+               },
+               {
+                  "datasource": {
+                     "uid": "${datasource}"
+                  },
+                  "exemplar": false,
+                  "expr": "histogram_quantile(0.95, sum(rate({__name__ =~\"wso2_integration_.*_latency_seconds\", le=~\".+\", wso2_cluster=~\"$wso2_cluster\", job=~\"$job\"}[$__rate_interval])) by (le))",
+                  "interval": "1m",
+                  "legendFormat": "95th Percentile",
+                  "refId": "B"
+               }
+            ],
+            "title": "Response Time",
+            "type": "timeseries"
+         }
+      ],
+      "refresh": "30s",
+      "schemaVersion": 39,
+      "tags": [
+         "wso2-enterprise-integrator-integration"
+      ],
+      "templating": {
+         "list": [
+            {
+               "current": {
+                  "selected": false,
+                  "text": "default",
+                  "value": "default"
+               },
+               "hide": 0,
+               "includeAll": false,
+               "label": "Data source",
+               "multi": false,
+               "name": "datasource",
+               "options": [ ],
+               "query": "prometheus",
+               "queryValue": "",
+               "refresh": 1,
+               "regex": "(?!grafanacloud-usage|grafanacloud-ml-metrics).+",
+               "skipUrlSync": false,
+               "type": "datasource"
+            },
+            {
+               "allValue": ".+",
+               "current": {
+                  "selected": false,
+                  "text": "All",
+                  "value": "$__all"
+               },
+               "datasource": {
+                  "uid": "$datasource"
+               },
+               "definition": "label_values(wso2_integration_server_up, job)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Job",
+               "multi": true,
+               "name": "job",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(wso2_integration_server_up, job)",
+                  "refId": "StandardVariableQuery"
+               },
+               "refresh": 2,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 1,
+               "tagValuesQuery": "",
+               "tagsQuery": "",
+               "type": "query",
+               "useTags": false
+            },
+            {
+               "allValue": ".+",
+               "current": {
+                  "selected": false,
+                  "text": "All",
+                  "value": "$__all"
+               },
+               "datasource": {
+                  "uid": "${datasource}"
+               },
+               "definition": "label_values(wso2_integration_server_up, wso2_cluster)",
+               "hide": 0,
+               "includeAll": true,
+               "label": "Cluster",
+               "multi": true,
+               "name": "wso2_cluster",
+               "options": [ ],
+               "query": {
+                  "query": "label_values(wso2_integration_server_up, wso2_cluster)",
+                  "refId": "StandardVariableQuery"
+               },
+               "refresh": 2,
+               "regex": "",
+               "skipUrlSync": false,
+               "sort": 0,
+               "type": "query"
+            }
+         ]
+      },
+      "time": {
+         "from": "now-30m",
+         "to": "now"
+      },
+      "timepicker": {
+         "refresh_intervals": [
+            "10s",
+            "30s",
+            "1m",
+            "5m",
+            "15m",
+            "30m",
+            "1h",
+            "2h",
+            "1d"
+         ]
+      },
+      "timezone": "",
+      "title": "WSO2 Integration Cluster Metrics",
+      "uid": "TdzS6sS7z",
+      "version": 2,
+      "weekStart": ""
+   }
