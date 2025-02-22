@@ -83,4 +83,8 @@ jobs:
 
       - name: Check for unexpected changes in generated files
         working-directory: ./${{ matrix.mixin }}
-        run: make && git diff --exit-code
+        run: make dashboards_out prometheus_alerts.yaml prometheus_rules.yaml && git diff --exit-code
+
+      - name: Run promtool test
+        working-directory: ./${{ matrix.mixin }}
+        run: make test

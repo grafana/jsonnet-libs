@@ -26,8 +26,6 @@ Based on format described [here](https://monitoring.mixins.dev/):
 * [`caddy-mixin`](caddy-mixin/): A set of reusable and extensible dashboards
   for Caddy.
 
-
-
 * [`jira-mixin`](jira-mixin/): A set of reusable and extensible dashboards and alerts for JIRA.
 
 You can find more in directories with `-mixin` suffix.
@@ -53,6 +51,14 @@ Examples:
  - [process-observ-lib](process-observ-lib/)
  - [golang-observ-lib](golang-observ-lib/)
  - [csp-mixin](csp-mixin/)
+
+ ## Prometheus rules testing for monitoring mixins and observability libraries
+
+It is highly recommended to test prometheus alerts with [promtool test rules](https://prometheus.io/docs/prometheus/latest/configuration/unit_testing_rules) command when complex PromQL queries are used or when additional queries are used in alerts' annotations.
+
+promtool tests files should be placed in tests directory in the root of the library and should be named like `prometheus_*.yaml`. This will enable running tests ing Github Actions and with `make test` command.
+
+A good example of promtool tests can be found in windows-observ-lib: [prometheus_alerts_test.yaml](windows-observ-lib/tests/prometheus_alerts_test.yaml)
 
 ## LICENSE
 
