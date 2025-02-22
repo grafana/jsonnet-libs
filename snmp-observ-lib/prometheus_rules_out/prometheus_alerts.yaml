@@ -127,7 +127,7 @@ groups:
             severity: info
         - alert: SNMPInterfaceDown
           annotations:
-            description: "Network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.instance}} is down. \nOnly interfaces with ifAdminStatus = `up` and matching `ifAlias=~\".*(?i:(uplink|internet|WAN)).*\"` are being checked.'\n"
+            description: "Network interface {{$labels.ifName}} ({{$labels.ifAlias}}) on {{$labels.instance}} is down. \nOnly interfaces with ifAdminStatus = `up` and matching `ifAlias=~\".*(?i:(uplink|internet|WAN)).*\"` are being checked.\n"
             summary: Network interface is down on SNMP device.
           expr: |
             (ifOperStatus{ifAlias=~".*(?i:(uplink|internet|WAN)).*"}) == 2
